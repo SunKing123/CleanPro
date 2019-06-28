@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/layout_net_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_marginTop="-20dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dimen_9dp"
+            android:drawableTop="@mipmap/no_network"
+            android:text="您的网络好像不给力，稍后再试"
+            android:textColor="@color/color_7c7a7a"
+            android:textSize="@dimen/dimen_16sp"/>
+
+        <TextView
+            android:id="@+id/tv_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:gravity="center"
+            android:background="@mipmap/btn_refresh"
+            android:text="点击重试"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp"/>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,499 @@
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in C:\Users\tie\AppData\Local\Android\Sdk/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Uncomment this to preserve the line number information for
+# debugging stack traces.
+#-keepattributes SourceFile,LineNumberTable
+
+# If you keep the line number information, uncomment this to
+# hide the original source file name.
+#-renamesourcefileattribute SourceFile
+
+-keep class com.google.gson.** {*;}
+#-keep class com.google.**{*;}
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+-keep class com.dubai.fa.model.** { *; }
+-keep class com.google.gson.examples.android.model.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+-keep class com.google.** {
+    <fields>;
+    <methods>;
+}
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+-dontwarn com.google.gson.**
+
+#指定代码的压缩级别
+-optimizationpasses 5
+#包明不混合大小写
+-dontusemixedcaseclassnames
+#不去忽略非公共的库类
+-dontskipnonpubliclibraryclasses
+ #优化  不优化输入的类文件
+-dontoptimize
+ #预校验
+-dontpreverify
+ #混淆时是否记录日志
+-verbose
+ # 混淆时所采用的算法
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+#保护注解
+-keepattributes *Annotation*
+
+ #不混淆R类
+-keep public class com.honglu.calftrader.R$*{
+    public static final int *;
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+
+
+# 保持哪些类不被混淆
+-keep public class * implements java.io.Serializable {
+	public *;
+}
+-keep class installment.loan.widget.** { *; } #自定义控件不参与混淆
+-keep class installment.loan.base.** { *; } #base不参与混淆
+-keep public class * extends installment.loan.base.BaseEntity  #Bean类不参与混淆
+-keep class installment.loan.ui.main.bean.**{ *; }  #Bean类不参与混淆
+-keep class installment.loan.ui.repayment.bean.**{ *; }  #Bean类不参与混淆
+-keep class installment.loan.ui.usercenter.bean.**{ *; }  #Bean类不参与混淆
+-keep class installment.loan.callback.** { *; }
+-keep public class * extends android.view
+-keep public class * extends android.app.Fragment
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+
+##bugly混淆
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
+
+#########Okhttputils混淆
+#okhttputils
+-dontwarn com.zhy.http.**
+-keep class com.zhy.http.**{*;}
+
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+
+
+#okio
+-dontwarn okio.**
+-keep class okio.**{*;}
+
+#常用参数类
+-keep class installment.loan.utils.** { *; }
+-keep class installment.loan.api.** { *; }
+-keep class installment.loan.app.UrlConstans { *; }
+#常用参数类end
+
+
+#如果引用了v4或者v7包
+#-dontwarn android.support.**
+#-keep class android.support.** { *; }
+#-keep interface android.support.** { *; }
+#
+#-libraryjars <java.home>\lib\rt.jar
+#-dontwarn org.apache.commons.**
+-dontwarn android.support.v4.**
+
+-keep class android.support.v4.** { *; }
+-keep interface android.support.v4.app.** { *; }
+
+-keep public class * extends android.support.v4.**
+-keep class android.support.v4.view.**{ *;}
+-keep class android.support.v4.content.**{ *;}
+
+-keep class android.support.design.widget.** { *; }
+-keep class android.support.design.** { *; }
+
+-keep public class * extends android.support.v4.app.FragmentActivity
+
+# Butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+# Butterknife end
+
+#Retrofit
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
+#webview
+-keepclassmembers class * extends android.webkit.WebViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.WebViewClient {
+    public void *(android.webkit.WebView, java.lang.String);
+}
+
+#Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+################引用的第三方jar包library#########################
+##-libraryjars libs/httpmime-4.1.3.jar
+#-keep class org.apache.http.entity.mime.** { *; }
+#-keep public interface org.apache.http.entity.mime.** {
+#   *;
+#}
+
+#-dontwarn org.apache.http.**
+#-keep class org.apache.http.** { *;}
+
+
+# Luban
+-keep class top.zibin.luban.**{*;}
+-dontwarn top.zibin.luban.*
+
+# RxJava
+-dontwarn sun.misc.**
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+      public static ** test();
+  }
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+
+#udesk
+-keep class udesk.** {*;}
+-keep class cn.udesk.**{*; }
+#七牛
+-keep class okhttp3.** {*;}
+-keep class okio.** {*;}
+-keep class com.qiniu.**{*;}
+-keep class com.qiniu.**{public <init>();}
+-ignorewarnings
+#smack
+-keep class org.jxmpp.** {*;}
+-keep class de.measite.** {*;}
+-keep class org.jivesoftware.** {*;}
+-keep class org.xmlpull.** {*;}
+-dontwarn org.xbill.**
+-keep class org.xbill.** {*;}
+
+#agora
+-keep class io.agora.**{*;}
+
+#freso
+-keep class com.facebook.imagepipeline.** {*; }
+-keep class com.facebook.animated.gif.** {*; }
+-keep class com.facebook.drawee.** {*; }
+-keep class com.facebook.drawee.backends.pipeline.** {*; }
+-keep class bolts.** {*; }
+-keep class me.relex.photodraweeview.** {*; }
+
+-keep,allowobfuscation @interface com.facebook.common.internal.DoNotStrip
+-keep @com.facebook.common.internal.DoNotStrip class *
+-keepclassmembers class * {
+    @com.facebook.common.internal.DoNotStrip *;
+}
+# Keep native methods
+-keepclassmembers class * {
+    native <methods>;
+}
+
+#Android M 权限
+-keep class rx.** {*;}
+-keep class com.tbruyelle.rxpermissions.** {*;}
+
+-keep class de.hdodenhof.circleimageview.** {*;}
+
+#umeng
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keep class com.umeng.** { *; }
+-keep public interface com.umeng.** {
+   *;
+}
+-dontwarn com.umeng.*
+
+#参数加密
+-keep class org.bouncycastle.**{*;}
+-keep class org.apache.commons.codec.**{*;}
+
+
+#evnetbus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+#TONGDUN
+-dontwarn android.os.**
+-dontwarn com.android.internal.**
+-keep class cn.tongdun.android.**{*;}
+
+#友盟分享
+-dontusemixedcaseclassnames
+    -dontshrink
+    -dontoptimize
+    -dontwarn com.google.android.maps.**
+    -dontwarn android.webkit.WebView
+    -dontwarn com.umeng.**
+    -dontwarn com.tencent.weibo.sdk.**
+    -dontwarn com.facebook.**
+    -keep public class javax.**
+    -keep public class android.webkit.**
+    -dontwarn android.support.v4.**
+    -keep enum com.facebook.**
+    -keepattributes Exceptions,InnerClasses,Signature
+    -keepattributes *Annotation*
+    -keepattributes SourceFile,LineNumberTable
+
+    -keep public interface com.facebook.**
+    -keep public interface com.tencent.**
+    -keep public interface com.umeng.socialize.**
+    -keep public interface com.umeng.socialize.sensor.**
+    -keep public interface com.umeng.scrshot.**
+    -keep class com.android.dingtalk.share.ddsharemodule.** { *; }
+    -keep public class com.umeng.socialize.* {*;}
+
+
+    -keep class com.facebook.**
+    -keep class com.facebook.** { *; }
+    -keep class com.umeng.scrshot.**
+    -keep public class com.tencent.** {*;}
+    -keep class com.umeng.socialize.sensor.**
+    -keep class com.umeng.socialize.handler.**
+    -keep class com.umeng.socialize.handler.*
+    -keep class com.umeng.weixin.handler.**
+    -keep class com.umeng.weixin.handler.*
+    -keep class com.umeng.qq.handler.**
+    -keep class com.umeng.qq.handler.*
+    -keep class UMMoreHandler{*;}
+    -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
+    -keep class com.tencent.mm.sdk.modelmsg.** implements   com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
+    -keep class im.yixin.sdk.api.YXMessage {*;}
+    -keep class im.yixin.sdk.api.** implements im.yixin.sdk.api.YXMessage$YXMessageData{*;}
+    -keep class com.tencent.mm.sdk.** {
+     *;
+    }
+    -keep class com.tencent.mm.opensdk.** {
+   *;
+    }
+    -dontwarn twitter4j.**
+    -keep class twitter4j.** { *; }
+
+    -keep class com.tencent.** {*;}
+    -dontwarn com.tencent.**
+    -keep public class com.umeng.com.umeng.soexample.R$*{
+    public static final int *;
+    }
+    -keep public class com.linkedin.android.mobilesdk.R$*{
+    public static final int *;
+        }
+    -keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+    }
+
+    -keep class com.tencent.open.TDialog$*
+    -keep class com.tencent.open.TDialog$* {*;}
+    -keep class com.tencent.open.PKDialog
+    -keep class com.tencent.open.PKDialog {*;}
+    -keep class com.tencent.open.PKDialog$*
+    -keep class com.tencent.open.PKDialog$* {*;}
+
+    -keep class com.sina.** {*;}
+    -dontwarn com.sina.**
+    -keep class  com.alipay.share.sdk.** {
+       *;
+    }
+    -keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+    }
+
+    -keep class com.linkedin.** { *; }
+    -keepattributes Signature
+#JPush
+-dontoptimize
+-dontpreverify
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
+-dontwarn com.xiaomi.push.**
+-keep class com.xiaomi.push.** { *; }
+
+ -ignorewarning
+ -keepattributes *Annotation*
+ -keepattributes Exceptions
+ -keepattributes InnerClasses
+ -keepattributes Signature
+ # hmscore-support: remote transport
+ -keep class * extends com.huawei.hms.core.aidl.IMessageEntity { *; }
+ # hmscore-support: remote transport
+ -keepclasseswithmembers class * implements com.huawei.hms.support.api.transport.DatagramTransport {      <init>(...);    }
+ # manifest: provider for updates
+ -keep public class com.huawei.hms.update.provider.UpdateProvider { public *; protected *; }
+
+#例外高德地图定位包
+-keep class com.amap.api.location.**{*;}
+-keep class com.amap.api.fence.**{*;}
+-keep class com.autonavi.aps.amapapi.model.**{*;}
+
+#start支付宝支付
+-keep class com.alipay.android.app.IAlixPay{*;}
+-keep class com.alipay.android.app.IAlixPay$Stub{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
+-keep class com.alipay.sdk.app.PayTask{ public *;}
+-keep class com.alipay.sdk.app.AuthTask{ public *;}
+-keep class com.alipay.sdk.app.H5PayCallback {
+    <fields>;
+    <methods>;
+}
+-keep class com.alipay.android.phone.mrpc.core.** { *; }
+-keep class com.alipay.apmobilesecuritysdk.** { *; }
+-keep class com.alipay.mobile.framework.service.annotation.** { *; }
+-keep class com.alipay.mobilesecuritysdk.face.** { *; }
+-keep class com.alipay.tscenter.biz.rpc.** { *; }
+-keep class org.json.alipay.** { *; }
+-keep class com.alipay.tscenter.** { *; }
+-keep class com.ta.utdid2.** { *;}
+-keep class com.ut.device.** { *;}
+#end 支付宝支付
+
+#-----聚信立start-----
+-keep class com.juxinli.normandy.process.ProcessStatus{
+    *;
+}
+-keep class com.juxinli.normandy.retrofitclient.bean.requestbean.TaskBean{*;}
+-keep class com.juxinli.normandy.retrofitclient.bean.requestbean.*{*;}
+-keep class com.juxinli.normandy.retrofitclient.bean.responsebean.*{*;}
+-keep class **.R$* { *; }
+-keep class com.juxinli.normandy.logger.*{*;}
+-keep public class com.android.vending.licensing.ILicensingService
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+-keep class com.google.**
+-dontwarn com.google.**
+# RxBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @com.hwangjr.rxbus.annotation.Subscribe public *;
+    @com.hwangjr.rxbus.annotation.Produce public *;
+}
+# novate
+-keep class retrofit2.** {*;}
+-dontwarn okhttp3**
+-keep  class okhttp3.**{*;}
+-dontwarn okio**
+-keep  class okio.**{*;}
+-keep  class rx.**{*;}
+-keep class com.tamic.novate.Novate.** {*;}
+#Timber
+-dontwarn org.jetbrains.annotations.**
+
+-keep class com.juxinli.normandy.NormandySDK {
+    public <methods>;
+    public static <methods>;
+}
+
+-keep class com.juxinli.normandy.NormandySDK$* {
+    *;
+}
+#枚举
+-keepclassmembers enum * {
+    **[] $VALUES;
+    public *;
+}
+#----聚信立end-----
+
+#----oss start---
+-keep class com.alibaba.sdk.android.oss.** { *; }
+-dontwarn okio.**
+-dontwarn org.apache.commons.codec.binary.**
+#----oss end---
+
+#----小牛统计 start---
+-dontwarn com.xiaoniu.statistic.**
+-keep class com.xiaoniu.statistic.**{ *;}
+#----小牛统计 end---
+
+#---ARouter start---
+-keep public class com.alibaba.android.arouter.routes.**{*;}
+-keep public class com.alibaba.android.arouter.facade.**{*;}
+-keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
+
+# If you use the byType method to obtain Service, add the following rules to protect the interface:
+-keep interface * implements com.alibaba.android.arouter.facade.template.IProvider
+
+# If single-type injection is used, that is, no interface is defined to implement IProvider, the following rules need to be added to protect the implementation
+# -keep class * implements com.alibaba.android.arouter.facade.template.IProvider
+#---ARouter end---

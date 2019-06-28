@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleProgressView">
+        <attr name="roundWidth" format="dimension" /> 
+        <attr name="max" format="integer" />  
+        <attr name="textIsDisplayable" format="boolean" /> 
+    </declare-styleable>
+
+    <declare-styleable name="vericationCodeInput">
+
+        <attr name="box" format="integer" />
+
+        <attr name="child_h_padding" format="dimension" />
+        <attr name="child_height" format="dimension" />
+        <attr name="child_width" format="dimension" />
+        <attr name="child_v_padding" format="dimension" />
+        <attr name="padding" format="dimension" />
+        <attr name="box_bg_focus" format="reference" />
+        <attr name="box_bg_normal" format="reference" />
+        <attr name="inputType" format="string" />
+        <attr name="verify_textSize" format="dimension" />
+        <attr name="verify_textColor" format="color" />
+        <attr name="isdialog" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="FixedAspectLayout">
+        <attr name="oliveapp_aspectRatio" format="float" />
+        <attr name="oliveapp_fixMode" format="integer">
+            <enum name="fixHeight" value="1" />
+            <enum name="fixWidth" value="2" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="WheelView">
+        <attr name="unitHeight" format="dimension" />
+        <attr name="itemNumber" format="integer" />
+        <attr name="normalTextColor" format="color" />
+        <attr name="normalTextSize" format="dimension" />
+        <attr name="selectedTextColor" format="color" />
+        <attr name="selectedTextSize" format="dimension" />
+        <attr name="selectedDefaultIndex" format="integer" />
+        <attr name="lineColor" format="color" />
+        <attr name="lineHeight" format="dimension" />
+    </declare-styleable>
+
+    <!--loading-->
+    <declare-styleable name="LoadingLayout">
+
+        <attr name="isFirstVisible" format="boolean"></attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="ContentWithSpaceEditText">
+        <attr name="epaysdk_type" format="enum">
+            <enum name="phone" value="0" />
+            <enum name="card" value="1" />
+            <enum name="IDCard" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="RoundCornerProgress">
+        <attr name="rcReverse" format="boolean" />
+        <attr name="rcProgress" format="float" />
+        <attr name="rcMax" format="float" />
+        <attr name="rcSecondaryProgress" format="float" />
+        <attr name="rcBackgroundPadding" format="dimension" />
+        <attr name="rcRadius" format="dimension" />
+        <attr name="rcProgressColor" format="color" />
+        <attr name="rcSecondaryProgressColor" format="color" />
+        <attr name="rcBackgroundColor" format="color" />
+    </declare-styleable>
+    <!--文本编辑框清楚文本icon-->
+    <declare-styleable name="CleanableEditText">
+        <attr name="deleteAble" format="integer" />
+        <attr name="deleteEnble" format="integer" />
+    </declare-styleable>
+
+    <!--密码编辑框可见性icon-->
+    <declare-styleable name="PasswordVisible">
+        <attr name="show" format="integer" />
+        <attr name="hide" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,82 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textCursorDrawable">@drawable/color_white_cursor</item>
+    </style>
+    <!--主页面-->
+    <style name="Main.Theme" parent="@style/AppTheme">
+        <!--防止跳转Main时，清除栈导致的短暂白屏或黑屏-->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+    <!--全屏主题-->
+    <style name="Theme.FullScreen" parent="@style/AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!--启动页主题-->
+    <style name="Theme.AppLauncher" parent="@style/Theme.FullScreen">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!--自定义Dialog主题-->
+    <style name="custom_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/animation</item>
+    </style>
+
+    <!--window动画-->
+    <style name="animation">
+        <item name="android:windowEnterAnimation">@anim/enter</item>
+        <item name="android:windowExitAnimation">@anim/exit</item>
+    </style>
+
+    <!--加载中dialog主题-->
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="dialog_2_button" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/animation</item>
+    </style>
+
+    <style name="dispatcher" parent="@android:style/Theme.Translucent">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <declare-styleable name="PasswordInputBox">
+        <attr name="text_size" format="dimension" />
+        <attr name="text_color" format="color" />
+        <attr name="focus_color" format="color" />
+        <attr name="normal_color" format="color" />
+        <attr name="is_password" format="boolean" />
+        <attr name="box_width" format="dimension" />
+        <attr name="box_height" format="dimension" />
+        <attr name="box_padding" format="dimension" />
+        <attr name="box_count" format="integer" />
+        <attr name="corners" format="dimension" />
+        <attr name="border_normal_width" format="dimension" />
+        <attr name="border_focus_width" format="dimension" />
+    </declare-styleable>
+</resources>

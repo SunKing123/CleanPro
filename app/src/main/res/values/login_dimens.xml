@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="activity_login_margin_left">18dp</dimen>
+    <dimen name="activity_login_small_size">14dp</dimen>
+</resources>

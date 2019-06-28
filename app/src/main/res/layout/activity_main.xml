@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/bottombar_tab_height" />
+
+    <com.installment.mall.ui.main.widget.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottombar_tab_height"
+        android:layout_gravity="bottom" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/bottombar_tab_height"
+        android:background="@mipmap/wl" />
+
+    <Button
+        android:id="@+id/float_button"
+        android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="清理"/>
+</merge>
