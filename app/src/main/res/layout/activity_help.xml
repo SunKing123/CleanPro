@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_login_margin_left"
+            android:paddingLeft="@dimen/dimen_12dp"
             android:paddingRight="@dimen/dimen_18dp"
             android:src="@mipmap/back"/>
 

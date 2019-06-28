@@ -493,15 +493,6 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             }
         }
 
-        @JavascriptInterface
-        public void downApp(String android_url, String yyb_url, String packageName) {
-            if (TextUtils.equals(title, getString(R.string.about_me))) {
-                requestPermission(REQUEST_APP_UPDATE);
-            } else {
-                downApp(android_url, yyb_url);
-            }
-        }
-
         /**
          * 关闭页面
          */
