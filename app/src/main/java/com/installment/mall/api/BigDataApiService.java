@@ -14,6 +14,7 @@ import retrofit2.http.POST;
 public interface BigDataApiService {
 
     /**
+     *
      * 通用埋点
      * @param body
      * @return
