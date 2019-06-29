@@ -1,18 +1,12 @@
 package com.installment.mall.utils;
 
-import android.Manifest;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 
-import com.installment.mall.R;
 import com.installment.mall.app.AppApplication;
 import com.installment.mall.ui.main.widget.SPUtil;
 
@@ -135,83 +129,6 @@ public class CalendarEventUtil {
         return id;
     }
 
-    /**
-     * 删除事件 type = 1 表示续期 删除之前的事件  2 表示 还款删除最后还款日 日历提醒
-     *
-     * @param date
-     * @param day
-     * @param money
-     * @param type
-     */
-    public static void deleteCalendarEvent(String date, int day, String money, int type) {
-
-        int i = 0;
-
-        if (type == 1) {
-            String s = "-" + String.valueOf(day);
-            i = Integer.parseInt(s);
-        }
-
-        String strdate = "";
-        String strdate2 = "";
-        String strdate3 = "";
-        try {
-//            strdate = date.split("-")[1]+"月"+date.split("-")[2]+"日";
-            strdate = TimeUtil.getNextDayOfCurrent(date, i);
-            strdate2 = TimeUtil.getNextDayOfCurrent(date, i - 1);
-            strdate3 = TimeUtil.getNextDayOfCurrent(date, i - 2);
-        } catch (Exception e) {
-        }
-
-        String str = SPUtil.getString(AppApplication.getInstance(), SPUtil.TITLE_CALENDAR, "");
-        String str2 = AppApplication.getInstance().getString(R.string.content_calendar_write, money, strdate);
-//        做版本兼容，老版本没有在本地存储日历提示
-        if (TextUtils.isEmpty(str)) {
-            str = str2;
-        }
-        Cursor eventCursor = null;
-        try {
-
-            eventCursor = AppApplication.getInstance().getContentResolver().query(Uri.parse(CALANDER_EVENT_URL), null, null, null, null);
-            //查询返回空值
-            if (eventCursor == null) {
-                return;
-            }
-            if (eventCursor.getCount() > 0) {
-                //遍历所有事件，找到title跟需要查询的title一样的项
-                for (eventCursor.moveToFirst(); !eventCursor.isAfterLast(); eventCursor.moveToNext()) {
-                    String eventTitle = eventCursor.getString(eventCursor.getColumnIndex("title"));
-                    if ((!TextUtils.isEmpty(str) && str.equals(eventTitle))) {
-                        //取得id
-                        int id = eventCursor.getInt(eventCursor.getColumnIndex(CalendarContract.Calendars._ID));
-                        Uri deleteUri = ContentUris.withAppendedId(Uri.parse(CALANDER_EVENT_URL), id);
-                        int rows = AppApplication.getInstance().getContentResolver().delete(deleteUri, null, null);
-                        if (rows == -1) {
-                            //事件删除失败
-                            return;
-                        }
-                    }
-                }
-            }
-        } catch (SecurityException e) {
-            ToastUtils.showShort("设置权限失败,请手动设置");
-
-        } finally {
-            if (eventCursor != null) {
-                eventCursor.close();
-            }
-        }
-    }
-
-    /**
-     * @param date    格式"yyyy-MM-dd"
-     * @param money
-     */
-    public static void addCalendarEventsAfterDays(String date, String money) {
-        String str = AppApplication.getInstance().getString(R.string.content_calendar_write, money, date);
-        addCalendarEvents(str, str, date);
-    }
-
     public static void addCalendarEvents(String title, String description, String date) {
         //写入提前一天的提醒
         String previouseDay = TimeUtil.getNextDayOfCurrent(date, -1);
@@ -298,43 +215,4 @@ public class CalendarEventUtil {
         return longDate;
     }
 
-    /**
-     * 获取删除日历权限
-     *
-     * @param dtess 还款日期
-     * @param days  借款周期
-     */
-    public static void getDeleteCalendarPermission(Fragment fragment, String dtess, String money, int days) {
-        // if (Build.VERSION.SDK_INT >= 23) {
-        int readStoragePermission = ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.WRITE_CALENDAR);
-        if (readStoragePermission != PackageManager.PERMISSION_GRANTED) {
-            fragment.requestPermissions(new String[]{Manifest.permission.WRITE_CALENDAR}, 1);
-            return;
-        } else {
-            //删除日历操作
-            CalendarEventUtil.deleteCalendarEvent(dtess, days, money, CALENDAR_DELETE_PAY);
-        }
-
-    }
-
-    /**
-     * 删除日历权限回调方法
-     *
-     * @param dtess 还款日期
-     * @param money 还款金额
-     * @param days  借款周期
-     */
-    public static void onPermissionResult(int requestCode, int[] grantResults, Fragment fragment, String dtess, String money, int days) {
-        switch (requestCode) {
-            case REQUEST_DELETE_CALENDAR:
-                //删除提醒
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    CalendarEventUtil.deleteCalendarEvent(dtess, days, money, CALENDAR_DELETE_PAY);
-                }
-                break;
-            default:
-                break;
-        }
-    }
 }
