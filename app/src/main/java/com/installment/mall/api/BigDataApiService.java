@@ -7,9 +7,6 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-/**
- * Created by fengpeihao on 2017/10/27.
- */
 
 public interface BigDataApiService {
 

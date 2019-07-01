@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import static com.installment.mall.utils.prefs.SpConstants.NOCLEARSPHELPER_NAME;
 
 /**
- * Created by fengpeihao on 2017/8/4.
+ * Created on 2017/8/4.
  */
 
 public class NoClearSPHelper {

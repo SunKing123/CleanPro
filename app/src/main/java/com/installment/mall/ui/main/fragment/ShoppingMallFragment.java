@@ -50,7 +50,7 @@ import static com.installment.mall.app.Constant.TAG_TURN_MAIN;
 
 /**
  * 首页tab H5页面（商城页、生活页）
- * Created by fengpeihao on 2018/3/21.
+ * Created on 2018/3/21.
  */
 public class ShoppingMallFragment extends SimpleFragment implements MainActivity.OnKeyBackListener {
     @BindView(R.id.web_view)

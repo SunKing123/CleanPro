@@ -55,7 +55,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
         this.mSubscription = Observable.timer(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> this.jumpActivity());
-//        this.mHandler.postDelayed(this::jumpActivity, 1500);
     }
 
     public void jumpActivity() {
