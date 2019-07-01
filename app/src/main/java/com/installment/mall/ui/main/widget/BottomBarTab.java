@@ -30,7 +30,6 @@ public class BottomBarTab extends FrameLayout {
     private Context mContext;
     private int mTabPosition = -1;
 
-    private int[] animations = {R.drawable.tab_loan, R.drawable.tab_shopping,R.drawable.tab_quota, R.drawable.tab_me};
     private int[] iconsSelect = {R.mipmap.loan_select, R.mipmap.mall_select, R.mipmap.up_quota_select,R.mipmap.me_select};
     private int[] icons = {R.mipmap.loan_normal, R.mipmap.mall_normal,R.mipmap.up_quota_normal, R.mipmap.me_normal};
 

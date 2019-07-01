@@ -9,6 +9,6 @@
         android:adjustViewBounds="true"
         android:clickable="true"
         android:scaleType="centerCrop"
-        android:src="@mipmap/splash_1125x2000" />
+        android:src="@mipmap/splash" />
 
 </merge>

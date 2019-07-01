@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
     @Override
     public void initView() {
         if (DeviceUtils.getScreenHeight() > 1920) {
-            this.ivSplash.setImageResource(R.mipmap.splash_1620x3360);
+            this.ivSplash.setImageResource(R.mipmap.splash);
         }
         skip();
     }
