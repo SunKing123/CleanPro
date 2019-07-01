@@ -14,4 +14,9 @@ public class RouteConstants {
      */
     public static final String USER_LOAD_H5_ACTIVITY = "/usercenter/UserLoadH5Activity";
 
+    /**
+     * 首页清理垃圾
+     */
+    public static final String JUNK_CLEAN_ACTIVITY = "/main/JunkCleanActivity";
+
 }

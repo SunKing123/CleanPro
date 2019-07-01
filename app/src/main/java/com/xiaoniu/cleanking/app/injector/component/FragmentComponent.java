@@ -1,7 +1,9 @@
 package com.xiaoniu.cleanking.app.injector.component;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.app.injector.PerFragment;
 import com.xiaoniu.cleanking.app.injector.module.FragmentModule;
+import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 
 import dagger.Component;
 
@@ -12,4 +14,7 @@ import dagger.Component;
 @Component(dependencies = AppComponent.class, modules = FragmentModule.class)
 public interface FragmentComponent {
 
+    RxFragment getFragment();
+
+    void inject(CleanMainFragment cleanMainFragment);
 }

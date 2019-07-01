@@ -10,6 +10,7 @@
         android:protectionLevel="signature" />
 
     <!-- Required -->
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -134,6 +135,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.main.activity.JunkCleanActivity" android:screenOrientation="portrait"/>
 
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
