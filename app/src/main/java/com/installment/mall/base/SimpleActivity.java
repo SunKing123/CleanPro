@@ -93,7 +93,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     protected void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white), true);
-//            StatusBarUtils.StatusBarLightMode(this,StatusBarUtils.StatusBarLightMode(this));
         } else {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.black), false);
         }

@@ -147,7 +147,7 @@ public class AndroidUtil {
                 }
 
                 if (!checkUdidValid()) {
-                    if (Validator.isEffective(mac)) {
+                    if (isEffective(mac)) {
                         udid = "MAC" + mac.replace(':', '0').replace('.', '0');
                     } else {
                         udid = "";
@@ -173,6 +173,17 @@ public class AndroidUtil {
         }
 
         return udid;
+    }
+
+    /**
+     * check whether be empty/null or not
+     *
+     * @param string
+     * @return
+     */
+    public static boolean isEffective(String string) {
+        return !((string == null) || ("".equals(string)) || (" ".equals(string))
+                || ("null".equals(string)) || ("\n".equals(string)));
     }
 
     private static boolean checkUdidValid() {

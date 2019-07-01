@@ -22,7 +22,7 @@ import com.installment.mall.R;
 
 
 /**
- * Created by fengpeihao on 16/6/3.
+ * Created on 16/6/3.
  */
 public class BottomBarTab extends FrameLayout {
     private ImageView mIcon;

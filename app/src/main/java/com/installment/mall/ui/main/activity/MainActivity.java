@@ -334,6 +334,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     Toast.makeText(getApplicationContext(), R.string.press_exit_again,Toast.LENGTH_SHORT).show();
                     // 更新firstTime
                     firstTime = secondTime;
+                    Intent intent = new Intent();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     return true;
                 } else {
                     //如果审核满足答题条件时自动跳转答题页面，返回则不跳
