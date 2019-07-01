@@ -10,10 +10,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
@@ -31,13 +32,21 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
-import com.umeng.socialize.UMShareAPI;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -54,8 +63,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     NoClearSPHelper mPreferencesHelper;
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
-    @BindView(R.id.float_button)
-    Button mFloatingActionButton;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -120,7 +127,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             showHideFragment(0, -1);
         } else {
             mBottomBar
-                    .addItem(new BottomBarTab(this, R.mipmap.loan_normal, getString(R.string.loan)))
+                    .addItem(new BottomBarTab(this, R.mipmap.loan_normal, getString(R.string.clean)))
                     .addItem(new BottomBarTab(this, R.mipmap.mall_normal, getString(R.string.shopping_mall)))
                     .addItem(new BottomBarTab(this, R.mipmap.up_quota_normal, getString(R.string.up_quota)))
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
@@ -151,7 +158,31 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 //        EventBus.getDefault().register(this);
 
-        mFloatingActionButton.setOnClickListener(v-> cleanMemory());
+
+
+        try {
+            String s2 = "DdAt8o/mcQ08hIcdQ0p/0hp9IHf95AaQ2xkDDmqVR8U=";
+            String s = "225e8C70688fD76Ec5C01A392302320A".toUpperCase();
+            SecretKeySpec secretKeySpec = new SecretKeySpec(s.getBytes("utf-8"), "AES");
+            Cipher instance = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            instance.init(2, secretKeySpec);
+            final byte[] decode = Base64.decode(s2, 0);
+
+            String s1 = new String(instance.doFinal(decode), "utf-8");
+            System.out.println(s1);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
     }
 
     private void cleanMemory() {
@@ -245,7 +276,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
 
         ShoppingMallFragment mineFragment = new ShoppingMallFragment();
-        ShoppingMallFragment loanFragment = new ShoppingMallFragment();
+        CleanMainFragment mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
         if (!TextUtils.isEmpty(mSPHelper.getMineShopUrl())) {
             url = mSPHelper.getMineShopUrl();
@@ -268,17 +299,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .hide(mineFragment)
                     .commitAllowingStateLoss();
         } else {
-            mFragments.add(loanFragment);
+            mFragments.add(mainFragment);
             mFragments.add(shoppingMallFragment);
             mFragments.add(upQuotaFragment);
             mFragments.add(mineFragment);
 
             mManager.beginTransaction()
-                    .add(R.id.frame_layout, loanFragment)
+                    .add(R.id.frame_layout, mainFragment)
                     .add(R.id.frame_layout, shoppingMallFragment)
                     .add(R.id.frame_layout, upQuotaFragment)
                     .add(R.id.frame_layout, mineFragment)
-                    .hide(loanFragment)
+                    .hide(mainFragment)
                     .hide(shoppingMallFragment)
                     .hide(upQuotaFragment)
                     .hide(mineFragment)

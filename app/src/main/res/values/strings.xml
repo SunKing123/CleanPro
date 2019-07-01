@@ -2,9 +2,30 @@
     <string name="app_name">分期淘</string>
     <string name="app_num">4</string>
     <string name="life">生活</string>
-    <string name="loan">借款</string>
+    <string name="clean">清理</string>
     <string name="up_quota">提额</string>
     <string name="mine">我的</string>
     <string name="shopping_mall">商城</string>
     <string name="press_exit_again">再按一次退出程序</string>
+    <string name="text_clean">清理</string>
+    <string name="process_clean">进程清理</string>
+    <string name="apk_clean">无用安装包</string>
+    <string name="tmp_clean">临时文件</string>
+    <string name="log_clean">日志文件</string>
+    <string name="cache_clean">缓存垃圾</string>
+    <string name="system_cache">系统缓存</string>
+
+    <string name="byte_short">B</string>
+    <!-- Suffix added to a number to signify size in kilobytes. -->
+    <string name="kilo_byte_short">KB</string>
+    <!-- Suffix added to a number to signify size in megabytes. -->
+    <string name="mega_byte_short">MB</string>
+    <!-- Suffix added to a number to signify size in gigabytes. -->
+    <string name="giga_byte_short">GB</string>
+    <!-- Suffix added to a number to signify size in terabytes. -->
+    <string name="tera_byte_short">TB</string>
+    <!-- Suffix added to a number to signify size in petabytes. -->
+    <string name="peta_byte_short">PB</string>
+
+    <string name="clean_file_size_suffix">%1$s%2$s</string>
 </resources>

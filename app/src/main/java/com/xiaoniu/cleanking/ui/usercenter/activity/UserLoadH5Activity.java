@@ -30,6 +30,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -42,16 +48,9 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.NotchUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -172,12 +171,12 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         }
         tvTitle.setText(title);
         //判断是否是刘海屏
-        boolean haveLiuhai = NotchUtils.hasNotchScreen(this);
+//        boolean haveLiuhai = NotchUtils.hasNotchScreen(this);
         if (isParam) {
             if (url.contains("?")) {
-                url = url + "&xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
+//                url = url + "&xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
             } else {
-                url = url + "?xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
+//                url = url + "?xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
             }
             mImgHelp.setVisibility(View.GONE);
         } else {
