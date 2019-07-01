@@ -70,6 +70,7 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
     long times1 = System.currentTimeMillis();
 
     public void scanSdcardFiles() {
+
         List<File> listFiles = new ArrayList<>();
         CleanAllFileScanUtil cleanAllFileScanUtil = new CleanAllFileScanUtil();
         times1 = System.currentTimeMillis();

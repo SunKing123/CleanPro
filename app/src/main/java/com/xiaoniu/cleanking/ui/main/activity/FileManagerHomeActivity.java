@@ -9,10 +9,12 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.TimeUtil;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,6 +109,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSize(videoSize));
         tvMusicSize.setText(CleanAllFileScanUtil.byte2FitSize(musicSize));
         tvApkSize.setText(CleanAllFileScanUtil.byte2FitSize(apkSize));
+
     }
 
     @Override

@@ -220,7 +220,17 @@ public class TimeUtil {
         }
         return mDateTime;
     }
-
+    /**
+     *
+     * @param time  1541569323155
+     * @param pattern yyyy-MM-dd HH:mm:ss
+     * @return 2018-11-07 13:42:03
+     */
+    public static String getDate2String(long time, String pattern) {
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
+        return format.format(date);
+    }
     /**
      * 描述：Date类型转化为String类型(可偏移).
      *

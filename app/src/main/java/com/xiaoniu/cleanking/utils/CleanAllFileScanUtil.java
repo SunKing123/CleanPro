@@ -20,16 +20,20 @@ public class CleanAllFileScanUtil {
     /**
      * KB与Byte的倍数
      */
-    public static final int KB   = 1024;
+    public static final int KB = 1024;
     /**
      * MB与Byte的倍数
      */
-    public static final int MB   = 1048576;
+    public static final int MB = 1048576;
     /**
      * GB与Byte的倍数
      */
-    public static final int GB   = 1073741824;
+    public static final int GB = 1073741824;
 
+    public static final String[] imageFormat = new String[]{".jpg", ".png", ".gif", ".bmp"};
+    public static final String[] videoFormat = new String[]{".mp4", ".mov", ".mkv", ".avi",".wmv",".m4v",".mpg",".vob",".webm",".ogv",".3gp",".flv",".f4v",".swf"};
+    public static final String[] musicFormat = new String[]{".mp3"};
+    public static final String[] apkFormat = new String[]{".apk"};
     /* access modifiers changed from: private */
     public AtomicInteger currentProgress;
     /* access modifiers changed from: private */
