@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     NoClearSPHelper mPreferencesHelper;
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
+    @BindView(R.id.btn_wjgl)
+    Button btn_wjgl;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -158,6 +160,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 //        EventBus.getDefault().register(this);
 
+         btn_wjgl.setOnClickListener(v-> startActivity(FileManagerHomeActivity.class));
 
 
         try {

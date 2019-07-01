@@ -1,7 +1,9 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.IBinder;
+import android.os.StatFs;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -10,47 +12,48 @@ import com.xiaoniu.cleanking.app.AppApplication;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *               ii.                                         ;9ABH,
- *              SA391,                                    .r9GG35&G
- *              &#ii13Gh;                               i3X31i;:,rB1
- *              iMs,:,i5895,                         .5G91:,:;:s1:8A
- *               33::::,,;5G5,                     ,58Si,,:::,sHX;iH1
- *                Sr.,:;rs13BBX35hh11511h5Shhh5S3GAXS:.,,::,,1AG3i,GG
- *                .G51S511sr;;iiiishS8G89Shsrrsh59S;.,,,,,..5A85Si,h8
- *               :SB9s:,............................,,,.,,,SASh53h,1G.
- *            .r18S;..,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....,,.1H315199,rX,
- *          ;S89s,..,,,,,,,,,,,,,,,,,,,,,,,....,,.......,,,;r1ShS8,;Xi
- *        i55s:.........,,,,,,,,,,,,,,,,.,,,......,.....,,....r9&5.:X1
- *       59;.....,.     .,,,,,,,,,,,...        .............,..:1;.:&s
- *      s8,..;53S5S3s.   .,,,,,,,.,..      i15S5h1:.........,,,..,,:99
- *      93.:39s:rSGB@A;  ..,,,,.....    .SG3hhh9G&BGi..,,,,,,,,,,,,.,83
- *      G5.G8  9#@@@@@X. .,,,,,,.....  iA9,.S&B###@@Mr...,,,,,,,,..,.;Xh
- *      Gs.X8 S@@@@@@@B:..,,,,,,,,,,. rA1 ,A@@@@@@@@@H:........,,,,,,.iX:
- *     ;9. ,8A#@@@@@@#5,.,,,,,,,,,... 9A. 8@@@@@@@@@@M;    ....,,,,,,,,S8
- *     X3    iS8XAHH8s.,,,,,,,,,,...,..58hH@@@@@@@@@Hs       ...,,,,,,,:Gs
- *    r8,        ,,,...,,,,,,,,,,.....  ,h8XABMMHX3r.          .,,,,,,,.rX:
- *   :9, .    .:,..,:;;;::,.,,,,,..          .,,.               ..,,,,,,.59
- *  .Si      ,:.i8HBMMMMMB&5,....                    .            .,,,,,.sMr
- *  SS       :: h@@@@@@@@@@#; .                     ...  .         ..,,,,iM5
- *  91  .    ;:.,1&@@@@@@MXs.                            .          .,,:,:&S
- *  hS ....  .:;,,,i3MMS1;..,..... .  .     ...                     ..,:,.99
- *  ,8; ..... .,:,..,8Ms:;,,,...                                     .,::.83
- *   s&: ....  .sS553B@@HX3s;,.    .,;13h.                            .:::&1
- *    SXr  .  ...;s3G99XA&X88Shss11155hi.                             ,;:h&,
- *     iH8:  . ..   ,;iiii;,::,,,,,.                                 .;irHA
- *      ,8X5;   .     .......                                       ,;iihS8Gi
- *         1831,                                                 .,;irrrrrs&@
- *           ;5A8r.                                            .:;iiiiirrss1H
- *             :X@H3s.......                                .,:;iii;iiiiirsrh
- *              r#h:;,...,,.. .,,:;;;;;:::,...              .:;;;;;;iiiirrss1
- *             ,M8 ..,....,.....,,::::::,,...         .     .,;;;iiiiiirss11h
- *             8B;.,,,,,,,.,.....          .           ..   .:;;;;iirrsss111h
- *            i@5,:::,,,,,,,,.... .                   . .:::;;;;;irrrss111111
- *            9Bi,:,,,,......                        ..r91;;;;;iirrsss1ss1111
+ * ii.                                         ;9ABH,
+ * SA391,                                    .r9GG35&G
+ * &#ii13Gh;                               i3X31i;:,rB1
+ * iMs,:,i5895,                         .5G91:,:;:s1:8A
+ * 33::::,,;5G5,                     ,58Si,,:::,sHX;iH1
+ * Sr.,:;rs13BBX35hh11511h5Shhh5S3GAXS:.,,::,,1AG3i,GG
+ * .G51S511sr;;iiiishS8G89Shsrrsh59S;.,,,,,..5A85Si,h8
+ * :SB9s:,............................,,,.,,,SASh53h,1G.
+ * .r18S;..,,,,,,,,,,,,,,,,,,,,,,,,,,,,,....,,.1H315199,rX,
+ * ;S89s,..,,,,,,,,,,,,,,,,,,,,,,,....,,.......,,,;r1ShS8,;Xi
+ * i55s:.........,,,,,,,,,,,,,,,,.,,,......,.....,,....r9&5.:X1
+ * 59;.....,.     .,,,,,,,,,,,...        .............,..:1;.:&s
+ * s8,..;53S5S3s.   .,,,,,,,.,..      i15S5h1:.........,,,..,,:99
+ * 93.:39s:rSGB@A;  ..,,,,.....    .SG3hhh9G&BGi..,,,,,,,,,,,,.,83
+ * G5.G8  9#@@@@@X. .,,,,,,.....  iA9,.S&B###@@Mr...,,,,,,,,..,.;Xh
+ * Gs.X8 S@@@@@@@B:..,,,,,,,,,,. rA1 ,A@@@@@@@@@H:........,,,,,,.iX:
+ * ;9. ,8A#@@@@@@#5,.,,,,,,,,,... 9A. 8@@@@@@@@@@M;    ....,,,,,,,,S8
+ * X3    iS8XAHH8s.,,,,,,,,,,...,..58hH@@@@@@@@@Hs       ...,,,,,,,:Gs
+ * r8,        ,,,...,,,,,,,,,,.....  ,h8XABMMHX3r.          .,,,,,,,.rX:
+ * :9, .    .:,..,:;;;::,.,,,,,..          .,,.               ..,,,,,,.59
+ * .Si      ,:.i8HBMMMMMB&5,....                    .            .,,,,,.sMr
+ * SS       :: h@@@@@@@@@@#; .                     ...  .         ..,,,,iM5
+ * 91  .    ;:.,1&@@@@@@MXs.                            .          .,,:,:&S
+ * hS ....  .:;,,,i3MMS1;..,..... .  .     ...                     ..,:,.99
+ * ,8; ..... .,:,..,8Ms:;,,,...                                     .,::.83
+ * s&: ....  .sS553B@@HX3s;,.    .,;13h.                            .:::&1
+ * SXr  .  ...;s3G99XA&X88Shss11155hi.                             ,;:h&,
+ * iH8:  . ..   ,;iiii;,::,,,,,.                                 .;irHA
+ * ,8X5;   .     .......                                       ,;iihS8Gi
+ * 1831,                                                 .,;irrrrrs&@
+ * ;5A8r.                                            .:;iiiiirrss1H
+ * :X@H3s.......                                .,:;iii;iiiiirsrh
+ * r#h:;,...,,.. .,,:;;;;;:::,...              .:;;;;;;iiiirrss1
+ * ,M8 ..,....,.....,,::::::,,...         .     .,;;;iiiiiirss11h
+ * 8B;.,,,,,,,.,.....          .           ..   .:;;;;iirrsss111h
+ * i@5,:::,,,,,,,,.... .                   . .:::;;;;;irrrss111111
+ * 9Bi,:,,,,......                        ..r91;;;;;iirrsss1ss1111
  */
 
 public class DeviceUtils {
@@ -91,7 +94,7 @@ public class DeviceUtils {
      * @param pxVal
      * @return 根据设备的分辨率从 px(像素) 的单位 转成为 sp
      */
-    public static int px2sp( int pxVal) {
+    public static int px2sp(int pxVal) {
         return Math.round(pxVal / AppApplication.getInstance().getResources().getDisplayMetrics().scaledDensity);
     }
 
@@ -211,6 +214,7 @@ public class DeviceUtils {
 
     /**
      * 根据文字长度换行平分文字
+     *
      * @param s
      * @return
      */
@@ -219,6 +223,33 @@ public class DeviceUtils {
             return s.substring(0, s.length() / 2) + "\n" + s.substring(s.length() / 2);
         }
         return s;
+    }
+
+    //    获取总的内存空间并控制显示
+    public static String getTotalSpace() {
+        String mToalS = "";
+        StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        float i = 1024 * 1024 * 1024;
+        float bytes = 0;
+        bytes = sf.getTotalBytes() / i;
+
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+        mToalS = df.format(bytes);
+        return mToalS;
+    }
+
+    //    获取剩余的内存空间并控制显示
+    public static String getFreeSpace() {
+        String mFreeS = "";
+        StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        float i = 1024 * 1024 * 1024;
+        float bytes = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            bytes = sf.getFreeBytes() / i;
+        }
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+        mFreeS = df.format(bytes);
+        return mFreeS;
     }
 
 }
