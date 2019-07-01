@@ -1,4 +1,4 @@
-package com.installment.mall;
+package com.xiaoniu.cleanking;
 
 import android.content.Context;
 

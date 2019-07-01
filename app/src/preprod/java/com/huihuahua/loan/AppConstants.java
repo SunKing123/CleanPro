@@ -1,4 +1,4 @@
-package com.installment.mall;
+package com.xiaoniu.cleanking;
 
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 

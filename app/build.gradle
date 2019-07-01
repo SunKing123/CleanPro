@@ -3,7 +3,7 @@ apply plugin: 'channel'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.installment.mall"
+        applicationId "com.xiaoniu.cleanking"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName rootProject.ext.versionName
