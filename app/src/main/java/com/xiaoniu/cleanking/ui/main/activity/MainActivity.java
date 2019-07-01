@@ -56,6 +56,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     @BindView(R.id.float_button)
     Button mFloatingActionButton;
+    @BindView(R.id.btn_wjgl)
+    Button btn_wjgl;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -152,6 +154,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        EventBus.getDefault().register(this);
 
         mFloatingActionButton.setOnClickListener(v-> cleanMemory());
+        btn_wjgl.setOnClickListener(v-> startActivity(FileManagerHomeActivity.class));
     }
 
     private void cleanMemory() {
