@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -15,12 +14,12 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.installment.mall.BuildConfig;
 import com.installment.mall.R;
 import com.installment.mall.app.AppApplication;
 import com.installment.mall.utils.encypt.Base64;
 import com.installment.mall.utils.prefs.ImplPreferencesHelper;
-import com.google.gson.Gson;
 import com.leon.channel.helper.ChannelReaderUtil;
 
 import java.io.File;
@@ -282,10 +281,6 @@ public class AndroidUtil {
         return implPreferencesHelper.getToken();
     }
 
-    public static void clearUserInfo() {
-        implPreferencesHelper.clear();
-    }
-
     public static String getCustomerId() {
         return implPreferencesHelper.getCustomerId();
     }
@@ -293,26 +288,6 @@ public class AndroidUtil {
 
     public static String getPhoneNum() {
         return implPreferencesHelper.getPhoneNum();
-    }
-
-    public static String getNetIp() {
-        return NetWorkUtils.getIPAddress(true);
-    }
-
-    public static void clearSp() {
-        implPreferencesHelper.clearSP();
-    }
-
-    public static Typeface getTypeface() {
-        return Typeface.createFromAsset(AppApplication.getInstance().getAssets(), "fonts/din_medium.ttf");
-    }
-
-    public static String getUserName() {
-        return implPreferencesHelper.getUserName();
-    }
-
-    public static String getIDNum() {
-        return implPreferencesHelper.getIDNum();
     }
 
     /**
