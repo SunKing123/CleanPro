@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -50,6 +52,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -188,6 +191,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
+    @OnClick({R.id.btn_install_manage})
+    public void onViewClick(View view) {
+        int id=view.getId();
+        if(id==R.id.btn_install_manage){
+            startActivity(new Intent(this,CleanInstallPackageActivity.class));
+        }
+    }
     private void cleanMemory() {
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infoList = am.getRunningAppProcesses();
