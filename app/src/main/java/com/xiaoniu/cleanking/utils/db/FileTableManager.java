@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -34,13 +35,15 @@ public class FileTableManager {
             SQLiteStatement stat = FileDBManager.getDBconnection(context).compileStatement(sql);
             FileDBManager.getDBconnection(context).beginTransaction();
             for (File remoteAppInfo : list) {
-                stat.bindString(1, getFileType(remoteAppInfo.getAbsolutePath()));
-                stat.bindString(2, remoteAppInfo.length() + "");
-                stat.bindString(3, remoteAppInfo.lastModified() + "");
-                stat.bindString(4, remoteAppInfo.getAbsolutePath());
-                long result = stat.executeInsert();
-                if (result < 0) {
-                    return false;
+                if (remoteAppInfo != null && !TextUtils.isEmpty(remoteAppInfo.getAbsolutePath())) {
+                    stat.bindString(1, getFileType(remoteAppInfo.getAbsolutePath()));
+                    stat.bindString(2, remoteAppInfo.length() + "");
+                    stat.bindString(3, remoteAppInfo.lastModified() + "");
+                    stat.bindString(4, remoteAppInfo.getAbsolutePath());
+                    long result = stat.executeInsert();
+                    if (result < 0) {
+                        return false;
+                    }
                 }
             }
             FileDBManager.getDBconnection(context).setTransactionSuccessful();

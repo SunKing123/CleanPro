@@ -50,10 +50,10 @@ public class TinkerManager {
     }
 
     public static void initFastCrashProtect() {
-        if (uncaughtExceptionHandler == null) {
-            uncaughtExceptionHandler = new MyUncaughtExceptionHandler();
-            Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
-        }
+//        if (uncaughtExceptionHandler == null) {
+//            uncaughtExceptionHandler = new MyUncaughtExceptionHandler();
+//            Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+//        }
     }
 
     public static void setUpgradeRetryEnable(boolean enable) {

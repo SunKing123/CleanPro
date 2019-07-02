@@ -11,6 +11,7 @@
         android:layout_height="80.0dip"
         android:scaleType="centerCrop" />
     <CheckBox
+        android:id="@+id/cb_choose"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginRight="@dimen/dimen_4dp"

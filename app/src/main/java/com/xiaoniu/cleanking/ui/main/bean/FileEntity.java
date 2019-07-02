@@ -13,6 +13,15 @@ public class FileEntity implements Serializable {
     public String size;
     public String time;
     public String path;
+    public boolean isCheck;
+
+    public boolean getIsCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
 
     public String getType() {
         return type;

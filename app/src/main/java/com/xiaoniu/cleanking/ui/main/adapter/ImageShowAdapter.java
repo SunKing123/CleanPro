@@ -3,15 +3,17 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 import android.app.Activity;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 
 import java.util.ArrayList;
@@ -19,14 +21,34 @@ import java.util.List;
 import java.util.Map;
 
 public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<Map<String, String>> listImage = new ArrayList<>();
-    Activity mActivity;
+    List<FileEntity> listImage = new ArrayList<>();
 
-    public ImageShowAdapter(Activity mActivity, List<Map<String, String>> listImage) {
+    public void setIsCheckAll(boolean isCheckAll) {
+        for(int i=0;i<this.listImage.size();i++){
+            this.listImage.get(i).setCheck(isCheckAll);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void deleteData(List<FileEntity> tempList) {
+        listImage.removeAll(tempList);
+        Log.e("gfd","删除后："+listImage.size());
+        notifyDataSetChanged();
+    }
+
+    public List<FileEntity> getListImage() {
+        return listImage;
+    }
+
+    Activity mActivity;
+    onCheckListener mOnCheckListener;
+
+
+    public ImageShowAdapter(Activity mActivity, List<FileEntity> listImage) {
         super();
         this.mActivity = mActivity;
         this.listImage = listImage;
-
+        Log.e("gfd","初始："+listImage.size());
     }
 
     @Override
@@ -39,16 +61,23 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
-            long totalSize = 0;
-            String mediaBean = listImage.get(position).get("path");
+            String path = listImage.get(position).getPath();
             Glide.with(mActivity)
-                    .load(mediaBean)
+                    .load(path)
                     .into(((ImageViewHolder) holder).iv_photo_filelist_pic);
             ConstraintLayout.LayoutParams llp = (ConstraintLayout.LayoutParams) ((ImageViewHolder) holder).iv_photo_filelist_pic.getLayoutParams();
             llp.width = (DeviceUtils.getScreenWidth() - DeviceUtils.dip2px(48)) / 3;
             llp.height = llp.width;
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setLayoutParams(llp);
-
+            ((ImageViewHolder) holder).cb_choose.setChecked((boolean)listImage.get(position).getIsCheck());
+            ((ImageViewHolder) holder).cb_choose.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    listImage.get(position).setCheck(isChecked);
+                    if (mOnCheckListener != null)
+                        mOnCheckListener.onCheck(listImage,position);
+                }
+            });
         }
     }
 
@@ -60,12 +89,24 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_photo_filelist_pic;
+        public CheckBox cb_choose;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             iv_photo_filelist_pic = (ImageView) itemView.findViewById(R.id.iv_photo_filelist_pic);
+            cb_choose = (CheckBox) itemView.findViewById(R.id.cb_choose);
         }
     }
 
 
+
+
+
+    public interface onCheckListener {
+        public void onCheck(List<FileEntity> listFile,int pos);
+    }
+
+    public void setmOnCheckListener(onCheckListener mOnCheckListener) {
+        this.mOnCheckListener = mOnCheckListener;
+    }
 }
