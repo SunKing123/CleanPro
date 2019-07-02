@@ -127,6 +127,14 @@ public class NumberUtils {
         }
     }
 
+    public static long getLong(String str) {
+        try {
+            return Long.parseLong(str);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     public static long string2Long(String str){
         try {
             return Long.parseLong(str);

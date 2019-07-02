@@ -7,6 +7,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
@@ -46,6 +47,8 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
             this.ivSplash.setImageResource(R.mipmap.splash);
         }
         skip();
+        //扫描所有文件更新数据库
+        CleanAllFileScanUtil.scanSdcardFiles();
     }
 
     /**
