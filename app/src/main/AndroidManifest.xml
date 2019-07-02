@@ -11,7 +11,7 @@
 
     <!-- Required -->
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE" />
@@ -92,9 +92,9 @@
         <activity
             android:name="com.xiaoniu.cleanking.ui.main.activity.MainActivity"
             android:configChanges="orientation"
-            android:theme="@style/Main.Theme"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:theme="@style/Main.Theme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity"
@@ -102,6 +102,7 @@
         <activity
             android:name=".ui.main.activity.FileManagerHomeActivity"
             android:screenOrientation="portrait" />
+
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />
@@ -135,12 +136,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.activity.JunkCleanActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.main.activity.JunkCleanActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".ui.main.activity.CleanMusicManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

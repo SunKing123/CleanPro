@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.app.injector.component;
 import com.xiaoniu.cleanking.app.injector.PerActivity;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
@@ -28,5 +29,7 @@ public interface ActivityComponent {
     void inject(FileManagerHomeActivity fileManagerHomeActivity);
 
     void inject(CleanInstallPackageActivity activity);
+
+    void inject(CleanMusicManageActivity cleanMusicManageActivity);
 }
 

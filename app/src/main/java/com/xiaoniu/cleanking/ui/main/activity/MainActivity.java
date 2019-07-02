@@ -191,11 +191,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    @OnClick({R.id.btn_install_manage})
+    @OnClick({R.id.btn_install_manage,R.id.btn_clean_music})
     public void onViewClick(View view) {
         int id=view.getId();
         if(id==R.id.btn_install_manage){
             startActivity(new Intent(this,CleanInstallPackageActivity.class));
+        }else if(id==R.id.btn_clean_music){
+            startActivity(new Intent(this,CleanMusicManageActivity.class));
         }
     }
     private void cleanMemory() {

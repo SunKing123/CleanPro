@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by lang.chen on 2019/7/2
@@ -25,8 +29,16 @@ public class DelDialogFragment extends DialogFragment {
     private DialogClickListener dialogClickListener;
 
 
-    public static DelDialogFragment newInstance() {
+    /**
+     * @param strs strs[0] 为标题
+     */
+    public static DelDialogFragment newInstance(String... strs) {
         DelDialogFragment delDialogFragment = new DelDialogFragment();
+        Bundle bundle = new Bundle();
+        if (strs.length > 0) {
+            bundle.putString("title", strs[0]);
+        }
+        delDialogFragment.setArguments(bundle);
         return delDialogFragment;
     }
 
@@ -77,6 +89,14 @@ public class DelDialogFragment extends DialogFragment {
 
 
     private void initView(View view) {
+
+        if(null!=getArguments()){
+           String title= getArguments().getString("title","");
+           if(!TextUtils.isEmpty(title)){
+               TextView txtTitle=view.findViewById(R.id.txt_title);
+                txtTitle.setText(title);
+           }
+        }
         Button btnCancel = view.findViewById(R.id.btn_cancel);
         Button btnDel = view.findViewById(R.id.btn_del);
 

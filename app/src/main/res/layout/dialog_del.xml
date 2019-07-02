@@ -10,10 +10,12 @@
     android:paddingTop="@dimen/dimen_16dp">
 
     <TextView
+        android:id="@+id/txt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="确定删除安装包？"
         android:textColor="@color/color_333333"
+        android:textStyle="bold"
         android:textSize="@dimen/dimen_16sp" />
 
     <TextView
