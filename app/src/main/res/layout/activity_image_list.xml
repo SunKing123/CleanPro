@@ -61,7 +61,7 @@
         app:layout_constraintBottom_toBottomOf="@id/view_bottom"
         android:checked="true"
         android:button="@null"
-        android:background="@drawable/iv_show_more_selector"
+        android:background="@drawable/choose_selector"
 
         />
 </android.support.constraint.ConstraintLayout>
