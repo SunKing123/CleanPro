@@ -70,7 +70,6 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                 });
     }
 
-    long times1 = System.currentTimeMillis();
 
     public void getSdcardFiles() {
         Observable.create(new ObservableOnSubscribe<List<Map<String, String>>>() {

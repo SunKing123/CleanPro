@@ -132,16 +132,26 @@
         android:textColor="#999999"
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_image_icon"
-       app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_image_icon" />
+
     <View
         android:id="@+id/view_image_bottom"
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         android:layout_height="@dimen/dimen_1dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/view_image_icon"
         android:layout_marginTop="@dimen/dimen_13dp"
+        android:background="#EEEEEE"
+        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
+        app:layout_constraintTop_toBottomOf="@id/view_image_icon" />
+
+    <View
+        android:id="@+id/view_imagearea"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_top"
+        app:layout_constraintBottom_toTopOf="@id/view_image_bottom"
         />
 
     <View
@@ -178,15 +188,16 @@
         app:layout_constraintBottom_toBottomOf="@id/view_video_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_video_icon" />
+
     <View
         android:id="@+id/view_video_bottom"
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         android:layout_height="@dimen/dimen_1dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/view_video_icon"
         android:layout_marginTop="@dimen/dimen_13dp"
-        />
+        android:background="#EEEEEE"
+        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
+        app:layout_constraintTop_toBottomOf="@id/view_video_icon" />
+
     <View
         android:id="@+id/view_music_icon"
         android:layout_width="@dimen/dimen_30dp"
@@ -221,15 +232,16 @@
         app:layout_constraintBottom_toBottomOf="@id/view_music_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_music_icon" />
+
     <View
         android:id="@+id/view_music_bottom"
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         android:layout_height="@dimen/dimen_1dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/view_music_icon"
         android:layout_marginTop="@dimen/dimen_13dp"
-        />
+        android:background="#EEEEEE"
+        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
+        app:layout_constraintTop_toBottomOf="@id/view_music_icon" />
+
     <View
         android:id="@+id/view_apk_icon"
         android:layout_width="@dimen/dimen_30dp"
@@ -264,13 +276,13 @@
         app:layout_constraintBottom_toBottomOf="@id/view_apk_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_apk_icon" />
+
     <View
         android:id="@+id/view_apk_bottom"
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         android:layout_height="@dimen/dimen_1dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/view_apk_icon"
         android:layout_marginTop="@dimen/dimen_13dp"
-        />
+        android:background="#EEEEEE"
+        app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
+        app:layout_constraintTop_toBottomOf="@id/view_apk_icon" />
 </android.support.constraint.ConstraintLayout>

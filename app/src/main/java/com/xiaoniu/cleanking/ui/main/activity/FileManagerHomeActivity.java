@@ -1,12 +1,16 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.EventBusTags;
@@ -18,6 +22,7 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +49,8 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     TextView tvMusicSize;
     @BindView(R.id.tv_apk_size)
     TextView tvApkSize;
+    @BindView(R.id.view_imagearea)
+    View viewImagearea;
     long times1 = 0;
 
 
@@ -95,7 +102,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         long videoSize = 0;
         long musicSize = 0;
         long apkSize = 0;
-        List<Map<String, String>> listImages = new ArrayList<>();
+        List<FileEntity> listImages = new ArrayList<>();
         List<Map<String, String>> listVideos = new ArrayList<>();
         List<Map<String, String>> listMusics = new ArrayList<>();
         List<Map<String, String>> listApks = new ArrayList<>();
@@ -112,7 +119,12 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
                     listMusics.add(listFiles.get(i));
                     musicSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
                 } else {
-                    listImages.add(listFiles.get(i));
+                    FileEntity fileEntity = new FileEntity();
+                    fileEntity.setSize(listFiles.get(i).get("size"));
+                    fileEntity.setTime(listFiles.get(i).get("time"));
+                    fileEntity.setPath(listFiles.get(i).get("path"));
+                    fileEntity.setType(listFiles.get(i).get("type"));
+                    listImages.add(fileEntity);
                     imageSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
                 }
             }
@@ -121,6 +133,14 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSize(videoSize));
         tvMusicSize.setText(CleanAllFileScanUtil.byte2FitSize(musicSize));
         tvApkSize.setText(CleanAllFileScanUtil.byte2FitSize(apkSize));
+
+        viewImagearea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
