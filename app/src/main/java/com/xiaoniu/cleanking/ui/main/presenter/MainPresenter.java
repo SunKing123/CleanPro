@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -25,10 +28,22 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by tie on 2017/5/15.
@@ -56,13 +71,13 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(UpdateInfoEntity updateInfoEntity) {
-                    if (updateInfoEntity.getData() != null) {
-                        if (updateInfoEntity.getData().getDownloadUrl() != null
-                                && TextUtils.equals(String.valueOf(1),updateInfoEntity.getData().getIsPopup())) {
-                            mUpdateAgent = new UpdateAgent(mActivity, updateInfoEntity.getData(), onCancelListener);
-                            mUpdateAgent.check();
-                        }
+                if (updateInfoEntity.getData() != null) {
+                    if (updateInfoEntity.getData().getDownloadUrl() != null
+                            && TextUtils.equals(String.valueOf(1), updateInfoEntity.getData().getIsPopup())) {
+                        mUpdateAgent = new UpdateAgent(mActivity, updateInfoEntity.getData(), onCancelListener);
+                        mUpdateAgent.check();
                     }
+                }
             }
 
             @Override
@@ -98,7 +113,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             patchVersion = config.get("patchVersion");
         }
         Map<String, String> queryParams = new HashMap<>();
-       // queryParams.put("channel", channel);
+        // queryParams.put("channel", channel);
         queryParams.put("baseVersionName", currentVersionName);
         queryParams.put("clientType", "1");
         if (!TextUtils.isEmpty(patchVersion)) {
@@ -182,5 +197,128 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             Activity activity = (RxAppCompatActivity) weakReference.get();
             UpdateUtil.loadFile(activity, result.getData().getPatchUrl(), result.getData().getPatchEncryption(), callback);
         }
+    }
+
+
+    //音乐文件
+    private Set<String> cachesMusicFiles = new HashSet<>();
+    //apk文件
+    private Set<String> cachesApkFies = new HashSet<>();
+
+
+    /**
+     * 文件缓存
+     */
+    public void saveCacheFiles() {
+
+
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                final String path = Environment.getExternalStorageDirectory().getPath();
+                scanMusicFile(path);
+                emitter.onNext("");
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        //
+                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putStringSet(SpCacheConfig.CACHES_KEY_MUSCI, cachesMusicFiles);
+                        editor.commit();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+
+
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                final String path = Environment.getExternalStorageDirectory().getPath();
+                scanApkFile(path);
+                emitter.onNext("");
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        //
+                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putStringSet(SpCacheConfig.CACHES_KEY_APK, cachesApkFies);
+                        editor.commit();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+
+    }
+
+
+    /**
+     * 文件扫描
+     */
+    private void scanMusicFile(String path) {
+
+        File file = new File(path);
+        if (file.isDirectory()) {
+            File[] f = file.listFiles();
+            if (null != f) {
+                for (File file1 : f) {
+                    if (file1.isDirectory()) {
+                        scanMusicFile(path + "/" + file1.getName());
+                    } else if (file1.getName().endsWith(".mp3")) {
+                        cachesMusicFiles.add(file1.getPath());
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void scanApkFile(String path) {
+
+        File file = new File(path);
+        if (file.isDirectory()) {
+            File[] f = file.listFiles();
+            if (null != f) {
+                for (File file1 : f) {
+                    if (file1.isDirectory()) {
+                        scanApkFile(path + "/" + file1.getName());
+                    } else if (file1.getName().endsWith(".apk")) {
+                        cachesApkFies.add(file1.getPath());
+                    }
+                }
+            }
+        }
+
+
     }
 }

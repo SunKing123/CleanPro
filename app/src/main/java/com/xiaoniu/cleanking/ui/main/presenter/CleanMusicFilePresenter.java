@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -8,13 +10,16 @@ import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.InstallManageUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -45,13 +50,15 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
 
     /**
      * 清空文件缓存
+     *
      * @param appInfoBeans
      */
-    public void updateCache(List<MusciInfoBean> appInfoBeans){
+    public void updateCache(List<MusciInfoBean> appInfoBeans) {
         musciInfoBeans.clear();
         files.clear();
         musciInfoBeans.addAll(appInfoBeans);
     }
+
     /**
      * 获取应用安装包信息
      *
@@ -64,18 +71,28 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
         if (files.size() > 0) {
             files.clear();
         }
-
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_MUSCI, new HashSet<String>());
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                //扫描apk文件
-                scanFile(path);
+
+                //先获取缓存文件
+                if (strings.size() > 0) {
+                    for (String path : strings) {
+                        File file = new File(path);
+                        files.add(file);
+                    }
+                } else {
+                    //扫描apk文件
+                    scanFile(path);
+                }
                 for (File file : files) {
-                    MusciInfoBean musciInfoBean=new MusciInfoBean();
-                    musciInfoBean.name=file.getName();
-                    musciInfoBean.packageSize=file.length();
-                    musciInfoBean.path=file.getPath();
-                    musciInfoBean.time= MusicFileUtils.getPlayDuration(file.getPath());
+                    MusciInfoBean musciInfoBean = new MusciInfoBean();
+                    musciInfoBean.name = file.getName();
+                    musciInfoBean.packageSize = file.length();
+                    musciInfoBean.path = file.getPath();
+                    musciInfoBean.time = MusicFileUtils.getPlayDuration(file.getPath());
                     musciInfoBeans.add(musciInfoBean);
                 }
                 emitter.onNext("");
@@ -105,20 +122,19 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                 });
 
 
-
         return musciInfoBeans;
     }
 
 
-    public void delFile(List<MusciInfoBean> list){
-        List<MusciInfoBean> files=list;
+    public void delFile(List<MusciInfoBean> list) {
+        List<MusciInfoBean> files = list;
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                for (MusciInfoBean appInfoBean : files){
-                    File file=new File(appInfoBean.path);
-                    if(null!=file){
+                for (MusciInfoBean appInfoBean : files) {
+                    File file = new File(appInfoBean.path);
+                    if (null != file) {
                         file.delete();
                     }
                 }
@@ -149,7 +165,7 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                 });
 
     }
-   
+
 
     /**
      * 文件扫描

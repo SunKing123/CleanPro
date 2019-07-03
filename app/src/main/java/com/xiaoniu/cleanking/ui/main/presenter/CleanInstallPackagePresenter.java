@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -7,6 +9,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.InstallManageUtils;
 
@@ -14,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -44,13 +48,19 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
 
     /**
      * 清空文件缓存
+     *
      * @param appInfoBeans
      */
-    public void updateCache(List<AppInfoBean> appInfoBeans){
+    public void updateCache(List<AppInfoBean> appInfoBeans) {
         apps.clear();
         apkFiles.clear();
         apps.addAll(appInfoBeans);
     }
+
+    public void updateRemoveCache(List<AppInfoBean> appInfoBeans) {
+        apps.removeAll(appInfoBeans);
+    }
+
     /**
      * 获取应用安装包信息
      *
@@ -64,14 +74,25 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
             apkFiles.clear();
         }
 
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_APK, new HashSet<String>());
+
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                //扫描apk文件
-                scanFile(path);
+                //先获取缓存文件
+                if (strings.size() > 0) {
+                    for (String path : strings) {
+                        File file = new File(path);
+                        apkFiles.add(file);
+                    }
+                } else {
+                    //扫描apk文件
+                    scanFile(path);
+                }
                 for (File file : apkFiles) {
                     AppInfoBean appInfoBean = InstallManageUtils.getUninstallAPKInfo(activity, file.getPath());
-                    if(!TextUtils.isEmpty(appInfoBean.name)){
+                    if (!TextUtils.isEmpty(appInfoBean.name)) {
                         apps.add(appInfoBean);
                     }
                 }
@@ -79,8 +100,8 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
                 emitter.onComplete();
             }
         })
-                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
-                .subscribeOn(Schedulers.io())//执行在io线程
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -102,20 +123,19 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
                 });
 
 
-
         return apps;
     }
 
 
-    public void delFile(List<AppInfoBean> list){
-        List<AppInfoBean> files=list;
+    public void delFile(List<AppInfoBean> list) {
+        List<AppInfoBean> files = list;
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                for (AppInfoBean appInfoBean : files){
-                    File file=new File(appInfoBean.path);
-                    if(null!=file){
+                for (AppInfoBean appInfoBean : files) {
+                    File file = new File(appInfoBean.path);
+                    if (null != file) {
                         file.delete();
                     }
                 }
@@ -146,6 +166,7 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
                 });
 
     }
+
     /**
      * 获取已安装和未安装安装包信息
      *

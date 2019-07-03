@@ -204,18 +204,27 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
         //更新缓存
-        mPresenter.updateCache(listsNew);
+        mPresenter.updateRemoveCache(appInfoBeans);
 
     }
 
     private void setStatusView(int type) {
         if (type == 0) {
-            mTxtInstall.setTextColor(getResources().getColor(R.color.white));
-            mViewLineIntall.setVisibility(View.VISIBLE);
-            mViewLineUninstall.setVisibility(View.INVISIBLE);
+            if(null!=mTxtInstall){
+                mTxtInstall.setTextColor(getResources().getColor(R.color.white));
+            }
+            if(null!=mViewLineIntall){
+                mViewLineIntall.setVisibility(View.VISIBLE);
+            }
+            if(null!=mViewLineUninstall){
+                mViewLineUninstall.setVisibility(View.INVISIBLE);
+            }
         } else {
-            mViewLineIntall.setVisibility(View.INVISIBLE);
-            mViewLineUninstall.setVisibility(View.VISIBLE);
+            if(null!=mViewLineIntall){
+                mViewLineIntall.setVisibility(View.INVISIBLE);
+            }
+            if(null!=mViewLineUninstall){
+                mViewLineUninstall.setVisibility(View.VISIBLE); }
         }
 
 
