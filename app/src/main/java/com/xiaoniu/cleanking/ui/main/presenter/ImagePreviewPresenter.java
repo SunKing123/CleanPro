@@ -12,22 +12,21 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.Image;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -41,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by tie on 2017/5/15.
  */
-public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
+public class ImagePreviewPresenter extends RxPresenter<PreviewImageActivity, MainModel> {
 
     private final RxAppCompatActivity mActivity;
     @Inject
@@ -49,25 +48,10 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
 
 
     @Inject
-    public ImageListPresenter(RxAppCompatActivity activity) {
+    public ImagePreviewPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
     }
 
-    public void getSdcardFiles() {
-//        Observable.create(new ObservableOnSubscribe<List<Map<String, String>>>() {
-//            @Override
-//            public void subscribe(ObservableEmitter<List<Map<String, String>>> e) throws Exception {
-//                e.onNext(FileTableManager.queryAllFiles(AppApplication.getInstance()));
-//            }
-//        }).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<List<Map<String, String>>>() {
-//                    @Override
-//                    public void accept(List<Map<String, String>> strings) throws Exception {
-//                        mView.scanSdcardResult(strings);
-//                    }
-//                });
-    }
 
     public interface ClickListener {
         public void clickOKBtn();
@@ -75,7 +59,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
         public void cancelBtn();
     }
 
-    public AlertDialog alertBanLiveDialog(Context context, int deleteNum,final ClickListener okListener) {
+    public AlertDialog alertBanLiveDialog(Context context, int deleteNum, final ClickListener okListener) {
         final AlertDialog dlg = new AlertDialog.Builder(context).create();
         if (((Activity) context).isFinishing()) {
             return dlg;
@@ -111,7 +95,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
     }
 
     //删除数据库中的相应图片
-    public void deleteFromDatabase(List<FileEntity> listF, ImageShowAdapter imageAdapter) {
+    public void deleteFromDatabase(List<Image> listF) {
         String[] strPaths = new String[listF.size()];
         for (int i = 0; i < listF.size(); i++) {
             strPaths[i] = listF.get(i).getPath();

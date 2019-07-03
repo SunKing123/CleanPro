@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     @BindView(R.id.line_none)
     LinearLayout line_none;
     ImageShowAdapter imageAdapter;
+    List<Integer> listSelect = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -66,7 +68,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         }
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
-        mPresenter.getSdcardFiles();
+        getImageList();
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,11 +90,11 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                     return;
                 List<FileEntity> listF = new ArrayList<>();
                 for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
-                    if (imageAdapter.getListImage().get(i).getIsCheck())
+                    if (imageAdapter.getListCheck().contains(i))
                         listF.add(imageAdapter.getListImage().get(i));
                 }
 
-                mPresenter.alertBanLiveDialog(ImageActivity.this,listF.size(), new ImageListPresenter.ClickListener() {
+                mPresenter.alertBanLiveDialog(ImageActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                     @Override
                     public void clickOKBtn() {
 //                        for (int i = 0; i < listF.size(); i++) {
@@ -100,7 +102,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 //                            f.delete();
 //                        }
                         //数据库删除选中的文件
-                        mPresenter.deleteFromDatabase(listF,imageAdapter);
+                        mPresenter.deleteFromDatabase(listF, imageAdapter);
                     }
 
                     @Override
@@ -120,7 +122,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     }
 
     //删除成功
-    public void deleteSuccess(List<FileEntity> listF){
+    public void deleteSuccess(List<FileEntity> listF) {
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
         imageAdapter.deleteData(listF);
@@ -132,7 +134,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     public void compulateDeleteSize() {
         List<FileEntity> listF = new ArrayList<>();
         for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
-            if (imageAdapter.getListImage().get(i).getIsCheck())
+            if (imageAdapter.getListCheck().contains(i))
                 listF.add(imageAdapter.getListImage().get(i));
         }
         long deleteSize = 0;
@@ -144,28 +146,10 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
     /**
      * 扫描出的结果
-     *
-     * @param listFiles
      */
-    public void scanSdcardResult(List<Map<String, String>> listFiles) {
-        long imageSize = 0;
-        List<FileEntity> listImages = new ArrayList<>();
-        for (int i = 0; i < listFiles.size(); i++) {
-            if (listFiles.get(i) != null) {
-                String filePath = listFiles.get(i).get("path");
-                if (Arrays.asList(CleanAllFileScanUtil.imageFormat).contains(filePath.substring(filePath.lastIndexOf('.'), filePath.length()))) {
-                    FileEntity fileEntity = new FileEntity();
-                    fileEntity.setCheck(false);
-                    fileEntity.setType(listFiles.get(i).get("type"));
-                    fileEntity.setTime(listFiles.get(i).get("time"));
-                    fileEntity.setSize(listFiles.get(i).get("size"));
-                    fileEntity.setPath(listFiles.get(i).get("path"));
-                    listImages.add(fileEntity);
-                    imageSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
-                }
-            }
-        }
-        imageAdapter = new ImageShowAdapter(ImageActivity.this, listImages);
+    public void getImageList() {
+        List<FileEntity> listImages = CleanAllFileScanUtil.clean_image_list;
+        imageAdapter = new ImageShowAdapter(ImageActivity.this, listImages, listSelect);
         recycle_view.setLayoutManager(new GridLayoutManager(ImageActivity.this, 3));
         recycle_view.setAdapter(imageAdapter);
         line_none.setVisibility(listImages.size() == 0 ? View.VISIBLE : View.GONE);
@@ -173,18 +157,28 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         imageAdapter.setmOnCheckListener(new ImageShowAdapter.onCheckListener() {
             @Override
             public void onCheck(List<FileEntity> listFile, int pos) {
-                List<Boolean> listC = new ArrayList<>();
-                for (int i = 0; i < listFile.size(); i++) {
-                    listC.add(listFile.get(i).getIsCheck());
-                }
-                cb_checkall.setBackgroundResource(listC.contains(false) ? R.drawable.icon_unselect : R.drawable.icon_select);
-                tv_delete.setBackgroundResource(listC.contains(true) ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-                tv_delete.setSelected(listC.contains(true) ? true : false);
+
+                cb_checkall.setBackgroundResource(imageAdapter.getListCheck().size() == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                tv_delete.setBackgroundResource(imageAdapter.getListCheck().size()==0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+                tv_delete.setSelected(imageAdapter.getListCheck().size()==0 ? false : true);
                 compulateDeleteSize();
             }
         });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 205) {
+            List<Integer> listInt = (List<Integer>) data.getSerializableExtra("selectList");
+            imageAdapter.setListCheck(listInt);
+            tv_delete.setBackgroundResource(imageAdapter.getListCheck().size()==0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+            tv_delete.setSelected(imageAdapter.getListCheck().size()==0 ? false : true);
+            compulateDeleteSize();
+            cb_checkall.setBackgroundResource(imageAdapter.getListCheck().size() == imageAdapter.getListImage().size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+        }
+    }
 
     @Override
     public void netError() {

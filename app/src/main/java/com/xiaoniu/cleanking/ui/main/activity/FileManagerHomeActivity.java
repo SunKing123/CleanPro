@@ -138,6 +138,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
+                CleanAllFileScanUtil.clean_image_list=listImages;
                 startActivity(intent);
             }
         });

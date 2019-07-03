@@ -1,32 +1,52 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.Image;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<FileEntity> listImage = new ArrayList<>();
+    List<Integer> listCheck = new ArrayList<>();
+
+    public List<Integer> getListCheck() {
+        return listCheck;
+    }
+
+    public void setListCheck(List<Integer> listCheck) {
+        this.listCheck.clear();
+        this.listCheck.addAll(listCheck);
+        notifyDataSetChanged();
+    }
 
     public void setIsCheckAll(boolean isCheckAll) {
-        for (int i = 0; i < this.listImage.size(); i++) {
-            this.listImage.get(i).setCheck(isCheckAll);
+        listCheck.clear();
+        if (isCheckAll) {
+            for (int i = 0; i < this.listImage.size(); i++) {
+                listCheck.add(i);
+            }
         }
         notifyDataSetChanged();
     }
@@ -45,11 +65,11 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     onCheckListener mOnCheckListener;
 
 
-    public ImageShowAdapter(Activity mActivity, List<FileEntity> listImage) {
+    public ImageShowAdapter(Activity mActivity, List<FileEntity> listImage, List<Integer> listCheck) {
         super();
         this.mActivity = mActivity;
+        this.listCheck = listCheck;
         this.listImage = listImage;
-        Log.e("gfd", "初始：" + listImage.size());
     }
 
     @Override
@@ -70,13 +90,34 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             llp.width = (DeviceUtils.getScreenWidth() - DeviceUtils.dip2px(48)) / 3;
             llp.height = llp.width;
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setLayoutParams(llp);
-            boolean isC = (boolean) listImage.get(position).getIsCheck();
-            ((ImageViewHolder) holder).cb_choose.setBackgroundResource(isC ? R.drawable.icon_select : R.drawable.icon_unselect);
-            ((ImageViewHolder) holder).cb_choose.setOnClickListener(new View.OnClickListener() {
+            ((ImageViewHolder) holder).iv_photo_filelist_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listImage.get(position).setCheck(!listImage.get(position).getIsCheck());
-                    ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listImage.get(position).getIsCheck() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                    Intent intent = new Intent(mActivity, PreviewImageActivity.class);
+                    List<Image> list = new ArrayList<>();
+                    for (int i = 0; i < listImage.size(); i++) {
+                        Image image = new Image();
+                        image.setPath(listImage.get(i).getPath());
+                        image.setSize(NumberUtils.getLong(listImage.get(i).getSize()));
+                        list.add(image);
+                    }
+                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
+                    CleanAllFileScanUtil.preview_image_list=list;
+//                    intent.putParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA, (ArrayList<? extends Parcelable>) list);
+                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_SELECT, (Serializable) listCheck);
+                    mActivity.startActivityForResult(intent, 209);
+                }
+            });
+            ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listCheck.contains(position) ? R.drawable.icon_select : R.drawable.icon_unselect);
+            ((ImageViewHolder) holder).rel_select.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!listCheck.contains(position)) {
+                        listCheck.add(position);
+                    } else {
+                        listCheck.remove(listCheck.indexOf(position));
+                    }
+                    ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listCheck.contains(position) ? R.drawable.icon_select : R.drawable.icon_unselect);
                     if (mOnCheckListener != null)
                         mOnCheckListener.onCheck(listImage, position);
                 }
@@ -94,11 +135,13 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_photo_filelist_pic;
         public TextView cb_choose;
+        public RelativeLayout rel_select;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             iv_photo_filelist_pic = (ImageView) itemView.findViewById(R.id.iv_photo_filelist_pic);
             cb_choose = (TextView) itemView.findViewById(R.id.cb_choose);
+            rel_select = (RelativeLayout) itemView.findViewById(R.id.rel_select);
         }
     }
 

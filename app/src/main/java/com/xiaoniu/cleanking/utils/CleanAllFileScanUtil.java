@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.utils;
 import android.os.Environment;
 
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.Image;
 import com.xiaoniu.cleanking.utils.db.FileDBManager;
 import com.xiaoniu.cleanking.utils.db.FileTableManager;
 
@@ -42,6 +44,10 @@ public class CleanAllFileScanUtil {
     public static final String[] videoFormat = new String[]{".mp4", ".3gp"};
     public static final String[] musicFormat = new String[]{".mp3"};
     public static final String[] apkFormat = new String[]{".apk"};
+
+    public static List<Image> preview_image_list;
+    public static List<FileEntity> clean_image_list ;
+
     /* access modifiers changed from: private */
     public AtomicInteger currentProgress;
     /* access modifiers changed from: private */
@@ -260,7 +266,7 @@ public class CleanAllFileScanUtil {
             @Override
             public void scanProgress(int i, int i2) {
                 if (i == i2) {
-                    FileTableManager.insertBySql(AppApplication.getInstance(),listFiles);
+                    FileTableManager.insertBySql(AppApplication.getInstance(), listFiles);
                     EventBus.getDefault().postSticky(new MessageEvent(EventBusTags.UPDATE_FILE_MANAGER));
                 }
             }
