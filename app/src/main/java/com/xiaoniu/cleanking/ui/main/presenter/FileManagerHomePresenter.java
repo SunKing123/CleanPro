@@ -5,18 +5,21 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -67,39 +70,20 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                 });
     }
 
-    long times1 = System.currentTimeMillis();
 
-    public void scanSdcardFiles() {
-
-        List<File> listFiles = new ArrayList<>();
-        CleanAllFileScanUtil cleanAllFileScanUtil = new CleanAllFileScanUtil();
-        times1 = System.currentTimeMillis();
-        cleanAllFileScanUtil.scanAllFiles(new CleanAllFileScanUtil.fileCheckByScan() {
+    public void getSdcardFiles() {
+        Observable.create(new ObservableOnSubscribe<List<Map<String, String>>>() {
             @Override
-            public void getFileByScan(File file) {
-                listFiles.add(file);
+            public void subscribe(ObservableEmitter<List<Map<String, String>>> e) throws Exception {
+                e.onNext(FileTableManager.queryAllFiles(AppApplication.getInstance()));
             }
-
-            @Override
-            public void scanProgress(int i, int i2) {
-//                Log.e("qwerty", "第一个：" + i + "第二个：" + i2);
-                if (i == i2) {
-                    Log.e("qwerty", "耗时：" + (System.currentTimeMillis() - times1) + "");
-                    Observable.create(new ObservableOnSubscribe<String>() {
-                        @Override
-                        public void subscribe(ObservableEmitter<String> e) throws Exception {
-                            e.onNext("");
-                        }
-                    }).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<String>() {
-                                @Override
-                                public void accept(String strings) throws Exception {
-                                    mView.scanSdcardResult(listFiles);
-                                }
-                            });
-                }
-            }
-        }, ".png", ".jpg",".mp4",".apk",".mp3");
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Map<String, String>>>() {
+                    @Override
+                    public void accept(List<Map<String, String>> strings) throws Exception {
+                        mView.scanSdcardResult(strings);
+                    }
+                });
     }
 }

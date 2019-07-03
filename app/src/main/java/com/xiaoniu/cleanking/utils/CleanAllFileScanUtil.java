@@ -2,8 +2,15 @@ package com.xiaoniu.cleanking.utils;
 
 import android.os.Environment;
 
+import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.utils.db.FileDBManager;
+import com.xiaoniu.cleanking.utils.db.FileTableManager;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,8 +37,9 @@ public class CleanAllFileScanUtil {
      */
     public static final int GB = 1073741824;
 
-    public static final String[] imageFormat = new String[]{".jpg", ".png", ".gif", ".bmp"};
-    public static final String[] videoFormat = new String[]{".mp4", ".mov", ".mkv", ".avi",".wmv",".m4v",".mpg",".vob",".webm",".ogv",".3gp",".flv",".f4v",".swf"};
+    public static final String[] imageFormat = new String[]{".jpg", ".png", ".gif"};
+    //    public static final String[] videoFormat = new String[]{".mp4", ".mov", ".mkv", ".avi",".wmv",".m4v",".mpg",".vob",".webm",".ogv",".3gp",".flv",".f4v",".swf"};
+    public static final String[] videoFormat = new String[]{".mp4", ".3gp"};
     public static final String[] musicFormat = new String[]{".mp3"};
     public static final String[] apkFormat = new String[]{".apk"};
     /* access modifiers changed from: private */
@@ -214,5 +222,48 @@ public class CleanAllFileScanUtil {
         } else {
             return String.format(Locale.getDefault(), "%.0fGB", (double) byteNum / GB);
         }
+    }
+
+    /**
+     * 多个数组赋值
+     *
+     * @param first
+     * @param rest
+     * @param <T>
+     * @return
+     */
+    public static <T> T[] arrayConcatAll(T[] first, T[]... rest) {
+        int totalLength = first.length;
+        for (T[] array : rest) {
+            totalLength += array.length;
+        }
+        T[] result = Arrays.copyOf(first, totalLength);
+        int offset = first.length;
+        for (T[] array : rest) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+        return result;
+    }
+
+    public static void scanSdcardFiles() {
+        String[] fileArray = new String[]{};
+        fileArray = CleanAllFileScanUtil.arrayConcatAll(CleanAllFileScanUtil.imageFormat, CleanAllFileScanUtil.videoFormat, CleanAllFileScanUtil.musicFormat, CleanAllFileScanUtil.apkFormat);
+        List<File> listFiles = new ArrayList<>();
+        CleanAllFileScanUtil cleanAllFileScanUtil = new CleanAllFileScanUtil();
+        cleanAllFileScanUtil.scanAllFiles(new CleanAllFileScanUtil.fileCheckByScan() {
+            @Override
+            public void getFileByScan(File file) {
+                listFiles.add(file);
+            }
+
+            @Override
+            public void scanProgress(int i, int i2) {
+                if (i == i2) {
+                    FileTableManager.insertBySql(AppApplication.getInstance(),listFiles);
+                    EventBus.getDefault().postSticky(new MessageEvent(EventBusTags.UPDATE_FILE_MANAGER));
+                }
+            }
+        }, fileArray);
     }
 }

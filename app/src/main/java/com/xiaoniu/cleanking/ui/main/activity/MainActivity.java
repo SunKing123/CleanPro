@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Button;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -52,7 +53,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -247,7 +247,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         return mi.availMem / (1024 * 1024);
     }
 
-
     /**
      * 接收外部跳转参数
      *
@@ -287,7 +286,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
-        mPresenter.saveCacheFiles();;
     }
 
     private void initFragments() {
