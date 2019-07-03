@@ -34,6 +34,31 @@
         app:layout_constraintLeft_toRightOf="@id/iv_back"
         app:layout_constraintTop_toTopOf="@id/view_top" />
 
+    <LinearLayout
+        android:id="@+id/line_none"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="116dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/view_top"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="173dp"
+            android:layout_height="149dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_none"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无图片～"
+            android:textSize="13dp"
+            android:textColor="#999999"
+            />
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
@@ -77,17 +102,16 @@
 
     <TextView
         android:id="@+id/tv_delete"
-        android:layout_width="wrap_content"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_10dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_10dp"
-        android:background="@drawable/delete_select_bg"
+        android:background="@drawable/delete_unselect_bg"
         android:paddingBottom="@dimen/dimen_10dp"
-        android:paddingLeft="@dimen/dimen_80dp"
-        android:paddingRight="@dimen/dimen_80dp"
+       android:gravity="center"
         android:paddingTop="@dimen/dimen_10dp"
-        android:text="删除 123M"
+        android:text="删除"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/view_bottom"
         app:layout_constraintRight_toRightOf="parent"

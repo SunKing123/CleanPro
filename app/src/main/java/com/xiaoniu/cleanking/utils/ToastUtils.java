@@ -78,7 +78,9 @@ public class ToastUtils {
     public static void show(CharSequence message, int duration) {
         initToast(message, duration).show();
     }
-
+    public static void show(CharSequence message) {
+        initToast(message, Toast.LENGTH_SHORT).show();
+    }
     /**
      * 自定义显示Toast时间
      *
