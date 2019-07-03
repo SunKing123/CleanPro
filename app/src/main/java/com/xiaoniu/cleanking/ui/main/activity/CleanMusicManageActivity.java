@@ -160,7 +160,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
         //更新缓存
-        mPresenter.updateCache(listsNew);
+        mPresenter.updateRemoveCache(listsNew);
 
     }
 

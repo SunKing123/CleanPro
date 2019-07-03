@@ -294,7 +294,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanMusicFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".mp3")) {
+                    } else if (file1.getName().endsWith(".mp3") &&  file.length()!=0) {
                         cachesMusicFiles.add(file1.getPath());
                     }
                 }
@@ -312,7 +312,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanApkFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".apk")) {
+                    } else if (file1.getName().endsWith(".apk") && file.length()!=0) {
                         cachesApkFies.add(file1.getPath());
                     }
                 }

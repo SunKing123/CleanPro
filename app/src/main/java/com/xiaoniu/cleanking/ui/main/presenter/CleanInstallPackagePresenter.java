@@ -59,6 +59,17 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
 
     public void updateRemoveCache(List<AppInfoBean> appInfoBeans) {
         apps.removeAll(appInfoBeans);
+
+        //更新本地缓存
+        Set<String> strings=new HashSet<>();
+        for (AppInfoBean file:apps){
+            strings.add(file.path);
+        }
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putStringSet(SpCacheConfig.CACHES_KEY_APK,strings);
+        editor.commit();
+
     }
 
     /**

@@ -57,8 +57,24 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
         musciInfoBeans.clear();
         files.clear();
         musciInfoBeans.addAll(appInfoBeans);
+
+
     }
 
+    public void updateRemoveCache(List<MusciInfoBean> appInfoBeans) {
+        musciInfoBeans.removeAll(appInfoBeans);
+
+        //更新本地缓存
+        Set<String> strings=new HashSet<>();
+        for (MusciInfoBean file:musciInfoBeans){
+            strings.add(file.path);
+        }
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putStringSet(SpCacheConfig.CACHES_KEY_MUSCI,strings);
+        editor.commit();
+
+    }
     /**
      * 获取应用安装包信息
      *
