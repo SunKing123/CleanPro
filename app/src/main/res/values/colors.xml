@@ -46,7 +46,6 @@
     <color name="color_BDC5CE">#BDC5CE</color>
     <color name="color_F85054">#F85054 </color>
     <color name="color_9B9B9B">#9B9B9B</color>
-    <color name="color_4690FD">#4690FD</color>
     <color name="color_FBCD09">#5180EF</color>
     <color name="color_FDEB9D">#FDEB9D</color>
     <color name="color_00DA80">#00DA80</color>
@@ -79,5 +78,5 @@
     <color name="color_999999">#999999</color>
     <color name="color_E9EBEE">#E9EBEE</color>
     <color name="color_8390A5">#8390A5</color>
-
+    <color name="color_4690FD">#4690FD</color>
 </resources>
