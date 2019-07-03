@@ -12,4 +12,5 @@ public class SpCacheConfig {
 
     public static final String CACHES_KEY_APK="key_caches_files_apk";
 
+    public static final String CACHES_KEY_VIDEO="key_caches_files_video";
 }

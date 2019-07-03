@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -204,6 +205,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     private Set<String> cachesMusicFiles = new HashSet<>();
     //apk文件
     private Set<String> cachesApkFies = new HashSet<>();
+    //视频文件
+    private Set<String> cachesVideo=new HashSet<>();
 
 
     /**
@@ -279,6 +282,41 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
                 });
 
+
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                 String path = Environment.getExternalStorageDirectory().getPath();
+                 scanViodeFile(path);
+                 emitter.onNext("");
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        //
+                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putStringSet(SpCacheConfig.CACHES_KEY_VIDEO, cachesVideo);
+                        editor.commit();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+
+
     }
 
 
@@ -319,6 +357,27 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         }
 
+    }
 
+
+    /**
+     * mp4    mov    mkv    avi    wmv    m4v    mpg    vob    webm    ogv    3gp    flv    f4v    swf    gif
+     * @param path
+     */
+    private  void scanViodeFile(String path){
+        File file = new File(path);
+        if (file.isDirectory()) {
+            File[] f = file.listFiles();
+            if (null != f) {
+                for (File file1 : f) {
+                    String fileName=file1.getName().toLowerCase();
+                    if (file1.isDirectory()) {
+                        scanViodeFile(path + "/" + file1.getName());
+                    } else if (fileName.endsWith(".mp4")) {
+                        cachesVideo.add(file1.getPath());
+                    }
+                }
+            }
+        }
     }
 }
