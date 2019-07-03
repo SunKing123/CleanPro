@@ -5,7 +5,31 @@
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottombar_tab_height" />
+        android:layout_marginBottom="@dimen/bottombar_tab_height">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_105dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_install_manage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安装包管理" />
+
+
+            <Button
+                android:id="@+id/btn_clean_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="音乐清理" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
 
     <com.xiaoniu.cleanking.ui.main.widget.BottomBar
         android:id="@+id/bottomBar"
@@ -25,4 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="文件管理" />
+
+
 </merge>

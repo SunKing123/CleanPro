@@ -105,6 +105,7 @@
         <activity
             android:name=".ui.main.activity.ImageActivity"
             android:screenOrientation="portrait" />
+
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />
@@ -138,7 +139,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.activity.JunkCleanActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.main.activity.JunkCleanActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.CleanInstallPackageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".ui.main.activity.CleanMusicManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
 
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"

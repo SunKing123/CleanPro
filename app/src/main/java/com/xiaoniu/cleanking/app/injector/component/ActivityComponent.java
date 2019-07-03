@@ -1,13 +1,15 @@
 package com.xiaoniu.cleanking.app.injector.component;
 
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.app.injector.PerActivity;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
+import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import dagger.Component;
 
@@ -29,5 +31,10 @@ public interface ActivityComponent {
     void inject(FileManagerHomeActivity fileManagerHomeActivity);
 
     void inject(ImageActivity imageListActivity);
+
+    void inject(CleanInstallPackageActivity activity);
+
+    void inject(CleanMusicManageActivity cleanMusicManageActivity);
+
 }
 
