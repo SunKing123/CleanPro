@@ -10,14 +10,23 @@
         android:layout_marginTop="@dimen/dimen_8dp"
         android:layout_height="80.0dip"
         android:scaleType="centerCrop" />
-    <TextView
-        android:id="@+id/cb_choose"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginRight="@dimen/dimen_4dp"
-        android:layout_marginBottom="@dimen/dimen_4dp"
-        android:background="@drawable/icon_unselect"
+    <RelativeLayout
+        android:id="@+id/rel_select"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         app:layout_constraintRight_toRightOf="@id/iv_photo_filelist_pic"
         app:layout_constraintBottom_toBottomOf="@id/iv_photo_filelist_pic"
-        />
+        >
+        <TextView
+            android:id="@+id/cb_choose"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/dimen_4dp"
+            android:layout_marginBottom="@dimen/dimen_4dp"
+            android:background="@drawable/icon_unselect"
+            />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>
