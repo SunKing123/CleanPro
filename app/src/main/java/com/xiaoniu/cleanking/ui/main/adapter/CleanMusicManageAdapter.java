@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -71,9 +74,23 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+            viewHolder.mLLContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    playAudio(appInfoBean.path);
+                }
+            });
         }
     }
 
+
+    public void playAudio(String audioPath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse("file:///" + audioPath);
+        intent.setDataAndType(uri, "audio/mp3");
+        mContext.startActivity(intent);
+    }
 
     public void clear() {
         mLists.clear();
@@ -105,11 +122,12 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
         //名称
         private TextView mTxtName;
         /**
-         *播放时长
+         * 播放时长
          **/
         private TextView mTxtTime;
         private TextView mTxtSize;
         private AppCompatCheckBox mCheckSelect;
+        private LinearLayout mLLContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -117,7 +135,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             mTxtName = itemView.findViewById(R.id.txt_name);
             mTxtSize = itemView.findViewById(R.id.txt_size);
             mCheckSelect = itemView.findViewById(R.id.check_select);
-
+            mLLContent = itemView.findViewById(R.id.ll_content);
         }
     }
 

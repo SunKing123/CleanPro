@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
@@ -38,6 +39,8 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     Button mBtnDel;
     @BindView(R.id.check_all)
     AppCompatCheckBox mCheckBoxAll;
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mLLEmptyView;
 
     private CleanMusicManageAdapter mAdapter;
 
@@ -74,9 +77,8 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mCheckBoxAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isRelevancy){
-                    checkAll(isChecked);
-                }
+                checkAll(isChecked);
+
                 //每设置完成就回归原位
                 isRelevancy=false;
             }
@@ -159,14 +161,28 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         }
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
+
+        if(listsNew.size()>0){
+            mLLEmptyView.setVisibility(View.GONE);
+        }else {
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
+
 
     }
 
     public void updateData(List<MusciInfoBean> musciInfoBeans) {
         mAdapter.clear();
         mAdapter.modifyList(musciInfoBeans);
+
+        if(musciInfoBeans.size()>0){
+            mLLEmptyView.setVisibility(View.GONE);
+        }else {
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
+
     }
 
     /**
@@ -195,8 +211,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
                 isCheckAll = false;
             }
         }
+
+        //mCheckBoxAll.setChecked(isCheckAll);
         isRelevancy=true;
-        mCheckBoxAll.setChecked(isCheckAll);
         if (totalSize > 0) {
             mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
             mBtnDel.setSelected(true);
