@@ -54,19 +54,19 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
     }
 
     public void getSdcardFiles() {
-        Observable.create(new ObservableOnSubscribe<List<Map<String, String>>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<Map<String, String>>> e) throws Exception {
-                e.onNext(FileTableManager.queryAllFiles(AppApplication.getInstance()));
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Map<String, String>>>() {
-                    @Override
-                    public void accept(List<Map<String, String>> strings) throws Exception {
-                        mView.scanSdcardResult(strings);
-                    }
-                });
+//        Observable.create(new ObservableOnSubscribe<List<Map<String, String>>>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<List<Map<String, String>>> e) throws Exception {
+//                e.onNext(FileTableManager.queryAllFiles(AppApplication.getInstance()));
+//            }
+//        }).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<List<Map<String, String>>>() {
+//                    @Override
+//                    public void accept(List<Map<String, String>> strings) throws Exception {
+//                        mView.scanSdcardResult(strings);
+//                    }
+//                });
     }
 
     public interface ClickListener {

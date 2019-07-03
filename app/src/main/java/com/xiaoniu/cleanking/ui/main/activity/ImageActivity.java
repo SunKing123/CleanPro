@@ -68,7 +68,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         }
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
-        mPresenter.getSdcardFiles();
+        getImageList();
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,26 +146,9 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
     /**
      * 扫描出的结果
-     *
-     * @param listFiles
      */
-    public void scanSdcardResult(List<Map<String, String>> listFiles) {
-        long imageSize = 0;
-        List<FileEntity> listImages = new ArrayList<>();
-        for (int i = 0; i < listFiles.size(); i++) {
-            if (listFiles.get(i) != null) {
-                String filePath = listFiles.get(i).get("path");
-                if (Arrays.asList(CleanAllFileScanUtil.imageFormat).contains(filePath.substring(filePath.lastIndexOf('.'), filePath.length()))) {
-                    FileEntity fileEntity = new FileEntity();
-                    fileEntity.setType(listFiles.get(i).get("type"));
-                    fileEntity.setTime(listFiles.get(i).get("time"));
-                    fileEntity.setSize(listFiles.get(i).get("size"));
-                    fileEntity.setPath(listFiles.get(i).get("path"));
-                    listImages.add(fileEntity);
-                    imageSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
-                }
-            }
-        }
+    public void getImageList() {
+        List<FileEntity> listImages = CleanAllFileScanUtil.clean_image_list;
         imageAdapter = new ImageShowAdapter(ImageActivity.this, listImages, listSelect);
         recycle_view.setLayoutManager(new GridLayoutManager(ImageActivity.this, 3));
         recycle_view.setAdapter(imageAdapter);
@@ -192,6 +175,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
             imageAdapter.setListCheck(listInt);
             tv_delete.setBackgroundResource(imageAdapter.getListCheck().size()==0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
             tv_delete.setSelected(imageAdapter.getListCheck().size()==0 ? false : true);
+            compulateDeleteSize();
+            cb_checkall.setBackgroundResource(imageAdapter.getListCheck().size() == imageAdapter.getListImage().size() ? R.drawable.icon_select : R.drawable.icon_unselect);
         }
     }
 

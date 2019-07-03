@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +18,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Image;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -27,7 +26,6 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<FileEntity> listImage = new ArrayList<>();
@@ -104,8 +102,9 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         list.add(image);
                     }
                     intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-                    intent.putParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA, (ArrayList<? extends Parcelable>) list);
-                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_SELECT,  (Serializable)listCheck);
+                    CleanAllFileScanUtil.preview_image_list=list;
+//                    intent.putParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA, (ArrayList<? extends Parcelable>) list);
+                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_SELECT, (Serializable) listCheck);
                     mActivity.startActivityForResult(intent, 209);
                 }
             });

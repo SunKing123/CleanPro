@@ -54,7 +54,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
 
     PreviewImagePagerAdapter previewImagePagerAdapter;
     ImagePreviewAdapter adapter;
-    private ArrayList<Image> mImageArrayList;
+    private List<Image> mImageArrayList;
     int selectPos = 0;
     List<Integer> listSelect = new ArrayList<>();
 
@@ -78,7 +78,8 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         }
 
         Intent intent = getIntent();
-        mImageArrayList = intent.getParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA);
+//        mImageArrayList = intent.getParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA);
+        mImageArrayList = CleanAllFileScanUtil.preview_image_list;
         int position = intent.getIntExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, 0);
         listSelect.addAll((List) intent.getSerializableExtra(ExtraConstant.PREVIEW_IMAGE_SELECT));
 
