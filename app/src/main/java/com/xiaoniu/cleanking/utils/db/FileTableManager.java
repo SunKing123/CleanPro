@@ -101,9 +101,25 @@ public class FileTableManager {
      * @param context
      * @param path    根据文件路径删除
      */
-    public static void deleteByBaseNo(Context context, String path) {
-        FileDBManager.getDBconnection(context).delete(FileTabSQL.FILE_MANAGER_TABLE_NAME, "path=?", new String[]{path});
-        FileDBManager.dbClose();
+    static long tt1 = 0;
+
+    public static void deleteByPath(Context context, String[] path) {
+        tt1 = System.currentTimeMillis();
+        FileDBManager.getDBconnection(context).beginTransaction();
+        try {
+            for (int i = 0; i < path.length; i++) {
+                FileDBManager.getDBconnection(context).delete(FileTabSQL.FILE_MANAGER_TABLE_NAME, "path=?", new String[]{path[i]});
+            }
+            FileDBManager.getDBconnection(context).setTransactionSuccessful();
+        } catch (Exception e) {
+
+        } finally {
+            FileDBManager.getDBconnection(context).endTransaction();
+            FileDBManager.dbClose();
+            long tt2 = System.currentTimeMillis() - tt1;
+            Log.e("ffff", "" + tt2);
+        }
+
     }
 
     /**

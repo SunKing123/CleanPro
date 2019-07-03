@@ -4,9 +4,12 @@ import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
@@ -14,6 +17,8 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.db.FileDBManager;
+import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.io.File;
@@ -33,8 +38,12 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     RecyclerView recycle_view;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     @BindView(R.id.cb_checkall)
     TextView cb_checkall;
+    @BindView(R.id.line_none)
+    LinearLayout line_none;
     ImageShowAdapter imageAdapter;
 
     @Override
@@ -47,7 +56,6 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         activityComponent.inject(this);
     }
 
-    boolean isCheckeds = false;
 
     @Override
     public void initView() {
@@ -56,15 +64,19 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         } else {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
         }
+        tv_delete.setSelected(false);
+        cb_checkall.setSelected(false);
         mPresenter.getSdcardFiles();
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!recycle_view.isComputingLayout()) {
-                    isCheckeds = isCheckeds ? false : true;
-                    imageAdapter.setIsCheckAll(isCheckeds ? true : false);
-                    cb_checkall.setBackgroundResource(isCheckeds ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    tv_delete.setBackgroundResource(isCheckeds ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+                    cb_checkall.setSelected(!cb_checkall.isSelected());
+                    tv_delete.setSelected(cb_checkall.isSelected());
+                    imageAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                    cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                    tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+                    compulateDeleteSize();
                 }
             }
         });
@@ -74,20 +86,21 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
             public void onClick(View v) {
                 if (!tv_delete.isSelected())
                     return;
-                mPresenter.alertBanLiveDialog(ImageActivity.this, new ImageListPresenter.ClickListener() {
+                List<FileEntity> listF = new ArrayList<>();
+                for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
+                    if (imageAdapter.getListImage().get(i).getIsCheck())
+                        listF.add(imageAdapter.getListImage().get(i));
+                }
+
+                mPresenter.alertBanLiveDialog(ImageActivity.this,listF.size(), new ImageListPresenter.ClickListener() {
                     @Override
                     public void clickOKBtn() {
-                        List<FileEntity> listF = new ArrayList<>();
-                        for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
-                            if (imageAdapter.getListImage().get(i).getIsCheck())
-                                listF.add(imageAdapter.getListImage().get(i));
-                        }
-
-                        for (int i = 0; i < listF.size(); i++) {
-                            File f = new File(listF.get(i).getPath());
-                            f.delete();
-                        }
-                        imageAdapter.deleteData(listF);
+//                        for (int i = 0; i < listF.size(); i++) {
+//                            File f = new File(listF.get(i).getPath());
+//                            f.delete();
+//                        }
+                        //数据库删除选中的文件
+                        mPresenter.deleteFromDatabase(listF,imageAdapter);
                     }
 
                     @Override
@@ -97,9 +110,37 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 });
             }
         });
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
+    //删除成功
+    public void deleteSuccess(List<FileEntity> listF){
+        tv_delete.setSelected(false);
+        tv_delete.setText("删除");
+        imageAdapter.deleteData(listF);
+        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
+        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
+    }
+
+    //计算删除文件大小
+    public void compulateDeleteSize() {
+        List<FileEntity> listF = new ArrayList<>();
+        for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
+            if (imageAdapter.getListImage().get(i).getIsCheck())
+                listF.add(imageAdapter.getListImage().get(i));
+        }
+        long deleteSize = 0;
+        for (int i = 0; i < listF.size(); i++) {
+            deleteSize += NumberUtils.getLong(listF.get(i).getSize());
+        }
+        tv_delete.setText(deleteSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSize(deleteSize));
+    }
 
     /**
      * 扫描出的结果
@@ -124,10 +165,11 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 }
             }
         }
-        tv_delete.setText("删除 " + CleanAllFileScanUtil.byte2FitSize(imageSize));
         imageAdapter = new ImageShowAdapter(ImageActivity.this, listImages);
         recycle_view.setLayoutManager(new GridLayoutManager(ImageActivity.this, 3));
         recycle_view.setAdapter(imageAdapter);
+        line_none.setVisibility(listImages.size() == 0 ? View.VISIBLE : View.GONE);
+        recycle_view.setVisibility(listImages.size() == 0 ? View.GONE : View.VISIBLE);
         imageAdapter.setmOnCheckListener(new ImageShowAdapter.onCheckListener() {
             @Override
             public void onCheck(List<FileEntity> listFile, int pos) {
@@ -138,6 +180,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 cb_checkall.setBackgroundResource(listC.contains(false) ? R.drawable.icon_unselect : R.drawable.icon_select);
                 tv_delete.setBackgroundResource(listC.contains(true) ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                 tv_delete.setSelected(listC.contains(true) ? true : false);
+                compulateDeleteSize();
             }
         });
     }
