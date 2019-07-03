@@ -97,7 +97,9 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                 if (strings.size() > 0) {
                     for (String path : strings) {
                         File file = new File(path);
-                        files.add(file);
+                        if(file.length()>0){
+                            files.add(file);
+                        }
                     }
                 } else {
                     //扫描apk文件
