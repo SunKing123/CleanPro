@@ -53,6 +53,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -190,6 +191,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             e.printStackTrace();
         }
     }
+
 
     @OnClick({R.id.btn_install_manage,R.id.btn_clean_music})
     public void onViewClick(View view) {
