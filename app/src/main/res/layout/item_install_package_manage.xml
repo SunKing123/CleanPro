@@ -68,7 +68,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_select"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyCheckBox"/>
         </LinearLayout>
 
 

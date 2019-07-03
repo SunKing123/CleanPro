@@ -163,7 +163,7 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanFile(path + "/" + file1.getName());
-                    } else if (file1.getName().trim().toLowerCase().endsWith(".mp3")) {
+                    } else if (file1.getName().endsWith(".mp3")) {
                         Log.i("test", "fileName=" + file1.getPath());
                         files.add(file1);
                     }

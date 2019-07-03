@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -70,7 +71,9 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
                 scanFile(path);
                 for (File file : apkFiles) {
                     AppInfoBean appInfoBean = InstallManageUtils.getUninstallAPKInfo(activity, file.getPath());
-                    apps.add(appInfoBean);
+                    if(!TextUtils.isEmpty(appInfoBean.name)){
+                        apps.add(appInfoBean);
+                    }
                 }
                 emitter.onNext("");
                 emitter.onComplete();

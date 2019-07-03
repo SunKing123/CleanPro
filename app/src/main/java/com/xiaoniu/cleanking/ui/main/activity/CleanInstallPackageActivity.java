@@ -50,8 +50,12 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     //tab类型  0 已安装，1 未安装
     private int mType;
-
+    /**
+     *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
+     */
+    private boolean isRelevancy=false;
     private InstallPackageManageAdapter mAdapter;
+
     String path = Environment.getExternalStorageDirectory().getPath();
 
     @Override
@@ -84,7 +88,11 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mCheckBoxAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkAll(isChecked);
+                if(!isRelevancy){
+                    checkAll(isChecked);
+                }
+                //每设置完成就回归原位
+                isRelevancy=false;
             }
         });
     }
@@ -225,7 +233,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         List<AppInfoBean> lists = mAdapter.getLists();
         //文件总大小
         totalSize = 0L;
-        boolean isCheckAll = false;
+        boolean isCheckAll = true;
         for (AppInfoBean appInfoBean : lists) {
             if (appInfoBean.packageName.equals(id)) {
                 appInfoBean.isSelect = isChecked;
@@ -239,6 +247,9 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                 isCheckAll = false;
             }
         }
+
+        isRelevancy=true;
+        mCheckBoxAll.setChecked(isCheckAll);
         if (totalSize > 0) {
             mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
             mBtnDel.setSelected(true);
