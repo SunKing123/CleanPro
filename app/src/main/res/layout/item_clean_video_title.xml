@@ -8,7 +8,6 @@
         android:id="@+id/txt_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/dimen_16dp"
         android:gravity="center_vertical"
         android:text="1"
         android:textColor="@color/color_666666"
