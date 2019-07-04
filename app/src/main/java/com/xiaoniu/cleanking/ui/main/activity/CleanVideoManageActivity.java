@@ -99,6 +99,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
                 }
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
+                totalSelectFiles();
             }
         });
     }
