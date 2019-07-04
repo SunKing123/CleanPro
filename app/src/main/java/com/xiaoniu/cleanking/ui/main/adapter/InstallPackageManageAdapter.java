@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,16 +66,12 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
             } else {
                 viewHolder.mTxtTime.setText("版本:" + appInfoBean.versionName);
             }
-            if (appInfoBean.isSelect) {
-                viewHolder.mCheckSelect.setChecked(true);
-            } else {
-                viewHolder.mCheckSelect.setChecked(false);
-            }
-            viewHolder.mCheckSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            viewHolder.mCheckSelect.setSelected(appInfoBean.isSelect);
+            viewHolder.mCheckSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(null!=onCheckListener){
-                        onCheckListener.onCheck(appInfoBean.packageName, isChecked);
+                public void onClick(View v) {
+                    if (null != onCheckListener) {
+                        onCheckListener.onCheck(appInfoBean.packageName, !appInfoBean.isSelect);
                     }
                 }
             });
@@ -116,7 +113,7 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
          */
         private TextView mTxtTime;
         private TextView mTxtSize;
-        private AppCompatCheckBox mCheckSelect;
+        private ImageButton mCheckSelect;
 
         public ViewHolder(View itemView) {
             super(itemView);

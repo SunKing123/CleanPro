@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +48,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     @BindView(R.id.btn_del)
     Button mBtnDel;
     @BindView(R.id.check_all)
-    AppCompatCheckBox mCheckBoxAll;
+    ImageButton mCheckBoxAll;
 
     @BindView(R.id.ll_empty_view)
     LinearLayout mLLEmptyView;
@@ -58,7 +59,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     /**
      *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
-    private boolean isRelevancy=false;
+    private  boolean mIsCheckAll;
     private InstallPackageManageAdapter mAdapter;
 
     String path = Environment.getExternalStorageDirectory().getPath();
@@ -90,15 +91,17 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mAdapter.setTabType(mType);
         mAdapter.setOnCheckListener(this);
 
-        mCheckBoxAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(!isRelevancy){
-//                    checkAll(isChecked);
-//                }
-                checkAll(isChecked);
-                //每设置完成就回归原位
-                isRelevancy=false;
+            public void onClick(View v) {
+                if(mIsCheckAll){
+                    mIsCheckAll=false;
+                }else {
+                    mIsCheckAll=true;
+                }
+                mCheckBoxAll.setSelected(mIsCheckAll);
+                checkAll(mIsCheckAll);
+                totalSelectFiles();
             }
         });
     }
@@ -275,6 +278,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             }
         }
 
+        mAdapter.notifyDataSetChanged();
         for (AppInfoBean appInfoBean : lists) {
             if (appInfoBean.isSelect) {
                 totalSize += appInfoBean.packageSize;
@@ -283,8 +287,9 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             }
         }
 
-        isRelevancy=true;
-        //mCheckBoxAll.setChecked(isCheckAll);
+        mIsCheckAll=isCheckAll;
+        mCheckBoxAll.setSelected(mIsCheckAll);
+
         if (totalSize > 0) {
             mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
             mBtnDel.setSelected(true);

@@ -129,12 +129,12 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <ImageButton
                 android:id="@+id/check_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:theme="@style/MyCheckBox"
-                android:layout_marginLeft="@dimen/dimen_16dp" />
+                android:layout_width="@dimen/dimen_16dp"
+                android:layout_height="@dimen/dimen_16dp"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:background="@drawable/bg_check" />
 
             <TextView
                 android:layout_width="wrap_content"
