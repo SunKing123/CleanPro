@@ -148,11 +148,10 @@
         android:id="@+id/view_imagearea"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        app:layout_constraintBottom_toTopOf="@id/view_image_bottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_top"
-        app:layout_constraintBottom_toTopOf="@id/view_image_bottom"
-        />
+        app:layout_constraintTop_toBottomOf="@id/view_top" />
 
     <View
         android:id="@+id/view_video_icon"
@@ -199,6 +198,15 @@
         app:layout_constraintTop_toBottomOf="@id/view_video_icon" />
 
     <View
+        android:id="@+id/view_clean_video"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toTopOf="@id/view_music_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_imagearea" />
+
+    <View
         android:id="@+id/view_music_icon"
         android:layout_width="@dimen/dimen_30dp"
         android:layout_height="@dimen/dimen_30dp"
@@ -243,6 +251,15 @@
         app:layout_constraintTop_toBottomOf="@id/view_music_icon" />
 
     <View
+        android:id="@+id/view_clean_music"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toTopOf="@id/view_music_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_clean_video" />
+
+    <View
         android:id="@+id/view_apk_icon"
         android:layout_width="@dimen/dimen_30dp"
         android:layout_height="@dimen/dimen_30dp"
@@ -285,4 +302,14 @@
         android:background="#EEEEEE"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         app:layout_constraintTop_toBottomOf="@id/view_apk_icon" />
+
+    <View
+        android:id="@+id/view_clean_install_apk"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toTopOf="@id/view_apk_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_clean_music" />
+
 </android.support.constraint.ConstraintLayout>
