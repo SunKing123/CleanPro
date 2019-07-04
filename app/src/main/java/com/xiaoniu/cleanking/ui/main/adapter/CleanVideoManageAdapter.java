@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,7 +61,6 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
     }
 
 
-
     @Override
     public int getItemViewType(int position) {
         VideoInfoBean videoInfoBean = getLists().get(position);
@@ -70,9 +70,9 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType==0){
+        if (viewType == 0) {
             View view = mInflater.inflate(R.layout.item_clean_video_title, parent, false);
-            return  new ViewHolderTitle(view);
+            return new ViewHolderTitle(view);
         }
         View view = mInflater.inflate(R.layout.item_video_file_manage, parent, false);
         return new ViewHolder(view);
@@ -82,27 +82,33 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         VideoInfoBean appInfoBean = getLists().get(position);
 
-        if(holder.getClass()==ViewHolderTitle.class){
-            ViewHolderTitle viewHolderTitle=(ViewHolderTitle)holder;
+        if (holder.getClass() == ViewHolderTitle.class) {
+            ViewHolderTitle viewHolderTitle = (ViewHolderTitle) holder;
             viewHolderTitle.mTxtTitle.setText(appInfoBean.date);
-        }else if (holder.getClass() == ViewHolder.class) {
+        } else if (holder.getClass() == ViewHolder.class) {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
-            setImgFrame(viewHolder.mImgFrame,appInfoBean.path);
+            setImgFrame(viewHolder.mImgFrame, appInfoBean.path);
             if (appInfoBean.isSelect) {
-                viewHolder.mCheckSelect.setChecked(true);
+                viewHolder.mCheckSelect.setSelected(true);
             } else {
-                viewHolder.mCheckSelect.setChecked(false);
+                viewHolder.mCheckSelect.setSelected(false);
             }
-            viewHolder.mCheckSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            viewHolder.mCheckSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
                     if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.path, isChecked);
+                        onCheckListener.onCheck(appInfoBean.path, !appInfoBean.isSelect);
                     }
                 }
             });
 
+            viewHolder.mLLPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    playAudio(appInfoBean.path);
+                }
+            });
         }
     }
 
@@ -110,17 +116,21 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
     /**
      * 设置视频第一帧图片
      */
-    private  void setImgFrame(ImageView imgFrame,String path){
+    private void setImgFrame(ImageView imgFrame, String path) {
 
         Glide.with(mContext).load(path).into(imgFrame);
 
     }
 
     public void playAudio(String audioPath) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file:///" + audioPath);
-        intent.setDataAndType(uri, "audio/mp3");
-        mContext.startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("file:///" + audioPath);
+            intent.setDataAndType(uri, "video/*");
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+
+        }
     }
 
     public void clear() {
@@ -150,11 +160,11 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
 
     class ViewHolderTitle extends RecyclerView.ViewHolder {
 
-        private  TextView mTxtTitle;
+        private TextView mTxtTitle;
 
         public ViewHolderTitle(View itemView) {
             super(itemView);
-            mTxtTitle=itemView.findViewById(R.id.txt_title);
+            mTxtTitle = itemView.findViewById(R.id.txt_title);
         }
     }
 
@@ -164,13 +174,16 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
          * 播放时长
          **/
         private TextView mTxtSize;
-        private AppCompatCheckBox mCheckSelect;
+        private ImageButton mCheckSelect;
         private ImageView mImgFrame;
+        private LinearLayout mLLPlay;
+
         public ViewHolder(View itemView) {
             super(itemView);
             mTxtSize = itemView.findViewById(R.id.txt_size_file);
             mCheckSelect = itemView.findViewById(R.id.check_select);
-            mImgFrame=itemView.findViewById(R.id.img);
+            mImgFrame = itemView.findViewById(R.id.img);
+            mLLPlay=itemView.findViewById(R.id.ll_play);
         }
     }
 

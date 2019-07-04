@@ -6,7 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -15,10 +15,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanVideoManageAdapter;
-import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanVideoManagePresenter;
@@ -26,7 +22,9 @@ import com.xiaoniu.cleanking.ui.main.widget.GrideManagerWrapper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,12 +42,13 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     @BindView(R.id.btn_del)
     Button mBtnDel;
     @BindView(R.id.check_all)
-    AppCompatCheckBox mCheckBoxAll;
+    ImageButton mCheckBoxAll;
     @BindView(R.id.ll_empty_view)
     LinearLayout mLLEmptyView;
 
     private CleanVideoManageAdapter mAdapter;
 
+    private  boolean mIsCheckAll;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -86,13 +85,20 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new GrideManagerWrapper(DensityUtil.dp2px(10)));
+        mRecyclerView.addItemDecoration(new GrideManagerWrapper(DensityUtil.dp2px(8)));
         mAdapter.setOnCheckListener(this);
 
-        mCheckBoxAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkAll(isChecked);
+            public void onClick(View v) {
+                if(mIsCheckAll){
+                    mIsCheckAll=false;
+                }else {
+                    mIsCheckAll=true;
+                }
+                mCheckBoxAll.setSelected(mIsCheckAll);
+                checkAll(mIsCheckAll);
             }
         });
     }
@@ -180,6 +186,32 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
                 listsNew.add(appInfoBean);
             }
         }
+
+        //删除标题日期去重，找出相对于的日期子集，如果不存在子集删除标题
+        Set<String> tempDate=new HashSet<>();
+        for(VideoInfoBean bean:appInfoBeans){
+            tempDate.add(bean.date);
+        }
+
+        for(String date:tempDate){
+            boolean isConstain = false;
+            VideoInfoBean videoInfoBeanTitle=null;
+            for(VideoInfoBean videoInfoBean:listsNew){
+                if(videoInfoBean.itemType==1 && date.equals(videoInfoBean.date)){
+                    isConstain=true;
+                }
+                if(videoInfoBean.itemType==0 && date.equals(videoInfoBean.date)){
+                    videoInfoBeanTitle=videoInfoBean;
+                }
+
+            }
+
+            //不包含子文件日期标题删除
+            if(isConstain==false &&null!=videoInfoBeanTitle){
+                listsNew.remove(videoInfoBeanTitle);
+            }
+        }
+
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
 
@@ -228,25 +260,30 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         List<VideoInfoBean> lists = mAdapter.getLists();
         //文件总大小
         totalSize = 0L;
+        //是否全选
         boolean isCheckAll = true;
         for (VideoInfoBean appInfoBean : lists) {
             if(appInfoBean.itemType==0){
                 continue;
             }
-            if (appInfoBean.path.equals(id)) {
+            //itemType==1 为图片 0 为 标题
+            if (appInfoBean.itemType==1 && appInfoBean.path.equals(id)) {
                 appInfoBean.isSelect = isChecked;
             }
         }
 
+        mAdapter.notifyDataSetChanged();
         for (VideoInfoBean appInfoBean : lists) {
             if (appInfoBean.isSelect) {
                 totalSize += appInfoBean.packageSize;
-            } else {
+            } else if(appInfoBean.isSelect==false && appInfoBean.itemType==1){
                 isCheckAll = false;
             }
         }
 
-        //mCheckBoxAll.setChecked(isCheckAll);
+        mIsCheckAll=isCheckAll;
+        mCheckBoxAll.setSelected(mIsCheckAll);
+
         if (totalSize > 0) {
             mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
             mBtnDel.setSelected(true);
