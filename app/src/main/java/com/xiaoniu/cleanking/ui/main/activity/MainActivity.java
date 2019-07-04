@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
@@ -208,7 +209,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private void initFragments() {
 
-        ShoppingMallFragment mineFragment = new ShoppingMallFragment();
+        MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
         if (!TextUtils.isEmpty(mSPHelper.getMineShopUrl())) {
@@ -218,36 +219,22 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ShoppingMallFragment upQuotaFragment = new ShoppingMallFragment();
         ShoppingMallFragment lifeFragment = ShoppingMallFragment.getIntance(ApiModule.LIFE);
 
-        if (AppApplication.isAudit) {
-            mFragments.add(shoppingMallFragment);
-            mFragments.add(lifeFragment);
-            mFragments.add(mineFragment);
 
-            mManager.beginTransaction()
-                    .add(R.id.frame_layout, shoppingMallFragment)
-                    .add(R.id.frame_layout, lifeFragment)
-                    .add(R.id.frame_layout, mineFragment)
-                    .hide(lifeFragment)
-                    .hide(shoppingMallFragment)
-                    .hide(mineFragment)
-                    .commitAllowingStateLoss();
-        } else {
-            mFragments.add(mainFragment);
-            mFragments.add(shoppingMallFragment);
-            mFragments.add(upQuotaFragment);
-            mFragments.add(mineFragment);
+        mFragments.add(mainFragment);
+        mFragments.add(shoppingMallFragment);
+        mFragments.add(upQuotaFragment);
+        mFragments.add(mineFragment);
 
-            mManager.beginTransaction()
-                    .add(R.id.frame_layout, mainFragment)
-                    .add(R.id.frame_layout, shoppingMallFragment)
-                    .add(R.id.frame_layout, upQuotaFragment)
-                    .add(R.id.frame_layout, mineFragment)
-                    .hide(mainFragment)
-                    .hide(shoppingMallFragment)
-                    .hide(upQuotaFragment)
-                    .hide(mineFragment)
-                    .commitAllowingStateLoss();
-        }
+        mManager.beginTransaction()
+                .add(R.id.frame_layout, mainFragment)
+                .add(R.id.frame_layout, shoppingMallFragment)
+                .add(R.id.frame_layout, upQuotaFragment)
+                .add(R.id.frame_layout, mineFragment)
+                .hide(mainFragment)
+                .hide(shoppingMallFragment)
+                .hide(upQuotaFragment)
+                .hide(mineFragment)
+                .commitAllowingStateLoss();
 
     }
 

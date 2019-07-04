@@ -12,6 +12,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_105dp"
             android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_wjgl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文件管理" />
 
 <!--            <Button
                 android:id="@+id/btn_install_manage"
@@ -57,11 +62,7 @@
         android:layout_marginBottom="@dimen/bottombar_tab_height"
         android:background="@mipmap/wl" />
 
-    <Button
-        android:id="@+id/btn_wjgl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="文件管理" />
+
 
 
 </merge>
