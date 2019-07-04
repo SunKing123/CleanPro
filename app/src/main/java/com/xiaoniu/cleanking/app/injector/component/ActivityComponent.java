@@ -10,6 +10,9 @@ import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -40,5 +43,12 @@ public interface ActivityComponent {
     void inject(PreviewImageActivity previewImageActivity);
 
     void inject(CleanVideoManageActivity cleanVideoManageActivity);
+
+
+    void inject(WhiteListInstallPackgeManageActivity whiteListInstallPackgeManageActivity);
+
+    void inject(WhiteListSpeedAddActivity whiteListSpeedAddActivity);
+
+    void inject(WhiteListSpeedManageActivity whiteListSpeedManageActivity);
 }
 

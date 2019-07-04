@@ -108,6 +108,7 @@
         <activity
             android:name=".ui.main.activity.PreviewImageActivity"
             android:screenOrientation="portrait" />
+
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />
@@ -159,6 +160,20 @@
 
         <activity
             android:name=".ui.main.activity.CleanVideoManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.WhiteListInstallPackgeManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WhiteListSpeedManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.WhiteListSpeedAddActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 

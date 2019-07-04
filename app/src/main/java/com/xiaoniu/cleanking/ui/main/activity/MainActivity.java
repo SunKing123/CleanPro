@@ -152,12 +152,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 //        EventBus.getDefault().register(this);
 
-         btn_wjgl.setOnClickListener(v-> startActivity(FileManagerHomeActivity.class));
+        btn_wjgl.setOnClickListener(v -> startActivity(FileManagerHomeActivity.class));
 
         DbHelper.copyDb();
     }
 
-
+    @OnClick({R.id.btn_whilte_list_speed})
+    public void onClickView(View view) {
+        int ids = view.getId();
+        if (ids == R.id.btn_whilte_list_speed) {
+            startActivity(new Intent(this, WhiteListSpeedManageActivity.class));
+        }
+    }
 
     /**
      * 接收外部跳转参数
@@ -289,7 +295,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 long secondTime = System.currentTimeMillis();
                 if (secondTime - firstTime > 1500) {
                     // 如果两次按键时间间隔大于800毫秒，则不退出
-                    Toast.makeText(getApplicationContext(), R.string.press_exit_again,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.press_exit_again, Toast.LENGTH_SHORT).show();
                     // 更新firstTime
                     firstTime = secondTime;
                     Intent intent = new Intent();
