@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -17,6 +18,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.HashMap;
 
@@ -69,7 +71,11 @@ public class JunkCleanActivity extends SimpleActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
+        }
         mTextTitle.setText("垃圾详情");
 
         mJunkGroups = CleanMainFragment.mJunkGroups;
