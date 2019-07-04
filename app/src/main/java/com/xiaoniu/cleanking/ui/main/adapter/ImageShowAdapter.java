@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,11 +16,9 @@ import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
-import com.xiaoniu.cleanking.ui.main.bean.Image;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,24 +26,18 @@ import java.util.List;
 
 public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<FileEntity> listImage = new ArrayList<>();
-    List<Integer> listCheck = new ArrayList<>();
 
-    public List<Integer> getListCheck() {
-        return listCheck;
-    }
 
-    public void setListCheck(List<Integer> listCheck) {
-        this.listCheck.clear();
-        this.listCheck.addAll(listCheck);
+    public void setListImage(List<FileEntity> listImage) {
+        this.listImage.clear();
+        this.listImage.addAll(listImage);
         notifyDataSetChanged();
     }
 
     public void setIsCheckAll(boolean isCheckAll) {
-        listCheck.clear();
-        if (isCheckAll) {
-            for (int i = 0; i < this.listImage.size(); i++) {
-                listCheck.add(i);
-            }
+
+        for (int i = 0; i < this.listImage.size(); i++) {
+            listImage.get(i).setIsSelect(isCheckAll);
         }
         notifyDataSetChanged();
     }
@@ -68,7 +59,6 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public ImageShowAdapter(Activity mActivity, List<FileEntity> listImage, List<Integer> listCheck) {
         super();
         this.mActivity = mActivity;
-        this.listCheck = listCheck;
         this.listImage = listImage;
     }
 
@@ -94,30 +84,17 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mActivity, PreviewImageActivity.class);
-                    List<Image> list = new ArrayList<>();
-                    for (int i = 0; i < listImage.size(); i++) {
-                        Image image = new Image();
-                        image.setPath(listImage.get(i).getPath());
-                        image.setSize(NumberUtils.getLong(listImage.get(i).getSize()));
-                        list.add(image);
-                    }
                     intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-                    CleanAllFileScanUtil.preview_image_list=list;
-//                    intent.putParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA, (ArrayList<? extends Parcelable>) list);
-                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_SELECT, (Serializable) listCheck);
+                    CleanAllFileScanUtil.clean_image_list = listImage;
                     mActivity.startActivityForResult(intent, 209);
                 }
             });
-            ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listCheck.contains(position) ? R.drawable.icon_select : R.drawable.icon_unselect);
+            ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
             ((ImageViewHolder) holder).rel_select.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!listCheck.contains(position)) {
-                        listCheck.add(position);
-                    } else {
-                        listCheck.remove(listCheck.indexOf(position));
-                    }
-                    ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listCheck.contains(position) ? R.drawable.icon_select : R.drawable.icon_unselect);
+                    listImage.get(position).setIsSelect(!listImage.get(position).getIsSelect());
+                    ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
                     if (mOnCheckListener != null)
                         mOnCheckListener.onCheck(listImage, position);
                 }

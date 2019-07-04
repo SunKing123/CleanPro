@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking;
 
-import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 
 /**
  * Created by admin on 2017/8/14.
@@ -30,5 +29,4 @@ public class AppConstants {
     //是否debug模式
     public static final boolean DEBUG = true;
 
-    public static final int miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_TEST;//微信小程序测试环境
 }

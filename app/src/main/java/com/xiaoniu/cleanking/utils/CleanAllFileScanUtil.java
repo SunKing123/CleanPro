@@ -45,7 +45,6 @@ public class CleanAllFileScanUtil {
     public static final String[] musicFormat = new String[]{".mp3"};
     public static final String[] apkFormat = new String[]{".apk"};
 
-    public static List<Image> preview_image_list;
     public static List<FileEntity> clean_image_list ;
 
     /* access modifiers changed from: private */

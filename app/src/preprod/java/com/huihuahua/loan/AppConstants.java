@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking;
 
-import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 
 /**
  * Created by admin on 2017/8/14.
@@ -20,7 +19,6 @@ public class AppConstants {
     public static String Base_H5_Host2 = "http://fddh5.51huihuahua.com";//H5路径
     public static String Action_Base_Host = "https://hhh.51huihuahua.com";//活动接口域名
 
-    public static final int miniprogramType = WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE;//微信小程序生产环境
     //埋点sdk接口
     public static final String Bury_Base_Host = "http://testaidataprobe.51huihuahua.com/apis/v1/dataprobe/";
     //是否debug模式

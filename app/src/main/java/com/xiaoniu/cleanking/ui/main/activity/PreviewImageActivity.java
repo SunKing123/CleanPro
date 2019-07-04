@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.ImagePreviewPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.io.Serializable;
@@ -54,9 +55,8 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
 
     PreviewImagePagerAdapter previewImagePagerAdapter;
     ImagePreviewAdapter adapter;
-    private List<Image> mImageArrayList;
+    private List<FileEntity> mImageArrayList;
     int selectPos = 0;
-    List<Integer> listSelect = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -79,14 +79,20 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
 
         Intent intent = getIntent();
 //        mImageArrayList = intent.getParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA);
-        mImageArrayList = CleanAllFileScanUtil.preview_image_list;
+        mImageArrayList = CleanAllFileScanUtil.clean_image_list;
         int position = intent.getIntExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, 0);
-        listSelect.addAll((List) intent.getSerializableExtra(ExtraConstant.PREVIEW_IMAGE_SELECT));
 
         if (null == mImageArrayList) {
             mImageArrayList = new ArrayList<>();
         }
-         previewImagePagerAdapter = new PreviewImagePagerAdapter(this, mImageArrayList);
+        adapter = new ImagePreviewAdapter(PreviewImageActivity.this, mImageArrayList, position);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PreviewImageActivity.this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recycle_view.setLayoutManager(linearLayoutManager);
+        recycle_view.setAdapter(adapter);
+
+
+        previewImagePagerAdapter = new PreviewImagePagerAdapter(this, mImageArrayList);
         mViewPager.setAdapter(previewImagePagerAdapter);
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setCurrentItem(position);
@@ -95,16 +101,13 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
             setPosition(position);
         }
 
-        adapter = new ImagePreviewAdapter(PreviewImageActivity.this, mImageArrayList, position, listSelect);
+
         computeDeleteSize();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PreviewImageActivity.this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recycle_view.setLayoutManager(linearLayoutManager);
-        recycle_view.setAdapter(adapter);
+
         adapter.setmOnCheckListener(new ImagePreviewAdapter.onCheckListener() {
             @Override
             public void onCheck(int pos) {
-                adapter.setSelectPosition(pos, listSelect);
+                adapter.setSelectPosition(pos);
                 mViewPager.setCurrentItem(pos);
                 if (pos == 0) {
                     setPosition(pos);
@@ -118,15 +121,9 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
             public void onClick(View v) {
                 tvSelectImage.setSelected(!tvSelectImage.isSelected());
                 tvSelectImage.setBackgroundResource(tvSelectImage.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                if (tvSelectImage.isSelected()) {
-                    if (!listSelect.contains(selectPos))
-                        listSelect.add(selectPos);
-                } else {
-                    if (listSelect.contains(selectPos))
-                        listSelect.remove(listSelect.indexOf(selectPos));
-                }
+               adapter.getListImage().get(selectPos).setIsSelect(tvSelectImage.isSelected());
                 if (adapter != null)
-                    adapter.setSelectPosition(selectPos, listSelect);
+                    adapter.setSelectPosition(selectPos);
                 computeDeleteSize();
             }
         });
@@ -134,6 +131,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                backToActivity();
                 finish();
             }
         });
@@ -141,13 +139,15 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listSelect.size() == 0)
-                    return;
-                List<Image> listF = new ArrayList<>();
-                for (int i = 0; i < adapter.getListImage().size(); i++) {
-                    if (listSelect.contains(i))
+
+                List<FileEntity> listF = new ArrayList<>();
+                List<FileEntity> listData=adapter.getListImage();
+                for (int i = 0; i < listData.size(); i++) {
+                    if (listData.get(i).getIsSelect())
                         listF.add(adapter.getListImage().get(i));
                 }
+                if (listF.size() == 0)
+                    return;
                 mPresenter.alertBanLiveDialog(PreviewImageActivity.this, listF.size(), new ImagePreviewPresenter.ClickListener() {
                     @Override
                     public void clickOKBtn() {
@@ -171,28 +171,31 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
 
 
     public void computeDeleteSize() {
-        tvSelectCount.setText("已选:" + listSelect.size() + "张");
-        long sizes = 0;
-        for (int i = 0; i < adapter.getListImage().size(); i++) {
-            if (listSelect.contains(i))
-                sizes += adapter.getListImage().get(i).getSize();
+        List<FileEntity> listF = new ArrayList<>();
+        List<FileEntity> listData=adapter.getListImage();
+        for (int i = 0; i < listData.size(); i++) {
+            if (listData.get(i).getIsSelect())
+                listF.add(listData.get(i));
         }
-        tvDelete.setText(listSelect.size() == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSize(sizes));
-        tvDelete.setBackgroundResource(listSelect.size() == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+
+        tvSelectCount.setText("已选:" + listF.size() + "张");
+        long deleteSize = 0;
+        for (int i = 0; i < listF.size(); i++) {
+            deleteSize += NumberUtils.getLong(listF.get(i).getSize());
+        }
+        tvDelete.setText(listF.size() == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSize(deleteSize));
+        tvDelete.setBackgroundResource(listF.size() == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
     }
 
     @Override
     public void netError() {
 
     }
+
     //删除成功
-    public void deleteSuccess(List<Image> listF) {
+    public void deleteSuccess(List<FileEntity> listF) {
         tvDelete.setText("删除");
-        for(int i=0;i<adapter.getListImage().size();i++){
-           if(listF.contains(adapter.getListImage().get(i))){
-               listSelect.remove(listSelect.indexOf(i));
-           }
-        }
+
         adapter.deleteData(listF);
 
         mImageArrayList.removeAll(listF);
@@ -201,10 +204,6 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         computeDeleteSize();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -215,10 +214,10 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
     public void onPageSelected(int position) {
         setPosition(position);
         selectPos = position;
-        tvSelectImage.setBackgroundResource(listSelect.contains(position) ? R.drawable.icon_select : R.drawable.icon_unselect);
-        tvSelectImage.setSelected(listSelect.contains(position));
+        tvSelectImage.setBackgroundResource(adapter.getListImage().get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
+        tvSelectImage.setSelected(adapter.getListImage().get(position).getIsSelect());
         if (adapter != null)
-            adapter.setSelectPosition(position, listSelect);
+            adapter.setSelectPosition(position);
     }
 
     @Override
@@ -230,13 +229,22 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         tv_pos.setText((position + 1) + "/" + mImageArrayList.size());
     }
 
+
     @Override
-    public void finish() {
+    public void onBackPressed() {
+        backToActivity();
+        super.onBackPressed();
+    }
+
+    public void backToActivity(){
         Intent intent1 = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("selectList", (Serializable) listSelect);
         intent1.putExtras(bundle);
         setResult(205, intent1);
-        super.finish();
+        CleanAllFileScanUtil.clean_image_list =mImageArrayList;
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

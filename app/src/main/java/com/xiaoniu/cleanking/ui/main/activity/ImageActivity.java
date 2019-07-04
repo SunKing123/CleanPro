@@ -89,8 +89,9 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 if (!tv_delete.isSelected())
                     return;
                 List<FileEntity> listF = new ArrayList<>();
-                for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
-                    if (imageAdapter.getListCheck().contains(i))
+                List<FileEntity> listData = imageAdapter.getListImage();
+                for (int i = 0; i < listData.size(); i++) {
+                    if (listData.get(i).getIsSelect())
                         listF.add(imageAdapter.getListImage().get(i));
                 }
 
@@ -133,9 +134,10 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     //计算删除文件大小
     public void compulateDeleteSize() {
         List<FileEntity> listF = new ArrayList<>();
-        for (int i = 0; i < imageAdapter.getListImage().size(); i++) {
-            if (imageAdapter.getListCheck().contains(i))
-                listF.add(imageAdapter.getListImage().get(i));
+        List<FileEntity> listData = imageAdapter.getListImage();
+        for (int i = 0; i < listData.size(); i++) {
+            if (listData.get(i).getIsSelect())
+                listF.add(listData.get(i));
         }
         long deleteSize = 0;
         for (int i = 0; i < listF.size(); i++) {
@@ -157,10 +159,15 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         imageAdapter.setmOnCheckListener(new ImageShowAdapter.onCheckListener() {
             @Override
             public void onCheck(List<FileEntity> listFile, int pos) {
-
-                cb_checkall.setBackgroundResource(imageAdapter.getListCheck().size() == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                tv_delete.setBackgroundResource(imageAdapter.getListCheck().size()==0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
-                tv_delete.setSelected(imageAdapter.getListCheck().size()==0 ? false : true);
+                int selectCount = 0;
+                for (int i = 0; i < listFile.size(); i++) {
+                    if (listFile.get(i).getIsSelect()) {
+                        selectCount++;
+                    }
+                }
+                cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+                tv_delete.setSelected(selectCount == 0 ? false : true);
                 compulateDeleteSize();
             }
         });
@@ -171,12 +178,21 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 205) {
-            List<Integer> listInt = (List<Integer>) data.getSerializableExtra("selectList");
-            imageAdapter.setListCheck(listInt);
-            tv_delete.setBackgroundResource(imageAdapter.getListCheck().size()==0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
-            tv_delete.setSelected(imageAdapter.getListCheck().size()==0 ? false : true);
+            List<FileEntity> listTemp = new ArrayList<>();
+            listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
+            imageAdapter.setListImage(listTemp);
+
+            int selectCount = 0;
+            for (int i = 0; i < listTemp.size(); i++) {
+                if (listTemp.get(i).getIsSelect()) {
+                    selectCount++;
+                }
+            }
+            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+            tv_delete.setSelected(selectCount == 0 ? false : true);
+            cb_checkall.setBackgroundResource(selectCount == listTemp.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+
             compulateDeleteSize();
-            cb_checkall.setBackgroundResource(imageAdapter.getListCheck().size() == imageAdapter.getListImage().size() ? R.drawable.icon_select : R.drawable.icon_unselect);
         }
     }
 

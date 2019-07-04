@@ -95,7 +95,7 @@ public class ImagePreviewPresenter extends RxPresenter<PreviewImageActivity, Mai
     }
 
     //删除数据库中的相应图片
-    public void deleteFromDatabase(List<Image> listF) {
+    public void deleteFromDatabase(List<FileEntity> listF) {
         String[] strPaths = new String[listF.size()];
         for (int i = 0; i < listF.size(); i++) {
             strPaths[i] = listF.get(i).getPath();

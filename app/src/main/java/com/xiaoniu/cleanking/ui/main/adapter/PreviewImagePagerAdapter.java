@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.OnOutsidePhotoTapListener;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Image;
 
 import java.util.List;
@@ -25,14 +26,14 @@ import java.util.List;
 public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsidePhotoTapListener, OnPhotoTapListener {
 
     private Context mContext;
-    private List<Image> mDataList;
+    private List<FileEntity> mDataList;
 
     public void deleteData(List<Image> tempList) {
         mDataList.removeAll(tempList);
         notifyDataSetChanged();
     }
 
-    public PreviewImagePagerAdapter(Context context, List<Image> dataList) {
+    public PreviewImagePagerAdapter(Context context, List<FileEntity> dataList) {
         mContext = context;
         mDataList = dataList;
     }
@@ -59,7 +60,7 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         PhotoView photoView = new PhotoView(container.getContext());
         photoView.setMinimumScale(0.5f);
-        Image image = mDataList.get(position);
+        FileEntity image = mDataList.get(position);
         if (null != image) {
 //            if (image.getHeight() > ScreenUtils.getScreenHeight()) {
 //                //长截图的话

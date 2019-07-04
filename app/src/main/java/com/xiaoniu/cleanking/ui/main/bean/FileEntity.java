@@ -13,7 +13,15 @@ public class FileEntity implements Serializable {
     public String size;
     public String time;
     public String path;
+    public boolean isSelect=false;
 
+    public boolean getIsSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(boolean select) {
+        isSelect = select;
+    }
 
     public String getType() {
         return type;

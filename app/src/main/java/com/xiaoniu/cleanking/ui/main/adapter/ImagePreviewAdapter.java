@@ -19,37 +19,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImagePreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<Image> listImage = new ArrayList<>();
+    List<FileEntity> listImage = new ArrayList<>();
 
-    public List<Image> getListImage() {
+    public List<FileEntity> getListImage() {
         return listImage;
     }
 
-    public void setListImage(List<Image> listImage) {
+    public void setListImage(List<FileEntity> listImage) {
         this.listImage = listImage;
     }
 
-    List<Integer> listInt = new ArrayList<>();
     Activity mActivity;
     onCheckListener mOnCheckListener;
 
     int selectPosition;
 
-    public void setSelectPosition(int selectPosition, List<Integer> listInt) {
+    public void setSelectPosition(int selectPosition) {
         this.selectPosition = selectPosition;
-        this.listInt = listInt;
         notifyDataSetChanged();
     }
 
-    public ImagePreviewAdapter(Activity mActivity, List<Image> listImage, int selectPosition, List<Integer> listInt) {
+    public ImagePreviewAdapter(Activity mActivity, List<FileEntity> listImage, int selectPosition) {
         super();
         this.mActivity = mActivity;
         this.listImage = listImage;
-        this.listInt = listInt;
         this.selectPosition = selectPosition;
     }
 
-    public void deleteData(List<Image> tempList) {
+    public void deleteData(List<FileEntity> tempList) {
         listImage.removeAll(tempList);
         notifyDataSetChanged();
     }
@@ -69,7 +66,7 @@ public class ImagePreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .load(path)
                     .into(((ImageViewHolder) holder).iv_photo_filelist_pic);
 
-            ((ImageViewHolder) holder).rel_select.setVisibility(listInt.contains(position) ? View.VISIBLE : View.GONE);
+            ((ImageViewHolder) holder).rel_select.setVisibility(listImage.get(position).getIsSelect() ? View.VISIBLE : View.GONE);
             ((ImageViewHolder) holder).tv_select.setVisibility(selectPosition == position ? View.VISIBLE : View.GONE);
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
