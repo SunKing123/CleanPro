@@ -73,8 +73,6 @@
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/dimen_16dp"
-        android:paddingRight="@dimen/dimen_16dp"
         android:paddingTop="@dimen/dimen_12dp"/>
 
 </LinearLayout>
