@@ -3,17 +3,31 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
+import java.util.HashMap;
+
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
+
+    @BindView(R.id.text_scan)
+    TextView mTextScan;
+    @BindView(R.id.text_count)
+    TextView mTextCount;
+
+    private boolean isScanFinish = false;
+    public static HashMap<Integer, JunkGroup> mJunkGroups;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -44,6 +58,28 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.layout_clean_right_now)
     public void onViewClicked() {
         //立即清理
-        startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+        if (isScanFinish) {
+            startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+        }else {
+            mPresenter.startScan();
+        }
+    }
+
+    /**
+     * 扫描完成
+     * @param junkGroups
+     */
+    public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
+        isScanFinish = true;
+        mJunkGroups = junkGroups;
+        mTextScan.setText("查看详情");
+    }
+
+    /**
+     * 统计总数
+     * @param total
+     */
+    public void showCountNumber(long total) {
+        getActivity().runOnUiThread(() -> mTextCount.setText(CleanUtil.formatShortFileSize(getActivity(), total)));
     }
 }

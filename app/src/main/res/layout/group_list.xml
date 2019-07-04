@@ -1,38 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/dimen_60dp"
         android:background="@android:color/white"
-        android:layout_marginTop="@dimen/dimen_6dp"
-        android:paddingLeft="@dimen/dimen_6dp"
-        android:paddingRight="@dimen/dimen_12dp"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
 
-        <TextView android:id="@+id/package_name"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/package_name"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
             android:ellipsize="marquee"
+            android:gravity="center_vertical"
             android:singleLine="true"
-            android:gravity="center_vertical|left"
-            android:text="@null"/>
+            android:text="@null"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_16sp"/>
 
-        <TextView android:id="@+id/package_size"
+        <ImageView
+            android:id="@+id/icon_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:src="@mipmap/arrow_down"/>
+
+        <TextView
+            android:id="@+id/package_size"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical|right"
-            android:text="@null"/>
+            android:gravity="right|center_vertical"
+            android:text="已选123MB"
+            android:textColor="@drawable/color_select_clean_detail"/>
 
+        <ImageView
+            android:id="@+id/icon_check"
+            android:layout_width="@dimen/dimen_18dp"
+            android:layout_height="@dimen/dimen_18dp"
+            android:layout_marginLeft="@dimen/dimen_12dp"
+            android:background="@drawable/icon_choose_selector"/>
     </LinearLayout>
-
 </LinearLayout>

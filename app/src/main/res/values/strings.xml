@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">分期淘</string>
+    <string name="app_name">清理大师</string>
     <string name="app_num">4</string>
     <string name="life">生活</string>
     <string name="clean">清理</string>
@@ -7,7 +7,7 @@
     <string name="mine">我的</string>
     <string name="shopping_mall">商城</string>
     <string name="press_exit_again">再按一次退出程序</string>
-    <string name="text_clean">清理</string>
+    <string name="text_clean">清理123123</string>
     <string name="process_clean">进程清理</string>
     <string name="apk_clean">无用安装包</string>
     <string name="tmp_clean">临时文件</string>
@@ -28,4 +28,9 @@
     <string name="peta_byte_short">PB</string>
 
     <string name="clean_file_size_suffix">%1$s%2$s</string>
+
+    <string name="clean_apk_file_damage">[已经损坏]</string>
+    <string name="clean_apk_file_install">[已经安装]</string>
+    <string name="clean_apk_file_uninstall">[未安装]</string>
+    <string name="clean_suggested">建议清理</string>
 </resources>

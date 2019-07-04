@@ -2,24 +2,15 @@ package com.xiaoniu.cleanking.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.IPackageDataObserver;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
+import android.os.Process;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.ui.main.activity.JunkCleanActivity;
-import com.xiaoniu.cleanking.ui.main.model.JunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mazhuang on 16/1/14.
@@ -67,57 +58,6 @@ public class CleanUtil {
                         value, context.getString(suffix));
     }
 
-    public static void freeAllAppsCache(final Handler handler) {
-
-        Context context = AppApplication.getInstance();
-
-        File externalDir = context.getExternalCacheDir();
-        if (externalDir == null) {
-            return;
-        }
-
-        PackageManager pm = context.getPackageManager();
-        List<ApplicationInfo> installedPackages = pm.getInstalledApplications(PackageManager.GET_GIDS);
-        for (ApplicationInfo info : installedPackages) {
-            String externalCacheDir = externalDir.getAbsolutePath()
-                    .replace(context.getPackageName(), info.packageName);
-            File externalCache = new File(externalCacheDir);
-            if (externalCache.exists() && externalCache.isDirectory()) {
-                deleteFile(externalCache);
-            }
-        }
-
-        boolean hanged = true;
-        try {
-            Method freeStorageAndNotify = pm.getClass()
-                    .getMethod("freeStorageAndNotify", long.class, IPackageDataObserver.class);
-            long freeStorageSize = Long.MAX_VALUE;
-
-            freeStorageAndNotify.invoke(pm, freeStorageSize, new IPackageDataObserver.Stub() {
-                @Override
-                public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
-                    Message msg = handler.obtainMessage(JunkCleanActivity.MSG_SYS_CACHE_CLEAN_FINISH);
-                    msg.sendToTarget();
-                }
-            });
-            hanged = false;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        if (hanged) {
-            Message msg = handler.obtainMessage(JunkCleanActivity.MSG_SYS_CACHE_CLEAN_FINISH);
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(JunkCleanActivity.HANG_FLAG, true);
-            msg.setData(bundle);
-            msg.sendToTarget();
-        }
-    }
-
     public static boolean deleteFile(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
@@ -131,25 +71,65 @@ public class CleanUtil {
         return file.delete();
     }
 
-    public static void killAppProcesses(String packageName) {
+    public static void killAppProcesses(String packageName,int pid) {
         if (packageName == null || packageName.isEmpty()) {
             return;
         }
 
-        ActivityManager am = (ActivityManager)AppApplication.getInstance()
+        ActivityManager am = (ActivityManager) AppApplication.getInstance()
                 .getSystemService(Context.ACTIVITY_SERVICE);
-        am.killBackgroundProcesses(packageName);
-    }
+        try {
+            if(!FileUtils.isSystemApK(packageName)) {
+                am.killBackgroundProcesses(packageName);
+            }
+        } catch (Exception e) {
+            if (pid != 0) {
+                try {
+                    Process.killProcess(pid);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
 
-    public static void freeJunkInfos(ArrayList<JunkInfo> junks, final Handler handler) {
-        for (JunkInfo info : junks) {
-            File file = new File(info.mPath);
-            if (file != null && file.exists()) {
-                file.delete();
             }
         }
 
-        Message msg = handler.obtainMessage(JunkCleanActivity.MSG_OVERALL_CLEAN_FINISH);
-        msg.sendToTarget();
     }
+
+    public static long freeJunkInfos(ArrayList<FirstJunkInfo> junks) {
+        long total = 0;
+        if (junks != null) {
+            int i = 0;
+            while (true) {
+                int i2 = i;
+                if (i2 >= junks.size()) {
+                    break;
+                }
+                if (junks.get(i2) != null && junks.get(i2).isAllchecked()) {
+                    total += junks.get(i2).getTotalSize();
+                    if (junks.get(i2).getSubGarbages() != null) {
+                        for (SecondJunkInfo secondlevelGarbageInfo : junks.get(i2).getSubGarbages()) {
+                            if (secondlevelGarbageInfo != null) {
+                                try {
+                                    FileUtils.deleteFileAndFolder(new File(secondlevelGarbageInfo.getFilecatalog()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                    try {
+                        FileUtils.deleteFileAndFolder(new File(junks.get(i2).getGarbageCatalog()));
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                    }
+                }
+                i = i2 + 1;
+            }
+        }
+
+        return total;
+    }
+
+
+
 }

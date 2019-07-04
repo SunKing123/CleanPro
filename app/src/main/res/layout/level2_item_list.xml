@@ -14,7 +14,8 @@
         android:paddingRight="@dimen/dimen_6dp"
         android:orientation="horizontal">
 
-        <TextView android:id="@+id/junk_type"
+        <TextView
+            android:id="@+id/text_app_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"

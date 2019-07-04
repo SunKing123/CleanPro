@@ -11,9 +11,17 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/color_0AD3EB"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <TextView
-            android:text="立即清理"
+            android:id="@+id/text_count"
+            android:text="0"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
+
+        <TextView
+            android:id="@+id/text_scan"
+            android:text="立即扫描"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50dp"/>
