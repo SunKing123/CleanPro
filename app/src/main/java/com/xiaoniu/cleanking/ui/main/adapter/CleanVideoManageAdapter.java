@@ -98,7 +98,7 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.name, isChecked);
+                        onCheckListener.onCheck(appInfoBean.path, isChecked);
                     }
                 }
             });

@@ -13,7 +13,7 @@ public class VideoInfoBean implements Serializable {
     //文件名
     public String name;
     //文件路径
-    public String path;
+    public String path="";
     //文件大小
     public long packageSize;
     //是否可选择

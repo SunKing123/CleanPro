@@ -113,7 +113,7 @@ public class CleanVideoManagePresenter extends RxPresenter<CleanVideoManageActiv
 
                 //找出相同时间的文件
 
-                Set<String> set=new TreeSet<>();
+                Set<String> set=new TreeSet<String>((o1, o2) -> o2.compareTo(o1));
 
                 for (File file : files) {
                     String time= DateUtils.timestampToPatternTime(file.lastModified(), "yyyy-MM-dd");
