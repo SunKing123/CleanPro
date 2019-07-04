@@ -159,17 +159,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
-    @OnClick({R.id.btn_install_manage, R.id.btn_clean_music, R.id.btn_clean_video})
-    public void onViewClick(View view) {
-        int id = view.getId();
-        if (id == R.id.btn_install_manage) {
-            startActivity(new Intent(this, CleanInstallPackageActivity.class));
-        } else if (id == R.id.btn_clean_music) {
-            startActivity(new Intent(this, CleanMusicManageActivity.class));
-        } else if (id == R.id.btn_clean_video) {
-            startActivity(new Intent(this, CleanVideoManageActivity.class));
-        }
-    }
 
     /**
      * 接收外部跳转参数
