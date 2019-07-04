@@ -2,17 +2,12 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,24 +15,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.main.bean.VideoFileCollenctionBean;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.utils.DateUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * 安装包管理

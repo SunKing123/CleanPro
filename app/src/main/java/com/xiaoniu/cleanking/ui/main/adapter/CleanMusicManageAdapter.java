@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,15 +63,15 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
             viewHolder.mTxtTime.setText(appInfoBean.time);
             if (appInfoBean.isSelect) {
-                viewHolder.mCheckSelect.setChecked(true);
+                viewHolder.mCheckSelect.setSelected(true);
             } else {
-                viewHolder.mCheckSelect.setChecked(false);
+                viewHolder.mCheckSelect.setSelected(false);
             }
-            viewHolder.mCheckSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            viewHolder.mCheckSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
                     if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.name, isChecked);
+                        onCheckListener.onCheck(appInfoBean.path, !appInfoBean.isSelect);
                     }
                 }
             });
@@ -126,7 +127,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
          **/
         private TextView mTxtTime;
         private TextView mTxtSize;
-        private AppCompatCheckBox mCheckSelect;
+        private ImageButton mCheckSelect;
         private LinearLayout mLLContent;
 
         public ViewHolder(View itemView) {

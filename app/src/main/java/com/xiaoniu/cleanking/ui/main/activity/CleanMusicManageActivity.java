@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     @BindView(R.id.btn_del)
     Button mBtnDel;
     @BindView(R.id.check_all)
-    AppCompatCheckBox mCheckBoxAll;
+    ImageButton mCheckBoxAll;
     @BindView(R.id.ll_empty_view)
     LinearLayout mLLEmptyView;
 
@@ -47,7 +48,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     /**
      *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
-    private boolean isRelevancy=false;
+    private  boolean mIsCheckAll;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -74,13 +75,17 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);
 
-        mCheckBoxAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkAll(isChecked);
-
-                //每设置完成就回归原位
-                isRelevancy=false;
+            public void onClick(View v) {
+                if(mIsCheckAll){
+                    mIsCheckAll=false;
+                }else {
+                    mIsCheckAll=true;
+                }
+                mCheckBoxAll.setSelected(mIsCheckAll);
+                checkAll(mIsCheckAll);
+                totalSelectFiles();
             }
         });
     }
@@ -199,11 +204,11 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         totalSize = 0L;
         boolean isCheckAll = true;
         for (MusciInfoBean appInfoBean : lists) {
-            if (appInfoBean.name.equals(id)) {
+            if (appInfoBean.path.equals(id)) {
                 appInfoBean.isSelect = isChecked;
             }
         }
-
+        mAdapter.notifyDataSetChanged();
         for (MusciInfoBean appInfoBean : lists) {
             if (appInfoBean.isSelect) {
                 totalSize += appInfoBean.packageSize;
@@ -212,8 +217,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
             }
         }
 
-        //mCheckBoxAll.setChecked(isCheckAll);
-        isRelevancy=true;
+        mIsCheckAll=isCheckAll;
+        mCheckBoxAll.setSelected(mIsCheckAll);
+
         if (totalSize > 0) {
             mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
             mBtnDel.setSelected(true);

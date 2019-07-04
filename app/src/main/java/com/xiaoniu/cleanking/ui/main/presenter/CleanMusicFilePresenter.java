@@ -17,6 +17,8 @@ import com.xiaoniu.cleanking.utils.MusicFileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +33,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static java.util.Comparator.comparing;
+
 /**
  * Created by lang.chen on 2019/7/2
  */
@@ -38,7 +42,7 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
 
     private RxAppCompatActivity activity;
 
-    private List<MusciInfoBean> musciInfoBeans = new ArrayList<>();
+    private List<MusciInfoBean> musciInfoBeans = new ArrayList<MusciInfoBean>();
 
     private List<File> files = new ArrayList<>();
 
@@ -105,6 +109,7 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                     //扫描apk文件
                     scanFile(path);
                 }
+
                 for (File file : files) {
                     MusciInfoBean musciInfoBean = new MusciInfoBean();
                     musciInfoBean.name = file.getName();
@@ -113,6 +118,8 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                     musciInfoBean.time = MusicFileUtils.getPlayDuration(file.getPath());
                     musciInfoBeans.add(musciInfoBean);
                 }
+                //按升序排列
+                Collections.sort(musciInfoBeans, ((o1, o2) -> o2.time.compareTo(o1.time)));
                 emitter.onNext("");
                 emitter.onComplete();
             }
