@@ -37,6 +37,11 @@
                 android:layout_height="wrap_content"
                 android:text="视频清理" />-->
 
+            <Button
+                android:id="@+id/btn_whilte_list_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="加速白名单" />
 
 
         </LinearLayout>

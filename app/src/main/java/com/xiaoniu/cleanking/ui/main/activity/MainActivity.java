@@ -158,7 +158,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         DbHelper.copyDb();
     }
 
-
+    @OnClick({R.id.btn_whilte_list_speed})
+    public void onClickView(View view) {
+        int ids = view.getId();
+        if (ids == R.id.btn_whilte_list_speed) {
+            startActivity(new Intent(this, WhiteListSpeedManageActivity.class));
+        }
+    }
 
     /**
      * 接收外部跳转参数
