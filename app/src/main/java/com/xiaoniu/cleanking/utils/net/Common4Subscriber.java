@@ -22,7 +22,7 @@ public abstract class Common4Subscriber<T extends BaseEntity> extends CommonSubs
     @Override
     public void onNext(T t) {
         if (!Constant.SUCCESS.equals(t.code)) {
-            showExtraOp(t.code,t.message);
+            showExtraOp(t.code,t.msg);
         }
         super.onNext(t);
     }

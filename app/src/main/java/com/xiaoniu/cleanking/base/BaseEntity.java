@@ -9,6 +9,5 @@ import java.io.Serializable;
 public class BaseEntity implements Serializable {
 
     public String code;
-    public String message;
-    public String time;
+    public String msg;
 }

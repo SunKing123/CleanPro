@@ -155,6 +155,10 @@
             android:name=".ui.main.activity.CleanMusicManageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.AboutActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
 
         <activity

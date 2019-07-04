@@ -6,13 +6,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
+import com.tencent.tinker.lib.tinker.Tinker;
+import com.tencent.tinker.lib.tinker.TinkerLoadResult;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.hotfix.listener.MyPatchListener;
 import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -23,16 +26,11 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
-import com.tencent.tinker.lib.tinker.Tinker;
-import com.tencent.tinker.lib.tinker.TinkerLoadResult;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,18 +65,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 版本更新
      */
     public void queryAppVersion(final OnCancelListener onCancelListener) {
-        mModel.queryAppVersion(new Common4Subscriber<UpdateInfoEntity>() {
+        mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
 
 
             @Override
-            public void getData(UpdateInfoEntity updateInfoEntity) {
-                if (updateInfoEntity.getData() != null) {
-                    if (updateInfoEntity.getData().getDownloadUrl() != null
-                            && TextUtils.equals(String.valueOf(1), updateInfoEntity.getData().getIsPopup())) {
-                        mUpdateAgent = new UpdateAgent(mActivity, updateInfoEntity.getData(), onCancelListener);
-                        mUpdateAgent.check();
-                    }
-                }
+            public void getData(AppVersion updateInfoEntity) {
+                setAppVersion(updateInfoEntity);
             }
 
             @Override
@@ -196,7 +188,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         @Override
         public void run() {
             Activity activity = (RxAppCompatActivity) weakReference.get();
-            UpdateUtil.loadFile(activity, result.getData().getPatchUrl(), result.getData().getPatchEncryption(), callback);
+//            UpdateUtil.loadFile(activity, result.getData().getPatchUrl(), result.getData().getPatchEncryption(), callback);
         }
     }
 
@@ -206,7 +198,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     //apk文件
     private Set<String> cachesApkFies = new HashSet<>();
     //视频文件
-    private Set<String> cachesVideo=new HashSet<>();
+    private Set<String> cachesVideo = new HashSet<>();
 
 
     /**
@@ -286,9 +278,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                 String path = Environment.getExternalStorageDirectory().getPath();
-                 scanViodeFile(path);
-                 emitter.onNext("");
+                String path = Environment.getExternalStorageDirectory().getPath();
+                scanViodeFile(path);
+                emitter.onNext("");
             }
         })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -332,7 +324,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanMusicFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".mp3") &&  file.length()!=0) {
+                    } else if (file1.getName().endsWith(".mp3") && file.length() != 0) {
                         cachesMusicFiles.add(file1.getPath());
                     }
                 }
@@ -350,7 +342,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanApkFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".apk") && file.length()!=0) {
+                    } else if (file1.getName().endsWith(".apk") && file.length() != 0) {
                         cachesApkFies.add(file1.getPath());
                     }
                 }
@@ -362,15 +354,16 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     /**
      * mp4    mov    mkv    avi    wmv    m4v    mpg    vob    webm    ogv    3gp    flv    f4v    swf    gif
+     *
      * @param path
      */
-    private  void scanViodeFile(String path){
+    private void scanViodeFile(String path) {
         File file = new File(path);
         if (file.isDirectory()) {
             File[] f = file.listFiles();
             if (null != f) {
                 for (File file1 : f) {
-                    String fileName=file1.getName().toLowerCase();
+                    String fileName = file1.getName().toLowerCase();
                     if (file1.isDirectory()) {
                         scanViodeFile(path + "/" + file1.getName());
                     } else if (fileName.endsWith(".mp4")) {
@@ -380,4 +373,38 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         }
     }
+
+    public void setAppVersion(AppVersion result) {
+        if (result != null) {
+            //根据版本号判断是否需要更新
+            String versionName = AndroidUtil.getAppVersionName();
+            int versionCode = AndroidUtil.getVersionCode();
+            //默认可以下载
+            int code = 0;
+            if (!TextUtils.isEmpty(result.code)) {
+                code = Integer.parseInt(result.code);
+            }
+            if (!TextUtils.isEmpty(versionName) && !TextUtils.equals(versionName, result.getData().versionNumber) && versionCode < code && !TextUtils.isEmpty(result.getData().downloadUrl)) {
+                boolean isForced = false;
+                if (TextUtils.equals(result.getData().forcedUpdate, "1")) {//强更
+                    isForced = true;
+                } else {//手动更新
+                    isForced = false;
+                }
+                if (mUpdateAgent == null) {
+                    mUpdateAgent = new UpdateAgent(mActivity, result, new OnCancelListener() {
+                        @Override
+                        public void onCancel() {
+                        }
+                    });
+                    mUpdateAgent.check();
+                }
+
+
+            } else {//清空版本信息状态
+            }
+        } else {
+        }
+    }
+
 }

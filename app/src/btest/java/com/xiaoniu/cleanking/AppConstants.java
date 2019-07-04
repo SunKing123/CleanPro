@@ -7,7 +7,7 @@ package com.xiaoniu.cleanking;
 
 public class AppConstants {
     //测试环境服务器
-    public static String Base_Host = "http://yacefddapi.51huihuahua.com";
+    public static String Base_Host = "http://yapi.openxiaoniu.com";
     public static String Base_Host_Finance = "http://yacefddapi.51huihuahua.com";//账务接口域名
     public static String Base_Image_Host = "http://testfddimage.51huihuahua.com";//图片路径
     public static String Base_H5_Host = "https://testfddh5.51huihuahua.com";//H5路径

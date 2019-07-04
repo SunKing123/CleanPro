@@ -58,8 +58,28 @@ public class AndroidUtil {
     public static int getAndroidSDKVersion() {
         return android.os.Build.VERSION.SDK_INT;
     }
-
-
+    public static int getVersionCode() {
+        return BuildConfig.VERSION_CODE;
+    }
+    /**
+     * 返回当前程序版本名
+     */
+    public static String getAppVersionName(Context context) {
+        String versionName = "0.0.0";
+        try {
+            // ---get the package info---
+            PackageManager pm = context.getPackageManager();
+            // 这里的context.getPackageName()可以换成你要查看的程序的包名
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            if (versionName == null || versionName.length() <= 0) {
+                return "";
+            }
+        } catch (Exception e) {
+            //Log.e("VersionInfo", "Exception", e);
+        }
+        return versionName;
+    }
     /**
      * 返回当前程序版本名
      */

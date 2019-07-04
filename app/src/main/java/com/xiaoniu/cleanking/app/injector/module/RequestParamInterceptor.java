@@ -32,20 +32,36 @@ public class RequestParamInterceptor implements Interceptor {
         long timeMillis = System.currentTimeMillis();
         Request original = chain.request();
         Request.Builder requestBuilder = original.newBuilder();
-        requestBuilder.addHeader("request-id", UUID.randomUUID().toString());
-        requestBuilder.addHeader("request-agent", "1");//1：android、2：iOS、3：PC、4、H5、5：wechat
-        requestBuilder.addHeader("device-id", AndroidUtil.getUdid());
-        requestBuilder.addHeader("os-version", "0");//0：android、1：iOS
-        requestBuilder.addHeader("sdk-version", AndroidUtil.getAndroidSDKVersion()+"");
-        requestBuilder.addHeader("phone-model", AndroidUtil.getSystemModel());
-        requestBuilder.addHeader("market", AndroidUtil.getMarketId());
-        requestBuilder.addHeader("app-version", AndroidUtil.getAppVersionName());
-        requestBuilder.addHeader("app-name", AndroidUtil.getAppNum());
-        requestBuilder.addHeader("app-id", BuildConfig.API_APPID);
-        requestBuilder.addHeader("timestamp", timeMillis +"");
-        requestBuilder.addHeader("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
-        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId());
-        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
+//        requestBuilder.addHeader("request-id", UUID.randomUUID().toString());
+//        requestBuilder.addHeader("request-agent", "1");//1：android、2：iOS、3：PC、4、H5、5：wechat
+//        requestBuilder.addHeader("device-id", AndroidUtil.getUdid());
+//        requestBuilder.addHeader("os-version", "0");//0：android、1：iOS
+//        requestBuilder.addHeader("sdk-version", AndroidUtil.getAndroidSDKVersion()+"");
+//        requestBuilder.addHeader("phone-model", AndroidUtil.getSystemModel());
+//        requestBuilder.addHeader("market", AndroidUtil.getMarketId());
+//        requestBuilder.addHeader("app-version", AndroidUtil.getAppVersionName());
+//        requestBuilder.addHeader("app-name", AndroidUtil.getAppNum());
+//        requestBuilder.addHeader("app-id", BuildConfig.API_APPID);
+//        requestBuilder.addHeader("timestamp", timeMillis +"");
+//        requestBuilder.addHeader("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
+//        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId());
+//        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
+
+        requestBuilder.addHeader("Ip", "172.16.88.23");
+        requestBuilder.addHeader("appVersion", AndroidUtil.getAppVersionName());
+        requestBuilder.addHeader("channel", AndroidUtil.getMarketId());
+        requestBuilder.addHeader("deviceId", AndroidUtil.getUdid());
+        requestBuilder.addHeader("gtId", "419441fd0260490413e73830c3326298");
+
+        requestBuilder.addHeader("imei", "357755073075671");
+        requestBuilder.addHeader("os", "android");
+        requestBuilder.addHeader("phoneType", AndroidUtil.getSystemModel());
+        requestBuilder.addHeader("phoneVersion", "Android"+AndroidUtil.getAndroidSDKVersion()+"");
+        requestBuilder.addHeader("sessionId", "");
+        requestBuilder.addHeader("sign", "7cdd4afd6a0bd76080a973ada0566598");
+        requestBuilder.addHeader("talkVersion", "");
+        requestBuilder.addHeader("timestamp", "1562234756542");
+        requestBuilder.addHeader("uid", "");
 //        //请求定制：添加请求头
 //        Request.Builder requestBuilder = original.newBuilder();
 //        CommonParam commonParam = new CommonParam();

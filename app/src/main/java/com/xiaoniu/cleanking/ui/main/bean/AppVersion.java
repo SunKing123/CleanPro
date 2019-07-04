@@ -1,22 +1,17 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.xiaoniu.cleanking.base.BaseEntity;
 
 /**
- * Created by tie on 2017/6/16.
+ * deprecation:用户实体类
+ * author:ayb
+ * time:2018/9/20
  */
-
-public class UpdateInfoEntity extends BaseEntity {
-
-
-    /**
-     * requestId : 34543543543511
-     * timestamp : 1535354186713
-     * data : {"versionNumber":"1.0.0","downloadUrl":"http://www.baidu.com","isForcedUpdate":"1","changeCopy":"1"}
-     */
+public class AppVersion extends BaseEntity {
 
     private DataBean data;
 
@@ -38,6 +33,7 @@ public class UpdateInfoEntity extends BaseEntity {
         public String forcedUpdate;
         public String md5;
         public String popup;
+        public String state;
 
         public String getAppType() {
             return appType;
@@ -127,9 +123,9 @@ public class UpdateInfoEntity extends BaseEntity {
             this.versionNumber = versionNumber;
         }
 
-        public String state;
         public String tag;
         public String versionNumber;
+
 
         protected DataBean(Parcel in) {
             appType = in.readString();
@@ -137,7 +133,6 @@ public class UpdateInfoEntity extends BaseEntity {
             changeLog = in.readString();
             code = in.readString();
             downloadUrl = in.readString();
-
             forcedUpdate = in.readString();
             md5 = in.readString();
             popup = in.readString();
@@ -158,7 +153,6 @@ public class UpdateInfoEntity extends BaseEntity {
             }
         };
 
-
         @Override
         public int describeContents() {
             return 0;
@@ -166,18 +160,20 @@ public class UpdateInfoEntity extends BaseEntity {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(appType);
+            dest.writeString(changeDesc);
+            dest.writeString(changeLog);
+            dest.writeString(code);
+            dest.writeString(downloadUrl);
             dest.writeString(forcedUpdate);
             dest.writeString(md5);
             dest.writeString(popup);
             dest.writeString(state);
             dest.writeString(tag);
             dest.writeString(versionNumber);
-
-            dest.writeString(appType);
-            dest.writeString(changeDesc);
-            dest.writeString(changeLog);
-            dest.writeString(code);
-            dest.writeString(downloadUrl);
         }
     }
+
+
+
 }

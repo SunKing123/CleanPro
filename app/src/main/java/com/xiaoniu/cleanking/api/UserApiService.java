@@ -1,10 +1,12 @@
 package com.xiaoniu.cleanking.api;
 
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -18,8 +20,8 @@ public interface UserApiService {
      *
      * @return
      */
-    @GET("/gateway/config/version")
-    Flowable<UpdateInfoEntity> queryAppVersion();
+    @POST("/mock/285/appVersion/query")
+    Flowable<AppVersion> queryAppVersion();
 
     /**
      * 查询app是否有补丁版本

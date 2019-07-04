@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import butterknife.BindView;
@@ -24,6 +26,8 @@ import butterknife.BindView;
 public class MeFragment extends SimpleFragment{
     @BindView(R.id.iv_top)
     ImageView iv_top;
+    @BindView(R.id.line_about)
+    LinearLayout line_about;
 
 
     public static MeFragment getIntance() {
@@ -38,6 +42,12 @@ public class MeFragment extends SimpleFragment{
 
     @Override
     protected void initView() {
+        line_about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(AboutActivity.class);
+            }
+        });
     }
 
 

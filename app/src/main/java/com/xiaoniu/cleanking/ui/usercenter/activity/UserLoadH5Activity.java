@@ -426,33 +426,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
      * 下载新版本应用
      */
     private void downloadApp() {
-        if (null == this.mUpdateInfo) {
-            ToastUtils.showShort("当前版本已是最新版本");
-            return;
-        }
-        mUpdateAgent = new UpdateAgent(UserLoadH5Activity.this, this.mUpdateInfo,true, new OnCancelListener() {
-            @Override
-            public void onCancel() {
 
-            }
-        });
-        //非强制更新检查通知栏权限
-        if (!TextUtils.equals(String.valueOf(1), this.mUpdateInfo.getIsForcedUpdate())) {
-            NotificationManagerCompat manager = NotificationManagerCompat.from(UserLoadH5Activity.this);
-            boolean isOpened = manager.areNotificationsEnabled();
-            //通知权限没有打开
-//            if (!isOpened) {
-//                ToastUtils.showShort("请打开通知权限");
-//                Intent intent = new Intent();
-//                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                Uri uri = Uri.fromParts("package", getPackageName(), null);
-//                intent.setData(uri);
-//                startActivityForResult(intent, REQUEST_NOTIFICATION);
-//                return;
-//            }
-        }
-        mUpdateAgent.check(false);
-//        mView.getDialog(mUpdateAgent);
     }
 
     /**

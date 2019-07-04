@@ -38,7 +38,7 @@ public abstract class Common3Subscriber<T extends BaseEntity> extends ResourceSu
 //            JPushInterface.setAlias(AppApplication.getInstance(), "", null);
         } else {
             //失败
-            showExtraOp(t.message);
+            showExtraOp(t.msg);
         }
     }
 

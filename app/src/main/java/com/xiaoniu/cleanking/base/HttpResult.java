@@ -50,7 +50,7 @@ public abstract class HttpResult<T extends BaseEntity> implements Callback {
 //            JPushInterface.setAlias(App.getAppContext(), "", null);
         } else {
             //失败
-            showExtraOp(t.message);
+            showExtraOp(t.msg);
         }
     }
 

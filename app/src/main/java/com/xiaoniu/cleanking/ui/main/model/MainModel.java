@@ -1,8 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.model;
 
 
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.base.BaseModel;
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -12,6 +14,9 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  *
@@ -30,8 +35,8 @@ public class MainModel extends BaseModel {
         mActivity = activity;
     }
 
-    public void queryAppVersion(Common4Subscriber<UpdateInfoEntity> commonSubscriber) {
-        mService.queryAppVersion().compose(RxUtil.<UpdateInfoEntity>rxSchedulerHelper(mActivity))
+    public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
+        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
                 .subscribeWith(commonSubscriber);
     }
 

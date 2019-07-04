@@ -27,22 +27,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.encypt.rsa.MD5Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class UpdateUtil {
     private static final String TAG = "ezy.update";
@@ -68,13 +63,13 @@ public class UpdateUtil {
         sp.edit().clear().apply();
     }
 
-    public static void setUpdate() {
+    public static void setUpdate(Context context) {
 
-        File oldFile = new File(getFilePath());
+        File oldFile = new File(getFilePath(context));
         if (oldFile.exists()) {
             oldFile.delete();
         }
-        File file = new File(getFilePath());
+        File file = new File(getFilePath(context));
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -94,7 +89,7 @@ public class UpdateUtil {
 
     public static void install(Context context, boolean force) {
         String md5 = context.getSharedPreferences(PREFS, 0).getString(KEY_UPDATE, "");
-        File apk = new File(getFilePath());
+        File apk = new File(getFilePath(context));
 
         install(context, apk, force);
     }
@@ -115,18 +110,17 @@ public class UpdateUtil {
             if (Build.VERSION.SDK_INT < 24) {
                 intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
             } else {
-                Uri uri = FileProvider.getUriForFile(AppApplication.getInstance(), context.getPackageName() + ".updatefileprovider", file);
+                Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".updatefileprovider", file);
                 intent.setDataAndType(uri, "application/vnd.android.package-archive");
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            AppApplication.getInstance().startActivity(intent);
+            context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (force) {
-            ((Activity)context).finish();
-//            System.exit(0);
+            ((Activity) context).finish();
         }
     }
 
@@ -145,13 +139,14 @@ public class UpdateUtil {
     /**
      * 获取文件路径名
      *
+     * @param context
      * @return
      */
-    public static String getFilePath() {
+    public static String getFilePath(Context context) {
        /* return Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context) + ".apk";*/
-        File apk = new File(AppApplication.getInstance().getExternalCacheDir(), "xiaoniu_v" + getAppVersionName() + ".apk");
+        File apk = new File(context.getExternalCacheDir(), "xiaoniu_v" + getAppVersionName(context) + ".apk");
         return apk.getAbsolutePath();
     }
 
@@ -165,7 +160,7 @@ public class UpdateUtil {
         /*return Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context);*/
-        File apk = new File(context.getExternalCacheDir(), File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName());
+        File apk = new File(context.getExternalCacheDir(), File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context));
         return apk.getAbsolutePath();
     }
 
@@ -177,24 +172,24 @@ public class UpdateUtil {
             file.mkdirs();
         }
 
-        File newFile = new File(file, "xiaoniu_v" + getAppVersionName());
+        File newFile = new File(file, "xiaoniu_v" + getAppVersionName(context));
         if (newFile.exists()) {
             newFile.delete();
         }
-        return new File(file, "xiaoniu_v" + getAppVersionName() + ".apk");
+        return new File(file, "xiaoniu_v" + getAppVersionName(context) + ".apk");
     }
 
 
     /**
      * 返回当前程序版本名
      */
-    public static String getAppVersionName() {
+    public static String getAppVersionName(Context context) {
         String versionName = "0.0.0";
         try {
             // ---get the package info---
-            PackageManager pm = AppApplication.getInstance().getPackageManager();
+            PackageManager pm = context.getPackageManager();
             // 这里的context.getPackageName()可以换成你要查看的程序的包名
-            PackageInfo pi = pm.getPackageInfo(AppApplication.getInstance().getPackageName(), 0);
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
             if (versionName == null || versionName.length() <= 0) {
                 return "";
@@ -268,94 +263,9 @@ public class UpdateUtil {
     }
 
     public interface PatchCallback {
-        void downloadSuccess(String path);
+        public void downloadSuccess(String path);
 
-        void downloadError(String message);
-    }
-
-    public static void loadFile(Activity context, final String url, final String encryption,
-                                final PatchCallback callback) {
-        int responseCode;
-        try {
-
-            URL _url = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) _url.openConnection(); //使用URL打开一个链接
-            conn.setDoInput(true); //允许输入流，即允许下载
-            //conn.setDoOutput(true); //允许输出流，即允许上传
-            conn.setUseCaches(false); //不使用缓冲
-            conn.setRequestMethod("GET"); //使用get请求
-            //response = client.execute(get);
-            responseCode = conn.getResponseCode();
-
-
-            if (responseCode != 200) {
-                callback.downloadError("服务器端返回状态错误"); // 文件不存在
-                return;
-            }
-
-            //HttpEntity entity = response.getEntity();
-            int length = conn.getContentLength();
-            //String path = Environment.getDownloadCacheDirectory().getPath();
-            final String path;
-            if (Environment.isExternalStorageEmulated()) {
-//                path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/flash_loan.patch";
-                if (Build.VERSION.SDK_INT >= 19) {
-                    path = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/flash_loan.patch";
-                } else {
-                    path = context.getExternalFilesDir("Documents") + "/flash_loan.patch";
-                }
-            } else {
-                path = context.getFilesDir() + "/flash_loan.patch";
-            }
-            InputStream is = conn.getInputStream();
-            FileOutputStream fileOutputStream = null;
-            File file = new File(path);
-            if (is != null) {
-
-                fileOutputStream = new FileOutputStream(file);
-                byte[] buf = new byte[1024];
-                int ch = -1;
-                while ((ch = is.read(buf)) != -1) {
-                    fileOutputStream.write(buf, 0, ch);
-                }
-            }
-            fileOutputStream.flush();
-            if (fileOutputStream != null) {
-                fileOutputStream.close();
-            }
-            //File file = new File(path);
-
-            boolean isVerify = UpdateUtil.verify(file, encryption);
-            //boolean isVerify = true;
-            if (isVerify) {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.downloadSuccess(path);
-
-                    }
-                });
-            } else {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.downloadError("检验补丁包失败，两个文件不一致");
-
-                    }
-                });
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    callback.downloadError("意外错误");
-                }
-            });
-
-        }
+        public void downloadError(String message);
     }
 
     public static boolean verify(File apk, String md5) {

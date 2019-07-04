@@ -20,30 +20,28 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.utils.EventBusTags;
+import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.update.listener.IDownloadAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateDownloader;
@@ -54,16 +52,17 @@ import com.xiaoniu.cleanking.utils.update.listener.OnFailureListener;
 
 import java.io.File;
 
+import io.reactivex.functions.Consumer;
+
 public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
-    public static final int REQUEST_APP_UPDATE = 5344;
+
     private static boolean mForce;
-    private Activity mActivity;
-    private static boolean mIsShowDialogProgress;
+    private final Activity mActivity;
     private Context mContext;
     private File mTmpFile;
     private File mApkFile;
 
-    private static UpdateInfoEntity.DataBean mInfo;
+    private static AppVersion mInfo;
     private UpdateError mError = null;
 
     //private IUpdateChecker mChecker = new DefaultUpdateChecker();
@@ -77,31 +76,24 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
     private OnCancelListener mOnCancelListener;
 
-    ActivityCompat.OnRequestPermissionsResultCallback callback = new ActivityCompat.OnRequestPermissionsResultCallback() {
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            if (requestCode == REQUEST_APP_UPDATE) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    update();
-                }
-            }
-        }
-    };
+//    ActivityCompat.OnRequestPermissionsResultCallback callback = new ActivityCompat.OnRequestPermissionsResultCallback() {
+//        @Override
+//        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//            if (requestCode == 341) {
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    update();
+//                }
+//            }
+//
+//        }
+//    };
 
-    public ActivityCompat.OnRequestPermissionsResultCallback getCallback() {
-        return callback;
-    }
-
-    public UpdateAgent(Activity activity, UpdateInfoEntity.DataBean updateInfo, OnCancelListener onCancelListener) {
-        initParams(activity, updateInfo, false, onCancelListener);
-    }
+//    public ActivityCompat.OnRequestPermissionsResultCallback getCallback() {
+//        return callback;
+//    }
 
 
-    public UpdateAgent(Activity activity, UpdateInfoEntity.DataBean updateInfo, boolean isShowDialogProgress, OnCancelListener onCancelListener) {
-        initParams(activity, updateInfo, isShowDialogProgress, onCancelListener);
-    }
-
-    public void initParams(Activity activity, UpdateInfoEntity.DataBean updateInfo, boolean isShowDialogProgress, OnCancelListener onCancelListener) {
+    public UpdateAgent(Activity activity, AppVersion updateInfo, OnCancelListener onCancelListener) {
         mContext = activity;
         mActivity = activity;
         mInfo = updateInfo;
@@ -110,18 +102,16 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         mPrompter = new DefaultUpdatePrompter(activity);
         mOnFailureListener = new DefaultFailureListener(activity);
         mOnDownloadListener = new DefaultDialogDownloadListener(activity);
-        //是否显示下载进度条
-        mIsShowDialogProgress = isShowDialogProgress;
         //是否强更
-        mForce = "1".equals(updateInfo.getIsForcedUpdate());
+        mForce = "1".equals(updateInfo.getData().forcedUpdate);
 
         mOnNotificationDownloadListener = new DefaultNotificationDownloadListener(mContext, 1);
+
     }
 
     public void dissmiss() {
-        if (mPrompter != null) {
+        if (mPrompter != null)
             mPrompter.dismiss();
-        }
     }
 
     @Override
@@ -142,7 +132,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         doDownload();
 //        }
         //关闭弹窗
-        dissmiss();
+        mPrompter.dismiss();
     }
 
     @Override
@@ -155,7 +145,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     @Override
     public void onStart() {
-        if (mForce || mIsShowDialogProgress) {
+        if (mForce) {
             //强更弹出下载对话框
             mOnDownloadListener.onStart();
         } else {
@@ -171,7 +161,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     @Override
     public void onProgress(int progress) {
-        if (mForce || mIsShowDialogProgress) {
+        if (mForce) {
             mOnDownloadListener.onProgress(progress);
         } else {
             mOnNotificationDownloadListener.onProgress(progress);
@@ -183,7 +173,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     @Override
     public void onFinish() {
-        if (mForce || mIsShowDialogProgress) {
+        if (mForce) {
             mOnDownloadListener.onFinish();
         } else {
             mOnNotificationDownloadListener.onFinish();
@@ -197,35 +187,26 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
     }
 
-    /**
-     * 弹出更新弹窗。。
-     */
+    //弹出更新弹窗。。
     public void check() {
-        check(true);
-    }
-
-    /**
-     * 弹出更新弹窗。。
-     *
-     * @param showPrompt 是否显示提示更新信息
-     */
-    public void check(boolean showPrompt) {
         UpdateError error = mError;
         if (error != null) {
             doFailure(error);
-            return;
-        }
-        if (mInfo == null) {
-            doFailure(new UpdateError(UpdateError.CHECK_UNKNOWN));
-            return;
-        }
-        mApkFile = UpdateUtil.makeFile(mContext);
-        mTmpFile = new File(UpdateUtil.getTempPath(mContext));
-        if (showPrompt) {
-            doPrompt();
         } else {
-            requestPermission(this);
+            if (mInfo == null) {
+                doFailure(new UpdateError(UpdateError.CHECK_UNKNOWN));
+            } else {
+                //UpdateUtil.setUpdate(mContext);
+//                mTmpFile = new File(UpdateUtil.getTempPath(mContext));
+//                mApkFile = new File(UpdateUtil.getFilePath(mContext));
+//                mTmpFile = UpdateUtil.makeFile(mContext);
+                mApkFile = UpdateUtil.makeFile(mContext);
+                mTmpFile = new File(UpdateUtil.getTempPath(mContext));
+
+                doPrompt();
+            }
         }
+
     }
 
     //弹窗操作
@@ -235,13 +216,12 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
     //下载操作
     void doDownload() {
-        //"https://ucan.25pp.com/PPAssistant_PP_102.apk"
-        mDownloader.download(this, mInfo.getDownloadUrl(), mTmpFile);
+        mDownloader.download(this, mInfo.getData().downloadUrl, mTmpFile);
     }
 
     //安装操作
     void doInstall() {
-        UpdateUtil.install(mContext, mApkFile, mForce || mIsShowDialogProgress);
+        UpdateUtil.install(mContext, mApkFile, mForce);
     }
 
     //失败
@@ -271,9 +251,8 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
         private Activity mActivity;
 
-        private TextView update_title;
         private TextView update_content;
-        private Button update_id_ok;
+        private TextView update_id_ok;
         private ImageView update_id_cancel;
         private TextView update_version_num;
 
@@ -286,10 +265,10 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
         @Override
         public void prompt(final IUpdateAgent agent) {
-            if (mActivity.isFinishing()) {
+            if (mActivity.isFinishing())
                 return;
-            }
-
+            if (dialog != null && dialog.isShowing())
+                return;
             dialog = new Dialog(mActivity, R.style.dialog_2_button);
 
             //dialog.setTitle("应用更新");
@@ -300,18 +279,16 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 //            dialog.setView(inflate, (int) (25 * density), (int) (15 * density), (int) (25 * density), 0);
             this.dialog.setContentView(inflate, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            update_title = inflate.findViewById(R.id.update_title);
-            update_content = inflate.findViewById(R.id.update_content);
-            update_id_ok = inflate.findViewById(R.id.update_id_ok);
-            update_id_cancel = inflate.findViewById(R.id.pop_close);
-            update_version_num = inflate.findViewById(R.id.update_version);
-//            View divider = inflate.findViewById(R.id.view_divider);
+            update_content = (TextView) inflate.findViewById(R.id.update_content);
+            update_id_ok = (TextView) inflate.findViewById(R.id.update_id_ok);
+            update_id_cancel = (ImageView) inflate.findViewById(R.id.update_id_cancel);
+            update_version_num = (TextView) inflate.findViewById(R.id.update_version_num);
             //设置title
             //update_title.setText("当前版本:" + mInfo.getOldVersionNumber() + ",最新版本:" + mInfo.getVersionNumber());
             //设置内容
-            String temp = mInfo.getChangeCopy().replace("\\n", "\n");
+            String temp = mInfo.getData().changeDesc.replace("\\n", "\n");
             update_content.setText(temp);
-            update_version_num.setText(mInfo.getVersionNumber());
+            update_version_num.setText("V " + mInfo.getData().versionNumber);
             //设置点击监听
             //升级
             update_id_ok.setOnClickListener(new View.OnClickListener() {
@@ -331,25 +308,21 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 //弹窗无法关闭
                 dialog.setCancelable(false);
                 update_id_cancel.setVisibility(View.GONE);
-                //  divider.setVisibility(View.GONE);
             }
             this.dialog.show();
 
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    if (!mForce && !mIsShowDialogProgress) {
+                    if (!mForce)
                         agent.getCancelListener().onCancel();
-                    }
                 }
             });
         }
 
         @Override
         public void dismiss() {
-            if(null!=dialog){
-                dialog.dismiss();
-            }
+            dialog.dismiss();
         }
 
         /**
@@ -358,28 +331,30 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
          * @param agent
          */
         public void requestPermission(IUpdateAgent agent) {
-            if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_APP_UPDATE);
-            } else {
-                //开始更新
-                agent.update();
-            }
+            String permissionsHint = "需要打开文件读写权限";
+            String[] permissions = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            new RxPermissions(mActivity).request(permissions).subscribe(new Consumer<Boolean>() {
+                @Override
+                public void accept(Boolean aBoolean) throws Exception {
+                    if (aBoolean) {
+                        //开始更新
+                        agent.update();
+                    } else {
+                        //TODO 版本更新没有权限处理
+//                        EventBusUtil.postAppMessage(EventBusTags.DEAL_WITH_NO_PERMISSION, permissionsHint);
+                    }
+                }
+            });
+
+//            if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 341);
+//            } else {
+//                //开始更新
+//                agent.update();
+//            }
         }
 
-    }
-
-    /**
-     * android 6.0请求写入sd权限
-     *
-     * @param agent
-     */
-    public void requestPermission(IUpdateAgent agent) {
-        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_APP_UPDATE);
-        } else {
-            //开始更新
-            this.update();
-        }
     }
 
     //失败
@@ -422,8 +397,8 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 View inflate = View.inflate(mContext, R.layout.custom_download_dialog, null);
 
                 dialog.setContentView(inflate, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                pgBar = inflate.findViewById(R.id.jjdxm_update_progress_bar);
-                tvPg = inflate.findViewById(R.id.jjdxm_update_progress_text);
+                pgBar = (ProgressBar) inflate.findViewById(R.id.jjdxm_update_progress_bar);
+                tvPg = (TextView) inflate.findViewById(R.id.jjdxm_update_progress_text);
                 dialog.setCancelable(false);
                 dialog.show();
                 mDialog = dialog;
@@ -449,6 +424,15 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         @Override
         public void onFinish() {
             if (mDialog != null) {
+                if (mContext == null) {
+                    return;
+                }
+                if (!(mContext instanceof Activity)) {
+                    return;
+                }
+                if (((Activity) mContext).isDestroyed()) {
+                    return;
+                }
                 mDialog.dismiss();
                 mDialog = null;
             }
@@ -470,22 +454,18 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         public void onStart() {
             if (mBuilder == null) {
                 String title = "下载中 - " + mContext.getString(mContext.getApplicationInfo().labelRes);
-                mBuilder = new NotificationCompat.Builder(mContext);
-                mBuilder.setOngoing(true)
-                        .setAutoCancel(false)
-                        .setPriority(Notification.PRIORITY_MAX)
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .setSmallIcon(mContext.getApplicationInfo().icon)
-                        .setTicker(title)
-                        .setContentTitle(title);
-
-                // 此处必须兼容android O设备，否则系统版本在O以上可能不展示通知栏
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationChannel channel = new NotificationChannel(mContext.getPackageName(), "app_download", NotificationManager.IMPORTANCE_DEFAULT);
-                    ((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-                    // channelId非常重要，不设置通知栏不展示
-                    mBuilder.setChannelId(mContext.getPackageName());
-                }
+                mBuilder = new NotificationUtils(mContext, true).getNotification(title, "");
+                mBuilder.setSound(null);
+                mBuilder.setVibrate(null);
+                mBuilder.setAutoCancel(false);
+//                mBuilder = new NotificationCompat.Builder(mContext);
+//                mBuilder.setOngoing(true)
+//                        .setAutoCancel(false)
+//                        .setPriority(Notification.PRIORITY_MAX)
+//                        .setDefaults(Notification.DEFAULT_VIBRATE)
+//                        .setSmallIcon(mContext.getApplicationInfo().icon)
+//                        .setTicker(title)
+//                        .setContentTitle(title);
             }
             onProgress(0);
         }
@@ -494,7 +474,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         public void onProgress(int progress) {
             if (mBuilder != null) {
                 if (progress > 0) {
-                    mBuilder.setPriority(Notification.PRIORITY_DEFAULT);
+                    mBuilder.setPriority(Notification.PRIORITY_LOW);
                     mBuilder.setDefaults(0);
                 }
                 mBuilder.setProgress(100, progress, false);
@@ -512,9 +492,9 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                intent.setDataAndType(Uri.fromFile(new File(UpdateUtil.getFilePath())), "application/vnd.android.package-archive");
+                intent.setDataAndType(Uri.fromFile(new File(UpdateUtil.getFilePath(mContext))), "application/vnd.android.package-archive");
             } else {
-                Uri uri = FileProvider.getUriForFile(mContext, mContext.getPackageName() + ".updatefileprovider", new File(UpdateUtil.getFilePath()));
+                Uri uri = FileProvider.getUriForFile(mContext, mContext.getPackageName() + ".updatefileprovider", new File(UpdateUtil.getFilePath(mContext)));
                 intent.setDataAndType(uri, "application/vnd.android.package-archive");
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
@@ -524,7 +504,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 mBuilder.setContentTitle("下载完成").setContentText("点击安装").setContentIntent(pendingIntent).setProgress(100, 100, false).setAutoCancel(true);
                 nm.notify(mNotifyId, mBuilder.build());
 
-                File file = new File(UpdateUtil.getFilePath());
+                File file = new File(UpdateUtil.getFilePath(mContext));
                 if (!file.exists()) {
                     nm.cancel(mNotifyId);
                 }
