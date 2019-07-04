@@ -1,10 +1,12 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
@@ -20,21 +22,18 @@ import butterknife.BindView;
  * Created on 2018/3/21.
  */
 public class MeFragment extends SimpleFragment{
-    @BindView(R.id.web_view)
-    WebView mWebView;
+    @BindView(R.id.iv_top)
+    ImageView iv_top;
 
 
-    public static MeFragment getIntance(String url) {
+    public static MeFragment getIntance() {
         MeFragment fragment = new MeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.URL, url);
-        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_shopping_mall;
+        return R.layout.fragment_me;
     }
 
     @Override
@@ -53,16 +52,16 @@ public class MeFragment extends SimpleFragment{
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(getContext()).onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        StatusBarCompat.translucentStatusBar(getActivity(), false, mWebView, true);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), true);
+//        } else {
+//            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
+//        }
+//        StatusBarCompat.translucentStatusBar(getActivity(), false, iv_top, true);
     }
 
 

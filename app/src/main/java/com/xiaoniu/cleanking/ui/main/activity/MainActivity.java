@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
@@ -152,21 +153,21 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 //        EventBus.getDefault().register(this);
 
-         btn_wjgl.setOnClickListener(v-> startActivity(FileManagerHomeActivity.class));
+        btn_wjgl.setOnClickListener(v -> startActivity(FileManagerHomeActivity.class));
 
         DbHelper.copyDb();
     }
 
 
-    @OnClick({R.id.btn_install_manage,R.id.btn_clean_music,R.id.btn_clean_video})
+    @OnClick({R.id.btn_install_manage, R.id.btn_clean_music, R.id.btn_clean_video})
     public void onViewClick(View view) {
-        int id=view.getId();
-        if(id==R.id.btn_install_manage){
-            startActivity(new Intent(this,CleanInstallPackageActivity.class));
-        }else if(id==R.id.btn_clean_music){
-            startActivity(new Intent(this,CleanMusicManageActivity.class));
-        }else if(id==R.id.btn_clean_video){
-            startActivity(new Intent(this,CleanVideoManageActivity.class));
+        int id = view.getId();
+        if (id == R.id.btn_install_manage) {
+            startActivity(new Intent(this, CleanInstallPackageActivity.class));
+        } else if (id == R.id.btn_clean_music) {
+            startActivity(new Intent(this, CleanMusicManageActivity.class));
+        } else if (id == R.id.btn_clean_video) {
+            startActivity(new Intent(this, CleanVideoManageActivity.class));
         }
     }
 
@@ -213,7 +214,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private void initFragments() {
 
-        ShoppingMallFragment mineFragment = new ShoppingMallFragment();
+        MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
         if (!TextUtils.isEmpty(mSPHelper.getMineShopUrl())) {
@@ -223,36 +224,22 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ShoppingMallFragment upQuotaFragment = new ShoppingMallFragment();
         ShoppingMallFragment lifeFragment = ShoppingMallFragment.getIntance(ApiModule.LIFE);
 
-        if (AppApplication.isAudit) {
-            mFragments.add(shoppingMallFragment);
-            mFragments.add(lifeFragment);
-            mFragments.add(mineFragment);
 
-            mManager.beginTransaction()
-                    .add(R.id.frame_layout, shoppingMallFragment)
-                    .add(R.id.frame_layout, lifeFragment)
-                    .add(R.id.frame_layout, mineFragment)
-                    .hide(lifeFragment)
-                    .hide(shoppingMallFragment)
-                    .hide(mineFragment)
-                    .commitAllowingStateLoss();
-        } else {
-            mFragments.add(mainFragment);
-            mFragments.add(shoppingMallFragment);
-            mFragments.add(upQuotaFragment);
-            mFragments.add(mineFragment);
+        mFragments.add(mainFragment);
+        mFragments.add(shoppingMallFragment);
+        mFragments.add(upQuotaFragment);
+        mFragments.add(mineFragment);
 
-            mManager.beginTransaction()
-                    .add(R.id.frame_layout, mainFragment)
-                    .add(R.id.frame_layout, shoppingMallFragment)
-                    .add(R.id.frame_layout, upQuotaFragment)
-                    .add(R.id.frame_layout, mineFragment)
-                    .hide(mainFragment)
-                    .hide(shoppingMallFragment)
-                    .hide(upQuotaFragment)
-                    .hide(mineFragment)
-                    .commitAllowingStateLoss();
-        }
+        mManager.beginTransaction()
+                .add(R.id.frame_layout, mainFragment)
+                .add(R.id.frame_layout, shoppingMallFragment)
+                .add(R.id.frame_layout, upQuotaFragment)
+                .add(R.id.frame_layout, mineFragment)
+                .hide(mainFragment)
+                .hide(shoppingMallFragment)
+                .hide(upQuotaFragment)
+                .hide(mineFragment)
+                .commitAllowingStateLoss();
 
     }
 
@@ -300,7 +287,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 long secondTime = System.currentTimeMillis();
                 if (secondTime - firstTime > 1500) {
                     // 如果两次按键时间间隔大于800毫秒，则不退出
-                    Toast.makeText(getApplicationContext(), R.string.press_exit_again,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.press_exit_again, Toast.LENGTH_SHORT).show();
                     // 更新firstTime
                     firstTime = secondTime;
                     Intent intent = new Intent();
