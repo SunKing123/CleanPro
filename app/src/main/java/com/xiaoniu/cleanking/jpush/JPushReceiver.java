@@ -111,7 +111,7 @@ public class JPushReceiver extends BroadcastReceiver {
                 Intent intent = new Intent(context, UserLoadH5Activity.class);
                 Bundle h5Bundle = new Bundle();
                 h5Bundle.putString(Constant.URL, url);
-                h5Bundle.putString(Constant.Title, "分期淘");
+                h5Bundle.putString(Constant.Title, "悟空清理");
                 intent.putExtras(h5Bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);

@@ -86,7 +86,7 @@ public class ApplicationDelegate extends DefaultApplicationLike {
         PlatformConfig.setWeixin("wx2440bee27b45a19a", "856c52eba457989c0487182c777c8942");
         PlatformConfig.setQQZone("1106787504", "KjjMEbU64j1qFg1u");
         PlatformConfig.setSinaWeibo("2480041639", "fc45c092d152a6382b0d84d1868a5d21", "");
-        Bugly.init(getApplication(), "76e42339b9", false);
+        Bugly.init(getApplication(), "bdd6fe23ab", false);
 
         UMShareAPI.get(getApplication());
 

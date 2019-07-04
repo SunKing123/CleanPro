@@ -184,7 +184,7 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                mCanGoBack = !"分期淘商城".equals(title);
+                mCanGoBack = !"悟空清理商城".equals(title);
             }
         });
     }
