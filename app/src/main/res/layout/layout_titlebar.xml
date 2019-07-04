@@ -1,50 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="@dimen/dimen_56dp"
+    android:background="@color/color_4690FD">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_42dp"
-        android:background="@color/white">
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="@dimen/dimen_35dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/dimen_12dp"
+        android:src="@mipmap/back"/>
 
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="@dimen/dimen_35dp"
-            android:layout_height="@dimen/dimen_40dp"
-            android:layout_centerVertical="true"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_12dp"
-            android:paddingRight="@dimen/dimen_12dp"
-            android:paddingTop="@dimen/dimen_10dp"
-            android:src="@mipmap/back"/>
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_8dp"
+        android:layout_toRightOf="@+id/img_back"
+        android:text="个人信息"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_18sp"/>
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="个人信息"
-            android:textColor="@color/color_252222"
-            android:textSize="@dimen/dimen_18sp"/>
-
-        <TextView
-            android:id="@+id/tv_service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dimen_12dp"
-            android:textSize="@dimen/dimen_14sp"
-            android:text="客服"
-            android:textColor="@color/color_252222"
-            android:visibility="gone"/>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/color_eeeeee"/>
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dimen_12dp"
+        android:text="客服"
+        android:textColor="@color/color_252222"
+        android:textSize="@dimen/dimen_14sp"
+        android:visibility="gone"/>
+</RelativeLayout>

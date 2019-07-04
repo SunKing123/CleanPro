@@ -1,7 +1,7 @@
 package com.xiaoniu.cleanking.callback;
 
 
-import com.xiaoniu.cleanking.ui.main.model.JunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public interface IScanCallback {
     void onBegin();
 
-    void onProgress(JunkInfo info);
+    void onProgress(FirstJunkInfo info);
 
-    void onFinish(ArrayList<JunkInfo> children);
+    void onFinish(ArrayList<FirstJunkInfo> children);
 }

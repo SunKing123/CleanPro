@@ -28,4 +28,9 @@
     <string name="peta_byte_short">PB</string>
 
     <string name="clean_file_size_suffix">%1$s%2$s</string>
+
+    <string name="clean_apk_file_damage">[已经损坏]</string>
+    <string name="clean_apk_file_install">[已经安装]</string>
+    <string name="clean_apk_file_uninstall">[未安装]</string>
+    <string name="clean_suggested">建议清理</string>
 </resources>

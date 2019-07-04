@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 文件管理首页
@@ -162,6 +163,20 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
 
     }
 
+    @OnClick({R.id.view_clean_video,R.id.view_clean_music,R.id.view_clean_install_apk})
+    public void onClickView(View view){
+        int ids=view.getId();
+        if(ids==R.id.view_clean_install_apk){
+            //跳转到安装包清理
+            startActivity(new Intent(this,CleanInstallPackageActivity.class));
+        }else if(ids==R.id.view_clean_music){
+            //跳转到音乐清理
+            startActivity(new Intent(this,CleanMusicManageActivity.class));
+        }else if(ids==R.id.view_clean_video){
+            //跳转到视频清理
+            startActivity(new Intent(this,CleanVideoManageActivity.class));
+        }
+    }
 
     @Override
     protected void onDestroy() {

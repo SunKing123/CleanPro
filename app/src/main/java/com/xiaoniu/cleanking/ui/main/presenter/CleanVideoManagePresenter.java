@@ -132,6 +132,7 @@ public class CleanVideoManagePresenter extends RxPresenter<CleanVideoManageActiv
                             VideoInfoBean bean = new VideoInfoBean();
                             bean.path = file.getPath();
                             bean.name = file.getName();
+                            bean.date=time;
                             bean.packageSize = file.length();
                             bean.itemType=1;
                             videoFileCollenctionBean.lists.add(bean);
@@ -186,8 +187,8 @@ public class CleanVideoManagePresenter extends RxPresenter<CleanVideoManageActiv
                 emitter.onComplete();
             }
         })
-                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
-                .subscribeOn(Schedulers.io())//执行在io线程
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
