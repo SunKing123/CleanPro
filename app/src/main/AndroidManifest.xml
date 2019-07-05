@@ -178,6 +178,10 @@
             android:name=".ui.main.activity.WhiteListSpeedManageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.FeedBackActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.WhiteListSpeedAddActivity"

@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.FeedBackActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -54,5 +55,6 @@ public interface ActivityComponent {
     void inject(WhiteListSpeedManageActivity whiteListSpeedManageActivity);
     void inject(AboutActivity aboutActivity);
     void inject(PhoneAccessActivity phoneAccessActivity);
+    void inject(FeedBackActivity feedBackActivity);
 }
 
