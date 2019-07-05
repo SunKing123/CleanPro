@@ -43,7 +43,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     Button mBtnDel;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
-    @BindView(R.id.ll_empty_view)
+    @BindView(R.id.ll_video_empty_view)
     LinearLayout mLLEmptyView;
 
     private CleanVideoManageAdapter mAdapter;
@@ -102,7 +102,10 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
                 totalSelectFiles();
             }
         });
+
+
     }
+
 
     /**
      * 全选
@@ -291,6 +294,9 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
      * 设置空视图
      * */
     private void setEmptyView(int size) {
+        if(null==mLLEmptyView){
+            mLLEmptyView=findViewById(R.id.ll_video_empty_view);
+        }
         if (size > 0) {
             if (null != mLLEmptyView) {
                 mLLEmptyView.setVisibility(View.GONE);

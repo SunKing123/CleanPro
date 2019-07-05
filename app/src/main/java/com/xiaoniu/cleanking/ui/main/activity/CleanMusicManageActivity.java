@@ -111,6 +111,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
      * 设置空视图
      */
     private void setEmptyView(int size) {
+        if(null==mLLEmptyView){
+            mLLEmptyView=findViewById(R.id.ll_empty_view);
+        }
         if (size > 0) {
             if (null != mLLEmptyView) {
                 mLLEmptyView.setVisibility(View.GONE);
