@@ -188,6 +188,9 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".ui.main.activity.WhiteListSettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"
