@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -82,6 +83,8 @@ public class MeFragment extends SimpleFragment{
         int ids=view.getId();
         if(ids==R.id.ll_setting){
             startActivity(new Intent(getContext(), WhiteListSettingActivity.class));
+        }else if(ids==R.id.ll_question_report){
+            startActivity(new Intent(getContext(), QuestionReportActivity.class));
         }
     }
 
