@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,6 +35,7 @@
 
         </LinearLayout>
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_44dp"
@@ -50,5 +52,60 @@
         android:layout_marginRight="@dimen/dimen_16dp"
         android:background="@color/color_color_EDEDED" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/dimen_12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_56dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/check_all"
+                android:layout_width="@dimen/dimen_16dp"
+                android:layout_height="@dimen/dimen_16dp"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:background="@drawable/bg_check" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_2dp"
+                android:text="全选"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dimen_16dp">
+
+                <Button
+                    android:id="@+id/btn_add"
+                    android:layout_width="@dimen/dimen_240dp"
+                    android:layout_height="@dimen/dimen_36dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_btn_del"
+                    android:text="添加"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

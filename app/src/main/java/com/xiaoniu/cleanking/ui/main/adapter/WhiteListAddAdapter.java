@@ -14,17 +14,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.utils.DateUtils;
-import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 加速白名单管理
+ * 加速白名单添加
  * Created by lang.chen on 2019/7/2
  */
-public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
+public class WhiteListAddAdapter extends RecyclerView.Adapter {
 
 
     private List<AppInfoBean> mLists = new ArrayList<>();
@@ -36,7 +34,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
 
     private OnCheckListener onCheckListener;
 
-    public WhiteListSpeedAdapter(Context context) {
+    public WhiteListAddAdapter(Context context) {
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -44,7 +42,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_white_list_speed, parent, false);
+        View view = mInflater.inflate(R.layout.item_white_list_add, parent, false);
         return new ViewHolder(view);
     }
 
@@ -56,15 +54,16 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             Glide.with(mContext).load(appInfoBean.icon).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
-            viewHolder.mBtnRemove.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mImgCheck.setSelected(appInfoBean.isSelect);
+
+            viewHolder.mImgCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.packageName);
+                        onCheckListener.onCheck(appInfoBean.packageName, !appInfoBean.isSelect);
                     }
                 }
             });
-
         }
     }
 
@@ -91,7 +90,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
 
 
     public interface OnCheckListener {
-        void onCheck(String id);
+        void onCheck(String id, boolean isChecked);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,18 +98,18 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
         private ImageView mImgIcon;
         //名称
         private TextView mTxtName;
-        //移除
-        private Button mBtnRemove;
+        private ImageButton mImgCheck;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             mImgIcon = itemView.findViewById(R.id.img_icon);
             mTxtName = itemView.findViewById(R.id.txt_name);
-            mBtnRemove = itemView.findViewById(R.id.btn_remove);
+            mImgCheck = itemView.findViewById(R.id.check_select);
         }
     }
 
-    public void setOnCheckListener(WhiteListSpeedAdapter.OnCheckListener onCheckListener) {
+    public void setOnCheckListener(WhiteListAddAdapter.OnCheckListener onCheckListener) {
         this.onCheckListener = onCheckListener;
     }
 
