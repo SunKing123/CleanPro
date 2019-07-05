@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +13,11 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.adapter.QuestionReportImgAdapter;
+import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,6 +40,7 @@ public class QuestionReportActivity extends BaseActivity {
     @BindView(R.id.btn_submit)
     Button mBtnSumbit;
 
+    private QuestionReportImgAdapter mAdapter;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -52,7 +60,22 @@ public class QuestionReportActivity extends BaseActivity {
     @Override
     protected void initView() {
 
+        mAdapter=new QuestionReportImgAdapter(getBaseContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        //调整RecyclerView的排列方向
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
         mTxtContent.addTextChangedListener(textWatcherContent);
+
+        //
+        ImgBean imgBean=new ImgBean();
+        imgBean.itemType=1;
+        List<ImgBean> lists=new ArrayList<>();
+        lists.add(imgBean);
+        mAdapter.modifyData(lists);
+
     }
 
     TextWatcher textWatcherContent = new TextWatcher() {

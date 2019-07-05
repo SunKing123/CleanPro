@@ -85,14 +85,14 @@
                 android:id="@+id/ll_img_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_12dp"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycle_view_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_68dp"
-                    android:layout_weight="1"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/txt_img_lenth"
