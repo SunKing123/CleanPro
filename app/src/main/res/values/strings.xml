@@ -8,6 +8,7 @@
     <string name="shopping_mall">商城</string>
     <string name="press_exit_again">再按一次退出程序</string>
     <string name="text_clean">清理</string>
+    <string name="text_cool">立即降温</string>
     <string name="process_clean">进程清理</string>
     <string name="apk_clean">无用安装包</string>
     <string name="tmp_clean">临时文件</string>

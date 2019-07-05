@@ -42,6 +42,10 @@
     <!-- 用于申请调用A-GPS模块 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
@@ -150,6 +154,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.main.activity.PhoneCoolingActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -167,6 +175,15 @@
 
         <activity
             android:name=".ui.main.activity.CleanVideoManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.HardwareInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.ProcessInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
