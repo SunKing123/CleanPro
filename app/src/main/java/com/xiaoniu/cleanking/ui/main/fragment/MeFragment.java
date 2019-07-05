@@ -87,7 +87,7 @@ public class MeFragment extends SimpleFragment{
     }
 
 
-    @OnClick({R.id.ll_setting})
+    @OnClick({R.id.ll_setting,R.id.ll_question_report})
     public void onClickView(View view){
         int ids=view.getId();
         if(ids==R.id.ll_setting){
