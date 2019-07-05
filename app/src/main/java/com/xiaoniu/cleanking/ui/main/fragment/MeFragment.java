@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.FeedBackActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import butterknife.BindView;
@@ -31,7 +32,8 @@ public class MeFragment extends SimpleFragment{
     ImageView iv_top;
     @BindView(R.id.line_about)
     LinearLayout line_about;
-
+    @BindView(R.id.line_feedback)
+    LinearLayout line_feedback;
 
     public static MeFragment getIntance() {
         MeFragment fragment = new MeFragment();
@@ -49,6 +51,13 @@ public class MeFragment extends SimpleFragment{
             @Override
             public void onClick(View v) {
                 startActivity(AboutActivity.class);
+            }
+        });
+
+        line_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(FeedBackActivity.class);
             }
         });
     }
