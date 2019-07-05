@@ -14,10 +14,12 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 我的
@@ -74,5 +76,13 @@ public class MeFragment extends SimpleFragment{
 //        StatusBarCompat.translucentStatusBar(getActivity(), false, iv_top, true);
     }
 
+
+    @OnClick({R.id.ll_setting})
+    public void onClickView(View view){
+        int ids=view.getId();
+        if(ids==R.id.ll_setting){
+            startActivity(new Intent(getContext(), WhiteListSettingActivity.class));
+        }
+    }
 
 }
