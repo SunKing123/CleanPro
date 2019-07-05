@@ -67,7 +67,7 @@
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
-        android:background="@color/color_color_EDEDED" />
+        android:background="@color/color_EDEDED" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"

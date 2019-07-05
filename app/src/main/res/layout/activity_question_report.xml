@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/dimen_12dp"
-                android:background="@color/color_color_EDEDED" />
+                android:background="@color/color_EDEDED" />
 
             <LinearLayout
                 android:id="@+id/ll_img_add"

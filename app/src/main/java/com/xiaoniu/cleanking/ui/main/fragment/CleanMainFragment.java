@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -55,7 +56,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
-    @OnClick(R.id.layout_clean_right_now)
+    @OnClick(R.id.text_scan)
     public void onViewClicked() {
         //立即清理
         if (isScanFinish) {
@@ -65,6 +66,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }
     }
 
+    @OnClick(R.id.text_cooling)
+    public void onCoolingViewClicked() {
+        //手机降温
+        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+    }
+    @OnClick(R.id.text_wjgl)
+    public void wjgl() {
+        //手机降温
+        startActivity(FileManagerHomeActivity.class);
+    }
     /**
      * 扫描完成
      * @param junkGroups
