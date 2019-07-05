@@ -116,12 +116,13 @@ public class BottomBarTab extends FrameLayout {
 //                showAnimation(mIcon,animations[mTabPosition]);
                 //mIcon.setImageResource(iconsSelect[mTabPosition]);
                 //mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_FB296B));
-                mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572));
+                mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_666666));
 //            }
         } else {
             //mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_A47282));
             //mIcon.setImageResource(icons[mTabPosition]);
-            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572_50));
+           // mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572_50));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_666666));
 //            if (mTabPosition == MAIN_ACTIVITY.ACTION) {
 //                mIcon.setImageResource(R.mipmap.icon_action);
 //                mTvTitle.setVisibility(GONE);

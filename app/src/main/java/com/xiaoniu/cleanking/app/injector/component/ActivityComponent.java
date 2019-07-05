@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
@@ -56,5 +57,7 @@ public interface ActivityComponent {
     void inject(AboutActivity aboutActivity);
     void inject(PhoneAccessActivity phoneAccessActivity);
     void inject(FeedBackActivity feedBackActivity);
+
+    void inject(PhoneCoolingActivity phoneCoolingActivity);
 }
 

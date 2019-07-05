@@ -55,7 +55,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
-    @OnClick(R.id.layout_clean_right_now)
+    @OnClick(R.id.text_scan)
     public void onViewClicked() {
         //立即清理
         if (isScanFinish) {
@@ -63,6 +63,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }else {
             mPresenter.startScan();
         }
+    }
+
+    @OnClick(R.id.text_cooling)
+    public void onCoolingViewClicked() {
+        //手机降温
+        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
     }
 
     /**

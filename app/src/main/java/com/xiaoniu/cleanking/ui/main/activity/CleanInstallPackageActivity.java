@@ -50,16 +50,16 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
 
-    @BindView(R.id.ll_empty_view)
+    @BindView(R.id.ll_install_empty_view)
     LinearLayout mLLEmptyView;
 
 
     //tab类型  0 已安装，1 未安装
     private int mType;
     /**
-     *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
+     * 列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
-    private  boolean mIsCheckAll;
+    private boolean mIsCheckAll;
     private InstallPackageManageAdapter mAdapter;
 
     String path = Environment.getExternalStorageDirectory().getPath();
@@ -94,10 +94,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
-                }else {
-                    mIsCheckAll=true;
+                if (mIsCheckAll) {
+                    mIsCheckAll = false;
+                } else {
+                    mIsCheckAll = true;
                 }
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
@@ -121,11 +121,8 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             mAdapter.clear();
             mAdapter.setTabType(mType);
             mAdapter.modifyList(lists);
-            if(lists.size()>0){
-                mLLEmptyView.setVisibility(View.GONE);
-            }else {
-                mLLEmptyView.setVisibility(View.VISIBLE);
-            }
+            setEmptyView(lists.size());
+
         } else if (id == R.id.txt_uninstall) {
             //未安装应用
             mType = 1;
@@ -134,11 +131,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             mAdapter.clear();
             mAdapter.setTabType(mType);
             mAdapter.modifyList(lists);
-            if(lists.size()>0){
-                mLLEmptyView.setVisibility(View.GONE);
-            }else {
-                mLLEmptyView.setVisibility(View.VISIBLE);
-            }
+            setEmptyView(lists.size());
 
         } else if (id == R.id.btn_del) { //删除文件
 
@@ -159,10 +152,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                         if (appInfoBean.isSelect) {
                             appInfoSelect.add(appInfoBean);
                             //从列表中移除即将要删除文件
-                           // lists.remove(appInfoBean);
+                            // lists.remove(appInfoBean);
                         }
                     }
-                   mPresenter.delFile(appInfoSelect);
+                    mPresenter.delFile(appInfoSelect);
 
                 }
             });
@@ -170,6 +163,24 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     }
 
+
+    /**
+     * 设置空视图
+     * */
+    private void setEmptyView(int size) {
+        if(null==mLLEmptyView){
+            mLLEmptyView=findViewById(R.id.ll_install_empty_view);
+        }
+        if (size > 0) {
+            if (null != mLLEmptyView) {
+                mLLEmptyView.setVisibility(View.GONE);
+            }
+        } else {
+            if (null != mLLEmptyView) {
+                mLLEmptyView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
     /**
      * 全选
@@ -197,11 +208,8 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         List<AppInfoBean> lists = mPresenter.getApkList(path, mType);
         mAdapter.clear();
         mAdapter.modifyList(lists);
-        if(lists.size()>0){
-            mLLEmptyView.setVisibility(View.GONE);
-        }else {
-            mLLEmptyView.setVisibility(View.VISIBLE);
-        }
+        setEmptyView(lists.size());
+
 
     }
 
@@ -210,28 +218,25 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         totalSelectFiles();
         Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
         //
-        List<AppInfoBean> listsNew=new ArrayList<>();
-        List<AppInfoBean> lists=mAdapter.getLists();
+        List<AppInfoBean> listsNew = new ArrayList<>();
+        List<AppInfoBean> lists = mAdapter.getLists();
         //过滤删除的文件
-        for(AppInfoBean appInfoBean: lists){
-            boolean isConstain=false;
-            for(AppInfoBean appInfoBean1 :appInfoBeans){
-                if(appInfoBean.packageName.equals(appInfoBean1.packageName)){
-                    isConstain=true;
+        for (AppInfoBean appInfoBean : lists) {
+            boolean isConstain = false;
+            for (AppInfoBean appInfoBean1 : appInfoBeans) {
+                if (appInfoBean.packageName.equals(appInfoBean1.packageName)) {
+                    isConstain = true;
                 }
             }
             //没有包含
-            if(isConstain==false){
+            if (isConstain == false) {
                 listsNew.add(appInfoBean);
             }
         }
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
-        if(listsNew.size()>0){
-            mLLEmptyView.setVisibility(View.GONE);
-        }else {
-            mLLEmptyView.setVisibility(View.VISIBLE);
-        }
+        setEmptyView(listsNew.size());
+
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
 
@@ -239,21 +244,22 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     private void setStatusView(int type) {
         if (type == 0) {
-            if(null!=mTxtInstall){
+            if (null != mTxtInstall) {
                 mTxtInstall.setTextColor(getResources().getColor(R.color.white));
             }
-            if(null!=mViewLineIntall){
+            if (null != mViewLineIntall) {
                 mViewLineIntall.setVisibility(View.VISIBLE);
             }
-            if(null!=mViewLineUninstall){
+            if (null != mViewLineUninstall) {
                 mViewLineUninstall.setVisibility(View.INVISIBLE);
             }
         } else {
-            if(null!=mViewLineIntall){
+            if (null != mViewLineIntall) {
                 mViewLineIntall.setVisibility(View.INVISIBLE);
             }
-            if(null!=mViewLineUninstall){
-                mViewLineUninstall.setVisibility(View.VISIBLE); }
+            if (null != mViewLineUninstall) {
+                mViewLineUninstall.setVisibility(View.VISIBLE);
+            }
         }
 
 
@@ -287,7 +293,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             }
         }
 
-        mIsCheckAll=isCheckAll;
+        mIsCheckAll = isCheckAll;
         mCheckBoxAll.setSelected(mIsCheckAll);
 
         if (totalSize > 0) {
@@ -306,8 +312,8 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     /**
      * 统计文件的大小
      */
-    private  void totalSelectFiles(){
-        totalSize=0L;
+    private void totalSelectFiles() {
+        totalSize = 0L;
         List<AppInfoBean> lists = mAdapter.getLists();
         for (AppInfoBean appInfoBean : lists) {
             if (appInfoBean.isSelect) {

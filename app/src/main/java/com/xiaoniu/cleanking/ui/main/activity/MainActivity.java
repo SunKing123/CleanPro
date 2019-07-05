@@ -206,6 +206,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
+        mPresenter.saveCacheFiles();
     }
 
     private void initFragments() {

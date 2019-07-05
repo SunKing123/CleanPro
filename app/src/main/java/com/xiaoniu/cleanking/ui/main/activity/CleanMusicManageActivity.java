@@ -46,9 +46,10 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     private CleanMusicManageAdapter mAdapter;
 
     /**
-     *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
+     * 列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
-    private  boolean mIsCheckAll;
+    private boolean mIsCheckAll;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -78,10 +79,10 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
-                }else {
-                    mIsCheckAll=true;
+                if (mIsCheckAll) {
+                    mIsCheckAll = false;
+                } else {
+                    mIsCheckAll = true;
                 }
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
@@ -106,6 +107,24 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     }
 
+    /**
+     * 设置空视图
+     */
+    private void setEmptyView(int size) {
+        if(null==mLLEmptyView){
+            mLLEmptyView=findViewById(R.id.ll_empty_view);
+        }
+        if (size > 0) {
+            if (null != mLLEmptyView) {
+                mLLEmptyView.setVisibility(View.GONE);
+            }
+        } else {
+            if (null != mLLEmptyView) {
+                mLLEmptyView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
 
     @OnClick({R.id.img_back
             , R.id.btn_del})
@@ -115,7 +134,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         if (id == R.id.img_back) {
             finish();
         } else if (id == R.id.btn_del) { //删除文件
-            String title="确定删除此音乐？";
+            String title = "确定删除此音乐？";
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
@@ -167,15 +186,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
 
-        if(listsNew.size()>0){
-            if(null!=mLLEmptyView){
-                mLLEmptyView.setVisibility(View.GONE);
-            }
-        }else {
-            if(null!=mLLEmptyView){
-                mLLEmptyView.setVisibility(View.VISIBLE);
-            }
-        }
+        setEmptyView(listsNew.size());
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
 
@@ -186,15 +197,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mAdapter.clear();
         mAdapter.modifyList(musciInfoBeans);
 
-        if(musciInfoBeans.size()>0){
-            if(null!=mLLEmptyView){
-                mLLEmptyView.setVisibility(View.GONE);
-            }
-        }else {
-            if(null!=mLLEmptyView){
-                mLLEmptyView.setVisibility(View.VISIBLE);
-            }
-        }
+        setEmptyView(musciInfoBeans.size());
 
     }
 
@@ -225,7 +228,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
             }
         }
 
-        mIsCheckAll=isCheckAll;
+        mIsCheckAll = isCheckAll;
         mCheckBoxAll.setSelected(mIsCheckAll);
 
         if (totalSize > 0) {

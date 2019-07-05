@@ -43,7 +43,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     Button mBtnDel;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
-    @BindView(R.id.ll_empty_view)
+    @BindView(R.id.ll_video_empty_view)
     LinearLayout mLLEmptyView;
 
     private CleanVideoManageAdapter mAdapter;
@@ -102,7 +102,10 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
                 totalSelectFiles();
             }
         });
+
+
     }
+
 
     /**
      * 全选
@@ -157,12 +160,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     }
 
     public void updateData(List<VideoInfoBean> infoBeans) {
-
-        if(infoBeans.size()>0){
-            mLLEmptyView.setVisibility(View.GONE);
-        }else {
-            mLLEmptyView.setVisibility(View.VISIBLE);
-        }
+        setEmptyView(infoBeans.size());
         mAdapter.clear();
         mAdapter.modifyList(infoBeans);
         mAdapter.notifyDataSetChanged();
@@ -215,12 +213,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
-
-        if(listsNew.size()>0){
-            mLLEmptyView.setVisibility(View.GONE);
-        }else {
-            mLLEmptyView.setVisibility(View.VISIBLE);
-        }
+        setEmptyView(listsNew.size());
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
 
@@ -295,5 +288,23 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
             mBtnDel.setClickable(false);
         }
 
+    }
+
+    /**
+     * 设置空视图
+     * */
+    private void setEmptyView(int size) {
+        if(null==mLLEmptyView){
+            mLLEmptyView=findViewById(R.id.ll_video_empty_view);
+        }
+        if (size > 0) {
+            if (null != mLLEmptyView) {
+                mLLEmptyView.setVisibility(View.GONE);
+            }
+        } else {
+            if (null != mLLEmptyView) {
+                mLLEmptyView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

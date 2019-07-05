@@ -19,4 +19,19 @@ public class RouteConstants {
      */
     public static final String JUNK_CLEAN_ACTIVITY = "/main/JunkCleanActivity";
 
+    /**
+     * 手机降温页面
+     */
+    public static final String PHONE_COOLING_ACTIVITY = "/main/PhoneCoolingActivity";
+
+    /**
+     * 硬件详情
+     */
+    public static final String HARDWARE_INFO_ACTIVITY = "/main/HardwareInfoActivity";
+
+    /**
+     * 进程详情
+     */
+    public static final String PROCESS_INFO_ACTIVITY = "/main/ProcessInfoActivity";
+
 }
