@@ -168,9 +168,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mAdapter.modifyList(listsNew);
 
         if(listsNew.size()>0){
-            mLLEmptyView.setVisibility(View.GONE);
+            if(null!=mLLEmptyView){
+                mLLEmptyView.setVisibility(View.GONE);
+            }
         }else {
-            mLLEmptyView.setVisibility(View.VISIBLE);
+            if(null!=mLLEmptyView){
+                mLLEmptyView.setVisibility(View.VISIBLE);
+            }
         }
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
@@ -183,9 +187,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mAdapter.modifyList(musciInfoBeans);
 
         if(musciInfoBeans.size()>0){
-            mLLEmptyView.setVisibility(View.GONE);
+            if(null!=mLLEmptyView){
+                mLLEmptyView.setVisibility(View.GONE);
+            }
         }else {
-            mLLEmptyView.setVisibility(View.VISIBLE);
+            if(null!=mLLEmptyView){
+                mLLEmptyView.setVisibility(View.VISIBLE);
+            }
         }
 
     }
