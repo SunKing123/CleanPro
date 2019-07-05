@@ -81,13 +81,13 @@
 -keep public class * implements java.io.Serializable {
 	public *;
 }
--keep class installment.loan.widget.** { *; } #自定义控件不参与混淆
--keep class installment.loan.base.** { *; } #base不参与混淆
+-keep class com.xiaoniu.cleanking.widget.** { *; } #自定义控件不参与混淆
+-keep class com.xiaoniu.cleanking.base.** { *; } #base不参与混淆
 -keep public class * extends installment.loan.base.BaseEntity  #Bean类不参与混淆
--keep class installment.loan.ui.main.bean.**{ *; }  #Bean类不参与混淆
--keep class installment.loan.ui.repayment.bean.**{ *; }  #Bean类不参与混淆
--keep class installment.loan.ui.usercenter.bean.**{ *; }  #Bean类不参与混淆
--keep class installment.loan.callback.** { *; }
+-keep class com.xiaoniu.cleanking.ui.main.bean.**{ *; }  #Bean类不参与混淆
+-keep class com.xiaoniu.cleanking.ui.repayment.bean.**{ *; }  #Bean类不参与混淆
+-keep class com.xiaoniu.cleanking.ui.usercenter.bean.**{ *; }  #Bean类不参与混淆
+-keep class com.xiaoniu.cleanking.callback.** { *; }
 -keep public class * extends android.view
 -keep public class * extends android.app.Fragment
 -keep public class * extends android.app.Activity
@@ -102,6 +102,8 @@
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
 
+
+-keep class com.xiaoniu.cleanking.ui.main.bean.**{ *; }  #Bean类不参与混淆
 
 #########Okhttputils混淆
 #okhttputils
@@ -119,9 +121,9 @@
 -keep class okio.**{*;}
 
 #常用参数类
--keep class installment.loan.utils.** { *; }
--keep class installment.loan.api.** { *; }
--keep class installment.loan.app.UrlConstans { *; }
+-keep class com.xiaoniu.cleanking.utils.** { *; }
+-keep class com.xiaoniu.cleanking.api.** { *; }
+-keep class com.xiaoniu.cleanking.app.UrlConstans { *; }
 #常用参数类end
 
 
