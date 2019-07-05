@@ -124,10 +124,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             showHideFragment(0, -1);
         } else {
             mBottomBar
-                    .addItem(new BottomBarTab(this, R.mipmap.loan_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.mipmap.mall_normal, getString(R.string.shopping_mall)))
-                    .addItem(new BottomBarTab(this, R.mipmap.up_quota_normal, getString(R.string.up_quota)))
-                    .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+                    .addItem(new BottomBarTab(this, 0, getString(R.string.clean)))
+                    .addItem(new BottomBarTab(this, 0,"工具箱"))
+                    .addItem(new BottomBarTab(this, 0, "资讯"))
+                    .addItem(new BottomBarTab(this, 0, getString(R.string.mine)));
             mBottomBar.setCurrentItem(0);
             LOAN = 0;
             SHOPPING = 1;

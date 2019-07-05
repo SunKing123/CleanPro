@@ -30,7 +30,7 @@ public class BottomBarTab extends FrameLayout {
     private Context mContext;
     private int mTabPosition = -1;
 
-    private int[] iconsSelect = {R.mipmap.loan_select, R.mipmap.mall_select, R.mipmap.up_quota_select,R.mipmap.me_select};
+    //private int[] iconsSelect = {R.mipmap.loan_select, R.mipmap.mall_select, R.mipmap.up_quota_select,R.mipmap.me_select};
     private int[] icons = {R.mipmap.loan_normal, R.mipmap.mall_normal,R.mipmap.up_quota_normal, R.mipmap.me_normal};
 
 
@@ -77,7 +77,7 @@ public class BottomBarTab extends FrameLayout {
         LinearLayout.LayoutParams paramsTv = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
         mTvTitle.setTextSize(10);
-        mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.color_7c7a7a));
+        mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.color_666666));
         mTvTitle.setLayoutParams(paramsTv);
         lLContainer.addView(mTvTitle);
 
@@ -114,13 +114,13 @@ public class BottomBarTab extends FrameLayout {
 //                mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_252222));
 //            } else {
 //                showAnimation(mIcon,animations[mTabPosition]);
-                mIcon.setImageResource(iconsSelect[mTabPosition]);
+                //mIcon.setImageResource(iconsSelect[mTabPosition]);
                 //mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_FB296B));
                 mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572));
 //            }
         } else {
             //mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_A47282));
-            mIcon.setImageResource(icons[mTabPosition]);
+            //mIcon.setImageResource(icons[mTabPosition]);
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572_50));
 //            if (mTabPosition == MAIN_ACTIVITY.ACTION) {
 //                mIcon.setImageResource(R.mipmap.icon_action);
