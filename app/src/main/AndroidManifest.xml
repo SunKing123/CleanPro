@@ -145,6 +145,9 @@
         <activity
             android:name=".ui.main.activity.JunkCleanActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneAccessActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"

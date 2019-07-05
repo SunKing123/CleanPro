@@ -5,9 +5,12 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 
 import io.reactivex.Flowable;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * @author tie
@@ -20,9 +23,11 @@ public interface UserApiService {
      *
      * @return
      */
-    @POST("/mock/285/appVersion/query")
+    @POST("/appVersion/query")
     Flowable<AppVersion> queryAppVersion();
 
+    @POST("/appVersion/query")
+    Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
     /**
      * 查询app是否有补丁版本
      *

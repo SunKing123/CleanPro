@@ -47,21 +47,8 @@ public class RequestParamInterceptor implements Interceptor {
 //        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId());
 //        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
 
-        requestBuilder.addHeader("Ip", "172.16.88.23");
-        requestBuilder.addHeader("appVersion", AndroidUtil.getAppVersionName());
-        requestBuilder.addHeader("channel", AndroidUtil.getMarketId());
-        requestBuilder.addHeader("deviceId", AndroidUtil.getUdid());
-        requestBuilder.addHeader("gtId", "419441fd0260490413e73830c3326298");
 
-        requestBuilder.addHeader("imei", "357755073075671");
-        requestBuilder.addHeader("os", "android");
-        requestBuilder.addHeader("phoneType", AndroidUtil.getSystemModel());
-        requestBuilder.addHeader("phoneVersion", "Android"+AndroidUtil.getAndroidSDKVersion()+"");
-        requestBuilder.addHeader("sessionId", "");
-        requestBuilder.addHeader("sign", "7cdd4afd6a0bd76080a973ada0566598");
-        requestBuilder.addHeader("talkVersion", "");
-        requestBuilder.addHeader("timestamp", "1562234756542");
-        requestBuilder.addHeader("uid", "");
+
 //        //请求定制：添加请求头
 //        Request.Builder requestBuilder = original.newBuilder();
 //        CommonParam commonParam = new CommonParam();
@@ -86,8 +73,23 @@ public class RequestParamInterceptor implements Interceptor {
 //        commonParam.setMarket(AndroidUtil.getMarketId(AppApplication.getInstance()));
 
 //        String json = new Gson().toJson(commonParam);
+        Map<String, Object> mapHeader = new HashMap<>();
+        mapHeader.put("Ip", "172.16.88.23");
+        mapHeader.put("appVersion", AndroidUtil.getAppVersionName());
+        mapHeader.put("channel", AndroidUtil.getMarketId());
+        mapHeader.put("deviceId", AndroidUtil.getUdid());
+        mapHeader.put("gtId", "419441fd0260490413e73830c3326298");
 
-
+        mapHeader.put("imei", "357755073075671");
+        mapHeader.put("os", "android");
+        mapHeader.put("phoneType", AndroidUtil.getSystemModel());
+        mapHeader.put("phoneVersion", "Android"+AndroidUtil.getAndroidSDKVersion()+"");
+        mapHeader.put("sessionId", "");
+        mapHeader.put("sign", "7cdd4afd6a0bd76080a973ada0566598");
+        mapHeader.put("talkVersion", "");
+        mapHeader.put("timestamp", "1562234756542");
+        mapHeader.put("uid", "");
+        requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
         if (original.body() instanceof FormBody) {
 
             FormBody oidFormBody = (FormBody) original.body();

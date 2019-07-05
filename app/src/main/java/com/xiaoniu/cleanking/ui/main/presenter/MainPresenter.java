@@ -384,7 +384,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             if (!TextUtils.isEmpty(result.code)) {
                 code = Integer.parseInt(result.code);
             }
-            if (!TextUtils.isEmpty(versionName) && !TextUtils.equals(versionName, result.getData().versionNumber) && versionCode < code && !TextUtils.isEmpty(result.getData().downloadUrl)) {
+            if (!TextUtils.isEmpty(versionName) && !TextUtils.equals(versionName, result.getData().versionNumber)  && !TextUtils.isEmpty(result.getData().downloadUrl)) {
                 boolean isForced = false;
                 if (TextUtils.equals(result.getData().forcedUpdate, "1")) {//强更
                     isForced = true;

@@ -7,7 +7,7 @@ package com.xiaoniu.cleanking.app;
 
 public class Constant {
 
-    public static final String SUCCESS = "200";
+    public static final String SUCCESS = "000000";
     public static final String CODE_REBIND_SUCCESS = "600"; // 已绑定过的卡，重新绑定标识码
     public static final String customerPhone = "400-106-7878";
     public static final String server_Phone = "4001067878";

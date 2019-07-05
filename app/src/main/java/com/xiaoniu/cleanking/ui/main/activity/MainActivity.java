@@ -58,6 +58,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     @BindView(R.id.btn_wjgl)
     Button btn_wjgl;
+    @BindView(R.id.btn_whilte_access)
+    Button btn_whilte_access;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -154,6 +156,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        EventBus.getDefault().register(this);
 
         btn_wjgl.setOnClickListener(v -> startActivity(FileManagerHomeActivity.class));
+        btn_whilte_access.setOnClickListener(v -> startActivity(PhoneAccessActivity.class));
 
         DbHelper.copyDb();
     }
