@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
@@ -125,7 +123,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else {
             mBottomBar
                     .addItem(new BottomBarTab(this, 0, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, 0,"工具箱"))
+                    .addItem(new BottomBarTab(this, 0, "工具箱"))
                     .addItem(new BottomBarTab(this, 0, "资讯"))
                     .addItem(new BottomBarTab(this, 0, getString(R.string.mine)));
             mBottomBar.setCurrentItem(0);
@@ -214,14 +212,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
-        String url = ApiModule.SHOPPING_MALL;
-        if (!TextUtils.isEmpty(mSPHelper.getMineShopUrl())) {
-            url = mSPHelper.getMineShopUrl();
-        }
-        ShoppingMallFragment shoppingMallFragment = ShoppingMallFragment.getIntance(url);
-        ShoppingMallFragment upQuotaFragment = new ShoppingMallFragment();
-        ShoppingMallFragment lifeFragment = ShoppingMallFragment.getIntance(ApiModule.LIFE);
+//        String url = ApiModule.SHOPPING_MALL;
+        String url = "http://192.168.90.51/clean2/home.html";
 
+        ShoppingMallFragment shoppingMallFragment = ShoppingMallFragment.getIntance(url);
+        ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
 
         mFragments.add(mainFragment);
         mFragments.add(shoppingMallFragment);
