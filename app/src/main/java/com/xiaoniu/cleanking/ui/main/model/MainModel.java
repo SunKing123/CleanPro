@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -36,6 +37,10 @@ public class MainModel extends BaseModel {
     }
 
     public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
                 .subscribeWith(commonSubscriber);
     }
