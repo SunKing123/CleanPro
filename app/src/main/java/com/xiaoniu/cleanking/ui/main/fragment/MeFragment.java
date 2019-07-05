@@ -32,8 +32,8 @@ public class MeFragment extends SimpleFragment{
     ImageView iv_top;
     @BindView(R.id.line_about)
     LinearLayout line_about;
-    @BindView(R.id.line_feedback)
-    LinearLayout line_feedback;
+//    @BindView(R.id.line_feedback)
+//    LinearLayout line_feedback;
 
     public static MeFragment getIntance() {
         MeFragment fragment = new MeFragment();
@@ -54,12 +54,12 @@ public class MeFragment extends SimpleFragment{
             }
         });
 
-        line_feedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(FeedBackActivity.class);
-            }
-        });
+//        line_feedback.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(FeedBackActivity.class);
+//            }
+//        });
     }
 
 
