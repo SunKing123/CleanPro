@@ -33,7 +33,7 @@ public class ProcessIconAdapter extends RecyclerView.Adapter<ProcessIconAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FirstJunkInfo junkInfo = mList.get(position);
-        holder.mViewImageIcon.setImageBitmap(junkInfo.getGarbageIcon());
+        holder.mViewImageIcon.setImageDrawable(junkInfo.getGarbageIcon());
     }
 
     @Override

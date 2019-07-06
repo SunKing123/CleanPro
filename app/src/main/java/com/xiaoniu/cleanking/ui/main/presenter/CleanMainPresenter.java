@@ -40,24 +40,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
         mJunkGroups = new HashMap<>();
 
-        JunkGroup cacheGroup = new JunkGroup();
-        cacheGroup.mName = getString(R.string.cache_clean);
-        cacheGroup.isChecked = true;
-        cacheGroup.mChildren = new ArrayList<>();
-        mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
-
-        JunkGroup processGroup = new JunkGroup();
-        processGroup.mName = getString(R.string.process_clean);
-        processGroup.isChecked = true;
-        processGroup.mChildren = new ArrayList<>();
-        mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
-
-        JunkGroup apkGroup = new JunkGroup();
-        apkGroup.mName = getString(R.string.apk_clean);
-        apkGroup.isChecked = true;
-        apkGroup.mChildren = new ArrayList<>();
-        mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
-
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
 
 
@@ -104,17 +86,41 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
-                        JunkGroup cacheGroup1 = mJunkGroups.get(JunkGroup.GROUP_CACHE);
-                        cacheGroup1.mChildren.add(info);
-                        cacheGroup1.mSize += info.getTotalSize();
+                        JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
+                        if (cacheGroup == null) {
+                            cacheGroup = new JunkGroup();
+                            cacheGroup.mName = getString(R.string.cache_clean);
+                            cacheGroup.isChecked = true;
+                            cacheGroup.isExpand = true;
+                            cacheGroup.mChildren = new ArrayList<>();
+                            mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
+                        }
+                        cacheGroup.mChildren.add(info);
+                        cacheGroup.mSize += info.getTotalSize();
                     } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
-                        JunkGroup cacheGroup1 = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
-                        cacheGroup1.mChildren.add(info);
-                        cacheGroup1.mSize += info.getTotalSize();
+                        JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
+                        if (processGroup == null) {
+                            processGroup = new JunkGroup();
+                            processGroup.mName = getString(R.string.process_clean);
+                            processGroup.isChecked = true;
+                            processGroup.isExpand = true;
+                            processGroup.mChildren = new ArrayList<>();
+                            mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
+                        }
+                        processGroup.mChildren.add(info);
+                        processGroup.mSize += info.getTotalSize();
                     } else if ("TYPE_APK".equals(info.getGarbageType())) {
-                        JunkGroup cacheGroup1 = mJunkGroups.get(JunkGroup.GROUP_APK);
-                        cacheGroup1.mChildren.add(info);
-                        cacheGroup1.mSize += info.getTotalSize();
+                        JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
+                        if(apkGroup == null){
+                            apkGroup = new JunkGroup();
+                            apkGroup.mName = getString(R.string.apk_clean);
+                            apkGroup.isChecked = true;
+                            apkGroup.isExpand = true;
+                            apkGroup.mChildren = new ArrayList<>();
+                            mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
+                        }
+                        apkGroup.mChildren.add(info);
+                        apkGroup.mSize += info.getTotalSize();
                     }
                 }
             }else {

@@ -21,7 +21,15 @@ public class JunkGroup implements Parcelable {
     public long mSize;
     public boolean isChecked;
     public ArrayList<FirstJunkInfo> mChildren;
+    public boolean isExpand;
 
+    public boolean isExpand() {
+        return isExpand;
+    }
+
+    public void setExpand(boolean expand) {
+        isExpand = expand;
+    }
 
     @Override
     public int describeContents() {
