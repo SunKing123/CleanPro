@@ -189,6 +189,7 @@ dependencies {
     annotationProcessor 'com.alibaba:arouter-compiler:latest.release'
 
     implementation 'com.jaredrummler:android-processes:1.0.3'
+    compile project(path: ':takephoto_library')
 }
 
 

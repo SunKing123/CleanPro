@@ -1,16 +1,20 @@
 package com.xiaoniu.cleanking.api;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 
 import io.reactivex.Flowable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
+import rx.Observable;
 
 /**
  * @author tie
@@ -38,5 +42,13 @@ public interface UserApiService {
      */
     @GET("/gateway/config/patch")
     Flowable<Patch> queryPatch(@Query("baseVersionName") String baseVersionName, @Query("clientType") String clientType, @Query("patchVersion") String patchVersion);
+
+
+    /**
+     * 意见反馈
+     */
+    @POST("/feedback/save")
+    @JSONField
+    Observable<String> submitQuestionReport(@Body RequestBody requestBody);
 
 }
