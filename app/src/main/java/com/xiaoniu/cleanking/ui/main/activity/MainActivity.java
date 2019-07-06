@@ -214,7 +214,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
 //        String url = ApiModule.SHOPPING_MALL;
-        String url = "http://192.168.90.51/clean2/home.html";
+        String url = "http://192.168.90.51/clean/home.html";
 
         ShoppingMallFragment shoppingMallFragment = ShoppingMallFragment.getIntance(url);
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
