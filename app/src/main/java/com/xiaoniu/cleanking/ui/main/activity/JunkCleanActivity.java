@@ -1,10 +1,16 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
@@ -34,28 +41,12 @@ import io.reactivex.schedulers.Schedulers;
 @Route(path = RouteConstants.JUNK_CLEAN_ACTIVITY)
 public class JunkCleanActivity extends SimpleActivity {
 
-    public static final int MSG_SYS_CACHE_BEGIN = 0x1001;
-    public static final int MSG_SYS_CACHE_POS = 0x1002;
-    public static final int MSG_SYS_CACHE_FINISH = 0x1003;
-
-    public static final int MSG_PROCESS_BEGIN = 0x1011;
-    public static final int MSG_PROCESS_POS = 0x1012;
-    public static final int MSG_PROCESS_FINISH = 0x1013;
-
-    public static final int MSG_OVERALL_BEGIN = 0x1021;
-    public static final int MSG_OVERALL_POS = 0x1022;
-    public static final int MSG_OVERALL_FINISH = 0x1023;
-
-    public static final int MSG_SYS_CACHE_CLEAN_FINISH = 0x1100;
-    public static final int MSG_PROCESS_CLEAN_FINISH = 0x1101;
-    public static final int MSG_OVERALL_CLEAN_FINISH = 0x1102;
-
-    public static final String HANG_FLAG = "hanged";
-
     private DockingExpandableListViewAdapter mAdapter;
 
     @BindView(R.id.tv_title)
     TextView mTextTitle;
+    @BindView(R.id.icon_more)
+    ImageView mIconMore;
     @BindView(R.id.do_junk_clean)
     TextView mTextClean;
 
@@ -84,12 +75,22 @@ public class JunkCleanActivity extends SimpleActivity {
             clearAll();
         });
 
-
-
         ExpandableListView listView = findViewById(R.id.junk_list);
         listView.setGroupIndicator(null);
         listView.setChildIndicator(null);
         listView.setDividerHeight(0);
+
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                JunkGroup junkGroup = mJunkGroups.get(groupPosition);
+                if (junkGroup != null) {
+                    junkGroup.isExpand = !junkGroup.isExpand();
+                    mAdapter.notifyDataSetChanged();
+                }
+                return false;
+            }
+        });
 
         mAdapter = new DockingExpandableListViewAdapter(this,listView);
         mAdapter.setOnItemSelectListener(() -> {
@@ -106,6 +107,10 @@ public class JunkCleanActivity extends SimpleActivity {
         listView.setAdapter(mAdapter);
 
         mAdapter.setData(mJunkGroups);
+
+        for (int i = 0; i < mJunkGroups.size(); i++) {
+            listView.expandGroup(i);
+        }
         String s = CleanUtil.formatShortFileSize(JunkCleanActivity.this, getTotalSize());
         mTextClean.setText("清理"+s);
     }
@@ -172,5 +177,58 @@ public class JunkCleanActivity extends SimpleActivity {
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
         finish();
+    }
+
+    @OnClick({R.id.icon_more})
+    public void onMoreClick(View view) {
+        showPopupWindow(mIconMore);
+    }
+
+    /**
+     * 显示可绑定银行列表
+     *
+     * @param statusView
+     */
+    public void showPopupWindow(View statusView) {
+        // 一个自定义的布局，作为显示的内容
+        View contentView = LayoutInflater.from(this).inflate(
+                R.layout.layout_clean_more_info, null);
+        View textApk = contentView.findViewById(R.id.text_apk);
+        View textMemory = contentView.findViewById(R.id.text_memory);
+        final PopupWindow popupWindow = new PopupWindow(contentView,
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        //添加银行卡
+        textApk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                startActivity(JunkCleanActivity.class);
+                StatisticsUtils.burying(StatisticsUtils.BuryEvent.BANK_MANAGE_ADD_BANK_WINDOW);
+            }
+        });
+        //设置还款顺序
+        textMemory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                startActivity(JunkCleanActivity.class);
+                StatisticsUtils.burying(StatisticsUtils.BuryEvent.BANK_MANAGE_SET_ORDER_WINDOW);
+            }
+        });
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        // 设置好参数之后再show
+        popupWindow.showAsDropDown(statusView);
     }
 }

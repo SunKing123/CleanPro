@@ -6,8 +6,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/layout_titlebar"/>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_56dp"
+        android:id="@+id/layout_title_bar"
+        android:background="@color/color_4690FD">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dimen_35dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dimen_12dp"
+            android:src="@mipmap/back"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_toRightOf="@+id/img_back"
+            android:text="个人信息"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_18sp"/>
+
+        <ImageView
+            android:id="@+id/icon_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="@dimen/dimen_16dp"
+            android:paddingLeft="@dimen/dimen_16dp"
+            android:src="@mipmap/icon_title_more"
+            android:visibility="visible"/>
+    </RelativeLayout>
 
     <include layout="@layout/content_junk_clean"
         />

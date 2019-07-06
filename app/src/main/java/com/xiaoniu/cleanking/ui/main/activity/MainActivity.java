@@ -1,10 +1,15 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +55,7 @@ import cn.jpush.android.api.JPushInterface;
 public class MainActivity extends BaseActivity<MainPresenter> {
 
     private static final String TAG = "MainActivity.class";
+    private static final int REQUEST_STORAGE_PERMISSION = 1111;
     @Inject
     NoClearSPHelper mPreferencesHelper;
     @BindView(R.id.bottomBar)
@@ -157,6 +163,43 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         btn_whilte_access.setOnClickListener(v -> startActivity(PhoneAccessActivity.class));
 
         DbHelper.copyDb();
+
+        checkReadPermission();
+    }
+
+    private void checkReadPermission() {
+        if (ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
+            System.out.println("");
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
+                        REQUEST_STORAGE_PERMISSION);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
+                        REQUEST_STORAGE_PERMISSION);
+            }
+        }
+    }
+
+    /**
+     * 检查权限后的回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_STORAGE_PERMISSION:
+                if (permissions.length != 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "打开相册失败，请允许存储权限后再试", Toast.LENGTH_SHORT).show();
+                } else {
+                    //TODO 请求权限弹窗 允许后回调返回的成功回调 在此写业务逻辑
+                }
+                break;
+        }
     }
 
     @OnClick({R.id.btn_whilte_list_speed})

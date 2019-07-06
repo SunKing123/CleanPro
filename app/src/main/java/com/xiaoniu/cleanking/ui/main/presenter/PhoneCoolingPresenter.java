@@ -1,6 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +14,9 @@ import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Process;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
@@ -23,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,15 +37,19 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.content.Context.USAGE_STATS_SERVICE;
+
 public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, PhoneCoolingModel> {
 
     private final FileQueryUtils mFileQueryUtils;
     private final HardwareInfo mHardwareInfo;
+    private final RxAppCompatActivity mRxActivity;
     private Sensor mTempSensor;
     private Intent batteryStatus;
 
     @Inject
-    public PhoneCoolingPresenter() {
+    public PhoneCoolingPresenter(RxAppCompatActivity rxActivity) {
+        mRxActivity = rxActivity;
         mFileQueryUtils = new FileQueryUtils();
         IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryStatus = AppApplication.getInstance().registerReceiver(null, iFilter);
@@ -173,4 +184,30 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
             }
         }
     }
+    @TargetApi(22)
+    public List<ActivityManager.RunningAppProcessInfo> getProcess() {
+            UsageStatsManager usageStatsManager = (UsageStatsManager) mRxActivity.getSystemService(USAGE_STATS_SERVICE);
+            if (usageStatsManager == null) {
+                return null;
+            }
+        List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
+        ArrayList arrayList = new ArrayList();
+        if (!(lists == null || lists.size() == 0)) {
+            for (UsageStats usageStats : lists) {
+                if (!(usageStats == null || usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.cleanmaster.mguard_cn"))) {
+                    ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
+                    runningAppProcessInfo.processName = usageStats.getPackageName();
+                    runningAppProcessInfo.pkgList = new String[]{usageStats.getPackageName()};
+                    int uidForName = Process.getUidForName(usageStats.getPackageName());
+                    arrayList.add(runningAppProcessInfo);
+                }
+            }
+        }
+
+        return arrayList;
+    }
+
+
+
+
 }

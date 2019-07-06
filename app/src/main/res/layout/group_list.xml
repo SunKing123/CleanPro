@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content" android:orientation="vertical">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,4 +48,13 @@
             android:layout_marginLeft="@dimen/dimen_12dp"
             android:background="@drawable/icon_choose_selector"/>
     </LinearLayout>
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_1dp"
+        android:visibility="gone"
+        android:background="@color/color_EDEDED"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"/>
 </LinearLayout>
