@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,10 +152,10 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
                 mPresenter.alertBanLiveDialog(PreviewImageActivity.this, listF.size(), new ImagePreviewPresenter.ClickListener() {
                     @Override
                     public void clickOKBtn() {
-//                        for (int i = 0; i < listF.size(); i++) {
-//                            File f = new File(listF.get(i).getPath());
-//                            f.delete();
-//                        }
+                        for (int i = 0; i < listF.size(); i++) {
+                            File f = new File(listF.get(i).getPath());
+                            f.delete();
+                        }
                         //数据库删除选中的文件
                         mPresenter.deleteFromDatabase(listF);
                     }
@@ -195,7 +196,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
     //删除成功
     public void deleteSuccess(List<FileEntity> listF) {
         tvDelete.setText("删除");
-
+        CleanAllFileScanUtil.clean_image_list.removeAll(listF);
         adapter.deleteData(listF);
 
         mImageArrayList.removeAll(listF);
