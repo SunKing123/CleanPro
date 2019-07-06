@@ -38,5 +38,11 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50dp"/>
+        <TextView
+            android:id="@+id/text_acce"
+            android:text="一键加速"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
