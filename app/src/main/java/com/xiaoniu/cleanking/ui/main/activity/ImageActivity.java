@@ -98,10 +98,10 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 mPresenter.alertBanLiveDialog(ImageActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                     @Override
                     public void clickOKBtn() {
-//                        for (int i = 0; i < listF.size(); i++) {
-//                            File f = new File(listF.get(i).getPath());
-//                            f.delete();
-//                        }
+                        for (int i = 0; i < listF.size(); i++) {
+                            File f = new File(listF.get(i).getPath());
+                            f.delete();
+                        }
                         //数据库删除选中的文件
                         mPresenter.deleteFromDatabase(listF, imageAdapter);
                     }
@@ -127,6 +127,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
         imageAdapter.deleteData(listF);
+        CleanAllFileScanUtil.clean_image_list.removeAll(listF);
         line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
         recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
     }
