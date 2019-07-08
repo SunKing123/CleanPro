@@ -16,6 +16,7 @@ public class SPUtil {
     //    public static String mytoken = "38ef122c894e4cc2a820170223155249";
     public static String mytoken = "";
     public static String myBrName = "myBrName";
+    public static String ONEKEY_ACCESS = "onekey_access";
     public static String myBrHomeName = "myBrHomeName";
     public static String ATTENTIONUP = "ATTENTIONUP";
     public static String ATTENTIONDOWN = "ATTENTIONDOWN";

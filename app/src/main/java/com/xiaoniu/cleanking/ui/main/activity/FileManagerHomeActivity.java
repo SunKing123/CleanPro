@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -52,6 +53,8 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     TextView tvApkSize;
     @BindView(R.id.view_imagearea)
     View viewImagearea;
+    @BindView(R.id.iv_back)
+    ImageView iv_back;
     long times1 = 0;
 
 
@@ -141,6 +144,12 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
                 Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
                 CleanAllFileScanUtil.clean_image_list=listImages;
                 startActivity(intent);
+            }
+        });
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
