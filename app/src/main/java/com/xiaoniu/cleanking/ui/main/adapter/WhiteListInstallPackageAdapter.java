@@ -7,15 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.utils.DateUtils;
-import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +21,7 @@ import java.util.List;
  * 加速白名单管理
  * Created by lang.chen on 2019/7/2
  */
-public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
+public class WhiteListInstallPackageAdapter extends RecyclerView.Adapter {
 
 
     private List<AppInfoBean> mLists = new ArrayList<>();
@@ -36,7 +33,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
 
     private OnCheckListener onCheckListener;
 
-    public WhiteListSpeedAdapter(Context context) {
+    public WhiteListInstallPackageAdapter(Context context) {
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -54,7 +51,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
 
         if (holder.getClass() == ViewHolder.class) {
             ViewHolder viewHolder = (ViewHolder) holder;
-            Glide.with(mContext).load(appInfoBean.icon).into(viewHolder.mImgIcon);
+            Glide.with(mContext).load(R.mipmap.icon_directory).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mBtnRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,7 +107,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setOnCheckListener(WhiteListSpeedAdapter.OnCheckListener onCheckListener) {
+    public void setOnCheckListener(WhiteListInstallPackageAdapter.OnCheckListener onCheckListener) {
         this.onCheckListener = onCheckListener;
     }
 

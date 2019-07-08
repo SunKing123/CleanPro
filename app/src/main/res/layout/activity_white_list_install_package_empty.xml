@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_install_empty_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/dimen_16dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/dimen_21sp"
+        android:textStyle="bold"
+        android:text="添加方法:"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dimen_14sp"
+        android:textColor="@color/color_333333"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:text="1.在垃圾详情界面，点击需要保护的安装包"/>
+
+    <ImageView
+        android:layout_width="@dimen/dimen_248dp"
+        android:layout_height="@dimen/dimen_98dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:src="@drawable/img_install_package_empty_1"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dimen_14sp"
+        android:textColor="@color/color_333333"
+        android:layout_marginTop="@dimen/dimen_29dp"
+        android:text="2.勾选“忽略此路径下所有安装包”"/>
+
+    <ImageView
+        android:layout_width="@dimen/dimen_248dp"
+        android:layout_height="@dimen/dimen_204dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:src="@drawable/img_install_package_empty_2"/>
+
+
+</LinearLayout>

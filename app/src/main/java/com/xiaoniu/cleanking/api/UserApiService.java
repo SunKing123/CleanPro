@@ -1,7 +1,9 @@
 package com.xiaoniu.cleanking.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 
@@ -10,6 +12,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
@@ -49,6 +52,15 @@ public interface UserApiService {
      */
     @POST("/feedback/save")
     @JSONField
-    Observable<String> submitQuestionReport(@Body RequestBody requestBody);
+    Flowable<BaseEntity> submitQuestionReport(@Body RequestBody requestBody);
+
+
+    /**
+     * 上传用户头像
+     **/
+    @Multipart
+    @POST("/file/upload")
+    Flowable<FileUploadInfoBean> uploadFile(@Part MultipartBody.Part file);
+
 
 }
