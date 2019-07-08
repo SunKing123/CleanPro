@@ -17,7 +17,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
-import com.xiaoniu.cleanking.ui.main.DockingExpandableListViewAdapter;
+import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
@@ -220,5 +220,14 @@ public class JunkCleanActivity extends SimpleActivity {
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         // 设置好参数之后再show
         popupWindow.showAsDropDown(statusView);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

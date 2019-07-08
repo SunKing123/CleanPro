@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.main;
+package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Dialog;
 import android.content.Context;

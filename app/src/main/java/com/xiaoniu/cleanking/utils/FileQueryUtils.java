@@ -847,7 +847,7 @@ public class FileQueryUtils {
         }
     }
 
-    public String getFilePath(String s2) {
+    public static String getFilePath(String s2) {
         try {
             String s = "225e8C70688fD76Ec5C01A392302320A".toUpperCase();
             SecretKeySpec secretKeySpec = new SecretKeySpec(s.getBytes("utf-8"), "AES");

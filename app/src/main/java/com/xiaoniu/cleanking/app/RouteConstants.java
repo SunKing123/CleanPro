@@ -34,4 +34,9 @@ public class RouteConstants {
      */
     public static final String PROCESS_INFO_ACTIVITY = "/main/ProcessInfoActivity";
 
+    /**
+     * 大文件页面
+     */
+    public static final String CLEAN_BIG_FILE_ACTIVITY = "/main/CleanBigFileActivity";
+
 }

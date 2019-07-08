@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.app.injector.component;
 
 import com.xiaoniu.cleanking.app.injector.PerActivity;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
+import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -62,5 +63,7 @@ public interface ActivityComponent {
     void inject(PhoneCoolingActivity phoneCoolingActivity);
 
     void inject(QuestionReportActivity questionReportActivity);
+
+    void inject(CleanBigFileActivity cleanBigFileActivity);
 }
 

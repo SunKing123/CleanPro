@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_56dp"
+        android:background="@color/color_4690FD">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dimen_35dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dimen_12dp"
+            android:src="@mipmap/back"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_toRightOf="@+id/img_back"
+            android:text="个人信息"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_18sp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_total"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:id="@+id/layout_show_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/layout_junk_clean"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/bg_bottom_layout">
+
+                <TextView
+                    android:id="@+id/do_junk_clean"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:background="@drawable/bg_bottom_button"
+                    android:gravity="center"
+                    android:text="@string/text_clean"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_16sp"/>
+
+            </FrameLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/junk_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/layout_junk_clean">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_clean_finish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/text_clean_finish_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="恭喜你！清理完成"/>
+
+            <TextView
+                android:id="@+id/text_clean_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_clean_finish_title"
+                android:layout_centerHorizontal="true"
+                android:text="清理了 100Mb"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

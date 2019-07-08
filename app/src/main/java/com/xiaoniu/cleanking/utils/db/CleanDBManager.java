@@ -117,6 +117,52 @@ public class CleanDBManager {
 			CleanDBManager.dbClose();
 		}
 	}
+
+	public static List<FilePathInfoClean> queryAllFilePathInfo() {
+		List<FilePathInfoClean> fileList = new ArrayList<>();
+		Cursor cursor = null;
+		try {
+			cursor =  CleanDBManager.getDBconnection().query(TABLE_CLEAN_INFO_PATH,
+					new String[]{"id", "appName", "filePath","garbageName","garbagetype","packageName","rootPath"}, null,
+					null, null, null, null);
+		} catch (Exception e) {
+
+			return null;
+		}
+		try {
+			if (cursor == null) {
+				return fileList;
+			} else {
+				if (cursor.moveToFirst()) {
+					for (int index = 0; index < cursor.getCount(); index++) {
+						FilePathInfoClean appInfoClean = new FilePathInfoClean();
+						appInfoClean.setId(cursor.getLong(cursor
+								.getColumnIndex("id")));
+						appInfoClean.setAppName(cursor.getString(cursor
+								.getColumnIndex("appName")));
+						appInfoClean.setPackageName(cursor.getString(cursor
+								.getColumnIndex("packageName")));
+						appInfoClean.setFilePath(cursor.getString(cursor
+								.getColumnIndex("filePath")));
+						appInfoClean.setGarbageName(cursor.getString(cursor
+								.getColumnIndex("garbageName")));
+						appInfoClean.setGarbagetype(cursor.getString(cursor
+								.getColumnIndex("garbagetype")));
+						appInfoClean.setRootPath(cursor.getString(cursor
+								.getColumnIndex("rootPath")));
+						fileList.add(appInfoClean);
+						cursor.moveToNext();
+					}
+					cursor.close();
+				}
+				return fileList;
+			}
+		} catch (Exception e) {
+			return fileList;
+		}finally {
+			CleanDBManager.dbClose();
+		}
+	}
 	
 	/***
 	 * 关闭数据库

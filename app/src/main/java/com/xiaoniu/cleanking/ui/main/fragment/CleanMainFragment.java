@@ -82,11 +82,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.line_ql)
     public void line_ql() {
         //手机清理
-        if (isScanFinish) {
-            startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
-        }else {
-            ToastUtils.show("正在扫描中");
-        }
+       startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
 
     @OnClick(R.id.btn_ljql)
