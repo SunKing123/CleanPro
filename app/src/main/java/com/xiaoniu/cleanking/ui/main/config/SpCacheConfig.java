@@ -22,6 +22,6 @@ public class SpCacheConfig {
     //key包名
     public static final String WHITE_LIST_KEY_INSTALL_PACKE_NAME = "white_list_install_packe_name";
     //path 路径
-    public static final String WHITE_LIST_DIRECTORY = "white_list_directory";
+    public static final String WHITE_LIST_KEY_DIRECTORY = "white_list_directory";
 
 }
