@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -29,6 +30,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     }
 
     private HashMap<Integer, JunkGroup> mJunkGroups = null;
+    private HashMap<Integer, JunkGroup> mJunkResults = null;
 
     long total = 0;
 
@@ -39,6 +41,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     public void startScan() {
 
         mJunkGroups = new HashMap<>();
+        mJunkResults = new HashMap<>();
 
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
 
@@ -124,7 +127,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
                     }
                 }
             }else {
-                mView.scanFinish(mJunkGroups);
+                int i = 0;
+                for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
+                    mJunkResults.put(i++, entry.getValue());
+                }
+                mView.scanFinish(mJunkResults);
             }
         });
 

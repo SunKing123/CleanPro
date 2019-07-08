@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -23,7 +22,6 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
@@ -80,16 +78,13 @@ public class JunkCleanActivity extends SimpleActivity {
         listView.setChildIndicator(null);
         listView.setDividerHeight(0);
 
-        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                JunkGroup junkGroup = mJunkGroups.get(groupPosition);
-                if (junkGroup != null) {
-                    junkGroup.isExpand = !junkGroup.isExpand();
-                    mAdapter.notifyDataSetChanged();
-                }
-                return false;
+        listView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            JunkGroup junkGroup = mJunkGroups.get(groupPosition);
+            if (junkGroup != null) {
+                junkGroup.isExpand = !junkGroup.isExpand();
+                mAdapter.notifyDataSetChanged();
             }
+            return false;
         });
 
         mAdapter = new DockingExpandableListViewAdapter(this,listView);
@@ -197,33 +192,21 @@ public class JunkCleanActivity extends SimpleActivity {
         View textMemory = contentView.findViewById(R.id.text_memory);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-        //添加银行卡
-        textApk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                startActivity(JunkCleanActivity.class);
-                StatisticsUtils.burying(StatisticsUtils.BuryEvent.BANK_MANAGE_ADD_BANK_WINDOW);
-            }
+        //APK白名单
+        textApk.setOnClickListener(v -> {
+            popupWindow.dismiss();
+            startActivity(WhiteListInstallPackgeManageActivity.class);
         });
-        //设置还款顺序
-        textMemory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                startActivity(JunkCleanActivity.class);
-                StatisticsUtils.burying(StatisticsUtils.BuryEvent.BANK_MANAGE_SET_ORDER_WINDOW);
-            }
+        //内存加速白名单
+        textMemory.setOnClickListener(v -> {
+            popupWindow.dismiss();
+            startActivity(WhiteListSpeedAddActivity.class);
         });
         popupWindow.setTouchable(true);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
+        popupWindow.setTouchInterceptor((v, event) -> {
+            return false;
+            // 这里如果返回true的话，touch事件将被拦截
+            // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
         });
         // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
         // 我觉得这里是API的一个bug

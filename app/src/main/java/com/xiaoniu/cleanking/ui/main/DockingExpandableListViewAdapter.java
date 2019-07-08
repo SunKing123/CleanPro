@@ -1,20 +1,27 @@
 package com.xiaoniu.cleanking.ui.main;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter {
 
@@ -139,14 +146,32 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mLogo = convertView.findViewById(R.id.app_logo);
             holder.mJunkSizeTv = convertView.findViewById(R.id.junk_size);
             holder.mCheckButton = convertView.findViewById(R.id.icon_check);
+            holder.mTextVersion = convertView.findViewById(R.id.text_version);
+            holder.mRootView = convertView.findViewById(R.id.layout_root);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
+        //名称
         holder.mJunkTypeTv.setText(info.getAppName());
+        //垃圾的LOGO
         holder.mLogo.setImageDrawable(info.getGarbageIcon());
+        //垃圾大小
         holder.mJunkSizeTv.setText(CleanUtil.formatShortFileSize(mContext, info.getTotalSize()));
+        //选择框
         holder.mCheckButton.setSelected(info.isAllchecked());
+        //只有安装包文件显示版本信息
+        if ("TYPE_APK".equals(info.getGarbageType())) {
+            holder.mTextVersion.setVisibility(View.VISIBLE);
+            holder.mTextVersion.setText(info.getDescp() + " v" + info.getVersionName());
+            holder.mRootView.setOnClickListener(v -> {
+                //点击监听
+                showApkWhiteDialog(info);
+            });
+        } else {
+            holder.mTextVersion.setVisibility(View.GONE);
+            holder.mRootView.setOnClickListener(null);
+        }
         holder.mCheckButton.setOnClickListener(v -> {
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
@@ -156,7 +181,12 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         return convertView;
     }
 
-    public void resetItemSelectButton(JunkGroup group) {
+    /**
+     * 重置全选按钮状态
+     *
+     * @param group
+     */
+    private void resetItemSelectButton(JunkGroup group) {
         group.isChecked = true;
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
             if (!firstJunkInfo.isAllchecked()) {
@@ -170,6 +200,82 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         notifyDataSetChanged();
     }
 
+    /**
+     * Apk安装包保护弹窗
+     */
+    public void showApkWhiteDialog(FirstJunkInfo junkInfo) {
+        //提示对话框
+        final Dialog dialog = new Dialog(mContext, R.style.custom_dialog);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_white_apk, null);
+        TextView mTextTitle = view.findViewById(R.id.text_title);
+        View mBlueBg = view.findViewById(R.id.bg_blue_view);
+        TextView mTextTips = view.findViewById(R.id.text_tips);
+        TextView mTextDivider = view.findViewById(R.id.text_divider);
+        TextView mTextSize = view.findViewById(R.id.text_size);
+        CheckBox mCheckView = view.findViewById(R.id.icon_check);
+        TextView mTextTrace = view.findViewById(R.id.text_trace);
+        TextView mTextClose = view.findViewById(R.id.text_close);
+
+        //app名称
+        mTextTitle.setText(junkInfo.getAppName());
+        //大小
+        mTextSize.setText("大小：" + CleanUtil.formatShortFileSize(mContext, junkInfo.getTotalSize()));
+        //路径
+        mTextTrace.setText("路径：" + junkInfo.getGarbageCatalog());
+
+
+        mTextClose.setOnClickListener(v -> dialog.dismiss());
+        mCheckView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mBlueBg.setVisibility(View.VISIBLE);
+            mTextTips.setVisibility(View.VISIBLE);
+            mTextDivider.setVisibility(View.GONE);
+            if (isChecked) {
+                mTextTips.setText(mContext.getResources().getString(R.string.text_apk_white_add));
+                savePath(junkInfo.getGarbageCatalog());
+            }else {
+                mTextTips.setText(mContext.getResources().getString(R.string.text_white_removed));
+                removePath(junkInfo.getGarbageCatalog());
+            }
+        });
+        dialog.setContentView(view);
+        if (dialog.isShowing()) {
+            return;
+        }
+        dialog.show();
+    }
+
+    /**
+     * 移除apk白名单缓存路径
+     * @param garbageCatalog
+     */
+    private void removePath(String garbageCatalog) {
+        Set<String> caches = new HashSet<>();
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Set<String> stringSet = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, caches);
+        if(stringSet != null) {
+            stringSet.remove(garbageCatalog);
+        }
+        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY,stringSet);
+        editor.apply();
+    }
+
+    /**
+     * 添加apk白名单缓存路径
+     * @param path
+     */
+    private void savePath(String path){
+        Set<String> caches = new HashSet<>();
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Set<String> stringSet = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, caches);
+        if(stringSet != null) {
+            stringSet.add(path);
+        }
+        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY,stringSet);
+        editor.apply();
+    }
+
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;
@@ -181,6 +287,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public ImageView mCheckButton;
         public ImageView mIconArrow;
         public View mViewDivider;
+
     }
 
     public static class ChildViewHolder {
@@ -188,9 +295,11 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public TextView mJunkSizeTv;
         public ImageView mLogo;
         public ImageView mCheckButton;
+        public TextView mTextVersion;
+        public LinearLayout mRootView;
     }
 
-    public interface OnItemSelectListener{
+    public interface OnItemSelectListener {
         void onCount();
     }
 }

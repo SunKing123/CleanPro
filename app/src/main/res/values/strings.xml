@@ -35,4 +35,8 @@
     <string name="clean_apk_file_uninstall">[未安装]</string>
     <string name="clean_suggested">建议清理</string>
     <string name="txt_white_list_speed_title">保护名单的软件，加速时不会被清理</string>
+    <string name="text_white_removed">此路径已从保护名单中移除</string>
+    <string name="text_apk_white_ignore">忽略此路径下所有安装包</string>
+    <string name="text_apk_white_add">此路径已加入保护名单</string>
+    <string name="text_close">关闭</string>
 </resources>
