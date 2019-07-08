@@ -142,9 +142,6 @@ public class FileQueryUtils {
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
-            if ("网络位置".equals(firstJunkInfo.getAppName()) || "支付宝".equals(firstJunkInfo.getAppName()) || "优酷视频".equals(firstJunkInfo.getAppName())) {
-                System.out.println("aaaa");
-            }
             firstJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
             firstJunkInfo.setAllchecked(true);
             firstJunkInfo.setGarbageType("TYPE_CACHE");
@@ -218,7 +215,7 @@ public class FileQueryUtils {
 //            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
             for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : this.mActivityManager.getRunningAppProcesses()) {
                 int i2 = runningAppProcessInfo.pid;
-                if (runningAppProcessInfo.uid > 10010) {
+                if (runningAppProcessInfo.uid > 10010 || !isSystemAppliation(runningAppProcessInfo.processName)) {
                     try {
                         String packNameByProName = getPackNameByProName(runningAppProcessInfo.processName);
                         int indexOf = packNameByProName.indexOf(COLON_SEPARATOR);
@@ -260,6 +257,7 @@ public class FileQueryUtils {
                                 onelevelGarbageInfo.setAllchecked(true);
                                 onelevelGarbageInfo.setAppName(loadLabel.toString().trim());
                                 onelevelGarbageInfo.setGarbageIcon(getAppIcon(mPackageManager.getPackageInfo(str, 0).applicationInfo));
+                                PackageInfo packageInfo = mPackageManager.getPackageInfo(str, 0);
 //                                if (!(memoryUncheckedList == null || memoryUncheckedList.getList() == null || memoryUncheckedList.getList().size() <= 0)) {
 //                                    for (String equals : memoryUncheckedList.getList()) {
 //                                        if (str.equals(equals)) {
@@ -300,7 +298,7 @@ public class FileQueryUtils {
             }
             int i3 = 0;
             while (i3 < runningAppProcesses.size()) {
-                if (((AndroidAppProcess) runningAppProcesses.get(i3)).uid <= 10010) {
+                if (((AndroidAppProcess) runningAppProcesses.get(i3)).uid <= 10010 || isSystemAppliation(((AndroidAppProcess) runningAppProcesses.get(i3)).getPackageName())) {
                     runningAppProcesses.remove(i3);
                     i2 = i3 - 1;
                 } else {
@@ -379,7 +377,8 @@ public class FileQueryUtils {
             List runningServices = activityManager.getRunningServices(Integer.MAX_VALUE);
             int i3 = 0;
             while (i3 < runningServices.size()) {
-                if (((ActivityManager.RunningServiceInfo) runningServices.get(i3)).uid <= 10010) {
+                if (((ActivityManager.RunningServiceInfo) runningServices.get(i3)).uid <= 10010 || (((ActivityManager.RunningServiceInfo) runningServices.get(i3)).flags & 1) != 0) {
+                    //系统应用 排除
                     runningServices.remove(i3);
                     i2 = i3 - 1;
                 } else {
@@ -698,6 +697,15 @@ public class FileQueryUtils {
 
     public static boolean isSystemAppliation() {
         return (AppApplication.getInstance().getApplicationInfo().flags & 1) != 0;
+    }
+
+    public boolean isSystemAppliation(String packageName) {
+        try {
+           return (mPackageManager.getPackageInfo(packageName,0).applicationInfo.flags & 1) != 0;
+        } catch (Exception e) {
+
+        }
+        return false;
     }
 
 
