@@ -37,6 +37,8 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     LinearLayout line_version;
     @BindView(R.id.line_xy)
     LinearLayout line_xy;
+    @BindView(R.id.line_share)
+    LinearLayout line_share;
 
     @Override
     public int getLayoutId() {
@@ -83,6 +85,14 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 jumpXieyiActivity("http://www.baidu.com");
+            }
+        });
+
+        line_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String shareContent="HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
+                mPresenter.share("","","悟空清理",shareContent,-1);
             }
         });
     }

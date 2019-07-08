@@ -102,7 +102,7 @@ public class ApplicationDelegate extends DefaultApplicationLike {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(getApplication());
-        UMConfigure.init(getApplication(), "5b8660388f4a9d079d00026d", AndroidUtil.getMarketId(), UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.init(getApplication(), "5d230f2f4ca357bdb700106d", AndroidUtil.getMarketId(), UMConfigure.DEVICE_TYPE_PHONE, "");
     }
 
     private static AppComponent mAppComponent;
