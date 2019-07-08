@@ -29,6 +29,15 @@ public class FirstJunkInfo implements Serializable {
     private String versionName;
     private int versionCode;
     private boolean isSelect=true;
+    private boolean isLock;
+
+    public boolean isLock() {
+        return isLock;
+    }
+
+    public void setLock(boolean lock) {
+        isLock = lock;
+    }
 
     public boolean getIsSelect() {
         return isSelect;

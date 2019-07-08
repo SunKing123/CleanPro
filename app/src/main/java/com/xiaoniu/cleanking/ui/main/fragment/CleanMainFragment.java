@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -15,7 +16,9 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 
@@ -26,6 +29,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @BindView(R.id.text_count)
     TextView mTextCount;
+    @BindView(R.id.btn_ljql)
+    Button mButtonCleanNow;
 
     private boolean isScanFinish = false;
     public static HashMap<Integer, JunkGroup> mJunkGroups;
@@ -52,6 +57,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         mPresenter.startScan();
     }
 
@@ -111,5 +117,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void showCountNumber(long total) {
         getActivity().runOnUiThread(() -> mTextCount.setText(CleanUtil.formatShortFileSize(getActivity(), total)));
+    }
+
+    @Subscribe
+    public void cleanFinish(String string) {
+        if ("clean_finish".equals(string)) {
+            //清理完成
+            mButtonCleanNow.setText("清理完成");
+            mTextCount.setText("暂无");
+            mButtonCleanNow.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 }
