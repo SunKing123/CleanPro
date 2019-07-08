@@ -16,7 +16,6 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -126,6 +125,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //清理完成
             mButtonCleanNow.setText("清理完成");
             mTextCount.setText("暂无");
+            mButtonCleanNow.setEnabled(false);
         }
     }
 
