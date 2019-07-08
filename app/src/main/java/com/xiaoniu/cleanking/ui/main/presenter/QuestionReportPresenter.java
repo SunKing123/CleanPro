@@ -36,15 +36,17 @@ public class QuestionReportPresenter extends RxPresenter<QuestionReportActivity,
 
 
     //提交意见反馈
-    public void submitData(String uid,String feedbackContent,String contactType,String feedbackPic){
+    public void submitData(String uid, String feedbackContent, String contactType, String feedbackPic) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
-        map.put("uid",uid);
-        map.put("feedbackContent",feedbackContent);
-        map.put("contactType",contactType);
-        map.put("feedbackPic",feedbackPic);
+        map.put("uid", uid);
+        map.put("feedbackContent", feedbackContent);
+        map.put("contactType", contactType);
+        map.put("feedbackPic", feedbackPic);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+
+
     }
 
 }
