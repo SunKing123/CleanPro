@@ -39,7 +39,6 @@ import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +173,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
             System.out.println("");
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
                         REQUEST_STORAGE_PERMISSION);
             } else {

@@ -6,23 +6,16 @@ import android.view.View;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
-import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
-import com.xiaoniu.cleanking.base.BaseFragment;
-import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.base.SimpleFragment;
-import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import butterknife.OnClick;
 
 public class ToolFragment extends SimpleFragment {
 
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        StatusBarCompat.translucentStatusBar(getActivity(), true);
     }
 
     @Override
