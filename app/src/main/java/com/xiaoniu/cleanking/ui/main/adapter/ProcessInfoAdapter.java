@@ -35,7 +35,7 @@ public class ProcessInfoAdapter extends RecyclerView.Adapter<ProcessInfoAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FirstJunkInfo junkInfo = mList.get(position);
-        holder.mIcon.setImageBitmap(junkInfo.getGarbageIcon());
+        holder.mIcon.setImageDrawable(junkInfo.getGarbageIcon());
         holder.mTextName.setText(junkInfo.getAppName());
 
         holder.mTextStop.setOnClickListener(v->{

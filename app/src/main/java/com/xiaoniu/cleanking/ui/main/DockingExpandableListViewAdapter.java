@@ -95,6 +95,8 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mPackageNameTv = convertView.findViewById(R.id.package_name);
             holder.mPackageSizeTv = convertView.findViewById(R.id.package_size);
             holder.mCheckButton = convertView.findViewById(R.id.icon_check);
+            holder.mIconArrow = convertView.findViewById(R.id.icon_arrow);
+            holder.mViewDivider = convertView.findViewById(R.id.view_divider);
             convertView.setTag(holder);
         } else {
             holder = (GroupViewHolder) convertView.getTag();
@@ -104,6 +106,8 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         holder.mPackageNameTv.setText(group.mName);
         holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
         holder.mCheckButton.setSelected(group.isChecked);
+        holder.mIconArrow.setImageDrawable(group.isExpand ? mContext.getResources().getDrawable(R.mipmap.arrow_up) : mContext.getResources().getDrawable(R.mipmap.arrow_down));
+        holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
         holder.mCheckButton.setOnClickListener(v -> {
             group.isChecked = !group.isChecked;
             resetSelectButton(group, group.isChecked);
@@ -126,7 +130,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         FirstJunkInfo info = mJunkGroups.get(groupPosition).mChildren.get(childPosition);
 
-
         ChildViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext)
@@ -141,7 +144,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder = (ChildViewHolder) convertView.getTag();
         }
         holder.mJunkTypeTv.setText(info.getAppName());
-        holder.mLogo.setImageBitmap(info.getGarbageIcon());
+        holder.mLogo.setImageDrawable(info.getGarbageIcon());
         holder.mJunkSizeTv.setText(CleanUtil.formatShortFileSize(mContext, info.getTotalSize()));
         holder.mCheckButton.setSelected(info.isAllchecked());
         holder.mCheckButton.setOnClickListener(v -> {
@@ -176,6 +179,8 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public TextView mPackageNameTv;
         public TextView mPackageSizeTv;
         public ImageView mCheckButton;
+        public ImageView mIconArrow;
+        public View mViewDivider;
     }
 
     public static class ChildViewHolder {

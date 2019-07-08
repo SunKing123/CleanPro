@@ -1,23 +1,21 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Parcel;
-import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mazhuang on 16/1/14.
  */
-public class FirstJunkInfo implements Parcelable {
+public class FirstJunkInfo implements Serializable {
     private String appGarbageName;
     private String appPackageName;
     private String appName;
     private String descp;
     private String garbageCatalog;
-    private Bitmap garbageIcon;
+    private Drawable garbageIcon;
     private boolean isAllchecked;
     private boolean isApkInstalled;
     private boolean isDeploy;
@@ -95,11 +93,11 @@ public class FirstJunkInfo implements Parcelable {
         this.garbageCatalog = garbageCatalog;
     }
 
-    public Bitmap getGarbageIcon() {
+    public Drawable getGarbageIcon() {
         return garbageIcon;
     }
 
-    public void setGarbageIcon(Bitmap garbageIcon) {
+    public void setGarbageIcon(Drawable garbageIcon) {
         this.garbageIcon = garbageIcon;
     }
 
@@ -183,64 +181,4 @@ public class FirstJunkInfo implements Parcelable {
         this.totalSize = totalSize;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.appGarbageName);
-        dest.writeString(this.appPackageName);
-        dest.writeString(this.appName);
-        dest.writeString(this.descp);
-        dest.writeString(this.garbageCatalog);
-        dest.writeParcelable(this.garbageIcon, flags);
-        dest.writeByte(this.isAllchecked ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isApkInstalled ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isDeploy ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isRemoved ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.pid);
-        dest.writeInt(this.position);
-        dest.writeString(this.garbageType);
-        dest.writeLong(this.selectSize);
-        dest.writeList(this.subGarbages);
-        dest.writeLong(this.totalSize);
-    }
-
-    public FirstJunkInfo() {
-    }
-
-    protected FirstJunkInfo(Parcel in) {
-        this.appGarbageName = in.readString();
-        this.appPackageName = in.readString();
-        this.appName = in.readString();
-        this.descp = in.readString();
-        this.garbageCatalog = in.readString();
-        this.garbageIcon = in.readParcelable(Drawable.class.getClassLoader());
-        this.isAllchecked = in.readByte() != 0;
-        this.isApkInstalled = in.readByte() != 0;
-        this.isDeploy = in.readByte() != 0;
-        this.isRemoved = in.readByte() != 0;
-        this.pid = in.readInt();
-        this.position = in.readInt();
-        this.garbageType = in.readString();
-        this.selectSize = in.readLong();
-        this.subGarbages = new ArrayList<SecondJunkInfo>();
-        in.readList(this.subGarbages, SecondJunkInfo.class.getClassLoader());
-        this.totalSize = in.readLong();
-    }
-
-    public static final Parcelable.Creator<FirstJunkInfo> CREATOR = new Parcelable.Creator<FirstJunkInfo>() {
-        @Override
-        public FirstJunkInfo createFromParcel(Parcel source) {
-            return new FirstJunkInfo(source);
-        }
-
-        @Override
-        public FirstJunkInfo[] newArray(int size) {
-            return new FirstJunkInfo[size];
-        }
-    };
 }

@@ -3,22 +3,19 @@ package com.xiaoniu.cleanking.utils;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.NinePatchDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
+import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -27,29 +24,33 @@ import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import static com.jaredrummler.android.processes.ProcessManager.getRunningAppProcesses;
+import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
+//import static com.jaredrummler.android.processes.ProcessManager.getRunningAppProcesses;
 
 public class FileQueryUtils {
 
     private static final String COLON_SEPARATOR = ":";
+    private final Set<String> mMemoryCacheWhite;
     private AppApplication mContext;
     private static List<ApplicationInfo> installedAppList;
-    private  ActivityManager mActivityManager;
-    private  PackageManager mPackageManager;
+    private ActivityManager mActivityManager;
+    private PackageManager mPackageManager;
     private ScanFileListener mScanFileListener;
 
 
@@ -57,6 +58,7 @@ public class FileQueryUtils {
         this.mContext = AppApplication.getInstance();
         this.mActivityManager = (ActivityManager) AppApplication.getInstance().getSystemService("activity");
         this.mPackageManager = AppApplication.getInstance().getPackageManager();
+        mMemoryCacheWhite = getCacheWhite();
         if (this.mPackageManager != null) {
             try {
                 installedAppList = this.mPackageManager.getInstalledApplications(8192);
@@ -121,9 +123,9 @@ public class FileQueryUtils {
      * @param applicationInfo
      * @return
      */
-    private Bitmap getAppIcon(ApplicationInfo applicationInfo) {
+    private Drawable getAppIcon(ApplicationInfo applicationInfo) {
         PackageManager pm = AppApplication.getInstance().getPackageManager();
-        return drawable2Bitmap(pm.getApplicationIcon(applicationInfo));
+        return pm.getApplicationIcon(applicationInfo);
     }
 
     /**
@@ -140,6 +142,9 @@ public class FileQueryUtils {
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
+            if ("网络位置".equals(firstJunkInfo.getAppName()) || "支付宝".equals(firstJunkInfo.getAppName()) || "优酷视频".equals(firstJunkInfo.getAppName())) {
+                System.out.println("aaaa");
+            }
             firstJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
             firstJunkInfo.setAllchecked(true);
             firstJunkInfo.setGarbageType("TYPE_CACHE");
@@ -236,6 +241,18 @@ public class FileQueryUtils {
                                     onelevelGarbageInfo3.setAppPackageName(str);
                                     onelevelGarbageInfo3.setGarbageType("TYPE_PROCESS");
                                     onelevelGarbageInfo3.setTotalSize(totalPss);
+                                    boolean isIgore = false;
+                                    if (mMemoryCacheWhite != null && mMemoryCacheWhite.size() > 0) {
+                                        for (String equals : mMemoryCacheWhite) {
+                                            if (equals.equals(str)) {
+                                                isIgore = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (isIgore) {
+                                        continue;
+                                    }
                                     hashMap.put(str, onelevelGarbageInfo3);
                                     onelevelGarbageInfo = onelevelGarbageInfo3;
                                 }
@@ -322,13 +339,18 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setGarbageType("TYPE_PROCESS");
                         onelevelGarbageInfo.setAppPackageName(applicationInfo.packageName);
                         onelevelGarbageInfo.setAllchecked(true);
-//                        if (!(memoryUncheckedList == null || memoryUncheckedList.getList() == null || memoryUncheckedList.getList().size() <= 0)) {
-//                            for (String equals : memoryUncheckedList.getList()) {
-//                                if (applicationInfo.packageName.equals(equals)) {
-//                                    onelevelGarbageInfo.setAllchecked(false);
-//                                }
-//                            }
-//                        }
+                        boolean isIgore = false;
+                        if (mMemoryCacheWhite != null && mMemoryCacheWhite.size() > 0) {
+                            for (String equals : mMemoryCacheWhite) {
+                                if (equals.equals(applicationInfo.packageName)) {
+                                    isIgore = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isIgore) {
+                            continue;
+                        }
                         onelevelGarbageInfo.setAppGarbageName(applicationInfo.loadLabel(mPackageManager).toString());
                         onelevelGarbageInfo.setPid(appMemoryInfo2.getId());
                         onelevelGarbageInfo.setTotalSize(totalPss);
@@ -349,6 +371,7 @@ public class FileQueryUtils {
 
     @TargetApi(19)
     public ArrayList<FirstJunkInfo> getTaskInfos24(Context context) {
+        AndroidProcesses.setLoggingEnabled(true);
         int i2;
         try {
 //            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
@@ -395,13 +418,6 @@ public class FileQueryUtils {
                     long totalPss = ((long) activityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {
                         onelevelGarbageInfo.setAllchecked(true);
-//                        if (!(memoryUncheckedList == null || memoryUncheckedList.getList() == null || memoryUncheckedList.getList().size() <= 0)) {
-//                            for (String equals : memoryUncheckedList.getList()) {
-//                                if (name.equals(equals)) {
-//                                    onelevelGarbageInfo.setAllchecked(false);
-//                                }
-//                            }
-//                        }
                         onelevelGarbageInfo.setAppPackageName(name);
                         onelevelGarbageInfo.setPid(appMemoryInfo2.getId());
                         onelevelGarbageInfo.setTotalSize(totalPss);
@@ -411,6 +427,18 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setAppName(getAppName(packageManager.getApplicationInfo(name, 0)));
                         onelevelGarbageInfo.setGarbageIcon(getAppIcon(packageManager.getApplicationInfo(name, 0)));
 //                        onelevelGarbageInfo.setDescp(CleanAppApplication.getInstance().getString(R.string.clean_suggested));
+                        boolean isIgore = false;
+                        if (mMemoryCacheWhite != null && mMemoryCacheWhite.size() > 0) {
+                            for (String equals : mMemoryCacheWhite) {
+                                if (name.equals(equals)) {
+                                    isIgore = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isIgore) {
+                            continue;
+                        }
                         if (mScanFileListener != null) {
                             mScanFileListener.increaseSize(totalPss);
                         }
@@ -525,9 +553,9 @@ public class FileQueryUtils {
 
         for (AppInfoClean appInfoClean : appInfoCleans) {
 
-           if (FileUtils.isAppInstalled(appInfoClean.getPackageName())) {
+            if (FileUtils.isAppInstalled(appInfoClean.getPackageName())) {
                 try {
-                    FirstJunkInfo onelevelGarbageInfo = isContain(list,appInfoClean.getPackageName());
+                    FirstJunkInfo onelevelGarbageInfo = isContain(list, appInfoClean.getPackageName());
                     if (onelevelGarbageInfo == null) {
                         onelevelGarbageInfo = new FirstJunkInfo();
                     }
@@ -811,26 +839,6 @@ public class FileQueryUtils {
         }
     }
 
-    private Bitmap drawable2Bitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof NinePatchDrawable) {
-            Bitmap bitmap = Bitmap
-                    .createBitmap(
-                            drawable.getIntrinsicWidth(),
-                            drawable.getIntrinsicHeight(),
-                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                                    : Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight());
-            drawable.draw(canvas);
-            return bitmap;
-        } else {
-            return null;
-        }
-    }
-
     public String getFilePath(String s2) {
         try {
             String s = "225e8C70688fD76Ec5C01A392302320A".toUpperCase();
@@ -844,6 +852,15 @@ public class FileQueryUtils {
 
         }
         return "";
+    }
+
+    /**
+     * 获取缓存白名单
+     */
+    public Set<String> getCacheWhite() {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets;
     }
 
     public interface ScanFileListener {
