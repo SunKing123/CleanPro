@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.HashMap;
@@ -74,12 +75,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.line_ql)
     public void line_ql() {
         //手机清理
-        startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+        if (isScanFinish) {
+            startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+        }else {
+            ToastUtils.show("正在扫描中");
+        }
     }
     @OnClick(R.id.btn_ljql)
     public void btn_ljql() {
         //立即清理
-        startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+        if (isScanFinish) {
+            startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+        }else {
+            ToastUtils.show("正在扫描中");
+        }
+
     }
     /**
      * 扫描完成
