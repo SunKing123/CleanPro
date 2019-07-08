@@ -131,26 +131,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     }
                 }
 
-                mPresenter.alertBanLiveDialog(PhoneAccessActivity.this, junkTemp.size(), new PhoneAccessPresenter.ClickListener() {
-                    @Override
-                    public void clickOKBtn() {
-                        long total = 0;
-                        for (FirstJunkInfo info : junkTemp) {
-                            total += info.getTotalSize();
-                            CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-                        }
-                        belowAdapter.deleteData(junkTemp);
-                        computeTotalSize(belowAdapter.getListImage());
-                        setCleanedView(total);
-                        if (Build.VERSION.SDK_INT >= 26)
-                            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
-                    }
-
-                    @Override
-                    public void cancelBtn() {
-
-                    }
-                });
+                long total = 0;
+                for (FirstJunkInfo info : junkTemp) {
+                    total += info.getTotalSize();
+                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+                }
+                belowAdapter.deleteData(junkTemp);
+                computeTotalSize(belowAdapter.getListImage());
+                setCleanedView(total);
+                if (Build.VERSION.SDK_INT >= 26)
+                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
 
             }
         });
