@@ -61,10 +61,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     NoClearSPHelper mPreferencesHelper;
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
-    @BindView(R.id.btn_wjgl)
-    Button btn_wjgl;
-    @BindView(R.id.btn_whilte_access)
-    Button btn_whilte_access;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -160,8 +156,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 //        EventBus.getDefault().register(this);
 
-        btn_wjgl.setOnClickListener(v -> startActivity(FileManagerHomeActivity.class));
-        btn_whilte_access.setOnClickListener(v -> startActivity(PhoneAccessActivity.class));
 
         DbHelper.copyDb();
 
@@ -203,13 +197,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    @OnClick({R.id.btn_whilte_list_speed})
-    public void onClickView(View view) {
-        int ids = view.getId();
-        if (ids == R.id.btn_whilte_list_speed) {
-            startActivity(new Intent(this, WhiteListSpeedManageActivity.class));
-        }
-    }
 
     /**
      * 接收外部跳转参数
