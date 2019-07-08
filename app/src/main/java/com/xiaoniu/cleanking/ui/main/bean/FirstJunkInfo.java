@@ -28,6 +28,15 @@ public class FirstJunkInfo implements Serializable {
     private long totalSize;
     private String versionName;
     private int versionCode;
+    private boolean isSelect=true;
+
+    public boolean getIsSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(boolean select) {
+        isSelect = select;
+    }
 
     /**
      * 添加子类垃圾对象

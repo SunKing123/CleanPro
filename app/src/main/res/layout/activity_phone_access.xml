@@ -52,9 +52,10 @@
         app:layout_constraintRight_toRightOf="@id/viewt"
         >
         <TextView
+            android:id="@+id/tv_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1.98"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="55sp"
             />
@@ -65,6 +66,7 @@
             android:orientation="vertical"
             >
             <TextView
+                android:id="@+id/tv_gb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="GB"
@@ -85,12 +87,13 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_4dp"
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@id/viewline"
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/viewt" />
 

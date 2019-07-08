@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.app.ActivityManager;
 import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +15,16 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessAdapter;
+import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +39,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     RecyclerView recycle_view;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
+    @BindView(R.id.tv_size)
+    TextView tv_size;
+    @BindView(R.id.tv_gb)
+    TextView tv_gb;
     @BindView(R.id.iv_back)
     ImageView iv_back;
     PhoneAccessAdapter imageAdapter;
+    PhoneAccessBelowAdapter belowAdapter;
 
     @Override
     public int getLayoutId() {
@@ -51,26 +61,30 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-        getImageList();
+        if (Build.VERSION.SDK_INT >= 26) {
+
+        } else {
+            mPresenter.getAccessListBelow();
+        }
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                finish();
-                mPresenter.getAccessList();
+                finish();
             }
         });
-
     }
 
-    public void getImageList() {
-        List<FileEntity> listImages = CleanAllFileScanUtil.clean_image_list == null ? new ArrayList<>() : CleanAllFileScanUtil.clean_image_list.subList(0, 20);
-        imageAdapter = new PhoneAccessAdapter(PhoneAccessActivity.this, listImages);
+
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        computeTotalSize(listInfo);
+        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfo);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
-        recycle_view.setAdapter(imageAdapter);
-        recycle_view.setVisibility(listImages.size() == 0 ? View.GONE : View.VISIBLE);
-        imageAdapter.setmOnCheckListener(new PhoneAccessAdapter.onCheckListener() {
+        recycle_view.setAdapter(belowAdapter);
+        belowAdapter.setmOnCheckListener(new PhoneAccessBelowAdapter.onCheckListener() {
             @Override
-            public void onCheck(List<FileEntity> listFile, int pos) {
+            public void onCheck(List<FirstJunkInfo> listFile, int pos) {
                 int selectCount = 0;
                 for (int i = 0; i < listFile.size(); i++) {
                     if (listFile.get(i).getIsSelect()) {
@@ -83,14 +97,57 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 //                compulateDeleteSize();
             }
         });
+
+        tv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
+                for (FirstJunkInfo info : listInfo) {
+                    if (info.getIsSelect()) {
+                        junkTemp.add(info);
+                    }
+                }
+
+                mPresenter.alertBanLiveDialog(PhoneAccessActivity.this, junkTemp.size(), new PhoneAccessPresenter.ClickListener() {
+                    @Override
+                    public void clickOKBtn() {
+                        long total = 0;
+                        for (FirstJunkInfo info : junkTemp) {
+                            total += info.getTotalSize();
+                            CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+                        }
+                        belowAdapter.deleteData(junkTemp);
+                        computeTotalSize(belowAdapter.getListImage());
+                    }
+
+                    @Override
+                    public void cancelBtn() {
+
+                    }
+                });
+
+            }
+        });
     }
 
 
-    public void getAccessList(ArrayList<FirstJunkInfo> listInfo) {
+    //计算总的缓存大小
+    public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo){
         long totalSizes = 0;
         for (FirstJunkInfo firstJunkInfo : listInfo)
             totalSizes += firstJunkInfo.getTotalSize();
-        Log.e("totalSizes", "" + totalSizes);
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
+        Log.e("sdfg", "" + str_totalSize);
+        if (str_totalSize.endsWith("MB") || str_totalSize.endsWith("GB") || str_totalSize.endsWith("KB")) {
+            tv_size.setText(str_totalSize.substring(0, str_totalSize.length() - 2));
+            tv_gb.setText(str_totalSize.substring(str_totalSize.length() - 2, str_totalSize.length()));
+        } else {
+            tv_size.setText(str_totalSize.substring(0, str_totalSize.length() - 1));
+            tv_gb.setText(str_totalSize.substring(str_totalSize.length() - 1, str_totalSize.length()));
+        }
+    }
+    public void getAccessListAbove22(List<ActivityManager.RunningAppProcessInfo> listInfo) {
+
     }
 
     @Override
