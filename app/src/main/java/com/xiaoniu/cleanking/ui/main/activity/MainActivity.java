@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
@@ -38,6 +39,7 @@ import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +106,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-
+//        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         //检查是否有补丁
         mPresenter.queryPatch();
         //检测版本更新
@@ -259,21 +261,21 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        String url = ApiModule.SHOPPING_MALL;
         String url = "http://192.168.90.51/clean/home.html";
 
-        ShoppingMallFragment shoppingMallFragment = ShoppingMallFragment.getIntance(url);
+        ToolFragment toolFragment = new ToolFragment();
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
 
         mFragments.add(mainFragment);
-        mFragments.add(shoppingMallFragment);
+        mFragments.add(toolFragment);
         mFragments.add(upQuotaFragment);
         mFragments.add(mineFragment);
 
         mManager.beginTransaction()
                 .add(R.id.frame_layout, mainFragment)
-                .add(R.id.frame_layout, shoppingMallFragment)
+                .add(R.id.frame_layout, toolFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
                 .add(R.id.frame_layout, mineFragment)
                 .hide(mainFragment)
-                .hide(shoppingMallFragment)
+                .hide(toolFragment)
                 .hide(upQuotaFragment)
                 .hide(mineFragment)
                 .commitAllowingStateLoss();

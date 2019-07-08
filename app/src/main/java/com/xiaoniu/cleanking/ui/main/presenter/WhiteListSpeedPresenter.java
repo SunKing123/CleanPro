@@ -59,6 +59,7 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
 
     }
 
+
     /**
      * 获取缓存白名单
      */
