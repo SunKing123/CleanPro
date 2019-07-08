@@ -8,7 +8,7 @@
         android:id="@+id/view_top"
         android:layout_width="match_parent"
         android:layout_height="216dp"
-        android:background="#7A7B7C"
+        android:background="#4690FD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -16,7 +16,7 @@
         android:id="@+id/iv_back"
         android:layout_width="11dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="@dimen/dimen_10dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
         android:src="@mipmap/back_white"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,16 +36,17 @@
 
     <com.xiaoniu.cleanking.widget.CircleProgressView
         android:id="@+id/circle_progress"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="97dp"
+        android:layout_height="97dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/dimen_52dp"
+        android:layout_marginLeft="@dimen/dimen_24dp"
         android:layout_marginTop="@dimen/dimen_52dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_back"
         app:location_start="top"
         app:progress_color="#FFFFFF"
-        app:progress_width="5dp" />
+        app:progress_width="5dp"
+        app:progress_normal_color="#599BFD"/>
 
     <TextView
         android:id="@+id/tv_percent_num"
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="70"
         android:textColor="@color/white"
-        android:textSize="@dimen/dimen_21dp"
+        android:textSize="@dimen/dimen_24sp"
         app:layout_constraintBottom_toBottomOf="@id/circle_progress"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="@id/circle_progress"
@@ -80,7 +81,8 @@
         android:layout_marginLeft="@dimen/dimen_20dp"
         android:text="内部存储"
         android:textColor="@color/white"
-        android:textSize="@dimen/dimen_18dp"
+        android:textSize="@dimen/dimen_20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tv_spaceinfos"
         app:layout_constraintLeft_toRightOf="@id/circle_progress"
         app:layout_constraintTop_toTopOf="@id/circle_progress"
@@ -93,22 +95,23 @@
         android:layout_marginLeft="@dimen/dimen_20dp"
         android:layout_marginTop="@dimen/dimen_7dp"
         android:text="剩余：7.65GB 总计：26GB"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dimen_14dp"
+        android:textColor="#CCFFFFFF"
+        android:textSize="@dimen/dimen_16sp"
         app:layout_constraintBottom_toBottomOf="@id/circle_progress"
         app:layout_constraintLeft_toRightOf="@id/circle_progress"
         app:layout_constraintTop_toBottomOf="@id/tv_nbcc"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <View
+    <ImageView
         android:id="@+id/view_image_icon"
         android:layout_width="@dimen/dimen_30dp"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#DDDDDD"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_top" />
+        app:layout_constraintTop_toBottomOf="@id/view_top"
+        android:src="@mipmap/icon_file_clean_img"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/tv_pic_text"
@@ -129,7 +132,7 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
-        android:textColor="#999999"
+        android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_image_icon"
         app:layout_constraintRight_toRightOf="parent"
@@ -153,15 +156,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_top" />
 
-    <View
+    <ImageView
         android:id="@+id/view_video_icon"
         android:layout_width="@dimen/dimen_30dp"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#DDDDDD"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_image_bottom" />
+        app:layout_constraintTop_toBottomOf="@id/view_image_bottom"
+        android:src="@mipmap/icon_file_clean_video"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/tv_video_text"
@@ -182,7 +186,7 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
-        android:textColor="#999999"
+        android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_video_icon"
         app:layout_constraintRight_toRightOf="parent"
@@ -206,15 +210,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_imagearea" />
 
-    <View
+    <ImageView
         android:id="@+id/view_music_icon"
         android:layout_width="@dimen/dimen_30dp"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#DDDDDD"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_video_bottom" />
+        app:layout_constraintTop_toBottomOf="@id/view_video_bottom"
+        android:src="@mipmap/icon_file_clean_music"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/tv_music_text"
@@ -235,7 +240,7 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
-        android:textColor="#999999"
+        android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_music_icon"
         app:layout_constraintRight_toRightOf="parent"
@@ -259,15 +264,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_clean_video" />
 
-    <View
+    <ImageView
         android:id="@+id/view_apk_icon"
         android:layout_width="@dimen/dimen_30dp"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#DDDDDD"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_music_bottom" />
+        app:layout_constraintTop_toBottomOf="@id/view_music_bottom"
+        android:src="@mipmap/icon_file_clean_apk"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/tv_apk_text"
@@ -288,7 +294,7 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
-        android:textColor="#999999"
+        android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_apk_icon"
         app:layout_constraintRight_toRightOf="parent"

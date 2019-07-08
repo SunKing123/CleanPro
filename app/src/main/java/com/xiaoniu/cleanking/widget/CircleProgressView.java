@@ -46,6 +46,7 @@ public class CircleProgressView extends View {
         locationStart = typedArray.getInt(R.styleable.CircleProgressView_location_start, 1);
         mProgressWidth = typedArray.getDimension(R.styleable.CircleProgressView_progress_width, dp2px(context, 4));
         mProgressColor = typedArray.getColor(R.styleable.CircleProgressView_progress_color, mProgressColor);
+        int normalColor = typedArray.getColor(R.styleable.CircleProgressView_progress_normal_color, mProgressColor);
         typedArray.recycle();
 
         //背景圆弧
@@ -53,7 +54,8 @@ public class CircleProgressView extends View {
         mBgPaint.setAntiAlias(true);
         mBgPaint.setStrokeWidth(mProgressWidth);
         mBgPaint.setStyle(Paint.Style.STROKE);
-        mBgPaint.setColor(Color.parseColor("#999999"));
+        //mBgPaint.setColor(Color.parseColor("#999999"));
+        mBgPaint.setColor(normalColor);
         mBgPaint.setStrokeCap(Paint.Cap.ROUND);
 
         //进度圆弧
