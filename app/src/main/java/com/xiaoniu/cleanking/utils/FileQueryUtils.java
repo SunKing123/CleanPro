@@ -78,7 +78,7 @@ public class FileQueryUtils {
      *
      * @return
      */
-    public List<PackageInfo> getInstalledList() {
+    public static List<PackageInfo> getInstalledList() {
         PackageManager pm = AppApplication.getInstance().getPackageManager();
         List<PackageInfo> installedPackages = pm.getInstalledPackages(0);
 

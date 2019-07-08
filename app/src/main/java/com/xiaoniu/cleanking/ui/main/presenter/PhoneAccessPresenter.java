@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Process;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -60,7 +61,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     }
 
 
-    //获取到可以加速的应用名单
+    //获取到可以加速的应用名单Android O以下的获取最忌使用情况
     public void getAccessListBelow() {
         mView.showLoadingDialog();
         Observable.create(new ObservableOnSubscribe<ArrayList<FirstJunkInfo>>() {
@@ -89,10 +90,9 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             @Override
             public void subscribe(ObservableEmitter<List<ActivityManager.RunningAppProcessInfo>> e) throws Exception {
                 //获取到可以加速的应用名单
-                List<ActivityManager.RunningAppProcessInfo> listApp=getProcessNew(mView);
+                List<ActivityManager.RunningAppProcessInfo> listApp=getProcessAbove();
 
                 List<ActivityManager.RunningAppProcessInfo> listTemp = new ArrayList<>();
-                List<String> listSystemPack = getSystemOrStoppedProcess(mView);
                 for (int i = 0; i < listApp.size(); i++) {
                     if (!isSystemApp(mView,listApp.get(i).processName)) {
                         listTemp.add(listApp.get(i));
@@ -111,26 +111,6 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 });
     }
 
-    @TargetApi(22)
-    public List<ActivityManager.RunningAppProcessInfo> getProcessNew(Context context) {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(USAGE_STATS_SERVICE);
-        if (usageStatsManager == null) {
-            return null;
-        }
-        List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
-        ArrayList arrayList = new ArrayList();
-        if (!(lists == null || lists.size() == 0)) {
-            for (UsageStats usageStats : lists) {
-                if (!(usageStats == null || usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.cleanmaster.mguard_cn"))) {
-                    ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
-                    runningAppProcessInfo.processName = usageStats.getPackageName();
-                    runningAppProcessInfo.pkgList = new String[]{usageStats.getPackageName()};
-                    arrayList.add(runningAppProcessInfo);
-                }
-            }
-        }
-        return arrayList;
-    }
 
     public List<String> getSystemOrStoppedProcess(Context context) {
         List<String> listPck = new ArrayList<>();
@@ -194,6 +174,30 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             }
         });
         return dlg;
+    }
+
+    //Android O以上用这个方法获取最近使用情况
+    @TargetApi(22)
+    public List<ActivityManager.RunningAppProcessInfo> getProcessAbove() {
+        UsageStatsManager usageStatsManager = (UsageStatsManager) mView.getSystemService(USAGE_STATS_SERVICE);
+        if (usageStatsManager == null) {
+            return null;
+        }
+        List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
+        ArrayList arrayList = new ArrayList();
+        if (!(lists == null || lists.size() == 0)) {
+            for (UsageStats usageStats : lists) {
+                if (!(usageStats == null || usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.cleanmaster.mguard_cn"))) {
+                    ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
+                    runningAppProcessInfo.processName = usageStats.getPackageName();
+                    runningAppProcessInfo.pkgList = new String[]{usageStats.getPackageName()};
+                    int uidForName = Process.getUidForName(usageStats.getPackageName());
+                    arrayList.add(runningAppProcessInfo);
+                }
+            }
+        }
+
+        return arrayList;
     }
 
     public interface ClickListener {
