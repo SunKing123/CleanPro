@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -162,10 +164,16 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
 
             List<ImgBean> datas = mAdapter.getLists();
-            if (datas.size() > 1) {
-                datas.remove(0);
-                for (ImgBean imgBean : datas) {
-                    uploadFile(imgBean.path);
+            //过滤头部
+            List<String> paths=new ArrayList<>();
+            for(ImgBean imgBean : datas){
+                if(!TextUtils.isEmpty(imgBean.path)){
+                    paths.add(imgBean.path);
+                }
+            }
+            if (paths.size() > 0) {
+                for (String path : paths) {
+                    uploadFile(path);
                 }
             } else {
                 String content = mTxtContent.getText().toString();
@@ -243,7 +251,9 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     @Override
     public void onDelImg(int position) {
         List<ImgBean> lists = mAdapter.getLists();
-        lists.remove(position);
-        mAdapter.notifyDataSetChanged();
+        if (lists.size() > 0 && position <= lists.size() - 1) {
+            lists.remove(position);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }
