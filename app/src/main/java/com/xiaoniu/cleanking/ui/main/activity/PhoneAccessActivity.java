@@ -72,7 +72,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void initWebView() {
-        String url = "http://192.168.90.51/clean/home.html";
+        String url = "http://testwlqlapph5.miaogou188.com/";
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
