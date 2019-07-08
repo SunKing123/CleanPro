@@ -23,8 +23,6 @@ import butterknife.OnClick;
 
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
-    @BindView(R.id.text_scan)
-    TextView mTextScan;
     @BindView(R.id.text_count)
     TextView mTextCount;
 
@@ -49,38 +47,39 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_clean_main;
+        return R.layout.fragment_clean_mainnew;
     }
 
     @Override
     protected void initView() {
-
+        mPresenter.startScan();
     }
 
-    @OnClick(R.id.text_scan)
-    public void onViewClicked() {
-        //立即清理
-        if (isScanFinish) {
-            startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
-        }else {
-            mPresenter.startScan();
-        }
-    }
 
-    @OnClick(R.id.text_cooling)
-    public void onCoolingViewClicked() {
-        //手机降温
-        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-    }
+//    @OnClick(R.id.text_cooling)
+//    public void onCoolingViewClicked() {
+//        //手机降温
+//        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+//    }
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
-        //手机降温
+        //文件管理
         startActivity(FileManagerHomeActivity.class);
     }
     @OnClick(R.id.text_acce)
     public void text_acce() {
         //一键加速
         startActivity(PhoneAccessActivity.class);
+    }
+    @OnClick(R.id.line_ql)
+    public void line_ql() {
+        //手机清理
+        startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
+    }
+    @OnClick(R.id.btn_ljql)
+    public void btn_ljql() {
+        //立即清理
+        startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
     }
     /**
      * 扫描完成
@@ -89,7 +88,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         isScanFinish = true;
         mJunkGroups = junkGroups;
-        mTextScan.setText("查看详情");
     }
 
     /**
