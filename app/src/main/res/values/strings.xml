@@ -35,4 +35,5 @@
     <string name="clean_apk_file_uninstall">[未安装]</string>
     <string name="clean_suggested">建议清理</string>
     <string name="txt_white_list_speed_title">保护名单的软件，加速时不会被清理</string>
+    <string name="txt_white_list_intall_packege">一键清理将忽略以下目录中的安装包</string>
 </resources>
