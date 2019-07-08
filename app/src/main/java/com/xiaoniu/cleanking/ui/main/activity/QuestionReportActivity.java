@@ -178,7 +178,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             } else {
                 String content = mTxtContent.getText().toString();
                 String contact = mTxtContact.getText().toString();
-                mPresenter.submitData("", content, contact, new Gson().toJson(mUploadUrls), common4Subscriber);
+                mPresenter.submitData("", content, contact, "", common4Subscriber);
             }
         }
     }
@@ -194,15 +194,24 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
             @Override
             public void getData(FileUploadInfoBean fileUploadInfoBean) {
-
-                mUploadUrls.add(fileUploadInfoBean.url);
+                FileUploadInfoBean.ImgUrl imgUrl=fileUploadInfoBean.data;
+                mUploadUrls.add(imgUrl.url);
                 Log.i(TAG, "successful");
                 // -1 移除头部
                 if (mUploadUrls.size() == mAdapter.getLists().size() - 1) {
 
                     String content = mTxtContent.getText().toString();
                     String contact = mTxtContact.getText().toString();
-                    mPresenter.submitData("", content, contact, new Gson().toJson(mUploadUrls), common4Subscriber);
+                    StringBuilder stringPaths=new StringBuilder();
+                    for(int i=0;i<mUploadUrls.size();i++){
+                        String path=mUploadUrls.get(i);
+                        stringPaths.append(path);
+                        //不是最后一个添加分隔符;
+                        if(mUploadUrls.size()!=1 &&  i!=mUploadUrls.size()-1){
+                            stringPaths.append(";");
+                        }
+                    }
+                    mPresenter.submitData("", content, contact, stringPaths.toString(), common4Subscriber);
                 }
             }
 

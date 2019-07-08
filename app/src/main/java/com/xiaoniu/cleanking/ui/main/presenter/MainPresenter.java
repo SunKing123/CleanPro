@@ -270,8 +270,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
 
                     @Override
-                    public void onComplete() {
-                    }
+                        public void onComplete() {
+                        }
                 });
 
 
@@ -324,7 +324,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanMusicFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".mp3") && file.length() != 0) {
+                    } else if (file1.getName().endsWith(".mp3") && file1.length() != 0) {
                         cachesMusicFiles.add(file1.getPath());
                     }
                 }
@@ -342,7 +342,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     if (file1.isDirectory()) {
                         scanApkFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".apk") && file.length() != 0) {
+                    } else if (file1.getName().endsWith(".apk") && file1.length() != 0) {
                         cachesApkFies.add(file1.getPath());
                     }
                 }
@@ -366,7 +366,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     String fileName = file1.getName().toLowerCase();
                     if (file1.isDirectory()) {
                         scanViodeFile(path + "/" + file1.getName());
-                    } else if (fileName.endsWith(".mp4")) {
+                    } else if (fileName.endsWith(".mp4") && file1.length() != 0) {
                         cachesVideo.add(file1.getPath());
                     }
                 }
