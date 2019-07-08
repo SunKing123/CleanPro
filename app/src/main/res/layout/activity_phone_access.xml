@@ -34,53 +34,61 @@
         app:layout_constraintLeft_toRightOf="@id/iv_back"
         app:layout_constraintTop_toTopOf="@id/view_top" />
 
-<View
-    android:id="@+id/viewt"
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-    app:layout_constraintTop_toBottomOf="@id/view_top"
-    android:background="#4690FD"
-    />
+    <View
+        android:id="@+id/viewt"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#4690FD"
+        app:layout_constraintTop_toBottomOf="@id/view_top" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="@id/viewt"
         app:layout_constraintBottom_toBottomOf="@id/viewt"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/viewt"
-        >
+        app:layout_constraintTop_toTopOf="@id/viewt">
+
+        <ImageView
+            android:id="@+id/iv_dun"
+            android:layout_width="47dp"
+            android:visibility="gone"
+            android:layout_height="54dp"
+            android:layout_marginRight="@dimen/dimen_15dp"
+            android:src="@mipmap/icon_dun" />
+
         <TextView
             android:id="@+id/tv_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
             android:textColor="@color/white"
-            android:textSize="55sp"
-            />
+            android:textSize="55sp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_4dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:layout_marginLeft="@dimen/dimen_4dp"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tv_gb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GB"
                 android:layout_marginBottom="@dimen/dimen_10dp"
+                android:text="GB"
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                />
+                android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_ql"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="内存可清理"
                 android:textColor="@color/white"
-                android:textSize="15sp"
-                />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -93,8 +101,8 @@
         android:layout_marginTop="@dimen/dimen_4dp"
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/viewline"
         android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/viewline"
         app:layout_constraintTop_toBottomOf="@id/viewt" />
 
 
@@ -103,26 +111,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/delete_select_bg"
+        android:gravity="center"
         android:paddingBottom="@dimen/dimen_10dp"
-       android:gravity="center"
         android:paddingTop="@dimen/dimen_10dp"
         android:text="清理"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-       app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-       />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <View
         android:id="@+id/viewline"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_1dp"
-        android:background="#EDEDED"
         android:layout_marginBottom="@dimen/dimen_12dp"
-        app:layout_constraintBottom_toTopOf="@id/tv_delete"
-        />
+        android:background="#EDEDED"
+        app:layout_constraintBottom_toTopOf="@id/tv_delete" />
 
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewt" />
 </android.support.constraint.ConstraintLayout>

@@ -39,7 +39,6 @@ import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +61,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     NoClearSPHelper mPreferencesHelper;
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
-    @BindView(R.id.btn_wjgl)
-    Button btn_wjgl;
-    @BindView(R.id.btn_whilte_access)
-    Button btn_whilte_access;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -161,8 +156,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 //        EventBus.getDefault().register(this);
 
-        btn_wjgl.setOnClickListener(v -> startActivity(FileManagerHomeActivity.class));
-        btn_whilte_access.setOnClickListener(v -> startActivity(PhoneAccessActivity.class));
 
         DbHelper.copyDb();
 
@@ -174,7 +167,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
             System.out.println("");
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
                         REQUEST_STORAGE_PERMISSION);
             } else {
@@ -204,13 +197,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    @OnClick({R.id.btn_whilte_list_speed})
-    public void onClickView(View view) {
-        int ids = view.getId();
-        if (ids == R.id.btn_whilte_list_speed) {
-            startActivity(new Intent(this, WhiteListSpeedManageActivity.class));
-        }
-    }
 
     /**
      * 接收外部跳转参数
@@ -259,7 +245,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
 //        String url = ApiModule.SHOPPING_MALL;
-        String url = "http://192.168.90.51/clean/home.html";
+        String url = "http://testwlqlapph5.miaogou188.com/";
 
         ToolFragment toolFragment = new ToolFragment();
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
