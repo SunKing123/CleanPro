@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,10 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
 
     public void resetSelectButton(JunkGroup group, boolean isChecked) {
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-            firstJunkInfo.setAllchecked(isChecked);
+            if(!firstJunkInfo.isLock()) {
+                //选中没有上锁的apk应用
+                firstJunkInfo.setAllchecked(isChecked);
+            }
         }
         if (mOnItemSelectListener != null) {
             mOnItemSelectListener.onCount();
@@ -168,10 +172,26 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
                 //点击监听
                 showApkWhiteDialog(info);
             });
+            if (!TextUtils.isEmpty(info.getGarbageCatalog())) {
+                if(getWhiteList().contains(dealPath(info.getGarbageCatalog()))){
+                    //已在白名单
+                    holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.mipmap.icon_lock));
+                    info.setAllchecked(false);
+                    info.setLock(true);
+                    resetItemSelectButton(mJunkGroups.get(groupPosition));
+                }else {
+                    holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_choose_selector));
+                    info.setLock(false);
+                }
+            }
         } else {
             holder.mTextVersion.setVisibility(View.GONE);
             holder.mRootView.setOnClickListener(null);
+            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_choose_selector));
         }
+
+
+
         holder.mCheckButton.setOnClickListener(v -> {
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
@@ -223,6 +243,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         //路径
         mTextTrace.setText("路径：" + junkInfo.getGarbageCatalog());
 
+        mCheckView.setChecked(junkInfo.isLock());
 
         mTextClose.setOnClickListener(v -> dialog.dismiss());
         mCheckView.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -231,10 +252,10 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             mTextDivider.setVisibility(View.GONE);
             if (isChecked) {
                 mTextTips.setText(mContext.getResources().getString(R.string.text_apk_white_add));
-                savePath(junkInfo.getGarbageCatalog());
+                savePath(dealPath(junkInfo.getGarbageCatalog()));
             }else {
                 mTextTips.setText(mContext.getResources().getString(R.string.text_white_removed));
-                removePath(junkInfo.getGarbageCatalog());
+                removePath(dealPath(junkInfo.getGarbageCatalog()));
             }
         });
         dialog.setContentView(view);
@@ -257,7 +278,8 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             stringSet.remove(garbageCatalog);
         }
         editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY,stringSet);
-        editor.apply();
+        editor.commit();
+        notifyDataSetChanged();
     }
 
     /**
@@ -273,7 +295,27 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             stringSet.add(path);
         }
         editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY,stringSet);
-        editor.apply();
+        editor.commit();
+        notifyDataSetChanged();
+    }
+
+    private Set<String> getWhiteList() {
+        Set<String> caches = new HashSet<>();
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        return sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, caches);
+    }
+
+    /**
+     * 路径处理
+     * @param path
+     * @return
+     */
+    private String dealPath(String path) {
+        if (!TextUtils.isEmpty(path)) {
+           return path.substring(0,path.lastIndexOf("/"));
+        }else {
+            return "";
+        }
     }
 
     @Override

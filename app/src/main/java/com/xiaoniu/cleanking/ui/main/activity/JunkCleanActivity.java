@@ -25,7 +25,10 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -123,26 +126,29 @@ public class JunkCleanActivity extends SimpleActivity {
     @SuppressLint("CheckResult")
     private void clearAll() {
         Observable.create(e -> {
-            JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
+
             long total = 0;
-            for (FirstJunkInfo info : processGroup.mChildren) {
-                if (info.isAllchecked()) {
-                    total += info.getTotalSize();
-                    CleanUtil.killAppProcesses(info.getAppPackageName(),info.getPid());
+            for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
+                JunkGroup value = entry.getValue();
+                if (value.mChildren != null && value.mChildren.size() > 0) {
+                    if("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())){
+
+                        for (FirstJunkInfo info : value.mChildren) {
+                            if (info.isAllchecked()) {
+                                total += info.getTotalSize();
+                                CleanUtil.killAppProcesses(info.getAppPackageName(),info.getPid());
+                            }
+                        }
+                    } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) {
+                        long l = CleanUtil.freeJunkInfos(value.mChildren);
+                        total += l;
+                    } else if ("TYPE_APK".equals(value.mChildren.get(0).getGarbageType())) {
+                        long l1 = CleanUtil.freeJunkInfos(value.mChildren);
+
+                        total += l1;
+                    }
                 }
             }
-
-            JunkGroup group = mJunkGroups.get(JunkGroup.GROUP_CACHE);
-
-            long l = CleanUtil.freeJunkInfos(group.mChildren);
-
-            total += l;
-
-            JunkGroup junkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
-
-            long l1 = CleanUtil.freeJunkInfos(junkGroup.mChildren);
-
-            total += l1;
 
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
@@ -152,6 +158,7 @@ public class JunkCleanActivity extends SimpleActivity {
             mTextCleanNumber.setText("清理了 " + s + " 垃圾");
             mLayoutList.setVisibility(View.GONE);
             mLayoutFinish.setVisibility(View.VISIBLE);
+            EventBus.getDefault().post("clean_finish");
         });
 
 

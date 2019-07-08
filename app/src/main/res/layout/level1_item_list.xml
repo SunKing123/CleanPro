@@ -61,8 +61,8 @@
 
             <ImageView
                 android:id="@+id/icon_check"
-                android:layout_width="@dimen/dimen_18dp"
-                android:layout_height="@dimen/dimen_18dp"
+                android:layout_width="@dimen/dimen_20dp"
+                android:layout_height="@dimen/dimen_20dp"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:background="@drawable/icon_choose_selector"
                 android:button="@null"
