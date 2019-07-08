@@ -88,4 +88,5 @@
     <dimen name="dimen_204dp">204dp</dimen>
     <dimen name="dimen_98dp">98dp</dimen>
     <dimen name="dimen_21sp">21sp</dimen>
+    <dimen name="dimen_20sp">20sp</dimen>
 </resources>

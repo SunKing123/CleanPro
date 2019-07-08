@@ -72,9 +72,9 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     public void initView() {
         EventBus.getDefault().register(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_7A7B7C), true);
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
-            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_7A7B7C), false);
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
         }
         //查询手机存储使用率
         mPresenter.getSpaceUse(tv_spaceinfos, circleProgressView);
