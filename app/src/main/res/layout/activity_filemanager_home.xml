@@ -11,7 +11,14 @@
         android:background="#4690FD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+<ImageView
+    android:layout_width="108dp"
+    android:layout_height="122dp"
+    android:layout_marginRight="@dimen/dimen_5dp"
+android:src="@mipmap/icon_wjhome"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/view_top"
+    />
     <ImageView
         android:id="@+id/iv_back"
         android:layout_width="11dp"
@@ -45,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_back"
         app:location_start="top"
         app:progress_color="#FFFFFF"
-        app:progress_width="5dp"
+        app:progress_width="9dp"
         app:progress_normal_color="#599BFD"/>
 
     <TextView
@@ -67,7 +74,7 @@
         android:layout_height="wrap_content"
         android:text="%"
         android:textColor="@color/white"
-        android:textSize="@dimen/dimen_10dp"
+        android:textSize="@dimen/dimen_24sp"
         app:layout_constraintBottom_toBottomOf="@id/circle_progress"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toRightOf="@id/tv_percent_num"
@@ -133,7 +140,8 @@
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
         android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_17dp"
+        android:drawablePadding="@dimen/dimen_4dp"
+        android:textSize="@dimen/dimen_12dp"
         app:layout_constraintBottom_toBottomOf="@id/view_image_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_image_icon" />
@@ -187,7 +195,8 @@
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
         android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_17dp"
+        android:textSize="@dimen/dimen_12dp"
+        android:drawablePadding="@dimen/dimen_4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_video_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_video_icon" />
@@ -241,7 +250,8 @@
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
         android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_17dp"
+        android:textSize="@dimen/dimen_12dp"
+        android:drawablePadding="@dimen/dimen_4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_music_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_music_icon" />
@@ -295,7 +305,8 @@
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
         android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_17dp"
+        android:textSize="@dimen/dimen_12dp"
+        android:drawablePadding="@dimen/dimen_4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_apk_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_apk_icon" />
