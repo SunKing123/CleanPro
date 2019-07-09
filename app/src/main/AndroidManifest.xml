@@ -215,7 +215,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.main.activity.WhiteListSettingActivity"
         <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
