@@ -174,7 +174,6 @@ public class PhoneThinResultPresenter extends RxPresenter<PhoneThinResultActivit
         @Override
         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) throws RemoteException {
             packageSize.add(pStats.codeSize);
-            Log.i("test", "isLast" + mIsLast);
             if (mIsLast) {
                 refreshData();
             }
