@@ -11,6 +11,16 @@ public class BigFileInfoEntity implements Serializable {
 
     private String content;
 
+    private boolean isChecked;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
     public String getContent() {
         return content;
     }

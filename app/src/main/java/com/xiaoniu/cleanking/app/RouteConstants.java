@@ -39,4 +39,9 @@ public class RouteConstants {
      */
     public static final String CLEAN_BIG_FILE_ACTIVITY = "/main/CleanBigFileActivity";
 
+    /**
+     * 大文件页面
+     */
+    public static final String CLEAN_FINISH_ACTIVITY = "/main/CleanFinishActivity";
+
 }

@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,6 +26,8 @@ public class MeFragment extends SimpleFragment {
     ImageView iv_top;
     @BindView(R.id.line_about)
     LinearLayout line_about;
+    @BindView(R.id.line_permisson)
+    LinearLayout line_permisson;
 //    @BindView(R.id.line_feedback)
 //    LinearLayout line_feedback;
 
@@ -79,13 +82,15 @@ public class MeFragment extends SimpleFragment {
     }
 
 
-    @OnClick({R.id.ll_setting, R.id.ll_question_report})
+    @OnClick({R.id.ll_setting,R.id.line_permisson, R.id.ll_question_report})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_setting) {
             startActivity(new Intent(getContext(), WhiteListSettingActivity.class));
         } else if (ids == R.id.ll_question_report) {
             startActivity(new Intent(getContext(), QuestionReportActivity.class));
+        }else if (ids == R.id.line_permisson) {
+            startActivity(new Intent(getContext(), PermissionActivity.class));
         }
     }
 

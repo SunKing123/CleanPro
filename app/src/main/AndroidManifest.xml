@@ -52,7 +52,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
     <!-- 友盟 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -211,8 +211,22 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.main.activity.CleanFinishActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.main.activity.WhiteListSettingActivity"
+        <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.usercenter.activity.PermissionActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.usercenter.activity.PermissionDetailActivity"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"/>
             android:screenOrientation="portrait" />
 
         <activity
@@ -264,7 +278,7 @@
                 <action android:name="cn.jpush.android.intent.PUSH_TIME" />
             </intent-filter>
         </service>
-
+        <service android:name=".ui.usercenter.activity.FloatingImageDisplayService"></service>
         <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
         <service

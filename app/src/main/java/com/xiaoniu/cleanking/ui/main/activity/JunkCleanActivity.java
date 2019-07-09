@@ -22,7 +22,6 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -153,12 +152,12 @@ public class JunkCleanActivity extends SimpleActivity {
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             //TODO 清理完成
-            String s = CleanUtil.formatShortFileSize(JunkCleanActivity.this, (Long) o);
-            ToastUtils.show("清理了" + s + "垃圾");
-            mTextCleanNumber.setText("清理了 " + s + " 垃圾");
-            mLayoutList.setVisibility(View.GONE);
-            mLayoutFinish.setVisibility(View.VISIBLE);
+            Bundle bundle = new Bundle();
+            bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_CLEAN_CACHE);
+            bundle.putLong("clean_count",(long) o);
+            startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
             EventBus.getDefault().post("clean_finish");
+            finish();
         });
 
 

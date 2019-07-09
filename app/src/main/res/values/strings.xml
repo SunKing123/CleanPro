@@ -40,4 +40,5 @@
     <string name="text_apk_white_ignore">忽略此路径下所有安装包</string>
     <string name="text_apk_white_add">此路径已加入保护名单</string>
     <string name="text_close">关闭</string>
+    <string name="text_confirm_select">确认勾选</string>
 </resources>
