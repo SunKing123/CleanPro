@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.callback.OnItemSelectListener;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -339,9 +340,5 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public ImageView mCheckButton;
         public TextView mTextVersion;
         public LinearLayout mRootView;
-    }
-
-    public interface OnItemSelectListener {
-        void onCount();
     }
 }

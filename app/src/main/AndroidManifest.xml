@@ -209,6 +209,11 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.main.activity.CleanFinishActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>

@@ -6,6 +6,7 @@ import android.os.Process;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 
@@ -58,6 +59,47 @@ public class CleanUtil {
                         value, context.getString(suffix));
     }
 
+    public static CountEntity formatShortFileSize(long number) {
+
+        CountEntity countEntity = new CountEntity();
+
+        float result = number;
+        int suffix = R.string.byte_short;
+        if (result > 900) {
+            suffix = R.string.kilo_byte_short;
+            result = result / 1024;
+        }
+        if (result > 900) {
+            suffix = R.string.mega_byte_short;
+            result = result / 1024;
+        }
+        if (result > 900) {
+            suffix = R.string.giga_byte_short;
+            result = result / 1024;
+        }
+        if (result > 900) {
+            suffix = R.string.tera_byte_short;
+            result = result / 1024;
+        }
+        if (result > 900) {
+            suffix = R.string.peta_byte_short;
+            result = result / 1024;
+        }
+        String value;
+        if (result < 1) {
+            value = String.format("%.2f", result);
+        } else if (result < 10) {
+            value = String.format("%.2f", result);
+        } else if (result < 100) {
+            value = String.format("%.1f", result);
+        } else {
+            value = String.format("%.0f", result);
+        }
+        countEntity.setTotalSize(value);
+        countEntity.setUnit(AppApplication.getInstance().getString(suffix));
+        return countEntity;
+    }
+
     public static boolean deleteFile(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
@@ -71,7 +113,7 @@ public class CleanUtil {
         return file.delete();
     }
 
-    public static void killAppProcesses(String packageName,int pid) {
+    public static void killAppProcesses(String packageName, int pid) {
         if (packageName == null || packageName.isEmpty()) {
             return;
         }
@@ -79,7 +121,7 @@ public class CleanUtil {
         ActivityManager am = (ActivityManager) AppApplication.getInstance()
                 .getSystemService(Context.ACTIVITY_SERVICE);
         try {
-            if(!FileUtils.isSystemApK(packageName)) {
+            if (!FileUtils.isSystemApK(packageName)) {
                 am.killBackgroundProcesses(packageName);
             }
         } catch (Exception e) {
@@ -129,7 +171,6 @@ public class CleanUtil {
 
         return total;
     }
-
 
 
 }

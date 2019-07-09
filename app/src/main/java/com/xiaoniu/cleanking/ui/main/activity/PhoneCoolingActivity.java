@@ -24,10 +24,10 @@ import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -145,7 +145,12 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(),firstJunkInfo.getPid());
         }
 
-        ToastUtils.show("降温成功");
+        finish();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_COOLING);
+        bundle.putLong("clean_count", new Random().nextInt(3)+1);
+        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
     }
 
     /**

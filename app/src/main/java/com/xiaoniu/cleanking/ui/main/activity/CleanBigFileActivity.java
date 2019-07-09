@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -50,6 +51,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     @BindView(R.id.layout_clean_finish)
     RelativeLayout mLayoutCleanFinish;
     private CleanBigFileAdapter mCleanBigFileAdapter;
+    private List<BigFileInfoEntity> mData;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -77,11 +79,33 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     }
 
     private void initAdapter() {
-        mCleanBigFileAdapter = new CleanBigFileAdapter();
+        mCleanBigFileAdapter = new CleanBigFileAdapter(mContext);
 
         mJunkList.setLayoutManager(new LinearLayoutManager(mContext));
 
         mJunkList.setAdapter(mCleanBigFileAdapter);
+
+        //条目选择监听
+        mCleanBigFileAdapter.setOnItemSelectListener(this::updateSelectCount);
+    }
+
+    /**
+     * 更新选择的数据
+     */
+    private void updateSelectCount() {
+        long total = 0;
+        for (BigFileInfoEntity entity : mData) {
+            if (entity.isChecked()) {
+                total += entity.getFile().length();
+            }
+        }
+        if (total > 0) {
+            mDoJunkClean.setEnabled(true);
+            mDoJunkClean.setText("清理 " + CleanUtil.formatShortFileSize(AppApplication.getInstance(),total));
+        }else {
+            mDoJunkClean.setEnabled(false);
+            mDoJunkClean.setText("清理");
+        }
     }
 
     @OnClick({R.id.img_back, R.id.do_junk_clean})
@@ -91,6 +115,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
                 finish();
                 break;
             case R.id.do_junk_clean:
+                //垃圾清理
+                mPresenter.showDeleteDialog(mData);
                 break;
                 default:
         }
@@ -101,6 +127,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param list
      */
     public void showList(List<BigFileInfoEntity> list) {
+        mData = list;
         mCleanBigFileAdapter.setData(list);
     }
 
@@ -110,5 +137,17 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      */
     public void showTotal(long total) {
         mTextTotal.setText(CleanUtil.formatShortFileSize(AppApplication.getInstance(),total) + "文件");
+    }
+
+    /**
+     * 清理完成
+     * @param total
+     */
+    public void cleanFinish(long total) {
+        finish();
+        Bundle bundle = new Bundle();
+        bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_BIG_FILE);
+        bundle.putLong("clean_count", total);
+        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
     }
 }
