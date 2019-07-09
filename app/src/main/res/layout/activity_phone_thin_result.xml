@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_26dp"
-            android:text="23"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_55dp" />
 
@@ -64,25 +64,20 @@
             android:layout_marginTop="@dimen/dimen_14dp"
             android:layout_toRightOf="@id/txt_space_size"
             android:text="%"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/txt_percentage"
             android:layout_alignLeft="@id/txt_percentage"
+            android:layout_marginTop="@dimen/dimen_8dp"
             android:text="已用空间"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_15sp" />
 
-        <TextView
-            android:id="@+id/txt_scan_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#1A000000"
-            android:paddingLeft="@dimen/dimen_16dp"
-            android:text="正在扫描"
-            android:textColor="@color/white" />
+
     </RelativeLayout>
 
 
@@ -116,6 +111,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_video"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_57dp"
         android:background="@color/white"
@@ -156,7 +152,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_system_space"
+
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_57dp"
         android:layout_marginTop="@dimen/dimen_12dp"
@@ -185,6 +181,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_soft"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_57dp"
         android:background="@color/white"

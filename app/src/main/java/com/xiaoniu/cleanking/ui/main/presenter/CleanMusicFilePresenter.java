@@ -212,6 +212,5 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
             }
         }
 
-
     }
 }
