@@ -60,7 +60,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         } else if (ids == R.id.ll_video) {
             startActivity(new Intent(this, CleanVideoManageActivity.class));
         } else if (ids == R.id.ll_soft) {
-            //startActivity(new Intent(this,CleanVideoManageActivity.class));
+            startActivity(new Intent(this,SoftManageActivity.class));
         }
     }
 }

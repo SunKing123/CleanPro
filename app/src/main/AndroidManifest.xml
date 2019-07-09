@@ -236,6 +236,11 @@
             android:name=".ui.main.activity.PhoneThinResultActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
+        <!-- 软件管理-->
+        <activity android:name=".ui.main.activity.SoftManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"
