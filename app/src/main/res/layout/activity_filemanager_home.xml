@@ -11,14 +11,15 @@
         android:background="#4690FD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-<ImageView
-    android:layout_width="108dp"
-    android:layout_height="122dp"
-    android:layout_marginRight="@dimen/dimen_5dp"
-android:src="@mipmap/icon_wjhome"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintBottom_toBottomOf="@id/view_top"
-    />
+
+    <!--         android:src="@mipmap/icon_wjhome" -->
+    <ImageView
+        android:layout_width="108dp"
+        android:layout_height="122dp"
+        android:layout_marginRight="@dimen/dimen_5dp"
+        app:layout_constraintBottom_toBottomOf="@id/view_top"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <ImageView
         android:id="@+id/iv_back"
         android:layout_width="11dp"
@@ -52,8 +53,8 @@ android:src="@mipmap/icon_wjhome"
         app:layout_constraintTop_toBottomOf="@id/iv_back"
         app:location_start="top"
         app:progress_color="#FFFFFF"
-        app:progress_width="9dp"
-        app:progress_normal_color="#599BFD"/>
+        app:progress_normal_color="#599BFD"
+        app:progress_width="9dp" />
 
     <TextView
         android:id="@+id/tv_percent_num"
@@ -115,10 +116,10 @@ android:src="@mipmap/icon_wjhome"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_top"
+        android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_img"
-        android:adjustViewBounds="true"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_top" />
 
     <TextView
         android:id="@+id/tv_pic_text"
@@ -139,8 +140,8 @@ android:src="@mipmap/icon_wjhome"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
-        android:textColor="@color/color_666666"
         android:drawablePadding="@dimen/dimen_4dp"
+        android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_12dp"
         app:layout_constraintBottom_toBottomOf="@id/view_image_icon"
         app:layout_constraintRight_toRightOf="parent"
@@ -170,10 +171,10 @@ android:src="@mipmap/icon_wjhome"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_image_bottom"
+        android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_video"
-        android:adjustViewBounds="true"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_image_bottom" />
 
     <TextView
         android:id="@+id/tv_video_text"
@@ -194,9 +195,9 @@ android:src="@mipmap/icon_wjhome"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
+        android:drawablePadding="@dimen/dimen_4dp"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_12dp"
-        android:drawablePadding="@dimen/dimen_4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_video_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_video_icon" />
@@ -225,10 +226,10 @@ android:src="@mipmap/icon_wjhome"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_video_bottom"
+        android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_music"
-        android:adjustViewBounds="true"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_video_bottom" />
 
     <TextView
         android:id="@+id/tv_music_text"
@@ -249,9 +250,9 @@ android:src="@mipmap/icon_wjhome"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
+        android:drawablePadding="@dimen/dimen_4dp"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_12dp"
-        android:drawablePadding="@dimen/dimen_4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_music_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_music_icon" />
@@ -280,10 +281,10 @@ android:src="@mipmap/icon_wjhome"
         android:layout_height="@dimen/dimen_30dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_music_bottom"
+        android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_apk"
-        android:adjustViewBounds="true"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_music_bottom" />
 
     <TextView
         android:id="@+id/tv_apk_text"
@@ -304,9 +305,9 @@ android:src="@mipmap/icon_wjhome"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:drawableRight="@mipmap/arrow_icon"
+        android:drawablePadding="@dimen/dimen_4dp"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_12dp"
-        android:drawablePadding="@dimen/dimen_4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_apk_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_apk_icon" />

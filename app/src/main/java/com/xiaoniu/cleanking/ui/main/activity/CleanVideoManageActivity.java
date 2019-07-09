@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,9 +19,11 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanVideoManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanVideoManagePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.GrideManagerWrapper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.MusicFileUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -290,6 +294,39 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     }
 
+    @Override
+    public void play(VideoInfoBean appInfoBean) {
+        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(appInfoBean.name,FileSizeUtils.formatFileSize(appInfoBean.packageSize)
+                ,"时长: "+ MusicFileUtils.getPlayDuration2(appInfoBean.path),"未知");
+        videoPlayFragment.show(getFragmentManager(),"");
+        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onConfirm() {
+                playAudio(appInfoBean.path);
+            }
+        });
+    }
+
+
+    /**
+     * 播放视频
+     * @param audioPath
+     */
+    public void playAudio(String audioPath) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("file:///" + audioPath);
+            intent.setDataAndType(uri, "video/*");
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+
+        }
+    }
     /**
      * 设置空视图
      * */

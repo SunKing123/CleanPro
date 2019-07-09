@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,10 +18,15 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanMusicManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
+import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMusicFilePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.MusicFileUtils;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,6 +250,34 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
 
     }
+
+    @Override
+    public void play(MusciInfoBean musciInfoBean) {
+        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(musciInfoBean.name,FileSizeUtils.formatFileSize(musciInfoBean.packageSize)
+                ,"时长: "+ MusicFileUtils.getPlayDuration2(musciInfoBean.path),"未知");
+        videoPlayFragment.show(getFragmentManager(),"");
+        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onConfirm() {
+                playAudio(musciInfoBean.path);
+            }
+        });
+    }
+
+
+
+    public void playAudio(String audioPath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse("file:///" + audioPath);
+        intent.setDataAndType(uri, "audio/mp3");
+        mContext.startActivity(intent);
+    }
+
 
     /**
      * 统计文件的大小
