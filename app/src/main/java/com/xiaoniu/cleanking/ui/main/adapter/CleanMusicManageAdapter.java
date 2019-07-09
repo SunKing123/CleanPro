@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
+import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.utils.DateUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
@@ -78,8 +79,9 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             viewHolder.mLLContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    playAudio(appInfoBean.path);
+                    if(null!=onCheckListener){
+                        onCheckListener.play(appInfoBean);
+                    }
                 }
             });
         }
@@ -116,6 +118,8 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
 
     public interface OnCheckListener {
         void onCheck(String id, boolean isChecked);
+
+        void play(MusciInfoBean musciInfoBean);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

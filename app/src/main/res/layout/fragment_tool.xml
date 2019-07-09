@@ -86,6 +86,42 @@
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:id="@+id/text_phone_thin"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/dimen_10dp"
+                    android:background="@drawable/bg_home_btn"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_yjjs" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:text="手机瘦身"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:textColor="#999999"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

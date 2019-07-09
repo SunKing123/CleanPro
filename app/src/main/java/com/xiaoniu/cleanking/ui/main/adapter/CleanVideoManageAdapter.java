@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +17,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.MusicFileUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,11 +94,18 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
             viewHolder.mLLPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    playAudio(appInfoBean.path);
+                    if(null!=onCheckListener){
+                        onCheckListener.play(appInfoBean);
+                    }
+
                 }
             });
         }
     }
+
+
+
+
 
 
     /**
@@ -140,6 +151,8 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
 
     public interface OnCheckListener {
         void onCheck(String id, boolean isChecked);
+
+        void play(VideoInfoBean videoInfoBean);
     }
 
     class ViewHolderTitle extends RecyclerView.ViewHolder {

@@ -12,8 +12,11 @@ import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneThinResultActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
@@ -72,5 +75,11 @@ public interface ActivityComponent {
     void inject(CleanBigFileActivity cleanBigFileActivity);
 
     void inject(PermissionActivity permissionActivity);
+
+    void inject(PhoneThinActivity phoneThinActivity);
+
+    void inject(PhoneThinResultActivity phoneThinResultActivity);
+
+    void inject(SoftManageActivity softManageActivity);
 }
 
