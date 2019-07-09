@@ -31,7 +31,7 @@ public interface UserApiService {
      * @return
      */
     @POST("/appVersion/query")
-    Flowable<AppVersion> queryAppVersion();
+    Flowable<AppVersion> queryAppVersion(@Body RequestBody body);
 
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
