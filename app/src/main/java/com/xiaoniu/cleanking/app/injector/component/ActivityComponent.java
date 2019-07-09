@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivi
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.FeedBackActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -46,6 +47,7 @@ public interface ActivityComponent {
     void inject(CleanInstallPackageActivity activity);
 
     void inject(CleanMusicManageActivity cleanMusicManageActivity);
+
     void inject(PreviewImageActivity previewImageActivity);
 
     void inject(CleanVideoManageActivity cleanVideoManageActivity);
@@ -56,8 +58,11 @@ public interface ActivityComponent {
     void inject(WhiteListSpeedAddActivity whiteListSpeedAddActivity);
 
     void inject(WhiteListSpeedManageActivity whiteListSpeedManageActivity);
+
     void inject(AboutActivity aboutActivity);
+
     void inject(PhoneAccessActivity phoneAccessActivity);
+
     void inject(FeedBackActivity feedBackActivity);
 
     void inject(PhoneCoolingActivity phoneCoolingActivity);
@@ -65,5 +70,7 @@ public interface ActivityComponent {
     void inject(QuestionReportActivity questionReportActivity);
 
     void inject(CleanBigFileActivity cleanBigFileActivity);
+
+    void inject(PermissionActivity permissionActivity);
 }
 

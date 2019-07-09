@@ -212,6 +212,12 @@
         <activity android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.usercenter.activity.PermissionActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.usercenter.activity.PermissionDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.main.activity.QuestionReportActivity"
             android:launchMode="singleTop"
