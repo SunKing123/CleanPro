@@ -47,6 +47,7 @@ public class CleanAllFileScanUtil {
 
     public static List<FileEntity> clean_image_list ;
 
+
     /* access modifiers changed from: private */
     public AtomicInteger currentProgress;
     /* access modifiers changed from: private */

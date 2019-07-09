@@ -41,7 +41,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/line_version"
+            android:id="@+id/line_permiht"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -97,6 +97,7 @@
             android:background="#EDEDED" />
 
         <LinearLayout
+            android:id="@+id/line_xfc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -152,6 +153,7 @@
             android:background="#EDEDED" />
 
         <LinearLayout
+            android:id="@+id/line_dingwei"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
