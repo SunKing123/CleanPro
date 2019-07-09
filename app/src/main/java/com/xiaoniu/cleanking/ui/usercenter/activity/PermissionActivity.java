@@ -55,7 +55,7 @@ public class PermissionActivity extends SimpleActivity {
         line_permiht.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Settings.canDrawOverlays(PermissionActivity.this)) {
+                if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
                     Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
                     startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
                 } else {
@@ -72,7 +72,7 @@ public class PermissionActivity extends SimpleActivity {
         line_xfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Settings.canDrawOverlays(PermissionActivity.this)) {
+                if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
                     Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
                     startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
                 } else {
@@ -88,7 +88,7 @@ public class PermissionActivity extends SimpleActivity {
         line_dingwei.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Settings.canDrawOverlays(PermissionActivity.this)) {
+                if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
                     Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
                     startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
                 } else {

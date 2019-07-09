@@ -107,7 +107,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.queryPatch();
         //检测版本更新
         mPresenter.queryAppVersion(() -> {
-
         });
 
         initFragments();

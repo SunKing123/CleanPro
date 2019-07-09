@@ -7,6 +7,7 @@ import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -20,7 +21,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /**
- *
  * @author tie
  * @date 2017/5/15
  */
@@ -39,14 +39,18 @@ public class MainModel extends BaseModel {
     public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
+        map.put("os", "android");
+        map.put("platform", "1");
+        map.put("appVersion", AndroidUtil.getAppVersionName());
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
+        mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
                 .subscribeWith(commonSubscriber);
     }
 
     /**
      * 热修复补丁查询
+     *
      * @param maps
      * @param commonSubscriber
      */

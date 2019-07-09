@@ -79,7 +79,7 @@ public class FloatingImageDisplayService extends Service {
     ImageView iv_delete;
 
     private void showFloatingWindow() {
-        if (Settings.canDrawOverlays(this)) {
+//        if (Build.VERSION.SDK_INT >= 23 &&Settings.canDrawOverlays(this)) {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             displayView = layoutInflater.inflate(R.layout.image_display, null);
 //            displayView.setOnTouchListener(new FloatingOnTouchListener());
@@ -143,6 +143,7 @@ public class FloatingImageDisplayService extends Service {
                     iv_zhankai.setVisibility(View.GONE);
                     iv_delete.setVisibility(View.GONE);
                     imageView.setVisibility(View.GONE);
+                    displayView.setVisibility(View.GONE);
                     stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
                 }
             });
@@ -150,7 +151,7 @@ public class FloatingImageDisplayService extends Service {
                 windowManager.removeViewImmediate(displayView);
             windowManager.addView(displayView, layoutParams);
 
-        }
+//        }
     }
 
     @Override
@@ -167,6 +168,8 @@ public class FloatingImageDisplayService extends Service {
             iv_delete.setVisibility(View.GONE);
         if (iv_delete != null)
             imageView.setVisibility(View.GONE);
+        if (displayView != null)
+            displayView.setVisibility(View.GONE);
     }
 
     public void setImageParam(ImageView iv, int widthDp, int heightDp) {
