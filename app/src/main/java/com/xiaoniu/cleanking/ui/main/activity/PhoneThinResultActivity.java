@@ -8,8 +8,11 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinResultPresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,6 +28,10 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     @BindView(R.id.txt_space_size)
     TextView mTxtSpaceSize;
 
+    @BindView(R.id.txt_install_size)
+    TextView mTxtInstallSize;//安装应用大小
+    @BindView(R.id.txt_soft_size)
+    TextView mTxtSoftSize;//软件大小
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -52,6 +59,12 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.scanData();
+    }
+
     @OnClick({R.id.img_back, R.id.ll_video, R.id.ll_soft})
     public void onViewClick(View view) {
         int ids = view.getId();
@@ -62,5 +75,25 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         } else if (ids == R.id.ll_soft) {
             startActivity(new Intent(this,SoftManageActivity.class));
         }
+    }
+
+    /**
+     * 更新软件数据
+     * @param size 安装应用大小
+     * @param totalSize  应用总大小
+     */
+    public void updateData(int size,long totalSize){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(null!=mTxtInstallSize){
+                    mTxtInstallSize.setText(String.format("已安装%s款",size));
+                }
+                if(null!=mTxtSoftSize){
+                    mTxtSoftSize.setText(FileSizeUtils.formatFileSize(totalSize));
+                }
+
+            }
+        });
     }
 }

@@ -46,7 +46,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
      */
     private boolean mIsCheckAll;
 
-    private  MonitorSysReceiver mMonitorSysReceiver;
+    private MonitorSysReceiver mMonitorSysReceiver;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -73,7 +73,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);
-        mAdapter.modifyList(mPresenter.getData());
+        //mAdapter.modifyList(mPresenter.getData());
         mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,12 +93,12 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     @Override
     protected void onStart() {
         super.onStart();
-        IntentFilter intentFilter=new IntentFilter();
+        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
         intentFilter.addAction("android.intent.action.PACKAGE_REMOVED");
         intentFilter.addDataScheme("package");
-        mMonitorSysReceiver=new MonitorSysReceiver();
-        registerReceiver(mMonitorSysReceiver,intentFilter);
+        mMonitorSysReceiver = new MonitorSysReceiver();
+        registerReceiver(mMonitorSysReceiver, intentFilter);
 
     }
 
@@ -106,6 +106,16 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     protected void onResume() {
         super.onResume();
 
+    }
+
+    public void updateData(List<AppInfoBean> lists) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.clear();
+                mAdapter.modifyList(lists);
+            }
+        });
     }
 
     @Override
@@ -126,7 +136,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             List<AppInfoBean> lists = mAdapter.getLists();
             for (AppInfoBean appInfoBean : lists) {
                 if (appInfoBean.isSelect) {
-                    uninstallApk(getBaseContext(),appInfoBean.packageName);
+                    uninstallApk(getBaseContext(), appInfoBean.packageName);
 
                 }
             }
@@ -135,12 +145,11 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     }
 
     /* 卸载apk */
-    public  void uninstallApk(Context context, String packageName) {
+    public void uninstallApk(Context context, String packageName) {
         Uri uri = Uri.parse("package:" + packageName);
         Intent intent = new Intent(Intent.ACTION_DELETE, uri);
         context.startActivity(intent);
     }
-
 
 
     /**
@@ -160,11 +169,12 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
 
 
     private int mTotalSize;
+
     @Override
     public void onCheck(String id, boolean isChecked) {
         List<AppInfoBean> lists = mAdapter.getLists();
         //文件总大小
-        mTotalSize =0;
+        mTotalSize = 0;
         boolean isCheckAll = true;
         for (AppInfoBean appInfoBean : lists) {
             if (appInfoBean.packageName.equals(id)) {
@@ -175,7 +185,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
         mAdapter.notifyDataSetChanged();
         for (AppInfoBean appInfoBean : lists) {
             if (appInfoBean.isSelect) {
-                mTotalSize ++;
+                mTotalSize++;
             } else {
                 isCheckAll = false;
             }
@@ -195,11 +205,11 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
         List<AppInfoBean> lists = mAdapter.getLists();
         for (AppInfoBean appInfoBean : lists) {
             if (appInfoBean.isSelect) {
-                mTotalSize ++;
+                mTotalSize++;
             }
         }
         if (mTotalSize > 0) {
-            mBtnDel.setText(String.format("卸载%s款",mTotalSize));
+            mBtnDel.setText(String.format("卸载%s款", mTotalSize));
             mBtnDel.setSelected(true);
             mBtnDel.setClickable(true);
         } else {
@@ -211,9 +221,9 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
 
 
     /**
-     *  自定义接收卸载广播
+     * 自定义接收卸载广播
      */
-    private  class  MonitorSysReceiver extends BroadcastReceiver{
+    private class MonitorSysReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {

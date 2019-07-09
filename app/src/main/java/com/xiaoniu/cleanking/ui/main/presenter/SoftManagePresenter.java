@@ -8,6 +8,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.os.RemoteException;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -34,6 +36,8 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
     RxAppCompatActivity mContext;
 
     private List<AppInfoBean> apps = new ArrayList<>();
+    //包名大小
+    private List<Long> packageSize = new ArrayList<>();
 
     @Inject
     public SoftManagePresenter(RxAppCompatActivity activity) {
@@ -78,12 +82,76 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
                 apps.add(appInfoBean);
-
             }
+        }
+
+        for (int i = 0; i < apps.size(); i++) {
+            AppInfoBean appInfoBean = apps.get(i);
+            boolean isLast = i == apps.size() - 1 ? true : false;
+            queryPacakgeSize(appInfoBean.packageName, isLast);
         }
     }
 
 
+    /**
+     * 根据获取的安装包大小更新缓存
+     *
+     * @return
+     */
+    public void refreshData() {
+        for (int i = 0; i < apps.size(); i++) {
+            AppInfoBean appInfoBean = apps.get(i);
+            appInfoBean.packageSize = packageSize.get(i);
+        }
+        mView.updateData(apps);
+    }
 
+    /**
+     * @param pkgName 包名
+     * @param isLast  是否为最后一个
+     */
+    public void queryPacakgeSize(String pkgName, boolean isLast) {
+
+        if (!TextUtils.isEmpty(pkgName)) {// pkgName不能为空
+            // 使用放射机制得到PackageManager类的隐藏函数getPackageSizeInfo
+
+            PackageManager mPackageManager = mContext.getPackageManager();
+            try {
+                String methodName = "getPackageSizeInfo";// 想通过反射机制调用的方法名
+                Class<?> parameterType1 = String.class;// 被反射的方法的第一个参数的类型
+                Class<?> parameterType2 = IPackageStatsObserver.class;// 被反射的方法的第二个参数的类型
+                Method getPackageSizeInfo = mPackageManager.getClass().getMethod(
+                        methodName, parameterType1, parameterType2);
+                getPackageSizeInfo.invoke(mPackageManager, pkgName, new PkgSizeObserver(pkgName, isLast));// 方法使用的参数
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+            }
+
+
+        }
 
     }
+
+    class PkgSizeObserver extends IPackageStatsObserver.Stub {
+        //包名
+        private String mPackageName;
+        //是否为获取最后一个包名
+        private boolean mIsLast;
+
+        public PkgSizeObserver(String packageName, boolean isLast) {
+            this.mPackageName = packageName;
+            this.mIsLast = isLast;
+        }
+
+        @Override
+        public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) throws RemoteException {
+            packageSize.add(pStats.codeSize);
+            if (mIsLast) {
+                refreshData();
+            }
+        }
+    }
+
+}

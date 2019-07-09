@@ -225,7 +225,6 @@
         <activity android:name=".ui.usercenter.activity.PermissionDetailActivity"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait"/>
             android:screenOrientation="portrait" />
 
         <activity
