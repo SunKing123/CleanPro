@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -26,12 +29,16 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
+import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
+import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +66,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     TextView tv_ql;
     @BindView(R.id.web_view)
     WebView mWebView;
+    @BindView(R.id.viewt)
+    View viewt;
+    @BindView(R.id.line_title)
+    View line_title;
+    @BindView(R.id.acceview)
+    AccessAnimView acceview;
     //    PhoneAccessAdapter imageAdapter;
     PhoneAccessBelowAdapter belowAdapter;
 
@@ -101,6 +114,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
+
     @Override
     public void initView() {
         initWebView();
@@ -125,23 +139,25 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
-                for (FirstJunkInfo info : belowAdapter.getListImage()) {
-                    if (info.getIsSelect()) {
-                        junkTemp.add(info);
-                    }
-                }
-
-                long total = 0;
-                for (FirstJunkInfo info : junkTemp) {
-                    total += info.getTotalSize();
-                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-                }
-                belowAdapter.deleteData(junkTemp);
-                computeTotalSize(belowAdapter.getListImage());
-                setCleanedView(total);
-                if (Build.VERSION.SDK_INT >= 26)
-                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
+                acceview.setVisibility(View.VISIBLE);
+                acceview.startTopAnim();
+//                ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
+//                for (FirstJunkInfo info : belowAdapter.getListImage()) {
+//                    if (info.getIsSelect()) {
+//                        junkTemp.add(info);
+//                    }
+//                }
+//
+//                long total = 0;
+//                for (FirstJunkInfo info : junkTemp) {
+//                    total += info.getTotalSize();
+//                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+//                }
+//                belowAdapter.deleteData(junkTemp);
+//                computeTotalSize(belowAdapter.getListImage());
+//                setCleanedView(total);
+//                if (Build.VERSION.SDK_INT >= 26)
+//                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
 
             }
         });
@@ -170,13 +186,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     public void setCleanSize(long totalSizes) {
         String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
-        Log.e("sdfg", "" + str_totalSize);
-        if (str_totalSize.endsWith("MB") || str_totalSize.endsWith("GB") || str_totalSize.endsWith("KB")) {
-            tv_size.setText(str_totalSize.substring(0, str_totalSize.length() - 2));
-            tv_gb.setText(str_totalSize.substring(str_totalSize.length() - 2, str_totalSize.length()));
-        } else {
-            tv_size.setText(str_totalSize.substring(0, str_totalSize.length() - 1));
-            tv_gb.setText(str_totalSize.substring(str_totalSize.length() - 1, str_totalSize.length()));
+        if (str_totalSize.endsWith("KB")) return;
+        //数字动画转换，GB转成Mb播放，kb太小就不扫描
+        int sizeMb = 0;
+        if (str_totalSize.endsWith("MB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            mPresenter.setNumAnim(tv_size,tv_gb,viewt,line_title, 0, sizeMb, 1);
+        } else if (str_totalSize.endsWith("GB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            sizeMb *= 1024;
+            mPresenter.setNumAnim(tv_size,tv_gb,viewt,line_title, 0, sizeMb, 2);
         }
     }
 
@@ -236,6 +255,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 //                compulateDeleteSize();
             }
         });
+
+        AnimationItem animationItem = new AnimationItem("Slide from bottom", R.anim.layout_animation_from_bottom);
+        mPresenter.runLayoutAnimation(recycle_view, animationItem);
+
     }
 
     //清理完毕后展示内容
@@ -244,6 +267,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("垃圾已清理");
         setCleanSize(total);
+    }
+
+    public void setStatusBar(int colorRes) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), false);
+        }
     }
 
     @Override
