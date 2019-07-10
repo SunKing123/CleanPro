@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
@@ -40,6 +42,9 @@ import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -289,12 +294,20 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册订阅者
+        EventBus.getDefault().register(this);
+
+    }
+
+    @Override
     protected void onDestroy() {
 
         if (mUpdateAgent != null) {
             mUpdateAgent.dissmiss();
         }
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -337,6 +350,14 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void setStatusBar() {
     }
 
+    /**
+     * 重新扫描文件
+     */
+    @Subscribe
+    public void onEventScan(ScanFileEvent scanFileEvent){
+        mPresenter.saveCacheFiles();
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

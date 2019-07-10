@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.EventBusTags;
+import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MessageEvent;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
@@ -134,9 +135,9 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             }
         }
         tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
-        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSize(videoSize));
-        tvMusicSize.setText(CleanAllFileScanUtil.byte2FitSize(musicSize));
-        tvApkSize.setText(CleanAllFileScanUtil.byte2FitSize(apkSize));
+//        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSize(videoSize));
+//        tvMusicSize.setText(CleanAllFileScanUtil.byte2FitSize(musicSize));
+//        tvApkSize.setText(CleanAllFileScanUtil.byte2FitSize(apkSize));
 
         viewImagearea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +186,24 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             //跳转到视频清理
             startActivity(new Intent(this,CleanVideoManageActivity.class));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        long videoSize=mPresenter.getVideoTotalSize();
+        long musicSize=mPresenter.getMusicTotalSize();
+        long apkSize=mPresenter.getAPKTotalSize();
+        if(null!=tvVideoSize){
+            tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
+        }
+        if(null!=tvMusicSize){
+            tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
+        }
+        if(null!=tvApkSize){
+            tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
+        }
+
     }
 
     @Override
