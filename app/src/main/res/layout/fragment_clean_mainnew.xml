@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:id="@+id/layout_root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <ScrollView
+        android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
@@ -14,11 +16,91 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_big_home"
-                android:orientation="vertical">
+                android:layout_height="420dp"
+                android:background="@drawable/bg_big_home">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dimen_20dp">
+
+                    <ImageView
+                        android:id="@+id/icon_outer"
+                        android:layout_width="@dimen/dimen_200dp"
+                        android:layout_height="200dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/icon_circle"/>
+
+                    <View
+                        android:id="@+id/circle_outer"
+                        android:layout_width="@dimen/dimen_200dp"
+                        android:layout_height="@dimen/dimen_200dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:background="@drawable/icon_bg_circle"
+                        android:visibility="visible"/>
+
+                    <View
+                        android:id="@+id/circle_outer2"
+                        android:layout_width="@dimen/dimen_200dp"
+                        android:layout_height="@dimen/dimen_200dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:background="@drawable/icon_bg_circle"
+                        android:visibility="visible"/>
+
+                    <ImageView
+                        android:id="@+id/icon_inner"
+                        android:layout_width="164dp"
+                        android:layout_height="164dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="78dp"
+                        android:src="@mipmap/icon_inner"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/text_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginTop="@dimen/dimen_100dp"
+                        android:text="11.5M"
+                        android:textColor="@color/white"
+                        android:textSize="50sp"/>
+
+                    <LinearLayout
+                        android:id="@+id/layout_scan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_count"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/text_scan_trace"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="扫描中"
+                            android:textColor="@color/white"/>
+
+                        <ImageView
+                            android:id="@+id/view_arrow"
+                            android:visibility="gone"
+                            android:src="@mipmap/arrow_right_white"
+                            android:layout_marginLeft="@dimen/dimen_4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -27,50 +109,22 @@
                     android:layout_marginTop="@dimen/dimen_20dp"
                     android:text="悟空清理"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="180dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/icon_scan" />
-
-                <TextView
-                    android:id="@+id/text_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="11.5M"
-                    android:textColor="@color/white"
-                    android:textSize="50sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_2dp"
-                    android:text="垃圾文件可以清理"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="20sp"/>
 
                 <Button
                     android:id="@+id/btn_ljql"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_28dp"
+                    android:layout_gravity="bottom"
                     android:layout_marginLeft="@dimen/dimen_60dp"
                     android:layout_marginRight="@dimen/dimen_60dp"
-                    android:layout_marginTop="@dimen/dimen_30dp"
+                    android:layout_marginBottom="@dimen/dimen_32dp"
                     android:background="@drawable/bg_btn_white"
                     android:text="立即清理"
                     android:textColor="#409CFF"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"/>
+            </FrameLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,7 +148,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_yjjs" />
+                        android:src="@mipmap/icon_yjjs"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -103,17 +157,17 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="一键加速"
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/dimen_20dp"
                         android:layout_marginTop="@dimen/dimen_4dp"
+                        android:layout_marginBottom="@dimen/dimen_20dp"
                         android:text="内存占用加速"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -131,7 +185,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_sjql" />
+                        android:src="@mipmap/icon_sjql"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -140,17 +194,17 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="手机清理"
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/dimen_20dp"
                         android:layout_marginTop="@dimen/dimen_4dp"
+                        android:layout_marginBottom="@dimen/dimen_20dp"
                         android:text="储存占用加速"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -166,7 +220,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_wjql" />
+                        android:src="@mipmap/icon_wjql"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -175,17 +229,17 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="文件清理"
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/dimen_20dp"
                         android:layout_marginTop="@dimen/dimen_4dp"
+                        android:layout_marginBottom="@dimen/dimen_20dp"
                         android:text="照片、视频、安装包"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -3,7 +3,10 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,8 +15,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -52,7 +53,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -165,6 +165,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         DbHelper.copyDb();
 
         checkReadPermission();
+
+        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        //扫描更新系统数据库
+        MediaScannerConnection.scanFile(this, new String[]{absolutePath+"/Download/Upgrade"}, null, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                showToast("清理完毕");
+            }
+        });
     }
 
     private void checkReadPermission() {
