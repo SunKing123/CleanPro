@@ -63,7 +63,12 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             Glide.with(mContext).load(appInfoBean.icon).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
-            viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
+            if(appInfoBean.packageSize==0){
+                viewHolder.mTxtSize.setVisibility(View.INVISIBLE);
+            }else {
+                viewHolder.mTxtTime.setVisibility(View.VISIBLE);
+                viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
+            }
             if(mIsShowSubTitle==false){
                 viewHolder.mTxtTime.setVisibility(View.GONE);
             }else {
