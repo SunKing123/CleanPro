@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
