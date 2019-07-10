@@ -12,14 +12,10 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.EventBusTags;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-import com.xiaoniu.cleanking.utils.MessageEvent;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -63,7 +59,6 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
@@ -122,24 +117,19 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     @Override
     protected void onResume() {
         super.onResume();
-        long videoSize=mPresenter.getVideoTotalSize();
-        long musicSize=mPresenter.getMusicTotalSize();
-        long apkSize=mPresenter.getAPKTotalSize();
-        if(null!=tvVideoSize){
+        long videoSize = mPresenter.getVideoTotalSize();
+        long musicSize = mPresenter.getMusicTotalSize();
+        long apkSize = mPresenter.getAPKTotalSize();
+        if (null != tvVideoSize) {
             tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
         }
-        if(null!=tvMusicSize){
+        if (null != tvMusicSize) {
             tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
         }
-        if(null!=tvApkSize){
+        if (null != tvApkSize) {
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
         }
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 }
