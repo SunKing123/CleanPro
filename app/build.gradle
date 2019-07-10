@@ -101,6 +101,7 @@ android {
         preDexLibraries true
         javaMaxHeapSize "4g"
         dexInProcess = false
+        jumboMode = true
     }
 
     productFlavors {

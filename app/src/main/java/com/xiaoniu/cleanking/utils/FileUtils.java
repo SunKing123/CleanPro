@@ -19,7 +19,7 @@ public class FileUtils {
         try {
             packageInfo = AppApplication.getInstance().getPackageManager().getPackageInfo(str, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         if (packageInfo != null) {
             return true;

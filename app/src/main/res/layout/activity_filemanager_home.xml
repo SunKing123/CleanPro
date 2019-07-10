@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             android:layout_width="fill_parent"
-                                             android:layout_height="fill_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <View
         android:id="@+id/view_top"
@@ -10,7 +10,7 @@
         android:layout_height="216dp"
         android:background="#4690FD"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:layout_width="108dp"
@@ -18,18 +18,17 @@
         android:layout_marginRight="@dimen/dimen_5dp"
         android:src="@mipmap/icon_wjhome"
         app:layout_constraintBottom_toBottomOf="@id/view_top"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
         android:id="@+id/iv_back"
-        android:layout_width="11dp"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:src="@mipmap/back_white"
+        android:src="@mipmap/icon_left_arrow_white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,7 +40,7 @@
         android:textSize="@dimen/dimen_18dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_back"
         app:layout_constraintLeft_toRightOf="@id/iv_back"
-        app:layout_constraintTop_toTopOf="@id/iv_back"/>
+        app:layout_constraintTop_toTopOf="@id/iv_back" />
 
     <com.xiaoniu.cleanking.widget.CircleProgressView
         android:id="@+id/circle_progress"
@@ -55,7 +54,7 @@
         app:location_start="top"
         app:progress_color="#FFFFFF"
         app:progress_normal_color="#599BFD"
-        app:progress_width="9dp"/>
+        app:progress_width="9dp" />
 
     <TextView
         android:id="@+id/tv_percent_num"
@@ -68,7 +67,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="@id/circle_progress"
         app:layout_constraintRight_toLeftOf="@id/tv_percent"
-        app:layout_constraintTop_toTopOf="@id/circle_progress"/>
+        app:layout_constraintTop_toTopOf="@id/circle_progress" />
 
     <TextView
         android:id="@+id/tv_percent"
@@ -81,7 +80,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toRightOf="@id/tv_percent_num"
         app:layout_constraintRight_toRightOf="@id/circle_progress"
-        app:layout_constraintTop_toTopOf="@id/circle_progress"/>
+        app:layout_constraintTop_toTopOf="@id/circle_progress" />
 
     <TextView
         android:id="@+id/tv_nbcc"
@@ -95,7 +94,7 @@
         app:layout_constraintBottom_toTopOf="@id/tv_spaceinfos"
         app:layout_constraintLeft_toRightOf="@id/circle_progress"
         app:layout_constraintTop_toTopOf="@id/circle_progress"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tv_spaceinfos"
@@ -109,7 +108,7 @@
         app:layout_constraintBottom_toBottomOf="@id/circle_progress"
         app:layout_constraintLeft_toRightOf="@id/circle_progress"
         app:layout_constraintTop_toBottomOf="@id/tv_nbcc"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <ImageView
         android:id="@+id/view_image_icon"
@@ -120,7 +119,7 @@
         android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_img"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_top"/>
+        app:layout_constraintTop_toBottomOf="@id/view_top" />
 
     <TextView
         android:id="@+id/tv_pic_text"
@@ -132,7 +131,7 @@
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_image_icon"
         app:layout_constraintLeft_toRightOf="@id/view_image_icon"
-        app:layout_constraintTop_toTopOf="@id/view_image_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_image_icon" />
 
     <TextView
         android:id="@+id/tv_image_size"
@@ -146,7 +145,7 @@
         android:textSize="@dimen/dimen_12dp"
         app:layout_constraintBottom_toBottomOf="@id/view_image_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/view_image_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_image_icon" />
 
     <View
         android:id="@+id/view_image_bottom"
@@ -155,7 +154,7 @@
         android:layout_marginTop="@dimen/dimen_13dp"
         android:background="#EEEEEE"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
-        app:layout_constraintTop_toBottomOf="@id/view_image_icon"/>
+        app:layout_constraintTop_toBottomOf="@id/view_image_icon" />
 
     <View
         android:id="@+id/view_imagearea"
@@ -164,7 +163,7 @@
         app:layout_constraintBottom_toTopOf="@id/view_image_bottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_top"/>
+        app:layout_constraintTop_toBottomOf="@id/view_top" />
 
     <ImageView
         android:id="@+id/view_video_icon"
@@ -175,7 +174,7 @@
         android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_video"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_image_bottom"/>
+        app:layout_constraintTop_toBottomOf="@id/view_image_bottom" />
 
     <TextView
         android:id="@+id/tv_video_text"
@@ -187,7 +186,7 @@
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_video_icon"
         app:layout_constraintLeft_toRightOf="@id/view_video_icon"
-        app:layout_constraintTop_toTopOf="@id/view_video_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_video_icon" />
 
     <TextView
         android:id="@+id/tv_video_size"
@@ -201,7 +200,7 @@
         android:textSize="@dimen/dimen_12dp"
         app:layout_constraintBottom_toBottomOf="@id/view_video_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/view_video_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_video_icon" />
 
     <View
         android:id="@+id/view_video_bottom"
@@ -210,7 +209,7 @@
         android:layout_marginTop="@dimen/dimen_13dp"
         android:background="#EEEEEE"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
-        app:layout_constraintTop_toBottomOf="@id/view_video_icon"/>
+        app:layout_constraintTop_toBottomOf="@id/view_video_icon" />
 
     <View
         android:id="@+id/view_clean_video"
@@ -219,7 +218,7 @@
         app:layout_constraintBottom_toTopOf="@id/view_music_icon"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_imagearea"/>
+        app:layout_constraintTop_toBottomOf="@id/view_imagearea" />
 
     <ImageView
         android:id="@+id/view_music_icon"
@@ -230,7 +229,7 @@
         android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_music"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_video_bottom"/>
+        app:layout_constraintTop_toBottomOf="@id/view_video_bottom" />
 
     <TextView
         android:id="@+id/tv_music_text"
@@ -242,7 +241,7 @@
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_music_icon"
         app:layout_constraintLeft_toRightOf="@id/view_music_icon"
-        app:layout_constraintTop_toTopOf="@id/view_music_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_music_icon" />
 
     <TextView
         android:id="@+id/tv_music_size"
@@ -256,7 +255,7 @@
         android:textSize="@dimen/dimen_12dp"
         app:layout_constraintBottom_toBottomOf="@id/view_music_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/view_music_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_music_icon" />
 
     <View
         android:id="@+id/view_music_bottom"
@@ -265,7 +264,7 @@
         android:layout_marginTop="@dimen/dimen_13dp"
         android:background="#EEEEEE"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
-        app:layout_constraintTop_toBottomOf="@id/view_music_icon"/>
+        app:layout_constraintTop_toBottomOf="@id/view_music_icon" />
 
     <View
         android:id="@+id/view_clean_music"
@@ -274,7 +273,7 @@
         app:layout_constraintBottom_toTopOf="@id/view_music_bottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_clean_video"/>
+        app:layout_constraintTop_toBottomOf="@id/view_clean_video" />
 
     <ImageView
         android:id="@+id/view_apk_icon"
@@ -285,7 +284,7 @@
         android:adjustViewBounds="true"
         android:src="@mipmap/icon_file_clean_apk"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_music_bottom"/>
+        app:layout_constraintTop_toBottomOf="@id/view_music_bottom" />
 
     <TextView
         android:id="@+id/tv_apk_text"
@@ -297,7 +296,7 @@
         android:textSize="@dimen/dimen_17dp"
         app:layout_constraintBottom_toBottomOf="@id/view_apk_icon"
         app:layout_constraintLeft_toRightOf="@id/view_apk_icon"
-        app:layout_constraintTop_toTopOf="@id/view_apk_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_apk_icon" />
 
     <TextView
         android:id="@+id/tv_apk_size"
@@ -311,7 +310,7 @@
         android:textSize="@dimen/dimen_12dp"
         app:layout_constraintBottom_toBottomOf="@id/view_apk_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/view_apk_icon"/>
+        app:layout_constraintTop_toTopOf="@id/view_apk_icon" />
 
     <View
         android:id="@+id/view_apk_bottom"
@@ -320,7 +319,7 @@
         android:layout_marginTop="@dimen/dimen_13dp"
         android:background="#EEEEEE"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
-        app:layout_constraintTop_toBottomOf="@id/view_apk_icon"/>
+        app:layout_constraintTop_toBottomOf="@id/view_apk_icon" />
 
     <View
         android:id="@+id/view_clean_install_apk"
@@ -329,6 +328,6 @@
         app:layout_constraintBottom_toTopOf="@id/view_apk_bottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_clean_music"/>
+        app:layout_constraintTop_toBottomOf="@id/view_clean_music" />
 
 </android.support.constraint.ConstraintLayout>

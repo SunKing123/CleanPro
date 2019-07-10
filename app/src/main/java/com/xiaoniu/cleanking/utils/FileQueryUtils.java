@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.utils;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -12,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Process;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
@@ -23,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
@@ -35,13 +39,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import static android.content.Context.USAGE_STATS_SERVICE;
 import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
-//import static com.jaredrummler.android.processes.ProcessManager.getRunningAppProcesses;
 
 public class FileQueryUtils {
 
@@ -146,6 +151,10 @@ public class FileQueryUtils {
             firstJunkInfo.setAllchecked(true);
             firstJunkInfo.setGarbageType("TYPE_CACHE");
             firstJunkInfo.setAppPackageName(applicationInfo.packageName);
+
+            if (mScanFileListener != null) {
+                mScanFileListener.scanFile(applicationInfo.packageName);
+            }
             //cache缓存
             if (file.exists()) {
                 SecondJunkInfo secondJunkInfo = listFiles(file);
@@ -206,11 +215,14 @@ public class FileQueryUtils {
         ArrayList arrayList = new ArrayList();
         try {
             HashMap hashMap = new HashMap();
-            if (Build.VERSION.SDK_INT >= 24 && !isSystemAppliation()) {
-                return getTaskInfos24(this.mContext);
+            if(Build.VERSION.SDK_INT >= 26){
+                return getTaskInfo26();
             }
-            if (Build.VERSION.SDK_INT >= 20 && !isSystemAppliation()) {
-                return getTaskInfos(this.mContext);
+            if (Build.VERSION.SDK_INT >= 24) {
+                return getTaskInfos24(mContext);
+            }
+            if (Build.VERSION.SDK_INT >= 20) {
+                return getTaskInfos(mContext);
             }
 //            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
             for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : this.mActivityManager.getRunningAppProcesses()) {
@@ -227,6 +239,8 @@ public class FileQueryUtils {
                         if (str != null) {
                             CharSequence loadLabel = this.mPackageManager.getPackageInfo(str, 0).applicationInfo.loadLabel(this.mPackageManager);
                             if (runningAppProcessInfo.importance >= 200 && !str.equals(this.mContext.getPackageName()) && !str.contains("com.xiaoniu")) {
+
+                                mScanFileListener.scanFile(str);
                                 long totalPss = (long) (this.mActivityManager.getProcessMemoryInfo(new int[]{i2})[0].getTotalPss() * 1024);
                                 if (hashMap.containsKey(str)) {
                                     FirstJunkInfo onelevelGarbageInfo2 = (FirstJunkInfo) hashMap.get(str);
@@ -287,6 +301,40 @@ public class FileQueryUtils {
         }
     }
 
+    @TargetApi(22)
+    private ArrayList<FirstJunkInfo> getTaskInfo26() {
+        UsageStatsManager usageStatsManager = (UsageStatsManager) mContext.getSystemService(USAGE_STATS_SERVICE);
+        if (usageStatsManager == null) {
+            return null;
+        }
+
+        ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
+        List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
+        if (!(lists == null || lists.size() == 0)) {
+            for (UsageStats usageStats : lists) {
+                mScanFileListener.scanFile(usageStats.getPackageName());
+                if (!(usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.xiaoniu"))) {
+                    String packageName = usageStats.getPackageName();
+                    if (!isSystemAppliation(packageName)) {
+                        List<PackageInfo> installedList = getInstalledList();
+                        for (PackageInfo packageInfo : installedList) {
+                            if (TextUtils.equals(packageName.trim(), packageInfo.packageName)) {
+                                FirstJunkInfo junkInfo = new FirstJunkInfo();
+                                junkInfo.setAllchecked(true);
+                                junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
+                                junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
+                                junkInfo.setTotalSize((long)(new Random().nextInt() + 62914560));
+                                junkInfo.setGarbageType("TYPE_PROCESS");
+                                junkList.add(junkInfo);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return junkList;
+    }
+
     public ArrayList<FirstJunkInfo> getTaskInfos(Context context) {
         int i2;
         try {
@@ -330,6 +378,7 @@ public class FileQueryUtils {
             while (it.hasNext()) {
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 ApplicationInfo applicationInfo = getApplicationInfo(appMemoryInfo2.getName());
+                mScanFileListener.scanFile(appMemoryInfo2.getName());
                 if (applicationInfo != null && !appMemoryInfo2.getName().contains("com.xiaoniu")) {
                     long totalPss = ((long) mActivityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {
@@ -413,6 +462,7 @@ public class FileQueryUtils {
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
                 String name = appMemoryInfo2.getName();
+                mScanFileListener.scanFile(name);
                 if (name != null && !name.contains("com.xiaoniu")) {
                     long totalPss = ((long) activityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {
@@ -451,6 +501,22 @@ public class FileQueryUtils {
         }
     }
 
+    public boolean isSystemApp(Context context,String packageName) {
+        PackageManager pm = context.getPackageManager();
+
+        if (packageName != null) {
+            try {
+                PackageInfo info = pm.getPackageInfo(packageName, 0);
+                return (info != null) && (info.applicationInfo != null) &&
+                        ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 查询apk文件
      *
@@ -471,7 +537,7 @@ public class FileQueryUtils {
                 } else {
                     cursor = query;
                 }
-                if (cursor != null && cursor.moveToFirst()) {
+                if (cursor.moveToFirst()) {
                     while (true) {
                         String string = cursor.getString(0);
                         long j = cursor.getLong(1);
@@ -701,7 +767,7 @@ public class FileQueryUtils {
 
     public boolean isSystemAppliation(String packageName) {
         try {
-           return (mPackageManager.getPackageInfo(packageName,0).applicationInfo.flags & 1) != 0;
+            return (mPackageManager.getPackageInfo(packageName, 0).applicationInfo.flags & 1) != 0;
         } catch (Exception e) {
 
         }
