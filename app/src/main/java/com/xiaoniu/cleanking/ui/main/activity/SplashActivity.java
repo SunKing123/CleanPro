@@ -49,6 +49,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
         skip();
         //扫描所有文件更新数据库
         CleanAllFileScanUtil.scanSdcardFiles();
+
     }
 
     /**

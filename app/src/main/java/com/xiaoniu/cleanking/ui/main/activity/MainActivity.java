@@ -3,7 +3,10 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -151,6 +154,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         DbHelper.copyDb();
 
         checkReadPermission();
+
+        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        //扫描更新系统数据库
+        MediaScannerConnection.scanFile(this, new String[]{absolutePath+"/Download/Upgrade"}, null, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                showToast("清理完毕");
+            }
+        });
     }
 
     private void checkReadPermission() {
