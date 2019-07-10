@@ -1,6 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 
+import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -10,9 +14,9 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.db.FileTableManager;
@@ -87,10 +91,54 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                 .subscribe(new Consumer<List<Map<String, String>>>() {
                     @Override
                     public void accept(List<Map<String, String>> strings) throws Exception {
-                        mView.scanSdcardResult(strings);
+//                        mView.scanSdcardResult(strings);
                     }
                 });
     }
+
+    /**
+     * 读取手机中所有图片信息
+     */
+    public void getPhotos(Activity mActivity) {
+        Observable.create(new ObservableOnSubscribe<List<FileEntity>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<FileEntity>> e) throws Exception {
+                List<FileEntity> mediaBeen = new ArrayList<>();
+                Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                String[] projImage = {MediaStore.Images.Media._ID
+                        , MediaStore.Images.Media.DATA
+                        , MediaStore.Images.Media.SIZE
+                        , MediaStore.Images.Media.DISPLAY_NAME};
+                Cursor mCursor = mActivity.getContentResolver().query(mImageUri,
+                        projImage,
+                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
+                        new String[]{"image/jpeg", "image/png"},
+                        MediaStore.Images.Media.DATE_MODIFIED + " desc");
+
+                if (mCursor != null) {
+                    while (mCursor.moveToNext()) {
+                        // 获取图片的路径
+                        String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                        int size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE)) ;
+                        String displayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                        //用于展示相册初始化界面
+                        mediaBeen.add(new FileEntity(size + "", path));
+                    }
+                    mCursor.close();
+                }
+
+                e.onNext(mediaBeen);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<FileEntity>>() {
+                    @Override
+                    public void accept(List<FileEntity> strings) throws Exception {
+                        mView.getPhotoInfo(strings);
+                    }
+                });
+    }
+
 
 
     /**

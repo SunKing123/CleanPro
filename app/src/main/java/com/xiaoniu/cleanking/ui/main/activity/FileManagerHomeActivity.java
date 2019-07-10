@@ -2,8 +2,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,21 +12,12 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.EventBusTags;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-import com.xiaoniu.cleanking.utils.MessageEvent;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,7 +45,6 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     View viewImagearea;
     @BindView(R.id.iv_back)
     ImageView iv_back;
-    long times1 = 0;
 
 
     @Override
@@ -71,7 +59,6 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
@@ -79,8 +66,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         }
         //查询手机存储使用率
         mPresenter.getSpaceUse(tv_spaceinfos, circleProgressView);
-        //获取sdcard文件，从数据库查询
-        mPresenter.getSdcardFiles();
+        mPresenter.getPhotos(FileManagerHomeActivity.this);
         //监听进度条进度
         circleProgressView.setOnAnimProgressListener(new CircleProgressView.OnAnimProgressListener() {
             @Override
@@ -91,124 +77,59 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     }
 
 
-    /**
-     * 扫描出的结果
-     *
-     * @param listFiles
-     */
-    public void scanSdcardResult(List<Map<String, String>> listFiles) {
-        if (listFiles.size() == 0) {
-            showLoadingDialog();
-            return;
-        }
-        cancelLoadingDialog();
-        Log.e("qwerty", "listFiles:" + listFiles.size());
+    public void getPhotoInfo(List<FileEntity> listPhoto) {
         long imageSize = 0;
-        long videoSize = 0;
-        long musicSize = 0;
-        long apkSize = 0;
-        List<FileEntity> listImages = new ArrayList<>();
-        List<Map<String, String>> listVideos = new ArrayList<>();
-        List<Map<String, String>> listMusics = new ArrayList<>();
-        List<Map<String, String>> listApks = new ArrayList<>();
-        for (int i = 0; i < listFiles.size(); i++) {
-            if (listFiles.get(i) != null) {
-                String filePath = listFiles.get(i).get("path");
-                if (Arrays.asList(CleanAllFileScanUtil.videoFormat).contains(filePath.substring(filePath.lastIndexOf('.'), filePath.length()))) {
-                    listVideos.add(listFiles.get(i));
-                    videoSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
-                } else if (Arrays.asList(CleanAllFileScanUtil.apkFormat).contains(filePath.substring(filePath.lastIndexOf('.'), filePath.length()))) {
-                    listApks.add(listFiles.get(i));
-                    apkSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
-                } else if (Arrays.asList(CleanAllFileScanUtil.musicFormat).contains(filePath.substring(filePath.lastIndexOf('.'), filePath.length()))) {
-                    listMusics.add(listFiles.get(i));
-                    musicSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
-                } else {
-                    FileEntity fileEntity = new FileEntity();
-                    fileEntity.setSize(listFiles.get(i).get("size"));
-                    fileEntity.setTime(listFiles.get(i).get("time"));
-                    fileEntity.setPath(listFiles.get(i).get("path"));
-                    fileEntity.setType(listFiles.get(i).get("type"));
-                    listImages.add(fileEntity);
-                    imageSize += listFiles.get(i) == null ? 0 : NumberUtils.getLong(listFiles.get(i).get("size"));
-                }
-            }
+        for (FileEntity fileEntity : listPhoto) {
+            imageSize += fileEntity == null ? 0 : NumberUtils.getLong(fileEntity.getSize());
         }
         tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
-//        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSize(videoSize));
-//        tvMusicSize.setText(CleanAllFileScanUtil.byte2FitSize(musicSize));
-//        tvApkSize.setText(CleanAllFileScanUtil.byte2FitSize(apkSize));
-
         viewImagearea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
-                CleanAllFileScanUtil.clean_image_list=listImages;
+                CleanAllFileScanUtil.clean_image_list = listPhoto;
                 startActivity(intent);
             }
         });
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
-
-    /**
-     * 数据库更新成功
-     */
-    @Subscribe
-    public void updateFileManager(MessageEvent messageEvent) {
-        if (EventBusTags.UPDATE_FILE_MANAGER.equals(messageEvent.getType())) {
-            //获取sdcard文件，从数据库查询
-            Log.e("更新数据成功", "更新数据成功");
-            mPresenter.getSdcardFiles();
-        }
-    }
 
     @Override
     public void netError() {
 
     }
 
-    @OnClick({R.id.view_clean_video,R.id.view_clean_music,R.id.view_clean_install_apk})
-    public void onClickView(View view){
-        int ids=view.getId();
-        if(ids==R.id.view_clean_install_apk){
+    @OnClick({R.id.view_clean_video, R.id.view_clean_music, R.id.view_clean_install_apk})
+    public void onClickView(View view) {
+        int ids = view.getId();
+        if (ids == R.id.view_clean_install_apk) {
             //跳转到安装包清理
-            startActivity(new Intent(this,CleanInstallPackageActivity.class));
-        }else if(ids==R.id.view_clean_music){
+            startActivity(new Intent(this, CleanInstallPackageActivity.class));
+        } else if (ids == R.id.view_clean_music) {
             //跳转到音乐清理
-            startActivity(new Intent(this,CleanMusicManageActivity.class));
-        }else if(ids==R.id.view_clean_video){
+            startActivity(new Intent(this, CleanMusicManageActivity.class));
+        } else if (ids == R.id.view_clean_video) {
             //跳转到视频清理
-            startActivity(new Intent(this,CleanVideoManageActivity.class));
+            startActivity(new Intent(this, CleanVideoManageActivity.class));
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        long videoSize=mPresenter.getVideoTotalSize();
-        long musicSize=mPresenter.getMusicTotalSize();
-        long apkSize=mPresenter.getAPKTotalSize();
-        if(null!=tvVideoSize){
+        long videoSize = mPresenter.getVideoTotalSize();
+        long musicSize = mPresenter.getMusicTotalSize();
+        long apkSize = mPresenter.getAPKTotalSize();
+        if (null != tvVideoSize) {
             tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
         }
-        if(null!=tvMusicSize){
+        if (null != tvMusicSize) {
             tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
         }
-        if(null!=tvApkSize){
+        if (null != tvApkSize) {
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
         }
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 }

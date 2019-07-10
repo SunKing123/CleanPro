@@ -9,11 +9,14 @@ import java.io.Serializable;
  */
 
 public class FileEntity implements Serializable {
-    public String type;
     public String size;
-    public String time;
     public String path;
-    public boolean isSelect=false;
+    public boolean isSelect = false;
+
+    public FileEntity(String size, String path) {
+        this.size = size;
+        this.path = path;
+    }
 
     public boolean getIsSelect() {
         return isSelect;
@@ -23,13 +26,6 @@ public class FileEntity implements Serializable {
         isSelect = select;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getSize() {
         return size;
@@ -39,13 +35,6 @@ public class FileEntity implements Serializable {
         this.size = size;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
 
     public String getPath() {
         return path;
