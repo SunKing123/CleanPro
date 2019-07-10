@@ -4,7 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.xiaoniu.cleanking.Manifest;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -67,12 +72,13 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     @Override
     protected void initView() {
 
-        mPresenter.scanData();
         mAdapter = new InstallPackageManageAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);
+        mAdapter.setIsShowSubTitle(false);
+
         //mAdapter.modifyList(mPresenter.getData());
         mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +93,13 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
                 totalSelectFiles();
             }
         });
+
+
+        mPresenter.scanData();
+
     }
+
+
 
 
     @Override
@@ -112,8 +124,8 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAdapter.clear();
-                mAdapter.modifyList(lists);
+                    mAdapter.clear();
+                    mAdapter.modifyList(lists);
             }
         });
     }
@@ -148,6 +160,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     public void uninstallApk(Context context, String packageName) {
         Uri uri = Uri.parse("package:" + packageName);
         Intent intent = new Intent(Intent.ACTION_DELETE, uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

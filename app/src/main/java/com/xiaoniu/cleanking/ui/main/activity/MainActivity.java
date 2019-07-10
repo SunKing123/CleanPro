@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -119,28 +118,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         JPushInterface.setDebugMode(false);
         JPushInterface.init(this);
         JPushInterface.setAlias(this, AndroidUtil.getPhoneNum(), null);
-        if (AppApplication.isAudit) {
-            mBottomBar.setCurrentItem(0);
-            mBottomBar.addItem(new BottomBarTab(this, R.mipmap.mall_normal, getString(R.string.shopping_mall)))
-                    .addItem(new BottomBarTab(this, R.mipmap.life_icon, getString(R.string.life)))
-                    .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
-            SHOPPING = 0;
-            UPQUOTA = 1;
-            MINE = 2;
-            showHideFragment(0, -1);
-        } else {
-            mBottomBar
-                    .addItem(new BottomBarTab(this, 0, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, 0, "工具箱"))
-                    .addItem(new BottomBarTab(this, 0, "资讯"))
-                    .addItem(new BottomBarTab(this, 0, getString(R.string.mine)));
-            mBottomBar.setCurrentItem(0);
-            LOAN = 0;
-            SHOPPING = 1;
-            UPQUOTA = 2;
-            MINE = 3;
-            showHideFragment(0, -1);
-        }
+
+        mBottomBar
+                .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
+                .addItem(new BottomBarTab(this,  R.mipmap.tool_normal, "工具箱"))
+                .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
+                .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+        mBottomBar.setCurrentItem(0);
+        LOAN = 0;
+        SHOPPING = 1;
+        UPQUOTA = 2;
+        MINE = 3;
+        showHideFragment(0, -1);
 
         this.mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
 
@@ -363,10 +352,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * 重新扫描文件
      */
     @Subscribe
-    public void onEventScan(ScanFileEvent scanFileEvent){
+    public void onEventScan(ScanFileEvent scanFileEvent) {
         mPresenter.saveCacheFiles();
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
