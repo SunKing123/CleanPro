@@ -149,7 +149,9 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             //如果图片大于3，移除第一张， +1是头部{
             //                lists.remove(1);
             //            }
-            if (mAdapter.getLists().size() > (IMG_MAX_SIZE + 1))
+            if (mAdapter.getLists().size() > IMG_MAX_SIZE + 1){
+                lists.remove(1);
+            }
             mAdapter.notifyDataSetChanged();
             mTxtImgSize.setText(String.format("%s/3", mAdapter.getLists().size() - 1));
         }

@@ -78,9 +78,13 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         if (!TextUtils.isEmpty(path)) {
 
             if (System.currentTimeMillis() - mCurrentTime > 50) {
-                mTxtScanContent.setText(String.format("正在扫描:%s", path));
-                mCurrentTime = System.currentTimeMillis();
-                mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
+                if(null!=mTxtScanContent){
+                    mTxtScanContent.setText(String.format("正在扫描:%s", path));
+                }
+                if(null!=mTxtSpaceSize){
+                    mCurrentTime = System.currentTimeMillis();
+                    mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
+                }
             }
 
         }

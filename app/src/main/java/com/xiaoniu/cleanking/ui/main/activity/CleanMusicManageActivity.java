@@ -198,6 +198,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mPresenter.updateRemoveCache(appInfoBeans);
 
 
+
     }
 
     public void updateData(List<MusciInfoBean> musciInfoBeans) {

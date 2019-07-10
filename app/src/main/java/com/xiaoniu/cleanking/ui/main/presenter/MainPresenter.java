@@ -206,12 +206,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      */
     public void saveCacheFiles() {
 
-
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 final String path = Environment.getExternalStorageDirectory().getPath();
-                scanMusicFile(path);
+                //scanMusicFile(path);
+                scanAllFile(path);
                 emitter.onNext("");
             }
         })
@@ -228,73 +228,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putStringSet(SpCacheConfig.CACHES_KEY_MUSCI, cachesMusicFiles);
-                        editor.commit();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
-
-
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                final String path = Environment.getExternalStorageDirectory().getPath();
-                scanApkFile(path);
-                emitter.onNext("");
-            }
-        })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(String value) {
-                        //
-                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putStringSet(SpCacheConfig.CACHES_KEY_APK, cachesApkFies);
-                        editor.commit();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                        public void onComplete() {
-                        }
-                });
-
-
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                String path = Environment.getExternalStorageDirectory().getPath();
-                scanViodeFile(path);
-                emitter.onNext("");
-            }
-        })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(String value) {
-                        //
-                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putStringSet(SpCacheConfig.CACHES_KEY_VIDEO, cachesVideo);
                         editor.commit();
                     }
@@ -308,56 +242,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
                 });
 
-
     }
 
 
-    /**
-     * 文件扫描
-     */
-    private void scanMusicFile(String path) {
-
-        File file = new File(path);
-        if (file.isDirectory()) {
-            File[] f = file.listFiles();
-            if (null != f) {
-                for (File file1 : f) {
-                    if (file1.isDirectory()) {
-                        scanMusicFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".mp3") && file1.length() != 0) {
-                        cachesMusicFiles.add(file1.getPath());
-                    }
-                }
-            }
-        }
-
-    }
-
-    private void scanApkFile(String path) {
-
-        File file = new File(path);
-        if (file.isDirectory()) {
-            File[] f = file.listFiles();
-            if (null != f) {
-                for (File file1 : f) {
-                    if (file1.isDirectory()) {
-                        scanApkFile(path + "/" + file1.getName());
-                    } else if (file1.getName().endsWith(".apk") && file1.length() != 0) {
-                        cachesApkFies.add(file1.getPath());
-                    }
-                }
-            }
-        }
-
-    }
-
-
-    /**
-     * mp4    mov    mkv    avi    wmv    m4v    mpg    vob    webm    ogv    3gp    flv    f4v    swf    gif
-     *
-     * @param path
-     */
-    private void scanViodeFile(String path) {
+    private  void scanAllFile(String path){
         File file = new File(path);
         if (file.isDirectory()) {
             File[] f = file.listFiles();
@@ -365,9 +253,13 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 for (File file1 : f) {
                     String fileName = file1.getName().toLowerCase();
                     if (file1.isDirectory()) {
-                        scanViodeFile(path + "/" + file1.getName());
+                        scanAllFile(path + "/" + file1.getName());
                     } else if (fileName.endsWith(".mp4") && file1.length() != 0) {
                         cachesVideo.add(file1.getPath());
+                    }else if(fileName.endsWith(".mp3") && file1.length()!=0){
+                        cachesMusicFiles.add(file1.getPath());
+                    }else if(fileName.endsWith(".apk")){
+                        cachesApkFies.add(file1.getPath());
                     }
                 }
             }
