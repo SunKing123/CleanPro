@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_70dp"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/dimen_16dp">
+        android:gravity="center_vertical">
 
 
         <ImageView
@@ -34,6 +34,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="小红书"
+                android:singleLine="true"
                 android:textColor="@color/color_333333" />
 
             <TextView
@@ -43,7 +44,8 @@
                 android:layout_marginTop="@dimen/dimen_4dp"
                 android:text="text"
                 android:textColor="@color/color_999999"
-                android:textSize="@dimen/dimen_12sp" />
+                android:textSize="@dimen/dimen_12sp"
+                />
 
             <View
                 android:layout_width="@dimen/dimen_10dp"

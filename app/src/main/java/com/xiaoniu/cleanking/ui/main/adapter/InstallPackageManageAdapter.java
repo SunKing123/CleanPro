@@ -40,6 +40,9 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
 
     private OnCheckListener onCheckListener;
 
+    //是否显示子标题 默认显示
+    private boolean mIsShowSubTitle=true;
+
     public InstallPackageManageAdapter(Context context) {
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -61,10 +64,15 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
             Glide.with(mContext).load(appInfoBean.icon).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
-            if (mTabType == 0) {
-               viewHolder.mTxtTime.setText(DateUtils.timestampToPatternTime(appInfoBean.installTime, "yyyy-MM-dd HH:mm"));
-            } else {
-                viewHolder.mTxtTime.setText("版本:" + appInfoBean.versionName);
+            if(mIsShowSubTitle==false){
+                viewHolder.mTxtTime.setVisibility(View.GONE);
+            }else {
+                viewHolder.mTxtTime.setVisibility(View.VISIBLE);
+                if (mTabType == 0) {
+                    viewHolder.mTxtTime.setText(DateUtils.timestampToPatternTime(appInfoBean.installTime, "yyyy-MM-dd HH:mm"));
+                } else {
+                    viewHolder.mTxtTime.setText("版本:" + appInfoBean.versionName);
+                }
             }
             viewHolder.mCheckSelect.setSelected(appInfoBean.isSelect);
             viewHolder.mCheckSelect.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +100,10 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
             mLists.addAll(appInfoBeans);
             notifyDataSetChanged();
         }
+    }
+
+    public void setIsShowSubTitle(boolean isShowSubTitle) {
+        this.mIsShowSubTitle = isShowSubTitle;
     }
 
     @Override

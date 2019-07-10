@@ -73,6 +73,8 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);
+        mAdapter.setIsShowSubTitle(false);
+
         //mAdapter.modifyList(mPresenter.getData());
         mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
             @Override

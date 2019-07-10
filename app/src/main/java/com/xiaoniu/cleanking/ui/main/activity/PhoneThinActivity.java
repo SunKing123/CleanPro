@@ -78,10 +78,10 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         if (!TextUtils.isEmpty(path)) {
 
             if (System.currentTimeMillis() - mCurrentTime > 50) {
-                if(null!=mTxtScanContent){
+                if (null != mTxtScanContent) {
                     mTxtScanContent.setText(String.format("正在扫描:%s", path));
                 }
-                if(null!=mTxtSpaceSize){
+                if (null != mTxtSpaceSize) {
                     mCurrentTime = System.currentTimeMillis();
                     mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
                 }
@@ -90,7 +90,6 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         }
 
     }
-
 
 
     @OnClick({R.id.img_back})
@@ -105,20 +104,33 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
      * 扫描完成
      */
     public void onComplete() {
-        mProgressVideo.setVisibility(View.GONE);
-        mProgressSystem.setVisibility(View.GONE);
-        mImgProgress.setVisibility(View.VISIBLE);
-        mImgProgressSystem.setVisibility(View.VISIBLE);
-        mTxtScanContent.setText("扫描完成");
-        mImgProgressSystem.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
-                long fileTotalSize = mPresenter.getFileSize();
-                intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
-                startActivity(intent);
-                finish();
-            }
-        }, 500);
+        if (null != mProgressVideo) {
+            mProgressVideo.setVisibility(View.GONE);
+        }
+        if (null != mProgressSystem) {
+            mProgressSystem.setVisibility(View.GONE);
+        }
+        if (null != mImgProgress) {
+            mImgProgress.setVisibility(View.VISIBLE);
+        }
+        if (null != mImgProgressSystem) {
+            mImgProgressSystem.setVisibility(View.VISIBLE);
+        }
+        if (null != mTxtScanContent) {
+            mTxtScanContent.setText("扫描完成");
+        }
+        if (null != mImgProgressSystem) {
+            mImgProgressSystem.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
+                    long fileTotalSize = mPresenter.getFileSize();
+                    intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
+                    startActivity(intent);
+                    finish();
+                }
+            }, 500);
+
+        }
     }
 }

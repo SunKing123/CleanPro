@@ -79,7 +79,7 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.name = packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString();
                 //应用icon
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
-                appInfoBean.installTime = packageInfo.firstInstallTime;
+                //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
                 apps.add(appInfoBean);
             }
