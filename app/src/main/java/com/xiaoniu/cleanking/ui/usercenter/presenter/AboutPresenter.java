@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -20,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -102,7 +104,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
                         }
                     });
                     mUpdateAgent.check();
-                }else{
+                } else {
                     mUpdateAgent.check();
                 }
 
@@ -119,6 +121,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
     public final static int SHARE_QQ = 3;
     public final static int SHARE_SINA = 4;
     private SHARE_MEDIA[] platform = {SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA};
+
     public void share(String picurl, String linkurl, String title, String content, int type) {
         //分享链接
         UMWeb web = new UMWeb(linkurl);
@@ -136,7 +139,12 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-
+                Log.e("ss", "ss");
+                if (share_media == SHARE_MEDIA.WEIXIN) {
+                    StatisticsUtils.trackClick("Wechat_friends_click ","微信好友","","Sharing_page");
+                } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
+                    StatisticsUtils.trackClick("Circle_of_friends_click  ","朋友圈","","Sharing_page");
+                }
             }
 
             @Override

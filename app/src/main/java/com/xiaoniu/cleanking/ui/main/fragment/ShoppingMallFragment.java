@@ -222,19 +222,13 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 firstTime = currentTimeMillis;
             } else {
                 SPUtil.setInt(getContext(), "turnask", 0);
-                AppManager.getAppManager().AppExit(getContext(), false);
+//                AppManager.getAppManager().AppExit(getContext(), false);
             }
         }
     }
 
     public class Javascript {
 
-        @JavascriptInterface
-        public void toBorrow() {//立即申请
-            Intent intent = new Intent(TAG_TURN_MAIN);
-            intent.putExtra("position", MainActivity.LOAN);
-            getActivity().sendBroadcast(intent);
-        }
 
         @JavascriptInterface
         public void toOtherPage(String url) {
@@ -245,12 +239,6 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             startActivity(UserLoadH5Activity.class, bundle);
         }
 
-        @JavascriptInterface
-        public void toActivity() {//跳转活动
-            Intent intent = new Intent(TAG_TURN_MAIN);
-            intent.putExtra("position", MainActivity.UPQUOTA);
-            getActivity().sendBroadcast(intent);
-        }
 
         @JavascriptInterface
         public void shareLink(String picurl, String linkurl, String title, String content, String activityEvtType) {

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
@@ -120,7 +121,7 @@ public class ApplicationDelegate extends DefaultApplicationLike {
 
     public void initNiuData(){
         //测试环境
-        NiuDataAPI.init(AppApplication.getInstance(), new Configuration().serverUrl("")
+        NiuDataAPI.init(AppApplication.getInstance(), new Configuration().serverUrl(AppConstants.BIGDATA_MD)
                 //.debugOn() //切换到sdk默认的测试环境地址
                 .logClose()//打开sdk日志信息
         );

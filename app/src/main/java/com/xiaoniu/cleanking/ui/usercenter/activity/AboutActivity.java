@@ -3,18 +3,21 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
@@ -93,6 +96,8 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             public void onClick(View v) {
                 String shareContent="HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
                 mPresenter.share("","","悟空清理",shareContent,-1);
+                Log.e("sdds",""+ AppManager.getAppManager().preActivity().getComponentName());
+                StatisticsUtils.trackClick("Circle_of_friends_click  ","朋友圈",source_page,"Sharing_page");
             }
         });
     }
