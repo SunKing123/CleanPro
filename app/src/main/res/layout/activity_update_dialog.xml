@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="V1.1.0"
-                    android:textColor="#4690fd"
+                    android:textColor="#29d69f"
                     android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
             </LinearLayout>

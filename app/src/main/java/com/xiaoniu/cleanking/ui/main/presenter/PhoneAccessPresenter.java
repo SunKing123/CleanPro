@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -14,11 +15,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Process;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,9 +31,11 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.ArrayList;
@@ -90,11 +97,11 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             @Override
             public void subscribe(ObservableEmitter<List<ActivityManager.RunningAppProcessInfo>> e) throws Exception {
                 //获取到可以加速的应用名单
-                List<ActivityManager.RunningAppProcessInfo> listApp=getProcessAbove();
+                List<ActivityManager.RunningAppProcessInfo> listApp = getProcessAbove();
 
                 List<ActivityManager.RunningAppProcessInfo> listTemp = new ArrayList<>();
                 for (int i = 0; i < listApp.size(); i++) {
-                    if (!isSystemApp(mView,listApp.get(i).processName)) {
+                    if (!isSystemApp(mView, listApp.get(i).processName)) {
                         listTemp.add(listApp.get(i));
                     }
                 }
@@ -123,7 +130,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         return listPck;
     }
 
-    public boolean isSystemApp(Context context,String packageName) {
+    public boolean isSystemApp(Context context, String packageName) {
         PackageManager pm = context.getPackageManager();
 
         if (packageName != null) {
@@ -157,7 +164,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         Button btnCancle = (Button) window.findViewById(R.id.btnCancle);
         TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
         TextView content = (TextView) window.findViewById(R.id.content);
-        tipTxt.setText("确定清理这"+deleteNum+"项？");
+        tipTxt.setText("确定清理这" + deleteNum + "项？");
         content.setText("删除后手机更加流畅");
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +205,80 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         }
 
         return arrayList;
+    }
+
+    //recyclerview底部弹出动画
+    public void runLayoutAnimation(final RecyclerView recyclerView, final AnimationItem item) {
+        final Context context = recyclerView.getContext();
+
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, item.getResourceId());
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
+    }
+
+    /**
+     * 数字动画
+     *
+     * @param
+     * @param startNum
+     * @param endNum
+     * @param type     1是MB，2是GB
+     */
+    boolean canPlaying = true;
+
+    public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt,View view_top, int startNum, int endNum, int type) {
+        ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
+        anim.setDuration(3000);
+        anim.setInterpolator(new DecelerateInterpolator());
+        canPlaying = true;
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int currentValue = (int) animation.getAnimatedValue();
+                tv_size.setText(currentValue + "");
+                Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
+                if (canPlaying && animation.getCurrentPlayTime() > 2800) {
+                    canPlaying = false;
+                    //播放的后500ms，背景色改变
+                    setBgChanged(viewt,view_top, 200);
+                }
+                if (currentValue == endNum) {
+                    tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
+                    tv_gb.setText(type == 1 ? "MB" : "GB");
+                }
+            }
+        });
+        anim.start();
+    }
+
+    public void setBgChanged(View viewt, View view_top,long time) {
+        ValueAnimator anim = ValueAnimator.ofInt(0, 100);
+        anim.setDuration(time);
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int currentValue = (int) animation.getAnimatedValue();
+                if (currentValue < 33) {
+                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_06C581));
+                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_06C581));
+                    mView.setStatusBar(R.color.color_06C581);
+                } else if (currentValue < 44) {
+                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_F1D53B));
+                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_F1D53B));
+                    mView.setStatusBar(R.color.color_F1D53B);
+                } else {
+                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_FD6F46));
+                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_FD6F46));
+                    mView.setStatusBar(R.color.color_FD6F46);
+                }
+
+            }
+        });
+        anim.start();
     }
 
     public interface ClickListener {
