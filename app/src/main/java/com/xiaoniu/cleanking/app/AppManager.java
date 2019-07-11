@@ -69,6 +69,15 @@ public class AppManager {
         activityName.add(activity.getClass().getName());
     }
 
+    public String preActivityName() {
+        int index = activityName.size() - 2;
+        if (index < 0) {
+            return null;
+        }
+        String activityNames = activityName.get(index);
+        return activityNames;
+    }
+
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
