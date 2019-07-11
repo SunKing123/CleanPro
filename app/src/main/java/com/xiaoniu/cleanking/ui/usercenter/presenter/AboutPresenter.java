@@ -15,6 +15,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -140,10 +141,15 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
                 Log.e("ss", "ss");
+                String pageName = "";
+                if (AppManager.getAppManager().preActivityName().contains("MainActivity")) {
+                    pageName = "mine_page";
+                }
+
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-                    StatisticsUtils.trackClick("Wechat_friends_click ","微信好友","","Sharing_page");
+                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", pageName, "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-                    StatisticsUtils.trackClick("Circle_of_friends_click  ","朋友圈","","Sharing_page");
+                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", pageName, "Sharing_page");
                 }
             }
 

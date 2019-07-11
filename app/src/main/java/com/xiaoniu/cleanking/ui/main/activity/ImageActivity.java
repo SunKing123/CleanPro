@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
@@ -18,9 +19,11 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.db.FileDBManager;
 import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,6 +82,14 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                     cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                     tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                     compulateDeleteSize();
+                    if(cb_checkall.isSelected()){
+                        String pageName = "";
+                        if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                            pageName = "file_cleaning_page";
+                        }
+                        StatisticsUtils.trackClick("picture_cleaning_all_election_click ", "全选-按钮", pageName, "picture_cleaning_page");
+
+                    }
                 }
             }
         });
@@ -111,11 +122,23 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
                     }
                 });
+
+                String pageName = "";
+                if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                    pageName = "file_cleaning_page";
+                }
+                StatisticsUtils.trackClick("picture_cleaning_clean_click", "图片清理-删除", pageName, "picture_cleaning_page");
+
             }
         });
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String pageName = "";
+                if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                    pageName = "file_cleaning_page";
+                }
+                StatisticsUtils.trackClick("picture_cleaning_back_click", "图片清理返回", pageName, "picture_cleaning_page");
                 finish();
             }
         });
@@ -202,6 +225,17 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("picture_cleaning_view_page", "图片清理");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("picture_cleaning_view_page", "图片清理");
+    }
 
     @Override
     protected void onDestroy() {

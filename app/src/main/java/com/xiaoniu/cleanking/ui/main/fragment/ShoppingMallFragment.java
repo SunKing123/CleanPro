@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -200,11 +201,18 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("information_iew_page", "信息页面");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!isHidden()) {
             mWebView.reload();
         }
+        NiuDataAPI.onPageStart("information_iew_page", "信息页面");
     }
 
     private long firstTime;

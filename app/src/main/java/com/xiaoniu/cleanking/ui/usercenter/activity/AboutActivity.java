@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
 
@@ -74,6 +75,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         line_version.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
                 if (tv_newversion.getVisibility() == View.VISIBLE) {
                     mPresenter.queryAppVersion(2, () -> {
                     });
@@ -88,6 +90,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 jumpXieyiActivity("http://www.baidu.com");
+                StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
             }
         });
 
@@ -96,17 +99,22 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             public void onClick(View v) {
                 String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
                 mPresenter.share("", "", "悟空清理", shareContent, -1);
-                String pageName = "mine_page";
-                if (AppManager.getAppManager().preActivityName().contains("MainActivity")) {
-                    pageName = "mine_page";
-                } else if (AppManager.getAppManager().preActivityName().contains("UserLoadH5Activity")) {
-                    pageName = "xieyi_page";
-                }
-                StatisticsUtils.trackClick("Circle_of_friends_click  ", "朋友圈", pageName, "Sharing_page");
+                StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
             }
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("about_view_page","关于");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("about_view_page", "关于");
+    }
 
     @Override
     public void netError() {

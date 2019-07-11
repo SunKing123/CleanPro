@@ -39,6 +39,7 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DbHelper;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
@@ -270,6 +271,32 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void showHideFragment(int position, int prePosition) {
+        String eventCode = "home_click";
+        String currentPage = "";
+        String sourcePage = "";
+        if (position == 0) {
+            eventCode = "home_click";
+            currentPage = "home_page";
+        } else if (position == 1) {
+            eventCode = "tools_click";
+            currentPage = "tools_page";
+        } else if (position == 2) {
+            eventCode = "selected_click";
+            currentPage = "selected_page";
+        } else if (position == 3) {
+            eventCode = "mine_click";
+            currentPage = "mine_page";
+        }
+        if (prePosition == 0) {
+            sourcePage = "home_page";
+        } else if (prePosition == 1) {
+            sourcePage = "tools_page";
+        } else if (prePosition == 2) {
+            sourcePage = "selected_page";
+        } else if (prePosition == 3) {
+            sourcePage = "mine_page";
+        }
+        StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
             source_page = "wode";
         if (position == CLEAN) {

@@ -38,7 +38,9 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +135,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onClick(View v) {
                 finish();
+                StatisticsUtils.trackClick("One_click_acceleration_Clean_click", "返回按钮", "home_page", "One_click_acceleration_Clean_up_pag");
             }
         });
 
@@ -178,6 +181,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
     //低于Android O

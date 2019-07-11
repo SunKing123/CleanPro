@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
@@ -14,8 +15,10 @@ import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.List;
 
@@ -74,6 +77,15 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
                 tv_percent_num.setText("" + progress);
             }
         });
+
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+
+                StatisticsUtils.trackClick("file_clean_back_click ", "返回按钮", "home_page", "file_cleaning_page");
+            }
+        });
     }
 
 
@@ -89,6 +101,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
                 Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
                 CleanAllFileScanUtil.clean_image_list = listPhoto;
                 startActivity(intent);
+                StatisticsUtils.trackClick("picture_cleaning_page_click", "图片清理", "home_page", "file_cleaning_page");
             }
         });
     }
@@ -105,12 +118,15 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         if (ids == R.id.view_clean_install_apk) {
             //跳转到安装包清理
             startActivity(new Intent(this, CleanInstallPackageActivity.class));
+            StatisticsUtils.trackClick("Installation_pack _pleaning_page", "安装包清理", "home_page", "file_cleaning_page");
         } else if (ids == R.id.view_clean_music) {
             //跳转到音乐清理
             startActivity(new Intent(this, CleanMusicManageActivity.class));
+            StatisticsUtils.trackClick("music_cleaning_page", "音乐清理", "home_page", "file_cleaning_page");
         } else if (ids == R.id.view_clean_video) {
             //跳转到视频清理
             startActivity(new Intent(this, CleanVideoManageActivity.class));
+            StatisticsUtils.trackClick("video_cleaning _page", "视频清理", "home_page", "file_cleaning_page");
         }
     }
 
@@ -129,7 +145,12 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         if (null != tvApkSize) {
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
         }
-
+        NiuDataAPI.onPageStart("file_clean_page_view_page", "文件清理");
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("file_clean_page_view_page", "文件清理");
+    }
 }
