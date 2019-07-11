@@ -2,7 +2,9 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanVideoManagePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.GrideManagerWrapper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -100,6 +103,8 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
                     mIsCheckAll=false;
                 }else {
                     mIsCheckAll=true;
+                    StatisticsUtils.trackClick("all_election_click","\"全选\"点击","file_cleaning_page","video_cleaning_page");
+
                 }
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
@@ -110,6 +115,13 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //视频浏览埋点
+        StatisticsUtils.trackClick("video_cleaning_view_page","\"视频清理\"浏览","file_cleaning_page","video_cleaning_page");
+    }
 
     /**
      * 全选
@@ -126,14 +138,24 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     }
 
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("video_cleaning_back_click ","\"视频清理\"返回按钮点击","file_cleaning_page","video_cleaning_page");
+        super.onBackPressed();
+    }
+
     @OnClick({R.id.img_back
             , R.id.btn_del})
     public void onViewClick(View view) {
         int id = view.getId();
 
         if (id == R.id.img_back) {
+            StatisticsUtils.trackClick("video_cleaning_back_click ","\"视频清理\"返回按钮点击","file_cleaning_page","video_cleaning_page");
+
             finish();
         } else if (id == R.id.btn_del) { //删除文件
+            StatisticsUtils.trackClick("clean_click","\"清理\"点击","file_cleaning_page","video_cleaning_page");
+
             String title="确定删除此视频？";
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
