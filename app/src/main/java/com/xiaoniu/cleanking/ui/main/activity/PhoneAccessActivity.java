@@ -124,7 +124,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             if (lastCheckTime == 0 || timeTemp > 2 * 60 * 1000)
                 mPresenter.getAccessAbove22();
             else
-                setCleanedView(0);
+                setCleanedView();
         } else {
             mPresenter.getAccessListBelow();
         }
@@ -162,6 +162,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         });
 
+        acceview.setListener(new AccessAnimView.onAnimEndListener() {
+            @Override
+            public void onAnimEnd() {
+                //动画结束时
+                setStatusBar(R.color.color_06C581);
+                if (viewt == null || line_title == null) return;
+                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                setCleanedView();
+            }
+        });
     }
 
     @Override
@@ -175,6 +186,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         setAdapter(listInfo);
     }
 
+    long totalSizesCleaned = 0;
 
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
@@ -182,6 +194,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         for (FirstJunkInfo firstJunkInfo : listInfo)
             totalSizes += firstJunkInfo.getTotalSize();
         setCleanSize(totalSizes);
+        this.totalSizesCleaned = totalSizes;
     }
 
     public void setCleanSize(long totalSizes) {
@@ -191,11 +204,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
-            mPresenter.setNumAnim(tv_size,tv_gb,viewt,line_title, 0, sizeMb, 1);
+            mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 1);
+            acceview.setData(sizeMb, "MB");
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
             sizeMb *= 1024;
-            mPresenter.setNumAnim(tv_size,tv_gb,viewt,line_title, 0, sizeMb, 2);
+            mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 2);
+            acceview.setData(sizeMb, "GB");
         }
     }
 
@@ -262,11 +277,25 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     //清理完毕后展示内容
-    public void setCleanedView(long total) {
+    public void setCleanedView() {
         mWebView.setVisibility(View.VISIBLE);
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("垃圾已清理");
-        setCleanSize(total);
+        setHasCleaned();
+    }
+
+    public void setHasCleaned() {
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizesCleaned);
+        int sizeMb = 0;
+        if (str_totalSize.endsWith("MB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            tv_size.setText(sizeMb + "");
+            tv_gb.setText("MB");
+        } else if (str_totalSize.endsWith("GB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            tv_size.setText(sizeMb + "");
+            tv_gb.setText("GB");
+        }
     }
 
     public void setStatusBar(int colorRes) {
