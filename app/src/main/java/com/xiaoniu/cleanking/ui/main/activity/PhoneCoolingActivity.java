@@ -114,13 +114,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
-        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","home_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","tools_page","temperature_result_display_page");
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","home_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","tools_page","temperature_result_display_page");
         super.onBackPressed();
     }
 
@@ -136,13 +136,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_process)
     public void onMLayoutProcessClicked() {
-        StatisticsUtils.trackClick("Running_applications_click ","\"运行的应用\"点击","home_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Running_applications_click ","\"运行的应用\"点击","tools_page","temperature_result_display_page");
         startActivity(RouteConstants.PROCESS_INFO_ACTIVITY);
     }
 
     @OnClick(R.id.layout_hardware)
     public void onMLayoutHardwareClicked() {
-        StatisticsUtils.trackClick("Operating_components_click ","\"运行的部件\"点击","home_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Operating_components_click ","\"运行的部件\"点击","tools_page","temperature_result_display_page");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
@@ -151,7 +151,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.text_cool_now)
     public void onMLayoutCoolClicked() {
-        StatisticsUtils.trackClick("Cool_down_immediately_click","\"立即降温\"点击","home_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Cool_down_immediately_click","\"立即降温\"点击","tools_page","temperature_result_display_page");
 
         //立即降温
         for (FirstJunkInfo firstJunkInfo : mRunningProcess) {
@@ -244,6 +244,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("Cell_phone_cooling_view_page","\"手机降温\"浏览","home_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Cell_phone_cooling_view_page","\"手机降温\"浏览","tools_page","temperature_result_display_page");
     }
 }
