@@ -99,23 +99,7 @@ public class JPushReceiver extends BroadcastReceiver {
         //已登录
         if(!TextUtils.isEmpty(AndroidUtil.getToken())) {
             //无链接跳首页，有链接跳活动
-            if (TextUtils.isEmpty(url)) {
-                Intent i = new Intent(context, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-                Intent intent = new Intent(TAG_TURN_MAIN);
-                intent.putExtra("position", MainActivity.LOAN);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.sendBroadcast(intent);
-            } else {
-                Intent intent = new Intent(context, UserLoadH5Activity.class);
-                Bundle h5Bundle = new Bundle();
-                h5Bundle.putString(Constant.URL, url);
-                h5Bundle.putString(Constant.Title, "悟空清理");
-                intent.putExtras(h5Bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
+
         }else{
 //            Intent intent = new Intent(AppApplication.getInstance(), CheckLoginActivity.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

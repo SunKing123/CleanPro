@@ -149,6 +149,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 
     @Override
     protected void initView() {
+        source_page="h5";
         bundle = getIntent().getExtras();
         if (bundle != null) {
             title = bundle.getString(Constant.Title);
@@ -506,54 +507,11 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
          */
         @JavascriptInterface
         public void pageLink(String pageType) {
-            if (JK_PAGE.equals(pageType)) {
-                //跳转首页
-                Intent intent = new Intent(TAG_TURN_MAIN);
-                intent.putExtra("position", MainActivity.LOAN);
-                sendBroadcast(intent);
-                finish();
-            } else if (HD_PAGE.equals(pageType)) {
-                //跳转活动列表
-                Intent intent = new Intent(TAG_TURN_MAIN);
-                intent.putExtra("position", MainActivity.UPQUOTA);
-                sendBroadcast(intent);
-                finish();
-            } else if (TIE_PAGE.equals(pageType)) {
-                //跳提额页面
-                Intent intent = new Intent(TAG_TURN_MAIN);
-                intent.putExtra("position", MainActivity.LIFE);
-                sendBroadcast(intent);
-                finish();
-            } else if (WODE_PAGE.equals(pageType)) {
-                //跳我的页面
-                Intent intent = new Intent(TAG_TURN_MAIN);
-                intent.putExtra("position", MainActivity.MINE);
-                sendBroadcast(intent);
-                finish();
-            }
+
         }
 
-        /**
-         * 跳转到首页，显示借款页面
-         */
-        @JavascriptInterface
-        public void toBorrow() {
-            Intent intent = new Intent(TAG_TURN_MAIN);
-            intent.putExtra("position", MainActivity.LOAN);
-            sendBroadcast(intent);
-            finish();
-        }
 
-        /**
-         * 跳转到提额页面
-         */
-        @JavascriptInterface
-        public void toActivity() {//跳转活动
-            Intent intent = new Intent(TAG_TURN_MAIN);
-            intent.putExtra("position", MainActivity.UPQUOTA);
-            sendBroadcast(intent);
-            finish();
-        }
+
 
         /**
          * 打开新的h5页面
