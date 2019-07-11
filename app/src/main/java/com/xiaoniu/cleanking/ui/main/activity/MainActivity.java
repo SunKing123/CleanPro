@@ -39,7 +39,6 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DbHelper;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
@@ -274,14 +273,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void showHideFragment(int position, int prePosition) {
         if (position == LOAN) {
             UmengUtils.event(MainActivity.this, UmengEnum.Tab_jiekuan);
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabJiekuan);
         } else if (position == MINE) {
             UmengUtils.event(MainActivity.this, UmengEnum.Tab_wode);
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabWode);
         } else if (position == UPQUOTA) {
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabTie);
         } else if (position == SHOPPING) {
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabShangcheng);
         }
         FragmentTransaction ft = mManager.beginTransaction();
         ft.show(mFragments.get(position));
