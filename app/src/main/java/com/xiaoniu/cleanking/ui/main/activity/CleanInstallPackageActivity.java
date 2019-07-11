@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanInstallPackagePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,8 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                     mIsCheckAll = false;
                 } else {
                     mIsCheckAll = true;
+                    StatisticsUtils.trackClick("Installation_pack_pleaning_all_election_click","\"全选按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
+
                 }
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
@@ -106,12 +109,20 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("Installation_pack_pleaning_back_click","\"安装包清理\"返回按钮点击","file_cleaning_page","Installation_pack_pleaning_page");
+        super.onBackPressed();
+    }
+
     @OnClick({R.id.img_back, R.id.txt_install, R.id.txt_uninstall
             , R.id.btn_del})
     public void onViewClick(View view) {
         int id = view.getId();
 
         if (id == R.id.img_back) {
+            StatisticsUtils.trackClick("Installation_pack_pleaning_back_click","\"安装包清理\"返回按钮点击","file_cleaning_page","Installation_pack_pleaning_page");
+
             finish();
         } else if (id == R.id.txt_install) {
             //已安装应用
@@ -134,6 +145,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             setEmptyView(lists.size());
 
         } else if (id == R.id.btn_del) { //删除文件
+            StatisticsUtils.trackClick("Installation_pack_pleaning_delete_click","\"删除按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
 
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance();
             dialogFragment.show(getFragmentManager(), "");
@@ -330,4 +342,13 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             mBtnDel.setClickable(false);
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //视频浏览埋点
+        StatisticsUtils.trackClick("Installation_pack_pleaning_view_page","\"安装包清理\"浏览","file_cleaning_page","Installation_pack_pleaning_page");
+    }
+
+
 }
