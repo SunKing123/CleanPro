@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class ProcessInfoAdapter extends RecyclerView.Adapter<ProcessInfoAdapter.
         holder.mTextName.setText(junkInfo.getAppName());
 
         holder.mTextStop.setOnClickListener(v->{
+            StatisticsUtils.trackClick("Forced_cessation_click","\"强制停止\"点击","temperature_result_display_page","Running_applications_page ");
+
             CleanUtil.killAppProcesses(junkInfo.getAppPackageName(),junkInfo.getPid());
             mList.remove(junkInfo);
             notifyDataSetChanged();
