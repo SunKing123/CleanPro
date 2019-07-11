@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -82,6 +85,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     //是否已经提交过，用来区分loading
     private boolean mIsSubmit;
 
+
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -139,14 +143,20 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             String contact = mTxtContact.getText().toString();
             if (null != mTxtContent && null != mTxtLength) {
                 int length = mTxtContent.getText().toString().length();
-                if(length>200){
-                    SpannableString spannableString=new SpannableString(content);
-                    //设置字体背景色
-                    spannableString.setSpan(new BackgroundColorSpan(Color.RED), content.length()-200
-                            , content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    mTxtContent.setText(spannableString);
 
-                }
+                    if (length > 200) {
+                        mTxtContent.removeTextChangedListener(textWatcherContent);
+                        SpannableString spannableString = new SpannableString(content);
+                        //设置字体背景色
+                        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF3838")), 200
+                                , mTxtContent.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        mTxtContent.getText().clear();
+                        mTxtContent.append(spannableString);
+                        mTxtContent.setSelection(content.length());
+
+                        mTxtContent.addTextChangedListener(textWatcherContent);
+                    }
+
                 mTxtLength.setText(String.format("%s/200", String.valueOf(length)));
 
                 if (!TextUtils.isEmpty(contact) && !TextUtils.isEmpty(content) && content.length() <= 200) {
@@ -161,6 +171,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
         }
     };
+
 
 
     TextWatcher textWatcherContact = new TextWatcher() {
