@@ -26,8 +26,6 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -164,7 +162,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     public void showTransAnim(FrameLayout mLayoutCleanTop) {
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(mLayoutCleanTop.getMeasuredHeight(), ScreenUtils.getScreenHeight(AppApplication.getInstance()));
-        valueAnimator.setDuration(3000);
+        valueAnimator.setDuration(1500);
         valueAnimator.setRepeatCount(0);
         valueAnimator.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
@@ -186,9 +184,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     public void startCleanScanAnimation(ImageView iconOuter, View circleOuter,View circleOuter2) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f,1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f,1f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f,1f);
 
         ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(circleOuter, "scaleX", 1f, 1.8f);
         ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(circleOuter, "scaleY", 1f, 1.8f);
@@ -203,11 +201,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         scaleY.setRepeatCount(-1);
         rotation.setRepeatCount(-1);
         alpha.setRepeatCount(-1);
-        scaleX.setDuration(1000);
-        scaleY.setDuration(1000);
+        scaleX.setDuration(2000);
+        scaleY.setDuration(2000);
         rotation.setRepeatMode(ValueAnimator.RESTART);
         rotation.setDuration(1000);
-        alpha.setDuration(1000);
+        alpha.setDuration(2000);
         alpha.setRepeatMode(ValueAnimator.REVERSE);
 
         //第一圈
@@ -222,12 +220,32 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         cleanScanAnimator = new AnimatorSet();
 
         cleanScanAnimator.playTogether(scaleX,scaleY,rotation,alpha,scaleX2,scaleY2,alpha2,scaleX3,scaleY3,alpha3);
+        cleanScanAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         cleanScanAnimator.start();
     }
 
     public void stopCleanScanAnimation() {
         if (cleanScanAnimator != null) {
-            cleanScanAnimator.cancel();
+            cleanScanAnimator.end();
         }
         mView.endScanAnimation();
     }
@@ -342,7 +360,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
         new Handler().postDelayed(() -> {
             if (animatorSet != null) {
-                animatorSet.cancel();
+
+                mView.showCleanFinish(Long.valueOf(countEntity.getTotalSize()));
+                animatorSet.end();
             }
         }, 6000);
 
@@ -355,6 +375,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         });
         valueAnimator.start();
 //        clearAll();
+
+
     }
 
     @SuppressLint("CheckResult")
@@ -386,8 +408,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-            mView.showCleanFinish(o);
-            EventBus.getDefault().post("clean_finish");
+
         });
 
 
