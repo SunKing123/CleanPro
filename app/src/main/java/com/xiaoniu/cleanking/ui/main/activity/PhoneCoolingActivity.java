@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
@@ -113,7 +114,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
+        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","tools_page","temperature_result_display_page");
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","tools_page","temperature_result_display_page");
+        super.onBackPressed();
     }
 
     @Override
@@ -128,11 +136,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_process)
     public void onMLayoutProcessClicked() {
+        StatisticsUtils.trackClick("Running_applications_click ","\"运行的应用\"点击","tools_page","temperature_result_display_page");
         startActivity(RouteConstants.PROCESS_INFO_ACTIVITY);
     }
 
     @OnClick(R.id.layout_hardware)
     public void onMLayoutHardwareClicked() {
+        StatisticsUtils.trackClick("Operating_components_click ","\"运行的部件\"点击","tools_page","temperature_result_display_page");
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
         startActivity(RouteConstants.HARDWARE_INFO_ACTIVITY, bundle);
@@ -140,6 +151,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.text_cool_now)
     public void onMLayoutCoolClicked() {
+        StatisticsUtils.trackClick("Cool_down_immediately_click","\"立即降温\"点击","tools_page","temperature_result_display_page");
+
         //立即降温
         for (FirstJunkInfo firstJunkInfo : mRunningProcess) {
             CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(),firstJunkInfo.getPid());
@@ -226,5 +239,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mIcon.setImageDrawable(AppApplication.getInstance().getResources().getDrawable(imageIcon));
         mTextName.setText(name);
         return view;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("Cell_phone_cooling_view_page","\"手机降温\"浏览","tools_page","temperature_result_display_page");
     }
 }
