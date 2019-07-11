@@ -35,14 +35,8 @@
     <item
         android:drawable="@mipmap/hj_bottom11"
         android:duration="40" />
-    <item
-        android:drawable="@mipmap/hj_bottom12"
-        android:duration="40" />
 
 
-    <item
-        android:drawable="@mipmap/hj_bottom11"
-        android:duration="40" />
     <item
         android:drawable="@mipmap/hj_bottom10"
         android:duration="40" />

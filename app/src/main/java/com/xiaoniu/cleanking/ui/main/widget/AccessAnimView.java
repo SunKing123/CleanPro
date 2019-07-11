@@ -38,6 +38,14 @@ public class AccessAnimView extends RelativeLayout {
     LinearLayout line_size;
     LinearLayout line_title;
     ImageView iv_bot;
+    ImageView iv_yu1;
+    ImageView iv_yu2;
+    ImageView iv_yu3;
+    ImageView iv_yu4;
+    ImageView iv_yu5;
+    ImageView iv_yu6;
+    ImageView iv_yu7;
+    ImageView iv_yu8;
     TextView tv_size;
     TextView tv_gb;
     LinearLayout line_allnum;
@@ -82,6 +90,14 @@ public class AccessAnimView extends RelativeLayout {
         line_size = v.findViewById(R.id.line_size);
         line_allnum = v.findViewById(R.id.line_allnum);
         line_title = v.findViewById(R.id.line_title);
+        iv_yu1 = v.findViewById(R.id.iv_yu1);
+        iv_yu2 = v.findViewById(R.id.iv_yu2);
+        iv_yu3 = v.findViewById(R.id.iv_yu3);
+        iv_yu4 = v.findViewById(R.id.iv_yu4);
+        iv_yu5 = v.findViewById(R.id.iv_yu5);
+        iv_yu6 = v.findViewById(R.id.iv_yu6);
+        iv_yu7 = v.findViewById(R.id.iv_yu7);
+        iv_yu8 = v.findViewById(R.id.iv_yu8);
 
     }
 
@@ -95,7 +111,7 @@ public class AccessAnimView extends RelativeLayout {
     //Step1:上面红色布局和中间1dp的布局动画开始
     public void startTopAnim() {
         int startHeight = DeviceUtils.dip2px(150);
-        int endHeight = DeviceUtils.getScreenHeight() - DeviceUtils.dip2px(56);
+        int endHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -172,6 +188,15 @@ public class AccessAnimView extends RelativeLayout {
     boolean canPlaying = true;
 
     public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, int startNum, int endNum, int type) {
+        setYuAnim(iv_yu1, 0);
+        setYuAnim(iv_yu2, 80);
+        setYuAnim(iv_yu3, 160);
+        setYuAnim(iv_yu4, 240);
+
+        setYuAnim(iv_yu5, 320);
+        setYuAnim(iv_yu6, 400);
+        setYuAnim(iv_yu7, 480);
+        setYuAnim(iv_yu8, 540);
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(3000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -247,7 +272,7 @@ public class AccessAnimView extends RelativeLayout {
         line_access.setVisibility(GONE);
 
         int endHeight = DeviceUtils.dip2px(150);
-        int startHeight = DeviceUtils.getScreenHeight() - DeviceUtils.dip2px(56);
+        int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -283,6 +308,24 @@ public class AccessAnimView extends RelativeLayout {
         animator.setInterpolator(new AccelerateInterpolator());
         animator.start();
         return animator;
+    }
+
+    //下雨动画
+    public void setYuAnim(View viewY, long delay) {
+        viewY.setVisibility(VISIBLE);
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", DeviceUtils.dip2px(112) * -1, DeviceUtils.getScreenHeight() + DeviceUtils.dip2px(112));
+                ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationY);
+                animator.setDuration(500);
+                animator.setInterpolator(new AccelerateInterpolator());
+                animator.setRepeatCount(10);
+//        animator.setRepeatMode(ValueAnimator.INFINITE);
+                animator.start();
+            }
+        }, delay);
+
     }
 
 }

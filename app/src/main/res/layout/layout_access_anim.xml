@@ -130,5 +130,7 @@
             android:scaleType="fitXY"
             android:src="@mipmap/hj_bottom1" />
     </LinearLayout>
-
+    <include
+        layout="@layout/layout_yu_anim"
+        />
 </RelativeLayout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+<View
+    android:layout_width="0px"
+    android:layout_height="1dp"
+    android:layout_weight="1"
+    />
+    <ImageView
+        android:id="@+id/iv_yu2"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="112dp"
+        android:visibility="gone"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <ImageView
+        android:id="@+id/iv_yu5"
+        android:visibility="gone"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <View
+        android:layout_width="10dp"
+        android:layout_height="1dp"
+        />
+    <ImageView
+        android:id="@+id/iv_yu4"
+        android:visibility="gone"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <ImageView
+        android:id="@+id/iv_yu8"
+        android:visibility="gone"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <View
+        android:layout_width="20dp"
+        android:layout_height="1dp"
+        />
+    <ImageView
+        android:id="@+id/iv_yu1"
+        android:visibility="gone"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <ImageView
+        android:id="@+id/iv_yu7"
+        android:layout_width="@dimen/dimen_2dp"
+        android:visibility="gone"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <View
+        android:layout_width="20dp"
+        android:layout_height="1dp"
+        />
+    <ImageView
+        android:id="@+id/iv_yu6"
+        android:visibility="gone"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+    <ImageView
+        android:id="@+id/iv_yu3"
+        android:layout_width="@dimen/dimen_2dp"
+        android:visibility="gone"
+        android:layout_height="112dp"
+        android:src="@mipmap/icon_yu" />
+    <View
+        android:layout_width="0px"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        />
+</LinearLayout>
