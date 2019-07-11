@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMusicFilePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -70,6 +71,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("music_cleaning_page_view_page","\"音乐清理\"浏览","file_cleaning_page","music_cleaning_page");
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_music_file_manage;
@@ -90,6 +98,8 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
                     mIsCheckAll = false;
                 } else {
                     mIsCheckAll = true;
+                    StatisticsUtils.trackClick("music_cleaning_all_election_click ","\"全选\"按钮点击","file_cleaning_page","music_cleaning_page");
+
                 }
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
@@ -139,8 +149,12 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         int id = view.getId();
 
         if (id == R.id.img_back) {
+            StatisticsUtils.trackClick("music_cleaning_back_click   ","\"音乐清理\"返回按钮点击","file_cleaning_page","music_cleaning_page");
+
             finish();
         } else if (id == R.id.btn_del) { //删除文件
+            StatisticsUtils.trackClick("music_cleaning_delete_click  ","\"删除\"按钮点击","file_cleaning_page","music_cleaning_page");
+
             String title = "确定删除此音乐？";
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
