@@ -13,17 +13,15 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
-import com.xiaoniu.cleanking.ui.main.bean.BigFileInfoEntity;
-import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
+import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
+import com.xiaoniu.cleanking.ui.main.bean.SecondLevelEntity;
+import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.model.CleanBigFileModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,6 +34,14 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, CleanBigFileModel> {
 
+    private SecondLevelEntity mSecondLevelEntity;
+    private SecondLevelEntity mMusicList;
+    private SecondLevelEntity mImageList;
+    private SecondLevelEntity mZipList;
+    private SecondLevelEntity mTextList;
+    private SecondLevelEntity mApkList;
+    private List<SecondLevelEntity> mLists = new ArrayList<>();
+
     @Inject
     public CleanBigFilePresenter() {
     }
@@ -45,26 +51,64 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
      */
     @SuppressLint("CheckResult")
     public void scanBigFile() {
+
+        initList();
+
         Observable.create(e -> {
             try {
-                Cursor query = AppApplication.getInstance().getContentResolver().query(Uri.parse("content://media/external/file"), new String[]{"_data", "_size"}, "_size>=?", new String[]{"10485760"}, "_size");
+                Cursor query = AppApplication.getInstance().getContentResolver().query(Uri.parse("content://media/external/file"), new String[]{"mime_type", "_data", "_size"}, "_size>=?", new String[]{"10485760"}, "_size");
                 long total = 0;
-                List<BigFileInfoEntity> list = new ArrayList<>();
                 if (query != null) {
                     int columnIndex = query.getColumnIndex("_data");
                     query.getColumnIndex("_size");
+                    int mimeTypeColumn = query.getColumnIndex("mime_type");
                     if (query.moveToFirst()) {
                         while (true) {
                             File file = new File(query.getString(columnIndex));
+                            String mimeType = query.getString(mimeTypeColumn);
+                            System.out.println(file.getName() + "===================:" + mimeType);
                             if (file.exists()) {
                                 long length = file.length();
                                 if (length < 10485760) {
                                     break;
                                 }
                                 total += length;
-                                BigFileInfoEntity cleanFileManagerInfo = new BigFileInfoEntity();
+                                ThirdLevelEntity cleanFileManagerInfo = new ThirdLevelEntity();
                                 cleanFileManagerInfo.setFile(file);
-                                list.add(cleanFileManagerInfo);
+                                if (!TextUtils.isEmpty(mimeType)){
+                                    if (mimeType.contains("video")) {
+                                        //视频
+                                        cleanFileManagerInfo.setContent("[视频]");
+                                        mSecondLevelEntity.addSubItem(cleanFileManagerInfo);
+                                        mSecondLevelEntity.addSize(length);
+                                    } else if (mimeType.contains("audio")) {
+                                        //音乐
+                                        cleanFileManagerInfo.setContent("[音乐]");
+                                        mMusicList.addSubItem(cleanFileManagerInfo);
+                                        mMusicList.addSize(length);
+                                    } else if (mimeType.contains("application/rar") || mimeType.contains("application/zip") || mimeType.contains("application/x-tar")) {
+                                        //压缩包
+                                        cleanFileManagerInfo.setContent("[压缩包]");
+                                        mZipList.addSubItem(cleanFileManagerInfo);
+                                        mZipList.addSize(length);
+                                    } else if (mimeType.contains("image")) {
+                                        //图片
+                                        cleanFileManagerInfo.setContent("[图片]");
+                                        mImageList.addSubItem(cleanFileManagerInfo);
+                                        mImageList.addSize(length);
+                                    } else if (mimeType.contains("text") || mimeType.contains("application/msword") || mimeType.contains("application/vnd.ms-powerpoint") || mimeType.contains("application/pdf")) {
+                                        //文档
+                                        cleanFileManagerInfo.setContent("[文档]");
+                                        mTextList.addSubItem(cleanFileManagerInfo);
+                                        mTextList.addSize(length);
+                                    } else if (mimeType.contains("application/vnd.android.package-archive")) {
+                                        //apk
+                                        cleanFileManagerInfo.setContent("[apk安装包]");
+                                        mApkList.addSubItem(cleanFileManagerInfo);
+                                        mApkList.addSize(length);
+                                    }
+
+                                }
                             }
                             if (!query.moveToNext()) {
                                 break;
@@ -73,50 +117,94 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                     }
                     query.close();
 
-                    List<FilePathInfoClean> filePathInfoCleans = CleanDBManager.queryAllFilePathInfo();
-                    if (filePathInfoCleans == null) {
-                        e.onNext(total);
-                        e.onNext(list);
-                        return;
-                    }
-                    for (FilePathInfoClean filePathInfoClean : filePathInfoCleans) {
-                        if (!TextUtils.isEmpty(filePathInfoClean.getRootPath())) {
-                            filePathInfoClean.setRootPath(FileQueryUtils.getFilePath(filePathInfoClean.getRootPath()));
-                        }
-                    }
-                    if (list.size() > 0) {
-                        for (BigFileInfoEntity cleanFileManagerInfo : list) {
-                            Iterator it = filePathInfoCleans.iterator();
-                            while (true) {
-                                if (!it.hasNext()) {
-                                    break;
-                                }
-                                FilePathInfoClean filePathInfoClean2 = (FilePathInfoClean) it.next();
-                                if (!TextUtils.isEmpty(filePathInfoClean2.getRootPath()) && cleanFileManagerInfo.getFile().getAbsolutePath().contains(filePathInfoClean2.getRootPath())) {
-                                    cleanFileManagerInfo.setContent("来自" + filePathInfoClean2.getAppName());
-                                    break;
-                                }
-                            }
-                            if (TextUtils.isEmpty(cleanFileManagerInfo.getContent())) {
-                                cleanFileManagerInfo.setContent("来自/" + cleanFileManagerInfo.getFile().getParentFile().getName());
-                            }
-                        }
-                    }
-                }
+//                    List<FilePathInfoClean> filePathInfoCleans = CleanDBManager.queryAllFilePathInfo();
+//                    if (filePathInfoCleans == null) {
+//                        e.onNext(total);
+//                        e.onNext(list);
+//                        return;
+//                    }
+//                    for (FilePathInfoClean filePathInfoClean : filePathInfoCleans) {
+//                        if (!TextUtils.isEmpty(filePathInfoClean.getRootPath())) {
+//                            filePathInfoClean.setRootPath(FileQueryUtils.getFilePath(filePathInfoClean.getRootPath()));
+//                        }
+//                    }
+//                    if (list.size() > 0) {
+//                        for (ThirdLevelEntity cleanFileManagerInfo : list) {
+//                            Iterator it = filePathInfoCleans.iterator();
+//                            while (true) {
+//                                if (!it.hasNext()) {
+//                                    break;
+//                                }
+//                                FilePathInfoClean filePathInfoClean2 = (FilePathInfoClean) it.next();
+//                                if (!TextUtils.isEmpty(filePathInfoClean2.getRootPath()) && cleanFileManagerInfo.getFile().getAbsolutePath().contains(filePathInfoClean2.getRootPath())) {
+//                                    cleanFileManagerInfo.setContent("来自" + filePathInfoClean2.getAppName());
+//                                    break;
+//                                }
+//                            }
+//                            if (TextUtils.isEmpty(cleanFileManagerInfo.getContent())) {
+//                                cleanFileManagerInfo.setContent("来自/" + cleanFileManagerInfo.getFile().getParentFile().getName());
+//                            }
+//                        }
+//                    }
 
+                    List<SecondLevelEntity> realData = new ArrayList<>();
+                    for (SecondLevelEntity entity : mLists) {
+                        if (entity.getSubItems() != null && entity.getSubItems().size() > 0) {
+                            realData.add(entity);
+                        }
+                    }
+                    e.onNext(realData);
+                }
                 e.onNext(total);
-                e.onNext(list);
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
+                    FirstLevelEntity firstLevelEntity = new FirstLevelEntity();
                     if (o instanceof List) {
-                        mView.showList((List<BigFileInfoEntity>) o);
+                        firstLevelEntity.setSubItems((List<SecondLevelEntity>) o);
+                        mView.showList(firstLevelEntity);
                     } else {
                         mView.showTotal((long) o);
                     }
                 });
+    }
+
+
+    private void initList() {
+        mSecondLevelEntity = new SecondLevelEntity();
+        mSecondLevelEntity.setName("下载的视频");
+        mSecondLevelEntity.setType(SecondLevelEntity.TYPE_VIDEO);
+
+        //音乐
+        mMusicList = new SecondLevelEntity();
+        mMusicList.setName("下载的音乐");
+        mMusicList.setType(SecondLevelEntity.TYPE_MUSIC);
+
+        //压缩包
+        mZipList = new SecondLevelEntity();
+        mZipList.setName("下载的压缩包");
+        mZipList.setType(SecondLevelEntity.TYPE_ZIP);
+        //图片
+        mImageList = new SecondLevelEntity();
+        mImageList.setName("下载的图片");
+        mImageList.setType(SecondLevelEntity.TYPE_IMAGE);
+        //文档
+        mTextList = new SecondLevelEntity();
+        mTextList.setName("下载的办公文件");
+        mTextList.setType(SecondLevelEntity.TYPE_WORD);
+        //APK
+        mApkList = new SecondLevelEntity();
+        mApkList.setName("下载的安装包");
+        mApkList.setType(SecondLevelEntity.TYPE_APK);
+
+        mLists.add(mSecondLevelEntity);
+        mLists.add(mMusicList);
+        mLists.add(mZipList);
+        mLists.add(mImageList);
+        mLists.add(mTextList);
+        mLists.add(mApkList);
     }
 
     /**
@@ -125,9 +213,9 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
      * @param data
      */
     @SuppressLint("CheckResult")
-    public void deleteFiles(List<BigFileInfoEntity> data, long total) {
+    public void deleteFiles(List<ThirdLevelEntity> data, long total) {
         Flowable.create(e -> {
-            for (BigFileInfoEntity entity : data) {
+            for (ThirdLevelEntity entity : data) {
                 if (entity.isChecked()) {
                     entity.getFile().delete();
                 }
@@ -143,11 +231,11 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
      *
      * @param data
      */
-    public void showDeleteDialog(List<BigFileInfoEntity> data) {
+    public void showDeleteDialog(List<ThirdLevelEntity> data) {
 
         long total = 0;
         int count = 0;
-        for (BigFileInfoEntity entity : data) {
+        for (ThirdLevelEntity entity : data) {
             if (entity.isChecked()) {
                 total += entity.getFile().length();
                 count++;

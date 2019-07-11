@@ -191,6 +191,8 @@ dependencies {
 
     implementation 'com.jaredrummler:android-processes:1.1.1'
     compile project(path: ':takephoto_library')
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
+    implementation 'com.airbnb.android:lottie:2.7.0'
 }
 
 

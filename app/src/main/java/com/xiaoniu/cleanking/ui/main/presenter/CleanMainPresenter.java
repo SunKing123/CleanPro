@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 
 import java.util.ArrayList;
@@ -314,7 +315,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360,0,360,0,360,0,360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360,0,360,0,360,0,360);
 
-        rotation.setDuration(2000);
+        rotation.setDuration(1300);
         rotation2.setDuration(2000);
 
         rotation3.setDuration(300);
@@ -335,6 +336,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
                 animatorSet.start();
 
                 startClean(animatorSet,textCount,countEntity);
+
+                mView.showLottieView();
             }
 
             @Override
@@ -360,14 +363,13 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
         new Handler().postDelayed(() -> {
             if (animatorSet != null) {
-
                 mView.showCleanFinish(Long.valueOf(countEntity.getTotalSize()));
                 animatorSet.end();
             }
-        }, 6000);
+        }, 5000);
 
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(6000);
+        valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
@@ -414,4 +416,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     }
 
+    /**
+     * view移动动画
+     */
+    public void viewTranslateAnim() {
+        ImageView imageView = new ImageView(mView.getActivity());
+        imageView.setImageResource(R.mipmap.icon_clean_jd);
+        FrameLayout cleanTopLayout = mView.getCleanTopLayout();
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.topMargin = DeviceUtils.dip2px(50);
+        cleanTopLayout.addView(imageView,layoutParams);
+    }
 }
