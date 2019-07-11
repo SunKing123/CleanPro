@@ -77,11 +77,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 借款页
      */
-    public static int LOAN = 0;
+    public static int CLEAN = 0;
     /**
      * 商城页
      */
-    public static int SHOPPING = 1;
+    public static int TOOL = 1;
     /**
      * 生活页
      */
@@ -89,12 +89,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 提额
      */
-    public static int UPQUOTA = 2;
+    public static int NEWS = 2;
     /**
      * 我的页面
      */
     public static int MINE = 3;
-    public final int[] popPositions = {Constant.LOAN, Constant.SHOPPING, Constant.UPQUOTA, Constant.MINE};
 
     @Inject
     NoClearSPHelper mSPHelper;
@@ -121,13 +120,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         mBottomBar
                 .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
-                .addItem(new BottomBarTab(this,  R.mipmap.tool_normal, "工具箱"))
+//                .addItem(new BottomBarTab(this, R.mipmap.tool_normal, "工具箱"))
                 .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
                 .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         mBottomBar.setCurrentItem(0);
-        LOAN = 0;
-        SHOPPING = 1;
-        UPQUOTA = 2;
+        CLEAN = 0;
+        TOOL = 1;
+        NEWS = 2;
         MINE = 3;
         showHideFragment(0, -1);
 
@@ -157,7 +156,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         //扫描更新系统数据库
-        MediaScannerConnection.scanFile(this, new String[]{absolutePath+"/Download/Upgrade"}, null, new MediaScannerConnection.OnScanCompletedListener() {
+        MediaScannerConnection.scanFile(this, new String[]{absolutePath + "/Download/Upgrade"}, null, new MediaScannerConnection.OnScanCompletedListener() {
             @Override
             public void onScanCompleted(String path, Uri uri) {
                 showToast("清理完毕");
@@ -211,13 +210,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String type = intent.getString("type");
 
         if ("shangcheng".equals(type)) {
-            mBottomBar.setCurrentItem(SHOPPING);
+            mBottomBar.setCurrentItem(TOOL);
         } else if ("shenghuo".equals(type)) {
             mBottomBar.setCurrentItem(LIFE);
         } else if ("jiekuan".equals(type)) {
-            mBottomBar.setCurrentItem(LOAN);
+            mBottomBar.setCurrentItem(CLEAN);
         } else if ("huodong".equals(type)) {
-            mBottomBar.setCurrentItem(UPQUOTA);
+            mBottomBar.setCurrentItem(NEWS);
         } else if ("wode".equals(type)) {
             mBottomBar.setCurrentItem(MINE);
         }
@@ -254,17 +253,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
 
         mFragments.add(mainFragment);
-        mFragments.add(toolFragment);
+//        mFragments.add(toolFragment);
         mFragments.add(upQuotaFragment);
         mFragments.add(mineFragment);
 
         mManager.beginTransaction()
                 .add(R.id.frame_layout, mainFragment)
-                .add(R.id.frame_layout, toolFragment)
+//                .add(R.id.frame_layout, toolFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
                 .add(R.id.frame_layout, mineFragment)
                 .hide(mainFragment)
-                .hide(toolFragment)
+//                .hide(toolFragment)
                 .hide(upQuotaFragment)
                 .hide(mineFragment)
                 .commitAllowingStateLoss();
@@ -272,16 +271,40 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void showHideFragment(int position, int prePosition) {
-        if (position == LOAN) {
+        String eventCode = "home_click";
+        String currentPage = "";
+        String sourcePage = "";
+        if (position == 0) {
+            eventCode = "home_click";
+            currentPage = "home_page";
+        } else if (position == 1) {
+            eventCode = "tools_click";
+            currentPage = "tools_page";
+        } else if (position == 2) {
+            eventCode = "selected_click";
+            currentPage = "selected_page";
+        } else if (position == 3) {
+            eventCode = "mine_click";
+            currentPage = "mine_page";
+        }
+        if (prePosition == 0) {
+            sourcePage = "home_page";
+        } else if (prePosition == 1) {
+            sourcePage = "tools_page";
+        } else if (prePosition == 2) {
+            sourcePage = "selected_page";
+        } else if (prePosition == 3) {
+            sourcePage = "mine_page";
+        }
+        StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
+        if (position == MINE)
+            source_page = "wode";
+        if (position == CLEAN) {
             UmengUtils.event(MainActivity.this, UmengEnum.Tab_jiekuan);
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabJiekuan);
         } else if (position == MINE) {
             UmengUtils.event(MainActivity.this, UmengEnum.Tab_wode);
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabWode);
-        } else if (position == UPQUOTA) {
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabTie);
-        } else if (position == SHOPPING) {
-            StatisticsUtils.burying(StatisticsUtils.BuryEvent.TabShangcheng);
+        } else if (position == NEWS) {
+        } else if (position == TOOL) {
         }
         FragmentTransaction ft = mManager.beginTransaction();
         ft.show(mFragments.get(position));
@@ -333,7 +356,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     //如果审核满足答题条件时自动跳转答题页面，返回则不跳
                     SPUtil.setInt(MainActivity.this, "turnask", 0);
                     SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);
-                    AppManager.getAppManager().AppExit(MainActivity.this, false);
+                    AppManager.getAppManager().clearStack();
                 }
             }
         }

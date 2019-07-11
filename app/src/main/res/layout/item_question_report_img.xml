@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -9,11 +10,12 @@
         android:layout_width="@dimen/dimen_60dp"
         android:layout_height="@dimen/dimen_60dp">
 
-        <ImageView
+        <com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView
             android:id="@+id/img"
             android:layout_width="@dimen/dimen_44dp"
             android:layout_height="@dimen/dimen_44dp"
             android:layout_gravity="center|left"
+            app:riv_corner_radius="3dp"
             android:scaleType="fitXY"/>
         <ImageView
             android:id="@+id/img_close"

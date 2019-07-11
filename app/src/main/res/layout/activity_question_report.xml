@@ -64,7 +64,6 @@
                 android:background="@color/white"
                 android:gravity="top"
                 android:hint="请输入您的问题和建议"
-                android:maxLength="200"
                 android:textColor="@color/color_333333"
                 android:textColorHint="@color/color_999999"
                 android:textSize="@dimen/dimen_15sp" />
@@ -161,6 +160,8 @@
             android:layout_marginRight="@dimen/dimen_16dp"
             android:background="@drawable/bg_btn_del"
             android:text="提交反馈"
+            android:enabled="false"
+            style="?android:attr/borderlessButtonStyle"
             android:textColor="@color/white" />
     </LinearLayout>
 

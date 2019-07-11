@@ -3,22 +3,26 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
 
@@ -66,15 +70,16 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         });
         tv_version.setText("当前版本 V" + AndroidUtil.getAppVersionName());
         //检测版本更新
-        mPresenter.queryAppVersion(1,() -> {
+        mPresenter.queryAppVersion(1, () -> {
         });
         line_version.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(tv_newversion.getVisibility()==View.VISIBLE){
-                    mPresenter.queryAppVersion(2,() -> {
+                StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
+                if (tv_newversion.getVisibility() == View.VISIBLE) {
+                    mPresenter.queryAppVersion(2, () -> {
                     });
-                }else{
+                } else {
                     ToastUtils.show("当前已是最新版本");
                 }
 
@@ -85,31 +90,45 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 jumpXieyiActivity("http://www.baidu.com");
+                StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
             }
         });
 
         line_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String shareContent="HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-                mPresenter.share("","","悟空清理",shareContent,-1);
+                String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
+                mPresenter.share("", "", "悟空清理", shareContent, -1);
+                StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
             }
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("about_view_page","关于");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("about_view_page", "关于");
+    }
 
     @Override
     public void netError() {
 
     }
 
-    public void jumpXieyiActivity(String url){
+    public void jumpXieyiActivity(String url) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
         bundle.putString(Constant.Title, "服务协议");
         bundle.putBoolean(Constant.NoTitle, false);
         startActivity(UserLoadH5Activity.class, bundle);
     }
+
     //显示是否有新版本文字
     public void setShowVersion(AppVersion result) {
         if (result != null) {

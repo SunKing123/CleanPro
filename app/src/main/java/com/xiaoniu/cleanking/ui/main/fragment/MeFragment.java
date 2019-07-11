@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -46,6 +47,7 @@ public class MeFragment extends SimpleFragment {
         line_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StatisticsUtils.trackClick("about_click","\"关于\"点击","mine_page","personal_center_page");
                 startActivity(AboutActivity.class);
             }
         });
@@ -62,6 +64,13 @@ public class MeFragment extends SimpleFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("personal_center_view_page","\"个人中心\"点击","mine_page","personal_center_page");
+
     }
 
     @Override
@@ -86,10 +95,14 @@ public class MeFragment extends SimpleFragment {
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_setting) {
+            StatisticsUtils.trackClick("set_up_click","\"设置\"点击","mine_page","personal_center_page");
             startActivity(new Intent(getContext(), WhiteListSettingActivity.class));
         } else if (ids == R.id.ll_question_report) {
+            StatisticsUtils.trackClick("question_feedback_click","\"问题反馈\"点击","mine_page","personal_center_page");
+
             startActivity(new Intent(getContext(), QuestionReportActivity.class));
         }else if (ids == R.id.line_permisson) {
+            StatisticsUtils.trackClick("privilege_management_click","\"权限管理\"点击","mine_page","personal_center_page");
             startActivity(new Intent(getContext(), PermissionActivity.class));
         }
     }

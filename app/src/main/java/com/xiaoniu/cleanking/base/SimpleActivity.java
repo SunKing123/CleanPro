@@ -58,7 +58,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler = new MHandler(SimpleActivity.this);
-        AppManager.getAppManager().addActivity(this);
+
         setContentView(getLayoutId());
         mUnBinder = ButterKnife.bind(this);
         mContext = this;
@@ -101,7 +101,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onDestroy() {
         mUnBinder.unbind();
-        AppManager.getAppManager().finishActivity(this);
+//        AppManager.getAppManager().finishActivity(this);
         cancelLoadingDialog();
         this.mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
@@ -110,6 +110,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        AppManager.getAppManager().addActivityName(this);
         MobclickAgent.onResume(this);
     }
 

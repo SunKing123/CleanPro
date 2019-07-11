@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -200,11 +201,18 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("information_iew_page", "信息页面");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!isHidden()) {
             mWebView.reload();
         }
+        NiuDataAPI.onPageStart("information_iew_page", "信息页面");
     }
 
     private long firstTime;
@@ -222,19 +230,13 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 firstTime = currentTimeMillis;
             } else {
                 SPUtil.setInt(getContext(), "turnask", 0);
-                AppManager.getAppManager().AppExit(getContext(), false);
+//                AppManager.getAppManager().AppExit(getContext(), false);
             }
         }
     }
 
     public class Javascript {
 
-        @JavascriptInterface
-        public void toBorrow() {//立即申请
-            Intent intent = new Intent(TAG_TURN_MAIN);
-            intent.putExtra("position", MainActivity.LOAN);
-            getActivity().sendBroadcast(intent);
-        }
 
         @JavascriptInterface
         public void toOtherPage(String url) {
@@ -245,12 +247,6 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             startActivity(UserLoadH5Activity.class, bundle);
         }
 
-        @JavascriptInterface
-        public void toActivity() {//跳转活动
-            Intent intent = new Intent(TAG_TURN_MAIN);
-            intent.putExtra("position", MainActivity.UPQUOTA);
-            getActivity().sendBroadcast(intent);
-        }
 
         @JavascriptInterface
         public void shareLink(String picurl, String linkurl, String title, String content, String activityEvtType) {

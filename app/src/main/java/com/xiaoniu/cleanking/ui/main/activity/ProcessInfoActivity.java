@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessInfoAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.List;
@@ -61,6 +62,19 @@ public class ProcessInfoActivity extends SimpleActivity {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
+        StatisticsUtils.trackClick("Running_applications_click","\"运行的应用\"返回","temperature_result_display_page","Running_applications_page ");
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("Running_applications_click","\"运行的应用\"返回","temperature_result_display_page","Running_applications_page ");
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("Running_applications_view_page","\"运行的应用\"浏览","temperature_result_display_page","Running_applications_page ");
     }
 }

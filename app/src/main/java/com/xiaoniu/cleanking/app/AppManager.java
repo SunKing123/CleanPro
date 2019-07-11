@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Process;
+import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -13,6 +16,7 @@ import java.util.Stack;
 
 public class AppManager {
     private static Stack<Activity> activityStack;
+    private static List<String> activityName = new ArrayList<>();
     private volatile static AppManager instance;
 
     private AppManager() {
@@ -28,6 +32,7 @@ public class AppManager {
                 if (instance == null) {
                     instance = new AppManager();
                     activityStack = new Stack();
+                    activityName = new ArrayList<>();
                 }
             }
 
@@ -42,7 +47,35 @@ public class AppManager {
         if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
+        Activity cAc = null;
+        for (Activity activityItem : activityStack) {
+            if (TextUtils.equals(activityItem.getClass().getName(), activity.getClass().getName())) {
+                cAc = activityItem;
+            }
+        }
+        if (cAc != null) activityStack.remove(activity);
         activityStack.add(activity);
+    }
+
+    public void addActivityName(Activity activity) {
+        if (activityName == null) {
+            activityName = new ArrayList<>();
+        }
+        List<String> listTemp=new ArrayList<>();
+        if(activityName.contains(activity.getClass().getName())){
+            listTemp.add(activity.getClass().getName());
+        }
+        activityName.removeAll(listTemp);
+        activityName.add(activity.getClass().getName());
+    }
+
+    public String preActivityName() {
+        int index = activityName.size() - 2;
+        if (index < 0) {
+            return null;
+        }
+        String activityNames = activityName.get(index);
+        return activityNames;
     }
 
     /**
@@ -92,11 +125,24 @@ public class AppManager {
     /**
      * 移除指定的Activity
      */
-    public void removeActivity(Activity activity) {
-        if (activity != null) {
-            activityStack.remove(activity);
-            activity = null;
+    public void removeActivity(Activity activitys) {
+
+
+        try {
+            for (Activity activity : activityStack) {
+                String name1 = activity.getClass().getName();
+                String currentName = activitys.getClass().getName();
+                if (name1.equals(currentName)) {
+                    if (activitys != null) {
+                        activityStack.remove(activitys);
+                        activitys = null;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     /**
@@ -179,5 +225,13 @@ public class AppManager {
                 Process.killProcess(Process.myPid());
             }
         }
+    }
+
+    public void clearStack() {
+        if (activityStack != null) {
+            activityStack.clear();
+            activityName.clear();
+        }
+
     }
 }

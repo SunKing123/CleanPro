@@ -42,7 +42,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+           android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -140,5 +141,5 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/line_title"></com.xiaoniu.cleanking.ui.main.widget.AccessAnimView>
+        ></com.xiaoniu.cleanking.ui.main.widget.AccessAnimView>
 </RelativeLayout>
