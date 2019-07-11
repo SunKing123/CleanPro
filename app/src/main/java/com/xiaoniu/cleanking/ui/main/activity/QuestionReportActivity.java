@@ -1,17 +1,25 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +32,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.adapter.QuestionReportImgAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.QuestionReportLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QuestionReportPresenter;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 
@@ -68,6 +77,11 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
     private QuestionReportImgAdapter mAdapter;
 
+    private QuestionReportLoadingDialogFragment mLoading;
+
+    //是否已经提交过，用来区分loading
+    private boolean mIsSubmit;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -94,7 +108,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
         mRecyclerView.setAdapter(mAdapter);
 
         mTxtContent.addTextChangedListener(textWatcherContent);
-
+        mTxtContact.addTextChangedListener(textWatcherContact);
         //
         ImgBean imgBean = new ImgBean();
         imgBean.itemType = 1;
@@ -102,6 +116,9 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
         lists.add(imgBean);
         mAdapter.modifyData(lists);
         mAdapter.setOnItemImgClickListener(this);
+
+        //
+        mLoading = QuestionReportLoadingDialogFragment.newInstance();
     }
 
     TextWatcher textWatcherContent = new TextWatcher() {
@@ -118,17 +135,58 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
         @Override
         public void afterTextChanged(Editable s) {
+            String content = mTxtContent.getText().toString();
+            String contact = mTxtContact.getText().toString();
             if (null != mTxtContent && null != mTxtLength) {
                 int length = mTxtContent.getText().toString().length();
+                if(length>200){
+                    SpannableString spannableString=new SpannableString(content);
+                    //设置字体背景色
+                    spannableString.setSpan(new BackgroundColorSpan(Color.RED), content.length()-200
+                            , content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    mTxtContent.setText(spannableString);
+
+                }
                 mTxtLength.setText(String.format("%s/200", String.valueOf(length)));
 
-                if (length > 0) {
+                if (!TextUtils.isEmpty(contact) && !TextUtils.isEmpty(content) && content.length() <= 200) {
                     mBtnSumbit.setSelected(true);
+                    mBtnSumbit.setEnabled(true);
                 } else {
                     mBtnSumbit.setSelected(false);
+                    mBtnSumbit.setEnabled(false);
                 }
+
             }
 
+        }
+    };
+
+
+    TextWatcher textWatcherContact = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+            String content = mTxtContent.getText().toString();
+            String contact = mTxtContact.getText().toString();
+            if (!TextUtils.isEmpty(contact) && !TextUtils.isEmpty(content) && content.length() <= 200) {
+                mBtnSumbit.setSelected(true);
+                mBtnSumbit.setEnabled(true);
+            } else {
+                mBtnSumbit.setSelected(false);
+                mBtnSumbit.setEnabled(false);
+            }
         }
     };
 
@@ -143,14 +201,12 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             List<ImgBean> lists = mAdapter.getLists();
             ImgBean imgBean = new ImgBean();
             imgBean.path = path;
-            lists.add(imgBean);
+            lists.add(0, imgBean);
 
 
             //如果图片大于3，移除第一张， +1是头部{
-            //                lists.remove(1);
-            //            }
-            if (mAdapter.getLists().size() > IMG_MAX_SIZE + 1){
-                lists.remove(1);
+            if (mAdapter.getLists().size() > IMG_MAX_SIZE + 1) {
+                lists.remove(IMG_MAX_SIZE - 1);
             }
             mAdapter.notifyDataSetChanged();
             mTxtImgSize.setText(String.format("%s/3", mAdapter.getLists().size() - 1));
@@ -164,12 +220,16 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             finish();
         } else if (ids == R.id.btn_submit) {// 提交反馈
 
+            mLoading.show(getSupportFragmentManager(), "");
 
+            if (mIsSubmit) {
+                mLoading.setReportSuccess(0);
+            }
             List<ImgBean> datas = mAdapter.getLists();
             //过滤头部
-            List<String> paths=new ArrayList<>();
-            for(ImgBean imgBean : datas){
-                if(!TextUtils.isEmpty(imgBean.path)){
+            List<String> paths = new ArrayList<>();
+            for (ImgBean imgBean : datas) {
+                if (!TextUtils.isEmpty(imgBean.path)) {
                     paths.add(imgBean.path);
                 }
             }
@@ -182,6 +242,8 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
                 String contact = mTxtContact.getText().toString();
                 mPresenter.submitData("", content, contact, "", common4Subscriber);
             }
+
+            mIsSubmit = true;
         }
     }
 
@@ -196,20 +258,19 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
             @Override
             public void getData(FileUploadInfoBean fileUploadInfoBean) {
-                FileUploadInfoBean.ImgUrl imgUrl=fileUploadInfoBean.data;
+                FileUploadInfoBean.ImgUrl imgUrl = fileUploadInfoBean.data;
                 mUploadUrls.add(imgUrl.url);
-                Log.i(TAG, "successful");
                 // -1 移除头部
                 if (mUploadUrls.size() == mAdapter.getLists().size() - 1) {
 
                     String content = mTxtContent.getText().toString();
                     String contact = mTxtContact.getText().toString();
-                    StringBuilder stringPaths=new StringBuilder();
-                    for(int i=0;i<mUploadUrls.size();i++){
-                        String path=mUploadUrls.get(i);
+                    StringBuilder stringPaths = new StringBuilder();
+                    for (int i = 0; i < mUploadUrls.size(); i++) {
+                        String path = mUploadUrls.get(i);
                         stringPaths.append(path);
                         //不是最后一个添加分隔符;
-                        if(mUploadUrls.size()!=1 &&  i!=mUploadUrls.size()-1){
+                        if (mUploadUrls.size() != 1 && i != mUploadUrls.size() - 1) {
                             stringPaths.append(";");
                         }
                     }
@@ -225,7 +286,10 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
             @Override
             public void netConnectError() {
-                Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT).show();
+                mLoading.dismissAllowingStateLoss();
+                Toast toast = Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
         });
     }
@@ -238,18 +302,29 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
         @Override
         public void getData(BaseEntity baseEntity) {
-            Toast.makeText(mContext, "上传成功", Toast.LENGTH_SHORT).show();
-            finish();
+            mLoading.setReportSuccess(1);
+            mBtnSumbit.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            }, 1000);
+
+
         }
 
         @Override
         public void showExtraOp(String message) {
-            Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
+            mLoading.dismissAllowingStateLoss();
         }
 
         @Override
         public void netConnectError() {
-            Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT).show();
+            mLoading.dismissAllowingStateLoss();
+            Toast toast = Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
         }
     };
 
@@ -266,5 +341,6 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             lists.remove(position);
             mAdapter.notifyDataSetChanged();
         }
+        mTxtImgSize.setText(String.format("%s/3", mAdapter.getLists().size() - 1));
     }
 }

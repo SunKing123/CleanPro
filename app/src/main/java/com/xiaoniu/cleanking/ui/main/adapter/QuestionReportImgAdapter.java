@@ -78,6 +78,7 @@ public class QuestionReportImgAdapter extends RecyclerView.Adapter {
                     }
                 });
             }else {
+                mViewHolder.mImg.setOnClickListener(null);
                 mViewHolder.mImgClose.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(new File(bean.path)).into(mViewHolder.mImg);
                 mViewHolder.mImgClose.setOnClickListener(new View.OnClickListener() {
