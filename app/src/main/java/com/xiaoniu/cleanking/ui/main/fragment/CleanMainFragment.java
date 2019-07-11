@@ -1,8 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,7 +22,9 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
+import com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,9 +40,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @BindView(R.id.text_count)
     TextView mTextCount;
     @BindView(R.id.layout_root)
-    LinearLayout mLayoutRoot;
+    MyLinearLayout mLayoutRoot;
     @BindView(R.id.layout_clean_top)
-    FrameLayout mlayoutCleanTop;
+    FrameLayout mLayoutCleanTop;
     @BindView(R.id.btn_ljql)
     Button mButtonCleanNow;
     @BindView(R.id.icon_outer)
@@ -51,6 +55,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     View mCircleOuter2;
     @BindView(R.id.text_scan_trace)
     TextView mTextScanTrace;
+    @BindView(R.id.text_content)
+    TextView mTextContent;
     @BindView(R.id.layout_scan)
     LinearLayout mLayoutScan;
     @BindView(R.id.view_arrow)
@@ -85,9 +91,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-        mPresenter.startScan();
 
-        mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+
+        new Handler().postDelayed(() -> {
+            mPresenter.startScan();
+            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+        }, 500);
     }
 
 
@@ -115,13 +124,18 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
 
     @OnClick(R.id.btn_ljql)
-    public void btn_ljql() {
-        mPresenter.showTransAnim(mlayoutCleanTop);
-        mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mTextCount, mCountEntity);
-        mButtonCleanNow.setVisibility(View.GONE);
-        mTextScanTrace.setText("垃圾清理中...");
-        mArrowRight.setVisibility(View.GONE);
-        mScrollView.setEnabled(false);
+    public void btnLjql() {
+        if (isScanFinish) {
+            mPresenter.showTransAnim(mLayoutCleanTop);
+            mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mTextCount, mCountEntity);
+            mButtonCleanNow.setVisibility(View.GONE);
+            mTextScanTrace.setText("垃圾清理中...");
+            mArrowRight.setVisibility(View.GONE);
+
+            mLayoutRoot.setIntercept(true);
+        }else{
+            ToastUtils.show("正在扫描中");
+        }
     }
 
     @OnClick(R.id.layout_scan)
@@ -166,10 +180,40 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void cleanFinish(String string) {
         if ("clean_finish".equals(string)) {
             //清理完成
-            mButtonCleanNow.setText("清理完成");
-            mTextCount.setText("暂无");
-            mButtonCleanNow.setEnabled(false);
+            restoreLayout();
         }
+    }
+
+    /**
+     * 恢复布局
+     */
+    private void restoreLayout() {
+        mLayoutRoot.setIntercept(false);
+        mIconInner.setVisibility(View.GONE);
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
+        layoutParams.height = DeviceUtils.dip2px(400);
+        mLayoutCleanTop.setLayoutParams(layoutParams);
+
+        if(getActivity() != null) {
+            FrameLayout frameLayout = getActivity().findViewById(R.id.frame_layout);
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
+            marginParams.bottomMargin = DeviceUtils.dip2px(53);
+            frameLayout.setLayoutParams(marginParams);
+            getActivity().findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+        }
+
+        mIconOuter.setTranslationY(0);
+        mIconInner.setTranslationY(0);
+        mLayoutScan.setTranslationY(0);
+        mTextCount.setTranslationY(0);
+
+        mTextContent.setVisibility(View.VISIBLE);
+        mTextCount.setVisibility(View.GONE);
+        mLayoutScan.setVisibility(View.GONE);
+        mButtonCleanNow.setText("完成");
+        mButtonCleanNow.setVisibility(View.VISIBLE);
+        mButtonCleanNow.setEnabled(false);
     }
 
     @Override
@@ -191,10 +235,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mCircleOuter.setVisibility(View.GONE);
     }
 
-    public void showCleanFinish(Object o) {
+    public void showCleanFinish(Long o) {
         Bundle bundle = new Bundle();
         bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_CLEAN_CACHE);
-        bundle.putLong("clean_count", (long) o);
+        bundle.putLong("clean_count", o);
         startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
     }
 }

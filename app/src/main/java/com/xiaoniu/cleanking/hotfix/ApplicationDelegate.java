@@ -9,6 +9,7 @@ import android.support.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -24,6 +25,8 @@ import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.statistic.Configuration;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -82,7 +85,7 @@ public class ApplicationDelegate extends DefaultApplicationLike {
     @Override
     public void onCreate() {
         super.onCreate();
-//        initNiuData();
+        initNiuData();
         PlatformConfig.setWeixin("wx2440bee27b45a19a", "856c52eba457989c0487182c777c8942");
         PlatformConfig.setQQZone("1106787504", "KjjMEbU64j1qFg1u");
         PlatformConfig.setSinaWeibo("2480041639", "fc45c092d152a6382b0d84d1868a5d21", "");
@@ -115,6 +118,13 @@ public class ApplicationDelegate extends DefaultApplicationLike {
         mAppComponent.inject(getApplication());
     }
 
+    public void initNiuData(){
+        //测试环境
+        NiuDataAPI.init(AppApplication.getInstance(), new Configuration().serverUrl("")
+                //.debugOn() //切换到sdk默认的测试环境地址
+                .logClose()//打开sdk日志信息
+        );
+    }
     public static AppComponent getAppComponent() {
         return mAppComponent;
     }

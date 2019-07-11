@@ -378,7 +378,10 @@
         <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:theme="@style/ImagePickerThemeFullScreen" />
-
+        <!--小牛数据埋点-->
+        <meta-data
+            android:name="com.xiaoniu.statistic.ProductID"
+            android:value="13" />
 
     </application>
 
