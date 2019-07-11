@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         mBottomBar
                 .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
-                .addItem(new BottomBarTab(this, R.mipmap.tool_normal, "工具箱"))
+//                .addItem(new BottomBarTab(this, R.mipmap.tool_normal, "工具箱"))
                 .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
                 .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         mBottomBar.setCurrentItem(0);
@@ -253,17 +253,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
 
         mFragments.add(mainFragment);
-        mFragments.add(toolFragment);
+//        mFragments.add(toolFragment);
         mFragments.add(upQuotaFragment);
         mFragments.add(mineFragment);
 
         mManager.beginTransaction()
                 .add(R.id.frame_layout, mainFragment)
-                .add(R.id.frame_layout, toolFragment)
+//                .add(R.id.frame_layout, toolFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
                 .add(R.id.frame_layout, mineFragment)
                 .hide(mainFragment)
-                .hide(toolFragment)
+//                .hide(toolFragment)
                 .hide(upQuotaFragment)
                 .hide(mineFragment)
                 .commitAllowingStateLoss();

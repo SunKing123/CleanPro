@@ -95,12 +95,12 @@
 
     <style name="MyCheckBox" parent="Theme.AppCompat.Light">
 
-        <item name="colorControlActivated">#4690FD</item>
+        <item name="colorControlActivated">#06C581</item>
         <item name="colorButtonNormal">@color/white</item>
     </style>
 
     <style name="my_check_box_white" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorControlActivated">#4690FD</item>
+        <item name="colorControlActivated">#06C581</item>
         <item name="colorControlNormal">@color/color_white</item>
         <item name="colorButtonNormal">@color/white</item>
         <item name="editTextColor">@color/white</item>

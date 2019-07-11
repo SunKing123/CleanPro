@@ -9,7 +9,7 @@
         android:id="@+id/view_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#4690FD"
+        android:background="#06C581"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

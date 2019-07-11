@@ -5,7 +5,7 @@
     <!-- 填充的颜色 -->
    <stroke
        android:width="@dimen/dimen_2dp"
-       android:color="#4690FD"
+       android:color="#06C581"
        />
 
 </shape>
