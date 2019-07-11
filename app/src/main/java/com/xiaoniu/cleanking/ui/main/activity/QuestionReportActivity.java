@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.QuestionReportLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QuestionReportPresenter;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 
 import java.io.File;
@@ -231,6 +232,8 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             finish();
         } else if (ids == R.id.btn_submit) {// 提交反馈
 
+            StatisticsUtils.trackClick("Submission_click","\"提交\"点击","personal_center_page","question_feedback_page");
+
             mLoading.show(getSupportFragmentManager(), "");
 
             if (mIsSubmit) {
@@ -340,7 +343,15 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     };
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("question_feedback_view_page","\"问题反馈\"浏览","personal_center_page","question_feedback_page");
+    }
+
+    @Override
     public void onSelectImg() {
+        StatisticsUtils.trackClick("Upload_photos_click","\"上传照片\"点击","personal_center_page","question_feedback_page");
+
         //跳转到照片选择页面
         startActivityForResult(new Intent(mContext, SimplePhotoActivity.class), CODE_IMG_SELECT);
     }
