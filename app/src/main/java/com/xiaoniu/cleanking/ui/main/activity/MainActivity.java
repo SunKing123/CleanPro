@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,10 +14,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.sxu.shadowdrawable.ShadowDrawable;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
@@ -39,7 +38,6 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DbHelper;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -67,6 +65,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     NoClearSPHelper mPreferencesHelper;
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
+    @BindView(R.id.bottom_shadow)
+    ImageView mBottomShadow;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
@@ -119,9 +119,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         JPushInterface.init(this);
         JPushInterface.setAlias(this, AndroidUtil.getPhoneNum(), null);
 
-        ShadowDrawable.setShadowDrawable(mBottomBar, Color.parseColor("#ffffff"),
-                DeviceUtils.dip2px(6),
-                Color.parseColor("#1A000000"), DeviceUtils.dip2px(8), 0, 5);
+//        ShadowDrawable.setShadowDrawable(mBottomBar, Color.parseColor("#ffffff"),
+//                DeviceUtils.dip2px(6),
+//                Color.parseColor("#1A000000"), DeviceUtils.dip2px(8), 0, 5);
         mBottomBar
                 .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
 //                .addItem(new BottomBarTab(this, R.mipmap.tool_normal, "工具箱"))
@@ -388,4 +388,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

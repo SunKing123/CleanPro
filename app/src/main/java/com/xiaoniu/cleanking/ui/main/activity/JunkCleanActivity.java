@@ -152,10 +152,10 @@ public class JunkCleanActivity extends SimpleActivity {
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             //TODO 清理完成
-            Bundle bundle = new Bundle();
-            bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_CLEAN_CACHE);
-            bundle.putLong("clean_count",(long) o);
-            startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_CLEAN_CACHE);
+//            bundle.putLong("clean_count",(long) o);
+//            startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
             EventBus.getDefault().post("clean_finish");
             finish();
         });

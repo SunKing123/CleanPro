@@ -7,6 +7,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
@@ -14,6 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,6 +27,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 
@@ -38,17 +44,15 @@ public class CleanAnimView extends RelativeLayout {
     LinearLayout mLayoutScan;
     LottieAnimationView mAnimationView;
     TextView mTextCount;
+    TextView mTextSize;
+    TextView mTextGb;
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
-    onAnimEndListener listener;
+    WebView mWebView;
     /**
      * 清理数据实体类
      */
     private CountEntity mCountEntity;
-
-    public void setListener(onAnimEndListener listener) {
-        this.listener = listener;
-    }
 
     //倒计时图片
     public CleanAnimView(Context context) {
@@ -81,13 +85,49 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutScan = v.findViewById(R.id.layout_scan);
         mAnimationView = v.findViewById(R.id.view_lottie);
         mTextCount = v.findViewById(R.id.text_count);
+        mTextSize = v.findViewById(R.id.tv_size);
+        mTextGb = v.findViewById(R.id.tv_gb);
         mLayoutRoot = v.findViewById(R.id.layout_root);
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
+        mWebView = v.findViewById(R.id.web_view);
+
+        initWebView();
+    }
+
+    public void initWebView() {
+        String url = ApiModule.Base_H5_Host;
+        WebSettings settings = mWebView.getSettings();
+        settings.setDomStorageEnabled(true);
+        settings.setJavaScriptEnabled(true);
+        mWebView.loadUrl(url);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+//                showLoadingDialog();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+//                cancelLoadingDialog();
+            }
+
+        });
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+
+            }
+        });
     }
 
     public void setData(CountEntity countEntity) {
         mCountEntity = countEntity;
         mTextCount.setText(mCountEntity.getTotalSize() + mCountEntity.getUnit());
+        mTextSize.setText(mCountEntity.getTotalSize());
+        mTextGb.setText(mCountEntity.getUnit());
     }
 
     //Step1:上面红色布局和中间1dp的布局动画开始

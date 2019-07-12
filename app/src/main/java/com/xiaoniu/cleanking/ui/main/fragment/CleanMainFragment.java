@@ -1,12 +1,17 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,6 +27,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
+import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
@@ -35,6 +41,7 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -112,6 +119,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
@@ -168,6 +176,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextScanTrace.setText("垃圾清理中...");
             mArrowRight.setVisibility(View.GONE);
             mLayoutRoot.setIntercept(true);
+            initWebView();
         } else {
             ToastUtils.show("正在扫描中");
         }
@@ -196,6 +205,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mArrowRight.setVisibility(View.VISIBLE);
 
         mPresenter.stopCleanScanAnimation();
+
+        if (mCountEntity != null) {
+            mTvSize.setText(mCountEntity.getTotalSize());
+            mTvGb.setText(mCountEntity.getUnit());
+        }
     }
 
     /**
@@ -255,6 +269,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             marginParams.bottomMargin = DeviceUtils.dip2px(53);
             frameLayout.setLayoutParams(marginParams);
             getActivity().findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.bottom_shadow).setVisibility(View.VISIBLE);
         }
     }
 
@@ -325,5 +340,46 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 AppManager.getAppManager().AppExit(getContext(), false);
             }
         }
+    }
+
+    /**
+     * 状态栏颜色变化
+     * @param animatedValue
+     */
+    public void showBarColor(int animatedValue) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, false);
+        }
+    }
+
+    public void initWebView() {
+        String url = ApiModule.Base_H5_Host;
+        WebSettings settings = mWebView.getSettings();
+        settings.setDomStorageEnabled(true);
+        settings.setJavaScriptEnabled(true);
+        mWebView.loadUrl(url);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+//                showLoadingDialog();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+//                cancelLoadingDialog();
+            }
+
+        });
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+
+            }
+        });
     }
 }

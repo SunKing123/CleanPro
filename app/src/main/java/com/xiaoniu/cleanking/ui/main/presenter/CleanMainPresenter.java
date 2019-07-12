@@ -49,7 +49,7 @@ import static com.xiaoniu.cleanking.utils.ResourceUtils.getString;
 
 public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainModel> {
 
-    private AnimatorSet mColorSet;
+    private ValueAnimator mScanTranlateColor;
 
     @Inject
     public CleanMainPresenter() {
@@ -85,8 +85,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
                         return;
                     }
                     activity.runOnUiThread(() -> {
-                        if(!mColorSet.isRunning()){
-                            mColorSet.start();
+                        if(!mScanTranlateColor.isRunning()){
+                            mScanTranlateColor.start();
                         }
                     });
                 }
@@ -183,14 +183,14 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     }
 
     public void showColorChange() {
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", ThirdLevel,SecondLevel);
-        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", SecondLevel, FirstLevel);
-        colorAnim1.setEvaluator(new ArgbEvaluator());
-        colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim1.setDuration(300);
-        colorAnim2.setDuration(300);
-        mColorSet = new AnimatorSet();
-        mColorSet.playSequentially(colorAnim1,colorAnim2);
+        mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", ThirdLevel,SecondLevel, FirstLevel);
+        mScanTranlateColor.setEvaluator(new ArgbEvaluator());
+        mScanTranlateColor.setDuration(300);
+        mScanTranlateColor.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            mView.showBarColor(animatedValue);
+        });
+
     }
 
     public void showTransAnim(FrameLayout mLayoutCleanTop) {
@@ -210,6 +210,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             layoutParams.bottomMargin = 0;
             frameLayout.setLayoutParams(layoutParams);
             mView.getActivity().findViewById(R.id.bottomBar).setVisibility(View.GONE);
+            mView.getActivity().findViewById(R.id.bottom_shadow).setVisibility(View.GONE);
             valueAnimator.start();
         }
     }
@@ -455,19 +456,23 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         });
         valueAnimator.start();
 
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", FirstLevel, SecondLevel);
-        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", SecondLevel, ThirdLevel);
-        colorAnim1.setEvaluator(new ArgbEvaluator());
-        colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim1.setDuration(500);
-        colorAnim2.setDuration(500);
-        colorAnim1.setStartDelay(4000);
-        colorAnim2.setStartDelay(4500);
+        ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", FirstLevel, SecondLevel,ThirdLevel);
+        colorAnim.setEvaluator(new ArgbEvaluator());
+        colorAnim.setDuration(1000);
+        colorAnim.setStartDelay(4000);
+        colorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int animatedValue = (int) animation.getAnimatedValue();
+                mView.showBarColor(animatedValue);
+            }
+        });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator,colorAnim1,colorAnim2);
+        animatorSetTimer.playTogether(valueAnimator,colorAnim);
         animatorSetTimer.start();
 
+        clearAll();
     }
 
     @SuppressLint("CheckResult")

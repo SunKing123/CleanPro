@@ -15,6 +15,7 @@
         android:layout_gravity="bottom" />
 
     <ImageView
+        android:id="@+id/bottom_shadow"
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:layout_gravity="bottom"

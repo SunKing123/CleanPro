@@ -355,7 +355,7 @@
                             android:id="@+id/tv_ql"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="内存可清理"
+                            android:text="垃圾已清理"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
                     </LinearLayout>
