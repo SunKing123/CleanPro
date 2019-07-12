@@ -159,6 +159,8 @@
                     android:layout_gravity="center"
                     android:background="@drawable/bg_btn_del"
                     android:text="删除"
+                    android:enabled="false"
+                    style="?android:attr/borderlessButtonStyle"
                     android:textColor="@color/white" />
             </LinearLayout>
 

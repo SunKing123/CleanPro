@@ -32,11 +32,63 @@
             android:textSize="@dimen/dimen_18sp"/>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/text_total"
-        android:gravity="center"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/dimen_150dp"
+        android:background="@color/color_4690FD">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="122dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="55sp"
+                android:visibility="visible"/>
+
+            <LinearLayout
+                android:id="@+id/layout_right_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_4dp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_gb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_10dp"
+                    android:text="GB"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/tv_ql"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="垃圾可清理"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_total"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_26dp"
+            android:layout_alignParentBottom="true"
+            android:alpha="0.1"
+            android:background="#000000"
+            android:gravity="center"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

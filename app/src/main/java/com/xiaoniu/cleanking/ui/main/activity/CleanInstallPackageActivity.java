@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.InstallPackageManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanInstallPackagePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
@@ -64,6 +65,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     private InstallPackageManageAdapter mAdapter;
 
     String path = Environment.getExternalStorageDirectory().getPath();
+    //loading是否为首次弹窗
+    private  boolean isShowFirst=true;
+
+    private CleanFileLoadingDialogFragment mLoading;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -84,6 +89,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     @Override
     protected void initView() {
         setStatusView(mType);
+        mLoading=CleanFileLoadingDialogFragment.newInstance();
 
         mAdapter = new InstallPackageManageAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
@@ -168,6 +174,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                         }
                     }
                     mPresenter.delFile(appInfoSelect);
+                    if(!isShowFirst){
+                        mLoading.setReportSuccess(0,"");
+                    }
+                    mLoading.show(getSupportFragmentManager(),"");
 
                 }
             });
@@ -227,8 +237,6 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
 
     public void updateDelFileView(List<AppInfoBean> appInfoBeans) {
-        totalSelectFiles();
-        Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
         //
         List<AppInfoBean> listsNew = new ArrayList<>();
         List<AppInfoBean> lists = mAdapter.getLists();
@@ -251,6 +259,17 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
+
+        mLoading.setReportSuccess(1,"成功删除" + FileSizeUtils.formatFileSize(totalSize));
+        mBtnDel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoading.dismissAllowingStateLoss();
+            }
+        },1500);
+
+        totalSelectFiles();
+
 
     }
 
@@ -308,17 +327,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mIsCheckAll = isCheckAll;
         mCheckBoxAll.setSelected(mIsCheckAll);
 
-        if (totalSize > 0) {
-            mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
-            mBtnDel.setSelected(true);
-            mBtnDel.setClickable(true);
-        } else {
-            mBtnDel.setText("删除");
-            mBtnDel.setSelected(false);
-            mBtnDel.setClickable(false);
-        }
-
-
+        totalSelectFiles();
     }
 
     /**
@@ -335,11 +344,12 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         if (totalSize > 0) {
             mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
             mBtnDel.setSelected(true);
-            mBtnDel.setClickable(true);
+            mBtnDel.setEnabled(true);
         } else {
             mBtnDel.setText("删除");
             mBtnDel.setSelected(false);
-            mBtnDel.setClickable(false);
+            mBtnDel.setEnabled(false);
+
         }
     }
 

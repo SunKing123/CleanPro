@@ -10,16 +10,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.adapter.CleanBigFileAdapter;
-import com.xiaoniu.cleanking.ui.main.bean.BigFileInfoEntity;
+import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
+import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
+import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,8 +53,11 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     TextView mTextCleanNumber;
     @BindView(R.id.layout_clean_finish)
     RelativeLayout mLayoutCleanFinish;
-    private CleanBigFileAdapter mCleanBigFileAdapter;
-    private List<BigFileInfoEntity> mData;
+    private CleanExpandAdapter mCleanBigFileAdapter;
+
+    private List<MultiItemEntity> mData;
+
+    private List<ThirdLevelEntity> mAllData = new ArrayList<>();
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -79,14 +85,24 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     }
 
     private void initAdapter() {
-        mCleanBigFileAdapter = new CleanBigFileAdapter(mContext);
+
+        mData = new ArrayList<>();
+
+        mCleanBigFileAdapter = new CleanExpandAdapter(mData);
 
         mJunkList.setLayoutManager(new LinearLayoutManager(mContext));
 
         mJunkList.setAdapter(mCleanBigFileAdapter);
 
         //条目选择监听
-        mCleanBigFileAdapter.setOnItemSelectListener(this::updateSelectCount);
+        mCleanBigFileAdapter.setOnItemSelectListener((isCheck, entity) -> {
+            if (isCheck) {
+                mAllData.add(entity);
+            }else {
+                mAllData.remove(entity);
+            }
+            updateSelectCount();
+        });
     }
 
     /**
@@ -94,7 +110,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      */
     private void updateSelectCount() {
         long total = 0;
-        for (BigFileInfoEntity entity : mData) {
+        for (ThirdLevelEntity entity : mAllData) {
             if (entity.isChecked()) {
                 total += entity.getFile().length();
             }
@@ -116,7 +132,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
                 break;
             case R.id.do_junk_clean:
                 //垃圾清理
-                mPresenter.showDeleteDialog(mData);
+                mPresenter.showDeleteDialog(mAllData);
                 break;
                 default:
         }
@@ -126,9 +142,11 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * 大文件列表
      * @param list
      */
-    public void showList(List<BigFileInfoEntity> list) {
-        mData = list;
-        mCleanBigFileAdapter.setData(list);
+    public void showList(FirstLevelEntity list) {
+//        mData.addAll()
+        mData.add(list);
+        mCleanBigFileAdapter.notifyDataSetChanged();
+        mCleanBigFileAdapter.expandAll();
     }
 
     /**

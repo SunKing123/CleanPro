@@ -12,7 +12,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath('com.tencent.tinker:tinker-patch-gradle-plugin:1.9.9')
         classpath 'com.leon.channel:plugin:2.0.2'
         // NOTE: Do not place your application dependencies here; they belong

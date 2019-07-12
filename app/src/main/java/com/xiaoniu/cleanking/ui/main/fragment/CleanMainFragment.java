@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -31,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -63,10 +65,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ImageView mArrowRight;
     @BindView(R.id.layout_scroll)
     ScrollView mScrollView;
+    @BindView(R.id.view_lottie)
+    LottieAnimationView mAnimationView;
 
     private boolean isScanFinish = false;
     public static HashMap<Integer, JunkGroup> mJunkGroups;
     private CountEntity mCountEntity;
+    private List<ImageView> mTopViews;
+    private Handler mHandler;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -74,7 +80,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
 
     @Override
-    public void netError() {
+    public void netError(){
 
     }
 
@@ -133,7 +139,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mArrowRight.setVisibility(View.GONE);
 
             mLayoutRoot.setIntercept(true);
-        }else{
+        } else {
             ToastUtils.show("正在扫描中");
         }
     }
@@ -176,12 +182,17 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         getActivity().runOnUiThread(() -> mTextCount.setText(CleanUtil.formatShortFileSize(getActivity(), total)));
     }
 
+
     @Subscribe
     public void cleanFinish(String string) {
         if ("clean_finish".equals(string)) {
             //清理完成
             restoreLayout();
         }
+    }
+
+    public FrameLayout getCleanTopLayout() {
+        return mLayoutCleanTop;
     }
 
     /**
@@ -195,7 +206,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         layoutParams.height = DeviceUtils.dip2px(400);
         mLayoutCleanTop.setLayoutParams(layoutParams);
 
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             FrameLayout frameLayout = getActivity().findViewById(R.id.frame_layout);
             ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
             marginParams.bottomMargin = DeviceUtils.dip2px(53);
@@ -240,5 +251,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_CLEAN_CACHE);
         bundle.putLong("clean_count", o);
         startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
+    }
+
+    /**
+     * 显示lottie动画
+     */
+    public void showLottieView() {
+        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("data.json");
+        mAnimationView.playAnimation();
     }
 }

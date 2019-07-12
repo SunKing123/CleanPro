@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -56,7 +57,7 @@ public class WhiteListAddAdapter extends RecyclerView.Adapter {
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mImgCheck.setSelected(appInfoBean.isSelect);
 
-            viewHolder.mImgCheck.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mLLCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != onCheckListener) {
@@ -99,13 +100,14 @@ public class WhiteListAddAdapter extends RecyclerView.Adapter {
         //名称
         private TextView mTxtName;
         private ImageButton mImgCheck;
-
-
+        //
+        private LinearLayout mLLCheck;
         public ViewHolder(View itemView) {
             super(itemView);
             mImgIcon = itemView.findViewById(R.id.img_icon);
             mTxtName = itemView.findViewById(R.id.txt_name);
             mImgCheck = itemView.findViewById(R.id.check_select);
+            mLLCheck=itemView.findViewById(R.id.ll_check);
         }
     }
 

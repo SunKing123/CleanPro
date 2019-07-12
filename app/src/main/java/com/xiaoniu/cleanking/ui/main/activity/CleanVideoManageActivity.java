@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanVideoManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanVideoManagePresenter;
@@ -56,6 +57,11 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     private CleanVideoManageAdapter mAdapter;
 
     private  boolean mIsCheckAll;
+
+    private CleanFileLoadingDialogFragment mLoading;
+
+    //loading是否为首次弹窗
+    private  boolean isShowFirst=true;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -75,6 +81,8 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     @Override
     protected void initView() {
+
+        mLoading=CleanFileLoadingDialogFragment.newInstance();
 
         mAdapter = new CleanVideoManageAdapter(this.getBaseContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
@@ -167,6 +175,10 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
                 @Override
                 public void onConfirm() {
+                    if(!isShowFirst){
+                        mLoading.setReportSuccess(0,"");
+                    }
+                    mLoading.show(getSupportFragmentManager(),"");
                     List<VideoInfoBean> lists = mAdapter.getLists();
                     //过滤选中的文件删除
                     List<VideoInfoBean> appInfoSelect = new ArrayList<>();
@@ -193,8 +205,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     }
 
     public void updateDelFileView(List<VideoInfoBean> appInfoBeans) {
-        totalSelectFiles();
-        Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
+
         //
         List<VideoInfoBean> listsNew = new ArrayList<>();
         List<VideoInfoBean> lists = mAdapter.getLists();
@@ -243,6 +254,15 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
 
+        mLoading.setReportSuccess(1,"成功删除" + FileSizeUtils.formatFileSize(totalSize));
+        mBtnDel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoading.dismissAllowingStateLoss();
+            }
+        },1500);
+        totalSelectFiles();
+
 
     }
 
@@ -265,6 +285,11 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
             mBtnDel.setText("删除");
             mBtnDel.setSelected(false);
             mBtnDel.setClickable(false);
+        }
+        if(totalSize>0){
+            mBtnDel.setEnabled(true);
+        }else {
+            mBtnDel.setEnabled(false);
         }
     }
     
@@ -303,17 +328,18 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
         mIsCheckAll=isCheckAll;
         mCheckBoxAll.setSelected(mIsCheckAll);
+//
+//        if (totalSize > 0) {
+//            mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
+//            mBtnDel.setSelected(true);
+//            mBtnDel.setClickable(true);
+//        } else {
+//            mBtnDel.setText("删除");
+//            mBtnDel.setSelected(false);
+//            mBtnDel.setClickable(false);
+//        }
 
-        if (totalSize > 0) {
-            mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
-            mBtnDel.setSelected(true);
-            mBtnDel.setClickable(true);
-        } else {
-            mBtnDel.setText("删除");
-            mBtnDel.setSelected(false);
-            mBtnDel.setClickable(false);
-        }
-
+        totalSelectFiles();
     }
 
     @Override
