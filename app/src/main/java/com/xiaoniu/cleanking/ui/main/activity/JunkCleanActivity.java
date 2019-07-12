@@ -18,13 +18,13 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
+import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +56,10 @@ public class JunkCleanActivity extends SimpleActivity {
     RelativeLayout mLayoutFinish;
     @BindView(R.id.text_clean_number)
     TextView mTextCleanNumber;
+    @BindView(R.id.view_clean_anim)
+    CleanAnimView mCleanAnimView;
+
+    private CountEntity countEntity;
 
     private HashMap<Integer, JunkGroup> mJunkGroups;
 
@@ -72,6 +76,9 @@ public class JunkCleanActivity extends SimpleActivity {
         mJunkGroups = CleanMainFragment.mJunkGroups;
 
         mTextClean.setOnClickListener(v -> {
+            mCleanAnimView.setData(countEntity);
+            mCleanAnimView.setVisibility(View.VISIBLE);
+            mCleanAnimView.startTopAnim(false);
             clearAll();
         });
 
@@ -97,7 +104,8 @@ public class JunkCleanActivity extends SimpleActivity {
                 mTextClean.setText("清理");
             }else {
                 mTextClean.setEnabled(true);
-                mTextClean.setText("清理" + CleanUtil.formatShortFileSize(JunkCleanActivity.this, totalSize));
+                countEntity = CleanUtil.formatShortFileSize(totalSize);
+                mTextClean.setText("清理" + countEntity.getResultSize());
             }
         });
 
@@ -156,8 +164,8 @@ public class JunkCleanActivity extends SimpleActivity {
 //            bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_CLEAN_CACHE);
 //            bundle.putLong("clean_count",(long) o);
 //            startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
-            EventBus.getDefault().post("clean_finish");
-            finish();
+//            EventBus.getDefault().post("clean_finish");
+//            finish();
         });
 
 

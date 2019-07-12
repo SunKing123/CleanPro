@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,7 +43,17 @@
             android:visibility="visible"/>
     </RelativeLayout>
 
-    <include layout="@layout/content_junk_clean"
+    <include
+        android:layout_below="@+id/layout_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/content_junk_clean"
         />
 
-</LinearLayout>
+    <com.xiaoniu.cleanking.ui.main.widget.CleanAnimView
+        android:id="@+id/view_clean_anim"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

@@ -131,8 +131,14 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     //Step1:上面红色布局和中间1dp的布局动画开始
-    public void startTopAnim() {
-        int startHeight = DeviceUtils.dip2px(150);
+    public void startTopAnim(boolean isNeedTranslation) {
+        int startHeight = 0;
+        if (isNeedTranslation) {
+            startHeight = DeviceUtils.dip2px(150);
+        }else {
+            startHeight = DeviceUtils.dip2px(56);
+        }
+
         int endHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
@@ -147,13 +153,13 @@ public class CleanAnimView extends RelativeLayout {
             }
         });
         anim.start();
-        startMiddleAnim();
+        startMiddleAnim(isNeedTranslation);
     }
 
     /**
      * 第一阶段控件 下移到中心
      */
-    public void startMiddleAnim() {
+    public void startMiddleAnim(boolean isNeedTranslation) {
         //位移的距离
         int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(150);
         ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
@@ -164,14 +170,22 @@ public class CleanAnimView extends RelativeLayout {
         ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(mIconInner, "alpha", 0, 1);
         ObjectAnimator outerAlpha = ObjectAnimator.ofFloat(mIconOuter, "alpha", 0, 1);
         ObjectAnimator scanAlpha = ObjectAnimator.ofFloat(mLayoutScan, "alpha", 0, 1);
+        ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mTextCount, "alpha", 0, 1);
 
-        outerY.setDuration(1000);
-        scanY.setDuration(1000);
-        innerY.setDuration(1000);
+        int time = 0;
+        if (isNeedTranslation) {
+            time = 1000;
+        }else {
+            time = 10;
+        }
+        outerY.setDuration(time);
+        scanY.setDuration(time);
+        innerY.setDuration(time);
         innerAlpha.setDuration(1000);
-        countY.setDuration(1000);
+        countY.setDuration(time);
         outerAlpha.setDuration(1000);
         scanAlpha.setDuration(1000);
+        countAlpha.setDuration(1000);
 
         //第一阶段倒转
         ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(mIconInner, "rotation", 0, -35f);
@@ -204,7 +218,13 @@ public class CleanAnimView extends RelativeLayout {
         });
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
+        if (isNeedTranslation) {
+            animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
+        }else {
+            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha,outerY,countY,innerY,scanY);
+        }
+
+
         animatorSet.start();
 
     }
@@ -270,7 +290,6 @@ public class CleanAnimView extends RelativeLayout {
      * 显示吸收动画
      */
     private void showLottieView() {
-        mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data2.json");
         mAnimationView.playAnimation();
     }

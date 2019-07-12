@@ -201,7 +201,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     public void startCleanAnim(CountEntity countEntity) {
         mCleanAnimView.setData(countEntity);
         mCleanAnimView.setVisibility(View.VISIBLE);
-        mCleanAnimView.startTopAnim();
+        mCleanAnimView.startTopAnim(true);
     }
 
 }

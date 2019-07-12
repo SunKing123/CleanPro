@@ -610,7 +610,8 @@ public class FileQueryUtils {
             }
             return arrayList;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 

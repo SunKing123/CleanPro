@@ -283,7 +283,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (getActivity() == null) {
             return;
         }
-        getActivity().runOnUiThread(() -> mTextScanTrace.setText(p0));
+        getActivity().runOnUiThread(() -> {
+            if(mTextScanTrace != null) {
+                mTextScanTrace.setText(p0);
+            }
+        });
 
     }
 
