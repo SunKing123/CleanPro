@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SecondLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
@@ -41,6 +42,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
     private SecondLevelEntity mTextList;
     private SecondLevelEntity mApkList;
     private List<SecondLevelEntity> mLists = new ArrayList<>();
+    private long mTotal;
 
     @Inject
     public CleanBigFilePresenter() {
@@ -101,13 +103,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                                         cleanFileManagerInfo.setContent("[文档]");
                                         mTextList.addSubItem(cleanFileManagerInfo);
                                         mTextList.addSize(length);
-                                    } else if (mimeType.contains("application/vnd.android.package-archive")) {
-                                        //apk
-                                        cleanFileManagerInfo.setContent("[apk安装包]");
-                                        mApkList.addSubItem(cleanFileManagerInfo);
-                                        mApkList.addSize(length);
                                     }
-
                                 }
                             }
                             if (!query.moveToNext()) {
@@ -153,9 +149,10 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                             realData.add(entity);
                         }
                     }
+                    e.onNext(total);
                     e.onNext(realData);
                 }
-                e.onNext(total);
+
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
@@ -164,9 +161,11 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                     FirstLevelEntity firstLevelEntity = new FirstLevelEntity();
                     if (o instanceof List) {
                         firstLevelEntity.setSubItems((List<SecondLevelEntity>) o);
+                        firstLevelEntity.setTotal(mTotal);
                         mView.showList(firstLevelEntity);
                     } else {
-                        mView.showTotal((long) o);
+                        mTotal = (long) o;
+                        mView.showTotal(mTotal);
                     }
                 });
     }
@@ -250,8 +249,9 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
         TextView mTextConfirm = view.findViewById(R.id.text_confirm);
         TextView mTextCancel = view.findViewById(R.id.text_cancel);
 
+        CountEntity countEntity = CleanUtil.formatShortFileSize(total);
         //大小
-        mTextTtitle.setText("将清理" + CleanUtil.formatShortFileSize(mView, total) + "文件");
+        mTextTtitle.setText("将清理" +countEntity.getResultSize()  + "文件");
         //路径
         mTextTips.setText("此次清理包含" + count + "个文件，清谨慎清理");
 
@@ -259,6 +259,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
         long finalTotal = total;
         mTextConfirm.setOnClickListener(v -> {
             dialog.dismiss();
+            mView.startCleanAnim(countEntity);
             deleteFiles(data, finalTotal);
         });
         dialog.setContentView(view);

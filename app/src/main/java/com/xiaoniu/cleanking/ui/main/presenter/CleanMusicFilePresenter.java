@@ -106,8 +106,7 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                         }
                     }
                 } else {
-                    //扫描apk文件
-                    scanFile(path);
+                    //scanFile(path);
                 }
 
                 for (File file : files) {

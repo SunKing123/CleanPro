@@ -51,8 +51,12 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     Button mBtnDel;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
+    @BindView(R.id.ll_check_all)
+    LinearLayout mLLCheckAll;
+
     @BindView(R.id.ll_video_empty_view)
     LinearLayout mLLEmptyView;
+
 
     private CleanVideoManageAdapter mAdapter;
 
@@ -104,7 +108,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         mAdapter.setOnCheckListener(this);
 
 
-        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
+        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mIsCheckAll){

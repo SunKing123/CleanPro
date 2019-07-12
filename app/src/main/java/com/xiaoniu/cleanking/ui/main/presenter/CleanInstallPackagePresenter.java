@@ -98,8 +98,7 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
                         apkFiles.add(file);
                     }
                 } else {
-                    //扫描apk文件
-                    scanFile(path);
+                    //scanFile(path);
                 }
                 for (File file : apkFiles) {
                     AppInfoBean appInfoBean = InstallManageUtils.getUninstallAPKInfo(activity, file.getPath());

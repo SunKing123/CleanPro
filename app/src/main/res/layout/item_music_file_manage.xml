@@ -44,7 +44,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dimen_16dp"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -53,16 +52,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1M"
-                android:layout_marginRight="@dimen/dimen_8dp"
                 android:textColor="@color/color_999999"
                 android:textSize="@dimen/dimen_12sp" />
 
+            <LinearLayout
+                android:id="@+id/ll_check_select"
+                android:layout_width="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
+                android:gravity="right">
             <ImageButton
                 android:id="@+id/check_select"
                 android:layout_width="@dimen/dimen_16dp"
                 android:layout_height="@dimen/dimen_16dp"
                 android:layout_gravity="right"
+                android:clickable="false"
+                android:layout_marginRight="@dimen/dimen_16dp"
                 android:background="@drawable/bg_check" />
+            </LinearLayout>
 
         </LinearLayout>
 

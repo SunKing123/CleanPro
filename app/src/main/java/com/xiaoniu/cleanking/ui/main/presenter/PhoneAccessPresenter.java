@@ -115,6 +115,9 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                     }
                 });
                 ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
+                if (listInfo == null) {
+                    listInfo = new ArrayList<>();
+                }
                 e.onNext(listInfo);
             }
         }).subscribeOn(Schedulers.io())

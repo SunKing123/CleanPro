@@ -1,11 +1,12 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,9 +18,11 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
+import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 
 import java.util.ArrayList;
@@ -53,6 +56,18 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     TextView mTextCleanNumber;
     @BindView(R.id.layout_clean_finish)
     RelativeLayout mLayoutCleanFinish;
+    @BindView(R.id.layout_current_select)
+    LinearLayout mLayoutCurrentSelect;
+    @BindView(R.id.layout_wait_select)
+    LinearLayout mLayoutWaitSelect;
+    @BindView(R.id.tv_size)
+    TextView mTvSize;
+    @BindView(R.id.tv_gb)
+    TextView mTvGb;
+    @BindView(R.id.acceview)
+    CleanAnimView mCleanAnimView;
+    @BindView(R.id.web_view)
+    WebView mWebView;
     private CleanExpandAdapter mCleanBigFileAdapter;
 
     private List<MultiItemEntity> mData;
@@ -98,7 +113,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanBigFileAdapter.setOnItemSelectListener((isCheck, entity) -> {
             if (isCheck) {
                 mAllData.add(entity);
-            }else {
+            } else {
                 mAllData.remove(entity);
             }
             updateSelectCount();
@@ -116,11 +131,18 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
             }
         }
         if (total > 0) {
+            CountEntity countEntity = CleanUtil.formatShortFileSize(total);
             mDoJunkClean.setEnabled(true);
-            mDoJunkClean.setText("清理 " + CleanUtil.formatShortFileSize(AppApplication.getInstance(),total));
-        }else {
-            mDoJunkClean.setEnabled(false);
+            mDoJunkClean.setText("清理 " + countEntity.getTotalSize() + countEntity.getUnit());
+            mTvSize.setText(countEntity.getTotalSize());
+            mTvGb.setText(countEntity.getUnit());
+            mLayoutWaitSelect.setVisibility(View.GONE);
+            mLayoutCurrentSelect.setVisibility(View.VISIBLE);
+        } else {
+            mDoJunkClean.setEnabled(true);
             mDoJunkClean.setText("清理");
+            mLayoutWaitSelect.setVisibility(View.VISIBLE);
+            mLayoutCurrentSelect.setVisibility(View.GONE);
         }
     }
 
@@ -134,12 +156,13 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
                 //垃圾清理
                 mPresenter.showDeleteDialog(mAllData);
                 break;
-                default:
+            default:
         }
     }
 
     /**
      * 大文件列表
+     *
      * @param list
      */
     public void showList(FirstLevelEntity list) {
@@ -151,21 +174,33 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
 
     /**
      * 总的大小
+     *
      * @param total
      */
     public void showTotal(long total) {
-        mTextTotal.setText(CleanUtil.formatShortFileSize(AppApplication.getInstance(),total) + "文件");
+        mTextTotal.setText("共发现" + CleanUtil.formatShortFileSize(AppApplication.getInstance(), total));
     }
 
     /**
      * 清理完成
+     *
      * @param total
      */
     public void cleanFinish(long total) {
-        finish();
-        Bundle bundle = new Bundle();
-        bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_BIG_FILE);
-        bundle.putLong("clean_count", total);
-        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
+//        finish();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_BIG_FILE);
+//        bundle.putLong("clean_count", total);
+//        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
+    }
+
+    /**
+     * 开始清理动画
+     * @param countEntity
+     */
+    public void startCleanAnim(CountEntity countEntity) {
+        mCleanAnimView.setData(countEntity);
+        mCleanAnimView.setVisibility(View.VISIBLE);
+        mCleanAnimView.startTopAnim();
     }
 }

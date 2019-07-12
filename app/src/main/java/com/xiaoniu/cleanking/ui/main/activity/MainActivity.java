@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -23,7 +22,6 @@ import com.sxu.shadowdrawable.ShadowDrawable;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -162,12 +160,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         //扫描更新系统数据库
-        MediaScannerConnection.scanFile(this, new String[]{absolutePath + "/Download/Upgrade"}, null, new MediaScannerConnection.OnScanCompletedListener() {
-            @Override
-            public void onScanCompleted(String path, Uri uri) {
-                showToast("清理完毕");
-            }
-        });
+        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null,null);
     }
 
     private void checkReadPermission() {
@@ -348,7 +341,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            } else {
+            } else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof CleanMainFragment) {
+                CleanMainFragment fragment = (CleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
+                fragment.onKeyBack();
+                return true;
+            }else {
                 long secondTime = System.currentTimeMillis();
                 if (secondTime - firstTime > 1500) {
                     // 如果两次按键时间间隔大于800毫秒，则不退出

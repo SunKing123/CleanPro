@@ -49,6 +49,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     Button mBtnDel;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
+    @BindView(R.id.ll_check_all)
+    LinearLayout mLLCheckAll;
+
     @BindView(R.id.ll_empty_view)
     LinearLayout mLLEmptyView;
 
@@ -98,7 +101,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);
 
-        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
+        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsCheckAll) {
