@@ -62,7 +62,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
-            viewHolder.mTxtTime.setText(appInfoBean.time);
+            viewHolder.mTxtTime.setText(String.format("时长:%s",appInfoBean.time));
             if (appInfoBean.isSelect) {
                 viewHolder.mCheckSelect.setSelected(true);
             } else {
