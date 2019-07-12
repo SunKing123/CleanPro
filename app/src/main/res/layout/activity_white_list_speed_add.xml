@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="添加加速保护名单"
+                android:layout_marginLeft="@dimen/dimen_12dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_18sp" />
 
@@ -102,6 +103,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/bg_btn_del"
                     android:text="添加"
+                    style="?android:attr/borderlessButtonStyle"
                     android:textColor="@color/white" />
             </LinearLayout>
 
