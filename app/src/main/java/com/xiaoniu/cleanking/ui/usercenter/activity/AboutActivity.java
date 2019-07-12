@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
@@ -89,7 +90,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         line_xy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpXieyiActivity("http://www.baidu.com");
+                jumpXieyiActivity(AppConstants.Base_H5_Host+"/agree.html");
                 StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
             }
         });

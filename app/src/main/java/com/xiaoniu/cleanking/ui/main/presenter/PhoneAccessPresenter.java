@@ -11,15 +11,20 @@ import android.app.AlertDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Process;
+import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,12 +32,16 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -258,7 +267,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
      */
     boolean canPlaying = true;
 
-    public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt,View view_top, int startNum, int endNum, int type) {
+    public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, View view_top, int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(3000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -272,7 +281,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 if (canPlaying && animation.getAnimatedFraction() > 0.933) {
                     canPlaying = false;
                     //播放的后500ms，背景色改变
-                    setBgChanged(viewt,view_top, 200);
+                    setBgChanged(viewt, view_top, 200);
                 }
                 if (currentValue == endNum) {
                     tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
@@ -290,7 +299,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         anim.start();
     }
 
-    public void setBgChanged(View viewt, View view_top,long time) {
+    public void setBgChanged(View viewt, View view_top, long time) {
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
         anim.setDuration(time);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -316,6 +325,74 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         });
         anim.start();
     }
+
+    /**
+     * 显示可绑定银行列表
+     *
+     * @param statusView
+     */
+    public void showPopupWindow(View statusView) {
+        // 一个自定义的布局，作为显示的内容
+        View contentView = LayoutInflater.from(mView).inflate(
+                R.layout.layout_clean_more_info, null);
+        View textMemory = contentView.findViewById(R.id.text_memory);
+        final PopupWindow popupWindow = new PopupWindow(contentView,
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        //内存加速白名单
+        contentView.setOnClickListener(v -> {
+            popupWindow.dismiss();
+            mView.setFromProtect(true);
+            mView.startActivity(WhiteListSpeedAddActivity.class);
+        });
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor((v, event) -> {
+            return false;
+            // 这里如果返回true的话，touch事件将被拦截
+            // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+        });
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        // 设置好参数之后再show
+        popupWindow.showAsDropDown(statusView);
+    }
+
+    boolean isFromClick = false;
+
+    public AlertDialog showPermissionDialog(Context context, final ClickListener okListener) {
+        isFromClick = false;
+        final AlertDialog dlg = new AlertDialog.Builder(context).create();
+        if (((Activity) context).isFinishing()) {
+            return dlg;
+        }
+        dlg.setCancelable(true);
+        dlg.show();
+        Window window = dlg.getWindow();
+        window.setContentView(R.layout.alite_permission_dialog);
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        //这里设置居中
+        lp.gravity = Gravity.CENTER;
+        window.setAttributes(lp);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView tv_goto = (TextView) window.findViewById(R.id.tv_goto);
+        tv_goto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFromClick = true;
+                dlg.dismiss();
+                okListener.clickOKBtn();
+            }
+        });
+        dlg.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (!isFromClick)
+                    mView.finish();
+            }
+        });
+        return dlg;
+    }
+
 
     public interface ClickListener {
         public void clickOKBtn();
