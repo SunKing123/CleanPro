@@ -53,8 +53,9 @@ public class CleanFileLoadingDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         getDialog().getWindow().setGravity(Gravity.CENTER);
-        int width = (int) (getScreenWidth(getContext()) * 0.28f);
-        getDialog().getWindow().setLayout(width, width);
+        int width = (int) (getScreenWidth(getContext()) * 0.30f);
+        int height= (int) (getScreenWidth(getContext()) * 0.26f);
+        getDialog().getWindow().setLayout(width, height);
     }
 
     /**
