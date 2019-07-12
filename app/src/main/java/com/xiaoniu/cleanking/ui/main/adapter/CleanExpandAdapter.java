@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SecondLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.FileUtils;
 
 import java.util.List;
 
@@ -58,16 +59,13 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
             case TYPE_LEVEL_1:
                 //第一级目录
                 FirstLevelEntity entity = (FirstLevelEntity) item;
-                helper.setText(R.id.junk_size,"400mb");
-                helper.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = helper.getAdapterPosition();
-                        if (entity.isExpanded()) {
-                            collapse(pos);
-                        } else {
-                            expand(pos);
-                        }
+                helper.setText(R.id.junk_size, CleanUtil.formatShortFileSize(AppApplication.getInstance(), entity.getTotal()));
+                helper.itemView.setOnClickListener(v -> {
+                    int pos = helper.getAdapterPosition();
+                    if (entity.isExpanded()) {
+                        collapse(pos);
+                    } else {
+                        expand(pos);
                     }
                 });
                 break;
@@ -75,7 +73,25 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 //第二级目录
                 final SecondLevelEntity entity2 = (SecondLevelEntity) item;
                 helper.setText(R.id.text_app_name, entity2.getName())
-                        .setText(R.id.junk_size,CleanUtil.formatShortFileSize(AppApplication.getInstance(), entity2.getTotalSize()));
+                        .setText(R.id.junk_size, CleanUtil.formatShortFileSize(AppApplication.getInstance(), entity2.getTotalSize()));
+                switch (entity2.getType()) {
+                    case SecondLevelEntity.TYPE_IMAGE:
+                        helper.setImageResource(R.id.app_logo, R.mipmap.icon_clean_image);
+                        break;
+                    case SecondLevelEntity.TYPE_MUSIC:
+                        helper.setImageResource(R.id.app_logo, R.mipmap.icon_clean_music);
+                        break;
+                    case SecondLevelEntity.TYPE_VIDEO:
+                        helper.setImageResource(R.id.app_logo, R.mipmap.icon_clean_video);
+                        break;
+                    case SecondLevelEntity.TYPE_WORD:
+                        helper.setImageResource(R.id.app_logo, R.mipmap.icon_clean_word);
+                        break;
+                    case SecondLevelEntity.TYPE_ZIP:
+                        helper.setImageResource(R.id.app_logo, R.mipmap.icon_clean_zip);
+                        break;
+                    default:
+                }
                 helper.itemView.setOnClickListener(v -> {
                     int pos = helper.getAdapterPosition();
                     if (entity2.isExpanded()) {
@@ -90,16 +106,18 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 helper.setText(R.id.text_app_name, entity3.getFile().getName())
                         .setText(R.id.junk_size, CleanUtil.formatShortFileSize(AppApplication.getInstance(), entity3.getFile().length()))
                         .setText(R.id.text_version, entity3.getContent());
-                helper.setOnCheckedChangeListener(R.id.icon_check, (buttonView, isChecked) -> {
+                helper.getView(R.id.icon_check).setSelected(entity3.isChecked());
+                FileUtils.showIconByFile(helper.getView(R.id.app_logo),entity3.getFile());
+                helper.setOnClickListener(R.id.icon_check, v -> {
                     boolean checked = entity3.isChecked();
                     if (checked) {
                         //取消勾选
                         entity3.setChecked(false);
-                        helper.setChecked(R.id.icon_check,false);
+                        helper.getView(R.id.icon_check).setSelected(false);
                         if (mOnItemSelectListener != null) {
-                            mOnItemSelectListener.onItemChecked(false,entity3);
+                            mOnItemSelectListener.onItemChecked(false, entity3);
                         }
-                    }else {
+                    } else {
                         showConfirmDialog(entity3);
                     }
                 });
@@ -127,12 +145,12 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
         mTextTrace.setText("来自：" + entity.getContent());
 
         mTextCancel.setOnClickListener(v -> dialog.dismiss());
-        mTextConfirm.setOnClickListener(v->{
+        mTextConfirm.setOnClickListener(v -> {
             entity.setChecked(true);
             dialog.dismiss();
             notifyDataSetChanged();
             if (mOnItemSelectListener != null) {
-                mOnItemSelectListener.onItemChecked(true,entity);
+                mOnItemSelectListener.onItemChecked(true, entity);
             }
         });
         dialog.setContentView(view);

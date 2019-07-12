@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:scrollbars="none">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -146,6 +146,7 @@
 
 
             <LinearLayout
+                android:layout_below="@+id/layout_clean_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20dp"
@@ -261,6 +262,138 @@
                         android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+
+            <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                         xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                         android:id="@+id/layout_clean_finish"
+                                                         android:visibility="gone"
+                                                         android:layout_width="match_parent"
+                                                         android:layout_height="match_parent"
+                                                         android:background="#F7F8FA">
+
+                <View
+                    android:id="@+id/view_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="#06C581"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:background="@mipmap/back_white"
+                    app:layout_constraintBottom_toBottomOf="@id/view_top"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/view_top" />
+
+                <TextView
+                    android:id="@+id/text_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_12dp"
+                    android:text="悟空清理"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_18sp"
+                    app:layout_constraintBottom_toBottomOf="@id/view_top"
+                    app:layout_constraintLeft_toRightOf="@id/iv_back"
+                    app:layout_constraintTop_toTopOf="@id/view_top" />
+
+                <View
+                    android:id="@+id/viewt"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="#06C581"
+                    app:layout_constraintTop_toBottomOf="@id/view_top" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@id/viewt"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="@id/viewt"
+                    app:layout_constraintTop_toTopOf="@id/viewt">
+
+                    <ImageView
+                        android:id="@+id/iv_dun"
+                        android:layout_width="47dp"
+                        android:layout_height="54dp"
+                        android:layout_marginRight="@dimen/dimen_15dp"
+                        android:src="@mipmap/icon_dun" />
+
+                    <TextView
+                        android:id="@+id/tv_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:visibility="visible"
+                        android:textColor="@color/white"
+                        android:textSize="55sp" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_right_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:layout_marginLeft="@dimen/dimen_4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_gb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/dimen_10dp"
+                            android:text="GB"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_ql"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="内存可清理"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_right_cooling"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginLeft="@dimen/dimen_4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_number_cool"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="成功降温2°C"
+                            android:textColor="@color/white"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="60s后达到最佳降温效果"
+                            android:layout_marginTop="@dimen/dimen_7dp"
+                            android:alpha="0.6"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <WebView
+                    android:id="@+id/web_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/viewt" />
+            </android.support.constraint.ConstraintLayout>
+        </RelativeLayout>
     </ScrollView>
 </com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout>

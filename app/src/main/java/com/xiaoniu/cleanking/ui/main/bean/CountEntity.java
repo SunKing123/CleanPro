@@ -8,6 +8,16 @@ public class CountEntity implements Serializable {
 
     private String unit;
 
+    private String resultSize;
+
+    public String getResultSize() {
+        return resultSize;
+    }
+
+    public void setResultSize(String resultSize) {
+        this.resultSize = resultSize;
+    }
+
     public String getTotalSize() {
         return totalSize;
     }

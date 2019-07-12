@@ -9,6 +9,16 @@ public class FirstLevelEntity extends AbstractExpandableItem<SecondLevelEntity> 
 
     private String name;
 
+    private long total;
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
     public String getName() {
         return name;
     }

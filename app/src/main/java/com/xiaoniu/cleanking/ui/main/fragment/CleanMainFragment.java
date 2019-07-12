@@ -3,17 +3,23 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -24,6 +30,8 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
@@ -67,6 +75,22 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ScrollView mScrollView;
     @BindView(R.id.view_lottie)
     LottieAnimationView mAnimationView;
+    @BindView(R.id.text_acce)
+    LinearLayout mTextAcce;
+    @BindView(R.id.line_ql)
+    LinearLayout mLineQl;
+    @BindView(R.id.text_wjgl)
+    LinearLayout mTextWjgl;
+    @BindView(R.id.iv_dun)
+    ImageView mIvDun;
+    @BindView(R.id.tv_size)
+    TextView mTvSize;
+    @BindView(R.id.tv_gb)
+    TextView mTvGb;
+    @BindView(R.id.web_view)
+    WebView mWebView;
+    @BindView(R.id.layout_clean_finish)
+    ConstraintLayout mLayoutCleanFinish;
 
     private boolean isScanFinish = false;
     public static HashMap<Integer, JunkGroup> mJunkGroups;
@@ -74,13 +98,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     private List<ImageView> mTopViews;
     private Handler mHandler;
 
+
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
     }
 
     @Override
-    public void netError(){
+    public void netError() {
 
     }
 
@@ -98,11 +123,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     protected void initView() {
         EventBus.getDefault().register(this);
 
+        ViewGroup.LayoutParams layoutParams = mLayoutCleanFinish.getLayoutParams();
+        layoutParams.height = ScreenUtils.getScreenHeight(AppApplication.getInstance());
+        mLayoutCleanFinish.setLayoutParams(layoutParams);
 
         new Handler().postDelayed(() -> {
             mPresenter.startScan();
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
         }, 500);
+
+
     }
 
 
@@ -137,7 +167,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mButtonCleanNow.setVisibility(View.GONE);
             mTextScanTrace.setText("垃圾清理中...");
             mArrowRight.setVisibility(View.GONE);
-
             mLayoutRoot.setIntercept(true);
         } else {
             ToastUtils.show("正在扫描中");
@@ -202,17 +231,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mLayoutRoot.setIntercept(false);
         mIconInner.setVisibility(View.GONE);
 
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DeviceUtils.dip2px(400);
         mLayoutCleanTop.setLayoutParams(layoutParams);
-
-        if (getActivity() != null) {
-            FrameLayout frameLayout = getActivity().findViewById(R.id.frame_layout);
-            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
-            marginParams.bottomMargin = DeviceUtils.dip2px(53);
-            frameLayout.setLayoutParams(marginParams);
-            getActivity().findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
-        }
 
         mIconOuter.setTranslationY(0);
         mIconInner.setTranslationY(0);
@@ -225,6 +246,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mButtonCleanNow.setText("完成");
         mButtonCleanNow.setVisibility(View.VISIBLE);
         mButtonCleanNow.setEnabled(false);
+    }
+
+    public void showBottomTab() {
+        if (getActivity() != null) {
+            FrameLayout frameLayout = getActivity().findViewById(R.id.frame_layout);
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
+            marginParams.bottomMargin = DeviceUtils.dip2px(53);
+            frameLayout.setLayoutParams(marginParams);
+            getActivity().findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -260,5 +291,39 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data.json");
         mAnimationView.playAnimation();
+    }
+
+    /**
+     * 清理完成后的页面
+     *
+     * @return
+     */
+    public View getCleanFinish() {
+        return mLayoutCleanFinish;
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onViewClicked() {
+        showBottomTab();
+        mLayoutCleanFinish.setVisibility(View.GONE);
+    }
+
+    private long firstTime;
+
+    public void onKeyBack() {
+        if (mLayoutCleanFinish.getVisibility() == View.VISIBLE) {
+            mLayoutCleanFinish.setVisibility(View.GONE);
+            showBottomTab();
+        } else {
+            long currentTimeMillis = System.currentTimeMillis();
+            if (currentTimeMillis - firstTime > 1500) {
+                Toast.makeText(getActivity(), "再按一次退出程序",
+                        Toast.LENGTH_SHORT).show();
+                firstTime = currentTimeMillis;
+            } else {
+                SPUtil.setInt(getContext(), "turnask", 0);
+                AppManager.getAppManager().AppExit(getContext(), false);
+            }
+        }
     }
 }

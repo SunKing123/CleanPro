@@ -2,16 +2,20 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -27,6 +31,8 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +44,12 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.VISIBLE;
 import static com.xiaoniu.cleanking.utils.ResourceUtils.getString;
 
 public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainModel> {
+
+    private AnimatorSet mColorSet;
 
     @Inject
     public CleanMainPresenter() {
@@ -62,12 +71,25 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
 
+        showColorChange();
 
         //文件加载进度回调
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
+            private boolean isFirst = true;
             @Override
             public void currentNumber() {
-
+                if (isFirst ) {
+                    isFirst = false;
+                    FragmentActivity activity = mView.getActivity();
+                    if (activity == null) {
+                        return;
+                    }
+                    activity.runOnUiThread(() -> {
+                        if(!mColorSet.isRunning()){
+                            mColorSet.start();
+                        }
+                    });
+                }
             }
 
             @Override
@@ -98,14 +120,14 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             e.onNext(runningProcess);
             long l1 = System.currentTimeMillis();
             long v2 = l1 - v1;
-            System.out.println("--------------" + v2);
+            System.out.println("==========================" + v2);
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
             long l2 = System.currentTimeMillis();
-            System.out.println("--------------" + (l2 - l1));
+            System.out.println("==========================" + (l2 - l1));
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo();
             long l3 = System.currentTimeMillis();
-            System.out.println("--------------" + (l3 - l2));
+            System.out.println("==========================" + (l3 - l2));
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
@@ -160,6 +182,17 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         });
     }
 
+    public void showColorChange() {
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", ThirdLevel,SecondLevel);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", SecondLevel, FirstLevel);
+        colorAnim1.setEvaluator(new ArgbEvaluator());
+        colorAnim2.setEvaluator(new ArgbEvaluator());
+        colorAnim1.setDuration(300);
+        colorAnim2.setDuration(300);
+        mColorSet = new AnimatorSet();
+        mColorSet.playSequentially(colorAnim1,colorAnim2);
+    }
+
     public void showTransAnim(FrameLayout mLayoutCleanTop) {
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(mLayoutCleanTop.getMeasuredHeight(), ScreenUtils.getScreenHeight(AppApplication.getInstance()));
@@ -167,7 +200,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         valueAnimator.setRepeatCount(0);
         valueAnimator.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
             layoutParams.height = currentValue;
             mLayoutCleanTop.setLayoutParams(layoutParams);
         });
@@ -183,6 +216,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     AnimatorSet cleanScanAnimator;
 
+    /**
+     * 开始扫描动画
+     * @param iconOuter
+     * @param circleOuter
+     * @param circleOuter2
+     */
     public void startCleanScanAnimation(ImageView iconOuter, View circleOuter,View circleOuter2) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f,1f);
@@ -244,6 +283,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         cleanScanAnimator.start();
     }
 
+    /**
+     * 扫描结束
+     */
     public void stopCleanScanAnimation() {
         if (cleanScanAnimator != null) {
             cleanScanAnimator.end();
@@ -257,8 +299,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         animator.setRepeatMode(repeatMode);
     }
 
+    /**
+     * 开始清理动画
+     * @param iconInner
+     * @param iconOuter
+     * @param layoutScan
+     * @param textCount
+     * @param countEntity
+     */
     public void startCleanAnimation(ImageView iconInner, ImageView iconOuter, LinearLayout layoutScan, TextView textCount, CountEntity countEntity) {
-        iconInner.setVisibility(View.VISIBLE);
+        iconInner.setVisibility(VISIBLE);
 
         int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - iconOuter.getMeasuredHeight();
         ObjectAnimator outerY = ObjectAnimator.ofFloat(iconOuter, "translationY", iconOuter.getTranslationY(), height);
@@ -281,7 +331,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         innerAlpha.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                iconInner.setVisibility(View.VISIBLE);
+                iconInner.setVisibility(VISIBLE);
                 new Handler().postDelayed(rotationFistStep::start, 400);
             }
 
@@ -360,14 +410,17 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     }
 
-    public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
-        new Handler().postDelayed(() -> {
-            if (animatorSet != null) {
-                mView.showCleanFinish(Long.valueOf(countEntity.getTotalSize()));
-                animatorSet.end();
-            }
-        }, 5000);
+    private static final int FirstLevel = 0xffFD6F46;
+    private static final int SecondLevel = 0xffF1D53B;
+    private static final int ThirdLevel = 0xff06C581;
 
+    /**
+     * 开始清理操作
+     * @param animatorSet
+     * @param textCount
+     * @param countEntity
+     */
+    public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
@@ -375,9 +428,45 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             float animatedValue = (float) animation.getAnimatedValue();
             textCount.setText(String.format("%s%s", Math.round(animatedValue), unit));
         });
-        valueAnimator.start();
-//        clearAll();
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (animatorSet != null) {
+                    //清理完成
+                    animatorSet.end();
+                    setViewTrans();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        valueAnimator.start();
+
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", FirstLevel, SecondLevel);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", SecondLevel, ThirdLevel);
+        colorAnim1.setEvaluator(new ArgbEvaluator());
+        colorAnim2.setEvaluator(new ArgbEvaluator());
+        colorAnim1.setDuration(500);
+        colorAnim2.setDuration(500);
+        colorAnim1.setStartDelay(4000);
+        colorAnim2.setStartDelay(4500);
+
+        AnimatorSet animatorSetTimer = new AnimatorSet();
+        animatorSetTimer.playTogether(valueAnimator,colorAnim1,colorAnim2);
+        animatorSetTimer.start();
 
     }
 
@@ -416,16 +505,42 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     }
 
-    /**
-     * view移动动画
-     */
-    public void viewTranslateAnim() {
-        ImageView imageView = new ImageView(mView.getActivity());
-        imageView.setImageResource(R.mipmap.icon_clean_jd);
-        FrameLayout cleanTopLayout = mView.getCleanTopLayout();
+    //数字动画播放完后火箭上移，布局高度缩小
+    public void setViewTrans() {
 
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = DeviceUtils.dip2px(50);
-        cleanTopLayout.addView(imageView,layoutParams);
+        View cleanFinish = mView.getCleanFinish();
+        cleanFinish.setVisibility(VISIBLE);
+        int startHeight = DeviceUtils.getScreenHeight();
+        ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
+        anim.setDuration(500);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) cleanFinish.getLayoutParams();
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.topMargin = currentValue;
+            cleanFinish.setLayoutParams(rlp);
+        });
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                EventBus.getDefault().post("clean_finish");
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        anim.start();
     }
 }

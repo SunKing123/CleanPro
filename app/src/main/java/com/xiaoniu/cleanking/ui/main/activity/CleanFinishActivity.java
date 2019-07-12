@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.os.Handler;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -13,8 +12,6 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -82,7 +79,6 @@ public class CleanFinishActivity extends SimpleActivity {
 
         initData();
 
-        new Handler().postDelayed(() -> EventBus.getDefault().post("clean_finish"), 500);
 
     }
 

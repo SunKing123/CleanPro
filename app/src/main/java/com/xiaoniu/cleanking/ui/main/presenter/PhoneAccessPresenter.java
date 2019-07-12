@@ -77,6 +77,9 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 //获取到可以加速的应用名单
                 FileQueryUtils mFileQueryUtils = new FileQueryUtils();
                 ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
+                if (listInfo == null) {
+                    listInfo = new ArrayList<>();
+                }
                 e.onNext(listInfo);
             }
         }).subscribeOn(Schedulers.io())

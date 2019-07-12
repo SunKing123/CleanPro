@@ -142,7 +142,16 @@ public class FileQueryUtils {
         ArrayList<FirstJunkInfo> list = new ArrayList<>();
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
         List<PackageInfo> installedList = AppApplication.getInstance().getPackageManager().getInstalledPackages(0);
+        int total = 0;
+        if (installedList != null) {
+            total = installedList.size();
+        }
+        int index = 0;
         for (PackageInfo applicationInfo : installedList) {
+            index ++;
+            if (index > (float)total * 3 / 4) {
+                mScanFileListener.currentNumber();
+            }
             final File file = new File(rootPath + applicationInfo.packageName + "/cache");
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
