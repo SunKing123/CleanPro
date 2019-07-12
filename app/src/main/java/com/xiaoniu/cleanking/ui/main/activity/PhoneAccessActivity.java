@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -66,6 +67,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     ImageView iv_dun;
     @BindView(R.id.tv_ql)
     TextView tv_ql;
+    @BindView(R.id.icon_more)
+    ImageView icon_more;
     @BindView(R.id.web_view)
     WebView mWebView;
     @BindView(R.id.viewt)
@@ -77,6 +80,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //    PhoneAccessAdapter imageAdapter;
     PhoneAccessBelowAdapter belowAdapter;
     boolean canClickDelete = false; //默认不可点击清理，当数字动画播放完毕后可以点击
+
+    public void setFromProtect(boolean fromProtect) {
+        isFromProtect = fromProtect;
+    }
+
+    boolean isFromProtect = false; //如果点击右上角的加速保护名单在返回，onResume不执行代码
 
     public void setCanClickDelete(boolean canClickDelete) {
         this.canClickDelete = canClickDelete;
@@ -125,16 +134,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public void initView() {
         initWebView();
-        if (Build.VERSION.SDK_INT >= 26) {
-            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
-            long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0 || timeTemp >  10 * 1000)
-                mPresenter.getAccessAbove22();
-            else
-                setCleanedView(0);
-        } else {
-            mPresenter.getAccessListBelow();
-        }
+
 
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +171,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         });
 
+        icon_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.showPopupWindow(icon_more);
+            }
+        });
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
@@ -192,6 +198,20 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        if (isFromProtect) {
+            isFromProtect = false;
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= 26) {
+            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+            long timeTemp = System.currentTimeMillis() - lastCheckTime;
+            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
+                mPresenter.getAccessAbove22();
+            else
+                setCleanedView(0);
+        } else {
+            mPresenter.getAccessListBelow();
+        }
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
@@ -240,9 +260,19 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     public void getAccessListAbove22(List<ActivityManager.RunningAppProcessInfo> listInfo) {
         if (listInfo.size() == 0) {
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivity(intent);
-            finish();
+            mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
+                @Override
+                public void clickOKBtn() {
+                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void cancelBtn() {
+
+                }
+            });
+
         } else {
             ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
             for (ActivityManager.RunningAppProcessInfo info : listInfo) {

@@ -75,8 +75,9 @@
     public static ** valueOf(java.lang.String);
 }
 
-
-
+# 埋点
+-dontwarn com.xiaoniu.statistic.**
+-keep class com.xiaoniu.statistic.**{*;}
 # 保持哪些类不被混淆
 -keep public class * implements java.io.Serializable {
 	public *;

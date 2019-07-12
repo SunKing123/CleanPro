@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -127,6 +128,15 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+
+/**
+ * 启用mixed content    android 5.0以上默认不支持Mixed Content
+ *
+ * 5.0以上允许加载http和https混合的页面(5.0以下默认允许，5.0+默认禁止)
+ * */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         mWebView.addJavascriptInterface(new Javascript(), "HhhWebPage");
         //分享
         mWebView.addJavascriptInterface(new Javascript(), "sharePage");

@@ -51,8 +51,9 @@
     <com.xiaoniu.cleanking.widget.HackyViewPager
         android:id="@+id/preview_image_vp_content"
         android:layout_width="match_parent"
-        android:layout_marginBottom="64dp"
-        android:layout_height="wrap_content"
+
+        app:layout_constraintBottom_toTopOf="@id/view_bottom"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/view_top"
         />
 
