@@ -70,6 +70,8 @@ public class AccessAnimView extends RelativeLayout {
 
     public interface onAnimEndListener {
         public void onAnimEnd();
+
+        public void onStatusBarColorChanged(int colorRes);
     }
 
     /**
@@ -188,15 +190,15 @@ public class AccessAnimView extends RelativeLayout {
     boolean canPlaying = true;
 
     public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, int startNum, int endNum, int type) {
-        setYuAnim(iv_yu1, 0);
-        setYuAnim(iv_yu2, 80);
-        setYuAnim(iv_yu3, 160);
-        setYuAnim(iv_yu4, 240);
+        ObjectAnimator oa1 = setYuAnim(iv_yu1, 0);
+        ObjectAnimator oa2 = setYuAnim(iv_yu2, 80);
+        ObjectAnimator oa3 = setYuAnim(iv_yu3, 160);
+        ObjectAnimator oa4 = setYuAnim(iv_yu4, 240);
 
-        setYuAnim(iv_yu5, 320);
-        setYuAnim(iv_yu6, 400);
-        setYuAnim(iv_yu7, 480);
-        setYuAnim(iv_yu8, 540);
+        ObjectAnimator oa5 = setYuAnim(iv_yu5, 320);
+        ObjectAnimator oa6 = setYuAnim(iv_yu6, 400);
+        ObjectAnimator oa7 = setYuAnim(iv_yu7, 480);
+        ObjectAnimator oa8 = setYuAnim(iv_yu8, 540);
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(3000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -206,9 +208,11 @@ public class AccessAnimView extends RelativeLayout {
             public void onAnimationUpdate(ValueAnimator animation) {
                 int currentValue = (int) animation.getAnimatedValue();
                 tv_size.setText(currentValue + "");
+                Log.e("asdf", "时间：" + animation.getAnimatedFraction());
                 Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
-                if (canPlaying && animation.getCurrentPlayTime() > 2800) {
+                if (canPlaying && animation.getAnimatedFraction() > 0.933) {
                     canPlaying = false;
+                    cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
                     //播放的后500ms，背景色改变
                     setBgChanged(viewt, 200);
                 }
@@ -222,10 +226,16 @@ public class AccessAnimView extends RelativeLayout {
     }
 
     boolean isFirstChangeColor = true;
+    boolean isFirstChangeColor1 = true;
+    boolean isFirstChangeColor2 = true;
+    boolean isFirstChangeColor3 = true;
 
     //数字动画播放的最后200ms，背景颜色变化
     public void setBgChanged(View viewt, long time) {
         isFirstChangeColor = true;
+        isFirstChangeColor1 = true;
+        isFirstChangeColor2 = true;
+        isFirstChangeColor3 = true;
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
         anim.setDuration(time);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -234,12 +244,24 @@ public class AccessAnimView extends RelativeLayout {
             public void onAnimationUpdate(ValueAnimator animation) {
                 int currentValue = (int) animation.getAnimatedValue();
                 if (currentValue < 66) {
+                    if (listener != null && isFirstChangeColor1) {
+                        listener.onStatusBarColorChanged(R.color.color_FD6F46);
+                        isFirstChangeColor1 = false;
+                    }
                     viewt.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
                     line_title.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
                 } else if (currentValue < 77) {
+                    if (listener != null && isFirstChangeColor2) {
+                        listener.onStatusBarColorChanged(R.color.color_06C581);
+                        isFirstChangeColor2 = false;
+                    }
                     viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                     line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 } else {
+                    if (listener != null && isFirstChangeColor3) {
+                        listener.onStatusBarColorChanged(R.color.color_06C581);
+                        isFirstChangeColor3 = false;
+                    }
                     viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                     line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                     if (isFirstChangeColor) {
@@ -311,22 +333,47 @@ public class AccessAnimView extends RelativeLayout {
     }
 
     //下雨动画
-    public void setYuAnim(View viewY, long delay) {
-        viewY.setVisibility(VISIBLE);
+    public ObjectAnimator setYuAnim(View viewY, long delay) {
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", DeviceUtils.dip2px(112) * -1, DeviceUtils.getScreenHeight() + DeviceUtils.dip2px(112));
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationY);
+        animator.setDuration(600);
+        animator.setInterpolator(new AccelerateInterpolator());
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+//        animator.setRepeatMode(ValueAnimator.INFINITE);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                viewY.setVisibility(VISIBLE);
+            }
+        });
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", DeviceUtils.dip2px(112) * -1, DeviceUtils.getScreenHeight() + DeviceUtils.dip2px(112));
-                ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationY);
-                animator.setDuration(500);
-                animator.setInterpolator(new AccelerateInterpolator());
-                animator.setRepeatCount(10);
 //        animator.setRepeatMode(ValueAnimator.INFINITE);
                 animator.start();
             }
         }, delay);
-
+        return animator;
     }
 
+    public void cancelYuAnims(ObjectAnimator oa1, ObjectAnimator oa2, ObjectAnimator oa3, ObjectAnimator oa4, ObjectAnimator oa5, ObjectAnimator oa6, ObjectAnimator oa7, ObjectAnimator oa8) {
+        if (oa1 != null) oa1.cancel();
+        if (oa2 != null) oa2.cancel();
+        if (oa3 != null) oa3.cancel();
+        if (oa4 != null) oa4.cancel();
+        if (oa5 != null) oa5.cancel();
+        if (oa6 != null) oa6.cancel();
+        if (oa7 != null) oa7.cancel();
+        if (oa8 != null) oa8.cancel();
+        iv_yu1.setVisibility(GONE);
+        iv_yu2.setVisibility(GONE);
+        iv_yu3.setVisibility(GONE);
+        iv_yu4.setVisibility(GONE);
+        iv_yu5.setVisibility(GONE);
+        iv_yu6.setVisibility(GONE);
+        iv_yu7.setVisibility(GONE);
+        iv_yu8.setVisibility(GONE);
+    }
 }
 

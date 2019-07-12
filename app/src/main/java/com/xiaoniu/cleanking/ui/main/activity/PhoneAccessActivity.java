@@ -76,6 +76,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     AccessAnimView acceview;
     //    PhoneAccessAdapter imageAdapter;
     PhoneAccessBelowAdapter belowAdapter;
+    boolean canClickDelete = false; //默认不可点击清理，当数字动画播放完毕后可以点击
+
+    public void setCanClickDelete(boolean canClickDelete) {
+        this.canClickDelete = canClickDelete;
+    }
 
     @Override
     public int getLayoutId() {
@@ -123,10 +128,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0 || timeTemp > 2 * 60 * 1000)
+            if (lastCheckTime == 0 || timeTemp >  10 * 1000)
                 mPresenter.getAccessAbove22();
             else
-                setCleanedView();
+                setCleanedView(0);
         } else {
             mPresenter.getAccessListBelow();
         }
@@ -142,25 +147,26 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!canClickDelete) return;
                 acceview.setVisibility(View.VISIBLE);
                 acceview.startTopAnim();
-//                ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
-//                for (FirstJunkInfo info : belowAdapter.getListImage()) {
-//                    if (info.getIsSelect()) {
-//                        junkTemp.add(info);
-//                    }
-//                }
-//
-//                long total = 0;
-//                for (FirstJunkInfo info : junkTemp) {
-//                    total += info.getTotalSize();
-//                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-//                }
-//                belowAdapter.deleteData(junkTemp);
-//                computeTotalSize(belowAdapter.getListImage());
-//                setCleanedView(total);
-//                if (Build.VERSION.SDK_INT >= 26)
-//                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
+                ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
+                for (FirstJunkInfo info : belowAdapter.getListImage()) {
+                    if (info.getIsSelect()) {
+                        junkTemp.add(info);
+                    }
+                }
+
+                long total = 0;
+                for (FirstJunkInfo info : junkTemp) {
+                    total += info.getTotalSize();
+                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+                }
+                belowAdapter.deleteData(junkTemp);
+                computeTotalSize(junkTemp);
+                setCleanedView(total);
+                if (Build.VERSION.SDK_INT >= 26)
+                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
 
             }
         });
@@ -173,7 +179,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 if (viewt == null || line_title == null) return;
                 line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                setCleanedView();
+                setCleanedView(0);
+            }
+
+            @Override
+            public void onStatusBarColorChanged(int colorRes) {
+                setStatusBar(colorRes);
             }
         });
     }
@@ -287,14 +298,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     //清理完毕后展示内容
-    public void setCleanedView() {
+    public void setCleanedView(long sized) {
         mWebView.setVisibility(View.VISIBLE);
         iv_dun.setVisibility(View.VISIBLE);
-        tv_ql.setText("垃圾已清理");
-        setHasCleaned();
+        tv_ql.setText("内存已清理");
+        setHasCleaned(sized);
     }
 
-    public void setHasCleaned() {
+    public void setHasCleaned(long sized) {
         String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizesCleaned);
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {

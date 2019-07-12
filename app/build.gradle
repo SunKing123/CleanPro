@@ -179,6 +179,8 @@ dependencies {
 //    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     compile 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'
+    // Android 阴影的实现
+    implementation 'com.github.JuHonggang:ShadowDrawable:0.1'
     //腾讯多渠道打包
     api 'com.leon.channel:helper:2.0.1'
     implementation 'com.umeng.umsdk:analytics:8.0.0'

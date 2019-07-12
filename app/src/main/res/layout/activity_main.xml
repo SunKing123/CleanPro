@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:layout_gravity="bottom"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginBottom="@dimen/bottombar_tab_height"
         android:background="@mipmap/wl" />
 
