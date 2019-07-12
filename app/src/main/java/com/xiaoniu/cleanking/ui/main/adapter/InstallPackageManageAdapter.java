@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -80,7 +81,7 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
                 }
             }
             viewHolder.mCheckSelect.setSelected(appInfoBean.isSelect);
-            viewHolder.mCheckSelect.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mLLCheckSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != onCheckListener) {
@@ -131,6 +132,7 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
         private TextView mTxtTime;
         private TextView mTxtSize;
         private ImageButton mCheckSelect;
+        private LinearLayout mLLCheckSelect;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -139,7 +141,7 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
             mTxtName = itemView.findViewById(R.id.txt_name);
             mTxtSize = itemView.findViewById(R.id.txt_size);
             mCheckSelect = itemView.findViewById(R.id.check_select);
-
+            mLLCheckSelect=itemView.findViewById(R.id.ll_check_select);
         }
     }
 

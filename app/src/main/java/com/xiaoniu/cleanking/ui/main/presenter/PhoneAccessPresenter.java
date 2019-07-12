@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -76,6 +78,33 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             public void subscribe(ObservableEmitter<ArrayList<FirstJunkInfo>> e) throws Exception {
                 //获取到可以加速的应用名单
                 FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+                //文件加载进度回调
+                mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
+                    @Override
+                    public void currentNumber() {
+
+                    }
+
+                    @Override
+                    public void increaseSize(long p0) {
+
+                    }
+
+                    @Override
+                    public void reduceSize(long p0) {
+
+                    }
+
+                    @Override
+                    public void scanFile(String p0) {
+
+                    }
+
+                    @Override
+                    public void totalSize(int p0) {
+
+                    }
+                });
                 ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
                 if (listInfo == null) {
                     listInfo = new ArrayList<>();
@@ -243,7 +272,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 int currentValue = (int) animation.getAnimatedValue();
                 tv_size.setText(currentValue + "");
                 Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
-                if (canPlaying && animation.getCurrentPlayTime() > 2800) {
+                if (canPlaying && animation.getAnimatedFraction() > 0.933) {
                     canPlaying = false;
                     //播放的后500ms，背景色改变
                     setBgChanged(viewt,view_top, 200);
@@ -252,6 +281,13 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                     tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                     tv_gb.setText(type == 1 ? "MB" : "GB");
                 }
+            }
+        });
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mView.setCanClickDelete(true);
             }
         });
         anim.start();

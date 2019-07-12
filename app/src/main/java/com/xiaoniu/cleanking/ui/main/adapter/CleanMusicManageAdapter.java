@@ -62,13 +62,13 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
-            viewHolder.mTxtTime.setText(appInfoBean.time);
+            viewHolder.mTxtTime.setText(String.format("时长:%s",appInfoBean.time));
             if (appInfoBean.isSelect) {
                 viewHolder.mCheckSelect.setSelected(true);
             } else {
                 viewHolder.mCheckSelect.setSelected(false);
             }
-            viewHolder.mCheckSelect.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mLLCheckSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != onCheckListener) {
@@ -133,6 +133,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
         private TextView mTxtSize;
         private ImageButton mCheckSelect;
         private LinearLayout mLLContent;
+        private LinearLayout mLLCheckSelect;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -141,6 +142,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             mTxtSize = itemView.findViewById(R.id.txt_size);
             mCheckSelect = itemView.findViewById(R.id.check_select);
             mLLContent = itemView.findViewById(R.id.ll_content);
+            mLLCheckSelect=itemView.findViewById(R.id.ll_check_select);
         }
     }
 

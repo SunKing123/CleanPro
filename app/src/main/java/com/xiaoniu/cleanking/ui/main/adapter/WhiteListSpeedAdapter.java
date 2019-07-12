@@ -60,7 +60,7 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.name);
+                        onCheckListener.onCheck(appInfoBean.packageName);
                     }
                 }
             });

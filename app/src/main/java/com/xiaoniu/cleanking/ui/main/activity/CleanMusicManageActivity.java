@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanMusicManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMusicFilePresenter;
@@ -48,8 +49,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     Button mBtnDel;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
+    @BindView(R.id.ll_check_all)
+    LinearLayout mLLCheckAll;
+
     @BindView(R.id.ll_empty_view)
     LinearLayout mLLEmptyView;
+
+    private CleanFileLoadingDialogFragment mLoading;
 
     private CleanMusicManageAdapter mAdapter;
 
@@ -57,6 +63,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
      * 列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
     private boolean mIsCheckAll;
+
+    //loading是否为首次弹窗
+    private  boolean isShowFirst=true;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -85,13 +94,14 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     @Override
     protected void initView() {
+        mLoading=CleanFileLoadingDialogFragment.newInstance();
         mAdapter = new CleanMusicManageAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);
 
-        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
+        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mIsCheckAll) {
@@ -166,6 +176,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
                 @Override
                 public void onConfirm() {
+
                     List<MusciInfoBean> lists = mAdapter.getLists();
                     //过滤选中的文件删除
                     List<MusciInfoBean> appInfoSelect = new ArrayList<>();
@@ -177,6 +188,10 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
                         }
                     }
                     mPresenter.delFile(appInfoSelect);
+                    if(!isShowFirst){
+                        mLoading.setReportSuccess(0,"");
+                    }
+                    mLoading.show(getSupportFragmentManager(),"");
 
                 }
             });
@@ -186,8 +201,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
 
     public void updateDelFileView(List<MusciInfoBean> appInfoBeans) {
-        totalSelectFiles();
-        Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
         //
         List<MusciInfoBean> listsNew = new ArrayList<>();
         List<MusciInfoBean> lists = mAdapter.getLists();
@@ -212,6 +226,15 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mPresenter.updateRemoveCache(appInfoBeans);
 
 
+        mLoading.setReportSuccess(1,"成功删除" + FileSizeUtils.formatFileSize(totalSize));
+        mBtnDel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoading.dismissAllowingStateLoss();
+            }
+        },1500);
+
+        totalSelectFiles();
 
     }
 
@@ -253,16 +276,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mIsCheckAll = isCheckAll;
         mCheckBoxAll.setSelected(mIsCheckAll);
 
-        if (totalSize > 0) {
-            mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
-            mBtnDel.setSelected(true);
-            mBtnDel.setClickable(true);
-        } else {
-            mBtnDel.setText("删除");
-            mBtnDel.setSelected(false);
-            mBtnDel.setClickable(false);
-        }
-
+        totalSelectFiles();
 
     }
 
@@ -313,6 +327,11 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
             mBtnDel.setText("删除");
             mBtnDel.setSelected(false);
             mBtnDel.setClickable(false);
+        }
+        if(totalSize>0){
+            mBtnDel.setEnabled(true);
+        }else {
+            mBtnDel.setEnabled(false);
         }
     }
 }

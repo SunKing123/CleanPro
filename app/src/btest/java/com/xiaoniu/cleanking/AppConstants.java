@@ -20,6 +20,7 @@ public class AppConstants {
     public static String AGGREMENT_H5_HOST = "http://testh5.51huihuahua.com";//相关协议域名
     public static String BIGDATA_MD = "http://testwkdataprobe.51huihuahua.com/wkdataprobe/apis";//大数据买点
 
+
     public static String OSS_ACCESS_KEY_ID = "LTAIWVBu27n5Vw0d";
     public static String OSS_ACCESS_KEY_SECRET = "18i7N4uSuLMlICX3Lk7r98uVOWPz4b";
     public static String OSS_END_POINT = "http://oss-cn-shanghai.aliyuncs.com";

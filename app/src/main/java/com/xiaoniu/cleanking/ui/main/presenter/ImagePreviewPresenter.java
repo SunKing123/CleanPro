@@ -105,7 +105,6 @@ public class ImagePreviewPresenter extends RxPresenter<PreviewImageActivity, Mai
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 //删除数据库
-                FileTableManager.deleteByPath(AppApplication.getInstance(), strPaths);
                 e.onNext("");
             }
         }).subscribeOn(Schedulers.io())

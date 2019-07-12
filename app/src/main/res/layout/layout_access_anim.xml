@@ -105,7 +105,9 @@
                 android:textSize="13sp" />
         </LinearLayout>
     </RelativeLayout>
-
+    <include
+        layout="@layout/layout_yu_anim"
+        />
     <LinearLayout
         android:id="@+id/line_hj"
         android:layout_width="59dp"
@@ -130,7 +132,5 @@
             android:scaleType="fitXY"
             android:src="@mipmap/hj_bottom1" />
     </LinearLayout>
-    <include
-        layout="@layout/layout_yu_anim"
-        />
+
 </RelativeLayout>

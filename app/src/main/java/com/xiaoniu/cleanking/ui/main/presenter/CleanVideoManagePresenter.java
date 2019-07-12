@@ -107,7 +107,7 @@ public class CleanVideoManagePresenter extends RxPresenter<CleanVideoManageActiv
                     }
                 } else {
                     //扫描视频文件
-                    scanViodeFile(path);
+                    //scanViodeFile(path);
                 }
                 List<VideoFileCollenctionBean> lists=new ArrayList<>();
 
