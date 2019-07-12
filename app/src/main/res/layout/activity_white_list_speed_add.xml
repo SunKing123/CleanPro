@@ -74,13 +74,19 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/ll_check_all"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center|left">
             <ImageButton
                 android:id="@+id/check_all"
                 android:layout_width="@dimen/dimen_16dp"
                 android:layout_height="@dimen/dimen_16dp"
                 android:layout_marginLeft="@dimen/dimen_16dp"
+                android:clickable="false"
                 android:background="@drawable/bg_check" />
-
+            </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

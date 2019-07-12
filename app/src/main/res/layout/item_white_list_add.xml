@@ -34,12 +34,20 @@
             android:textColor="@color/color_333333" />
 
 
-        <ImageButton
-            android:id="@+id/check_select"
-            android:layout_width="@dimen/dimen_16dp"
-            android:layout_height="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/bg_check" />
+
+        <LinearLayout
+            android:id="@+id/ll_check"
+            android:layout_width="@dimen/dimen_50dp"
+            android:layout_height="@dimen/dimen_50dp"
+            android:gravity="center|right">
+            <ImageButton
+                android:id="@+id/check_select"
+                android:layout_width="@dimen/dimen_16dp"
+                android:layout_height="@dimen/dimen_16dp"
+                android:layout_marginRight="@dimen/dimen_16dp"
+                android:clickable="false"
+                android:background="@drawable/bg_check" />
+        </LinearLayout>
 
     </LinearLayout>
 

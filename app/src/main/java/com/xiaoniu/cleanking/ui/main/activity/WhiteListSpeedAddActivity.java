@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -35,7 +36,8 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
     Button mBtnAdd;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
-
+    @BindView(R.id.ll_check_all)
+    LinearLayout mCheckAll;
     /**
      *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
@@ -67,7 +69,7 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
 
         mAdapter.modifyList(mPresenter.getData());
         mAdapter.setOnCheckListener(this);
-        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
+        mCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mIsCheckAll){
