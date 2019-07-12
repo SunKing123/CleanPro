@@ -260,7 +260,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
         mTextConfirm.setOnClickListener(v -> {
             dialog.dismiss();
             mView.startCleanAnim(countEntity);
-            deleteFiles(data, finalTotal);
+//            deleteFiles(data, finalTotal);
         });
         dialog.setContentView(view);
         if (dialog.isShowing()) {

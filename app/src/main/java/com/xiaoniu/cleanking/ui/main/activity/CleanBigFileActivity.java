@@ -203,4 +203,5 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim();
     }
+
 }

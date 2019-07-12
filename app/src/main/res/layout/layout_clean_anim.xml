@@ -156,33 +156,7 @@
                     android:id="@+id/tv_ql"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="内存可清理"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_right_cooling"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_4dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/tv_number_cool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="成功降温2°C"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_7dp"
-                    android:alpha="0.6"
-                    android:text="60s后达到最佳降温效果"
+                    android:text="垃圾已清理"
                     android:textColor="@color/white"
                     android:textSize="15sp"/>
             </LinearLayout>
