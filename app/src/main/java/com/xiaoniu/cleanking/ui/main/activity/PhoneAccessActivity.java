@@ -205,7 +205,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0 || timeTemp > 10 * 1000)
+            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
                 mPresenter.getAccessAbove22();
             else
                 setCleanedView(0);
