@@ -99,6 +99,8 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
+                for(FileEntity fileEntity:listPhoto)
+                    fileEntity.setIsSelect(false);
                 CleanAllFileScanUtil.clean_image_list = listPhoto;
                 startActivity(intent);
                 StatisticsUtils.trackClick("picture_cleaning_page_click", "图片清理", "home_page", "file_cleaning_page");
