@@ -104,7 +104,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="@dimen/dimen_16dp"
                         android:layout_marginTop="@dimen/dimen_100dp"
-                        android:text="11.5M"
+                        android:text="0.0M"
                         android:textColor="@color/white"
                         android:textSize="50sp" />
 

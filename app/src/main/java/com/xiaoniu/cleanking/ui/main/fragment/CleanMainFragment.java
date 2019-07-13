@@ -202,7 +202,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mLaoutContentFinish.setVisibility(View.GONE);
             mTextCount.setVisibility(View.VISIBLE);
             mLayoutScan.setVisibility(View.VISIBLE);
-            mTextCount.setText("0MB");
+            mTextCount.setText("0.0MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(View.GONE);
         } else if (type == TYPE_NOT_SCAN) {

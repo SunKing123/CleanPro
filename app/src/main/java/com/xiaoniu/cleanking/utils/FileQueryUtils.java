@@ -332,7 +332,11 @@ public class FileQueryUtils {
                                 junkInfo.setAllchecked(true);
                                 junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
                                 junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                                junkInfo.setTotalSize((long)(new Random().nextInt() + 62914560));
+                                long totalSize = (long) ((Math.random() * 80886656) + 80886656);
+                                if (mScanFileListener != null) {
+                                    mScanFileListener.increaseSize(totalSize);
+                                }
+                                junkInfo.setTotalSize(totalSize);
                                 junkInfo.setGarbageType("TYPE_PROCESS");
                                 junkList.add(junkInfo);
                             }
