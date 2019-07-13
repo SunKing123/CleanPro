@@ -109,10 +109,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 mPresenter.alertBanLiveDialog(ImageActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                     @Override
                     public void clickOKBtn() {
-                        for (int i = 0; i < listF.size(); i++) {
-                            File f = new File(listF.get(i).getPath());
-                            f.delete();
-                        }
+                        //删除本地文件
+                        mPresenter.delFile(listF);
                         //数据库删除选中的文件
                         mPresenter.deleteFromDatabase(listF, imageAdapter);
                     }

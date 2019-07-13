@@ -6,13 +6,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
@@ -23,18 +23,19 @@ import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.ToastUtils;
-import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
+import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -75,7 +76,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
         public void cancelBtn();
     }
 
-    public AlertDialog alertBanLiveDialog(Context context, int deleteNum,final ClickListener okListener) {
+    public AlertDialog alertBanLiveDialog(Context context, int deleteNum, final ClickListener okListener) {
         final AlertDialog dlg = new AlertDialog.Builder(context).create();
         if (((Activity) context).isFinishing()) {
             return dlg;
@@ -92,7 +93,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
 
         Button btnCancle = (Button) window.findViewById(R.id.btnCancle);
         TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
-        tipTxt.setText("确定删除这"+deleteNum+"张图片？");
+        tipTxt.setText("确定删除这" + deleteNum + "张图片？");
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,5 +134,47 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
                         ToastUtils.show("删除成功");
                     }
                 });
+    }
+
+    //删除本地文件
+    public void delFile(List<FileEntity> list) {
+        mView.showLoadingDialog();
+        List<FileEntity> files = list;
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+
+                for (FileEntity appInfoBean : files) {
+                    AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+appInfoBean.getPath()+"\"",null);
+//                    File file = new File(appInfoBean.path);
+//                    if (null != file) {
+//                        file.delete();
+//                    }
+                }
+                emitter.onNext("");
+                emitter.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.cancelLoadingDialog();
+                    }
+                });
+
     }
 }
