@@ -106,6 +106,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     private Handler mHandler;
 
     /**
+     * 首页是否显示
+     */
+    private boolean isShow = true;
+
+    /**
      * 当前的首页的状态
      */
     private int type = 0;
@@ -126,6 +131,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 扫描中
      */
     public static final int TYPE_SCANING = 3;
+    /**
+     * 扫描时颜色变化是否完成
+     */
+    private boolean mChangeFinish;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -240,6 +249,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         type = TYPE_SCAN_FINISH;
         //重置扫描状态
         mPresenter.setIsFinish(false);
+        //重置颜色变化状态
+        mChangeFinish = false;
 
         mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
         //设置titlebar颜色
@@ -440,16 +451,36 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         int color = R.color.color_4690FD;
-        if (type == TYPE_SCAN_FINISH) {
+        if (type == TYPE_SCAN_FINISH || mChangeFinish) {
             //扫描完成
             color = R.color.color_FD6F46;
         }
         if (!hidden) {
+            isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), false);
             }
+        } else {
+            isShow = false;
         }
+    }
+
+    /**
+     * 获取当前Fragment是否显示
+     *
+     * @return
+     */
+    public boolean getViewShow() {
+        return isShow;
+    }
+
+    /**
+     * 是否颜色变化完成
+     * @param b
+     */
+    public void setColorChange(boolean b) {
+        mChangeFinish = b;
     }
 }

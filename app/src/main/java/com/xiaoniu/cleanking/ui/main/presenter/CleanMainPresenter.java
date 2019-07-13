@@ -125,14 +125,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             e.onNext(runningProcess);
             long l1 = System.currentTimeMillis();
             long v2 = l1 - v1;
-            System.out.println("==========================" + v2);
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
             long l2 = System.currentTimeMillis();
-            System.out.println("==========================" + (l2 - l1));
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo();
             long l3 = System.currentTimeMillis();
-            System.out.println("==========================" + (l3 - l2));
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
@@ -190,10 +187,35 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     public void showColorChange() {
         mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         mScanTranlateColor.setEvaluator(new ArgbEvaluator());
-        mScanTranlateColor.setDuration(300);
+        mScanTranlateColor.setDuration(500);
         mScanTranlateColor.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
-            mView.showBarColor(animatedValue);
+            if(mView.getViewShow()) {
+                //只有首页显示的时候会显示状态栏变化
+                mView.showBarColor(animatedValue);
+            }
+        });
+
+        mScanTranlateColor.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mView.setColorChange(true);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
         });
 
     }
@@ -468,10 +490,10 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         colorAnim.setEvaluator(new ArgbEvaluator());
         colorAnim.setDuration(1000);
         colorAnim.setStartDelay(4000);
-        colorAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int animatedValue = (int) animation.getAnimatedValue();
+        colorAnim.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            if(mView.getViewShow()) {
+                //只有首页显示的时候会显示状态栏变化
                 mView.showBarColor(animatedValue);
             }
         });
