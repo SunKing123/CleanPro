@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -154,6 +156,8 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+
+                mWebView.setLayerType(View.LAYER_TYPE_HARDWARE,null);
                 cancelLoadingDialog();
                 if (!isError) {
                     isSuccess = true;
@@ -161,7 +165,15 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 }
                 isError = false;
             }
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
+                // 不要使用super，否则有些手机访问不了，因为包含了一条 handler.cancel()
+                // super.onReceivedSslError(view, handler, error);
+
+                // 接受所有网站的证书，忽略SSL错误，执行访问网页
+                handler.proceed();
+            }
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);

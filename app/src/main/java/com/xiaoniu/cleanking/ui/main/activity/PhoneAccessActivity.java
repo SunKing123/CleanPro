@@ -148,15 +148,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onClick(View v) {
                 if (!canClickDelete) return;
-                acceview.setVisibility(View.VISIBLE);
-                acceview.startTopAnim();
                 ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
                 for (FirstJunkInfo info : belowAdapter.getListImage()) {
                     if (info.getIsSelect()) {
                         junkTemp.add(info);
                     }
                 }
-
+                if (junkTemp.size() == 0) return;
+                acceview.setVisibility(View.VISIBLE);
+                acceview.startTopAnim();
                 long total = 0;
                 for (FirstJunkInfo info : junkTemp) {
                     total += info.getTotalSize();
@@ -223,8 +223,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        computeTotalSize(listInfo);
-        setAdapter(listInfo);
+        if (listInfo.size() == 0) {
+            setCleanedView(0);
+        } else {
+            computeTotalSize(listInfo);
+            setAdapter(listInfo);
+        }
     }
 
     long totalSizesCleaned = 0;
