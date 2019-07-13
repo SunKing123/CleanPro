@@ -47,7 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.VISIBLE;
 import static com.xiaoniu.cleanking.utils.ResourceUtils.getString;
 
-public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainModel> {
+public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMainModel> {
 
     private ValueAnimator mScanTranlateColor;
 
@@ -60,6 +60,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     long total = 0;
 
+    private FileQueryUtils mFileQueryUtils;
+
     /**
      * 开始进行文件扫描
      */
@@ -71,23 +73,24 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         mJunkGroups = new HashMap<>();
         mJunkResults = new HashMap<>();
 
-        FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+        mFileQueryUtils = new FileQueryUtils();
 
         showColorChange();
 
         //文件加载进度回调
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
             private boolean isFirst = true;
+
             @Override
             public void currentNumber() {
-                if (isFirst ) {
+                if (isFirst) {
                     isFirst = false;
                     FragmentActivity activity = mView.getActivity();
                     if (activity == null) {
                         return;
                     }
                     activity.runOnUiThread(() -> {
-                        if(!mScanTranlateColor.isRunning()){
+                        if (!mScanTranlateColor.isRunning()) {
                             mScanTranlateColor.start();
                         }
                     });
@@ -133,7 +136,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-            if(o instanceof ArrayList) {
+            if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
@@ -162,7 +165,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
                         processGroup.mSize += info.getTotalSize();
                     } else if ("TYPE_APK".equals(info.getGarbageType())) {
                         JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
-                        if(apkGroup == null){
+                        if (apkGroup == null) {
                             apkGroup = new JunkGroup();
                             apkGroup.mName = getString(R.string.apk_clean);
                             apkGroup.isChecked = true;
@@ -174,7 +177,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
                         apkGroup.mSize += info.getTotalSize();
                     }
                 }
-            }else {
+            } else {
                 int i = 0;
                 for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                     mJunkResults.put(i++, entry.getValue());
@@ -185,7 +188,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     }
 
     public void showColorChange() {
-        mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", ThirdLevel,SecondLevel, FirstLevel);
+        mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         mScanTranlateColor.setEvaluator(new ArgbEvaluator());
         mScanTranlateColor.setDuration(300);
         mScanTranlateColor.addUpdateListener(animation -> {
@@ -206,7 +209,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             layoutParams.height = currentValue;
             mLayoutCleanTop.setLayoutParams(layoutParams);
         });
-        if(mView.getActivity() != null) {
+        if (mView.getActivity() != null) {
             FrameLayout frameLayout = mView.getActivity().findViewById(R.id.frame_layout);
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
             layoutParams.bottomMargin = 0;
@@ -221,15 +224,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     /**
      * 开始扫描动画
+     *
      * @param iconOuter
      * @param circleOuter
      * @param circleOuter2
      */
-    public void startCleanScanAnimation(ImageView iconOuter, View circleOuter,View circleOuter2) {
+    public void startCleanScanAnimation(ImageView iconOuter, View circleOuter, View circleOuter2) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f,1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f,1f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f,1f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f, 1f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f, 1f);
 
         ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(circleOuter, "scaleX", 1f, 1.8f);
         ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(circleOuter, "scaleY", 1f, 1.8f);
@@ -262,7 +266,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
         cleanScanAnimator = new AnimatorSet();
 
-        cleanScanAnimator.playTogether(scaleX,scaleY,rotation,alpha,scaleX2,scaleY2,alpha2,scaleX3,scaleY3,alpha3);
+        cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
         cleanScanAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -304,6 +308,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     /**
      * 开始清理动画
+     *
      * @param iconInner
      * @param iconOuter
      * @param layoutScan
@@ -341,7 +346,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             @Override
             public void onAnimationEnd(Animator animation) {
                 //第二阶段开始
-                secondLevel(iconInner, iconOuter,textCount,countEntity);
+                secondLevel(iconInner, iconOuter, textCount, countEntity);
             }
 
             @Override
@@ -356,7 +361,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         });
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(outerY,innerY,innerAlpha,scanY,countY);
+        animatorSet.playTogether(outerY, innerY, innerAlpha, scanY, countY);
         animatorSet.start();
 
 
@@ -364,9 +369,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     public void secondLevel(ImageView iconInner, ImageView iconOuter, TextView textCount, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35,0, 360,0,360,0,360);
-        ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360,0,360,0,360,0,360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360,0,360,0,360,0,360);
+        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360);
+        ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
+        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
 
         rotation.setDuration(1300);
         rotation2.setDuration(2000);
@@ -385,10 +390,10 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             @Override
             public void onAnimationEnd(Animator animation) {
                 AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(rotation3,rotation4);
+                animatorSet.playTogether(rotation3, rotation4);
                 animatorSet.start();
 
-                startClean(animatorSet,textCount,countEntity);
+                startClean(animatorSet, textCount, countEntity);
 
                 mView.showLottieView();
             }
@@ -419,6 +424,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
 
     /**
      * 开始清理操作
+     *
      * @param animatorSet
      * @param textCount
      * @param countEntity
@@ -458,7 +464,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         });
         valueAnimator.start();
 
-        ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(),"backgroundColor", FirstLevel, SecondLevel,ThirdLevel);
+        ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());
         colorAnim.setDuration(1000);
         colorAnim.setStartDelay(4000);
@@ -471,7 +477,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator,colorAnim);
+        animatorSetTimer.playTogether(valueAnimator, colorAnim);
         animatorSetTimer.start();
 
         clearAll();
@@ -485,12 +491,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();
                 if (value.mChildren != null && value.mChildren.size() > 0) {
-                    if("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())){
+                    if ("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())) {
 
                         for (FirstJunkInfo info : value.mChildren) {
                             if (info.isAllchecked()) {
                                 total += info.getTotalSize();
-                                CleanUtil.killAppProcesses(info.getAppPackageName(),info.getPid());
+                                CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
                             }
                         }
                     } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) {
@@ -549,5 +555,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
             }
         });
         anim.start();
+    }
+
+    /**
+     * 设置扫描是否终止
+     *
+     * @param isFinish
+     */
+    public void setIsFinish(boolean isFinish) {
+        if (mFileQueryUtils != null) {
+            mFileQueryUtils.setFinish(isFinish);
+        }
     }
 }

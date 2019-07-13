@@ -122,6 +122,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 清理完成
      */
     public static final int TYPE_CLEAN_FINISH = 2;
+    /**
+     * 扫描中
+     */
+    public static final int TYPE_SCANING = 3;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -155,6 +159,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         new Handler().postDelayed(() -> {
             mPresenter.startScan();
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+            type = TYPE_SCANING;
+            mButtonCleanNow.setText("停止扫描");
         }, 500);
 
 
@@ -209,6 +215,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //未扫描， 去扫描
             mPresenter.startScan();
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+            type = TYPE_SCANING;
+            mButtonCleanNow.setText("停止扫描");
+        } else if (type == TYPE_SCANING) {
+            //停止扫描
+            mPresenter.setIsFinish(true);
         }
     }
 
@@ -227,6 +238,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         type = TYPE_SCAN_FINISH;
+        //重置扫描状态
+        mPresenter.setIsFinish(false);
+
+        mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
+        //设置titlebar颜色
+        showBarColor(getResources().getColor(R.color.color_FD6F46));
 
         mButtonCleanNow.setText("立即清理");
 

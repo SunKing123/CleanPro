@@ -45,6 +45,7 @@ import java.util.Set;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import static android.content.Context.RECEIVER_VISIBLE_TO_INSTANT_APPS;
 import static android.content.Context.USAGE_STATS_SERVICE;
 import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
 
@@ -57,6 +58,11 @@ public class FileQueryUtils {
     private ActivityManager mActivityManager;
     private PackageManager mPackageManager;
     private ScanFileListener mScanFileListener;
+
+    /**
+     * 是否终止标识符， 如果停止，结束查询数据
+     */
+    private boolean isFinish = false;
 
 
     public FileQueryUtils() {
@@ -73,6 +79,10 @@ public class FileQueryUtils {
         }
     }
 
+
+    public void setFinish(boolean finish) {
+        isFinish = finish;
+    }
 
     public void setScanFileListener(ScanFileListener scanFileListener) {
         mScanFileListener = scanFileListener;
@@ -139,6 +149,9 @@ public class FileQueryUtils {
      * @return
      */
     public ArrayList<FirstJunkInfo> getAndroidDataInfo() {
+        if (isFinish) {
+            return new ArrayList<>();
+        }
         ArrayList<FirstJunkInfo> list = new ArrayList<>();
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
         List<PackageInfo> installedList = AppApplication.getInstance().getPackageManager().getInstalledPackages(0);
@@ -148,6 +161,9 @@ public class FileQueryUtils {
         }
         int index = 0;
         for (PackageInfo applicationInfo : installedList) {
+            if (isFinish) {
+                return list;
+            }
             index ++;
             if (index > (float)total * 3 / 4) {
                 mScanFileListener.currentNumber();
@@ -219,6 +235,9 @@ public class FileQueryUtils {
      * @return
      */
     public ArrayList<FirstJunkInfo> getRunningProcess() {
+        if (isFinish) {
+            return new ArrayList<>();
+        }
         String str;
         FirstJunkInfo onelevelGarbageInfo;
         ArrayList arrayList = new ArrayList();
@@ -233,8 +252,12 @@ public class FileQueryUtils {
             if (Build.VERSION.SDK_INT >= 20) {
                 return getTaskInfos(mContext);
             }
-//            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
+
             for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : this.mActivityManager.getRunningAppProcesses()) {
+
+                if (isFinish) {
+                    return arrayList;
+                }
                 int i2 = runningAppProcessInfo.pid;
                 if (runningAppProcessInfo.uid > 10010 || !isSystemAppliation(runningAppProcessInfo.processName)) {
                     try {
@@ -314,13 +337,21 @@ public class FileQueryUtils {
     private ArrayList<FirstJunkInfo> getTaskInfo26() {
         UsageStatsManager usageStatsManager = (UsageStatsManager) mContext.getSystemService(USAGE_STATS_SERVICE);
         if (usageStatsManager == null) {
-            return null;
+            return new ArrayList<>();
+        }
+
+        if (isFinish) {
+            return new ArrayList<>();
         }
 
         ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
         List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
         if (!(lists == null || lists.size() == 0)) {
             for (UsageStats usageStats : lists) {
+                if (isFinish) {
+                    //停止扫描
+                    return junkList;
+                }
                 mScanFileListener.scanFile(usageStats.getPackageName());
                 if (!(usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.xiaoniu"))) {
                     String packageName = usageStats.getPackageName();
@@ -351,11 +382,13 @@ public class FileQueryUtils {
     public ArrayList<FirstJunkInfo> getTaskInfos(Context context) {
         int i2;
         try {
-//            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
+            if (isFinish) {
+                return new ArrayList<>();
+            }
             ArrayList arrayList = new ArrayList();
             List runningAppProcesses = getRunningAppProcesses();
             if (runningAppProcesses.isEmpty() || runningAppProcesses.size() == 0) {
-                return null;
+                return new ArrayList<>();
             }
             int i3 = 0;
             while (i3 < runningAppProcesses.size()) {
@@ -389,6 +422,9 @@ public class FileQueryUtils {
             }
             Iterator it = arrayList2.iterator();
             while (it.hasNext()) {
+                if (isFinish) {
+                    return arrayList;
+                }
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 ApplicationInfo applicationInfo = getApplicationInfo(appMemoryInfo2.getName());
                 mScanFileListener.scanFile(appMemoryInfo2.getName());
@@ -425,13 +461,16 @@ public class FileQueryUtils {
             }
             return arrayList;
         } catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 
     @TargetApi(19)
     public ArrayList<FirstJunkInfo> getTaskInfos24(Context context) {
         AndroidProcesses.setLoggingEnabled(true);
+        if (isFinish) {
+            return new ArrayList<>();
+        }
         int i2;
         try {
 //            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
@@ -472,6 +511,9 @@ public class FileQueryUtils {
             ArrayList arrayList2 = new ArrayList();
             Iterator it = arrayList.iterator();
             while (it.hasNext()) {
+                if (isFinish) {
+                    return arrayList2;
+                }
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
                 String name = appMemoryInfo2.getName();
@@ -510,7 +552,7 @@ public class FileQueryUtils {
             }
             return arrayList2;
         } catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -536,6 +578,9 @@ public class FileQueryUtils {
      * @return
      */
     public List<FirstJunkInfo> queryAPkFile() {
+        if (isFinish) {
+            return new ArrayList<>();
+        }
         Cursor cursor;
         String absolutePath;
         try {
@@ -552,6 +597,9 @@ public class FileQueryUtils {
                 }
                 if (cursor.moveToFirst()) {
                     while (true) {
+                        if (isFinish) {
+                            return arrayList;
+                        }
                         String string = cursor.getString(0);
                         long j = cursor.getLong(1);
                         if (new File(string).exists() && j != 0) {
@@ -614,23 +662,29 @@ public class FileQueryUtils {
             }
             return arrayList;
         } catch (Exception e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
     public ArrayList<FirstJunkInfo> getAppCacheAndAdGarbage(ArrayList<FirstJunkInfo> list) {
 
-//        ArrayList arrayList = new ArrayList();
+        if (isFinish) {
+            return new ArrayList<>();
+        }
+
         ArrayList arrayList2 = new ArrayList();
 
         List<AppInfoClean> appInfoCleans = CleanDBManager.queryInfoList();
 
         if (appInfoCleans == null) {
-            return null;
+            return new ArrayList<>();
         }
 
         for (AppInfoClean appInfoClean : appInfoCleans) {
+
+            if (isFinish) {
+                return arrayList2;
+            }
 
             if (FileUtils.isAppInstalled(appInfoClean.getPackageName())) {
                 try {
