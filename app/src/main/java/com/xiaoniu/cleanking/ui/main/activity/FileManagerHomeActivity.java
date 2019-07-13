@@ -69,7 +69,6 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         }
         //查询手机存储使用率
         mPresenter.getSpaceUse(tv_spaceinfos, circleProgressView);
-        mPresenter.getPhotos(FileManagerHomeActivity.this);
         //监听进度条进度
         circleProgressView.setOnAnimProgressListener(new CircleProgressView.OnAnimProgressListener() {
             @Override
@@ -135,6 +134,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     @Override
     protected void onResume() {
         super.onResume();
+        mPresenter.getPhotos(FileManagerHomeActivity.this);
         long videoSize = mPresenter.getVideoTotalSize();
         long musicSize = mPresenter.getMusicTotalSize();
         long apkSize = mPresenter.getAPKTotalSize();
