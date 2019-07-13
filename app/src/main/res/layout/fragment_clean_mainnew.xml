@@ -34,17 +34,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                    <TextView
-                        android:id="@+id/text_content"
+                    <LinearLayout
+                        android:id="@+id/layout_content_clean_finish"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dimen_200dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/dimen_60dp"
                         android:gravity="center"
-                        android:text="手机已经很干净了"
-                        android:textColor="@color/white"
-                        android:textSize="19sp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:src="@mipmap/icon_clean_finish"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/text_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_22dp"
+                            android:text="手机很干净了~"
+                            android:textColor="@color/white"
+                            android:textSize="19sp"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
 
                     <ImageView
                         android:id="@+id/icon_outer"
