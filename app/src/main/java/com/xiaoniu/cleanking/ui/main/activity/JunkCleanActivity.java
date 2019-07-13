@@ -26,6 +26,8 @@ import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,10 +77,14 @@ public class JunkCleanActivity extends SimpleActivity {
 
         mJunkGroups = CleanMainFragment.mJunkGroups;
 
+        //立即清理点击
         mTextClean.setOnClickListener(v -> {
             mCleanAnimView.setData(countEntity);
             mCleanAnimView.setVisibility(View.VISIBLE);
+            //清理动画
             mCleanAnimView.startTopAnim(false);
+            //title bar
+            showBarColor(getResources().getColor(R.color.color_FD6F46));
             clearAll();
         });
 
@@ -116,8 +122,10 @@ public class JunkCleanActivity extends SimpleActivity {
         for (int i = 0; i < mJunkGroups.size(); i++) {
             listView.expandGroup(i);
         }
-        String s = CleanUtil.formatShortFileSize(JunkCleanActivity.this, getTotalSize());
-        mTextClean.setText("清理"+s);
+        countEntity = CleanUtil.formatShortFileSize(getTotalSize());
+        mTextClean.setText("清理"+ countEntity.getResultSize());
+
+        mCleanAnimView.setOnColorChangeListener(this::showBarColor);
     }
 
     @Override
@@ -159,13 +167,7 @@ public class JunkCleanActivity extends SimpleActivity {
 
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-            //TODO 清理完成
-//            Bundle bundle = new Bundle();
-//            bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_CLEAN_CACHE);
-//            bundle.putLong("clean_count",(long) o);
-//            startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
-//            EventBus.getDefault().post("clean_finish");
-//            finish();
+            EventBus.getDefault().post("clean_finish");
         });
 
 
@@ -235,6 +237,19 @@ public class JunkCleanActivity extends SimpleActivity {
         super.onResume();
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 状态栏颜色变化
+     *
+     * @param animatedValue
+     */
+    public void showBarColor(int animatedValue) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, false);
         }
     }
 }

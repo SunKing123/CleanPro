@@ -66,6 +66,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment,CleanMainM
     @SuppressLint("CheckResult")
     public void startScan() {
 
+        total = 0;
+
         mJunkGroups = new HashMap<>();
         mJunkResults = new HashMap<>();
 

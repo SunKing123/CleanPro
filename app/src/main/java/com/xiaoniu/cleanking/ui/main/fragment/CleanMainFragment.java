@@ -29,7 +29,6 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -40,7 +39,6 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,8 +70,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     View mCircleOuter2;
     @BindView(R.id.text_scan_trace)
     TextView mTextScanTrace;
-    @BindView(R.id.text_content)
-    TextView mTextContent;
     @BindView(R.id.layout_scan)
     LinearLayout mLayoutScan;
     @BindView(R.id.view_arrow)
@@ -96,15 +92,36 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     TextView mTvGb;
     @BindView(R.id.web_view)
     WebView mWebView;
+    @BindView(R.id.layout_content_clean_finish)
+    LinearLayout mLaoutContentFinish;
     @BindView(R.id.layout_clean_finish)
     ConstraintLayout mLayoutCleanFinish;
 
-    private boolean isScanFinish = false;
+    /**
+     * 清理的分类列表
+     */
     public static HashMap<Integer, JunkGroup> mJunkGroups;
     private CountEntity mCountEntity;
     private List<ImageView> mTopViews;
     private Handler mHandler;
 
+    /**
+     * 当前的首页的状态
+     */
+    private int type = 0;
+
+    /**
+     * 未扫描
+     */
+    private static final int TYPE_NOT_SCAN = 0;
+    /**
+     * 扫描完成
+     */
+    private static final int TYPE_SCAN_FINISH = 1;
+    /**
+     * 清理完成
+     */
+    public static final int TYPE_CLEAN_FINISH = 2;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -169,7 +186,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
-        if (isScanFinish) {
+        if (type == TYPE_SCAN_FINISH) {
+            //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
             mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mTextCount, mCountEntity);
             mButtonCleanNow.setVisibility(View.GONE);
@@ -177,18 +195,28 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mArrowRight.setVisibility(View.GONE);
             mLayoutRoot.setIntercept(true);
             initWebView();
-        } else {
-            ToastUtils.show("正在扫描中");
+        } else if (type == TYPE_CLEAN_FINISH) {
+            //清理完成点击
+            mButtonCleanNow.setText("再次清理");
+            type = TYPE_NOT_SCAN;
+            mLaoutContentFinish.setVisibility(View.GONE);
+            mTextCount.setVisibility(View.VISIBLE);
+            mLayoutScan.setVisibility(View.VISIBLE);
+            mTextCount.setText("0MB");
+            mTextScanTrace.setText("还未扫描");
+            mArrowRight.setVisibility(View.GONE);
+        } else if (type == TYPE_NOT_SCAN) {
+            //未扫描， 去扫描
+            mPresenter.startScan();
+            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
         }
     }
 
     @OnClick(R.id.layout_scan)
     public void mClickLayoutScan() {
         //查看详情
-        if (isScanFinish) {
+        if (type == TYPE_SCAN_FINISH) {
             startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
-        } else {
-            ToastUtils.show("正在扫描中");
         }
     }
 
@@ -198,7 +226,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param junkGroups
      */
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
-        isScanFinish = true;
+        type = TYPE_SCAN_FINISH;
+
+        mButtonCleanNow.setText("立即清理");
+
         mJunkGroups = junkGroups;
 
         mTextScanTrace.setText("查看垃圾详情");
@@ -242,24 +273,31 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 恢复布局
      */
     private void restoreLayout() {
+        //设置可以点击
         mLayoutRoot.setIntercept(false);
         mIconInner.setVisibility(View.GONE);
-
+        //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DeviceUtils.dip2px(400);
         mLayoutCleanTop.setLayoutParams(layoutParams);
-
+        //移动的页面view还原
         mIconOuter.setTranslationY(0);
         mIconInner.setTranslationY(0);
         mLayoutScan.setTranslationY(0);
         mTextCount.setTranslationY(0);
 
-        mTextContent.setVisibility(View.VISIBLE);
+        mLaoutContentFinish.setVisibility(View.VISIBLE);
         mTextCount.setVisibility(View.GONE);
         mLayoutScan.setVisibility(View.GONE);
+        //按钮设置
         mButtonCleanNow.setText("完成");
         mButtonCleanNow.setVisibility(View.VISIBLE);
-        mButtonCleanNow.setEnabled(false);
+        //恢复背景
+        mLayoutCleanTop.setBackgroundResource(R.drawable.bg_big_home);
+        //设置titlebar颜色
+        showBarColor(getResources().getColor(R.color.color_4690FD));
+        //清理完成标识
+        type = TYPE_CLEAN_FINISH;
     }
 
     public void showBottomTab() {
@@ -284,7 +322,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             return;
         }
         getActivity().runOnUiThread(() -> {
-            if(mTextScanTrace != null) {
+            if (mTextScanTrace != null) {
                 mTextScanTrace.setText(p0);
             }
         });
@@ -294,13 +332,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void endScanAnimation() {
         mCircleOuter2.setVisibility(View.GONE);
         mCircleOuter.setVisibility(View.GONE);
-    }
-
-    public void showCleanFinish(Long o) {
-        Bundle bundle = new Bundle();
-        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_CLEAN_CACHE);
-        bundle.putLong("clean_count", o);
-        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
     }
 
     /**
@@ -348,6 +379,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 状态栏颜色变化
+     *
      * @param animatedValue
      */
     public void showBarColor(int animatedValue) {
@@ -385,5 +417,22 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             }
         });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        int color = R.color.color_4690FD;
+        if (type == TYPE_SCAN_FINISH) {
+            //扫描完成
+            color = R.color.color_FD6F46;
+        }
+        if (!hidden) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), false);
+            }
+        }
     }
 }

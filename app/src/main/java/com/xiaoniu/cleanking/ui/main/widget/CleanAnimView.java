@@ -28,6 +28,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 
@@ -49,6 +50,13 @@ public class CleanAnimView extends RelativeLayout {
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
+
+    private OnColorChangeListener mOnColorChangeListener;
+
+    public void setOnColorChangeListener(OnColorChangeListener onColorChangeListener) {
+        mOnColorChangeListener = onColorChangeListener;
+    }
+
     /**
      * 清理数据实体类
      */
@@ -63,10 +71,6 @@ public class CleanAnimView extends RelativeLayout {
     public CleanAnimView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context);
-    }
-
-    public interface onAnimEndListener {
-        public void onAnimEnd();
     }
 
     /**
@@ -290,12 +294,20 @@ public class CleanAnimView extends RelativeLayout {
      * 显示吸收动画
      */
     private void showLottieView() {
-        mAnimationView.setAnimation("data2.json");
+        mAnimationView.setAnimation("data.json");
+        mAnimationView.setImageAssetsFolder("images");
         mAnimationView.playAnimation();
     }
 
+    /**
+     * 第一阶段  红色
+     */
     private static final int FirstLevel = 0xffFD6F46;
+
     private static final int SecondLevel = 0xffF1D53B;
+    /**
+     * 第三阶段 绿色
+     */
     private static final int ThirdLevel = 0xff06C581;
 
     /**
@@ -339,17 +351,20 @@ public class CleanAnimView extends RelativeLayout {
             }
         });
 
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot,"backgroundColor", FirstLevel, SecondLevel);
-        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLayoutRoot,"backgroundColor", SecondLevel, ThirdLevel);
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot,"backgroundColor", FirstLevel, SecondLevel,ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
-        colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim1.setDuration(500);
-        colorAnim2.setDuration(500);
+        colorAnim1.setDuration(1000);
         colorAnim1.setStartDelay(4000);
-        colorAnim2.setStartDelay(4500);
+
+        colorAnim1.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            if (mOnColorChangeListener != null) {
+                mOnColorChangeListener.onColorChange(animatedValue);
+            }
+        });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator,colorAnim1,colorAnim2);
+        animatorSetTimer.playTogether(valueAnimator,colorAnim1);
         animatorSetTimer.start();
 
     }
