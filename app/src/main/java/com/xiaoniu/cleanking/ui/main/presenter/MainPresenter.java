@@ -267,7 +267,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
     public void setAppVersion(AppVersion result) {
-        if (result != null) {
+        if (result != null&&result.getData()!=null) {
             //根据版本号判断是否需要更新
             String versionName = AndroidUtil.getAppVersionName();
             int versionCode = AndroidUtil.getVersionCode();
