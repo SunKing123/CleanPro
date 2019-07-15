@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -299,6 +300,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if ("clean_finish".equals(string)) {
             //清理完成
             restoreLayout();
+            //清理完成后通知 文件数据库同步(陈浪)
+            EventBus.getDefault().post(new ScanFileEvent());
         }
     }
 
