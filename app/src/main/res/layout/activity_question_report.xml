@@ -134,7 +134,9 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:hint="QQ/手机号"
+                android:digits="0123456789"
                 android:singleLine="true"
+                android:inputType="phone"
                 android:textColor="@color/color_333333"
                 android:textColorHint="@color/color_999999"
                 android:textSize="@dimen/dimen_15sp" />
