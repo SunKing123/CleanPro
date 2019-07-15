@@ -10,7 +10,7 @@ public class AppConstants {
     public static String Base_Host = "http://clsystem-mclean-dev-default.miaogou188.com";
     public static String Base_Host_Finance = "http://yacefddapi.51huihuahua.com";//账务接口域名
     public static String Base_Image_Host = "http://testfddimage.51huihuahua.com";//图片路径
-    public static String Base_H5_Host = "http://testwlqlapph5.miaogou188.com";//H5路径
+    public static String Base_H5_Host = "http://testwlqlapph5.fqt188.com";//H5路径
     public static String Base_H5_Host2 = "http://testfddh5.51huihuahua.com";//H5路径
     public static String Map_Https = "https://testfddh5.51huihuahua.com";//地图路径
     public static String Base_Big_Data = "http://testhhh.xnshandai.net";//大数据接口路径
