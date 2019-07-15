@@ -247,28 +247,37 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         type = TYPE_SCAN_FINISH;
+
+        if (mCountEntity != null) {
+            mTvSize.setText(mCountEntity.getTotalSize());
+            mTvGb.setText(mCountEntity.getUnit());
+
+            if (mCountEntity.getNumber() > 0) {
+                //扫描到垃圾
+
+                mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
+                //设置titlebar颜色
+                showBarColor(getResources().getColor(R.color.color_FD6F46));
+
+                mButtonCleanNow.setText("立即清理");
+
+                mJunkGroups = junkGroups;
+
+                mTextScanTrace.setText("查看垃圾详情");
+                mArrowRight.setVisibility(View.VISIBLE);
+            }else {
+                //没有扫描到垃圾
+                cleanFinishSign();
+            }
+        }
+
         //重置扫描状态
         mPresenter.setIsFinish(false);
         //重置颜色变化状态
         mChangeFinish = false;
 
-        mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
-        //设置titlebar颜色
-        showBarColor(getResources().getColor(R.color.color_FD6F46));
-
-        mButtonCleanNow.setText("立即清理");
-
-        mJunkGroups = junkGroups;
-
-        mTextScanTrace.setText("查看垃圾详情");
-        mArrowRight.setVisibility(View.VISIBLE);
-
         mPresenter.stopCleanScanAnimation();
 
-        if (mCountEntity != null) {
-            mTvSize.setText(mCountEntity.getTotalSize());
-            mTvGb.setText(mCountEntity.getUnit());
-        }
     }
 
     /**
@@ -314,16 +323,24 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mLayoutScan.setTranslationY(0);
         mTextCount.setTranslationY(0);
 
+        cleanFinishSign();
+
+        //恢复背景
+        mLayoutCleanTop.setBackgroundResource(R.drawable.bg_big_home);
+        //设置titlebar颜色
+        showBarColor(getResources().getColor(R.color.color_4690FD));
+    }
+
+    /**
+     * 清理很干净标识
+     */
+    public void cleanFinishSign() {
         mLaoutContentFinish.setVisibility(View.VISIBLE);
         mTextCount.setVisibility(View.GONE);
         mLayoutScan.setVisibility(View.GONE);
         //按钮设置
         mButtonCleanNow.setText("完成");
         mButtonCleanNow.setVisibility(View.VISIBLE);
-        //恢复背景
-        mLayoutCleanTop.setBackgroundResource(R.drawable.bg_big_home);
-        //设置titlebar颜色
-        showBarColor(getResources().getColor(R.color.color_4690FD));
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
     }

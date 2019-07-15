@@ -139,7 +139,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
             mLayoutWaitSelect.setVisibility(View.GONE);
             mLayoutCurrentSelect.setVisibility(View.VISIBLE);
         } else {
-            mDoJunkClean.setEnabled(true);
+            mDoJunkClean.setEnabled(false);
             mDoJunkClean.setText("清理");
             mLayoutWaitSelect.setVisibility(View.VISIBLE);
             mLayoutCurrentSelect.setVisibility(View.GONE);
