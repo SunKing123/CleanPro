@@ -178,7 +178,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param total
      */
     public void showTotal(long total) {
-        mTextTotal.setText("共发现" + CleanUtil.formatShortFileSize(AppApplication.getInstance(), total));
+        if (mTextTotal != null)
+            mTextTotal.setText("共发现" + CleanUtil.formatShortFileSize(AppApplication.getInstance(), total));
     }
 
     /**
@@ -196,6 +197,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
 
     /**
      * 开始清理动画
+     *
      * @param countEntity
      */
     public void startCleanAnim(CountEntity countEntity) {

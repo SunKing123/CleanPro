@@ -254,7 +254,39 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             } else {
                 String content = mTxtContent.getText().toString();
                 String contact = mTxtContact.getText().toString();
-                mPresenter.submitData("", content, contact, "", common4Subscriber);
+                mPresenter.submitData("", content, contact, "", new Common4Subscriber<BaseEntity>() {
+                    @Override
+                    public void showExtraOp(String code, String message) {
+
+                    }
+
+                    @Override
+                    public void getData(BaseEntity baseEntity) {
+                        mLoading.setReportSuccess(1);
+                        mBtnSumbit.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, 1000);
+
+
+                    }
+
+                    @Override
+                    public void showExtraOp(String message) {
+                        mLoading.dismissAllowingStateLoss();
+                    }
+
+                    @Override
+                    public void netConnectError() {
+                        mLoading.dismissAllowingStateLoss();
+                        Toast toast = Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+
+                    }
+                });
             }
 
             mIsSubmit = true;
@@ -274,7 +306,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             public void getData(FileUploadInfoBean fileUploadInfoBean) {
                 FileUploadInfoBean.ImgUrl imgUrl = fileUploadInfoBean.data;
                 mUploadUrls.add(imgUrl.url);
-                // -1 移除头部
+                // -1  去除尾部
                 if (mUploadUrls.size() == mAdapter.getLists().size() - 1) {
 
                     String content = mTxtContent.getText().toString();
@@ -288,7 +320,39 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
                             stringPaths.append(";");
                         }
                     }
-                    mPresenter.submitData("", content, contact, stringPaths.toString(), common4Subscriber);
+                    mPresenter.submitData("", content, contact, stringPaths.toString(), new Common4Subscriber<BaseEntity>() {
+                        @Override
+                        public void showExtraOp(String code, String message) {
+
+                        }
+
+                        @Override
+                        public void getData(BaseEntity baseEntity) {
+                            mLoading.setReportSuccess(1);
+                            mBtnSumbit.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            }, 1000);
+
+
+                        }
+
+                        @Override
+                        public void showExtraOp(String message) {
+                            mLoading.dismissAllowingStateLoss();
+                        }
+
+                        @Override
+                        public void netConnectError() {
+                            mLoading.dismissAllowingStateLoss();
+                            Toast toast = Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+
+                        }
+                    });
                 }
             }
 
@@ -308,7 +372,9 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
         });
     }
 
-    Common4Subscriber<BaseEntity> common4Subscriber = new Common4Subscriber<BaseEntity>() {
+
+
+/*    Common4Subscriber<BaseEntity> common4Subscriber = new Common4Subscriber<BaseEntity>() {
         @Override
         public void showExtraOp(String code, String message) {
 
@@ -340,7 +406,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             toast.show();
 
         }
-    };
+    };*/
 
     @Override
     protected void onStart() {

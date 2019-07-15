@@ -128,6 +128,7 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public void setData(CountEntity countEntity) {
+        if (mCountEntity == null) return;
         mCountEntity = countEntity;
         mTextCount.setText(mCountEntity.getResultSize());
         mTextSize.setText(mCountEntity.getTotalSize());
@@ -139,7 +140,7 @@ public class CleanAnimView extends RelativeLayout {
         int startHeight = 0;
         if (isNeedTranslation) {
             startHeight = DeviceUtils.dip2px(150);
-        }else {
+        } else {
             startHeight = DeviceUtils.dip2px(56);
         }
 
@@ -179,7 +180,7 @@ public class CleanAnimView extends RelativeLayout {
         int time = 0;
         if (isNeedTranslation) {
             time = 1000;
-        }else {
+        } else {
             time = 10;
         }
         outerY.setDuration(time);
@@ -224,8 +225,8 @@ public class CleanAnimView extends RelativeLayout {
         AnimatorSet animatorSet = new AnimatorSet();
         if (isNeedTranslation) {
             animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
-        }else {
-            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha,outerY,countY,innerY,scanY);
+        } else {
+            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY, innerY, scanY);
         }
 
 
@@ -351,7 +352,7 @@ public class CleanAnimView extends RelativeLayout {
             }
         });
 
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot,"backgroundColor", FirstLevel, SecondLevel,ThirdLevel);
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(1000);
         colorAnim1.setStartDelay(4000);
@@ -364,11 +365,10 @@ public class CleanAnimView extends RelativeLayout {
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator,colorAnim1);
+        animatorSetTimer.playTogether(valueAnimator, colorAnim1);
         animatorSetTimer.start();
 
     }
-
 
 
     //数字动画播放完后火箭上移，布局高度缩小

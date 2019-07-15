@@ -37,7 +37,7 @@ public class CleanFileLoadingDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_question_report_loading, null);
+        View view = inflater.inflate(R.layout.dialog_clean_file_loading, null);
         getDialog().setCanceledOnTouchOutside(false);
         initView(view);
         return view;

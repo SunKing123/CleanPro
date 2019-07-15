@@ -154,6 +154,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
                 emitter.onNext("");
                 emitter.onComplete();
             }
+
         })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
