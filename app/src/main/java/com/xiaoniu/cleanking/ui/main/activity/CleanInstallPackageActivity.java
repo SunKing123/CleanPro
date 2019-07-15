@@ -142,6 +142,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             mAdapter.setTabType(mType);
             mAdapter.modifyList(lists);
             setEmptyView(lists.size());
+            totalSelectFiles();
 
         } else if (id == R.id.txt_uninstall) {
             //未安装应用
@@ -152,6 +153,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             mAdapter.setTabType(mType);
             mAdapter.modifyList(lists);
             setEmptyView(lists.size());
+            totalSelectFiles();
 
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("Installation_pack_pleaning_delete_click","\"删除按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
@@ -200,10 +202,21 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             if (null != mLLEmptyView) {
                 mLLEmptyView.setVisibility(View.GONE);
             }
+            boolean isCheckAll = true;
+            List<AppInfoBean> lists=mAdapter.getLists();
+            for (AppInfoBean appInfoBean : lists) {
+                if (!appInfoBean.isSelect) {
+                    isCheckAll=false;
+                }
+            }
+            mIsCheckAll=isCheckAll;
+            mCheckBoxAll.setSelected(mIsCheckAll);
         } else {
             if (null != mLLEmptyView) {
                 mLLEmptyView.setVisibility(View.VISIBLE);
             }
+            mIsCheckAll=false;
+            mCheckBoxAll.setSelected(mIsCheckAll);
         }
     }
 
@@ -234,7 +247,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mAdapter.clear();
         mAdapter.modifyList(lists);
         setEmptyView(lists.size());
-
+        totalSelectFiles();
 
     }
 
@@ -259,7 +272,6 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mAdapter.clear();
         mAdapter.modifyList(listsNew);
         setEmptyView(listsNew.size());
-
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
 
@@ -270,10 +282,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                 mLoading.dismissAllowingStateLoss();
             }
         },1500);
-
         totalSelectFiles();
-
-
     }
 
     private void setStatusView(int type) {
