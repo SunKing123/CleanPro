@@ -128,7 +128,9 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public void setData(CountEntity countEntity) {
-        if (mCountEntity == null) return;
+        if (countEntity == null) {
+            return;
+        }
         mCountEntity = countEntity;
         mTextCount.setText(mCountEntity.getResultSize());
         mTextSize.setText(mCountEntity.getTotalSize());
