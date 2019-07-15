@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -54,7 +55,11 @@ import butterknife.OnClick;
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @BindView(R.id.text_count)
-    TextView mTextCount;
+    AppCompatTextView mTextCount;
+    @BindView(R.id.text_unit)
+    TextView mTextUnit;
+    @BindView(R.id.layout_count)
+    RelativeLayout mLayoutCount;
     @BindView(R.id.layout_root)
     MyLinearLayout mLayoutRoot;
     @BindView(R.id.layout_clean_top)
@@ -205,7 +210,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (type == TYPE_SCAN_FINISH) {
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
-            mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mTextCount, mCountEntity);
+            mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
             mButtonCleanNow.setVisibility(View.GONE);
             mTextScanTrace.setText("垃圾清理中...");
             mArrowRight.setVisibility(View.GONE);
@@ -216,9 +221,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mButtonCleanNow.setText("再次清理");
             type = TYPE_NOT_SCAN;
             mLaoutContentFinish.setVisibility(View.GONE);
-            mTextCount.setVisibility(View.VISIBLE);
+            mLayoutCount.setVisibility(View.VISIBLE);
             mLayoutScan.setVisibility(View.VISIBLE);
-            mTextCount.setText("0.0MB");
+            mTextCount.setText("0.0");
+            mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(View.GONE);
         } else if (type == TYPE_NOT_SCAN) {
@@ -291,7 +297,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             return;
         }
         mCountEntity = CleanUtil.formatShortFileSize(total);
-        getActivity().runOnUiThread(() -> mTextCount.setText(CleanUtil.formatShortFileSize(getActivity(), total)));
+        getActivity().runOnUiThread(() -> {
+            CountEntity countEntity = CleanUtil.formatShortFileSize(total);
+            mTextCount.setText(countEntity.getTotalSize());
+            mTextUnit.setText(countEntity.getUnit());
+        });
     }
 
 
@@ -318,13 +328,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mIconInner.setVisibility(View.GONE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
-        layoutParams.height = DeviceUtils.dip2px(400);
+        layoutParams.height = DeviceUtils.dip2px(460);
         mLayoutCleanTop.setLayoutParams(layoutParams);
         //移动的页面view还原
         mIconOuter.setTranslationY(0);
         mIconInner.setTranslationY(0);
         mLayoutScan.setTranslationY(0);
-        mTextCount.setTranslationY(0);
+        mLayoutCount.setTranslationY(0);
 
         cleanFinishSign();
 
@@ -339,7 +349,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void cleanFinishSign() {
         mLaoutContentFinish.setVisibility(View.VISIBLE);
-        mTextCount.setVisibility(View.GONE);
+        mLayoutCount.setVisibility(View.GONE);
         mLayoutScan.setVisibility(View.GONE);
         //按钮设置
         mButtonCleanNow.setText("完成");
@@ -502,5 +512,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void setColorChange(boolean b) {
         mChangeFinish = b;
+    }
+
+    /**
+     * 获取总量显示的view
+     * @return
+     */
+    public AppCompatTextView getTextCountView() {
+        return mTextCount;
+    }
+
+    /**
+     * 获取总量显示的view
+     * @return
+     */
+    public TextView getTextUnitView() {
+        return mTextUnit;
     }
 }

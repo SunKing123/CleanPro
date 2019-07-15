@@ -297,8 +297,8 @@ public class CleanAnimView extends RelativeLayout {
      * 显示吸收动画
      */
     private void showLottieView() {
-        mAnimationView.setAnimation("data.json");
-        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("data2.json");
+        mAnimationView.setImageAssetsFolder("images2");
         mAnimationView.playAnimation();
     }
 

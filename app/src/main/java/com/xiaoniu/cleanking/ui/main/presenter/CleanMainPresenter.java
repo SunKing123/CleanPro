@@ -334,16 +334,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param iconInner
      * @param iconOuter
      * @param layoutScan
-     * @param textCount
+     * @param layoutScan
      * @param countEntity
      */
-    public void startCleanAnimation(ImageView iconInner, ImageView iconOuter, LinearLayout layoutScan, TextView textCount, CountEntity countEntity) {
+    public void startCleanAnimation(ImageView iconInner, ImageView iconOuter, LinearLayout layoutScan, RelativeLayout layoutCount, CountEntity countEntity) {
         iconInner.setVisibility(VISIBLE);
 
         int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - iconOuter.getMeasuredHeight();
         ObjectAnimator outerY = ObjectAnimator.ofFloat(iconOuter, "translationY", iconOuter.getTranslationY(), height);
         ObjectAnimator scanY = ObjectAnimator.ofFloat(layoutScan, "translationY", layoutScan.getTranslationY(), height);
-        ObjectAnimator countY = ObjectAnimator.ofFloat(textCount, "translationY", textCount.getTranslationY(), height);
+        ObjectAnimator countY = ObjectAnimator.ofFloat(layoutCount, "translationY", layoutCount.getTranslationY(), height);
         ObjectAnimator innerY = ObjectAnimator.ofFloat(iconInner, "translationY", iconInner.getTranslationY(), height);
 
         ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(iconInner, "alpha", 0, 1);
@@ -368,7 +368,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             @Override
             public void onAnimationEnd(Animator animation) {
                 //第二阶段开始
-                secondLevel(iconInner, iconOuter, textCount, countEntity);
+                secondLevel(iconInner, iconOuter, countEntity);
             }
 
             @Override
@@ -389,7 +389,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     }
 
-    public void secondLevel(ImageView iconInner, ImageView iconOuter, TextView textCount, CountEntity countEntity) {
+    public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
         ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
@@ -415,7 +415,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                 animatorSet.playTogether(rotation3, rotation4);
                 animatorSet.start();
 
-                startClean(animatorSet, textCount, countEntity);
+                startClean(animatorSet, countEntity);
 
                 mView.showLottieView();
             }
@@ -448,16 +448,22 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * 开始清理操作
      *
      * @param animatorSet
-     * @param textCount
      * @param countEntity
      */
-    public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
+    public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
-            textCount.setText(String.format("%s%s", Math.round(animatedValue), unit));
+            TextView mTextCount = mView.getTextCountView();
+            TextView textUnit = mView.getTextUnitView();
+            if (mTextCount != null) {
+                mTextCount.setText(String.valueOf(Math.round(animatedValue)));
+            }
+            if (textUnit != null) {
+                textUnit.setText(unit);
+            }
         });
         valueAnimator.addListener(new Animator.AnimatorListener() {
             @Override
