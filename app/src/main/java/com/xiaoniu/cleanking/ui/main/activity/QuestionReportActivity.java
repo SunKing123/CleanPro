@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.xiaoniu.cleanking.R;
@@ -225,13 +226,24 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
         }
     }
 
+    private  Toast mToastContactHint;
     @OnClick({R.id.img_back, R.id.btn_submit})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.img_back) {
             finish();
         } else if (ids == R.id.btn_submit) {// 提交反馈
-
+            String content = mTxtContent.getText().toString();
+            String contact = mTxtContact.getText().toString();
+            if(TextUtils.isEmpty(contact) || contact.length()<5 || contact.length()>15){
+                if(mToastContactHint==null){
+                    mToastContactHint=Toast.makeText(mContext,"填写的联系方式有误",Toast.LENGTH_SHORT);
+                    mToastContactHint.setGravity(Gravity.CENTER,0,0);
+                }else {
+                    mToastContactHint.show();
+                }
+                return;
+            }
             StatisticsUtils.trackClick("Submission_click","\"提交\"点击","personal_center_page","question_feedback_page");
 
             mLoading.show(getSupportFragmentManager(), "");
@@ -252,8 +264,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
                     uploadFile(path);
                 }
             } else {
-                String content = mTxtContent.getText().toString();
-                String contact = mTxtContact.getText().toString();
+
                 mPresenter.submitData("", content, contact, "", new Common4Subscriber<BaseEntity>() {
                     @Override
                     public void showExtraOp(String code, String message) {
