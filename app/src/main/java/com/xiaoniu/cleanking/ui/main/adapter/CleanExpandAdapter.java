@@ -102,7 +102,6 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         expand(pos);
                     }
                 });
-                helper.setImageResource(R.id.image_arrow, entity2.isExpanded() ? R.mipmap.arrow_up : R.mipmap.arrow_down);
                 break;
             case TYPE_LEVEL_3:
                 final ThirdLevelEntity entity3 = (ThirdLevelEntity) item;
