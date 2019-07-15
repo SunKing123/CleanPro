@@ -264,7 +264,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
                 mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
                 //设置titlebar颜色
-                showBarColor(getResources().getColor(R.color.color_FD6F46));
+                if(getViewShow()) {
+                    showBarColor(getResources().getColor(R.color.color_FD6F46));
+                }
 
                 mButtonCleanNow.setText("立即清理");
 

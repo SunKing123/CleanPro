@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -44,12 +44,20 @@ public class CleanAnimView extends RelativeLayout {
     ImageView mIconInner;
     LinearLayout mLayoutScan;
     LottieAnimationView mAnimationView;
+    LottieAnimationView mLottieView;
+    RelativeLayout mLayoutCount;
     TextView mTextCount;
+    TextView mTextUnit;
     TextView mTextSize;
     TextView mTextGb;
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
+
+    /**
+     * 第二阶段
+     */
+    AnimatorSet animatorStep2;
 
     private OnColorChangeListener mOnColorChangeListener;
 
@@ -88,7 +96,10 @@ public class CleanAnimView extends RelativeLayout {
         mIconInner = v.findViewById(R.id.icon_inner);
         mLayoutScan = v.findViewById(R.id.layout_scan);
         mAnimationView = v.findViewById(R.id.view_lottie);
+        mLottieView = v.findViewById(R.id.icon_inner_lottie);
+        mLayoutCount = v.findViewById(R.id.layout_count);
         mTextCount = v.findViewById(R.id.text_count);
+        mTextUnit = v.findViewById(R.id.text_unit);
         mTextSize = v.findViewById(R.id.tv_size);
         mTextGb = v.findViewById(R.id.tv_gb);
         mLayoutRoot = v.findViewById(R.id.layout_root);
@@ -132,7 +143,8 @@ public class CleanAnimView extends RelativeLayout {
             return;
         }
         mCountEntity = countEntity;
-        mTextCount.setText(mCountEntity.getResultSize());
+        mTextCount.setText(mCountEntity.getTotalSize());
+        mTextUnit.setText(mCountEntity.getUnit());
         mTextSize.setText(mCountEntity.getTotalSize());
         mTextGb.setText(mCountEntity.getUnit());
     }
@@ -171,13 +183,13 @@ public class CleanAnimView extends RelativeLayout {
         int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(150);
         ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
         ObjectAnimator scanY = ObjectAnimator.ofFloat(mLayoutScan, "translationY", mLayoutScan.getTranslationY(), height);
-        ObjectAnimator countY = ObjectAnimator.ofFloat(mTextCount, "translationY", mTextCount.getTranslationY(), height);
+        ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);
         ObjectAnimator innerY = ObjectAnimator.ofFloat(mIconInner, "translationY", mIconInner.getTranslationY(), height);
 
         ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(mIconInner, "alpha", 0, 1);
         ObjectAnimator outerAlpha = ObjectAnimator.ofFloat(mIconOuter, "alpha", 0, 1);
         ObjectAnimator scanAlpha = ObjectAnimator.ofFloat(mLayoutScan, "alpha", 0, 1);
-        ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mTextCount, "alpha", 0, 1);
+        ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mLayoutCount, "alpha", 0, 1);
 
         int time = 0;
         if (isNeedTranslation) {
@@ -210,7 +222,7 @@ public class CleanAnimView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 //第二阶段开始
-                secondLevel(mIconInner, mIconOuter, mTextCount, mCountEntity);
+                secondLevel(mIconInner, mIconOuter, mCountEntity);
             }
 
             @Override
@@ -241,22 +253,28 @@ public class CleanAnimView extends RelativeLayout {
      *
      * @param iconInner
      * @param iconOuter
-     * @param textCount
      * @param countEntity
      */
-    public void secondLevel(ImageView iconInner, ImageView iconOuter, TextView textCount, CountEntity countEntity) {
+    public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360);
-        ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
+//        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325,-35,325,-35,325,-35);
+        ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35,325);
 
-        rotation.setDuration(1300);
-        rotation2.setDuration(2000);
+        rotation.setDuration(500);
+//        rotation2.setDuration(1000);
 
         rotation3.setDuration(300);
-        rotation3.setRepeatCount(-1);
-        rotation4.setRepeatCount(-1);
-        rotation4.setDuration(300);
+        rotation3.setRepeatCount(ValueAnimator.INFINITE);
+        rotation3.setInterpolator(new LinearInterpolator());
+
+        rotation4.setDuration(200);
+        rotation4.setRepeatCount(ValueAnimator.INFINITE);
+        rotation4.setInterpolator(new LinearInterpolator());
+
+
+        animatorStep2 = new AnimatorSet();
+        animatorStep2.playTogether(rotation3);
 
         rotation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -267,10 +285,7 @@ public class CleanAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(rotation3, rotation4);
-                animatorSet.start();
-                startClean(animatorSet, textCount, countEntity);
+                startClean(animatorStep2, countEntity);
             }
 
             @Override
@@ -284,13 +299,13 @@ public class CleanAnimView extends RelativeLayout {
             }
         });
 
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation2.setInterpolator(new AccelerateInterpolator());
+//        rotation.setInterpolator(new AccelerateInterpolator());
+//        rotation2.setInterpolator(new AccelerateInterpolator());
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(rotation, rotation2);
-        animatorSet.start();
+        animatorSet.playTogether(rotation, rotation4);
 
+        animatorSet.start();
     }
 
     /**
@@ -298,7 +313,7 @@ public class CleanAnimView extends RelativeLayout {
      */
     private void showLottieView() {
         mAnimationView.setAnimation("data2.json");
-        mAnimationView.setImageAssetsFolder("images2");
+        mAnimationView.setImageAssetsFolder("images");
         mAnimationView.playAnimation();
     }
 
@@ -317,16 +332,16 @@ public class CleanAnimView extends RelativeLayout {
      * 开始加速旋转
      *
      * @param animatorSet
-     * @param textCount
      * @param countEntity
      */
-    public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
+    public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
-            textCount.setText(String.format("%s%s", Math.round(animatedValue), unit));
+            mTextCount.setText(String.format("%s", Math.round(animatedValue)));
+            mTextUnit.setText(unit);
         });
 
         valueAnimator.addListener(new Animator.AnimatorListener() {

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -100,6 +102,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         initAdapter();
         //大文件扫描
         mPresenter.scanBigFile();
+
+        mCleanAnimView.setOnColorChangeListener(this::showBarColor);
     }
 
     private void initAdapter() {
@@ -207,6 +211,19 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setData(countEntity);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);
+    }
+
+    /**
+     * 状态栏颜色变化
+     *
+     * @param animatedValue
+     */
+    public void showBarColor(int animatedValue) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, false);
+        }
     }
 
 }

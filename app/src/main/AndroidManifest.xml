@@ -255,6 +255,14 @@
         <activity android:name=".ui.main.activity.SoftManageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

@@ -20,7 +20,6 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
-import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -82,7 +81,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
     private UpdateAgent mUpdateAgent;
 
     public void setAppVersion(AppVersion result) {
-        if (result != null) {
+        if (result != null && result.getData() != null) {
             //根据版本号判断是否需要更新
             String versionName = AndroidUtil.getAppVersionName();
             int versionCode = AndroidUtil.getVersionCode();
@@ -130,7 +129,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
         web.setTitle(title);
         if (TextUtils.isEmpty(picurl)) {
             //缩略图
-            web.setThumb(new UMImage(mView, R.mipmap.logo_share));
+            web.setThumb(new UMImage(mView, R.mipmap.applogo));
         } else {
             web.setThumb(new UMImage(mView, picurl));
         }
@@ -160,6 +159,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
 
             @Override
             public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+                System.out.println("----------------------------------"+throwable.getCause());
                 if (share_media == SHARE_MEDIA.WEIXIN || share_media == SHARE_MEDIA.WEIXIN_CIRCLE) {
                     handler.sendEmptyMessage(SHARE_WECHAT);
                 } else if (share_media == SHARE_MEDIA.QQ || share_media == SHARE_MEDIA.QZONE) {

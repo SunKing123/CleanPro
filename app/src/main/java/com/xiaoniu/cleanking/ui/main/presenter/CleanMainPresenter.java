@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -391,17 +392,21 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360);
+        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360,0);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
+        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
         rotation.setDuration(1300);
-        rotation2.setDuration(2000);
+        rotation2.setDuration(1100);
 
         rotation3.setDuration(300);
         rotation3.setRepeatCount(-1);
         rotation4.setRepeatCount(-1);
-        rotation4.setDuration(300);
+        rotation4.setDuration(200);
+        rotation4.setInterpolator(new LinearInterpolator());
+        AnimatorSet animatorStep2 = new AnimatorSet();
+        animatorStep2.playTogether(rotation3, rotation4);
+
 
         rotation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -411,13 +416,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(rotation3, rotation4);
-                animatorSet.start();
 
-                startClean(animatorSet, countEntity);
+                animatorStep2.start();
 
+                startClean(animatorStep2, countEntity);
                 mView.showLottieView();
+
             }
 
             @Override
@@ -436,6 +440,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(rotation, rotation2);
+        animatorSet.playSequentially();
         animatorSet.start();
 
     }
