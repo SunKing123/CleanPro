@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class CountEntity implements Serializable {
 
-    private String totalSize;
+    private String totalSize = "0";
 
     private String unit;
 

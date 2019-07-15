@@ -484,7 +484,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             }
         });
-        valueAnimator.start();
 
         ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());
