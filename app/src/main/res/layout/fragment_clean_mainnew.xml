@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     android:id="@+id/layout_root"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:background="@color/white"
+                                                     android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/layout_scroll"
@@ -21,7 +21,7 @@
             <FrameLayout
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="460dp"
                 android:background="@drawable/bg_big_home">
 
                 <RelativeLayout
@@ -33,14 +33,14 @@
                         android:id="@+id/view_lottie"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true" />
+                        android:layout_centerInParent="true"/>
 
                     <LinearLayout
                         android:id="@+id/layout_content_clean_finish"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dimen_200dp"
+                        android:layout_height="@dimen/dimen_230dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:layout_marginTop="@dimen/dimen_80dp"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:visibility="gone">
@@ -48,7 +48,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/icon_clean_finish" />
+                            android:src="@mipmap/icon_clean_finish"/>
 
                         <TextView
                             android:id="@+id/text_content"
@@ -58,36 +58,36 @@
                             android:text="手机很干净了~"
                             android:textColor="@color/white"
                             android:textSize="19sp"
-                            android:visibility="visible" />
+                            android:visibility="visible"/>
                     </LinearLayout>
 
 
                     <ImageView
                         android:id="@+id/icon_outer"
-                        android:layout_width="@dimen/dimen_200dp"
-                        android:layout_height="200dp"
+                        android:layout_width="@dimen/dimen_230dp"
+                        android:layout_height="230dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:layout_marginTop="@dimen/dimen_80dp"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/icon_circle" />
+                        android:src="@mipmap/icon_circle"/>
 
                     <View
                         android:id="@+id/circle_outer"
-                        android:layout_width="@dimen/dimen_200dp"
-                        android:layout_height="@dimen/dimen_200dp"
+                        android:layout_width="@dimen/dimen_230dp"
+                        android:layout_height="@dimen/dimen_230dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:layout_marginTop="@dimen/dimen_80dp"
                         android:background="@drawable/icon_bg_circle"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <View
                         android:id="@+id/circle_outer2"
-                        android:layout_width="@dimen/dimen_200dp"
-                        android:layout_height="@dimen/dimen_200dp"
+                        android:layout_width="@dimen/dimen_230dp"
+                        android:layout_height="@dimen/dimen_230dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/dimen_60dp"
+                        android:layout_marginTop="@dimen/dimen_80dp"
                         android:background="@drawable/icon_bg_circle"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <ImageView
                         android:id="@+id/icon_inner"
@@ -95,32 +95,43 @@
                         android:layout_height="164dp"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
-                        android:layout_marginTop="78dp"
+                        android:layout_marginTop="110dp"
                         android:src="@mipmap/icon_inner"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_count"
-                        android:layout_width="@dimen/dimen_160dp"
+                    <RelativeLayout
+                        android:id="@+id/layout_count"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
-                        android:layout_marginTop="@dimen/dimen_100dp"
-                        android:lines="1"
-                        android:gravity="center_horizontal"
-                        android:text="110.0M"
-                        android:textColor="@color/white"
-                        android:textSize="50sp"
-                        app:autoSizeMaxTextSize="50sp"
-                        app:autoSizeMinTextSize="@dimen/dimen_16sp"
-                        app:autoSizeStepGranularity="@dimen/dimen_2dp"
-                        app:autoSizeTextType="uniform" />
+                        android:layout_marginTop="@dimen/dimen_150dp"
+                        android:layout_centerHorizontal="true">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/text_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxWidth="@dimen/dimen_170dp"
+                            android:lines="1"
+                            android:gravity="center"
+                            android:text="0.0"
+                            android:textColor="@color/white"
+                            android:textSize="50sp"/>
+
+                        <TextView
+                            android:id="@+id/text_unit"
+                            android:text="MB"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:layout_toRightOf="@id/text_count"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/layout_scan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_count"
+                        android:layout_below="@id/layout_count"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:gravity="center"
@@ -129,9 +140,12 @@
                         <TextView
                             android:id="@+id/text_scan_trace"
                             android:layout_width="wrap_content"
+                            android:maxWidth="@dimen/dimen_150dp"
+                            android:singleLine="true"
+                            android:gravity="center"
                             android:layout_height="wrap_content"
                             android:text="扫描中"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"/>
 
                         <ImageView
                             android:id="@+id/view_arrow"
@@ -139,7 +153,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dimen_4dp"
                             android:src="@mipmap/arrow_right_white"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -150,20 +164,20 @@
                     android:layout_marginTop="@dimen/dimen_20dp"
                     android:text="悟空清理"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"/>
 
                 <Button
                     android:id="@+id/btn_ljql"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="@dimen/dimen_32dp"
+                    android:layout_marginBottom="@dimen/dimen_40dp"
                     android:layout_marginLeft="@dimen/dimen_60dp"
                     android:layout_marginRight="@dimen/dimen_60dp"
                     android:background="@drawable/bg_btn_white"
                     android:text="立即清理"
                     android:textColor="#06C581"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
             </FrameLayout>
 
 
@@ -190,7 +204,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_yjjs" />
+                        android:src="@mipmap/icon_yjjs"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -199,7 +213,7 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="一键加速"
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -209,7 +223,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="内存占用加速"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -227,7 +241,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_sjql" />
+                        android:src="@mipmap/icon_sjql"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -236,7 +250,7 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="手机清理"
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -246,7 +260,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="储存占用加速"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -262,7 +276,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_wjql" />
+                        android:src="@mipmap/icon_wjql"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -271,7 +285,7 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="文件清理"
                         android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -281,17 +295,17 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="照片、视频、安装包"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"/>
                 </LinearLayout>
             </LinearLayout>
 
             <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/layout_clean_finish"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#F7F8FA"
-                android:visibility="gone">
+                                                         xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                         android:id="@+id/layout_clean_finish"
+                                                         android:layout_width="match_parent"
+                                                         android:layout_height="match_parent"
+                                                         android:background="#F7F8FA"
+                                                         android:visibility="gone">
 
                 <View
                     android:id="@+id/view_top"
@@ -299,7 +313,7 @@
                     android:layout_height="56dp"
                     android:background="#06C581"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <ImageView
                     android:id="@+id/iv_back"
@@ -309,7 +323,7 @@
                     android:background="@mipmap/back_white"
                     app:layout_constraintBottom_toBottomOf="@id/view_top"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/view_top" />
+                    app:layout_constraintTop_toTopOf="@id/view_top"/>
 
                 <TextView
                     android:id="@+id/text_title"
@@ -321,14 +335,14 @@
                     android:textSize="@dimen/dimen_18sp"
                     app:layout_constraintBottom_toBottomOf="@id/view_top"
                     app:layout_constraintLeft_toRightOf="@id/iv_back"
-                    app:layout_constraintTop_toTopOf="@id/view_top" />
+                    app:layout_constraintTop_toTopOf="@id/view_top"/>
 
                 <View
                     android:id="@+id/viewt"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:background="#06C581"
-                    app:layout_constraintTop_toBottomOf="@id/view_top" />
+                    app:layout_constraintTop_toBottomOf="@id/view_top"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -345,7 +359,7 @@
                         android:layout_width="47dp"
                         android:layout_height="54dp"
                         android:layout_marginRight="@dimen/dimen_15dp"
-                        android:src="@mipmap/icon_dun" />
+                        android:src="@mipmap/icon_dun"/>
 
                     <TextView
                         android:id="@+id/tv_size"
@@ -354,7 +368,7 @@
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="55sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <LinearLayout
                         android:id="@+id/layout_right_content"
@@ -371,7 +385,7 @@
                             android:layout_marginBottom="@dimen/dimen_10dp"
                             android:text="GB"
                             android:textColor="@color/white"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/tv_ql"
@@ -379,7 +393,7 @@
                             android:layout_height="wrap_content"
                             android:text="垃圾已清理"
                             android:textColor="@color/white"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -396,7 +410,7 @@
                             android:layout_height="wrap_content"
                             android:text="成功降温2°C"
                             android:textColor="@color/white"
-                            android:textSize="24sp" />
+                            android:textSize="24sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -405,7 +419,7 @@
                             android:alpha="0.6"
                             android:text="60s后达到最佳降温效果"
                             android:textColor="@color/white"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -414,7 +428,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/viewt" />
+                    app:layout_constraintTop_toBottomOf="@id/viewt"/>
             </android.support.constraint.ConstraintLayout>
         </RelativeLayout>
     </ScrollView>

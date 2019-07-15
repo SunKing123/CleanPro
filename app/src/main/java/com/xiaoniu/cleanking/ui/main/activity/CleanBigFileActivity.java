@@ -135,15 +135,13 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         }
         if (total > 0) {
             CountEntity countEntity = CleanUtil.formatShortFileSize(total);
-            mDoJunkClean.setEnabled(true);
             mDoJunkClean.setText("清理 " + countEntity.getTotalSize() + countEntity.getUnit());
             mTvSize.setText(countEntity.getTotalSize());
             mTvGb.setText(countEntity.getUnit());
             mLayoutWaitSelect.setVisibility(View.GONE);
             mLayoutCurrentSelect.setVisibility(View.VISIBLE);
         } else {
-            mDoJunkClean.setEnabled(false);
-            mDoJunkClean.setText("清理");
+            mDoJunkClean.setText("完成");
             mLayoutWaitSelect.setVisibility(View.VISIBLE);
             mLayoutCurrentSelect.setVisibility(View.GONE);
         }
@@ -157,7 +155,11 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
                 break;
             case R.id.do_junk_clean:
                 //垃圾清理
-                mPresenter.showDeleteDialog(mAllData);
+                if("完成".equals(mDoJunkClean.getText().toString())){
+                    finish();
+                }else {
+                    mPresenter.showDeleteDialog(mAllData);
+                }
                 break;
             default:
         }
