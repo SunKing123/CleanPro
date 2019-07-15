@@ -120,16 +120,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         });
 
         Observable.create(e -> {
-            long v1 = System.currentTimeMillis();
+            //扫描进程
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(runningProcess);
-            long l1 = System.currentTimeMillis();
-            long v2 = l1 - v1;
+            //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
-            long l2 = System.currentTimeMillis();
-            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo();
-            long l3 = System.currentTimeMillis();
+            //获取前两个扫描的结果
+            boolean isScanFile = (runningProcess.size() + apkJunkInfos.size()) > 0;
+            //扫描数据文件
+            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {

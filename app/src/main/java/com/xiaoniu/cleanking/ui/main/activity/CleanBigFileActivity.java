@@ -21,9 +21,12 @@ import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
+import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +142,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
             mLayoutWaitSelect.setVisibility(View.GONE);
             mLayoutCurrentSelect.setVisibility(View.VISIBLE);
         } else {
-            mDoJunkClean.setEnabled(true);
+            mDoJunkClean.setEnabled(false);
             mDoJunkClean.setText("清理");
             mLayoutWaitSelect.setVisibility(View.VISIBLE);
             mLayoutCurrentSelect.setVisibility(View.GONE);
@@ -178,8 +181,9 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param total
      */
     public void showTotal(long total) {
-        if (mTextTotal != null)
+        if (mTextTotal != null) {
             mTextTotal.setText("共发现" + CleanUtil.formatShortFileSize(AppApplication.getInstance(), total));
+        }
     }
 
     /**
@@ -188,11 +192,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param total
      */
     public void cleanFinish(long total) {
-//        finish();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_BIG_FILE);
-//        bundle.putLong("clean_count", total);
-//        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
+        //清理完成后通知 文件数据库同步(陈浪)
+        EventBus.getDefault().post(new ScanFileEvent());
     }
 
     /**

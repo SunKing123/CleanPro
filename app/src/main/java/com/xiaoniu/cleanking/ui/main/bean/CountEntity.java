@@ -4,11 +4,33 @@ import java.io.Serializable;
 
 public class CountEntity implements Serializable {
 
+    /**
+     * 数值 eg: "20.0"
+     */
     private String totalSize = "0";
 
+    /**
+     * 单位 eg: "KB"
+     */
     private String unit;
 
+    /**
+     * 拼接完成的字符串  eg: "20.0MB"
+     */
     private String resultSize;
+
+    /**
+     * 扫描的文件大小 单位 B
+     */
+    private long number;
+
+    public long getNumber() {
+        return number;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
+    }
 
     public String getResultSize() {
         return resultSize;
