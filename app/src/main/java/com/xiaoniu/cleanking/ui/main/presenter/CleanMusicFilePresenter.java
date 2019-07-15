@@ -1,7 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -91,6 +94,7 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
         if (files.size() > 0) {
             files.clear();
         }
+        long duration=System.currentTimeMillis();
         SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_MUSCI, new HashSet<String>());
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -114,11 +118,15 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                     musciInfoBean.name = file.getName();
                     musciInfoBean.packageSize = file.length();
                     musciInfoBean.path = file.getPath();
-                    musciInfoBean.time = MusicFileUtils.getPlayDuration(file.getPath());
+                    //musciInfoBean.time = MusicFileUtils.getPlayDuration(file.getPath());
+                    musciInfoBean.time=MusicFileUtils.timeParse(queryDuartion(musciInfoBean.name));
                     musciInfoBeans.add(musciInfoBean);
                 }
+
+
                 //按升序排列
                 Collections.sort(musciInfoBeans, ((o1, o2) -> o2.time.compareTo(o1.time)));
+                //Log.i("test","duration="+(System.currentTimeMillis()-duration));
                 emitter.onNext("");
                 emitter.onComplete();
             }
@@ -149,6 +157,38 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
         return musciInfoBeans;
     }
 
+
+    private  int queryDuartion(String title){
+        Cursor cursor = activity.getContentResolver().query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Audio.Media._ID,
+                        MediaStore.Audio.Media.DISPLAY_NAME,
+                        MediaStore.Audio.Media.TITLE,
+                        MediaStore.Audio.Media.DURATION,
+                        MediaStore.Audio.Media.ARTIST,
+                        MediaStore.Audio.Media.ALBUM,
+                        MediaStore.Audio.Media.YEAR,
+                        MediaStore.Audio.Media.MIME_TYPE,
+                        MediaStore.Audio.Media.SIZE,
+                        MediaStore.Audio.Media.DATA },
+                MediaStore.Audio.Media.DISPLAY_NAME+"=?",new String[]{title},null);
+
+        if (cursor.moveToFirst()){
+        //if (cursor.moveToFirst()) {
+            int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+//            String tilte = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
+//            Log.i("test","title="+tilte+",time="+MusicFileUtils.timeParse(duration));
+
+            return duration;
+        }
+        try {
+            cursor.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+
+    }
 
     public void delFile(List<MusciInfoBean> list) {
         List<MusciInfoBean> files = list;

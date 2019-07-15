@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
@@ -113,7 +115,11 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
      */
     private void setImgFrame(ImageView imgFrame, String path) {
 
-        Glide.with(mContext).load(path).into(imgFrame);
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.color.color_666666)// 正在加载中的图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
+
+        Glide.with(mContext).load(path).apply(options).into(imgFrame);
 
     }
 
