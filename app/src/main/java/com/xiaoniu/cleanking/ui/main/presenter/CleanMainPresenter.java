@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -120,16 +121,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         });
 
         Observable.create(e -> {
-            long v1 = System.currentTimeMillis();
+            //扫描进程
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(runningProcess);
-            long l1 = System.currentTimeMillis();
-            long v2 = l1 - v1;
+            //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
-            long l2 = System.currentTimeMillis();
-            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo();
-            long l3 = System.currentTimeMillis();
+            //获取前两个扫描的结果
+            boolean isScanFile = (runningProcess.size() + apkJunkInfos.size()) > 0;
+            //扫描数据文件
+            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
@@ -334,16 +335,16 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param iconInner
      * @param iconOuter
      * @param layoutScan
-     * @param textCount
+     * @param layoutScan
      * @param countEntity
      */
-    public void startCleanAnimation(ImageView iconInner, ImageView iconOuter, LinearLayout layoutScan, TextView textCount, CountEntity countEntity) {
+    public void startCleanAnimation(ImageView iconInner, ImageView iconOuter, LinearLayout layoutScan, RelativeLayout layoutCount, CountEntity countEntity) {
         iconInner.setVisibility(VISIBLE);
 
         int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - iconOuter.getMeasuredHeight();
         ObjectAnimator outerY = ObjectAnimator.ofFloat(iconOuter, "translationY", iconOuter.getTranslationY(), height);
         ObjectAnimator scanY = ObjectAnimator.ofFloat(layoutScan, "translationY", layoutScan.getTranslationY(), height);
-        ObjectAnimator countY = ObjectAnimator.ofFloat(textCount, "translationY", textCount.getTranslationY(), height);
+        ObjectAnimator countY = ObjectAnimator.ofFloat(layoutCount, "translationY", layoutCount.getTranslationY(), height);
         ObjectAnimator innerY = ObjectAnimator.ofFloat(iconInner, "translationY", iconInner.getTranslationY(), height);
 
         ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(iconInner, "alpha", 0, 1);
@@ -368,7 +369,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             @Override
             public void onAnimationEnd(Animator animation) {
                 //第二阶段开始
-                secondLevel(iconInner, iconOuter, textCount, countEntity);
+                secondLevel(iconInner, iconOuter, countEntity);
             }
 
             @Override
@@ -389,19 +390,23 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     }
 
-    public void secondLevel(ImageView iconInner, ImageView iconOuter, TextView textCount, CountEntity countEntity) {
+    public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360);
+        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360,0);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
+        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
         rotation.setDuration(1300);
-        rotation2.setDuration(2000);
+        rotation2.setDuration(1100);
 
         rotation3.setDuration(300);
         rotation3.setRepeatCount(-1);
         rotation4.setRepeatCount(-1);
-        rotation4.setDuration(300);
+        rotation4.setDuration(200);
+        rotation4.setInterpolator(new LinearInterpolator());
+        AnimatorSet animatorStep2 = new AnimatorSet();
+        animatorStep2.playTogether(rotation3, rotation4);
+
 
         rotation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -411,13 +416,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(rotation3, rotation4);
-                animatorSet.start();
 
-                startClean(animatorSet, textCount, countEntity);
+                animatorStep2.start();
 
+                startClean(animatorStep2, countEntity);
                 mView.showLottieView();
+
             }
 
             @Override
@@ -436,6 +440,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(rotation, rotation2);
+        animatorSet.playSequentially();
         animatorSet.start();
 
     }
@@ -448,16 +453,22 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * 开始清理操作
      *
      * @param animatorSet
-     * @param textCount
      * @param countEntity
      */
-    public void startClean(AnimatorSet animatorSet, TextView textCount, CountEntity countEntity) {
+    public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
-            textCount.setText(String.format("%s%s", Math.round(animatedValue), unit));
+            TextView mTextCount = mView.getTextCountView();
+            TextView textUnit = mView.getTextUnitView();
+            if (mTextCount != null) {
+                mTextCount.setText(String.valueOf(Math.round(animatedValue)));
+            }
+            if (textUnit != null) {
+                textUnit.setText(unit);
+            }
         });
         valueAnimator.addListener(new Animator.AnimatorListener() {
             @Override

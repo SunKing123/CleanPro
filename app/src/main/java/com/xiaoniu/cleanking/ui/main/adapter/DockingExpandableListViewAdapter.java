@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 一键清理详情的列表Adapter
+ */
 public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private final ExpandableListView mListView;
@@ -106,6 +110,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mCheckButton = convertView.findViewById(R.id.icon_check);
             holder.mIconArrow = convertView.findViewById(R.id.icon_arrow);
             holder.mViewDivider = convertView.findViewById(R.id.view_divider);
+            holder.mLayoutCheck = convertView.findViewById(R.id.layout_check);
             convertView.setTag(holder);
         } else {
             holder = (GroupViewHolder) convertView.getTag();
@@ -125,9 +130,15 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         return convertView;
     }
 
-    public void resetSelectButton(JunkGroup group, boolean isChecked) {
+    /**
+     * 第一级选择框点击时， 设置所有子按钮为选中/未选中状态
+     *
+     * @param group
+     * @param isChecked
+     */
+    private void resetSelectButton(JunkGroup group, boolean isChecked) {
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-            if(!firstJunkInfo.isLock()) {
+            if (!firstJunkInfo.isLock()) {
                 //选中没有上锁的apk应用
                 firstJunkInfo.setAllchecked(isChecked);
             }
@@ -141,7 +152,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         FirstJunkInfo info = mJunkGroups.get(groupPosition).mChildren.get(childPosition);
-
         ChildViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext)
@@ -153,6 +163,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mCheckButton = convertView.findViewById(R.id.icon_check);
             holder.mTextVersion = convertView.findViewById(R.id.text_version);
             holder.mRootView = convertView.findViewById(R.id.layout_root);
+            holder.mLayoutCheck = convertView.findViewById(R.id.layout_check);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
@@ -174,13 +185,13 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
                 showApkWhiteDialog(info);
             });
             if (!TextUtils.isEmpty(info.getGarbageCatalog())) {
-                if(getWhiteList().contains(dealPath(info.getGarbageCatalog()))){
-                    //已在白名单
+                if (getWhiteList().contains(dealPath(info.getGarbageCatalog()))) {
+                    //已在白名单 加锁
                     holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.mipmap.icon_lock));
                     info.setAllchecked(false);
                     info.setLock(true);
                     resetItemSelectButton(mJunkGroups.get(groupPosition));
-                }else {
+                } else {
                     holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_choose_selector));
                     info.setLock(false);
                 }
@@ -192,8 +203,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         }
 
 
-
-        holder.mCheckButton.setOnClickListener(v -> {
+        holder.mLayoutCheck.setOnClickListener(v -> {
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
             resetItemSelectButton(mJunkGroups.get(groupPosition));
@@ -203,7 +213,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
     }
 
     /**
-     * 重置全选按钮状态
+     * 重置父类的全选按钮状态
      *
      * @param group
      */
@@ -254,7 +264,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             if (isChecked) {
                 mTextTips.setText(mContext.getResources().getString(R.string.text_apk_white_add));
                 savePath(dealPath(junkInfo.getGarbageCatalog()));
-            }else {
+            } else {
                 mTextTips.setText(mContext.getResources().getString(R.string.text_white_removed));
                 removePath(dealPath(junkInfo.getGarbageCatalog()));
             }
@@ -268,6 +278,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
 
     /**
      * 移除apk白名单缓存路径
+     *
      * @param garbageCatalog
      */
     private void removePath(String garbageCatalog) {
@@ -275,27 +286,28 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         Set<String> stringSet = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, caches);
-        if(stringSet != null) {
+        if (stringSet != null) {
             stringSet.remove(garbageCatalog);
         }
-        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY,stringSet);
+        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, stringSet);
         editor.commit();
         notifyDataSetChanged();
     }
 
     /**
      * 添加apk白名单缓存路径
+     *
      * @param path
      */
-    private void savePath(String path){
+    private void savePath(String path) {
         Set<String> caches = new HashSet<>();
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         Set<String> stringSet = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, caches);
-        if(stringSet != null) {
+        if (stringSet != null) {
             stringSet.add(path);
         }
-        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY,stringSet);
+        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_DIRECTORY, stringSet);
         editor.commit();
         notifyDataSetChanged();
     }
@@ -308,13 +320,14 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
 
     /**
      * 路径处理
+     *
      * @param path
      * @return
      */
     private String dealPath(String path) {
         if (!TextUtils.isEmpty(path)) {
-           return path.substring(0,path.lastIndexOf("/"));
-        }else {
+            return path.substring(0, path.lastIndexOf("/"));
+        } else {
             return "";
         }
     }
@@ -330,7 +343,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public ImageView mCheckButton;
         public ImageView mIconArrow;
         public View mViewDivider;
-
+        public FrameLayout mLayoutCheck;
     }
 
     public static class ChildViewHolder {
@@ -340,5 +353,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public ImageView mCheckButton;
         public TextView mTextVersion;
         public LinearLayout mRootView;
+        public FrameLayout mLayoutCheck;
     }
 }

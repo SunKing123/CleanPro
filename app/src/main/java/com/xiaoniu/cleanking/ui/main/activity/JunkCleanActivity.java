@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,12 +17,14 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -28,8 +32,11 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -102,13 +109,13 @@ public class JunkCleanActivity extends SimpleActivity {
             return false;
         });
 
-        mAdapter = new DockingExpandableListViewAdapter(this,listView);
+        mAdapter = new DockingExpandableListViewAdapter(this, listView);
         mAdapter.setOnItemSelectListener(() -> {
             long totalSize = getTotalSize();
             if (totalSize <= 0) {
                 mTextClean.setEnabled(false);
                 mTextClean.setText("清理");
-            }else {
+            } else {
                 mTextClean.setEnabled(true);
                 countEntity = CleanUtil.formatShortFileSize(totalSize);
                 mTextClean.setText("清理" + countEntity.getResultSize());
@@ -123,7 +130,7 @@ public class JunkCleanActivity extends SimpleActivity {
             listView.expandGroup(i);
         }
         countEntity = CleanUtil.formatShortFileSize(getTotalSize());
-        mTextClean.setText("清理"+ countEntity.getResultSize());
+        mTextClean.setText("清理" + countEntity.getResultSize());
 
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
     }
@@ -146,12 +153,12 @@ public class JunkCleanActivity extends SimpleActivity {
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();
                 if (value.mChildren != null && value.mChildren.size() > 0) {
-                    if("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())){
+                    if ("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())) {
 
                         for (FirstJunkInfo info : value.mChildren) {
                             if (info.isAllchecked()) {
                                 total += info.getTotalSize();
-                                CleanUtil.killAppProcesses(info.getAppPackageName(),info.getPid());
+                                CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
                             }
                         }
                     } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) {
@@ -235,6 +242,8 @@ public class JunkCleanActivity extends SimpleActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        getWhiteApp();
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
@@ -251,5 +260,31 @@ public class JunkCleanActivity extends SimpleActivity {
         } else {
             StatusBarCompat.setStatusBarColor(this, animatedValue, false);
         }
+    }
+
+    public void getWhiteApp() {
+        ArrayList<FirstJunkInfo> processList = new ArrayList<>();
+        for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
+            JunkGroup value = entry.getValue();
+            if ("进程清理".equals(value.mName)) {
+                for (FirstJunkInfo info : value.mChildren) {
+                    //进程
+                    if (!isCacheWhite(info.getAppPackageName())) {
+                        processList.add(info);
+                    }
+                }
+                value.mChildren = processList;
+            }
+        }
+    }
+
+
+    /**
+     * 获取缓存白名单
+     */
+    public boolean isCacheWhite(String packageName) {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets.contains(packageName);
     }
 }

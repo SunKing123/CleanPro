@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -33,6 +34,7 @@ import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -53,7 +55,11 @@ import butterknife.OnClick;
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @BindView(R.id.text_count)
-    TextView mTextCount;
+    AppCompatTextView mTextCount;
+    @BindView(R.id.text_unit)
+    TextView mTextUnit;
+    @BindView(R.id.layout_count)
+    RelativeLayout mLayoutCount;
     @BindView(R.id.layout_root)
     MyLinearLayout mLayoutRoot;
     @BindView(R.id.layout_clean_top)
@@ -204,7 +210,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (type == TYPE_SCAN_FINISH) {
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
-            mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mTextCount, mCountEntity);
+            mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
             mButtonCleanNow.setVisibility(View.GONE);
             mTextScanTrace.setText("垃圾清理中...");
             mArrowRight.setVisibility(View.GONE);
@@ -215,9 +221,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mButtonCleanNow.setText("再次清理");
             type = TYPE_NOT_SCAN;
             mLaoutContentFinish.setVisibility(View.GONE);
-            mTextCount.setVisibility(View.VISIBLE);
+            mLayoutCount.setVisibility(View.VISIBLE);
             mLayoutScan.setVisibility(View.VISIBLE);
-            mTextCount.setText("0.0MB");
+            mTextCount.setText("0.0");
+            mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(View.GONE);
         } else if (type == TYPE_NOT_SCAN) {
@@ -247,28 +254,39 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         type = TYPE_SCAN_FINISH;
+
+        if (mCountEntity != null) {
+            mTvSize.setText(mCountEntity.getTotalSize());
+            mTvGb.setText(mCountEntity.getUnit());
+
+            if (mCountEntity.getNumber() > 0) {
+                //扫描到垃圾
+
+                mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
+                //设置titlebar颜色
+                if(getViewShow()) {
+                    showBarColor(getResources().getColor(R.color.color_FD6F46));
+                }
+
+                mButtonCleanNow.setText("立即清理");
+
+                mJunkGroups = junkGroups;
+
+                mTextScanTrace.setText("查看垃圾详情");
+                mArrowRight.setVisibility(View.VISIBLE);
+            }else {
+                //没有扫描到垃圾
+                cleanFinishSign();
+            }
+        }
+
         //重置扫描状态
         mPresenter.setIsFinish(false);
         //重置颜色变化状态
         mChangeFinish = false;
 
-        mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
-        //设置titlebar颜色
-        showBarColor(getResources().getColor(R.color.color_FD6F46));
-
-        mButtonCleanNow.setText("立即清理");
-
-        mJunkGroups = junkGroups;
-
-        mTextScanTrace.setText("查看垃圾详情");
-        mArrowRight.setVisibility(View.VISIBLE);
-
         mPresenter.stopCleanScanAnimation();
 
-        if (mCountEntity != null) {
-            mTvSize.setText(mCountEntity.getTotalSize());
-            mTvGb.setText(mCountEntity.getUnit());
-        }
     }
 
     /**
@@ -281,7 +299,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             return;
         }
         mCountEntity = CleanUtil.formatShortFileSize(total);
-        getActivity().runOnUiThread(() -> mTextCount.setText(CleanUtil.formatShortFileSize(getActivity(), total)));
+        getActivity().runOnUiThread(() -> {
+            CountEntity countEntity = CleanUtil.formatShortFileSize(total);
+            mTextCount.setText(countEntity.getTotalSize());
+            mTextUnit.setText(countEntity.getUnit());
+        });
     }
 
 
@@ -290,6 +312,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if ("clean_finish".equals(string)) {
             //清理完成
             restoreLayout();
+            //清理完成后通知 文件数据库同步(陈浪)
+            EventBus.getDefault().post(new ScanFileEvent());
         }
     }
 
@@ -306,24 +330,32 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mIconInner.setVisibility(View.GONE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
-        layoutParams.height = DeviceUtils.dip2px(400);
+        layoutParams.height = DeviceUtils.dip2px(460);
         mLayoutCleanTop.setLayoutParams(layoutParams);
         //移动的页面view还原
         mIconOuter.setTranslationY(0);
         mIconInner.setTranslationY(0);
         mLayoutScan.setTranslationY(0);
-        mTextCount.setTranslationY(0);
+        mLayoutCount.setTranslationY(0);
 
-        mLaoutContentFinish.setVisibility(View.VISIBLE);
-        mTextCount.setVisibility(View.GONE);
-        mLayoutScan.setVisibility(View.GONE);
-        //按钮设置
-        mButtonCleanNow.setText("完成");
-        mButtonCleanNow.setVisibility(View.VISIBLE);
+        cleanFinishSign();
+
         //恢复背景
         mLayoutCleanTop.setBackgroundResource(R.drawable.bg_big_home);
         //设置titlebar颜色
         showBarColor(getResources().getColor(R.color.color_4690FD));
+    }
+
+    /**
+     * 清理很干净标识
+     */
+    public void cleanFinishSign() {
+        mLaoutContentFinish.setVisibility(View.VISIBLE);
+        mLayoutCount.setVisibility(View.GONE);
+        mLayoutScan.setVisibility(View.GONE);
+        //按钮设置
+        mButtonCleanNow.setText("完成");
+        mButtonCleanNow.setVisibility(View.VISIBLE);
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
     }
@@ -482,5 +514,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void setColorChange(boolean b) {
         mChangeFinish = b;
+    }
+
+    /**
+     * 获取总量显示的view
+     * @return
+     */
+    public AppCompatTextView getTextCountView() {
+        return mTextCount;
+    }
+
+    /**
+     * 获取总量显示的view
+     * @return
+     */
+    public TextView getTextUnitView() {
+        return mTextUnit;
     }
 }

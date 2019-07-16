@@ -64,7 +64,6 @@ public class FileQueryUtils {
      */
     private boolean isFinish = false;
 
-
     public FileQueryUtils() {
         this.mContext = AppApplication.getInstance();
         this.mActivityManager = (ActivityManager) AppApplication.getInstance().getSystemService("activity");
@@ -147,8 +146,9 @@ public class FileQueryUtils {
      * 获取Android/data中的垃圾信息
      *
      * @return
+     * @param isScanFile 是否扫描到文件
      */
-    public ArrayList<FirstJunkInfo> getAndroidDataInfo() {
+    public ArrayList<FirstJunkInfo> getAndroidDataInfo(boolean isScanFile) {
         if (isFinish) {
             return new ArrayList<>();
         }
@@ -165,9 +165,6 @@ public class FileQueryUtils {
                 return list;
             }
             index ++;
-            if (index > (float)total * 3 / 4) {
-                mScanFileListener.currentNumber();
-            }
             final File file = new File(rootPath + applicationInfo.packageName + "/cache");
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
@@ -220,6 +217,10 @@ public class FileQueryUtils {
                 continue;
             }
             list.add(firstJunkInfo);
+
+            if (index > (float)total * 3 / 4 && !isScanFile && list.size() > 0) {
+                mScanFileListener.currentNumber();
+            }
         }
 
         ArrayList<FirstJunkInfo> appCacheAndAdGarbage = getAppCacheAndAdGarbage(list);
@@ -750,6 +751,10 @@ public class FileQueryUtils {
                     }
                     if (onelevelGarbageInfo.getSubGarbages() != null && onelevelGarbageInfo.getSubGarbages().size() > 0) {
                         arrayList2.add(onelevelGarbageInfo);
+                    }
+
+                    if (arrayList2.size() > 0) {
+                        mScanFileListener.currentNumber();
                     }
                 } catch (Exception e2) {
 

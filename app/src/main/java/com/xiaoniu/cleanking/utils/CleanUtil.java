@@ -98,6 +98,7 @@ public class CleanUtil {
         countEntity.setTotalSize(value);
         countEntity.setUnit(AppApplication.getInstance().getString(suffix));
         countEntity.setResultSize(value + AppApplication.getInstance().getString(suffix));
+        countEntity.setNumber(number);
         return countEntity;
     }
 

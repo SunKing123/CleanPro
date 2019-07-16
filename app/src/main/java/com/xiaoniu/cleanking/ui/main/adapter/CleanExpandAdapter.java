@@ -68,12 +68,14 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         expand(pos);
                     }
                 });
+                helper.setImageResource(R.id.image_arrow, entity.isExpanded() ? R.mipmap.arrow_up : R.mipmap.arrow_down);
                 break;
             case TYPE_LEVEL_2:
                 //第二级目录
                 final SecondLevelEntity entity2 = (SecondLevelEntity) item;
                 helper.setText(R.id.text_app_name, entity2.getName())
                         .setText(R.id.junk_size, CleanUtil.formatShortFileSize(AppApplication.getInstance(), entity2.getTotalSize()));
+                //设置二级目录图标
                 switch (entity2.getType()) {
                     case SecondLevelEntity.TYPE_IMAGE:
                         helper.setImageResource(R.id.app_logo, R.mipmap.icon_clean_image);

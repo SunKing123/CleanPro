@@ -44,13 +44,13 @@
 
         <ImageView
             android:id="@+id/icon_outer"
-            android:layout_width="@dimen/dimen_200dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/dimen_230dp"
+            android:layout_height="@dimen/dimen_230dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             android:scaleType="fitXY"
             android:src="@mipmap/icon_circle"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <ImageView
             android:id="@+id/icon_inner"
@@ -58,25 +58,52 @@
             android:layout_height="164dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="80dp"
             android:src="@mipmap/icon_inner"
             android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/text_count"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/icon_inner_lottie"
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:visibility="gone"/>
+
+
+        <RelativeLayout
+            android:id="@+id/layout_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="82dp"
-            android:text="11.5M"
-            android:textColor="@color/white"
-            android:textSize="50sp"/>
+            android:layout_marginTop="110dp"
+            >
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:maxWidth="@dimen/dimen_170dp"
+                android:text="0.0"
+                android:textColor="@color/white"
+                android:textSize="50sp"/>
+
+            <TextView
+                android:id="@+id/text_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_toRightOf="@id/text_count"
+                android:text="MB"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/layout_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_count"
+            android:layout_below="@id/layout_count"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_4dp"
             android:gravity="center"
@@ -95,11 +122,11 @@
     <android.support.constraint.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/layout_clean_finish"
-        android:layout_below="@id/line_title"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
-        android:background="#F7F8FA">
+        android:layout_below="@id/line_title"
+        android:background="#F7F8FA"
+        android:visibility="gone">
 
         <View
             android:id="@+id/viewt_finish"

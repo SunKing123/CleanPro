@@ -7,8 +7,6 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.concurrent.TimeUnit;
@@ -43,9 +41,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
 
     @Override
     public void initView() {
-        if (DeviceUtils.getScreenHeight() > 1920) {
-            this.ivSplash.setImageResource(R.mipmap.splash);
-        }
         skip();
     }
 

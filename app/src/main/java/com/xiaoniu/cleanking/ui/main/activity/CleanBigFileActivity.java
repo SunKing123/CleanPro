@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,9 +22,13 @@ import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
+import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +102,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         initAdapter();
         //大文件扫描
         mPresenter.scanBigFile();
+
+        mCleanAnimView.setOnColorChangeListener(this::showBarColor);
     }
 
     private void initAdapter() {
@@ -132,15 +139,13 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         }
         if (total > 0) {
             CountEntity countEntity = CleanUtil.formatShortFileSize(total);
-            mDoJunkClean.setEnabled(true);
             mDoJunkClean.setText("清理 " + countEntity.getTotalSize() + countEntity.getUnit());
             mTvSize.setText(countEntity.getTotalSize());
             mTvGb.setText(countEntity.getUnit());
             mLayoutWaitSelect.setVisibility(View.GONE);
             mLayoutCurrentSelect.setVisibility(View.VISIBLE);
         } else {
-            mDoJunkClean.setEnabled(true);
-            mDoJunkClean.setText("清理");
+            mDoJunkClean.setText("完成");
             mLayoutWaitSelect.setVisibility(View.VISIBLE);
             mLayoutCurrentSelect.setVisibility(View.GONE);
         }
@@ -154,7 +159,11 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
                 break;
             case R.id.do_junk_clean:
                 //垃圾清理
-                mPresenter.showDeleteDialog(mAllData);
+                if("完成".equals(mDoJunkClean.getText().toString())){
+                    finish();
+                }else {
+                    mPresenter.showDeleteDialog(mAllData);
+                }
                 break;
             default:
         }
@@ -178,8 +187,9 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param total
      */
     public void showTotal(long total) {
-        if (mTextTotal != null)
+        if (mTextTotal != null) {
             mTextTotal.setText("共发现" + CleanUtil.formatShortFileSize(AppApplication.getInstance(), total));
+        }
     }
 
     /**
@@ -188,11 +198,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param total
      */
     public void cleanFinish(long total) {
-//        finish();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_BIG_FILE);
-//        bundle.putLong("clean_count", total);
-//        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
+        //清理完成后通知 文件数据库同步(陈浪)
+        EventBus.getDefault().post(new ScanFileEvent());
     }
 
     /**
@@ -204,6 +211,19 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setData(countEntity);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);
+    }
+
+    /**
+     * 状态栏颜色变化
+     *
+     * @param animatedValue
+     */
+    public void showBarColor(int animatedValue) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, false);
+        }
     }
 
 }
