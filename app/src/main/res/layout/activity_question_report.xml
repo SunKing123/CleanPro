@@ -64,6 +64,7 @@
                 android:background="@color/white"
                 android:gravity="top"
                 android:hint="请输入您的问题和建议"
+                android:lineSpacingExtra="1.2dp"
                 android:textColor="@color/color_333333"
                 android:textColorHint="@color/color_999999"
                 android:textSize="@dimen/dimen_15sp" />
