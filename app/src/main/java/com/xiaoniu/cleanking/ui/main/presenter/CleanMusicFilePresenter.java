@@ -94,14 +94,14 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
         if (files.size() > 0) {
             files.clear();
         }
-        long duration=System.currentTimeMillis();
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_MUSCI, new HashSet<String>());
+//        long duration=System.currentTimeMillis();
+//        SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+//        Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_MUSCI, new HashSet<String>());
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                //先获取缓存文件
+/*                //先获取缓存文件
                 if (strings.size() > 0) {
                     for (String path : strings) {
                         File file = new File(path);
@@ -121,8 +121,9 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                     //musciInfoBean.time = MusicFileUtils.getPlayDuration(file.getPath());
                     musciInfoBean.time=MusicFileUtils.timeParse(queryDuartion(musciInfoBean.name));
                     musciInfoBeans.add(musciInfoBean);
-                }
+                }*/
 
+                queryAllMusic();
 
                 //按升序排列
                 Collections.sort(musciInfoBeans, ((o1, o2) -> o2.time.compareTo(o1.time)));
@@ -174,10 +175,16 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
                 MediaStore.Audio.Media.DISPLAY_NAME+"=?",new String[]{title},null);
 
         if (cursor.moveToFirst()){
-        //if (cursor.moveToFirst()) {
             int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
-//            String tilte = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
-//            Log.i("test","title="+tilte+",time="+MusicFileUtils.timeParse(duration));
+            String tilte = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
+            String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+
+            File file = new File(url);
+            if(file.length()>0){
+                files.add(file);
+            }
+        //if (cursor.moveToFirst()) {
+            Log.i("test","url="+url+",time="+MusicFileUtils.timeParse(duration));
 
             return duration;
         }
@@ -189,6 +196,51 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
         return 0;
 
     }
+
+
+
+    private  void queryAllMusic(){
+        Cursor cursor = activity.getContentResolver().query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Audio.Media._ID,
+                        MediaStore.Audio.Media.DISPLAY_NAME,
+                        MediaStore.Audio.Media.TITLE,
+                        MediaStore.Audio.Media.DURATION,
+                        MediaStore.Audio.Media.ARTIST,
+                        MediaStore.Audio.Media.ALBUM,
+                        MediaStore.Audio.Media.YEAR,
+                        MediaStore.Audio.Media.MIME_TYPE,
+                        MediaStore.Audio.Media.SIZE,
+                        MediaStore.Audio.Media.DATA },null
+                ,null,null);
+
+        while (cursor.moveToNext()){
+            //if (cursor.moveToFirst()) {
+            int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+//            String tilte = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
+            String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            Log.i("test","url="+url+",time="+MusicFileUtils.timeParse(duration));
+
+            File file=new File(url);
+
+            if(null!=file){
+                files.add(file);
+            MusciInfoBean musciInfoBean = new MusciInfoBean();
+            musciInfoBean.name = file.getName();
+            musciInfoBean.packageSize = file.length();
+            musciInfoBean.path = file.getPath();
+            //musciInfoBean.time = MusicFileUtils.getPlayDuration(file.getPath());
+            musciInfoBean.time=MusicFileUtils.timeParse(duration);
+            musciInfoBeans.add(musciInfoBean);
+            }
+        }
+        try {
+            cursor.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public void delFile(List<MusciInfoBean> list) {
         List<MusciInfoBean> files = list;

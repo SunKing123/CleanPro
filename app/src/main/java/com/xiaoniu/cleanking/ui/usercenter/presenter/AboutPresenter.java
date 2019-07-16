@@ -177,7 +177,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
         });
         switch (type) {
             case -1:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
                 shareAction.open();
                 break;
             case 0:

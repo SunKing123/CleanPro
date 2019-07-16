@@ -119,11 +119,11 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         if (arguments != null) {
             url = arguments.getString(Constant.URL, ApiModule.SHOPPING_MALL);
         }
-        if (url.contains("?")) {
-            url = url + "&xn_data=" + AndroidUtil.getXnData();
-        } else {
-            url = url + "?xn_data=" + AndroidUtil.getXnData();
-        }
+//        if (url.contains("?")) {
+//            url = url + "&xn_data=" + AndroidUtil.getXnData();
+//        } else {
+//            url = url + "?xn_data=" + AndroidUtil.getXnData();
+//        }
         initWebView();
     }
 

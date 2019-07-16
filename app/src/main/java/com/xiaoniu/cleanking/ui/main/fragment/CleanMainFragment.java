@@ -265,7 +265,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         type = TYPE_SCAN_FINISH;
 
-        if (mCountEntity != null) {
+        if (mCountEntity != null && mTvSize != null) {
             mTvSize.setText(mCountEntity.getTotalSize());
             mTvGb.setText(mCountEntity.getUnit());
 
