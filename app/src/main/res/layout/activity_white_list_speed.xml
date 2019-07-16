@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -29,8 +30,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加速保护名单"
                 android:layout_marginLeft="@dimen/dimen_12dp"
+                android:text="加速保护名单"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_18sp" />
 
@@ -54,26 +55,63 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_44dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dimen_16dp"
-        android:text="@string/txt_white_list_speed_title"
-        android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_14sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="@dimen/dimen_16dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:background="@color/color_EDEDED" />
+    <LinearLayout
+        android:id="@+id/ll_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_view"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dimen_16dp"
+            android:text="@string/txt_white_list_speed_title"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@color/color_EDEDED" />
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/dimen_12dp"/>
+        android:layout_height="match_parent">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/dimen_12dp" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="173dp"
+                android:layout_height="149dp"
+                android:layout_marginTop="100dp"
+                android:src="@mipmap/img_holder_empty_install" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="加速白名单为空～" />
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

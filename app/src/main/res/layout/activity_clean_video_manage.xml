@@ -60,6 +60,7 @@
                 <ImageView
                     android:layout_width="173dp"
                     android:layout_height="149dp"
+                    android:src="@mipmap/img_holder_empty_video"
                     android:layout_marginTop="100dp" />
 
                 <TextView
