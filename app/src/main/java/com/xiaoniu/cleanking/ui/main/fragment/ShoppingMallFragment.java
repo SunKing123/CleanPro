@@ -240,9 +240,9 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     @Override
     public void onResume() {
         super.onResume();
-        if (!isHidden()) {
-            mWebView.reload();
-        }
+//        if (!isHidden()) {
+//            mWebView.reload();
+//        }
         NiuDataAPI.onPageStart("information_iew_page", "信息页面");
     }
 
@@ -267,7 +267,6 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     }
 
     public class Javascript {
-
 
         @JavascriptInterface
         public void toOtherPage(String url) {

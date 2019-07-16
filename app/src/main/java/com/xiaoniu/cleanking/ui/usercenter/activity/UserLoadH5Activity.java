@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -50,15 +49,12 @@ import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
-import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.xiaoniu.cleanking.app.Constant.TAG_TURN_MAIN;
 
 /**
  * 通用加载h5页面类
@@ -133,6 +129,8 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
     private String isRefresh;
     private String appId;
     private Map<String, Map<String, Object>> productRegisterMonitorMap;
+
+    private boolean isError = false;
     /**
      * 版本更新信息
      */
@@ -294,13 +292,19 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                 if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(UserLoadH5Activity.this.title) && tvTitle != null) {
                     tvTitle.setText(title);
                 }
-
+                if (!isError) {
+                    mLayoutNetError.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                isError = false;
             }
 
             @Override
             public void onReceivedError(WebView view, int errorCode,
                                         String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
+
+                isError = true;
                 if (mLayoutNetError != null) {
                     mLayoutNetError.setVisibility(View.VISIBLE);
                 }
@@ -370,11 +374,9 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         startActivity(UserLoadH5Activity.class, bundle);
     }
 
-    @OnClick(R.id.tv_refresh)
+    @OnClick(R.id.layout_net_error)
     public void onTvRefreshClicked() {
         mWebView.loadUrl(url);
-        mLayoutNetError.setVisibility(View.GONE);
-        mWebView.setVisibility(View.VISIBLE);
     }
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;

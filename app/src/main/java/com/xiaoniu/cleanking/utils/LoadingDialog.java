@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 
 /**
@@ -32,12 +33,16 @@ public class LoadingDialog {
             View v = inflater.inflate(R.layout.loading_dialog, null);// 得到加载view
             LinearLayout layout = v.findViewById(R.id.dialog_view);// 加载布局
             // main.xml中的ImageView
-            ImageView spaceshipImage = v.findViewById(R.id.img);
+            LottieAnimationView spaceshipImage = v.findViewById(R.id.img);
+
+            spaceshipImage.setImageAssetsFolder("images");
+            spaceshipImage.setAnimation("data_loading.json");
             // 提示文字
             mContentText = v.findViewById(R.id.tipTextView);
+            spaceshipImage.useHardwareAcceleration();
+            spaceshipImage.setRepeatCount(-1);
             // 加载动画
-            AnimationDrawable drawable = (AnimationDrawable) spaceshipImage.getDrawable();
-            drawable.start();
+            spaceshipImage.playAnimation();
 //        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
 //                context, R.anim.loading_animation);
 //        // 使用ImageView显示动画
