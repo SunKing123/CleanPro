@@ -10,6 +10,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -53,6 +55,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
@@ -110,6 +115,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ImageView mImageSecondAd;
     @BindView(R.id.text_bottom_title)
     TextView mTextBottomTitle;
+    @BindView(R.id.layout_not_net)
+    LinearLayout mLayoutNotNet;
 
 
     /**
@@ -221,22 +228,22 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
             mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
-            mButtonCleanNow.setVisibility(View.GONE);
+            mButtonCleanNow.setVisibility(GONE);
             mTextScanTrace.setText("垃圾清理中...");
-            mArrowRight.setVisibility(View.GONE);
+            mArrowRight.setVisibility(GONE);
             mLayoutRoot.setIntercept(true);
             initWebView();
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
             mButtonCleanNow.setText("再次清理");
             type = TYPE_NOT_SCAN;
-            mLaoutContentFinish.setVisibility(View.GONE);
-            mLayoutCount.setVisibility(View.VISIBLE);
-            mLayoutScan.setVisibility(View.VISIBLE);
+            mLaoutContentFinish.setVisibility(GONE);
+            mLayoutCount.setVisibility(VISIBLE);
+            mLayoutScan.setVisibility(VISIBLE);
             mTextCount.setText("0.0");
             mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
-            mArrowRight.setVisibility(View.GONE);
+            mArrowRight.setVisibility(GONE);
         } else if (type == TYPE_NOT_SCAN) {
             //未扫描， 去扫描
             mPresenter.startScan();
@@ -283,7 +290,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 mJunkGroups = junkGroups;
 
                 mTextScanTrace.setText("查看垃圾详情");
-                mArrowRight.setVisibility(View.VISIBLE);
+                mArrowRight.setVisibility(VISIBLE);
             } else {
                 //没有扫描到垃圾
                 cleanFinishSign();
@@ -337,7 +344,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     private void restoreLayout() {
         //设置可以点击
         mLayoutRoot.setIntercept(false);
-        mIconInner.setVisibility(View.GONE);
+        mIconInner.setVisibility(GONE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DeviceUtils.dip2px(460);
@@ -360,12 +367,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 清理很干净标识
      */
     public void cleanFinishSign() {
-        mLaoutContentFinish.setVisibility(View.VISIBLE);
-        mLayoutCount.setVisibility(View.GONE);
-        mLayoutScan.setVisibility(View.GONE);
+        mLaoutContentFinish.setVisibility(VISIBLE);
+        mLayoutCount.setVisibility(GONE);
+        mLayoutScan.setVisibility(GONE);
         //按钮设置
         mButtonCleanNow.setText("完成");
-        mButtonCleanNow.setVisibility(View.VISIBLE);
+        mButtonCleanNow.setVisibility(VISIBLE);
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
     }
@@ -376,8 +383,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
             marginParams.bottomMargin = DeviceUtils.dip2px(53);
             frameLayout.setLayoutParams(marginParams);
-            getActivity().findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
-            getActivity().findViewById(R.id.bottom_shadow).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.bottomBar).setVisibility(VISIBLE);
+            getActivity().findViewById(R.id.bottom_shadow).setVisibility(VISIBLE);
         }
     }
 
@@ -400,8 +407,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
 
     public void endScanAnimation() {
-        mCircleOuter2.setVisibility(View.GONE);
-        mCircleOuter.setVisibility(View.GONE);
+        mCircleOuter2.setVisibility(GONE);
+        mCircleOuter.setVisibility(GONE);
     }
 
     /**
@@ -425,14 +432,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.iv_back)
     public void onViewClicked() {
         showBottomTab();
-        mLayoutCleanFinish.setVisibility(View.GONE);
+        mLayoutCleanFinish.setVisibility(GONE);
     }
 
     private long firstTime;
 
     public void onKeyBack() {
-        if (mLayoutCleanFinish.getVisibility() == View.VISIBLE) {
-            mLayoutCleanFinish.setVisibility(View.GONE);
+        if (mLayoutCleanFinish.getVisibility() == VISIBLE) {
+            mLayoutCleanFinish.setVisibility(GONE);
             showBottomTab();
         } else {
             long currentTimeMillis = System.currentTimeMillis();
@@ -460,6 +467,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }
     }
 
+    boolean isError = false;
+
     public void initWebView() {
         String url = ApiModule.Base_H5_Host;
         WebSettings settings = mWebView.getSettings();
@@ -477,8 +486,24 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 //                cancelLoadingDialog();
+                if (!isError) {
+                    mLayoutNotNet.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                isError = false;
             }
 
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                isError = true;
+                if (mLayoutNotNet != null) {
+                    mLayoutNotNet.setVisibility(VISIBLE);
+                }
+                if (mWebView != null) {
+                    mWebView.setVisibility(GONE);
+                }
+            }
         });
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -487,6 +512,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             }
         });
+    }
+
+    @OnClick(R.id.layout_not_net)
+    public void onTvRefreshClicked() {
+
+        mWebView.loadUrl(ApiModule.Base_H5_Host);
     }
 
     @Override
@@ -551,7 +582,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param dataBean
      */
     public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
-        mTextBottomTitle.setVisibility(View.VISIBLE);
+        mTextBottomTitle.setVisibility(VISIBLE);
         if (position == 0) {
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
             clickDownload(mImageFirstAd,dataBean.getDownloadUrl());
