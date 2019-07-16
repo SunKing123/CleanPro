@@ -151,9 +151,9 @@
     <View
         android:id="@+id/view_image_bottom"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#EEEEEE"
+        android:background="#EDEDED"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         app:layout_constraintTop_toBottomOf="@id/view_image_icon" />
 
@@ -206,9 +206,9 @@
     <View
         android:id="@+id/view_video_bottom"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#EEEEEE"
+        android:background="#EDEDED"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         app:layout_constraintTop_toBottomOf="@id/view_video_icon" />
 
@@ -261,9 +261,9 @@
     <View
         android:id="@+id/view_music_bottom"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#EEEEEE"
+        android:background="#EDEDED"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         app:layout_constraintTop_toBottomOf="@id/view_music_icon" />
 
@@ -316,9 +316,9 @@
     <View
         android:id="@+id/view_apk_bottom"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/dimen_13dp"
-        android:background="#EEEEEE"
+        android:background="#EDEDED"
         app:layout_constraintLeft_toLeftOf="@id/tv_pic_text"
         app:layout_constraintTop_toBottomOf="@id/view_apk_icon" />
 

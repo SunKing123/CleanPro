@@ -100,6 +100,13 @@
         <item name="colorButtonNormal">@color/white</item>
     </style>
 
+    <style name="transparent_activity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+
     <style name="my_check_box_white" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorControlActivated">#06C581</item>
         <item name="colorControlNormal">@color/color_white</item>
