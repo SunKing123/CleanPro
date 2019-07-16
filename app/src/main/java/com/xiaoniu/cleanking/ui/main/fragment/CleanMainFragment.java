@@ -415,9 +415,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 显示lottie动画
      */
     public void showLottieView() {
+        mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data.json");
         mAnimationView.playAnimation();
+
     }
 
     /**
