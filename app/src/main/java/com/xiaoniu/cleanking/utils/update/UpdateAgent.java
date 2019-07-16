@@ -101,7 +101,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         mOnFailureListener = new DefaultFailureListener(activity);
         mOnDownloadListener = new DefaultDialogDownloadListener(activity);
         //是否强更
-        mForce = "1".equals(updateInfo.getData().forcedUpdate);
+        mForce = "1".equals(updateInfo.getData().changeProperties);
 
         mOnNotificationDownloadListener = new DefaultNotificationDownloadListener(mContext, 1);
 

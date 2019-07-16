@@ -243,21 +243,21 @@ public class AccessAnimView extends RelativeLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int currentValue = (int) animation.getAnimatedValue();
-                if (currentValue < 66) {
+                if (currentValue < 66 && currentValue >= 0) {
                     if (listener != null && isFirstChangeColor1) {
                         listener.onStatusBarColorChanged(R.color.color_FD6F46);
                         isFirstChangeColor1 = false;
                     }
                     viewt.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
                     line_title.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
-                } else if (currentValue < 77) {
+                } else if (currentValue < 77 && currentValue >= 66) {
                     if (listener != null && isFirstChangeColor2) {
                         listener.onStatusBarColorChanged(R.color.color_06C581);
                         isFirstChangeColor2 = false;
                     }
                     viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                     line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                } else {
+                } else if (currentValue >= 77) {
                     if (listener != null && isFirstChangeColor3) {
                         listener.onStatusBarColorChanged(R.color.color_06C581);
                         isFirstChangeColor3 = false;
