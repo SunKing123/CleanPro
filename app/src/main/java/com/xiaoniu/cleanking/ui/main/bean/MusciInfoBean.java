@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class MusciInfoBean implements Serializable {
 
+    public int id;
     //文件名
     public String name;
     //播放时长
