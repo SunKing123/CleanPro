@@ -196,6 +196,8 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
     implementation 'com.airbnb.android:lottie:2.7.0'
     implementation project(path: ':takephoto_library')
+    //AgentWeb
+    implementation 'com.just.agentweb:agentweb:4.0.3-beta' // (必选)
 }
 
 
