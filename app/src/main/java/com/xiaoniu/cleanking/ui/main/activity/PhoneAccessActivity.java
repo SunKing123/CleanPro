@@ -131,6 +131,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 super.onPageStarted(view, url, favicon);
 //                showLoadingDialog();
             }
+
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
@@ -143,6 +144,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     mWebView.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -341,12 +343,19 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 aboveListInfo.add(mInfo);
             }
             List<PackageInfo> listP = FileQueryUtils.getInstalledList();
+            long oneG = (1024 * 1024 * 1024) / aboveListInfo.size();
+            long un = 80886656;
+            if (aboveListInfo.size() < 10) {
+                un = 80886656;
+            }else{
+                un = oneG;
+            }
             for (FirstJunkInfo firstJunkInfo : aboveListInfo) {
                 for (int j = 0; j < listP.size(); j++) {
                     if (TextUtils.equals(listP.get(j).packageName.trim(), firstJunkInfo.getAppPackageName())) {
                         firstJunkInfo.setAppName(listP.get(j).applicationInfo.loadLabel(packageManager).toString().trim());
                         firstJunkInfo.setGarbageIcon(listP.get(j).applicationInfo.loadIcon(packageManager));
-                        firstJunkInfo.setTotalSize((int) (Math.random() * 80886656) + 80886656);
+                        firstJunkInfo.setTotalSize((int) (Math.random() * un) + un);
                     }
                 }
             }
@@ -430,10 +439,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), false);
         }
     }
+
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
         mWebView.loadUrl(ApiModule.Base_H5_Host);
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
