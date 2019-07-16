@@ -79,31 +79,31 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                                 if (!TextUtils.isEmpty(mimeType)){
                                     if (mimeType.contains("video")) {
                                         //视频
-                                        cleanFileManagerInfo.setContent("[视频]");
+                                        cleanFileManagerInfo.setContent("视频");
                                         mSecondLevelEntity.addSubItem(cleanFileManagerInfo);
                                         mSecondLevelEntity.addSize(length);
                                         total += length;
                                     } else if (mimeType.contains("audio")) {
                                         //音乐
-                                        cleanFileManagerInfo.setContent("[音乐]");
+                                        cleanFileManagerInfo.setContent("音乐");
                                         mMusicList.addSubItem(cleanFileManagerInfo);
                                         mMusicList.addSize(length);
                                         total += length;
                                     } else if (mimeType.contains("application/rar") || mimeType.contains("application/zip") || mimeType.contains("application/x-tar")) {
                                         //压缩包
-                                        cleanFileManagerInfo.setContent("[压缩包]");
+                                        cleanFileManagerInfo.setContent("压缩包");
                                         mZipList.addSubItem(cleanFileManagerInfo);
                                         mZipList.addSize(length);
                                         total += length;
                                     } else if (mimeType.contains("image")) {
                                         //图片
-                                        cleanFileManagerInfo.setContent("[图片]");
+                                        cleanFileManagerInfo.setContent("图片");
                                         mImageList.addSubItem(cleanFileManagerInfo);
                                         mImageList.addSize(length);
                                         total += length;
                                     } else if (mimeType.contains("text") || mimeType.contains("application/msword") || mimeType.contains("application/vnd.ms-powerpoint") || mimeType.contains("application/pdf")) {
                                         //文档
-                                        cleanFileManagerInfo.setContent("[文档]");
+                                        cleanFileManagerInfo.setContent("文档");
                                         mTextList.addSubItem(cleanFileManagerInfo);
                                         mTextList.addSize(length);
                                         total += length;

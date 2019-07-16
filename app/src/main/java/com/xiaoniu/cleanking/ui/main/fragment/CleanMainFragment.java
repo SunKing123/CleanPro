@@ -375,6 +375,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mButtonCleanNow.setVisibility(VISIBLE);
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
+
+        setColorChange(false);
     }
 
     public void showBottomTab() {
@@ -530,6 +532,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //扫描完成
             color = R.color.color_FD6F46;
         }
+
         if (!hidden) {
             isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

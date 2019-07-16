@@ -107,7 +107,7 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 final ThirdLevelEntity entity3 = (ThirdLevelEntity) item;
                 helper.setText(R.id.text_app_name, entity3.getFile().getName())
                         .setText(R.id.junk_size, CleanUtil.formatShortFileSize(AppApplication.getInstance(), entity3.getFile().length()))
-                        .setText(R.id.text_version, entity3.getContent());
+                        .setText(R.id.text_version, "["+entity3.getContent() + "]");
                 helper.getView(R.id.icon_check).setSelected(entity3.isChecked());
                 FileUtils.showIconByFile(helper.getView(R.id.app_logo),entity3.getFile());
                 helper.setOnClickListener(R.id.icon_check, v -> {
@@ -140,11 +140,14 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
         TextView mTextTrace = view.findViewById(R.id.text_trace);
         TextView mTextConfirm = view.findViewById(R.id.text_confirm);
         TextView mTextCancel = view.findViewById(R.id.text_cancel);
+        TextView mTextContent = view.findViewById(R.id.text_select_content);
 
         //大小
         mTextSize.setText("大小：" + CleanUtil.formatShortFileSize(mContext, entity.getFile().length()));
         //路径
         mTextTrace.setText("来自：" + entity.getContent());
+        //选择内容
+        mTextContent.setText("您勾选了一个"+ entity.getContent() +"，清理后将无法恢复，请确认是否勾选？");
 
         mTextCancel.setOnClickListener(v -> dialog.dismiss());
         mTextConfirm.setOnClickListener(v -> {
