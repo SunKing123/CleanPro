@@ -134,10 +134,9 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        mWebView.addJavascriptInterface(new Javascript(), "HhhWebPage");
+        mWebView.addJavascriptInterface(new Javascript(), "cleanPage");
         //分享
         mWebView.addJavascriptInterface(new Javascript(), "sharePage");
-        mWebView.addJavascriptInterface(new Javascript(), "guanJiaPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

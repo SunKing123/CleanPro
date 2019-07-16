@@ -70,5 +70,11 @@
                 android:button="@null"/>
         </LinearLayout>
 
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_1dp"
+            android:background="@color/color_EDEDED"/>
+
     </LinearLayout>
 </LinearLayout>

@@ -39,7 +39,7 @@ import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
-import com.xiaoniu.cleanking.ui.main.widget.MyLinearLayout;
+import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -68,7 +68,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @BindView(R.id.layout_count)
     RelativeLayout mLayoutCount;
     @BindView(R.id.layout_root)
-    MyLinearLayout mLayoutRoot;
+    MyRelativeLayout mLayoutRoot;
     @BindView(R.id.layout_clean_top)
     FrameLayout mLayoutCleanTop;
     @BindView(R.id.btn_ljql)
@@ -401,7 +401,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }
         getActivity().runOnUiThread(() -> {
             if (mTextScanTrace != null) {
-                mTextScanTrace.setText(p0);
+                mTextScanTrace.setText("扫描:" + p0);
             }
         });
 

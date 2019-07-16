@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -568,7 +567,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
         anim.setDuration(500);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.setInterpolator(new LinearInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) cleanFinish.getLayoutParams();
         anim.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
@@ -619,10 +618,10 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             public void getData(ImageAdEntity imageAdEntity) {
                 List<ImageAdEntity.DataBean> dataList = imageAdEntity.getData();
                 if (dataList != null) {
-                    if (dataList.get(0) != null) {
+                    if (dataList.size() > 0) {
                         mView.showFirstAd(dataList.get(0), 0);
                     }
-                    if (dataList.get(1) != null) {
+                    if (dataList.size() > 1) {
                         mView.showFirstAd(dataList.get(1), 1);
                     }
                 }
