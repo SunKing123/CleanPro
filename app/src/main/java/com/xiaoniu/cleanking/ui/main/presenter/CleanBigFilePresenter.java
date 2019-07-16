@@ -266,7 +266,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
             mView.startCleanAnim(countEntity);
             //设置titlebar颜色
             mView.showBarColor(mView.getResources().getColor(R.color.color_FD6F46));
-//            deleteFiles(data, finalTotal);
+            deleteFiles(data, finalTotal);
         });
         dialog.setContentView(view);
         if (dialog.isShowing()) {

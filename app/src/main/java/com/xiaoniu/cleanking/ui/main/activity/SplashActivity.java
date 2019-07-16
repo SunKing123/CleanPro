@@ -1,12 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Intent;
 import android.widget.ImageView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.concurrent.TimeUnit;
@@ -57,7 +58,15 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
 //        if (TextUtils.isEmpty(AndroidUtil.getToken())) {
 //            startActivity(RouteConstants.CHECK_LOGIN_ACTIVITY, true);
 //        } else {
-            startActivity(RouteConstants.MAIN_ACTIVITY, true);
+
+        final boolean isfirst = SPUtil.getFirstIn(SplashActivity.this, "isfirst", true);
+        if (isfirst) {
+            startActivity(new Intent(SplashActivity.this, NavigationActivity.class));
+            finish();
+        } else {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+        }
 //        }
     }
 

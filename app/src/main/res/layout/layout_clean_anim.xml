@@ -193,7 +193,31 @@
             android:id="@+id/web_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewt_finish"/>
+
+        <LinearLayout
+            android:id="@+id/layout_not_net"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewt_finish"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+            <ImageView
+                android:src="@mipmap/icon_no_net"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:textColor="@color/color_999999"
+                android:text="资讯列表获取失败～"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </RelativeLayout>

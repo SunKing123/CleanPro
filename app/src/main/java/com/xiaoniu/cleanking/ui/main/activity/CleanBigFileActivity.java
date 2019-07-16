@@ -73,6 +73,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     CleanAnimView mCleanAnimView;
     @BindView(R.id.web_view)
     WebView mWebView;
+    @BindView(R.id.layout_no_file)
+    LinearLayout mLayoutNoFile;
     private CleanExpandAdapter mCleanBigFileAdapter;
 
     private List<MultiItemEntity> mData;
@@ -175,7 +177,6 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param list
      */
     public void showList(FirstLevelEntity list) {
-//        mData.addAll()
         mData.add(list);
         mCleanBigFileAdapter.notifyDataSetChanged();
         mCleanBigFileAdapter.expandAll();
@@ -189,6 +190,10 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     public void showTotal(long total) {
         if (mTextTotal != null) {
             mTextTotal.setText("共发现" + CleanUtil.formatShortFileSize(AppApplication.getInstance(), total));
+        }
+        if (total <= 0) {
+            mLayoutNoFile.setVisibility(View.VISIBLE);
+            mJunkList.setVisibility(View.GONE);
         }
     }
 

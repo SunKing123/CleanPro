@@ -22,8 +22,10 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
@@ -31,6 +33,8 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
+import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -191,7 +195,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         mScanTranlateColor.setDuration(500);
         mScanTranlateColor.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
-            if(mView.getViewShow()) {
+            if (mView.getViewShow()) {
                 //只有首页显示的时候会显示状态栏变化
                 mView.showBarColor(animatedValue);
             }
@@ -392,7 +396,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360,0);
+        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360, 0);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
@@ -502,7 +506,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         colorAnim.setStartDelay(4000);
         colorAnim.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
-            if(mView.getViewShow()) {
+            if (mView.getViewShow()) {
                 //只有首页显示的时候会显示状态栏变化
                 mView.showBarColor(animatedValue);
             }
@@ -598,5 +602,47 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         if (mFileQueryUtils != null) {
             mFileQueryUtils.setFinish(isFinish);
         }
+    }
+
+    /**
+     * 底部广告接口
+     */
+    public void requestBottomAd() {
+        mModel.getBottomAd(new CommonSubscriber<ImageAdEntity>() {
+            @Override
+            public void getData(ImageAdEntity imageAdEntity) {
+                List<ImageAdEntity.DataBean> dataList = imageAdEntity.getData();
+                if (dataList != null) {
+                    if (dataList.get(0) != null) {
+                        mView.showFirstAd(dataList.get(0), 0);
+                    }
+                    if (dataList.get(1) != null) {
+                        mView.showFirstAd(dataList.get(1), 1);
+                    }
+                }
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
+
+    /**
+     * 开始下载
+     * @param downloadUrl
+     */
+    public void startDownload(String downloadUrl) {
+        AppVersion appVersion = new AppVersion();
+        AppVersion.DataBean dataBean = new AppVersion.DataBean();
+        dataBean.downloadUrl = downloadUrl;
+        appVersion.setData(dataBean);
+        new UpdateAgent(mView.getActivity(),appVersion,null).customerDownload();
     }
 }

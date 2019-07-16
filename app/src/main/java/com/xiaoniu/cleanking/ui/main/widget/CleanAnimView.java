@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -53,6 +55,7 @@ public class CleanAnimView extends RelativeLayout {
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
+    LinearLayout mLayoutNotNet;
 
     /**
      * 第二阶段
@@ -105,9 +108,18 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutRoot = v.findViewById(R.id.layout_root);
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
         mWebView = v.findViewById(R.id.web_view);
+        mLayoutNotNet = v.findViewById(R.id.layout_not_net);
 
         initWebView();
+
+        mLayoutNotNet.setOnClickListener(view-> onTvRefreshClicked());
     }
+
+    public void onTvRefreshClicked() {
+        mWebView.loadUrl(ApiModule.Base_H5_Host);
+    }
+
+    boolean isError = false;
 
     public void initWebView() {
         String url = ApiModule.Base_H5_Host;
@@ -126,14 +138,30 @@ public class CleanAnimView extends RelativeLayout {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 //                cancelLoadingDialog();
+                if (!isError) {
+                    mLayoutNotNet.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                isError = false;
             }
 
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                isError = true;
+                if (mLayoutNotNet != null) {
+                    mLayoutNotNet.setVisibility(VISIBLE);
+                }
+                if (mWebView != null) {
+                    mWebView.setVisibility(GONE);
+                }
+            }
         });
+
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-
             }
         });
     }

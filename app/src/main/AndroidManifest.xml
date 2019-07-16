@@ -107,6 +107,9 @@
             android:name="com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.main.activity.NavigationActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.activity.FileManagerHomeActivity"
             android:screenOrientation="portrait" />
         <activity
