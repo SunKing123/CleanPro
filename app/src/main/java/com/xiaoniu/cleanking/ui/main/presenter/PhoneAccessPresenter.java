@@ -18,6 +18,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Process;
 import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
@@ -394,6 +396,15 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             }
         });
         return dlg;
+    }
+
+    public  boolean checkNetwork(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            return false;
+        }
+        NetworkInfo info = connectivity.getActiveNetworkInfo();
+        return info != null && info.isConnected();
     }
 
 
