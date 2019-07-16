@@ -255,7 +255,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         type = TYPE_SCAN_FINISH;
 
-        if (mCountEntity != null) {
+        if (mCountEntity != null && mTvSize != null) {
             mTvSize.setText(mCountEntity.getTotalSize());
             mTvGb.setText(mCountEntity.getUnit());
 
@@ -264,7 +264,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
                 mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
                 //设置titlebar颜色
-                if(getViewShow()) {
+                if (getViewShow()) {
                     showBarColor(getResources().getColor(R.color.color_FD6F46));
                 }
 
@@ -274,7 +274,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
                 mTextScanTrace.setText("查看垃圾详情");
                 mArrowRight.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 //没有扫描到垃圾
                 cleanFinishSign();
             }
@@ -510,6 +510,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 是否颜色变化完成
+     *
      * @param b
      */
     public void setColorChange(boolean b) {
@@ -518,6 +519,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 获取总量显示的view
+     *
      * @return
      */
     public AppCompatTextView getTextCountView() {
@@ -526,6 +528,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 获取总量显示的view
+     *
      * @return
      */
     public TextView getTextUnitView() {
