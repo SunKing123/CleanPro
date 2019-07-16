@@ -25,8 +25,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
@@ -74,21 +77,21 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
     private OnCancelListener mOnCancelListener;
 
-//    ActivityCompat.OnRequestPermissionsResultCallback callback = new ActivityCompat.OnRequestPermissionsResultCallback() {
-//        @Override
-//        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//            if (requestCode == 341) {
-//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    update();
-//                }
-//            }
-//
-//        }
-//    };
+    ActivityCompat.OnRequestPermissionsResultCallback callback = new ActivityCompat.OnRequestPermissionsResultCallback() {
+        @Override
+        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            if (requestCode == 341) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    update();
+                }
+            }
 
-//    public ActivityCompat.OnRequestPermissionsResultCallback getCallback() {
-//        return callback;
-//    }
+        }
+    };
+
+    public ActivityCompat.OnRequestPermissionsResultCallback getCallback() {
+        return callback;
+    }
 
 
     public UpdateAgent(Activity activity, AppVersion updateInfo, OnCancelListener onCancelListener) {

@@ -142,8 +142,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:maxWidth="@dimen/dimen_170dp"
+                            android:maxWidth="@dimen/dimen_140dp"
                             android:singleLine="true"
+                            android:ellipsize="middle"
                             android:text="扫描中"
                             android:textColor="@color/white"/>
 
@@ -166,11 +167,12 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"/>
 
-                <Button
+                <TextView
                     android:id="@+id/btn_ljql"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dimen_48dp"
                     android:layout_gravity="bottom"
+                    android:gravity="center"
                     android:layout_marginLeft="@dimen/dimen_60dp"
                     android:layout_marginRight="@dimen/dimen_60dp"
                     android:layout_marginBottom="@dimen/dimen_40dp"
@@ -224,15 +226,15 @@
                         android:layout_marginBottom="@dimen/dimen_20dp"
                         android:text="内存占用加速"
                         android:textColor="#999999"
-                        android:textSize="10sp"/>
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/line_ql"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_13dp"
-                    android:layout_marginRight="@dimen/dimen_13dp"
+                    android:layout_marginLeft="@dimen/dimen_7dp"
+                    android:layout_marginRight="@dimen/dimen_7dp"
                     android:layout_weight="1"
                     android:background="@mipmap/bg_item_shadow_bottom"
                     android:orientation="vertical">
@@ -261,7 +263,7 @@
                         android:layout_marginBottom="@dimen/dimen_20dp"
                         android:text="储存占用加速"
                         android:textColor="#999999"
-                        android:textSize="10sp"/>
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -294,19 +296,29 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:layout_marginBottom="@dimen/dimen_20dp"
-                        android:text="照片、视频、安装包"
+                        android:text="照片、视频、音乐"
                         android:textColor="#999999"
-                        android:textSize="10sp"/>
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/text_bottom_title"
+                android:layout_below="@+id/layout_middle_item"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:text="更多推荐"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <ImageView
                 android:id="@+id/image_ad_bottom_first"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layout_middle_item"
+                android:layout_below="@+id/text_bottom_title"
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_12dp"
