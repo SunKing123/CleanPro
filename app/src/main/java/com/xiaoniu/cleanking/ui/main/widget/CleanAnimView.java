@@ -208,7 +208,7 @@ public class CleanAnimView extends RelativeLayout {
      */
     public void startMiddleAnim(boolean isNeedTranslation) {
         //位移的距离
-        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(150);
+        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(170);
         ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
         ObjectAnimator scanY = ObjectAnimator.ofFloat(mLayoutScan, "translationY", mLayoutScan.getTranslationY(), height);
         ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);

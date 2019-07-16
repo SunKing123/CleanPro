@@ -157,6 +157,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     private boolean mChangeFinish;
 
+    /**
+     * 之前清理完成时间
+     */
+    private long preCleanTime;
+
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
@@ -195,6 +200,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
         //请求广告接口
         mPresenter.requestBottomAd();
+
+
     }
 
 
@@ -245,13 +252,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(GONE);
         } else if (type == TYPE_NOT_SCAN) {
-            //未扫描， 去扫描
-            mCircleOuter.setVisibility(VISIBLE);
-            mCircleOuter2.setVisibility(VISIBLE);
-            mPresenter.startScan();
-            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
-            type = TYPE_SCANING;
-            mButtonCleanNow.setText("停止扫描");
+            long now = System.currentTimeMillis();
+            long time = (now - preCleanTime) / 1000;
+            if (time < 30) {
+                cleanFinishSign();
+            }else {
+                //未扫描， 去扫描
+                mCircleOuter.setVisibility(VISIBLE);
+                mCircleOuter2.setVisibility(VISIBLE);
+                mPresenter.startScan();
+                mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+                type = TYPE_SCANING;
+                mButtonCleanNow.setText("停止扫描");
+            }
+
+
         } else if (type == TYPE_SCANING) {
             //停止扫描
             mPresenter.setIsFinish(true);
@@ -306,6 +321,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
         mPresenter.stopCleanScanAnimation();
 
+
     }
 
     /**
@@ -333,6 +349,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             restoreLayout();
             //清理完成后通知 文件数据库同步(陈浪)
             EventBus.getDefault().post(new ScanFileEvent());
+
+            preCleanTime = System.currentTimeMillis();
         }
     }
 

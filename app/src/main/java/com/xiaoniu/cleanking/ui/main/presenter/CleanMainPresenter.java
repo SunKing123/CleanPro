@@ -32,6 +32,7 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
@@ -470,7 +471,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             TextView mTextCount = mView.getTextCountView();
             TextView textUnit = mView.getTextUnitView();
             if (mTextCount != null) {
-                mTextCount.setText(String.valueOf(Math.round(animatedValue)));
+                mTextCount.setText(NumberUtils.getFloatStr2(animatedValue));
             }
             if (textUnit != null) {
                 textUnit.setText(unit);

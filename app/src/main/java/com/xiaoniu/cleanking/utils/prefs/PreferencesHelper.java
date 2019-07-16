@@ -34,4 +34,6 @@ public interface PreferencesHelper {
      * 获取昵称
      */
     String getNickName();
+
+
 }

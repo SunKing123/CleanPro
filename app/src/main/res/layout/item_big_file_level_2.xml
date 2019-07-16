@@ -36,7 +36,6 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:singleLine="true"
-                    android:text="拼多多"
                     android:textColor="@color/color_333333"/>
             </LinearLayout>
 
@@ -46,7 +45,6 @@
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
                 android:enabled="true"
-                android:text="123MB"
                 android:textColor="@drawable/color_select_clean_detail"/>
 
         </LinearLayout>

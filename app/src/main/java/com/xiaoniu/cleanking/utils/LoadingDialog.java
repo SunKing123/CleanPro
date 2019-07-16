@@ -32,8 +32,6 @@ public class LoadingDialog {
             LinearLayout layout = v.findViewById(R.id.dialog_view);// 加载布局
             // main.xml中的ImageView
             LottieAnimationView spaceshipImage = v.findViewById(R.id.img);
-
-            spaceshipImage.setImageAssetsFolder("images");
             spaceshipImage.setAnimation("data_loading.json");
             // 提示文字
             mContentText = v.findViewById(R.id.tipTextView);
