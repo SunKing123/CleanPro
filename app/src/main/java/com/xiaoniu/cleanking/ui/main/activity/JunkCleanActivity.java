@@ -218,7 +218,7 @@ public class JunkCleanActivity extends SimpleActivity {
         //APK白名单
         textApk.setOnClickListener(v -> {
             popupWindow.dismiss();
-            startActivity(WhiteListInstallPackgeManageActivity.class);
+            startActivity(WhiteListSpeedManageActivity.class);
         });
         //内存加速白名单
         textMemory.setOnClickListener(v -> {

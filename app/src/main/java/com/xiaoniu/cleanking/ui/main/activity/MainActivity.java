@@ -28,7 +28,6 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.fragment.BaseBrowserFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
@@ -197,6 +196,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
                 break;
         }
+
     }
 
 

@@ -15,7 +15,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,7 +72,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @BindView(R.id.layout_clean_top)
     FrameLayout mLayoutCleanTop;
     @BindView(R.id.btn_ljql)
-    Button mButtonCleanNow;
+    TextView mButtonCleanNow;
     @BindView(R.id.icon_outer)
     ImageView mIconOuter;
     @BindView(R.id.icon_inner)
@@ -116,7 +115,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ImageView mImageSecondAd;
     @BindView(R.id.layout_not_net)
     LinearLayout mLayoutNotNet;
-
+    @BindView(R.id.text_bottom_title)
+    TextView mTextBottomTitle;
 
     /**
      * 清理的分类列表
@@ -235,7 +235,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             initWebView();
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
-            mButtonCleanNow.setText("再次清理");
+            mButtonCleanNow.setText("再次扫描");
             type = TYPE_NOT_SCAN;
             mLaoutContentFinish.setVisibility(GONE);
             mLayoutCount.setVisibility(VISIBLE);
@@ -246,6 +246,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mArrowRight.setVisibility(GONE);
         } else if (type == TYPE_NOT_SCAN) {
             //未扫描， 去扫描
+            mCircleOuter.setVisibility(VISIBLE);
+            mCircleOuter2.setVisibility(VISIBLE);
             mPresenter.startScan();
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
             type = TYPE_SCANING;
@@ -592,10 +594,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
             clickDownload(mImageFirstAd,dataBean.getDownloadUrl());
+            mTextBottomTitle.setVisibility(VISIBLE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
             clickDownload(mImageSecondAd,dataBean.getDownloadUrl());
+            mTextBottomTitle.setVisibility(VISIBLE);
         }
     }
 
