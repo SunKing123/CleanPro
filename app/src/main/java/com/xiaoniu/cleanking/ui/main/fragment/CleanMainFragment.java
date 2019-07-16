@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
@@ -41,6 +42,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -102,6 +104,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LinearLayout mLaoutContentFinish;
     @BindView(R.id.layout_clean_finish)
     ConstraintLayout mLayoutCleanFinish;
+    @BindView(R.id.image_ad_bottom_first)
+    ImageView mImageFirstAd;
+    @BindView(R.id.image_ad_bottom_second)
+    ImageView mImageSecondAd;
+    @BindView(R.id.text_bottom_title)
+    TextView mTextBottomTitle;
+
 
     /**
      * 清理的分类列表
@@ -178,7 +187,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mButtonCleanNow.setText("停止扫描");
         }, 500);
 
-
+        //请求广告接口
+        mPresenter.requestBottomAd();
     }
 
 
@@ -264,7 +274,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
                 mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
                 //设置titlebar颜色
-                if(getViewShow()) {
+                if (getViewShow()) {
                     showBarColor(getResources().getColor(R.color.color_FD6F46));
                 }
 
@@ -274,7 +284,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
                 mTextScanTrace.setText("查看垃圾详情");
                 mArrowRight.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 //没有扫描到垃圾
                 cleanFinishSign();
             }
@@ -510,6 +520,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 是否颜色变化完成
+     *
      * @param b
      */
     public void setColorChange(boolean b) {
@@ -518,6 +529,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 获取总量显示的view
+     *
      * @return
      */
     public AppCompatTextView getTextCountView() {
@@ -526,9 +538,37 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 获取总量显示的view
+     *
      * @return
      */
     public TextView getTextUnitView() {
         return mTextUnit;
+    }
+
+    /**
+     * 显示广告 position = 0 第一个 position = 1  第二个
+     *
+     * @param dataBean
+     */
+    public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
+        mTextBottomTitle.setVisibility(View.VISIBLE);
+        if (position == 0) {
+            ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
+            clickDownload(mImageFirstAd,dataBean.getDownloadUrl());
+        } else if (position == 1) {
+            ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
+            clickDownload(mImageSecondAd,dataBean.getDownloadUrl());
+        }
+    }
+
+    /**
+     * 点击下载app
+     * @param view
+     * @param downloadUrl
+     */
+    public void clickDownload(View view, String downloadUrl) {
+        view.setOnClickListener(v -> {
+            mPresenter.startDownload(downloadUrl);
+        });
     }
 }

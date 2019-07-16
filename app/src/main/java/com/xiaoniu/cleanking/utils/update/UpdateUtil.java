@@ -31,6 +31,7 @@ import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.encypt.rsa.MD5Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -160,12 +161,12 @@ public class UpdateUtil {
         /*return Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context);*/
-        File apk = new File(context.getExternalCacheDir(), File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context));
+        File apk = new File(context.getExternalCacheDir(), File.separator + "clean_download" + File.separator + "xiaoniu_v" + getAppVersionName(context));
         return apk.getAbsolutePath();
     }
 
     public static File makeFile(Context context) {
-        File file = new File(context.getExternalCacheDir(), File.separator + "flashloan");
+        File file = new File(context.getExternalCacheDir(), File.separator + "clean_download");
 //        String fileDirs = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "flashloan";
 //        File file = new File(fileDirs);
         if (!file.exists()) {
@@ -177,6 +178,20 @@ public class UpdateUtil {
             newFile.delete();
         }
         return new File(file, "xiaoniu_v" + getAppVersionName(context) + ".apk");
+    }
+
+    public static File makeFile(String fileName,boolean isTemp) {
+        File file = new File(AppApplication.getInstance().getExternalCacheDir(), File.separator + "clean_ad_download");
+//        String fileDirs = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "flashloan";
+//        File file = new File(fileDirs);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        if (isTemp) {
+            return new File(file, fileName);
+        }else{
+            return new File(file, fileName + ".apk");
+        }
     }
 
 

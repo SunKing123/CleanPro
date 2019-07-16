@@ -36,11 +36,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
-import com.xiaoniu.cleanking.utils.EventBusTags;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.update.listener.IDownloadAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateAgent;
@@ -125,7 +123,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
     @Override
     public void update() {
 //        mApkFile = new File(UpdateUtil.getFilePath(mContext));
-        mApkFile = UpdateUtil.makeFile(mContext);
+//        mApkFile = UpdateUtil.makeFile(mContext);
 //        if (UpdateUtil.verify(mApkFile)) {
 //            doInstall();
 //        } else {
@@ -209,6 +207,17 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
     }
 
+    /**
+     * 自定义下载广告文件
+     */
+    public void customerDownload() {
+        long currentTimes = System.currentTimeMillis();
+        mApkFile = UpdateUtil.makeFile(String.valueOf(currentTimes),false);
+        mTmpFile = UpdateUtil.makeFile(String.valueOf(currentTimes),true);
+
+        requestPermission(this);
+    }
+
     //弹窗操作
     void doPrompt() {
         mPrompter.prompt(this);
@@ -247,7 +256,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
 
     //更新弹窗
-    private static class DefaultUpdatePrompter implements IUpdatePrompter {
+    private class DefaultUpdatePrompter implements IUpdatePrompter {
 
         private Activity mActivity;
 
@@ -322,30 +331,34 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
         @Override
         public void dismiss() {
-            dialog.dismiss();
+            if (dialog != null) {
+                dialog.dismiss();
+            }
         }
 
-        /**
-         * android 6.0请求写入sd权限
-         *
-         * @param agent
-         */
-        public void requestPermission(IUpdateAgent agent) {
-            String permissionsHint = "需要打开文件读写权限";
-            String[] permissions = new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            new RxPermissions(mActivity).request(permissions).subscribe(new Consumer<Boolean>() {
-                @Override
-                public void accept(Boolean aBoolean) throws Exception {
-                    if (aBoolean) {
-                        //开始更新
-                        agent.update();
-                    } else {
-                        //TODO 版本更新没有权限处理
+    }
+
+    /**
+     * android 6.0请求写入sd权限
+     *
+     * @param agent
+     */
+    private void requestPermission(IUpdateAgent agent) {
+        String permissionsHint = "需要打开文件读写权限";
+        String[] permissions = new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        new RxPermissions(mActivity).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始更新
+                    agent.update();
+                } else {
+                    //TODO 版本更新没有权限处理
 //                        EventBusUtil.postAppMessage(EventBusTags.DEAL_WITH_NO_PERMISSION, permissionsHint);
-                    }
                 }
-            });
+            }
+        });
 
 //            if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 //                ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 341);
@@ -353,8 +366,6 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 //                //开始更新
 //                agent.update();
 //            }
-        }
-
     }
 
     //失败

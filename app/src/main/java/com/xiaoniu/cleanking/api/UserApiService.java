@@ -4,8 +4,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
+import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
-import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
@@ -16,7 +16,6 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 /**
  * @author tie
@@ -61,5 +60,12 @@ public interface UserApiService {
     @POST("/file/upload")
     Flowable<FileUploadInfoBean> uploadFile(@Part MultipartBody.Part file);
 
+
+    /**
+     * 首页的底部清理广告
+     */
+    @POST("/banner/query")
+    @JSONField
+    Flowable<ImageAdEntity> queryBottomAd(@Body RequestBody requestBody);
 
 }

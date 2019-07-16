@@ -363,6 +363,7 @@ public class FileQueryUtils {
                                 FirstJunkInfo junkInfo = new FirstJunkInfo();
                                 junkInfo.setAllchecked(true);
                                 junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
+                                junkInfo.setAppPackageName(packageName);
                                 junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
                                 long totalSize = (long) ((Math.random() * 80886656) + 80886656);
                                 if (mScanFileListener != null) {
