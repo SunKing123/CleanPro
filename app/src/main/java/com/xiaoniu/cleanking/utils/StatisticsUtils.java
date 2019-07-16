@@ -37,6 +37,28 @@ public class StatisticsUtils {
 
 
     /**
+     * sdk 首页广告
+     *
+     * @param eventCode   事件code
+     * @param sourcePage  来源页面
+     * @param eventName   事件说明
+     * @param currentPage 当前页面
+     * @param position  广告位置
+     */
+    public static void trackClickHolder(String eventCode, String eventName, String sourcePage, String currentPage,String position) {
+        JSONObject j = new JSONObject();
+        try {
+            j.put("source_page", sourcePage);
+            j.put("current_page", currentPage);
+            j.put("ad_position_id",position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(eventCode);
+        NiuDataAPI.trackClick(builder.toString(), eventName, j);
+    }
+    /**
      * h5的点击埋点
      *
      * @param eventCode

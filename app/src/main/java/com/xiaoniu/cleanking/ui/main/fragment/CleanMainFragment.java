@@ -49,7 +49,7 @@ import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -458,6 +458,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.iv_back)
     public void onViewClicked() {
+
+        //
         showBottomTab();
         mLayoutCleanFinish.setVisibility(GONE);
     }
@@ -614,14 +616,17 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
-            clickDownload(mImageFirstAd,dataBean.getDownloadUrl());
+            clickDownload(mImageFirstAd,dataBean.getDownloadUrl(),position);
             mTextBottomTitle.setVisibility(VISIBLE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
-            clickDownload(mImageSecondAd,dataBean.getDownloadUrl());
+            clickDownload(mImageSecondAd,dataBean.getDownloadUrl(),position);
             mTextBottomTitle.setVisibility(VISIBLE);
         }
+        StatisticsUtils.trackClickHolder("clean_up_ad_show", "\"广告展示曝光", "home_page"
+                , "home_page_clean_up_page",String.valueOf(position));
+
     }
 
     /**
@@ -629,8 +634,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param view
      * @param downloadUrl
      */
-    public void clickDownload(View view, String downloadUrl) {
+    public void clickDownload(View view, String downloadUrl,int position) {
         view.setOnClickListener(v -> {
+            //广告埋点
+            StatisticsUtils.trackClickHolder("clean_up_ad_click", "\"广告点击", "home_page"
+                    , "home_page_clean_up_page",String.valueOf(position));
             mPresenter.startDownload(downloadUrl);
         });
     }
