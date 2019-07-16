@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,6 +72,13 @@ public class JunkCleanActivity extends SimpleActivity {
     private CountEntity countEntity;
 
     private HashMap<Integer, JunkGroup> mJunkGroups;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("check_garbage_view_page", "\"清理垃圾\"浏览", "home_page", "check_garbage_details");
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

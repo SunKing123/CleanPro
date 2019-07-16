@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -205,18 +206,23 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 //    }
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
+        StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", "home_page", "home_page");
+
         //文件管理
         startActivity(FileManagerHomeActivity.class);
     }
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
+        StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
         startActivity(PhoneAccessActivity.class);
     }
 
     @OnClick(R.id.line_ql)
     public void line_ql() {
+        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", "home_page", "home_page");
+
         //手机清理
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
@@ -233,6 +239,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mArrowRight.setVisibility(GONE);
             mLayoutRoot.setIntercept(true);
             initWebView();
+            StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", "home_page", "check_garbage_details");
+
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
             mButtonCleanNow.setText("再次扫描");
@@ -244,6 +252,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(GONE);
+
+
         } else if (type == TYPE_NOT_SCAN) {
             //未扫描， 去扫描
             mCircleOuter.setVisibility(VISIBLE);
@@ -252,6 +262,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
             type = TYPE_SCANING;
             mButtonCleanNow.setText("停止扫描");
+            StatisticsUtils.trackClick("stop_scanning_click", "\"停止扫描\"点击", "home_page", "home_page");
+
         } else if (type == TYPE_SCANING) {
             //停止扫描
             mPresenter.setIsFinish(true);
@@ -260,6 +272,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.layout_scan)
     public void mClickLayoutScan() {
+        StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", "home_page", "check_garbage_details");
+
         //查看详情
         if (type == TYPE_SCAN_FINISH) {
             startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
@@ -305,6 +319,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mChangeFinish = false;
 
         mPresenter.stopCleanScanAnimation();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("home_page_view_page", "首页浏览", "home_page", "home_page");
 
     }
 
