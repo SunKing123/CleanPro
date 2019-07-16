@@ -10,6 +10,7 @@
         android:protectionLevel="signature" />
 
     <!-- Required -->
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
@@ -114,6 +115,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.ImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.FloatActivity"
+            android:theme="@style/transparent_activity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PreviewImageActivity"
