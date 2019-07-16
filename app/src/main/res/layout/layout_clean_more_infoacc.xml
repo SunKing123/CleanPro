@@ -10,6 +10,7 @@
     <TextView
         android:id="@+id/text_memory"
         android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dimen_1dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_20dp"
         android:layout_gravity="center_vertical"

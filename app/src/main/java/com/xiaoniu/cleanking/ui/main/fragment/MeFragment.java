@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
@@ -27,6 +29,8 @@ import butterknife.OnClick;
 public class MeFragment extends SimpleFragment {
     @BindView(R.id.iv_top)
     ImageView iv_top;
+    @BindView(R.id.viewmid)
+    View viewmid;
     @BindView(R.id.line_about)
     LinearLayout line_about;
     @BindView(R.id.line_permisson)
@@ -53,6 +57,14 @@ public class MeFragment extends SimpleFragment {
                 startActivity(AboutActivity.class);
             }
         });
+
+        ConstraintLayout.LayoutParams clp = (ConstraintLayout.LayoutParams) iv_top.getLayoutParams();
+        clp.height = DeviceUtils.getScreenHeight() * 26 / 100;
+        iv_top.setLayoutParams(clp);
+
+        ConstraintLayout.LayoutParams clpt = (ConstraintLayout.LayoutParams) viewmid.getLayoutParams();
+        clpt.topMargin = DeviceUtils.getScreenHeight() * 26 / 100-DeviceUtils.dip2px(15);
+        viewmid.setLayoutParams(clpt);
 
 //        line_feedback.setOnClickListener(new View.OnClickListener() {
 //            @Override
