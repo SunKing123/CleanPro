@@ -186,10 +186,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
+//            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
                 mPresenter.getAccessAbove22();
-            else
-                setCleanedView(0);
+//            else
+//                setCleanedView(0);
         } else {
             mPresenter.getAccessListBelow();
         }
@@ -248,7 +248,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
             @Override
             public void onStatusBarColorChanged(int colorRes) {
-                setStatusBar(colorRes);
+                setStatusBarNum(colorRes);
             }
         });
     }
@@ -437,6 +437,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), true);
         } else {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), false);
+        }
+    }
+
+    public void setStatusBarNum(int colorRes) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, colorRes, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, colorRes, false);
         }
     }
 

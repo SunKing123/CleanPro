@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.main.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
@@ -188,6 +190,16 @@ public class AccessAnimView extends RelativeLayout {
      * @param type     1是MB，2是GB
      */
     boolean canPlaying = true;
+    /**
+     * 第一阶段  红色
+     */
+    private static final int FirstLevel = 0xffFD6F46;
+
+    private static final int SecondLevel = 0xffF1D53B;
+    /**
+     * 第三阶段 绿色
+     */
+    private static final int ThirdLevel = 0xff06C581;
 
     public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, int startNum, int endNum, int type) {
         ObjectAnimator oa1 = setYuAnim(iv_yu1, 0);
@@ -214,7 +226,7 @@ public class AccessAnimView extends RelativeLayout {
                     canPlaying = false;
                     cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
                     //播放的后500ms，背景色改变
-                    setBgChanged(viewt, 200);
+//                    setBgChanged(viewt, 200);
                 }
                 if (currentValue == endNum) {
                     tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
@@ -222,7 +234,40 @@ public class AccessAnimView extends RelativeLayout {
                 }
             }
         });
-        anim.start();
+//        anim.start();
+
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
+        colorAnim1.setEvaluator(new ArgbEvaluator());
+        colorAnim1.setDuration(800);
+        colorAnim1.setStartDelay(2200);
+
+        colorAnim1.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            line_title.setBackgroundColor(animatedValue);
+            if (listener != null) {
+                listener.onStatusBarColorChanged(animatedValue);
+            }
+        });
+
+        colorAnim1.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (listener != null)
+                    listener.onAnimEnd();
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setViewTrans();
+                    }
+                }, 200);
+            }
+        });
+
+
+        AnimatorSet animatorSetTimer = new AnimatorSet();
+        animatorSetTimer.playTogether(anim, colorAnim1);
+        animatorSetTimer.start();
     }
 
     boolean isFirstChangeColor = true;

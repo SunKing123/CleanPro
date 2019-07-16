@@ -45,10 +45,11 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -212,18 +213,23 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 //    }
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
+        StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", "home_page", "home_page");
+
         //文件管理
         startActivity(FileManagerHomeActivity.class);
     }
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
+        StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
         startActivity(PhoneAccessActivity.class);
     }
 
     @OnClick(R.id.line_ql)
     public void line_ql() {
+        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", "home_page", "home_page");
+
         //手机清理
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
@@ -240,6 +246,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mArrowRight.setVisibility(GONE);
             mLayoutRoot.setIntercept(true);
             initWebView();
+            StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", "home_page", "check_garbage_details");
+
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
             mButtonCleanNow.setText("再次扫描");
@@ -251,6 +259,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(GONE);
+
+
         } else if (type == TYPE_NOT_SCAN) {
             long now = System.currentTimeMillis();
             long time = (now - preCleanTime) / 1000;
@@ -264,6 +274,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
                 type = TYPE_SCANING;
                 mButtonCleanNow.setText("停止扫描");
+                StatisticsUtils.trackClick("stop_scanning_click", "\"停止扫描\"点击", "home_page", "home_page");
             }
 
 
@@ -275,6 +286,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.layout_scan)
     public void mClickLayoutScan() {
+        StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", "home_page", "check_garbage_details");
+
         //查看详情
         if (type == TYPE_SCAN_FINISH) {
             startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
@@ -321,6 +334,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
         mPresenter.stopCleanScanAnimation();
 
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        StatisticsUtils.trackClick("home_page_view_page", "首页浏览", "home_page", "home_page");
 
     }
 
@@ -455,6 +475,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.iv_back)
     public void onViewClicked() {
+
+        //
         showBottomTab();
         mLayoutCleanFinish.setVisibility(GONE);
     }
@@ -611,14 +633,17 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
-            clickDownload(mImageFirstAd,dataBean.getDownloadUrl());
+            clickDownload(mImageFirstAd,dataBean.getDownloadUrl(),position);
             mTextBottomTitle.setVisibility(VISIBLE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
-            clickDownload(mImageSecondAd,dataBean.getDownloadUrl());
+            clickDownload(mImageSecondAd,dataBean.getDownloadUrl(),position);
             mTextBottomTitle.setVisibility(VISIBLE);
         }
+        StatisticsUtils.trackClickHolder("clean_up_ad_show", "\"广告展示曝光", "home_page"
+                , "home_page_clean_up_page",String.valueOf(position));
+
     }
 
     /**
@@ -626,8 +651,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param view
      * @param downloadUrl
      */
-    public void clickDownload(View view, String downloadUrl) {
+    public void clickDownload(View view, String downloadUrl,int position) {
         view.setOnClickListener(v -> {
+            //广告埋点
+            StatisticsUtils.trackClickHolder("clean_up_ad_click", "\"广告点击", "home_page"
+                    , "home_page_clean_up_page",String.valueOf(position));
             mPresenter.startDownload(downloadUrl);
         });
     }

@@ -53,15 +53,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:visibility="gone"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="173dp"
                     android:layout_height="149dp"
-                    android:src="@mipmap/img_holder_empty_video"
-                    android:layout_marginTop="100dp" />
+                    android:src="@mipmap/img_holder_empty_video" />
 
                 <TextView
                     android:layout_width="wrap_content"
