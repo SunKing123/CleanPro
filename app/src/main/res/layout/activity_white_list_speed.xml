@@ -96,14 +96,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical"
             android:visibility="gone">
 
             <ImageView
                 android:layout_width="173dp"
                 android:layout_height="149dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="-44dp"
                 android:src="@mipmap/img_holder_empty_install" />
 
             <TextView
