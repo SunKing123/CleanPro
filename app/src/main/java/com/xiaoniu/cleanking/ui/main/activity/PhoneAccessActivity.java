@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,7 +10,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,15 +21,18 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -34,9 +40,11 @@ import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -51,6 +59,7 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 手机加速--一键清理内存页面
@@ -79,9 +88,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     View viewt;
     @BindView(R.id.line_title)
     View line_title;
+    @BindView(R.id.layout_not_net)
+    LinearLayout mLayoutNetError;
     @BindView(R.id.acceview)
     AccessAnimView acceview;
     //    PhoneAccessAdapter imageAdapter;
+    private boolean isSuccess = false;
+    private boolean isError = false;
     PhoneAccessBelowAdapter belowAdapter;
     boolean canClickDelete = false; //默认不可点击清理，当数字动画播放完毕后可以点击
 
@@ -110,18 +123,37 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(new Javascript(), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoadingDialog();
+//                showLoadingDialog();
             }
-
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                isError = true;
+                isSuccess = false;
+                if (mLayoutNetError != null) {
+                    mLayoutNetError.setVisibility(View.VISIBLE);
+                }
+                if (mWebView != null) {
+                    mWebView.setVisibility(View.GONE);
+                }
+            }
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 cancelLoadingDialog();
+                if (!isError) {
+                    isSuccess = true;
+                    //回调成功后的相关操作
+                    mLayoutNetError.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                isError = false;
             }
 
         });
@@ -134,10 +166,20 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
+    public class Javascript {
+        @JavascriptInterface
+        public void toOtherPage(String url) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.URL, url);
+            bundle.putString(Constant.Title, "");
+            bundle.putBoolean(Constant.NoTitle, false);
+            startActivity(UserLoadH5Activity.class, bundle);
+        }
+    }
+
 
     @Override
     public void initView() {
-        initWebView();
 
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
@@ -361,6 +403,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //清理完毕后展示内容
     public void setCleanedView(long sized) {
         mWebView.setVisibility(View.VISIBLE);
+        initWebView();
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");
         setHasCleaned(sized);
@@ -387,7 +430,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), false);
         }
     }
-
+    @OnClick(R.id.layout_not_net)
+    public void onTvRefreshClicked() {
+        mWebView.loadUrl(ApiModule.Base_H5_Host);
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
