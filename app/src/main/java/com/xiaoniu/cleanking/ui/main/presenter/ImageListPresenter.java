@@ -21,11 +21,14 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -89,9 +92,9 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
         lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button btnOk = (Button) window.findViewById(R.id.btnOk);
+        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
 
-        Button btnCancle = (Button) window.findViewById(R.id.btnCancle);
+        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
         TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
         tipTxt.setText("确定删除这" + deleteNum + "张图片？");
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +113,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
         });
         return dlg;
     }
+
 
     //删除数据库中的相应图片
     public void deleteFromDatabase(List<FileEntity> listF, ImageShowAdapter imageAdapter) {

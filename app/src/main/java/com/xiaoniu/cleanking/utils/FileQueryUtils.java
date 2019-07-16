@@ -593,7 +593,7 @@ public class FileQueryUtils {
             Cursor query = AppApplication.getInstance().getContentResolver().query(Uri.parse(str), strArr, "mime_type= ?", strArr2, null);
             if (query != null) {
                 if (!query.moveToFirst()) {
-                    cursor = AppApplication.getInstance().getContentResolver().query(Uri.parse(str), strArr, "_data like ?", new String[]{"%.apk%"}, null);
+                    cursor = AppApplication.getInstance().getContentResolver().query(Uri.parse(str), strArr, "_data like ?", new String[]{"%.apk"}, null);
                 } else {
                     cursor = query;
                 }
@@ -639,18 +639,20 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                } else {
-                                    onelevelGarbageInfo.setAppGarbageName(string.substring(string.lastIndexOf("/") + 1));
-                                    onelevelGarbageInfo.setAppName(string.substring(string.lastIndexOf("/") + 1));
-                                    if (onelevelGarbageInfo.getAppGarbageName().contains(".apk") && !onelevelGarbageInfo.getGarbageCatalog().contains(".apk.")) {
-                                        onelevelGarbageInfo.setAllchecked(true);
-                                        if (mScanFileListener != null) {
-                                            mScanFileListener.increaseSize(j);
-                                        }
-                                        onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_damage));
-                                    }
+                                    arrayList.add(onelevelGarbageInfo);
                                 }
-                                arrayList.add(onelevelGarbageInfo);
+//                                else {
+//                                    onelevelGarbageInfo.setAppGarbageName(string.substring(string.lastIndexOf("/") + 1));
+//                                    onelevelGarbageInfo.setAppName(string.substring(string.lastIndexOf("/") + 1));
+//                                    if (onelevelGarbageInfo.getAppGarbageName().contains(".apk") && !onelevelGarbageInfo.getGarbageCatalog().contains(".apk.")) {
+//                                        onelevelGarbageInfo.setAllchecked(true);
+//                                        if (mScanFileListener != null) {
+//                                            mScanFileListener.increaseSize(j);
+//                                        }
+//                                        onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_damage));
+//                                    }
+//                                }
+
                             }
                         }
                         if (!cursor.moveToNext()) {
