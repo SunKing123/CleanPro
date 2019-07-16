@@ -77,14 +77,26 @@ public class CleanFileLoadingDialogFragment extends DialogFragment {
 
     public void setReportSuccess(int status,String title) {
         if (status == 0) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mImgSuccessful.setVisibility(View.GONE);
-            mTxtContent.setText("删除中...");
+            if(null!=mProgressBar){
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+            if(null!=mImgSuccessful){
+                mImgSuccessful.setVisibility(View.GONE);
+            }
+            if(null!=mTxtContent){
+                mTxtContent.setText("删除中...");
+            }
 
         } else {
-            mProgressBar.setVisibility(View.GONE);
-            mImgSuccessful.setVisibility(View.VISIBLE);
-            mTxtContent.setText(title);
+            if(null!=mProgressBar){
+                mProgressBar.setVisibility(View.GONE);
+            }
+            if(null!=mImgSuccessful){
+                mImgSuccessful.setVisibility(View.VISIBLE);
+            }
+            if(null!=mTxtContent){
+                mTxtContent.setText(title);
+            }
 
         }
     }
