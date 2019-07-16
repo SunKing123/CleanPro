@@ -169,7 +169,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("clean_click","\"清理\"点击","file_cleaning_page","video_cleaning_page");
 
-            String title="确定删除此视频？";
+            String title=String.format("确定删除%s个视频?",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
@@ -202,6 +202,19 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     }
 
+    /**
+     * 获取选中的大小
+     */
+    public int getSelectSize(){
+        int size=0;
+        List<VideoInfoBean> lists=mAdapter.getLists();
+        for(VideoInfoBean videoInfoBean: lists){
+            if(videoInfoBean.isSelect){
+                size++;
+            }
+        }
+        return  size;
+    }
     public void updateData(List<VideoInfoBean> infoBeans) {
         cancelLoadingDialog();
         setEmptyView(infoBeans.size());

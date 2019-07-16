@@ -27,6 +27,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 手机加速--一键清理内存页面
@@ -86,9 +88,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     View viewt;
     @BindView(R.id.line_title)
     View line_title;
+    @BindView(R.id.layout_not_net)
+    LinearLayout mLayoutNetError;
     @BindView(R.id.acceview)
     AccessAnimView acceview;
     //    PhoneAccessAdapter imageAdapter;
+    private boolean isSuccess = false;
+    private boolean isError = false;
     PhoneAccessBelowAdapter belowAdapter;
     boolean canClickDelete = false; //默认不可点击清理，当数字动画播放完毕后可以点击
 
@@ -123,13 +129,31 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showLoadingDialog();
+//                showLoadingDialog();
             }
-
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                isError = true;
+                isSuccess = false;
+                if (mLayoutNetError != null) {
+                    mLayoutNetError.setVisibility(View.VISIBLE);
+                }
+                if (mWebView != null) {
+                    mWebView.setVisibility(View.GONE);
+                }
+            }
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 cancelLoadingDialog();
+                if (!isError) {
+                    isSuccess = true;
+                    //回调成功后的相关操作
+                    mLayoutNetError.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+                isError = false;
             }
 
         });
@@ -156,7 +180,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-        initWebView();
 
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
@@ -380,6 +403,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //清理完毕后展示内容
     public void setCleanedView(long sized) {
         mWebView.setVisibility(View.VISIBLE);
+        initWebView();
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");
         setHasCleaned(sized);
@@ -406,7 +430,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(colorRes), false);
         }
     }
-
+    @OnClick(R.id.layout_not_net)
+    public void onTvRefreshClicked() {
+        mWebView.loadUrl(ApiModule.Base_H5_Host);
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
