@@ -3,6 +3,9 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -274,7 +277,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 
     public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, View view_top, int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
-        anim.setDuration(3000);
+        anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
         canPlaying = true;
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -283,17 +286,24 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 int currentValue = (int) animation.getAnimatedValue();
                 tv_size.setText(currentValue + "");
                 Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
-                if (canPlaying && animation.getAnimatedFraction() > 0.933) {
-                    canPlaying = false;
-                    //播放的后500ms，背景色改变
-                    setBgChanged(viewt, view_top, 200);
-                }
+
                 if (currentValue == endNum) {
                     tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                     tv_gb.setText(type == 1 ? "MB" : "GB");
                 }
             }
         });
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
+        colorAnim1.setEvaluator(new ArgbEvaluator());
+        colorAnim1.setDuration(800);
+        colorAnim1.setStartDelay(1200);
+
+        colorAnim1.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            view_top.setBackgroundColor(animatedValue);
+            mView.setStatusBarNum(animatedValue);
+        });
+
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -301,34 +311,54 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 mView.setCanClickDelete(true);
             }
         });
-        anim.start();
+//        anim.start();
+
+        AnimatorSet animatorSetTimer = new AnimatorSet();
+        animatorSetTimer.playTogether(anim, colorAnim1);
+        animatorSetTimer.start();
+
     }
 
-    public void setBgChanged(View viewt, View view_top, long time) {
-        ValueAnimator anim = ValueAnimator.ofInt(0, 100);
-        anim.setDuration(time);
-        anim.setInterpolator(new DecelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                if (currentValue < 33) {
-                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_06C581));
-                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_06C581));
-                    mView.setStatusBar(R.color.color_06C581);
-                } else if (currentValue < 44) {
-                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_F1D53B));
-                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_F1D53B));
-                    mView.setStatusBar(R.color.color_F1D53B);
-                } else {
-                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_FD6F46));
-                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_FD6F46));
-                    mView.setStatusBar(R.color.color_FD6F46);
-                }
 
-            }
-        });
-        anim.start();
+    /**
+     * 第一阶段  红色
+     */
+    private static final int FirstLevel = 0xff06C581;
+
+    private static final int SecondLevel = 0xffF1D53B;
+    /**
+     * 第三阶段 绿色
+     */
+    private static final int ThirdLevel = 0xffFD6F46;
+
+    public void setBgChanged(View viewt, View view_top) {
+
+
+
+//        ValueAnimator anim = ValueAnimator.ofInt(0, 100);
+//        anim.setDuration(time);
+//        anim.setInterpolator(new DecelerateInterpolator());
+//        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                int currentValue = (int) animation.getAnimatedValue();
+//                if (currentValue < 33) {
+//                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_06C581));
+//                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_06C581));
+//                    mView.setStatusBar(R.color.color_06C581);
+//                } else if (currentValue < 44) {
+//                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_F1D53B));
+//                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_F1D53B));
+//                    mView.setStatusBar(R.color.color_F1D53B);
+//                } else {
+//                    viewt.setBackgroundColor(mView.getResources().getColor(R.color.color_FD6F46));
+//                    view_top.setBackgroundColor(mView.getResources().getColor(R.color.color_FD6F46));
+//                    mView.setStatusBar(R.color.color_FD6F46);
+//                }
+//
+//            }
+//        });
+//        anim.start();
     }
 
     /**
@@ -398,7 +428,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         return dlg;
     }
 
-    public  boolean checkNetwork(Context context) {
+    public boolean checkNetwork(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity == null) {
             return false;
