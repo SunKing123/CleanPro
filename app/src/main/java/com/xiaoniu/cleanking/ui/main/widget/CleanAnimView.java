@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.JavaInterface;
 
 
 /**
@@ -125,6 +126,7 @@ public class CleanAnimView extends RelativeLayout {
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
+        mWebView.addJavascriptInterface(new JavaInterface(), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
