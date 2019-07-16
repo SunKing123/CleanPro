@@ -218,12 +218,12 @@ public class JunkCleanActivity extends SimpleActivity {
         //APK白名单
         textApk.setOnClickListener(v -> {
             popupWindow.dismiss();
-            startActivity(WhiteListSpeedManageActivity.class);
+            startActivity(WhiteListInstallPackgeManageActivity.class);
         });
         //内存加速白名单
         textMemory.setOnClickListener(v -> {
             popupWindow.dismiss();
-            startActivity(WhiteListSpeedAddActivity.class);
+            startActivity(WhiteListSpeedManageActivity.class);
         });
         popupWindow.setTouchable(true);
         popupWindow.setTouchInterceptor((v, event) -> {
