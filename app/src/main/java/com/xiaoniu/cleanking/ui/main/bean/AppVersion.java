@@ -27,7 +27,7 @@ public class AppVersion extends BaseEntity {
         public String changeLog;
         public String code;
         public String downloadUrl;
-        public String forcedUpdate;
+        public String changeProperties;
         public String md5;
         public String popup;
         public String state;
@@ -72,12 +72,12 @@ public class AppVersion extends BaseEntity {
             this.downloadUrl = downloadUrl;
         }
 
-        public String getForcedUpdate() {
-            return forcedUpdate;
+        public String getChangeProperties() {
+            return changeProperties;
         }
 
-        public void setForcedUpdate(String forcedUpdate) {
-            this.forcedUpdate = forcedUpdate;
+        public void setChangeProperties(String changeProperties) {
+            this.changeProperties = changeProperties;
         }
 
         public String getMd5() {

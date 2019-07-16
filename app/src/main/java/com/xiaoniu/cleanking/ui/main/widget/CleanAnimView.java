@@ -46,7 +46,6 @@ public class CleanAnimView extends RelativeLayout {
     ImageView mIconInner;
     LinearLayout mLayoutScan;
     LottieAnimationView mAnimationView;
-    LottieAnimationView mLottieView;
     RelativeLayout mLayoutCount;
     TextView mTextCount;
     TextView mTextUnit;
@@ -99,7 +98,6 @@ public class CleanAnimView extends RelativeLayout {
         mIconInner = v.findViewById(R.id.icon_inner);
         mLayoutScan = v.findViewById(R.id.layout_scan);
         mAnimationView = v.findViewById(R.id.view_lottie);
-        mLottieView = v.findViewById(R.id.icon_inner_lottie);
         mLayoutCount = v.findViewById(R.id.layout_count);
         mTextCount = v.findViewById(R.id.text_count);
         mTextUnit = v.findViewById(R.id.text_unit);
@@ -268,7 +266,7 @@ public class CleanAnimView extends RelativeLayout {
         if (isNeedTranslation) {
             animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
         } else {
-            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY, innerY, scanY);
+            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY,innerY, scanY);
         }
 
 
@@ -308,7 +306,7 @@ public class CleanAnimView extends RelativeLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 //500ms后开始显示回收光点
-                new Handler().postDelayed(() -> showLottieView(), 500);
+                new Handler().postDelayed(() -> showLottieView(), 600);
             }
 
             @Override
@@ -340,6 +338,7 @@ public class CleanAnimView extends RelativeLayout {
      * 显示吸收动画
      */
     private void showLottieView() {
+        mAnimationView.useHardwareAcceleration();
         mAnimationView.setAnimation("data2.json");
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.playAnimation();

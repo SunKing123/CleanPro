@@ -113,8 +113,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ImageView mImageFirstAd;
     @BindView(R.id.image_ad_bottom_second)
     ImageView mImageSecondAd;
-    @BindView(R.id.text_bottom_title)
-    TextView mTextBottomTitle;
     @BindView(R.id.layout_not_net)
     LinearLayout mLayoutNotNet;
 
@@ -123,7 +121,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 清理的分类列表
      */
     public static HashMap<Integer, JunkGroup> mJunkGroups;
-    private CountEntity mCountEntity;
+    private CountEntity mCountEntity = new CountEntity();
     private List<ImageView> mTopViews;
     private Handler mHandler;
 
@@ -225,6 +223,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
         if (type == TYPE_SCAN_FINISH) {
+            mScrollView.scrollTo(mScrollView.getScrollX(),0);
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
             mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
@@ -375,6 +374,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mButtonCleanNow.setVisibility(VISIBLE);
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
+
+        setColorChange(false);
     }
 
     public void showBottomTab() {
@@ -415,9 +416,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 显示lottie动画
      */
     public void showLottieView() {
+        mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data.json");
         mAnimationView.playAnimation();
+
     }
 
     /**
@@ -528,6 +531,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //扫描完成
             color = R.color.color_FD6F46;
         }
+
         if (!hidden) {
             isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -582,11 +586,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param dataBean
      */
     public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
-        mTextBottomTitle.setVisibility(VISIBLE);
         if (position == 0) {
+            mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
             clickDownload(mImageFirstAd,dataBean.getDownloadUrl());
         } else if (position == 1) {
+            mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
             clickDownload(mImageSecondAd,dataBean.getDownloadUrl());
         }

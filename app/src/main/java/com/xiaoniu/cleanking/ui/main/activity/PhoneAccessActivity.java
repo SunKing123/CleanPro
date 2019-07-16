@@ -135,7 +135,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public void initView() {
         initWebView();
 
-
+        if (Build.VERSION.SDK_INT >= 26) {
+            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+            long timeTemp = System.currentTimeMillis() - lastCheckTime;
+//            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
+            mPresenter.getAccessAbove22();
+//            else
+//                setCleanedView(0);
+        } else {
+            mPresenter.getAccessListBelow();
+        }
+        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +173,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
                 }
                 belowAdapter.deleteData(junkTemp);
-                computeTotalSize(junkTemp);
+                computeTotalSizeDeleteClick(junkTemp);
                 setCleanedView(total);
                 if (Build.VERSION.SDK_INT >= 26)
                     SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
@@ -202,17 +212,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             isFromProtect = false;
             return;
         }
-        if (Build.VERSION.SDK_INT >= 26) {
-            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
-            long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
-                mPresenter.getAccessAbove22();
-            else
-                setCleanedView(0);
-        } else {
-            mPresenter.getAccessListBelow();
-        }
-        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
     @Override
@@ -238,23 +237,33 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         long totalSizes = 0;
         for (FirstJunkInfo firstJunkInfo : listInfo)
             totalSizes += firstJunkInfo.getTotalSize();
-        setCleanSize(totalSizes);
+        setCleanSize(totalSizes, true);
         this.totalSizesCleaned = totalSizes;
     }
 
-    public void setCleanSize(long totalSizes) {
+    public void computeTotalSizeDeleteClick(ArrayList<FirstJunkInfo> listInfo) {
+        long totalSizes = 0;
+        for (FirstJunkInfo firstJunkInfo : listInfo)
+            totalSizes += firstJunkInfo.getTotalSize();
+        setCleanSize(totalSizes, false);
+        this.totalSizesCleaned = totalSizes;
+    }
+
+    public void setCleanSize(long totalSizes, boolean canPlayAnim) {
         String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
-            mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 1);
+            if (canPlayAnim)
+                mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 1);
             acceview.setData(sizeMb, "MB");
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
             sizeMb *= 1024;
-            mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 2);
+            if (canPlayAnim)
+                mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 2);
             acceview.setData(sizeMb, "GB");
         }
     }

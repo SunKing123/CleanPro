@@ -82,21 +82,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
 
     public void setAppVersion(AppVersion result) {
         if (result != null && result.getData() != null) {
-            //根据版本号判断是否需要更新
-            String versionName = AndroidUtil.getAppVersionName();
-            int versionCode = AndroidUtil.getVersionCode();
-            //默认可以下载
-            int code = 0;
-            if (!TextUtils.isEmpty(result.code)) {
-                code = Integer.parseInt(result.code);
-            }
-            if (!TextUtils.isEmpty(versionName) && !TextUtils.equals(versionName, result.getData().versionNumber) && !TextUtils.isEmpty(result.getData().downloadUrl)) {
-                boolean isForced = false;
-                if (TextUtils.equals(result.getData().forcedUpdate, "1")) {//强更
-                    isForced = true;
-                } else {//手动更新
-                    isForced = false;
-                }
+            if (TextUtils.equals("1", result.getData().popup))
                 if (mUpdateAgent == null) {
                     mUpdateAgent = new UpdateAgent(mActivity, result, new OnCancelListener() {
                         @Override
@@ -107,11 +93,6 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
                 } else {
                     mUpdateAgent.check();
                 }
-
-
-            } else {//清空版本信息状态
-            }
-        } else {
         }
     }
 
@@ -159,7 +140,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
 
             @Override
             public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-                System.out.println("----------------------------------"+throwable.getCause());
+                System.out.println("----------------------------------" + throwable.getCause());
                 if (share_media == SHARE_MEDIA.WEIXIN || share_media == SHARE_MEDIA.WEIXIN_CIRCLE) {
                     handler.sendEmptyMessage(SHARE_WECHAT);
                 } else if (share_media == SHARE_MEDIA.QQ || share_media == SHARE_MEDIA.QZONE) {

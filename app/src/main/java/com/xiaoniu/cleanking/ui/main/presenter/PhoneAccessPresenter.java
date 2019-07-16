@@ -337,7 +337,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     public void showPopupWindow(View statusView) {
         // 一个自定义的布局，作为显示的内容
         View contentView = LayoutInflater.from(mView).inflate(
-                R.layout.layout_clean_more_info, null);
+                R.layout.layout_clean_more_infoacc, null);
         View textMemory = contentView.findViewById(R.id.text_memory);
         final PopupWindow popupWindow = new PopupWindow(contentView,
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);

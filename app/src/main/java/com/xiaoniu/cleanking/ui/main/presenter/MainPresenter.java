@@ -245,7 +245,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
 
-    private  void scanAllFile(String path){
+    private void scanAllFile(String path) {
         File file = new File(path);
         if (file.isDirectory()) {
             File[] f = file.listFiles();
@@ -256,9 +256,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         scanAllFile(path + "/" + file1.getName());
                     } else if (fileName.endsWith(".mp4") && file1.length() != 0) {
                         cachesVideo.add(file1.getPath());
-                    }else if(fileName.endsWith(".mp3") && file1.length()!=0){
+                    } else if (fileName.endsWith(".mp3") && file1.length() != 0) {
                         cachesMusicFiles.add(file1.getPath());
-                    }else if(fileName.endsWith(".apk")){
+                    } else if (fileName.endsWith(".apk")) {
                         cachesApkFies.add(file1.getPath());
                     }
                 }
@@ -267,22 +267,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
     public void setAppVersion(AppVersion result) {
-        if (result != null&&result.getData()!=null) {
+        if (result != null && result.getData() != null) {
             //根据版本号判断是否需要更新
-            String versionName = AndroidUtil.getAppVersionName();
-            int versionCode = AndroidUtil.getVersionCode();
-            //默认可以下载
-            int code = 0;
-            if (!TextUtils.isEmpty(result.code)) {
-                code = Integer.parseInt(result.code);
-            }
-            if (!TextUtils.isEmpty(versionName) && !TextUtils.equals(versionName, result.getData().versionNumber)  && !TextUtils.isEmpty(result.getData().downloadUrl)) {
-                boolean isForced = false;
-                if (TextUtils.equals(result.getData().forcedUpdate, "1")) {//强更
-                    isForced = true;
-                } else {//手动更新
-                    isForced = false;
-                }
+            if (TextUtils.equals("1", result.getData().popup))
                 if (mUpdateAgent == null) {
                     mUpdateAgent = new UpdateAgent(mActivity, result, new OnCancelListener() {
                         @Override
@@ -291,11 +278,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     });
                     mUpdateAgent.check();
                 }
-
-
-            } else {//清空版本信息状态
-            }
-        } else {
         }
     }
 

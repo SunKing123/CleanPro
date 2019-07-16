@@ -7,17 +7,17 @@ public class CountEntity implements Serializable {
     /**
      * 数值 eg: "20.0"
      */
-    private String totalSize = "0";
+    private String totalSize = "0.0";
 
     /**
      * 单位 eg: "KB"
      */
-    private String unit;
+    private String unit = "MB";
 
     /**
      * 拼接完成的字符串  eg: "20.0MB"
      */
-    private String resultSize;
+    private String resultSize = "0.0MB";
 
     /**
      * 扫描的文件大小 单位 B
