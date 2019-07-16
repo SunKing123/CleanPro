@@ -15,7 +15,7 @@
             android:id="@+id/ll_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_10dp"
+            android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
