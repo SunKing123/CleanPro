@@ -91,6 +91,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     @Override
     protected void initView() {
+        showLoadingDialog();
         setStatusView(mType);
         mLoading=CleanFileLoadingDialogFragment.newInstance();
 
@@ -241,6 +242,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
      * @param appInfoBeans
      */
     public void updateData(List<AppInfoBean> appInfoBeans) {
+        cancelLoadingDialog();
         mType = 0;
         setStatusView(mType);
         List<AppInfoBean> lists = mPresenter.getApkList(path, mType);

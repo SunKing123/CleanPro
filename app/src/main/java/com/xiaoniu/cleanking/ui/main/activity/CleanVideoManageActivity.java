@@ -86,6 +86,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     @Override
     protected void initView() {
 
+        showLoadingDialog();
         mLoading=CleanFileLoadingDialogFragment.newInstance();
 
         mAdapter = new CleanVideoManageAdapter(this.getBaseContext());
@@ -202,6 +203,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     }
 
     public void updateData(List<VideoInfoBean> infoBeans) {
+        cancelLoadingDialog();
         setEmptyView(infoBeans.size());
         mAdapter.clear();
         mAdapter.modifyList(infoBeans);

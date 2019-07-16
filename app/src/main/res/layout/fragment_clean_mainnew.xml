@@ -302,23 +302,14 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_bottom_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/layout_middle_item"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_12dp"
-                android:text="软件推荐"
-                android:visibility="gone"/>
-
             <ImageView
                 android:id="@+id/image_ad_bottom_first"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_bottom_title"
+                android:layout_below="@+id/layout_middle_item"
                 android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_7dp"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
                 android:layout_marginBottom="@dimen/dimen_14dp"/>
 
@@ -327,6 +318,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/image_ad_bottom_first"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
                 android:layout_marginBottom="@dimen/dimen_14dp"/>
