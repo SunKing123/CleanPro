@@ -42,7 +42,7 @@
            <TextView
                android:id="@+id/text_tips"
                android:textSize="@dimen/dimen_12sp"
-               android:textColor="@color/color_4690FD"
+               android:textColor="#4690FD"
                android:text="@string/text_white_removed"
                android:gravity="center_vertical"
                android:layout_width="wrap_content"
@@ -78,6 +78,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginTop="@dimen/dimen_12dp"
+           android:gravity="center_vertical"
            android:orientation="horizontal">
            <CheckBox
                android:id="@+id/icon_check"

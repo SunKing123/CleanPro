@@ -51,10 +51,5 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_1dp"
-            android:background="@color/color_E6E6E6"/>
-
     </LinearLayout>
 </LinearLayout>
