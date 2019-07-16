@@ -228,27 +228,34 @@ public class DeviceUtils {
     //    获取总的内存空间并控制显示
     public static String getTotalSpace() {
         String mToalS = "";
-        StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
-        float i = 1024 * 1024 * 1024;
-        float bytes = 0;
-        bytes = sf.getTotalBytes() / i;
+        try {
+            StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
+            float i = 1024 * 1024 * 1024;
+            float bytes = 0;
+            bytes = sf.getTotalBytes() / i;
 
-        DecimalFormat df = new DecimalFormat("0.00");//格式化小数
-        mToalS = df.format(bytes);
+            DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+            mToalS = df.format(bytes);
+        } catch (Exception e) {
+        }
         return mToalS;
     }
 
     //    获取剩余的内存空间并控制显示
     public static String getFreeSpace() {
         String mFreeS = "";
-        StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
-        float i = 1024 * 1024 * 1024;
-        float bytes = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            bytes = sf.getFreeBytes() / i;
+        try {
+            StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
+            float i = 1024 * 1024 * 1024;
+            float bytes = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                bytes = sf.getFreeBytes() / i;
+            }
+            DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+            mFreeS = df.format(bytes);
+        } catch (Exception e) {
         }
-        DecimalFormat df = new DecimalFormat("0.00");//格式化小数
-        mFreeS = df.format(bytes);
+
         return mFreeS;
     }
 
