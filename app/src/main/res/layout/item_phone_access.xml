@@ -53,7 +53,7 @@
         />
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_1dp"
+        android:layout_height="0.5dp"
         app:layout_constraintTop_toBottomOf="@id/iv_photo_filelist_pic"
         android:background="#EDEDED"
         android:layout_marginTop="@dimen/dimen_16dp"
