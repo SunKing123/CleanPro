@@ -165,7 +165,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("music_cleaning_delete_click  ","\"删除\"按钮点击","file_cleaning_page","music_cleaning_page");
 
-            String title = "确定删除此音乐？";
+            String title =String.format("确定删除%s个音乐？",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
@@ -236,6 +236,23 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
         totalSelectFiles();
 
+    }
+
+
+    /**
+     * 获取选中的大小
+     *
+     * @return
+     */
+    private int getSelectSize() {
+        int size = 0;
+        List<MusciInfoBean> lists = mAdapter.getLists();
+        for (MusciInfoBean musciInfoBean : lists) {
+            if (musciInfoBean.isSelect) {
+                size++;
+            }
+        }
+        return size;
     }
 
     public void updateData(List<MusciInfoBean> musciInfoBeans) {
