@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Trace;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -69,6 +70,10 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
     }
 
     public void updateRemoveCache(List<MusciInfoBean> appInfoBeans) {
+
+        for(MusciInfoBean musciInfoBean: appInfoBeans){
+            delMusic(musciInfoBean.id);
+        }
         musciInfoBeans.removeAll(appInfoBeans);
 
         //更新本地缓存
@@ -198,6 +203,11 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
     }
 
 
+    private  void delMusic(int id){
+        int result=activity.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Audio.Media._ID+"=?",new String[]{String.valueOf(id)});
+    }
+
 
     private  void queryAllMusic(){
         Cursor cursor = activity.getContentResolver().query(
@@ -219,13 +229,13 @@ public class CleanMusicFilePresenter extends RxPresenter<CleanMusicManageActivit
             int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
 //            String tilte = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
             String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
-            Log.i("test","url="+url+",time="+MusicFileUtils.timeParse(duration));
-
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
             File file=new File(url);
 
             if(null!=file){
                 files.add(file);
             MusciInfoBean musciInfoBean = new MusciInfoBean();
+            musciInfoBean.id=id;
             musciInfoBean.name = file.getName();
             musciInfoBean.packageSize = file.length();
             musciInfoBean.path = file.getPath();

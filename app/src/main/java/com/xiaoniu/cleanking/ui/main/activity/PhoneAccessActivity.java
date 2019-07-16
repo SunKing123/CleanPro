@@ -1,14 +1,18 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -26,15 +31,19 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -44,7 +53,9 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -106,6 +117,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(new Javascript(), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -128,6 +140,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
             }
         });
+    }
+
+    public class Javascript {
+        @JavascriptInterface
+        public void toOtherPage(String url) {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.URL, url);
+            bundle.putString(Constant.Title, "");
+            bundle.putBoolean(Constant.NoTitle, false);
+            startActivity(UserLoadH5Activity.class, bundle);
+        }
     }
 
 
@@ -314,9 +337,23 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     }
 
+    /**
+     * 获取缓存白名单
+     */
+    public boolean isCacheWhite(String packageName) {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets.contains(packageName);
+    }
 
-    public void setAdapter(ArrayList<FirstJunkInfo> listInfo) {
-        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfo);
+    public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
+        ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
+        for (FirstJunkInfo firstJunkInfo : listInfos) {
+            if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
+                listInfoData.add(firstJunkInfo);
+        }
+
+        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);
         belowAdapter.setmOnCheckListener(new PhoneAccessBelowAdapter.onCheckListener() {

@@ -4,7 +4,9 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -16,11 +18,13 @@ import com.xiaoniu.cleanking.hotfix.listener.MyPatchListener;
 import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -212,6 +216,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 final String path = Environment.getExternalStorageDirectory().getPath();
                 //scanMusicFile(path);
                 scanAllFile(path);
+                queryAllMusic();
                 emitter.onNext("");
             }
         })
@@ -257,12 +262,34 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     } else if (fileName.endsWith(".mp4") && file1.length() != 0) {
                         cachesVideo.add(file1.getPath());
                     } else if (fileName.endsWith(".mp3") && file1.length() != 0) {
-                        cachesMusicFiles.add(file1.getPath());
+                        //cachesMusicFiles.add(file1.getPath());
                     } else if (fileName.endsWith(".apk")) {
                         cachesApkFies.add(file1.getPath());
                     }
                 }
             }
+        }
+    }
+
+
+    private void queryAllMusic() {
+        Cursor cursor = mActivity.getContentResolver().query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Audio.Media._ID,
+                        MediaStore.Audio.Media.DATA}, null
+                , null, null);
+
+        while (cursor.moveToNext()) {
+            String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            File file = new File(url);
+            if (null != file) {
+                cachesMusicFiles.add(file.getPath());
+            }
+        }
+        try {
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
