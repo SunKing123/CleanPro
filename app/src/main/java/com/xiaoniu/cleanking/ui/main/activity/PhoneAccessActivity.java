@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -44,7 +46,9 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -314,9 +318,23 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     }
 
+    /**
+     * 获取缓存白名单
+     */
+    public boolean isCacheWhite(String packageName) {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets.contains(packageName);
+    }
 
-    public void setAdapter(ArrayList<FirstJunkInfo> listInfo) {
-        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfo);
+    public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
+        ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
+        for (FirstJunkInfo firstJunkInfo : listInfos) {
+            if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
+                listInfoData.add(firstJunkInfo);
+        }
+
+        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);
         belowAdapter.setmOnCheckListener(new PhoneAccessBelowAdapter.onCheckListener() {
