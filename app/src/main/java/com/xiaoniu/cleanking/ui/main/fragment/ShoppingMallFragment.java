@@ -22,7 +22,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.socialize.ShareAction;
@@ -32,14 +31,12 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -50,8 +47,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.xiaoniu.cleanking.app.Constant.TAG_TURN_MAIN;
-
 /**
  * 首页tab H5页面（商城页、生活页）
  * Created on 2018/3/21.
@@ -59,10 +54,8 @@ import static com.xiaoniu.cleanking.app.Constant.TAG_TURN_MAIN;
 public class ShoppingMallFragment extends SimpleFragment implements MainActivity.OnKeyBackListener {
     @BindView(R.id.web_view)
     WebView mWebView;
-    @BindView(R.id.layout_net_error)
+    @BindView(R.id.layout_not_net)
     LinearLayout mLayoutNetError;
-    @BindView(R.id.tv_refresh)
-    TextView mTvRefresh;
     private String url = ApiModule.SHOPPING_MALL;
     private boolean isFirst = true;
 
@@ -132,6 +125,7 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
 
+
 /**
  * 启用mixed content    android 5.0以上默认不支持Mixed Content
  *
@@ -157,14 +151,17 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                mWebView.setLayerType(View.LAYER_TYPE_HARDWARE,null);
+                mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 cancelLoadingDialog();
                 if (!isError) {
                     isSuccess = true;
                     //回调成功后的相关操作
+                    mLayoutNetError.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
                 }
                 isError = false;
             }
+
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
@@ -174,11 +171,18 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 // 接受所有网站的证书，忽略SSL错误，执行访问网页
                 handler.proceed();
             }
+
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 isError = true;
                 isSuccess = false;
+                if (mLayoutNetError != null) {
+                    mLayoutNetError.setVisibility(View.VISIBLE);
+                }
+                if (mWebView != null) {
+                    mWebView.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -373,10 +377,8 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @OnClick(R.id.tv_refresh)
+    @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mLayoutNetError.setVisibility(View.GONE);
-        mWebView.setVisibility(View.VISIBLE);
         mWebView.loadUrl(url);
     }
 

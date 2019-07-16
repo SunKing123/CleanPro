@@ -400,17 +400,17 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
-        rotation.setDuration(1300);
+        rotation.setDuration(1200);
         rotation2.setDuration(1100);
 
-        rotation3.setDuration(300);
+        rotation3.setDuration(200);
         rotation3.setRepeatCount(-1);
         rotation4.setRepeatCount(-1);
         rotation4.setDuration(200);
         rotation4.setInterpolator(new LinearInterpolator());
-        AnimatorSet animatorStep2 = new AnimatorSet();
-        animatorStep2.playTogether(rotation3, rotation4);
+        rotation3.setInterpolator(new LinearInterpolator());
 
+        new Handler().postDelayed(() -> mView.showLottieView(), 700);
 
         rotation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -421,10 +421,10 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                animatorStep2.start();
+//                animatorStep2.start();
 
-                startClean(animatorStep2, countEntity);
-                mView.showLottieView();
+                startClean(rotation4,rotation3, countEntity);
+
 
             }
 
@@ -442,10 +442,13 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         rotation.setInterpolator(new AccelerateInterpolator());
         rotation2.setInterpolator(new AccelerateInterpolator());
 
+        AnimatorSet animatorStep2 = new AnimatorSet();
+        animatorStep2.playSequentially(rotation, rotation3);
+
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(rotation, rotation2);
-        animatorSet.playSequentially();
+        animatorSet.playSequentially(rotation2,rotation4);
         animatorSet.start();
+        animatorStep2.start();
 
     }
 
@@ -459,7 +462,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param animatorSet
      * @param countEntity
      */
-    public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
+    public void startClean(ObjectAnimator animatorSet, ObjectAnimator animatorSet2, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
@@ -486,6 +489,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                     //清理完成
                     animatorSet.end();
                     setViewTrans();
+                }
+                if (animatorSet2 != null) {
+                    animatorSet2.end();
                 }
             }
 

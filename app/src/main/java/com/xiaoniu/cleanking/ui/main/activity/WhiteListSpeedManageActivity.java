@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -28,6 +29,11 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
     public static final int REQUEST_CODE_UPDATE = 0x1101;
     @BindView(R.id.recycle_view)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mLLEmptyView;
+    @BindView(R.id.ll_head)
+    LinearLayout mLLHead;
 
     private WhiteListSpeedAdapter mAdapter;
 
@@ -55,6 +61,7 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.modifyList(mPresenter.getData());
         mAdapter.setOnCheckListener(this);
+        setEmptyView();
     }
 
     @OnClick({R.id.img_back, R.id.ll_add})
@@ -76,21 +83,34 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
             mPresenter.scanData();
             mAdapter.clear();
             mAdapter.modifyList(mPresenter.getData());
+            setEmptyView();
         }
     }
 
     @Override
     public void onCheck(String id) {
-        List<AppInfoBean> appInfoBeanList=mAdapter.getLists();
-        List<AppInfoBean> appselcts=new ArrayList<>();
-        for(AppInfoBean appInfoBean: appInfoBeanList){
-          if(id.equals(appInfoBean.packageName)){
-              appselcts.add(appInfoBean);
-              appInfoBeanList.remove(appInfoBean);
-              break;
-          }
+        List<AppInfoBean> appInfoBeanList = mAdapter.getLists();
+        List<AppInfoBean> appselcts = new ArrayList<>();
+        for (AppInfoBean appInfoBean : appInfoBeanList) {
+            if (id.equals(appInfoBean.packageName)) {
+                appselcts.add(appInfoBean);
+                appInfoBeanList.remove(appInfoBean);
+                break;
+            }
         }
         mAdapter.notifyDataSetChanged();
         mPresenter.updateCache(appselcts);
+        setEmptyView();
+    }
+
+    private void setEmptyView() {
+        if (mAdapter.getLists().size() > 0) {
+            mLLEmptyView.setVisibility(View.GONE);
+            mLLHead.setVisibility(View.VISIBLE);
+        } else {
+            mLLEmptyView.setVisibility(View.VISIBLE);
+            mLLHead.setVisibility(View.GONE);
+
+        }
     }
 }
