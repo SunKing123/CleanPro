@@ -32,7 +32,7 @@ public class NavigationActivity extends SimpleActivity {
     ViewPager mViewPager;
     @BindView(R.id.navigation_main)
     FrameLayout mNavigationMain;
-    private int[] bitmaps = {R.mipmap.navigation_1, R.mipmap.navigation_2, R.mipmap.navigation_3};
+//    private int[] bitmaps = {R.mipmap.navigation_1, R.mipmap.navigation_2, R.mipmap.navigation_3};
 
     @Override
     public int getLayoutId() {
@@ -53,21 +53,21 @@ public class NavigationActivity extends SimpleActivity {
         /**
          * 加入导览图集
          */
-        for (int i = 0; i < bitmaps.length; i++) {
-            View v = getLayoutInflater().inflate(R.layout.activity_navigation_item_view, null);
-            ImageView image = v.findViewById(R.id.image);
-
-
-//            if (screenHeight > 1920) {
-//                image.setImageResource(bitmaps2[i]);
-//                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mImgDot.getLayoutParams();
-//                layoutParams.bottomMargin = DeviceUtils.dip2px(84);
-//                mImgDot.setLayoutParams(layoutParams);
-//            } else {
-            image.setImageResource(bitmaps[i]);
-//            }
-            views.add(v);
-        }
+//        for (int i = 0; i < bitmaps.length; i++) {
+//            View v = getLayoutInflater().inflate(R.layout.activity_navigation_item_view, null);
+//            ImageView image = v.findViewById(R.id.image);
+//
+//
+////            if (screenHeight > 1920) {
+////                image.setImageResource(bitmaps2[i]);
+////                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mImgDot.getLayoutParams();
+////                layoutParams.bottomMargin = DeviceUtils.dip2px(84);
+////                mImgDot.setLayoutParams(layoutParams);
+////            } else {
+//            image.setImageResource(bitmaps[i]);
+////            }
+//            views.add(v);
+//        }
 
         View vlast = getLayoutInflater().inflate(R.layout.activity_navigation_item_viewlast, null);
         TextView cb_checkall = vlast.findViewById(R.id.cb_checkall);
@@ -132,7 +132,7 @@ public class NavigationActivity extends SimpleActivity {
     }
 
     public void initLastClick(TextView cb_checkall, TextView tv_delete) {
-        cb_checkall.setSelected(false);
+        cb_checkall.setSelected(true);
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

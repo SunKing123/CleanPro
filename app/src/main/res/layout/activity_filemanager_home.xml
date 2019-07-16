@@ -103,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_20dp"
         android:layout_marginTop="@dimen/dimen_7dp"
-        android:text="剩余：7.65GB 总计：26GB"
+        android:text="剩余：7.65GB     总计：26GB"
         android:textColor="#CCFFFFFF"
         android:textSize="@dimen/dimen_16sp"
         app:layout_constraintBottom_toBottomOf="@id/circle_progress"
