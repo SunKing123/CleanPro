@@ -16,6 +16,8 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -105,6 +107,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                     if (listData.get(i).getIsSelect())
                         listF.add(imageAdapter.getListImage().get(i));
                 }
+
 
                 mPresenter.alertBanLiveDialog(ImageActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                     @Override
