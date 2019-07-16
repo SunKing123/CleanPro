@@ -49,7 +49,7 @@ import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
-
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.List;
@@ -274,13 +274,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
                 type = TYPE_SCANING;
                 mButtonCleanNow.setText("停止扫描");
-                StatisticsUtils.trackClick("stop_scanning_click", "\"停止扫描\"点击", "home_page", "home_page");
             }
-
 
         } else if (type == TYPE_SCANING) {
             //停止扫描
             mPresenter.setIsFinish(true);
+            StatisticsUtils.trackClick("stop_scanning_click", "\"停止扫描\"点击", "home_page", "home_page");
         }
     }
 
@@ -341,7 +340,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onStart() {
         super.onStart();
         StatisticsUtils.trackClick("home_page_view_page", "首页浏览", "home_page", "home_page");
-
     }
 
     /**
