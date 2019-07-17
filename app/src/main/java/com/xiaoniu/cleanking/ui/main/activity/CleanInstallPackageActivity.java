@@ -378,12 +378,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         }
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
-        //视频浏览埋点
+    protected void onResume() {
+        super.onResume();
         StatisticsUtils.trackClick("Installation_pack_pleaning_view_page","\"安装包清理\"浏览","file_cleaning_page","Installation_pack_pleaning_page");
     }
-
-
 }
