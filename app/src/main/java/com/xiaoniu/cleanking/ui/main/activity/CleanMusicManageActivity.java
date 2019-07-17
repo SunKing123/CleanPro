@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanMusicFilePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -85,7 +86,14 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     @Override
     protected void onResume() {
         super.onResume();
-        StatisticsUtils.trackClick("music_cleaning_page_view_page","\"音乐清理\"浏览","file_cleaning_page","music_cleaning_page");
+        //StatisticsUtils.trackClick("music_cleaning_page_view_page","\"音乐清理\"浏览","file_cleaning_page","music_cleaning_page");
+        NiuDataAPI.onPageStart("music_cleaning_page_view_page","\"音乐清理\"浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("music_cleaning_page_view_page","\"音乐清理\"浏览");
     }
 
     @Override
