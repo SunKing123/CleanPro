@@ -26,7 +26,9 @@ import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -158,6 +160,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         switch (view.getId()) {
             case R.id.img_back:
                 finish();
+                StatisticsUtils.trackClick("cell_phone_clean_click", "手机清理返回按钮点击", "home_page", "");
                 break;
             case R.id.do_junk_clean:
                 //垃圾清理
@@ -165,6 +168,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
                     finish();
                 }else {
                     mPresenter.showDeleteDialog(mAllData);
+                    StatisticsUtils.trackClick("clean_click", "清理点击", "home_page", "");
                 }
                 break;
             default:
@@ -231,4 +235,15 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("cell_phone_clean_click_view","手机清理页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("cell_phone_clean_click_view","手机清理页面浏览");
+    }
 }

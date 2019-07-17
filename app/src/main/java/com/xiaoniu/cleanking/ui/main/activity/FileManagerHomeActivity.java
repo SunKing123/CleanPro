@@ -100,7 +100,9 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         for (FileEntity fileEntity : listPhoto) {
             imageSize += fileEntity == null ? 0 : NumberUtils.getLong(fileEntity.getSize());
         }
-        tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
+        if(imageSize>0){
+            tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
+        }
         viewImagearea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

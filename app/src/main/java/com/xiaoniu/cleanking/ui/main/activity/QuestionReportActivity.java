@@ -420,8 +420,8 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     };*/
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         StatisticsUtils.trackClick("question_feedback_view_page","\"问题反馈\"浏览","personal_center_page","question_feedback_page");
     }
 

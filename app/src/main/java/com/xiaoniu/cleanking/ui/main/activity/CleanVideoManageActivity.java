@@ -153,7 +153,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("video_cleaning_back_click ","\"视频清理\"返回按钮点击","file_cleaning_page","video_cleaning_page");
+        StatisticsUtils.trackClick("video_cleaning_back_click","\"视频清理\"返回按钮点击","file_cleaning_page","video_cleaning_page");
         super.onBackPressed();
     }
 
@@ -163,7 +163,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         int id = view.getId();
 
         if (id == R.id.img_back) {
-            StatisticsUtils.trackClick("video_cleaning_back_click ","\"视频清理\"返回按钮点击","file_cleaning_page","video_cleaning_page");
+            StatisticsUtils.trackClick("video_cleaning_back_click","\"视频清理\"返回按钮点击","file_cleaning_page","video_cleaning_page");
 
             finish();
         } else if (id == R.id.btn_del) { //删除文件

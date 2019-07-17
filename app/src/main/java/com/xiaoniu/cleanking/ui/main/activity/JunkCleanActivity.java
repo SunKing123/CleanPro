@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -76,8 +77,6 @@ public class JunkCleanActivity extends SimpleActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("check_garbage_view_page", "\"清理垃圾\"浏览", "home_page", "check_garbage_details");
-
     }
 
     @Override
@@ -101,6 +100,8 @@ public class JunkCleanActivity extends SimpleActivity {
             //title bar
             showBarColor(getResources().getColor(R.color.color_FD6F46));
             clearAll();
+
+            StatisticsUtils.trackClick("view_spam_details_clean_click", "'清理'点击", "home_page", "");
         });
 
         ExpandableListView listView = findViewById(R.id.junk_list);
@@ -185,7 +186,6 @@ public class JunkCleanActivity extends SimpleActivity {
             EventBus.getDefault().post("clean_finish");
         });
 
-
     }
 
     private long getTotalSize() {
@@ -203,11 +203,13 @@ public class JunkCleanActivity extends SimpleActivity {
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
         finish();
+        StatisticsUtils.trackClick("view_spam_details_garbage_details_click", "‘垃圾详情’返回", "home_page", "");
     }
 
     @OnClick({R.id.icon_more})
     public void onMoreClick(View view) {
         showPopupWindow(mIconMore);
+        StatisticsUtils.trackClick("view_spam_details_more_click", "右上角'三个点'的点击", "home_page", "");
     }
 
     /**
@@ -255,6 +257,13 @@ public class JunkCleanActivity extends SimpleActivity {
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
+        NiuDataAPI.onPageStart("view_spam_details_view_page","一键清理页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("view_spam_details_view_page","一键清理页面浏览");
     }
 
     /**
