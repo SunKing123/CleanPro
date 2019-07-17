@@ -345,7 +345,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     private void requestPermission(IUpdateAgent agent) {
         String permissionsHint = "需要打开文件读写权限";
-        String[] permissions = new String[]{
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mActivity).request(permissions).subscribe(new Consumer<Boolean>() {
             @Override
@@ -354,7 +354,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                     //开始更新
                     agent.update();
                 } else {
-                    if(hasPermissionDeniedForever(mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                    if (hasPermissionDeniedForever(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ToastUtils.show(permissionsHint);
                         mPrompter.dismiss();
                     }
@@ -525,7 +525,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
     /**
      * 是否有权限被永久拒绝
      *
-     * @param activity    当前activity
+     * @param activity   当前activity
      * @param permission 权限
      * @return
      */
