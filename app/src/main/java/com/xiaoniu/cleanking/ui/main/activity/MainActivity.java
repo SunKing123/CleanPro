@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
@@ -365,6 +366,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 扫描成功
+     */
+    public   void onScanFileSuccess(){
+        EventBus.getDefault().post(new FileCleanSizeEvent());
     }
 
     public interface OnKeyBackListener {
