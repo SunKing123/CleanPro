@@ -81,9 +81,10 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     }
 
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         StatisticsUtils.trackClick("music_cleaning_page_view_page","\"音乐清理\"浏览","file_cleaning_page","music_cleaning_page");
     }
 
@@ -108,9 +109,8 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
                     mIsCheckAll = false;
                 } else {
                     mIsCheckAll = true;
-                    StatisticsUtils.trackClick("music_cleaning_all_election_click ","\"全选\"按钮点击","file_cleaning_page","music_cleaning_page");
-
                 }
+                StatisticsUtils.trackClick("music_cleaning_all_election_click","\"全选\"按钮点击","file_cleaning_page","music_cleaning_page");
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
                 totalSelectFiles();
@@ -159,11 +159,11 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         int id = view.getId();
 
         if (id == R.id.img_back) {
-            StatisticsUtils.trackClick("music_cleaning_back_click   ","\"音乐清理\"返回按钮点击","file_cleaning_page","music_cleaning_page");
+            StatisticsUtils.trackClick("music_cleaning_back_click","\"音乐清理\"返回按钮点击","file_cleaning_page","music_cleaning_page");
 
             finish();
         } else if (id == R.id.btn_del) { //删除文件
-            StatisticsUtils.trackClick("music_cleaning_delete_click  ","\"删除\"按钮点击","file_cleaning_page","music_cleaning_page");
+            StatisticsUtils.trackClick("music_cleaning_delete_click","\"删除\"按钮点击","file_cleaning_page","music_cleaning_page");
 
             String title =String.format("确定删除这%s个音乐？",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
@@ -199,6 +199,12 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("music_cleaning_back_click","\"音乐清理\"返回按钮点击","file_cleaning_page","music_cleaning_page");
+        super.onBackPressed();
+    }
 
     public void updateDelFileView(List<MusciInfoBean> appInfoBeans) {
        // Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
