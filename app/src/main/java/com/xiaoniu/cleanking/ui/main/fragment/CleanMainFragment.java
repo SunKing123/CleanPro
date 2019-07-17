@@ -539,8 +539,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 super.onPageFinished(view, url);
 //                cancelLoadingDialog();
                 if (!isError) {
-                    mLayoutNotNet.setVisibility(View.GONE);
-                    mWebView.setVisibility(View.VISIBLE);
+                    if (mLayoutNotNet != null) {
+                        mLayoutNotNet.setVisibility(View.GONE);
+                    }
+                    if (mWebView != null) {
+                        mWebView.setVisibility(View.VISIBLE);
+                    }
                 }
                 isError = false;
             }

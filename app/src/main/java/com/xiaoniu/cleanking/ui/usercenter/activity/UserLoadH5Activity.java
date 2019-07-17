@@ -293,8 +293,12 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                     tvTitle.setText(title);
                 }
                 if (!isError) {
-                    mLayoutNetError.setVisibility(View.GONE);
-                    mWebView.setVisibility(View.VISIBLE);
+                    if (mLayoutNetError != null) {
+                        mLayoutNetError.setVisibility(View.GONE);
+                    }
+                    if (mWebView != null) {
+                        mWebView.setVisibility(View.VISIBLE);
+                    }
                 }
                 isError = false;
             }
