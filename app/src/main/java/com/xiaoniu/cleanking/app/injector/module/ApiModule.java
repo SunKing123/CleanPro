@@ -36,41 +36,16 @@ public class ApiModule {
     private Retrofit mRetrofit;
     private Retrofit mRetrofit2;
     private Retrofit mRetrofit3;
-    private Retrofit mRetrofit4;
 
     //网络地址
     public static String Base_Host = AppConstants.Base_Host;
-    public static String Base_Host_Finance = AppConstants.Base_Host_Finance;
-    public static String Base_Image_Host = AppConstants.Base_Image_Host;//图片路径
     public static String Base_H5_Host = AppConstants.Base_H5_Host;//H5路径
-    public static String Base_H5_Host2 = AppConstants.Base_H5_Host2;//H5路径
-    public static String Map_Https = AppConstants.Map_Https;//地图路径
     public static String Base_Big_Data = AppConstants.Base_Big_Data;//大数据接口路径
-    public static String GuanJiaHost1 = AppConstants.GuanJia_Host1;
-    public static String GuanJiaHost2 = AppConstants.GuanJia_Host2;
-    public static String ActionBaseHost = AppConstants.Action_Base_Host;
 
-    public static String H5_Map_Url = Map_Https + "/FenDuoDuoH5/html/page/map/map_index.html";//H5地图
     public static String Base_Host2 = "https://www.juxinli.com";//聚信立路径
     public static String Base_Host3 = "https://credit.baiqishi.com";//白骑士路径
-    public static String Face_Img_Url = Base_Image_Host + "/images/img1.png";//人脸页默认头像路径
     public static String ZhiMaXinYong = Base_H5_Host + "/FlashLoanH5/html/page/my/zhima.html";//芝麻信用路径
-    public static String Permission_Help = Base_H5_Host + "/FenDuoDuoH5/html/page/my/help/other.html";//开启权限帮助
     public static String SHOPPING_MALL = Base_H5_Host + "/FenDuoDuoH5/html/page/store/index.html";//商城
-    public static String LIFE = Base_H5_Host + "/FenDuoDuoH5/html/page/other/life.html";//生活
-    public static String ACTIVITY = Base_H5_Host + "/FlashLoanH5/html/hh_activity/invite/index.html";//活动
-    public static String BuyInsurance = Base_H5_Host + "/FenDuoDuoH5/html/page/bank/buy_insurance.html";//购买保险页
-    public static String Help_Url = Base_H5_Host + "/FenDuoDuoH5/html/page/my/help/index.html";//帮助中心
-    public static String About_Us_Url = Base_H5_Host + "/FenDuoDuoH5/html/page/other/aboutUs.html";//关于我们
-    public static String BuyVIP = Base_H5_Host + "/FlashLoanH5/html/page/bank/ok_order.html";//购买VIP页
-    public static String orderDetailsUrl = Base_H5_Host + "/FenDuoDuoH5/html/page/indent/indent_dtl2.html";//订单详情页
-    public static String saveProductApply = GuanJiaHost1 + "/userCenter/productApply/saveProductApply";//贷款产品申请成功回调入库接口
-    public static String queryProductMonitor = GuanJiaHost2 + "/loanCenter/loanAllProduct/queryProductMonitor";//产品注册信息监控
-    public static String Reject_H5_Url = Base_H5_Host2 + "/FlashLoanH5/html/dkguanjia/guidePage.html";//被拒页面
-    public static String Extension_H5_Url = Base_H5_Host + "/FenDuoDuoH5/html/page/bank/pay_index.html";//续期
-    public static String Repayment_H5_Url = Base_H5_Host + "/FenDuoDuoH5/html/page/bank/pay_index2.html";//还款
-    public static String Reject_Action_H5_Url = Base_H5_Host2 + "/FlashLoanHd/html/hh_activity/jb_index.html";//被拒之后的活动H5链接
-    public static String Operator_Explain = Base_H5_Host + "/FlashLoanH5/html/page/index/amendOPd.html";//运营商修改服务密码说明页
 
 
     public ApiModule(Application application) {
@@ -164,13 +139,6 @@ public class ApiModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        //Retrofit初始化
-        mRetrofit4 = new Retrofit.Builder()
-                .baseUrl(Base_Host_Finance)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
 
     }
 
