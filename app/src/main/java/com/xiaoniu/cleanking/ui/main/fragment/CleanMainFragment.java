@@ -675,4 +675,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("check_garbage_view_page", "\"清理垃圾\"浏览");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("check_garbage_view_page", "\"清理垃圾\"浏览");
+
+    }
 }
