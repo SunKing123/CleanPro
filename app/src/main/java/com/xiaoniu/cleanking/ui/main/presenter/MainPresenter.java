@@ -233,6 +233,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         editor.putStringSet(SpCacheConfig.CACHES_KEY_APK, cachesApkFies);
                         editor.putStringSet(SpCacheConfig.CACHES_KEY_VIDEO, cachesVideo);
                         editor.commit();
+
+                        mView.onScanFileSuccess();
                     }
 
                     @Override

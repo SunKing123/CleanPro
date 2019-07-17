@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
@@ -276,23 +277,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (position == 0) {
             eventCode = "home_click";
             currentPage = "home_page";
-        } else if (position == 1) {
-            eventCode = "tools_click";
-            currentPage = "tools_page";
-        } else if (position == 2) {
+        }  else if (position == 1) {
             eventCode = "selected_click";
             currentPage = "selected_page";
-        } else if (position == 3) {
+        } else if (position == 2) {
             eventCode = "mine_click";
             currentPage = "mine_page";
         }
         if (prePosition == 0) {
             sourcePage = "home_page";
         } else if (prePosition == 1) {
-            sourcePage = "tools_page";
-        } else if (prePosition == 2) {
             sourcePage = "selected_page";
-        } else if (prePosition == 3) {
+        } else if (prePosition == 2) {
             sourcePage = "mine_page";
         }
         StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
@@ -364,6 +360,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 扫描成功
+     */
+    public   void onScanFileSuccess(){
+        EventBus.getDefault().post(new FileCleanSizeEvent());
     }
 
     public interface OnKeyBackListener {

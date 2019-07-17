@@ -284,7 +284,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
         long totalSizes = 0;
         for (FirstJunkInfo firstJunkInfo : listInfo)
-            totalSizes += firstJunkInfo.getTotalSize();
+            totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
         setCleanSize(totalSizes, true);
         this.totalSizesCleaned = totalSizes;
     }
@@ -343,12 +343,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 aboveListInfo.add(mInfo);
             }
             List<PackageInfo> listP = FileQueryUtils.getInstalledList();
-            long oneG = (1024 * 1024 * 1024) / aboveListInfo.size();
+//            long oneG = (1024 * 1024 * 1024) / aboveListInfo.size();
             long un = 80886656;
-            if (aboveListInfo.size() < 10) {
+            if (aboveListInfo.size() < 10 && aboveListInfo.size() > 0) {
                 un = 80886656;
+            } else if (aboveListInfo.size() < 20 && aboveListInfo.size() >= 10) {
+                un = 40886656;
             } else {
-                un = oneG;
+                un = 20886656;
             }
             for (FirstJunkInfo firstJunkInfo : aboveListInfo) {
                 for (int j = 0; j < listP.size(); j++) {

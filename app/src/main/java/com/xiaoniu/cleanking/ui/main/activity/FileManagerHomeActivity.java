@@ -2,6 +2,9 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +14,7 @@ import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
@@ -19,6 +23,9 @@ import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -131,6 +138,34 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         }
     }
 
+
+    /**
+     * 文件扫描后更新size
+     */
+    @Subscribe
+    public void onUpdateSize(FileCleanSizeEvent fileCleanSizeEvent) {
+
+        long videoSize = mPresenter.getVideoTotalSize();
+        long musicSize = mPresenter.getMusicTotalSize();
+        long apkSize = mPresenter.getAPKTotalSize();
+        if (null != tvVideoSize && videoSize > 0) {
+            tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
+        }
+        if (null != tvMusicSize && musicSize > 0) {
+            tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
+        }
+        if (null != tvApkSize && apkSize > 0) {
+            tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
+        }
+
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -138,13 +173,15 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         long videoSize = mPresenter.getVideoTotalSize();
         long musicSize = mPresenter.getMusicTotalSize();
         long apkSize = mPresenter.getAPKTotalSize();
-        if (null != tvVideoSize) {
+
+
+        if (null != tvVideoSize && videoSize > 0) {
             tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
         }
-        if (null != tvMusicSize) {
+        if (null != tvMusicSize && musicSize > 0) {
             tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
         }
-        if (null != tvApkSize) {
+        if (null != tvApkSize && apkSize > 0) {
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
         }
         NiuDataAPI.onPageStart("file_clean_page_view_page", "文件清理");
@@ -154,5 +191,11 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
     protected void onPause() {
         super.onPause();
         NiuDataAPI.onPageEnd("file_clean_page_view_page", "文件清理");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
