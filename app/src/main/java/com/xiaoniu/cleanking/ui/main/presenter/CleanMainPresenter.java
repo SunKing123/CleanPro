@@ -464,6 +464,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param countEntity
      */
     public void startClean(ObjectAnimator animatorSet, ObjectAnimator animatorSet2, CountEntity countEntity) {
+        if (countEntity == null) {
+            countEntity = new CountEntity();
+        }
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(5000);
         String unit = countEntity.getUnit();
