@@ -177,6 +177,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);
         }
+        @JavascriptInterface
+        public void onTitleClick(String id, String name) {
+            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+        }
     }
 
 

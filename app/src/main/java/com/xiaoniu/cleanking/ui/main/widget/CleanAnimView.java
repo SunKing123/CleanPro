@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 
 /**
@@ -56,6 +57,17 @@ public class CleanAnimView extends RelativeLayout {
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
     LinearLayout mLayoutNotNet;
+
+    /**
+     * 一键清理页面
+     */
+    public static final int page_junk_clean = 0;
+    /**
+     * 手机清理页面
+     */
+    public static final int page_file_clean = 1;
+
+    private int currentPage = 0;
 
     /**
      * 第二阶段
@@ -170,10 +182,11 @@ public class CleanAnimView extends RelativeLayout {
         });
     }
 
-    public void setData(CountEntity countEntity) {
+    public void setData(CountEntity countEntity,int page) {
         if (countEntity == null) {
             return;
         }
+        currentPage = page;
         mCountEntity = countEntity;
         mTextCount.setText(mCountEntity.getTotalSize());
         mTextUnit.setText(mCountEntity.getUnit());
@@ -443,6 +456,12 @@ public class CleanAnimView extends RelativeLayout {
 
             }
         });
+
+        if (currentPage == page_file_clean) {
+            NiuDataAPI.onPageStart("mobile_clean_up_page_view","手机清理页浏览");
+        } else if (currentPage == page_junk_clean) {
+            NiuDataAPI.onPageStart("clean_up_page_view","清理完成页浏览");
+        }
     }
 }
 

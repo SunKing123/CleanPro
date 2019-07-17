@@ -93,7 +93,7 @@ public class JunkCleanActivity extends SimpleActivity {
 
         //立即清理点击
         mTextClean.setOnClickListener(v -> {
-            mCleanAnimView.setData(countEntity);
+            mCleanAnimView.setData(countEntity,CleanAnimView.page_junk_clean);
             mCleanAnimView.setVisibility(View.VISIBLE);
             //清理动画
             mCleanAnimView.startTopAnim(false);
@@ -202,8 +202,13 @@ public class JunkCleanActivity extends SimpleActivity {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
+        if (mCleanAnimView != null && mCleanAnimView.getVisibility() == View.VISIBLE) {
+            StatisticsUtils.trackClick("home_page_clean_up_click", "清理完成返回按钮点击", "home_page", "");
+        }else {
+            StatisticsUtils.trackClick("view_spam_details_garbage_details_click", "‘垃圾详情’返回", "home_page", "");
+        }
         finish();
-        StatisticsUtils.trackClick("view_spam_details_garbage_details_click", "‘垃圾详情’返回", "home_page", "");
+
     }
 
     @OnClick({R.id.icon_more})
@@ -263,7 +268,11 @@ public class JunkCleanActivity extends SimpleActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("view_spam_details_view_page","一键清理页面浏览");
+        if (mCleanAnimView != null && mCleanAnimView.getVisibility() == View.VISIBLE) {
+            NiuDataAPI.onPageEnd("clean_up_page_view","清理完成页浏览");
+        }else {
+            NiuDataAPI.onPageEnd("view_spam_details_view_page","一键清理页面浏览");
+        }
     }
 
     /**
