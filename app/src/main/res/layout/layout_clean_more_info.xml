@@ -1,36 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="184dp"
-              android:layout_height="108dp"
-              android:background="@mipmap/icon_junk_more"
-              android:orientation="vertical">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="184dp"
+    android:layout_height="108dp">
 
-    <TextView
-        android:id="@+id/text_apk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_21dp"
-        android:layout_marginLeft="@dimen/dimen_18dp"
-        android:text="安装包保护名单"
-        android:textSize="@dimen/dimen_16sp"
-        android:textColor="@color/color_4A4A4A"/>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="184dp"
+        android:layout_height="108dp"
+        android:background="@mipmap/icon_junk_more"
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginBottom="@dimen/dimen_12dp"
-        android:layout_marginLeft="@dimen/dimen_5dp"
-        android:layout_marginRight="@dimen/dimen_5dp"
-        android:layout_height="1dp"
-        android:background="@color/color_EDEDED"/>
+        <TextView
+            android:id="@+id/text_apk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dimen_18dp"
+            android:paddingTop="@dimen/dimen_21dp"
+            android:paddingBottom="@dimen/dimen_12dp"
+            android:text="安装包保护名单"
+            android:textColor="@color/color_4A4A4A"
+            android:textSize="@dimen/dimen_16sp"/>
 
-    <TextView
-        android:id="@+id/text_memory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_18dp"
-        android:text="加速保护名单"
-        android:textSize="@dimen/dimen_16sp"
-        android:textColor="@color/color_4A4A4A"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dimen_5dp"
+            android:layout_marginRight="@dimen/dimen_5dp"
+            android:background="@color/color_EDEDED"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/text_memory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dimen_18dp"
+            android:text="加速保护名单"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
+            android:textColor="@color/color_4A4A4A"
+            android:textSize="@dimen/dimen_16sp"/>
+    </LinearLayout>
+</FrameLayout>

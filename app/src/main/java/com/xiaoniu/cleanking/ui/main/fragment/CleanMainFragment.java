@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -118,6 +119,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LinearLayout mLayoutNotNet;
     @BindView(R.id.text_bottom_title)
     TextView mTextBottomTitle;
+
+    @BindView(R.id.view_click_first_ad)
+    View mFirstViewAdClick;
+    @BindView(R.id.view_click_second_ad)
+    View mSecondViewAdClick;
 
     /**
      * 清理的分类列表
@@ -237,7 +243,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
         if (type == TYPE_SCAN_FINISH) {
-            mScrollView.scrollTo(mScrollView.getScrollX(),0);
+            mScrollView.scrollTo(mScrollView.getScrollX(), 0);
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
             mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
@@ -266,7 +272,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             long time = (now - preCleanTime) / 1000;
             if (time < 30) {
                 cleanFinishSign();
-            }else {
+            } else {
                 //未扫描， 去扫描
                 mCircleOuter.setVisibility(VISIBLE);
                 mCircleOuter2.setVisibility(VISIBLE);
@@ -274,6 +280,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
                 type = TYPE_SCANING;
                 mButtonCleanNow.setText("停止扫描");
+                mTextScanTrace.setText("扫描中");
             }
 
         } else if (type == TYPE_SCANING) {
@@ -532,8 +539,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 super.onPageFinished(view, url);
 //                cancelLoadingDialog();
                 if (!isError) {
-                    mLayoutNotNet.setVisibility(View.GONE);
-                    mWebView.setVisibility(View.VISIBLE);
+                    if (mLayoutNotNet != null) {
+                        mLayoutNotNet.setVisibility(View.GONE);
+                    }
+                    if (mWebView != null) {
+                        mWebView.setVisibility(View.VISIBLE);
+                    }
                 }
                 isError = false;
             }
@@ -631,30 +642,33 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
-            clickDownload(mImageFirstAd,dataBean.getDownloadUrl(),position);
+            clickDownload(mFirstViewAdClick, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(VISIBLE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
-            clickDownload(mImageSecondAd,dataBean.getDownloadUrl(),position);
+            clickDownload(mSecondViewAdClick, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(VISIBLE);
         }
         StatisticsUtils.trackClickHolder("clean_up_ad_show", "\"广告展示曝光", "home_page"
-                , "home_page_clean_up_page",String.valueOf(position));
+                , "home_page_clean_up_page", String.valueOf(position));
 
     }
 
     /**
      * 点击下载app
+     *
      * @param view
      * @param downloadUrl
      */
-    public void clickDownload(View view, String downloadUrl,int position) {
+    public void clickDownload(View view, String downloadUrl, int position) {
         view.setOnClickListener(v -> {
             //广告埋点
             StatisticsUtils.trackClickHolder("clean_up_ad_click", "\"广告点击", "home_page"
-                    , "home_page_clean_up_page",String.valueOf(position));
+                    , "home_page_clean_up_page", String.valueOf(position));
             mPresenter.startDownload(downloadUrl);
+            ToastUtils.show("已开始下载");
         });
     }
+
 }

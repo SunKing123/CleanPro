@@ -15,7 +15,6 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,9 +23,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Process;
-import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,8 +42,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -377,7 +373,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         contentView.setOnClickListener(v -> {
             popupWindow.dismiss();
             mView.setFromProtect(true);
-            mView.startActivity(WhiteListSpeedAddActivity.class);
+            mView.startActivity(WhiteListSpeedManageActivity.class);
         });
         popupWindow.setTouchable(true);
         popupWindow.setTouchInterceptor((v, event) -> {

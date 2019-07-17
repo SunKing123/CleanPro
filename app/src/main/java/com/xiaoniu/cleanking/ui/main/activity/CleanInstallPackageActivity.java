@@ -159,7 +159,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("Installation_pack_pleaning_delete_click","\"删除按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
 
-            String title=String.format("确认删除%s个安装包",getSelectSize());
+            String title=String.format("确认删除这%s个安装包",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {

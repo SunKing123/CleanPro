@@ -9,7 +9,7 @@ public class AppConstants {
     //生产环境
     public static String Base_Host = "https://fddapi.fdd188.com";
     public static String Base_Image_Host = "http://fddimage.51huihuahua.com";//图片路径
-    public static String Base_H5_Host = "https://fddh5.fdd188.com";//H5路径
+    public static String Base_H5_Host = "https://wkqlapph5.wukongclean.com";//H5路径
     public static String Base_H5_Host2 = "http://fddh5.51huihuahua.com";//H5路径
     public static String Map_Https = "http://fddh5.51huihuahua.com";//地图路径
     public static String Base_Big_Data = "http://dataprobe.xiaoniu.com";//大数据接口路径

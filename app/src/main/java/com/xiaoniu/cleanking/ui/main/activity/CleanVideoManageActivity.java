@@ -169,7 +169,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("clean_click","\"清理\"点击","file_cleaning_page","video_cleaning_page");
 
-            String title=String.format("确定删除%s个视频?",getSelectSize());
+            String title=String.format("确定删除这%s个视频?",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
