@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/dimen_12dp"
-            android:paddingRight="@dimen/dimen_8dp"
             android:src="@mipmap/back"/>
 
         <TextView
@@ -26,6 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/img_back"
             android:text="个人信息"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_18sp"/>
 
