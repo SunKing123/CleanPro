@@ -89,7 +89,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             public void onClick(View v) {
                 finish();
 
-                StatisticsUtils.trackClick("file_clean_back_click ", "返回按钮", "home_page", "file_cleaning_page");
+                StatisticsUtils.trackClick("file_clean_back_click", "返回按钮", "home_page", "file_cleaning_page");
             }
         });
     }

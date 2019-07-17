@@ -25,16 +25,29 @@ public class StatisticsUtils {
     public static void trackClick(String eventCode, String eventName, String sourcePage, String currentPage) {
         JSONObject j = new JSONObject();
         try {
-            j.put("source_page", sourcePage);
-            j.put("current_page", currentPage);
+            j.put("source_page", sourcePage.trim());
+            j.put("current_page", currentPage.trim());
         } catch (JSONException e) {
             e.printStackTrace();
         }
         StringBuilder builder = new StringBuilder();
-        builder.append(eventCode);
+        builder.append(eventCode.trim());
         NiuDataAPI.trackClick(builder.toString(), eventName, j);
     }
-
+    public static void trackClickH5(String eventCode, String eventName, String sourcePage, String currentPage,String id,String name) {
+        JSONObject j = new JSONObject();
+        try {
+            j.put("source_page", sourcePage.trim());
+            j.put("current_page", currentPage.trim());
+            j.put("content_cate_id", id.trim());
+            j.put("content_cate_name", name.trim());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(eventCode.trim());
+        NiuDataAPI.trackClick(builder.toString(), eventName, j);
+    }
 
     /**
      * sdk 首页广告
@@ -58,6 +71,9 @@ public class StatisticsUtils {
         builder.append(eventCode);
         NiuDataAPI.trackClick(builder.toString(), eventName, j);
     }
+
+
+
     /**
      * h5的点击埋点
      *

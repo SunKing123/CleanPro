@@ -18,4 +18,8 @@ public class JavaInterface {
         ARouter.getInstance().build(RouteConstants.USER_LOAD_H5_ACTIVITY).with(bundle).navigation();
 
     }
+    @JavascriptInterface
+    public void onTitleClick(String id, String name) {
+        StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+    }
 }

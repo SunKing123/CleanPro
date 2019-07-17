@@ -177,6 +177,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);
         }
+        @JavascriptInterface
+        public void onTitleClick(String id, String name) {
+            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+        }
     }
 
 
@@ -198,7 +202,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onClick(View v) {
                 finish();
-                StatisticsUtils.trackClick("One_click_acceleration_Clean_click", "返回按钮", "home_page", "One_click_acceleration_Clean_up_pag");
+                StatisticsUtils.trackClick("One_click_acceleration_Clean_click", "返回按钮", "home_page", "One_click_acceleration_Clean_up_page");
             }
         });
 
@@ -413,11 +417,18 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     //清理完毕后展示内容
     public void setCleanedView(long sized) {
+        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         mWebView.setVisibility(View.VISIBLE);
         initWebView();
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");
         setHasCleaned(sized);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
     public void setHasCleaned(long sized) {
