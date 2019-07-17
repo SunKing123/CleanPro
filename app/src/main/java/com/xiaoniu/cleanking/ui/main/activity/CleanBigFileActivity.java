@@ -160,7 +160,11 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         switch (view.getId()) {
             case R.id.img_back:
                 finish();
-                StatisticsUtils.trackClick("cell_phone_clean_click", "手机清理返回按钮点击", "home_page", "");
+                if (mCleanAnimView != null && mCleanAnimView.getVisibility() == View.VISIBLE) {
+                    StatisticsUtils.trackClick("cell_phone_clean_click", "手机清理返回按钮点击", "home_page", "");
+                }else {
+                    StatisticsUtils.trackClick(" mobile_cleaning_scan_clean_up_click", "清理完成返回按钮点击", "home_page", "");
+                }
                 break;
             case R.id.do_junk_clean:
                 //垃圾清理
@@ -217,7 +221,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
      * @param countEntity
      */
     public void startCleanAnim(CountEntity countEntity) {
-        mCleanAnimView.setData(countEntity);
+        mCleanAnimView.setData(countEntity,CleanAnimView.page_file_clean);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);
     }
@@ -244,6 +248,12 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("cell_phone_clean_click_view","手机清理页面浏览");
+        if (mCleanAnimView != null && mCleanAnimView.getVisibility() == View.VISIBLE) {
+            NiuDataAPI.onPageEnd("mobile_clean_up_page_view","手机清理页浏览");
+        }else {
+            NiuDataAPI.onPageEnd("cell_phone_clean_click_view","手机清理页面浏览");
+        }
+
     }
+
 }

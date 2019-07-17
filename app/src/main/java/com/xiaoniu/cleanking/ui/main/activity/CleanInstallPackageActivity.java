@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanInstallPackagePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -382,6 +383,14 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     @Override
     protected void onResume() {
         super.onResume();
-        StatisticsUtils.trackClick("Installation_pack_pleaning_view_page","\"安装包清理\"浏览","file_cleaning_page","Installation_pack_pleaning_page");
+        //StatisticsUtils.trackClick("Installation_pack_pleaning_view_page","\"安装包清理\"浏览","file_cleaning_page","Installation_pack_pleaning_page");
+        NiuDataAPI.onPageStart("Installation_pack_pleaning_view_page", "\"安装包清理\"浏览");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("Installation_pack_pleaning_view_page", "\"安装包清理\"浏览");
     }
 }

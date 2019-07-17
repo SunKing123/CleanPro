@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.widget.GrideManagerWrapper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -129,11 +130,19 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     }
 
 
+
+
     @Override
-    protected void onStart() {
-        super.onStart();
-        //视频浏览埋点
-        StatisticsUtils.trackClick("video_cleaning_view_page","\"视频清理\"浏览","file_cleaning_page","video_cleaning_page");
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("video_cleaning_view_page","\"视频清理\"浏览");
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("video_cleaning_view_page","\"视频清理\"浏览");
     }
 
     /**

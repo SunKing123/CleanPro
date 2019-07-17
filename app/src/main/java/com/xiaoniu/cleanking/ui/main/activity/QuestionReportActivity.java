@@ -40,6 +40,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.QuestionReportLoadingDialog
 import com.xiaoniu.cleanking.ui.main.presenter.QuestionReportPresenter;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -422,7 +423,13 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     @Override
     protected void onResume() {
         super.onResume();
-        StatisticsUtils.trackClick("question_feedback_view_page","\"问题反馈\"浏览","personal_center_page","question_feedback_page");
+        NiuDataAPI.onPageStart("question_feedback_view_page", "\"问题反馈\"浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("question_feedback_view_page", "\"问题反馈\"浏览");
     }
 
     @Override
