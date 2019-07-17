@@ -18,13 +18,10 @@ import com.xiaoniu.cleanking.hotfix.listener.MyPatchListener;
 import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
-import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
-import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -307,5 +304,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 }
         }
     }
+
+
 
 }

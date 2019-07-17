@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_56dp"
-        android:id="@+id/layout_title_bar"
         android:background="@color/color_4690FD">
 
         <ImageView
@@ -18,6 +16,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/dimen_12dp"
+            android:paddingRight="@dimen/dimen_8dp"
             android:src="@mipmap/back"/>
 
         <TextView
@@ -25,7 +24,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_toRightOf="@+id/img_back"
             android:text="个人信息"
             android:textColor="@color/white"
@@ -37,23 +35,23 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingRight="@dimen/dimen_16dp"
             android:paddingLeft="@dimen/dimen_16dp"
+            android:paddingRight="@dimen/dimen_16dp"
             android:src="@mipmap/icon_title_more"
             android:visibility="visible"/>
     </RelativeLayout>
 
     <include
-        android:layout_below="@+id/layout_title_bar"
+        layout="@layout/content_junk_clean"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/content_junk_clean"
+        android:layout_below="@+id/layout_title_bar"
         />
 
     <com.xiaoniu.cleanking.ui.main.widget.CleanAnimView
         android:id="@+id/view_clean_anim"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

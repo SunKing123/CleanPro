@@ -196,7 +196,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
                 break;
         }
-
     }
 
 
