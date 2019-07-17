@@ -274,7 +274,7 @@ public class JunkCleanActivity extends SimpleActivity {
         ArrayList<FirstJunkInfo> processList = new ArrayList<>();
         for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
             JunkGroup value = entry.getValue();
-            if ("进程清理".equals(value.mName)) {
+            if (getString(R.string.process_clean).equals(value.mName)) {
                 for (FirstJunkInfo info : value.mChildren) {
                     //进程
                     if (!isCacheWhite(info.getAppPackageName())) {

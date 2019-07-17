@@ -155,8 +155,12 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 if (!isError) {
                     isSuccess = true;
                     //回调成功后的相关操作
-                    mLayoutNetError.setVisibility(View.GONE);
-                    mWebView.setVisibility(View.VISIBLE);
+                    if (mLayoutNetError != null) {
+                        mLayoutNetError.setVisibility(View.GONE);
+                    }
+                    if (mWebView != null) {
+                        mWebView.setVisibility(View.VISIBLE);
+                    }
                 }
                 isError = false;
             }

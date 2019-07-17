@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
+import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,8 +47,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
 import static com.xiaoniu.cleanking.utils.ResourceUtils.getString;
@@ -137,7 +136,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
+        }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
+
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa:我执行了");
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
                 for (FirstJunkInfo info : a) {
@@ -551,11 +552,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                     }
                 }
             }
-
             e.onNext(total);
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-
-        });
+        }).compose(RxUtil.rxObservableSchedulerHelper(mView));
 
 
     }

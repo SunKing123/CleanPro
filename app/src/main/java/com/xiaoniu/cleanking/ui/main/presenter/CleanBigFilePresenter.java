@@ -30,8 +30,6 @@ import javax.inject.Inject;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, CleanBigFileModel> {
 
@@ -160,7 +158,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }).compose(RxUtil.rxObservableSchedulerHelper(mView))
                 .subscribe(o -> {
                     FirstLevelEntity firstLevelEntity = new FirstLevelEntity();
                     if (o instanceof List) {
@@ -224,7 +222,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                 }
             }
             e.onNext("finish");
-        }, BackpressureStrategy.BUFFER).compose(RxUtil.rxSchedulerHelper()).subscribe(o -> {
+        }, BackpressureStrategy.BUFFER).compose(RxUtil.rxSchedulerHelper(mView)).subscribe(o -> {
             mView.cleanFinish(total);
         });
     }

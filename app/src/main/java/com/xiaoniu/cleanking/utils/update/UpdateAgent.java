@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
@@ -43,6 +42,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.listener.IDownloadAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateDownloader;
@@ -77,16 +77,13 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
     private OnCancelListener mOnCancelListener;
 
-    ActivityCompat.OnRequestPermissionsResultCallback callback = new ActivityCompat.OnRequestPermissionsResultCallback() {
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            if (requestCode == 341) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    update();
-                }
+    ActivityCompat.OnRequestPermissionsResultCallback callback = (requestCode, permissions, grantResults) -> {
+        if (requestCode == 341) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                update();
             }
-
         }
+
     };
 
     public ActivityCompat.OnRequestPermissionsResultCallback getCallback() {
@@ -215,8 +212,8 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     public void customerDownload() {
         long currentTimes = System.currentTimeMillis();
-        mApkFile = UpdateUtil.makeFile(String.valueOf(currentTimes),false);
-        mTmpFile = UpdateUtil.makeFile(String.valueOf(currentTimes),true);
+        mApkFile = UpdateUtil.makeFile(String.valueOf(currentTimes), false);
+        mTmpFile = UpdateUtil.makeFile(String.valueOf(currentTimes), true);
 
         requestPermission(this);
     }
@@ -357,18 +354,13 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                     //开始更新
                     agent.update();
                 } else {
-                    //TODO 版本更新没有权限处理
-//                        EventBusUtil.postAppMessage(EventBusTags.DEAL_WITH_NO_PERMISSION, permissionsHint);
+                    if(hasPermissionDeniedForever(mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                        ToastUtils.show(permissionsHint);
+                        mPrompter.dismiss();
+                    }
                 }
             }
         });
-
-//            if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 341);
-//            } else {
-//                //开始更新
-//                agent.update();
-//            }
     }
 
     //失败
@@ -528,5 +520,22 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
 
         }
+    }
+
+    /**
+     * 是否有权限被永久拒绝
+     *
+     * @param activity    当前activity
+     * @param permission 权限
+     * @return
+     */
+    private static boolean hasPermissionDeniedForever(Activity activity, String permission) {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!activity.shouldShowRequestPermissionRationale(permission)) {
+                hasDeniedForever = true;
+            }
+        }
+        return hasDeniedForever;
     }
 }

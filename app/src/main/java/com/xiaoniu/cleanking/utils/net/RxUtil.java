@@ -10,6 +10,9 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.FlowableTransformer;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -43,6 +46,28 @@ public class RxUtil {
         return new FlowableTransformer<T, T>() {
             @Override
             public Flowable<T> apply(Flowable<T> observable) {
+                return observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(fragment.<T>bindUntilEvent(FragmentEvent.DESTROY_VIEW));
+            }
+        };
+    }
+
+    public static <T> ObservableTransformer<T, T> rxObservableSchedulerHelper(final RxAppCompatActivity activity) {    //compose简化线程
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(Observable<T> observable) {
+                return observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(activity.<T>bindUntilEvent(ActivityEvent.DESTROY));
+            }
+        };
+    }
+
+    public static <T> ObservableTransformer<T, T> rxObservableSchedulerHelper(final RxFragment fragment) {    //compose简化线程
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(Observable<T> observable) {
                 return observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .compose(fragment.<T>bindUntilEvent(FragmentEvent.DESTROY_VIEW));

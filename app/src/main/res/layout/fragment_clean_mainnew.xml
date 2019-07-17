@@ -150,8 +150,8 @@
 
                         <ImageView
                             android:id="@+id/view_arrow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/dimen_16dp"
+                            android:layout_height="@dimen/dimen_16dp"
                             android:layout_marginLeft="@dimen/dimen_4dp"
                             android:src="@mipmap/arrow_right_white"
                             android:visibility="gone"/>
@@ -261,7 +261,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:layout_marginBottom="@dimen/dimen_20dp"
-                        android:text="储存占用加速"
+                        android:text="存储空间清理"
                         android:textColor="#999999"
                         android:textSize="11sp"/>
                 </LinearLayout>
@@ -324,6 +324,13 @@
                 android:layout_marginTop="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
                 android:layout_marginBottom="@dimen/dimen_14dp"/>
+            
+            <View
+                android:id="@+id/view_click_first_ad"
+                android:layout_alignTop="@+id/image_ad_bottom_first"
+                android:layout_alignRight="@+id/image_ad_bottom_first"
+                android:layout_width="@dimen/dimen_64dp"
+                android:layout_height="@dimen/dimen_58dp"/>
 
             <ImageView
                 android:id="@+id/image_ad_bottom_second"
@@ -334,6 +341,13 @@
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
                 android:layout_marginBottom="@dimen/dimen_14dp"/>
+
+            <View
+                android:id="@+id/view_click_second_ad"
+                android:layout_alignTop="@+id/image_ad_bottom_second"
+                android:layout_alignRight="@+id/image_ad_bottom_second"
+                android:layout_width="@dimen/dimen_64dp"
+                android:layout_height="@dimen/dimen_58dp"/>
 
 
         </RelativeLayout>
