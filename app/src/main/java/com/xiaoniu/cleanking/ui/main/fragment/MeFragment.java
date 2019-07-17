@@ -64,7 +64,7 @@ public class MeFragment extends SimpleFragment {
         iv_top.setLayoutParams(clp);
 
         ConstraintLayout.LayoutParams clpt = (ConstraintLayout.LayoutParams) viewmid.getLayoutParams();
-        clpt.topMargin = DeviceUtils.getScreenHeight() * 26 / 100-DeviceUtils.dip2px(15);
+        clpt.topMargin = DeviceUtils.getScreenHeight() * 26 / 100 - DeviceUtils.dip2px(15);
         viewmid.setLayoutParams(clpt);
 
 //        line_feedback.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +86,11 @@ public class MeFragment extends SimpleFragment {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
             }
         }
+        if (hidden) {
+            NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
+        } else {
+            NiuDataAPI.onPageStart("personal_center_view_page", "个人中心浏览");
+        }
     }
 
     @Override
@@ -97,13 +102,12 @@ public class MeFragment extends SimpleFragment {
     @Override
     public void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("personal_center_view_page", "个人中心浏览");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
+
     }
 
     @Override
