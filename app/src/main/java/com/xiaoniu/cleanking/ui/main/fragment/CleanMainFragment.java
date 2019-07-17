@@ -48,6 +48,7 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -346,7 +347,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Override
     public void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("home_page_view_page", "首页浏览", "home_page", "home_page");
     }
 
     /**
@@ -595,6 +595,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             isShow = false;
         }
+        if (!hidden)
+            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
+        else
+            NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
     }
 
     /**

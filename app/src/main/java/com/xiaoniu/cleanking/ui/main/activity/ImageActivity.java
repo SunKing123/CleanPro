@@ -89,7 +89,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                         if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
                             pageName = "file_cleaning_page";
                         }
-                        StatisticsUtils.trackClick("picture_cleaning_all_election_click ", "全选-按钮", pageName, "picture_cleaning_page");
+                        StatisticsUtils.trackClick("picture_cleaning_all_election_click", "全选-按钮", pageName, "picture_cleaning_page");
 
                     }
                 }

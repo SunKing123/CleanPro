@@ -25,13 +25,13 @@ public class StatisticsUtils {
     public static void trackClick(String eventCode, String eventName, String sourcePage, String currentPage) {
         JSONObject j = new JSONObject();
         try {
-            j.put("source_page", sourcePage);
-            j.put("current_page", currentPage);
+            j.put("source_page", sourcePage.trim());
+            j.put("current_page", currentPage.trim());
         } catch (JSONException e) {
             e.printStackTrace();
         }
         StringBuilder builder = new StringBuilder();
-        builder.append(eventCode);
+        builder.append(eventCode.trim());
         NiuDataAPI.trackClick(builder.toString(), eventName, j);
     }
 

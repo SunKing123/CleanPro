@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -90,15 +91,20 @@ public class MeFragment extends SimpleFragment {
     @Override
     public void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("personal_center_view_page", "\"个人中心\"点击", "mine_page", "personal_center_page");
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart("personal_center_view_page", "个人中心浏览");
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
