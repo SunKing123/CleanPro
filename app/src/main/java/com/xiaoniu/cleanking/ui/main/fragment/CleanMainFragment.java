@@ -650,7 +650,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             clickDownload(mSecondViewAdClick, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(VISIBLE);
         }
-        StatisticsUtils.trackClickHolder("clean_up_ad_show", "\"广告展示曝光", "home_page"
+        StatisticsUtils.trackClickHolder("ad_show", "\"广告展示曝光", "home_page"
                 , "home_page_clean_up_page", String.valueOf(position));
 
     }
@@ -664,7 +664,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void clickDownload(View view, String downloadUrl, int position) {
         view.setOnClickListener(v -> {
             //广告埋点
-            StatisticsUtils.trackClickHolder("clean_up_ad_click", "\"广告点击", "home_page"
+            StatisticsUtils.trackClickHolder("ad_click", "\"广告点击", "home_page"
                     , "home_page_clean_up_page", String.valueOf(position));
             mPresenter.startDownload(downloadUrl);
             ToastUtils.show("已开始下载");
