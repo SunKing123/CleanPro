@@ -165,7 +165,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("music_cleaning_delete_click  ","\"删除\"按钮点击","file_cleaning_page","music_cleaning_page");
 
-            String title =String.format("确定删除%s个音乐？",getSelectSize());
+            String title =String.format("确定删除这%s个音乐？",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
