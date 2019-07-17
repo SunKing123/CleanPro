@@ -47,6 +47,7 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
@@ -530,7 +531,10 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);
         }
-
+        @JavascriptInterface
+        public void onTitleClick(String id, String name) {
+            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+        }
         @JavascriptInterface
         public void toOtherPage_gj(String url, String productId, String isRefresh) {
             Bundle bundle = new Bundle();
