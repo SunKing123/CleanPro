@@ -87,13 +87,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     protected void onResume() {
         super.onResume();
         //StatisticsUtils.trackClick("music_cleaning_page_view_page","\"音乐清理\"浏览","file_cleaning_page","music_cleaning_page");
-        NiuDataAPI.onPageStart("music_cleaning_page_view_page","\"音乐清理\"浏览");
+        NiuDataAPI.onPageStart("music_cleaning_page_view_page","音乐清理浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("music_cleaning_page_view_page","\"音乐清理\"浏览");
+        NiuDataAPI.onPageEnd("music_cleaning_page_view_page","音乐清理浏览");
     }
 
     @Override

@@ -423,13 +423,13 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("question_feedback_view_page", "\"问题反馈\"浏览");
+        NiuDataAPI.onPageStart("question_feedback_view_page", "问题反馈浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("question_feedback_view_page", "\"问题反馈\"浏览");
+        NiuDataAPI.onPageEnd("question_feedback_view_page", "问题反馈浏览");
     }
 
     @Override

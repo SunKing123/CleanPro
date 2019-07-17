@@ -135,14 +135,14 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("video_cleaning_view_page","\"视频清理\"浏览");
+        NiuDataAPI.onPageStart("video_cleaning_view_page","视频清理浏览");
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("video_cleaning_view_page","\"视频清理\"浏览");
+        NiuDataAPI.onPageEnd("video_cleaning_view_page","视频清理浏览");
     }
 
     /**

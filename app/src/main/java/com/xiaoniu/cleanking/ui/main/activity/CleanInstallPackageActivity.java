@@ -384,13 +384,13 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     protected void onResume() {
         super.onResume();
         //StatisticsUtils.trackClick("Installation_pack_pleaning_view_page","\"安装包清理\"浏览","file_cleaning_page","Installation_pack_pleaning_page");
-        NiuDataAPI.onPageStart("Installation_pack_pleaning_view_page", "\"安装包清理\"浏览");
+        NiuDataAPI.onPageStart("Installation_pack_pleaning_view_page", "安装包清理浏览");
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("Installation_pack_pleaning_view_page", "\"安装包清理\"浏览");
+        NiuDataAPI.onPageEnd("Installation_pack_pleaning_view_page", "安装包清理浏览");
     }
 }
