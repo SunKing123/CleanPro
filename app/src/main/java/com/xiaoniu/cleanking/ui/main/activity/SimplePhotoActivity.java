@@ -2,7 +2,13 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+
+
+import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.app.TakePhotoActivity;
+import org.devio.takephoto.compress.CompressConfig;
+import org.devio.takephoto.model.LubanOptions;
 import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TResult;
 
@@ -18,7 +24,12 @@ public class SimplePhotoActivity extends TakePhotoActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTakePhoto().onPickFromGallery();
+
+        LubanOptions option = new LubanOptions.Builder().setMaxHeight(1080).setMaxWidth(1080).setMaxSize(50 *1024).create();
+        CompressConfig  config=CompressConfig.ofLuban(option);
+        TakePhoto takePhoto=getTakePhoto();
+        takePhoto.onEnableCompress(config,true);
+        takePhoto.onPickFromGallery();
     }
 
 

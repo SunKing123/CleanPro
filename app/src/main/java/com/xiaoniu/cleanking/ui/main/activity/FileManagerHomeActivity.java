@@ -102,6 +102,8 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         }
         if(imageSize>0){
             tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
+        }else {
+            tvImageSize.setText("");
         }
         viewImagearea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,13 +181,21 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
 
         if (null != tvVideoSize && videoSize > 0) {
             tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
+        }else if(null!=tvVideoSize){
+            tvVideoSize.setText("");
         }
+
         if (null != tvMusicSize && musicSize > 0) {
             tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
+        }else if(null!=tvMusicSize){
+            tvMusicSize.setText("");
         }
         if (null != tvApkSize && apkSize > 0) {
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
+        }else if(null!=tvApkSize){
+            tvApkSize.setText("");
         }
+
         NiuDataAPI.onPageStart("file_clean_page_view_page", "文件清理");
     }
 
