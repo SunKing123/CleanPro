@@ -600,7 +600,20 @@ if (buildWithTinker()) {
         }
     }
 }
+rebuildChannel {
+    //指定渠道文件
+    channelFile = file("../channel.txt")
+    //渠道名会替换基础包名称里的base字符串
+    baseReleaseApk = new File(project.projectDir, "prod/release/clean_base.apk")
 
+    //Release渠道包输出目录
+    releaseOutputDir = new File(project.projectDir, "build/channel")
+
+    //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
+    isFastMode = false
+    //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
+    lowMemory = false
+}
 task sortPublicTxt() {
     doLast {
         File originalFile = project.file("public.txt")
