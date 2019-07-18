@@ -72,9 +72,9 @@ public class ImagePreviewPresenter extends RxPresenter<PreviewImageActivity, Mai
         lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        Button btnOk = (Button) window.findViewById(R.id.btnOk);
+        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
 
-        Button btnCancle = (Button) window.findViewById(R.id.btnCancle);
+        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
         TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
         tipTxt.setText("确定删除这"+deleteNum+"张图片？");
         btnOk.setOnClickListener(new View.OnClickListener() {

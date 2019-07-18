@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImagePreviewAdapter;
@@ -153,8 +155,10 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
                     @Override
                     public void clickOKBtn() {
                         for (int i = 0; i < listF.size(); i++) {
-                            File f = new File(listF.get(i).getPath());
-                            f.delete();
+//                            File f = new File(listF.get(i).getPath());
+//                            f.delete();
+                            AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+listF.get(i).getPath()+"\"",null);
+
                         }
                         //数据库删除选中的文件
                         mPresenter.deleteFromDatabase(listF);

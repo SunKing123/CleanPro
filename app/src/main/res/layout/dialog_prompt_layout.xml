@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/dimen_8dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/title_ly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dimen_24dp"
+                tools:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_prompt_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/dimen_8dp"
+                    android:paddingBottom="@dimen/dimen_8dp"
+                    android:paddingRight="@dimen/dimen_8dp"
+                    android:textColor="#FF9300"
+                    android:textSize="@dimen/dimen_18sp"
+                    android:textStyle="bold"
+                    tools:text="公告"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/color_E9EBEE"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_prompt_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.2"
+                android:minHeight="@dimen/dimen_40dp"
+                android:padding="@dimen/dimen_16dp"
+                android:textColor="@color/color_323232"
+                android:textSize="@dimen/dimen_14sp"
+                tools:text="12月12日～15日\n升级提示\n升级提示升级提示升级提示升级提示升级提示升级提示升级提示升级提示升级提示。"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_E9EBEE"/>
+
+            <LinearLayout
+                android:id="@+id/ly_action_btn_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_positive"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_46dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:textColor="#727375"
+                    android:textSize="@dimen/dimen_18sp"
+                    android:visibility="gone"
+                    tools:background="@color/white"
+                    tools:text="我知道了"
+                    tools:visibility="visible"/>
+
+                <View
+                    android:visibility="gone"
+                    android:layout_width="0.2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_E9EBEE"/>
+
+                <TextView
+                    android:id="@+id/btn_neutral"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_46dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:textColor="#727375"
+                    android:textSize="@dimen/dimen_18sp"
+                    android:visibility="gone"
+                    tools:background="@color/white"
+                    tools:text="我知道了"
+                    tools:visibility="visible"/>
+
+                <View
+                    android:layout_width="0.2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_E9EBEE"/>
+
+                <TextView
+                    android:id="@+id/btn_negative"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_46dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:textColor="#FF2F31"
+                    android:textSize="@dimen/dimen_18sp"
+                    android:visibility="gone"
+                    tools:background="@color/white"
+                    tools:text="我知道了"
+                    tools:visibility="visible"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <!--style="?android:attr/borderlessButtonStyle"-->
+</android.support.v7.widget.CardView>

@@ -194,17 +194,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-
+        mPresenter.checkPermission();
         ViewGroup.LayoutParams layoutParams = mLayoutCleanFinish.getLayoutParams();
         layoutParams.height = ScreenUtils.getScreenHeight(AppApplication.getInstance());
         mLayoutCleanFinish.setLayoutParams(layoutParams);
 
-        new Handler().postDelayed(() -> {
-            mPresenter.startScan();
-            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
-            type = TYPE_SCANING;
-            mButtonCleanNow.setText("停止扫描");
-        }, 500);
 
         //请求广告接口
         mPresenter.requestBottomAd();
@@ -212,6 +206,15 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
+
+    public void startScan() {
+        new Handler().postDelayed(() -> {
+            mPresenter.startScan();
+            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+            type = TYPE_SCANING;
+            mButtonCleanNow.setText("停止扫描");
+        }, 500);
+    }
 
     //    @OnClick(R.id.text_cooling)
 //    public void onCoolingViewClicked() {
@@ -679,6 +682,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("check_garbage_view_page", "\"清理垃圾\"浏览");
+        if (isGotoSetting) {
+            mPresenter.checkPermission();
+            isGotoSetting = false;
+        }
+    }
+
+    boolean isGotoSetting = false;
+
+    public void setIsGotoSetting(boolean isGotoSetting) {
+        this.isGotoSetting = isGotoSetting;
     }
 
     @Override

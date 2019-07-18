@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -20,6 +23,7 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -31,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 /**
  * 文件管理首页
@@ -100,14 +105,14 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         for (FileEntity fileEntity : listPhoto) {
             imageSize += fileEntity == null ? 0 : NumberUtils.getLong(fileEntity.getSize());
         }
-        if(imageSize>0){
+        if (imageSize > 0) {
             tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
         }
         viewImagearea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
-                for(FileEntity fileEntity:listPhoto)
+                for (FileEntity fileEntity : listPhoto)
                     fileEntity.setIsSelect(false);
                 CleanAllFileScanUtil.clean_image_list = listPhoto;
                 startActivity(intent);
@@ -187,6 +192,42 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
         }
         NiuDataAPI.onPageStart("file_clean_page_view_page", "文件清理");
+    }
+
+    public void checkPermission() {
+        String permissionsHint = "需要打开文件读写权限";
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        new RxPermissions(FileManagerHomeActivity.this).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始更新
+
+                } else {
+                    if (hasPermissionDeniedForever(FileManagerHomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        ToastUtils.show(permissionsHint);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 是否有权限被永久拒绝
+     *
+     * @param activity   当前activity
+     * @param permission 权限
+     * @return
+     */
+    private static boolean hasPermissionDeniedForever(Activity activity, String permission) {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!activity.shouldShowRequestPermissionRationale(permission)) {
+                hasDeniedForever = true;
+            }
+        }
+        return hasDeniedForever;
     }
 
     @Override
