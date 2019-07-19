@@ -8,17 +8,21 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -30,9 +34,7 @@ import android.widget.TextView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -46,7 +48,6 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -669,8 +670,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                 } else {
                     if (hasPermissionDeniedForever(mView.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         //永久拒绝权限
-                        showPermissionDialog(permissionsHint);
-                    }else{
+                        showPermissionDialog(mView.getContext());
+                    } else {
                         //拒绝权限
                         checkPermission();
                     }
@@ -686,42 +687,90 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      */
     PromptDialog dialog;
 
-    public void showPermissionDialog(String stringRes) {
+//    public void showPermissionDialog(String stringRes) {
+//        if (dialog != null && dialog.isShowing())
+//            return;
+//        dialog = PromptDialog.builder(mView.getContext())
+//                .setTitle("提示", R.color.color_111111, R.dimen.dimen_18sp)
+//                .setMessage(stringRes, R.color.color_262626, R.dimen.dimen_15sp)
+//                .setMessagePadding(R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp)
+//                .setMessageGravity(Gravity.CENTER)
+//                .setNegativeBtnStyle(R.dimen.dimen_16sp, R.color.color_FF2F31, R.color.white)
+//                .setNegativeButton("去设置", (dialog1, which) -> {
+//                    dialog1.dismiss();
+//                    if (!TextUtils.isEmpty(stringRes) && stringRes.contains("悬浮窗权限")) {
+//                        try {
+//                            mView.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + mView.getActivity().getPackageName())));
+//                        } catch (Exception e) {
+//                        }
+//                    } else {
+//                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                        intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
+//                            mView.setIsGotoSetting(true);
+//                            mView.getActivity().startActivity(intent);
+//                        }
+//                    }
+////                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+//
+//
+//                })
+//                .setPositiveBtnStyle(R.dimen.dimen_16sp, R.color.color_AEB0B3, R.color.white)
+//                .setPositiveButton("退出", (dialog12, which) -> {
+//                    mView.getActivity().finish();
+//                    dialog12.dismiss();
+//                })
+//                .create();
+//        dialog.show();
+//    }
+
+    AlertDialog dlg;
+
+    public void showPermissionDialog(Context context) {
         if (dialog != null && dialog.isShowing())
             return;
-        dialog = PromptDialog.builder(mView.getContext())
-                .setTitle("提示", R.color.color_111111, R.dimen.dimen_18sp)
-                .setMessage(stringRes, R.color.color_262626, R.dimen.dimen_15sp)
-                .setMessagePadding(R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp)
-                .setMessageGravity(Gravity.CENTER)
-                .setNegativeBtnStyle(R.dimen.dimen_16sp, R.color.color_FF2F31, R.color.white)
-                .setNegativeButton("去设置", (dialog1, which) -> {
-                    dialog1.dismiss();
-                    if (!TextUtils.isEmpty(stringRes) && stringRes.contains("悬浮窗权限")) {
-                        try {
-                            mView.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + mView.getActivity().getPackageName())));
-                        } catch (Exception e) {
-                        }
-                    } else {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
-                            mView.setIsGotoSetting(true);
-                            mView.getActivity().startActivity(intent);
-                        }
-                    }
-//                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+        dlg = new AlertDialog.Builder(context).create();
+        if (((Activity) context).isFinishing()) {
+            return;
+        }
+        dlg.show();
+        Window window = dlg.getWindow();
+        window.setContentView(R.layout.alite_redp_send_dialog);
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        //这里设置居中
+        lp.gravity = Gravity.CENTER;
+        window.setAttributes(lp);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
 
-
-                })
-                .setPositiveBtnStyle(R.dimen.dimen_16sp, R.color.color_AEB0B3, R.color.white)
-                .setPositiveButton("退出", (dialog12, which) -> {
-                    mView.getActivity().finish();
-                    dialog12.dismiss();
-                })
-                .create();
-        dialog.show();
+        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
+        TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
+        TextView content = (TextView) window.findViewById(R.id.content);
+        btnCancle.setText("退出");
+        btnOk.setText("去设置");
+        tipTxt.setText("提示!");
+        content.setText("清理功能无法使用，请先开启文件读写权限。");
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
+                    mView.setIsGotoSetting(true);
+                    mView.getActivity().startActivity(intent);
+                }
+            }
+        });
+        btnCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                mView.getActivity().finish();
+            }
+        });
     }
 
     /**

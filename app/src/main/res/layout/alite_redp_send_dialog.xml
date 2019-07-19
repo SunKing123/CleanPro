@@ -25,7 +25,7 @@
                 android:id="@+id/tipTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="left"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="20dp"
                 android:text="确定删除这7张图片？"
