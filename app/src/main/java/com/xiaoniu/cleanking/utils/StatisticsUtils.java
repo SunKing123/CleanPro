@@ -71,7 +71,19 @@ public class StatisticsUtils {
         builder.append(eventCode);
         NiuDataAPI.trackClick(builder.toString(), eventName, j);
     }
-
+    public static void trackClickHolderCustom(String eventCode, String eventName, String sourcePage, String currentPage,String position) {
+        JSONObject j = new JSONObject();
+        try {
+            j.put("source_page", sourcePage);
+            j.put("current_page", currentPage);
+            j.put("ad_position_id",position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(eventCode);
+        NiuDataAPI.trackEvent(builder.toString(), eventName, j);
+    }
 
 
     /**

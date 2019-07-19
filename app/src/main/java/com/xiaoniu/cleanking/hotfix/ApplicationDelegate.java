@@ -119,13 +119,15 @@ public class ApplicationDelegate extends DefaultApplicationLike {
         mAppComponent.inject(getApplication());
     }
 
-    public void initNiuData(){
+    public void initNiuData() {
         //测试环境
         NiuDataAPI.init(AppApplication.getInstance(), new Configuration().serverUrl(AppConstants.BIGDATA_MD)
                 //.debugOn() //切换到sdk默认的测试环境地址
                 .logClose()//打开sdk日志信息
+                .channel(AndroidUtil.getMarketId())
         );
     }
+
     public static AppComponent getAppComponent() {
         return mAppComponent;
     }
