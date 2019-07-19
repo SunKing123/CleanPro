@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -123,11 +125,20 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        ShadowDrawable.setShadowDrawable(mBottomBar, Color.parseColor("#ffffff"),
 //                DeviceUtils.dip2px(6),
 //                Color.parseColor("#1A000000"), DeviceUtils.dip2px(8), 0, 5);
-        mBottomBar
-                .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
-//                .addItem(new BottomBarTab(this, R.mipmap.tool_normal, "工具箱"))
-                .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
-                .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+//        状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "0")) {
+            mBottomBar
+                    .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
+//                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
+                    .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+        } else {
+            mBottomBar
+                    .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
+                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
+                    .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+        }
+
         mBottomBar.setCurrentItem(0);
         CLEAN = 0;
         TOOL = 1;
@@ -161,7 +172,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         //扫描更新系统数据库
-        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null,null);
+        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);
     }
 
     private void checkReadPermission() {
@@ -246,15 +257,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
-//        String url = ApiModule.SHOPPING_MALL;
         String url = ApiModule.Base_H5_Host;
 
-        ToolFragment toolFragment = new ToolFragment();
+//        ToolFragment toolFragment = new ToolFragment();
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
-//        BaseBrowserFragment baseBrowserFragment=BaseBrowserFragment.newInstance(url);
         mFragments.add(mainFragment);
-//        mFragments.add(toolFragment);
-        mFragments.add(upQuotaFragment);
+
+        //        状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1")) {
+            mFragments.add(upQuotaFragment);
+        }
         mFragments.add(mineFragment);
 
         mManager.beginTransaction()
@@ -277,7 +290,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (position == 0) {
             eventCode = "home_click";
             currentPage = "home_page";
-        }  else if (position == 1) {
+        } else if (position == 1) {
             eventCode = "selected_click";
             currentPage = "selected_page";
         } else if (position == 2) {
@@ -341,7 +354,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 CleanMainFragment fragment = (CleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            }else {
+            } else {
                 long secondTime = System.currentTimeMillis();
                 if (secondTime - firstTime > 1500) {
                     // 如果两次按键时间间隔大于800毫秒，则不退出
@@ -365,7 +378,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 扫描成功
      */
-    public   void onScanFileSuccess(){
+    public void onScanFileSuccess() {
         EventBus.getDefault().post(new FileCleanSizeEvent());
     }
 

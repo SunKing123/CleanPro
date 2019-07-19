@@ -9,6 +9,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 
 
 /**
@@ -30,8 +33,8 @@ public class BottomBarTab extends FrameLayout {
     private Context mContext;
     private int mTabPosition = -1;
 
-    private int[] iconsSelect = {R.mipmap.clean_select, R.mipmap.msg_select,R.mipmap.me_select};
-    private int[] icons = {R.mipmap.clean_normal,R.mipmap.msg_normal, R.mipmap.me_normal};
+    private int[] iconsSelect = {R.mipmap.clean_select, R.mipmap.msg_select, R.mipmap.me_select};
+    private int[] icons = {R.mipmap.clean_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
 
 
     private TextView mTvUnreadCount;
@@ -52,6 +55,15 @@ public class BottomBarTab extends FrameLayout {
 
     private void init(Context context, int icon, CharSequence title) {
         mContext = context;
+        //        状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(getContext(), AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "0")) {
+            icons = new int[]{R.mipmap.clean_normal, R.mipmap.me_normal};
+            iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.me_select};
+        } else {
+            icons = new int[]{R.mipmap.clean_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
+            iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.msg_select, R.mipmap.me_select};
+        }
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
         setBackgroundDrawable(drawable);
@@ -114,14 +126,14 @@ public class BottomBarTab extends FrameLayout {
 //                mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_252222));
 //            } else {
 //                showAnimation(mIcon,animations[mTabPosition]);
-                mIcon.setImageResource(iconsSelect[mTabPosition]);
+            mIcon.setImageResource(iconsSelect[mTabPosition]);
 //                mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_29D69F));
-                mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_29D69F));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_29D69F));
 //            }
         } else {
 //            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_999999));
             mIcon.setImageResource(icons[mTabPosition]);
-           // mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572_50));
+            // mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572_50));
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_999999));
 //            if (mTabPosition == MAIN_ACTIVITY.ACTION) {
 //                mIcon.setImageResource(R.mipmap.icon_action);

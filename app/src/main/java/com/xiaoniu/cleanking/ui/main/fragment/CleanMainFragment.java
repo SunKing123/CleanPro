@@ -41,6 +41,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
@@ -546,7 +547,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                         mLayoutNotNet.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(View.VISIBLE);
+                        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }
                 isError = false;

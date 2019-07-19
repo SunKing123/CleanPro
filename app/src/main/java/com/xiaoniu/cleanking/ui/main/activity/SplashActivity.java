@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.widget.ImageView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -51,7 +53,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
     public void skip() {
         this.mSubscription = Observable.timer(1500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> this.jumpActivity());
+                .subscribe(aLong -> mPresenter.getAuditSwitch());
     }
 
     public void jumpActivity() {
@@ -68,6 +70,16 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
             finish();
         }
 //        }
+    }
+
+    public void getAuditSwitch(AuditSwitch auditSwitch) {
+        if (auditSwitch == null) {
+            //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
+            SPUtil.setString(SplashActivity.this, AppApplication.AuditSwitch, "1");
+        }else{
+            SPUtil.setString(SplashActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
+        }
+        jumpActivity();
     }
 
     @Override

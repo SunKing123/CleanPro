@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
 import com.leon.channel.helper.ChannelReaderUtil;
@@ -58,9 +60,11 @@ public class AndroidUtil {
     public static int getAndroidSDKVersion() {
         return android.os.Build.VERSION.SDK_INT;
     }
+
     public static int getVersionCode() {
         return BuildConfig.VERSION_CODE;
     }
+
     /**
      * 返回当前程序版本名
      */
@@ -80,6 +84,7 @@ public class AndroidUtil {
         }
         return versionName;
     }
+
     /**
      * 返回当前程序版本名
      */
@@ -270,7 +275,20 @@ public class AndroidUtil {
             channel = ChannelReaderUtil.getChannel(AppApplication.getInstance());
         } catch (Exception e) {
         }
-        return !TextUtils.isEmpty(channel) ? channel : "huawei";
+        return !TextUtils.isEmpty(channel) ? channel : "official";
+    }
+
+    //当前是否为审核状态，审核状态则隐藏相关页面
+    public static boolean isInAudit() {
+        boolean isInAudit = false;
+        //        状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(AppApplication.getInstance(), AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1")) {
+            isInAudit = false;
+        } else {
+            isInAudit = true;
+        }
+        return isInAudit;
     }
 
     /**

@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -153,7 +154,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     isSuccess = true;
                     //回调成功后的相关操作
                     mLayoutNetError.setVisibility(View.GONE);
-                    mWebView.setVisibility(View.VISIBLE);
+                    mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                    recycle_view.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
                 }
                 isError = false;
             }
@@ -177,6 +179,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);
         }
+
         @JavascriptInterface
         public void onTitleClick(String id, String name) {
             StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
@@ -418,7 +421,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //清理完毕后展示内容
     public void setCleanedView(long sized) {
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
-        mWebView.setVisibility(View.VISIBLE);
+        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+        recycle_view.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
         initWebView();
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");

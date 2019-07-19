@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.api;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
@@ -30,6 +31,14 @@ public interface UserApiService {
      */
     @POST("/appVersion/query")
     Flowable<AppVersion> queryAppVersion(@Body RequestBody body);
+
+    /**
+     * 过审开关
+     *
+     * @return
+     */
+    @POST("/auditSwitch/query")
+    Flowable<AuditSwitch> queryAuditSwitch(@Body RequestBody body);
 
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);

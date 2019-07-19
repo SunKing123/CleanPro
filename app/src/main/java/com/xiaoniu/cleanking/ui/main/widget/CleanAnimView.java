@@ -32,6 +32,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -155,7 +156,7 @@ public class CleanAnimView extends RelativeLayout {
                         mLayoutNotNet.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(View.VISIBLE);
+                        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }
                 isError = false;

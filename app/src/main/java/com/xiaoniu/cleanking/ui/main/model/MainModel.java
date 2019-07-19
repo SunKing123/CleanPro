@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -62,4 +63,16 @@ public class MainModel extends BaseModel {
         mService.queryPatch(baseVersionName, clientType, patchVersion).compose(RxUtil.<Patch>rxSchedulerHelper(mActivity))
                 .subscribeWith(commonSubscriber);
     }
+
+    public void queryAuditSwitch(Common4Subscriber<AuditSwitch> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("channel", AndroidUtil.getMarketId());
+        map.put("appVersion", AndroidUtil.getAppVersionName());
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.queryAuditSwitch(body).compose(RxUtil.<AuditSwitch>rxSchedulerHelper(mActivity))
+                .subscribeWith(commonSubscriber);
+    }
+
 }
