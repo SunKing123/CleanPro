@@ -1,8 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.Manifest;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,15 +10,11 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -40,7 +34,6 @@ import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -153,9 +146,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 if (!isError) {
                     isSuccess = true;
                     //回调成功后的相关操作
-                    mLayoutNetError.setVisibility(View.GONE);
-                    mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    recycle_view.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                    if (mLayoutNetError != null) {
+                        mLayoutNetError.setVisibility(View.GONE);
+                    }
+                    if (mWebView != null) {
+                        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                    }
+                    if (recycle_view != null) {
+                        recycle_view.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                    }
                 }
                 isError = false;
             }
