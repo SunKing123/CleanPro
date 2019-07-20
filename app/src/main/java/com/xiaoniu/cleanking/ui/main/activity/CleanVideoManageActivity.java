@@ -25,11 +25,13 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanVideoManagePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.GrideManagerWrapper;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -70,8 +72,6 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
-        String path = Environment.getExternalStorageDirectory().getPath();
-        mPresenter.getFlieList(path);
     }
 
     @Override
@@ -86,8 +86,8 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     @Override
     protected void initView() {
-
-        showLoadingDialog();
+        String path = Environment.getExternalStorageDirectory().getPath();
+        mPresenter.getFlieList(path);
         mLoading=CleanFileLoadingDialogFragment.newInstance();
 
         mAdapter = new CleanVideoManageAdapter(this.getBaseContext());
@@ -225,7 +225,6 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         return  size;
     }
     public void updateData(List<VideoInfoBean> infoBeans) {
-        cancelLoadingDialog();
         setEmptyView(infoBeans.size());
         mAdapter.clear();
         mAdapter.modifyList(infoBeans);
@@ -396,10 +395,14 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
      */
     public void playAudio(String audioPath) {
         try {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            Uri uri = Uri.parse("file:///" + audioPath);
+//            intent.setDataAndType(uri, "video/*");
+//            mContext.startActivity(intent);
+            File file = new File(audioPath);
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri uri = Uri.parse("file:///" + audioPath);
-            intent.setDataAndType(uri, "video/*");
-            mContext.startActivity(intent);
+            AndroidUtil.fileUri(this, intent, file, "video/*");
+            startActivity(intent);
         } catch (Exception e) {
 
         }

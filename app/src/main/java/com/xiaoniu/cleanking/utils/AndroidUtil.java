@@ -1,12 +1,15 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -289,6 +292,18 @@ public class AndroidUtil {
             isInAudit = true;
         }
         return isInAudit;
+    }
+//调用第三方程序uri版本兼容
+    public static void fileUri(Context context, Intent intent, File file, String type) {
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".updatefileprovider", file);
+            intent.setDataAndType(contentUri, type);
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), type);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
     }
 
     /**

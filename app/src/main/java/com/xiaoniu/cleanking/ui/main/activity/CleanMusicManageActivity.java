@@ -1,8 +1,11 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -23,9 +27,11 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMusicFilePresenter;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.update.UpdateFileProvider;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
@@ -66,7 +72,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     private boolean mIsCheckAll;
 
     //loading是否为首次弹窗
-    private  boolean isShowFirst=true;
+    private boolean isShowFirst = true;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -82,18 +88,17 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
         //StatisticsUtils.trackClick("music_cleaning_page_view_page","\"音乐清理\"浏览","file_cleaning_page","music_cleaning_page");
-        NiuDataAPI.onPageStart("music_cleaning_page_view_page","音乐清理浏览");
+        NiuDataAPI.onPageStart("music_cleaning_page_view_page", "音乐清理浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("music_cleaning_page_view_page","音乐清理浏览");
+        NiuDataAPI.onPageEnd("music_cleaning_page_view_page", "音乐清理浏览");
     }
 
     @Override
@@ -103,7 +108,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     @Override
     protected void initView() {
-        mLoading=CleanFileLoadingDialogFragment.newInstance();
+        mLoading = CleanFileLoadingDialogFragment.newInstance();
         mAdapter = new CleanMusicManageAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
@@ -118,7 +123,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
                 } else {
                     mIsCheckAll = true;
                 }
-                StatisticsUtils.trackClick("music_cleaning_all_election_click","\"全选\"按钮点击","file_cleaning_page","music_cleaning_page");
+                StatisticsUtils.trackClick("music_cleaning_all_election_click", "\"全选\"按钮点击", "file_cleaning_page", "music_cleaning_page");
                 mCheckBoxAll.setSelected(mIsCheckAll);
                 checkAll(mIsCheckAll);
                 totalSelectFiles();
@@ -146,8 +151,8 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
      * 设置空视图
      */
     private void setEmptyView(int size) {
-        if(null==mLLEmptyView){
-            mLLEmptyView=findViewById(R.id.ll_empty_view);
+        if (null == mLLEmptyView) {
+            mLLEmptyView = findViewById(R.id.ll_empty_view);
         }
         if (size > 0) {
             if (null != mLLEmptyView) {
@@ -167,13 +172,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         int id = view.getId();
 
         if (id == R.id.img_back) {
-            StatisticsUtils.trackClick("music_cleaning_back_click","\"音乐清理\"返回按钮点击","file_cleaning_page","music_cleaning_page");
+            StatisticsUtils.trackClick("music_cleaning_back_click", "\"音乐清理\"返回按钮点击", "file_cleaning_page", "music_cleaning_page");
 
             finish();
         } else if (id == R.id.btn_del) { //删除文件
-            StatisticsUtils.trackClick("music_cleaning_delete_click","\"删除\"按钮点击","file_cleaning_page","music_cleaning_page");
+            StatisticsUtils.trackClick("music_cleaning_delete_click", "\"删除\"按钮点击", "file_cleaning_page", "music_cleaning_page");
 
-            String title =String.format("确定删除这%s个音乐？",getSelectSize());
+            String title = String.format("确定删除这%s个音乐？", getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
@@ -196,10 +201,10 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
                         }
                     }
                     mPresenter.delFile(appInfoSelect);
-                    if(!isShowFirst){
-                        mLoading.setReportSuccess(0,"");
+                    if (!isShowFirst) {
+                        mLoading.setReportSuccess(0, "");
                     }
-                    mLoading.show(getSupportFragmentManager(),"");
+                    mLoading.show(getSupportFragmentManager(), "");
 
                 }
             });
@@ -210,12 +215,12 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("music_cleaning_back_click","\"音乐清理\"返回按钮点击","file_cleaning_page","music_cleaning_page");
+        StatisticsUtils.trackClick("music_cleaning_back_click", "\"音乐清理\"返回按钮点击", "file_cleaning_page", "music_cleaning_page");
         super.onBackPressed();
     }
 
     public void updateDelFileView(List<MusciInfoBean> appInfoBeans) {
-       // Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(mContext, "成功删除" + FileSizeUtils.formatFileSize(totalSize), Toast.LENGTH_SHORT).show();
         //
         List<MusciInfoBean> listsNew = new ArrayList<>();
         List<MusciInfoBean> lists = mAdapter.getLists();
@@ -240,13 +245,13 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
         mPresenter.updateRemoveCache(appInfoBeans);
 
 
-        mLoading.setReportSuccess(1,"成功删除" + FileSizeUtils.formatFileSize(totalSize));
+        mLoading.setReportSuccess(1, "成功删除" + FileSizeUtils.formatFileSize(totalSize));
         mBtnDel.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mLoading.dismissAllowingStateLoss();
             }
-        },1500);
+        }, 1500);
 
         totalSelectFiles();
 
@@ -313,9 +318,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     @Override
     public void play(MusciInfoBean musciInfoBean) {
-        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(musciInfoBean.name,FileSizeUtils.formatFileSize(musciInfoBean.packageSize)
-                ,"时长: "+ MusicFileUtils.getPlayDuration2(musciInfoBean.path),"未知");
-        videoPlayFragment.show(getFragmentManager(),"");
+        VideoPlayFragment videoPlayFragment = VideoPlayFragment.newInstance(musciInfoBean.name, FileSizeUtils.formatFileSize(musciInfoBean.packageSize)
+                , "时长: " + MusicFileUtils.getPlayDuration2(musciInfoBean.path), "未知");
+        videoPlayFragment.show(getFragmentManager(), "");
         videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
             @Override
             public void onCancel() {
@@ -330,12 +335,19 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     }
 
 
-
     public void playAudio(String audioPath) {
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+////        Uri uri = Uri.parse("file:///" + audioPath);
+//        Uri uris =  UpdateFileProvider.getUriForFile(CleanMusicManageActivity.this, "wjx.bhne.com.tbsopenoffice.fileprovider", new File(audioPath));
+//
+//        intent.setDataAndType(uris, "audio/mp3");
+//        mContext.startActivity(intent);
+
+        File file = new File(audioPath);
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("file:///" + audioPath);
-        intent.setDataAndType(uri, "audio/mp3");
-        mContext.startActivity(intent);
+        AndroidUtil.fileUri(this, intent, file, "audio/mp3");
+        startActivity(intent);
+
     }
 
 
@@ -359,10 +371,12 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
             mBtnDel.setSelected(false);
             mBtnDel.setClickable(false);
         }
-        if(totalSize>0){
+        if (totalSize > 0) {
             mBtnDel.setEnabled(true);
-        }else {
+        } else {
             mBtnDel.setEnabled(false);
         }
     }
+
+
 }

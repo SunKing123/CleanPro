@@ -91,6 +91,7 @@ public class CleanVideoManagePresenter extends RxPresenter<CleanVideoManageActiv
         if (files.size() > 0) {
             files.clear();
         }
+        mView.showLoadingDialog();
         SharedPreferences sharedPreferences = activity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_VIDEO, new HashSet<String>());
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -163,6 +164,7 @@ public class CleanVideoManagePresenter extends RxPresenter<CleanVideoManageActiv
 
                     @Override
                     public void onComplete() {
+                        mView.cancelLoadingDialog();
                     }
                 });
 
