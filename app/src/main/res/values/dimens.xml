@@ -96,7 +96,7 @@
     <dimen name="dimen_140dp">140dp</dimen>
     <dimen name="dimen_57dp">57dp</dimen>
     <dimen name="dimen_64dp">64dp</dimen>
-
-
     <dimen name="dimen_11sp">11sp</dimen>
+    <dimen name="dimen_106dp">106dp</dimen>
+    <dimen name="dimen_118dp">118dp</dimen>
 </resources>

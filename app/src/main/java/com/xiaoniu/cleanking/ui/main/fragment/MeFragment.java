@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
@@ -135,6 +136,15 @@ public class MeFragment extends SimpleFragment {
         } else if (ids == R.id.line_permisson) {
             StatisticsUtils.trackClick("privilege_management_click", "\"权限管理\"点击", "mine_page", "personal_center_page");
             startActivity(new Intent(getContext(), PermissionActivity.class));
+        }
+    }
+
+
+    @OnClick({R.id.ll_clean})
+    public void onClickS(View view){
+        int ids=view.getId();
+        if(ids==R.id.ll_clean){
+            startActivity(new Intent(getContext(), WXCleanImgActivity.class));
         }
     }
 

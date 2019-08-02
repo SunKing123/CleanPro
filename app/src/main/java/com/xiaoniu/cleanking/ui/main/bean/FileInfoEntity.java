@@ -9,4 +9,5 @@ public class FileInfoEntity implements Serializable {
     public String name;
     public long size;
     public String path;
+
 }

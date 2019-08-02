@@ -4,13 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 添加 ViewPager Fragment
- * Created by longer on 17/3/23.
+
  */
 
 public class CommonFragmentPageAdapter extends FragmentStatePagerAdapter {
