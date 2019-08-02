@@ -44,6 +44,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 public class CleanAnimView extends RelativeLayout {
     private Context mContext;
     LinearLayout mLineTitle;
+    TextView tv_qltitle;
     RelativeLayout viewt;
     ImageView mIconOuter;
     ImageView mIconInner;
@@ -53,6 +54,8 @@ public class CleanAnimView extends RelativeLayout {
     TextView mTextCount;
     TextView mTextUnit;
     TextView mTextSize;
+    ImageView iv_back;
+    ImageView iv_dun;
     TextView mTextGb;
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
@@ -67,6 +70,7 @@ public class CleanAnimView extends RelativeLayout {
      * 手机清理页面
      */
     public static final int page_file_clean = 1;
+    public static final int page_file_wxclean = 2;
 
     private int currentPage = 0;
 
@@ -108,6 +112,9 @@ public class CleanAnimView extends RelativeLayout {
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_clean_anim, this, true);
         viewt = v.findViewById(R.id.viewt);
         mLineTitle = v.findViewById(R.id.line_title);
+        iv_dun = v.findViewById(R.id.iv_dun);
+        iv_back = v.findViewById(R.id.iv_back);
+        tv_qltitle = v.findViewById(R.id.tv_qltitle);
         mIconOuter = v.findViewById(R.id.icon_outer);
         mIconInner = v.findViewById(R.id.icon_inner);
         mLayoutScan = v.findViewById(R.id.layout_scan);
@@ -123,8 +130,13 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
 
         initWebView();
-
-        mLayoutNotNet.setOnClickListener(view-> onTvRefreshClicked());
+        iv_back.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) listener.onClick();
+            }
+        });
+        mLayoutNotNet.setOnClickListener(view -> onTvRefreshClicked());
     }
 
     public void onTvRefreshClicked() {
@@ -183,7 +195,7 @@ public class CleanAnimView extends RelativeLayout {
         });
     }
 
-    public void setData(CountEntity countEntity,int page) {
+    public void setData(CountEntity countEntity, int page) {
         if (countEntity == null) {
             return;
         }
@@ -286,7 +298,7 @@ public class CleanAnimView extends RelativeLayout {
         if (isNeedTranslation) {
             animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
         } else {
-            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY,innerY, scanY);
+            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY, innerY, scanY);
         }
 
 
@@ -305,7 +317,7 @@ public class CleanAnimView extends RelativeLayout {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
 //        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325,-35,325,-35,325,-35);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35,325);
+        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
 
         rotation.setDuration(500);
 //        rotation2.setDuration(1000);
@@ -459,10 +471,32 @@ public class CleanAnimView extends RelativeLayout {
         });
 
         if (currentPage == page_file_clean) {
-            NiuDataAPI.onPageStart("mobile_clean_up_page_view","手机清理页浏览");
+            NiuDataAPI.onPageStart("mobile_clean_up_page_view", "手机清理页浏览");
         } else if (currentPage == page_junk_clean) {
-            NiuDataAPI.onPageStart("clean_up_page_view","清理完成页浏览");
+            NiuDataAPI.onPageStart("clean_up_page_view", "清理完成页浏览");
         }
+    }
+
+    public void setTitle(String title) {
+        tv_qltitle.setText(title);
+    }
+
+    public void setIcon(int res, int width, int height) {
+        iv_dun.setImageResource(res);
+        LinearLayout.LayoutParams llp = (LinearLayout.LayoutParams) iv_dun.getLayoutParams();
+        llp.width = width;
+        llp.height = height;
+        iv_dun.setLayoutParams(llp);
+    }
+
+    onBackClickListener listener;
+
+    public void setListener(onBackClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onBackClickListener {
+        public void onClick();
     }
 }
 

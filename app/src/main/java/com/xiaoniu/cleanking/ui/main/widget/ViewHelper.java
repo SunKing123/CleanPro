@@ -252,6 +252,18 @@ public class ViewHelper {
         }
     }
 
+    public static void setTextViewToDDINOTF(TextView textView) {
+        Typeface typeface;
+        try {
+            typeface = Typeface.createFromAsset(textView.getContext().getAssets(), "fonts/D-DIN.otf");
+        } catch (Exception e) {
+            typeface = null;
+        }
+        if (typeface != null) {
+            textView.setTypeface(typeface);
+        }
+    }
+
     /**
      * 礼物横幅设置字体DIN-BoldItalic
      *

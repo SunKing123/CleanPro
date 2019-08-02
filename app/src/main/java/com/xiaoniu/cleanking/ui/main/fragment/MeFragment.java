@@ -1,10 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,10 +17,16 @@ import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
-import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
+import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
+import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
+import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -50,13 +59,62 @@ public class MeFragment extends SimpleFragment {
         return R.layout.fragment_me;
     }
 
+    public void b() {
+        Long oneAppCache = new QueryFileUtil().getOneAppCache(getActivity(), "com.tencent.mm", -1);
+        Log.e("asd", "" + oneAppCache);
+
+    }
+
+    WxQqUtil f;
+    public String c;
+
     @Override
     protected void initView() {
         line_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
-                startActivity(AboutActivity.class);
+                Log.e("fdsa", "dsd");
+                startActivity(WechatCleanHomeActivity.class);
+//                PrefsCleanUtil.getInstance().init(getContext(), "xnpre", Context.MODE_APPEND);
+//                getActivity().getWindow().getDecorView().post(new Runnable() {
+//                    public void run() {
+//                        ThreadTaskUtil.executeNormalTask("准备扫描微信", new Runnable() {
+//                            public void run() {
+//                                f = new WxQqUtil();
+//                                f.startScanWxGarbage(c, new WxQqUtil.a() {
+//                                    @Override
+//                                    public void changeHomeNum() {
+//                                        e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
+//                                    }
+//
+//                                    @Override
+//                                    public void wxEasyScanFinish() {
+//                                        long ls = e + WxQqUtil.m.getTotalSize() + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
+//                                        Log.e("fdsa", "" + ls);
+//                                        long st = 1024 * 1024;
+//                                        Log.e("fdsa", "垃圾文件不含聊天记录建议清理" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.d.getTotalSize()));
+//                                        Log.e("fdsa", "朋友圈缓存" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.g.getTotalSize()));
+//                                        Log.e("fdsa", "其他缓存浏览公众号小程序产生" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.f.getTotalSize()));
+//                                        Log.e("fdsa", "缓存表情浏览聊天记录产生的表情" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.e.getTotalSize()));
+//                                        Log.e("fdsa", "总缓存大小" + CleanAllFileScanUtil.byte2FitSize(e));
+//                                    }
+//                                });
+//                                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_WX_TOTAL_SIZE, WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize());
+//                            }
+//                        });
+//                        ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
+//                            public void run() {
+//                                SystemClock.sleep(200);
+//                                b();
+//                            }
+//                        });
+//
+//                    }
+//                });
+
+
+//                StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
+//                startActivity(AboutActivity.class);
             }
         });
 
@@ -74,6 +132,12 @@ public class MeFragment extends SimpleFragment {
 //                startActivity(FeedBackActivity.class);
 //            }
 //        });
+    }
+
+    public long e = 0;
+
+    public void changeHomeNum() {
+        this.e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
     }
 
 
@@ -136,6 +200,9 @@ public class MeFragment extends SimpleFragment {
         } else if (ids == R.id.line_permisson) {
             StatisticsUtils.trackClick("privilege_management_click", "\"权限管理\"点击", "mine_page", "personal_center_page");
             startActivity(new Intent(getContext(), PermissionActivity.class));
+
+            long ls = e + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
+            Log.e("fdsa", "" + ls);
         }
     }
 
