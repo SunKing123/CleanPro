@@ -228,6 +228,10 @@
             android:name=".ui.tool.wechat.activity.WechatCleanHomeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"

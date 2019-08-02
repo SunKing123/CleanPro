@@ -219,6 +219,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
     }
 
+    public void deleteResult(long result){
+        Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanResultActivity.class);
+        intent.putExtra("data", result);
+        startActivity(intent);
+        finish();
+    }
     @Override
     public void netError() {
 

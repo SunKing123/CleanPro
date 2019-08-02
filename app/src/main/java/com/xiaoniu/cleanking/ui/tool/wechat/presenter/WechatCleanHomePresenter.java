@@ -176,7 +176,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
     }
 
-
+    //清理缓存垃圾
     public void onekeyCleanDelete(boolean isTopSelect, boolean isBottomSelect) {
         CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
         CleanWxEasyInfo gabageFileInfo = WxQqUtil.d;  //垃圾文件   不含聊天记录建议清理
@@ -192,15 +192,19 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         }
         if (isBottomSelect) {
             listTemp.addAll(wxprogramInfo.getTempList());
+//            listTemp.add(wxprogramInfo.getTempList().get(0));
+//            listTemp.add(wxprogramInfo.getTempList().get(1));
+//            listTemp.add(wxprogramInfo.getTempList().get(2));
+//            listTemp.add(wxprogramInfo.getTempList().get(3));
         }
         delFile(listTemp);
     }
 
     public void delFile(List<CleanWxItemInfo> list) {
         List<CleanWxItemInfo> files = list;
-        Observable.create(new ObservableOnSubscribe<String>() {
+        Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
 
                 for (CleanWxItemInfo appInfoBean : files) {
                     File file = appInfoBean.getFile();
@@ -209,20 +213,23 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
                         file.delete();
                     }
                 }
-                emitter.onNext("");
+                long sizes = 0;
+                for (CleanWxItemInfo cleanWxItemInfo : files)
+                    sizes += cleanWxItemInfo.getFileSize();
+                emitter.onNext(sizes);
                 emitter.onComplete();
             }
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程
-                .subscribe(new Observer<String>() {
+                .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(String value) {
-
+                    public void onNext(Long value) {
+                        mView.deleteResult(value);
                     }
 
                     @Override
