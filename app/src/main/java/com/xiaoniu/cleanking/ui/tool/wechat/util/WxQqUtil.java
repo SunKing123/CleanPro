@@ -5,9 +5,12 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanSwitch;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxFourItemInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Logger;
@@ -17,7 +20,9 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -502,14 +507,92 @@ public class WxQqUtil {
         while (true) {
             int i3 = i2;
             if (i3 < cleanWxEasyInfo.getTempList().size()) {
-//                b.insertFileToList(cleanWxEasyInfo.getList(), (CleanWxItemInfo) cleanWxEasyInfo.getTempList().get(i3));
+                insertFileToList(cleanWxEasyInfo.getList(), (CleanWxItemInfo) cleanWxEasyInfo.getTempList().get(i3));
                 i2 = i3 + 1;
             } else {
-//                cleanWxEasyInfo.getTempList().clear();
+                cleanWxEasyInfo.getTempList().clear();
                 return;
             }
         }
     }
+
+    public static void insertFileToList(List<MultiItemEntity> list, CleanWxItemInfo cleanWxItemInfo) {
+        try {
+//            if (CleanWxClearNewActivity.a == cleanWxItemInfo.getDays()) {
+//                cleanWxItemInfo.setStringDay("今天");
+//            } else if (CleanWxClearNewActivity.a - cleanWxItemInfo.getDays() == 1) {
+//                cleanWxItemInfo.setStringDay("昨天");
+//            } else {
+                cleanWxItemInfo.setStringDay(SimpleDateFormat.getDateInstance().format(new Date(cleanWxItemInfo.getFile().lastModified())));
+//            }
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) instanceof CleanWxHeadInfo) {
+                    CleanWxHeadInfo cleanWxHeadInfo = (CleanWxHeadInfo) list.get(i);
+                    if (cleanWxHeadInfo.getDays() == cleanWxItemInfo.getDays()) {
+                        int i2 = 0;
+                        while (i2 < cleanWxHeadInfo.getSubItems().size()) {
+                            if (cleanWxHeadInfo.getSubItems().get(i2) == null || ((CleanWxFourItemInfo) cleanWxHeadInfo.getSubItems().get(i2)).getFourItem().size() >= 4) {
+                                i2++;
+                            } else {
+                                ((CleanWxFourItemInfo) cleanWxHeadInfo.getSubItems().get(i2)).getFourItem().add(cleanWxItemInfo);
+                                cleanWxHeadInfo.setTotalNum(cleanWxHeadInfo.getTotalNum() + 1);
+                                return;
+                            }
+                        }
+                        CleanWxFourItemInfo cleanWxFourItemInfo = new CleanWxFourItemInfo();
+                        if (cleanWxItemInfo.getFileType() == 8 || cleanWxItemInfo.getFileType() == 10) {
+                            cleanWxFourItemInfo.setItemType(12);
+                        }
+                        cleanWxFourItemInfo.setDays(cleanWxItemInfo.getDays());
+                        cleanWxFourItemInfo.getFourItem().add(cleanWxItemInfo);
+                        cleanWxHeadInfo.setTotalNum(cleanWxHeadInfo.getTotalNum() + 1);
+                        cleanWxHeadInfo.addSubItem(cleanWxFourItemInfo);
+                        if (cleanWxHeadInfo.isExpanded()) {
+                            list.add(cleanWxHeadInfo.getSubItems().size() + i, cleanWxFourItemInfo);
+                            return;
+                        }
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        try {
+            CleanWxHeadInfo cleanWxHeadInfo2 = new CleanWxHeadInfo();
+            cleanWxHeadInfo2.setDays(cleanWxItemInfo.getDays());
+            cleanWxHeadInfo2.setChecked(cleanWxItemInfo.isChecked());
+            cleanWxHeadInfo2.setExpanded(true);
+            cleanWxHeadInfo2.setStringDay(cleanWxItemInfo.getStringDay());
+            CleanWxFourItemInfo cleanWxFourItemInfo2 = new CleanWxFourItemInfo();
+            if (cleanWxItemInfo.getFileType() == 8 || cleanWxItemInfo.getFileType() == 10) {
+                cleanWxFourItemInfo2.setItemType(12);
+            }
+            cleanWxFourItemInfo2.setDays(cleanWxItemInfo.getDays());
+            cleanWxFourItemInfo2.getFourItem().add(cleanWxItemInfo);
+            cleanWxHeadInfo2.setTotalNum(cleanWxHeadInfo2.getTotalNum() + 1);
+            cleanWxFourItemInfo2.setDays(cleanWxItemInfo.getDays());
+            cleanWxHeadInfo2.addSubItem(cleanWxFourItemInfo2);
+            for (int i3 = 0; i3 < list.size(); i3++) {
+                if (list.get(i3) instanceof CleanWxHeadInfo) {
+                    if (cleanWxHeadInfo2.getDays() > ((CleanWxHeadInfo) list.get(i3)).getDays()) {
+                        list.add(i3, cleanWxHeadInfo2);
+                        if (cleanWxHeadInfo2.isExpanded()) {
+                            list.add(i3 + 1, cleanWxFourItemInfo2);
+                            return;
+                        }
+                        return;
+                    }
+                }
+            }
+            list.add(cleanWxHeadInfo2);
+            if (cleanWxHeadInfo2.isExpanded()) {
+                list.add(cleanWxFourItemInfo2);
+            }
+        } catch (Exception e2) {
+        }
+    }
+
+
 
     public void stopScan() {
         this.p = true;
