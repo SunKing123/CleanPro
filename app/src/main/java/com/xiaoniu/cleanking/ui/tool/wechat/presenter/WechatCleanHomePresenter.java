@@ -3,12 +3,15 @@ package com.xiaoniu.cleanking.ui.tool.wechat.presenter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
@@ -50,6 +54,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.VISIBLE;
+
 /**
  * Created by z on 2017/5/15.
  */
@@ -66,16 +72,34 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
     }
 
 
+    //扫描中动画
+    public ObjectAnimator setScaningAnim(View viewY) {
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", 0, DeviceUtils.getScreenWidth() );
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
+        animator.setDuration(600);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+//        animator.setRepeatMode(ValueAnimator.INFINITE);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                viewY.setVisibility(VISIBLE);
+            }
+        });
+        animator.start();
+        return animator;
+    }
+
     //数字动画先播
-    public ValueAnimator setTextAnim(TextView tvGab, int startNum, int endNum) {
-        ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
+    public ValueAnimator setTextAnim(TextView tvGab, float startNum, float endNum) {
+        ValueAnimator anim = ValueAnimator.ofFloat(startNum, endNum);
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                tvGab.setText(currentValue + "");
+                float currentValue = (float) animation.getAnimatedValue();
+                tvGab.setText(NumberUtils.getFloatStr1(currentValue) + "");
             }
         });
         anim.start();
@@ -116,9 +140,9 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                relSelects.setVisibility(View.VISIBLE);
-                view3.setVisibility(View.VISIBLE);
-                view4.setVisibility(View.VISIBLE);
+                relSelects.setVisibility(VISIBLE);
+                view3.setVisibility(VISIBLE);
+                view4.setVisibility(VISIBLE);
             }
         });
     }
