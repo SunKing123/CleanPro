@@ -230,6 +230,20 @@ public class CleanAllFileScanUtil {
         }
     }
 
+    public static String byte2FitSizeOne(long byteNum) {
+        if (byteNum < 0) {
+            return "shouldn't be less than zero!";
+        } else if (byteNum < KB) {
+            return String.format(Locale.getDefault(), "%.1fB", (double) byteNum);
+        } else if (byteNum < MB) {
+            return String.format(Locale.getDefault(), "%.1fKB", (double) byteNum / KB);
+        } else if (byteNum < GB) {
+            return String.format(Locale.getDefault(), "%.1fMB", (double) byteNum / MB);
+        } else {
+            return String.format(Locale.getDefault(), "%.1fGB", (double) byteNum / GB);
+        }
+    }
+
     /**
      * 多个数组赋值
      *

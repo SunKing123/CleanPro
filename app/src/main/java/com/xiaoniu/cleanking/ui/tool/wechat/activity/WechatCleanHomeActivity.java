@@ -3,9 +3,11 @@ package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
@@ -25,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -32,8 +35,17 @@ import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 微信清理首页
@@ -158,6 +170,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
     }
 
+
     //获取扫描结果
     public void getScanResult() {
         setScanStatus(false);
@@ -166,15 +179,30 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
         CleanWxEasyInfo gabageFileInfo = WxQqUtil.d;  //垃圾文件   不含聊天记录建议清理
         CleanWxEasyInfo wxCircleInfo = WxQqUtil.g;  //朋友圈缓存
-        tvWxgabageSize.setText("已选" + CleanAllFileScanUtil.byte2FitSize(headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize()));
-        tvWxprogram.setText("已选" + CleanAllFileScanUtil.byte2FitSize(wxprogramInfo.getTotalSize()));
+        tvWxgabageSize.setText("已选" + CleanAllFileScanUtil.byte2FitSizeOne(headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize()));
+        tvWxprogram.setText("已选" + CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize()));
         getSelectCacheSize();
 
-        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSize(WxQqUtil.h.getTotalSize()));
-        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSize(WxQqUtil.i.getTotalSize()));
-        tvAudSize.setText(CleanAllFileScanUtil.byte2FitSize(WxQqUtil.k.getTotalSize()));
-        tvFileSize.setText(CleanAllFileScanUtil.byte2FitSize(WxQqUtil.n.getTotalSize()));
-        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize());
+
+
+
+
+
+
+
+        Log.e("asdfg", "图片：" + WxQqUtil.h.getTotalSize() + "：数量：" + WxQqUtil.h.getTotalNum());
+        Log.e("asdfg", "视频：" + WxQqUtil.i.getTotalSize() + "：数量：" + WxQqUtil.i.getTotalNum());
+        Log.e("asdfg", "语音：" + WxQqUtil.k.getTotalSize() + "：数量：" + WxQqUtil.k.getTotalNum());
+        Log.e("asdfg", "文件：" + WxQqUtil.n.getTotalSize() + "：数量：" + WxQqUtil.n.getTotalNum());
+
+        Log.e("asdfg", "拍摄及保存的图片：" + WxQqUtil.l.getTotalSize() + "：数量：" + WxQqUtil.l.getTotalNum());
+        Log.e("asdfg", "拍摄以及保存的视频：" + WxQqUtil.m.getTotalSize() + "：数量：" + WxQqUtil.m.getTotalNum());
+        Log.e("asdfg", "收藏的表情：" + WxQqUtil.j.getTotalSize() + "：数量：" + WxQqUtil.j.getTotalNum());
+        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.h.getTotalSize()));
+        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.i.getTotalSize()));
+        tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.k.getTotalSize()));
+        tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.n.getTotalSize()));
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize());
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
@@ -214,17 +242,18 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         if (tvSelect.isSelected()) selectSize += WxQqUtil.f.getTotalSize();
         if (tvSelect1.isSelected())
             selectSize += WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize();
-        tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSize(selectSize));
-        tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSize(selectSize));
+        tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
+        tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
     }
 
-    public void deleteResult(long result){
+    public void deleteResult(long result) {
         Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanResultActivity.class);
         intent.putExtra("data", result);
         startActivity(intent);
         finish();
     }
+
     @Override
     public void netError() {
 
