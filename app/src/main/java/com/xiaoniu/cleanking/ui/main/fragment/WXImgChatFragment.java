@@ -20,19 +20,12 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.ui.main.event.WXImgChatEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanImgPresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,6 +55,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
     private  boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
+    private FileCopyProgressDialogFragment mProgress;;
+
     public static WXImgChatFragment newInstance() {
         WXImgChatFragment wxImgChatFragment = new WXImgChatFragment();
 
@@ -89,6 +84,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         mAdapter = new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mLoading=CleanFileLoadingDialogFragment.newInstance();
+        mProgress=FileCopyProgressDialogFragment.newInstance();
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -269,11 +265,36 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                 });
 
                 break;
+            //保存到手机
             case R.id.btn_save:
+
+                List<File> lists=getSelectFiles();
+                if(lists.size()==0){
+                    ToastUtils.show("未选中照片");
+                }else {
+                    FragmentManager fmProgress= getActivity().getFragmentManager();
+                    mProgress.show(fmProgress,"");
+                    //导入图片
+                    mPresenter.copyFile(lists);
+                }
+
                 break;
         }
     }
 
+
+    /**
+     * 导入成功
+     * @param progress
+     */
+    public void copySuccess(int progress){
+
+        mProgress.setValue(progress);
+        if(progress>=100){
+            ToastUtils.show("保存成功，请至手机相册查看");
+            mProgress.dismissAllowingStateLoss();
+        }
+    }
 
 
     private  int getSelectSize(){
@@ -289,6 +310,22 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         }
         return  size;
     }
+
+    private  List<File> getSelectFiles(){
+        List<File> files=new ArrayList<>();
+        List<FileTitleEntity> lists = mAdapter.getList();
+
+        for(FileTitleEntity fileTitleEntity: lists){
+            for(FileChildEntity fileChildEntity:fileTitleEntity.lists){
+                if(fileChildEntity.isSelect){
+                    File File =new File(fileChildEntity.path);
+                    files.add(File);
+                }
+            }
+        }
+        return  files;
+    }
+
 
 
     /**
