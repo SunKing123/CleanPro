@@ -56,7 +56,7 @@ import butterknife.OnClick;
  * <p>
  * 3.数据组装和渲染
  */
-public class WXCleanImgActivity extends BaseActivity<WXCleanImgPresenter> {
+public class WXCleanImgActivity extends BaseActivity{
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -76,10 +76,7 @@ public class WXCleanImgActivity extends BaseActivity<WXCleanImgPresenter> {
     @BindView(R.id.ll_img_save_list)
     LinearLayout llImgSaveList;
 
-    @BindView(R.id.ll_check_all)
-    LinearLayout mLLCheckAll;
 
-    private  boolean mIsCheckAll;
     //
     private List<Fragment> mFragments = new ArrayList<>();
     private CommonFragmentPageAdapter mAdapter;
@@ -87,9 +84,6 @@ public class WXCleanImgActivity extends BaseActivity<WXCleanImgPresenter> {
 
     @Override
     public void inject(ActivityComponent activityComponent) {
-        activityComponent.inject(this);
-        mPresenter.init();
-        mPresenter.start();
     }
 
 
@@ -133,18 +127,7 @@ public class WXCleanImgActivity extends BaseActivity<WXCleanImgPresenter> {
         });
         setSelcteStatusView(0);
 
-        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
-                }else {
-                    mIsCheckAll=true;
-                    StatisticsUtils.trackClick("all_election_click","\"全选\"点击","file_cleaning_page","video_cleaning_page");
-                }
-                mLLCheckAll.setSelected(mIsCheckAll);
-            }
-        });
+
     }
 
 
@@ -221,27 +204,5 @@ public class WXCleanImgActivity extends BaseActivity<WXCleanImgPresenter> {
     public void emptyEvent(EmptyEvent emptyEvent) {
 
     }
-
-    /**
-     * 更新微信聊天图片
-     *
-     * @param lists
-     */
-    public void updateImgChat(List<FileTitleEntity> lists) {
-       EventBus.getDefault().post(new WXImgChatEvent(lists));
-
-    }
-
-
-    /**
-     * 更新拍摄图片
-     * @param lists
-     */
-    public void updateImgCamera(List<FileTitleEntity> lists) {
-
-        EventBus.getDefault().post(new WXImgCameraEvent(lists));
-
-    }
-
 
 }

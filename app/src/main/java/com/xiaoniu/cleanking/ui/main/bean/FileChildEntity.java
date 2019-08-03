@@ -14,6 +14,9 @@ public class FileChildEntity {
     //是否已选择
     public boolean isSelect;
 
+    //父类id，对应type
+    public int parentId;
+
 
     @Override
     public String toString() {

@@ -86,6 +86,5 @@ public interface ActivityComponent {
 
     void inject(WechatCleanHomeActivity wechatCleanHomeActivity);
 
-    void inject(WXCleanImgActivity wxCleanImgActivity);
 }
 

@@ -38,6 +38,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
 
     private WXImgAdapter mWXImgAdapter;
 
+    private  OnCheckListener onCheckListener;
 
     public WXImgChatAdapter(Context context) {
         this.mContext = context;
@@ -55,6 +56,9 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         return mLists.size();
     }
 
+    public void clear(){
+        mLists.clear();
+    }
     public List<FileTitleEntity> getList() {
         return mLists;
     }
@@ -127,6 +131,9 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
                 for (FileChildEntity childEntity : listChild) {
                     childEntity.isSelect = fileTitleEntity.isSelect;
                 }
+                if(null!=onCheckListener){
+                    onCheckListener.onCheck(groupPosition,-1,fileTitleEntity.isSelect);
+                }
                 notifyDataSetChanged();
             }
         });
@@ -148,6 +155,14 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
         }
         mWXImgAdapter = new WXImgAdapter(mContext, lists);
+        mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
+            @Override
+            public void select(int position, boolean isSelect) {
+                if(null!=onCheckListener){
+                    onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                }
+            }
+        });
         mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
 
 
@@ -193,5 +208,12 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    public void setOnCheckListener(OnCheckListener onCheckListener) {
+        this.onCheckListener = onCheckListener;
+    }
+
+    public interface OnCheckListener{
+        void  onCheck(int groupPosition,int position,boolean isCheck);
+    }
 
 }

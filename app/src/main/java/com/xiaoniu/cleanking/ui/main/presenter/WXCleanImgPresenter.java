@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.ui.main.bean.VideoFileCollenctionBean;
 import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
+import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.DateUtils;
 
@@ -42,9 +43,8 @@ import io.reactivex.schedulers.Schedulers;
  * 图片清理
  * Created by lang.chen on 2019/7/2
  */
-public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainModel> {
+public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMainModel> {
 
-    RxAppCompatActivity activity;
 
     private static final String TAG = "WXCleanImg.class";
     /**
@@ -69,10 +69,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
      */
     private List<FileTitleEntity> listsCamera = new ArrayList<>();
 
-    /**
-     * 保存图片
-     */
-    private List<FileTitleEntity> listsSaveList = new ArrayList<>();
+
 
 
     /**
@@ -80,8 +77,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
      */
 
     @Inject
-    public WXCleanImgPresenter(RxAppCompatActivity activity) {
-        this.activity = activity;
+    public WXCleanImgPresenter() {
     }
 
 
@@ -124,9 +120,9 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
      * <p>
      * 初始化 一级目录标题
      */
-    public void init() {
+    public void init(Context context) {
         path = getPath(wxRootPath);
-        String[] titles = activity.getResources().getStringArray(R.array.wx_file_titles);
+        String[] titles = context.getResources().getStringArray(R.array.wx_file_titles);
         for (int i = 0; i < titles.length; i++) {
             //聊天图片
             FileTitleEntity fileEntity = new FileTitleEntity();
@@ -134,19 +130,49 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
             fileEntity.type = i;
             fileEntity.id = String.valueOf(i);
             listsChat.add(fileEntity);
-            //拍摄图片
-            FileTitleEntity fileEntityCamera = new FileTitleEntity();
-            fileEntityCamera.title = titles[i];
-            fileEntityCamera.type = i;
-            fileEntityCamera.id = String.valueOf(i);
-            listsCamera.add(fileEntityCamera);
-            //保存图片
-            FileTitleEntity fileEntitySaveList = new FileTitleEntity();
-            fileEntityCamera.title = titles[i];
-            fileEntityCamera.type = i;
-            fileEntityCamera.id = String.valueOf(i);
-            listsSaveList.add(fileEntitySaveList);
         }
+
+    }
+
+
+
+    public void delFile(List<FileChildEntity> list) {
+        List<FileChildEntity> files = list;
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+
+                for ( FileChildEntity fileChildEntity : files) {
+                    File file = new File(fileChildEntity.path);
+                    if (null != file) {
+                        file.delete();
+                    }
+                }
+                emitter.onNext("");
+                emitter.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+
+                        mView.updateDelFileView(list);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
 
     }
 
@@ -154,7 +180,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
     public void start() {
 
         getImgChat();
-        getImgCamera();
+       // getImgCamera();
     }
 
 
@@ -195,7 +221,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
     }
 
 
-    private  void totalFileSize(List<FileTitleEntity> lists){
+    public   void totalFileSize(List<FileTitleEntity> lists){
         if(null==lists ||  lists.size()==0){
             return;
         }
@@ -232,7 +258,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
                     @Override
                     public void onNext(String value) {
                         totalFileSize(listsCamera);
-                        mView.updateImgCamera(listsCamera);
+                        //mView.updateImgCamera(listsCamera);
                     }
 
                     @Override
@@ -268,6 +294,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
                         fileChildEntity.name = file.getName()+".jpg";
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
+                        fileChildEntity.parentId=FileTitleEntity.Type.TH;
                         Log.i(TAG,"file="+file.getName()+",path"+file.getPath()+",time="+file.lastModified());
                             listsChat.get(FileTitleEntity.Type.TH).lists.add(fileChildEntity);
                     } else if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
@@ -275,17 +302,22 @@ public class WXCleanImgPresenter extends RxPresenter<WXCleanImgActivity, MainMod
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
+
                         Log.i(TAG,"file="+file.getName()+",time="+file.lastModified());
                         if (file.getName().contains("th_")) {
+                            fileChildEntity.parentId=FileTitleEntity.Type.TH;
                             listsChat.get(FileTitleEntity.Type.TH).lists.add(fileChildEntity);
                         } else if (DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
                             //是否为今天
+                            fileChildEntity.parentId=FileTitleEntity.Type.TODAY;
                             listsChat.get(FileTitleEntity.Type.TODAY).lists.add(fileChildEntity);
                         } else if (DateUtils.isYesterday(file.lastModified())) {
                             //是否为昨天
+                            fileChildEntity.parentId=FileTitleEntity.Type.YESTERDAY;
                             listsChat.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
                         } else if (DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
                             //是否为同一个月
+                            fileChildEntity.parentId=FileTitleEntity.Type.MONTH;
                             listsChat.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
                         }
 //                        else if(){

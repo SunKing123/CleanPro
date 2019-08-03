@@ -23,6 +23,17 @@ public class FileTitleEntity extends BaseEntity {
     public List<FileChildEntity> lists = new ArrayList<>();
 
 
+
+    public static  FileTitleEntity copyObject(String id,String title,int type, long size,boolean isExpand,boolean isSelect){
+        FileTitleEntity fileTitleEntity=new FileTitleEntity();
+        fileTitleEntity.id=id;
+        fileTitleEntity.title=title;
+        fileTitleEntity.type=type;
+        fileTitleEntity.size=size;
+        fileTitleEntity.isExpand=isExpand;
+        fileTitleEntity.isSelect=isSelect;
+        return  fileTitleEntity;
+    }
     public interface Type {
 
         //缩略图

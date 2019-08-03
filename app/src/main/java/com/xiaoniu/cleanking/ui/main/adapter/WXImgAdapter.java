@@ -27,6 +27,8 @@ public class WXImgAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<FileChildEntity> mLists;
 
+    private  OnSelectListener onSelectListener;
+
     public WXImgAdapter(Context context, List<FileChildEntity> lists) {
         this.mContext = context;
         this.mLists=lists;
@@ -63,7 +65,11 @@ public class WXImgAdapter extends RecyclerView.Adapter {
                 }else {
                     fileChildEntity.isSelect=true;
                 }
+                if(null!=onSelectListener){
+                    onSelectListener.select(position,fileChildEntity.isSelect);
+                }
                 notifyDataSetChanged();
+
             }
         });
 
@@ -93,5 +99,13 @@ public class WXImgAdapter extends RecyclerView.Adapter {
             mImgSelect = itemView.findViewById(R.id.check_select);
             mLLSelect=itemView.findViewById(R.id.ll_check_select);
         }
+    }
+
+    public void setOnSelectListener(OnSelectListener onSelectListener) {
+        this.onSelectListener = onSelectListener;
+    }
+
+    interface   OnSelectListener{
+        void select(int position, boolean isSelect);
     }
 }
