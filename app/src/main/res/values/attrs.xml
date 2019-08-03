@@ -15,7 +15,7 @@
         <!--画笔颜色-->
         <attr name="progress_color" format="color" />
         <!-- 正常颜色-->
-        <attr name="progress_normal_color" format="color"/>
+        <attr name="progress_normal_color" format="color" />
         <!--加载进度起始位置-->
         <attr name="location_start" format="enum">
             <enum name="left" value="1" />
@@ -53,6 +53,15 @@
             <enum name="mirror" value="2" />
         </attr>
     </declare-styleable>
+
+
+    <string-array name="wx_file_titles">
+        <item>缩略图</item>
+        <item>今天</item>
+        <item>昨天</item>
+        <item>一月内</item>
+        <item>半年内</item>
+    </string-array>
 
     <declare-styleable name="ArcProgressBar">
         <attr name="arc_max_progress" format="float"/>

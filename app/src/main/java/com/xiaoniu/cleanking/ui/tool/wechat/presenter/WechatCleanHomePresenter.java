@@ -20,6 +20,8 @@ import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxFourItemInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
@@ -45,6 +47,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -140,6 +143,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
                             @Override
                             public void wxEasyScanFinish() {
+                                getHsize();
                                 mView.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -168,6 +172,35 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
             }
         });
+    }
+    public void getHsize(){
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+                int totalH = 0;
+                List<CleanWxFourItemInfo> listFour=new ArrayList<>();
+                List<CleanWxItemInfo> listData=new ArrayList<>();
+                for (int i = 0; i < WxQqUtil.h.getList().size(); i++) {
+                    if (WxQqUtil.h.getList().get(i) instanceof CleanWxFourItemInfo) {
+                        CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) WxQqUtil.h.getList().get(i);
+                        listFour.add(cleanWxHeadInfo);
+                    }
+                }
+
+                for(int j=0;j<listFour.size();j++){
+                    listData.addAll(listFour.get(j).getFourItem());
+                }
+                Log.e("asdfg", "Step2："  + totalH);
+                e.onNext(totalH);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer strings) throws Exception {
+                        Log.e("asdfg", "图片：" + WxQqUtil.h.getTotalSize() + "：数量：" + strings);
+                    }
+                });
     }
 
     public void b() {

@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class DateUtils {
@@ -238,10 +239,10 @@ public class DateUtils {
      */
     public static boolean isSameDay(long time1, long time2) {
         Date date1 = new Date();
-        date1.setTime(time1 * 1000);
+        date1.setTime(time1);
 
         Date date2 = new Date();
-        date2.setTime(time2 * 1000);
+        date2.setTime(time2);
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(date1);
@@ -257,14 +258,71 @@ public class DateUtils {
         return false;
     }
 
+
+
     /**
-     * 计算距离当前时间.
+     * 判断是否为同一个月
      *
-     * @param timestamp  当时时间戳.
-     * @param systemTime 服务器时间戳.
-     * @return 若距离当前时间小于1分钟则返回xx秒之前，若距离当前时间小于1小时则返回xx分钟之前，若距离当前时间小于1天则返回xx小时前，
-     * 若时间为今年则返回MM-dd，否则返回yyyy-MM-dd.
+     * @param time1 时间丑
      */
+    public static boolean isSameMonth(long time1, long time2) {
+        Date date1 = new Date();
+        date1.setTime(time1);
+
+        Date date2 = new Date();
+        date2.setTime(time2);
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(date1);
+        //
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(date2);
+        if (calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH)) {
+            return true;
+
+        }
+        return false;
+    }
+
+
+
+
+    /**
+     * 判断是否为昨天(效率比较高)
+     * @param day 传入的 时间  "2016-06-28 10:10:30" "2016-06-28" 都可以
+     * @return true昨天 false不是
+     * @throws ParseException
+     */
+    public static boolean isYesterday(long day)  {
+
+        Calendar pre = Calendar.getInstance();
+        Date predate = new Date(System.currentTimeMillis());
+        pre.setTime(predate);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date(day);
+        cal.setTime(date);
+
+        if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
+            int diffDay = cal.get(Calendar.DAY_OF_YEAR)
+                    - pre.get(Calendar.DAY_OF_YEAR);
+
+            if (diffDay == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+        /**
+         * 计算距离当前时间.
+         *
+         * @param timestamp  当时时间戳.
+         * @param systemTime 服务器时间戳.
+         * @return 若距离当前时间小于1分钟则返回xx秒之前，若距离当前时间小于1小时则返回xx分钟之前，若距离当前时间小于1天则返回xx小时前，
+         * 若时间为今年则返回MM-dd，否则返回yyyy-MM-dd.
+         */
     public static String fromTheCurrentTime(long systemTime, long timestamp) {
         if (timestamp < 100000000000L) {
             timestamp = timestamp * 1000;
