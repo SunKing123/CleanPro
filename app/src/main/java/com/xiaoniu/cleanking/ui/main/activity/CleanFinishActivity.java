@@ -79,7 +79,6 @@ public class CleanFinishActivity extends SimpleActivity {
 
         initData();
 
-
     }
 
     private void initData() {

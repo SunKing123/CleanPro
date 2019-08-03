@@ -121,7 +121,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LinearLayout mLayoutNotNet;
     @BindView(R.id.text_bottom_title)
     TextView mTextBottomTitle;
-
     @BindView(R.id.view_click_first_ad)
     View mFirstViewAdClick;
     @BindView(R.id.view_click_second_ad)
@@ -200,10 +199,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         layoutParams.height = ScreenUtils.getScreenHeight(AppApplication.getInstance());
         mLayoutCleanFinish.setLayoutParams(layoutParams);
 
-
         //请求广告接口
         mPresenter.requestBottomAd();
-
 
     }
 
