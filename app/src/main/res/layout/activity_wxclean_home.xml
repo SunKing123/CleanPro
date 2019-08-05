@@ -125,6 +125,12 @@
             <include layout="@layout/layout_wxclean_item2" />
         </LinearLayout>
     </ScrollView>
+    <ImageView
+        android:id="@+id/iv_scan_frame"
+        android:layout_width="99dp"
+        android:layout_height="319dp"
+        android:src="@mipmap/icon_scanframe"
+        />
 
     <RelativeLayout
         android:id="@+id/rel_bottom"

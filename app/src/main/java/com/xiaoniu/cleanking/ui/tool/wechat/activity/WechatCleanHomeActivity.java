@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -91,6 +92,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     ImageView ivGabcache;
     @BindView(R.id.iv_wxxcx)
     ImageView ivWxxcx;
+    @BindView(R.id.iv_scan_frame)
+    ImageView ivScanFrame;
     @BindView(R.id.iv_chatfile)
     ImageView ivChatfile;
     @BindView(R.id.iv_hua3)
@@ -109,6 +112,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     LinearLayout lineSming;
     @BindView(R.id.line_smed)
     LinearLayout lineSmed;
+    ObjectAnimator objectAnimatorScanIng;
 
     @Override
     public int getLayoutId() {
@@ -131,10 +135,10 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         lineSmed.setVisibility(View.GONE);
         setScanStatus(true);
         mPresenter.scanWxGabage();
-
+        objectAnimatorScanIng = mPresenter.setScaningAnim(ivScanFrame);
     }
 
-    @OnClick({R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1})
+    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
@@ -166,6 +170,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
             getSelectCacheSize();
+        } else if (ids == R.id.cons_aud) {
+            Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanAudActivity.class);
+            startActivity(intent);
+        }else if (ids == R.id.cons_file) {
+            Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanFileActivity.class);
+            startActivity(intent);
         }
 
     }
@@ -184,12 +194,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         getSelectCacheSize();
 
 
-
-
-
-
-
-
         Log.e("asdfg", "图片：" + WxQqUtil.h.getTotalSize() + "：数量：" + WxQqUtil.h.getTotalNum());
         Log.e("asdfg", "视频：" + WxQqUtil.i.getTotalSize() + "：数量：" + WxQqUtil.i.getTotalNum());
         Log.e("asdfg", "语音：" + WxQqUtil.k.getTotalSize() + "：数量：" + WxQqUtil.k.getTotalNum());
@@ -205,12 +209,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize());
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
-        int sizeMb = 0;
+        float sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
-            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
 
         } else if (str_totalSize.endsWith("GB")) {
-            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
             sizeMb *= 1024;
         }
 
@@ -219,6 +223,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                ivScanFrame.setVisibility(View.GONE);
+                if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
                 lineSming.setVisibility(View.GONE);
                 lineSmed.setVisibility(View.VISIBLE);
                 mPresenter.setTextSizeAnim(tvGabsize, 110, 55);

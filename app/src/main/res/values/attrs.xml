@@ -63,4 +63,19 @@
         <item>半年内</item>
     </string-array>
 
+    <declare-styleable name="ArcProgressBar">
+        <attr name="arc_max_progress" format="float"/>
+        <attr name="arc_bg_color" format="color"/>
+        <attr name="arc_stroke_width" format="dimension"/>
+        <attr name="arc_progress" format="float"/>
+        <attr name="arc_progress_color" format="color"/>
+        <attr name="arc_first_text" format="string"/>
+        <attr name="arc_first_text_color" format="color"/>
+        <attr name="arc_first_text_size" format="dimension"/>
+        <attr name="arc_second_text" format="string"/>
+        <attr name="arc_second_text_color" format="color"/>
+        <attr name="arc_second_text_size" format="dimension"/>
+        <attr name="arc_angle_size" format="float"/>
+        <attr name="arc_start_angle" format="float"/>
+    </declare-styleable>
 </resources>

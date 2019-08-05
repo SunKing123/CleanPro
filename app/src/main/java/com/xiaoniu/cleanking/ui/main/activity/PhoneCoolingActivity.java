@@ -1,12 +1,18 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,13 +24,16 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.ArrayList;
@@ -32,6 +41,8 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.view.View.VISIBLE;
 
 /**
  * @author Administrator
@@ -65,6 +76,17 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     ConstraintLayout mLayoutHardware;
     @BindView(R.id.layout_bottom_container)
     LinearLayout mLayoutBottom;
+    @BindView(R.id.progress_bar)
+    ArcProgressBar mProgressBar;
+    @BindView(R.id.image_point)
+    ImageView mImagePoint;
+    @BindView(R.id.text_temperature_number)
+    TextView mTextTemperatureNumber;
+    @BindView(R.id.layout_anim_cool)
+    ConstraintLayout mLayoutAnimCool;
+    @BindView(R.id.layout_content_cool)
+    LinearLayout mLayoutContentCool;
+
     private ProcessIconAdapter mProcessIconAdapter;
     private HardwareInfo mHardwareInfo;
     public static ArrayList<FirstJunkInfo> mRunningProcess;
@@ -103,6 +125,88 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mPresenter.getRunningProcess();
 
         mPresenter.getHardwareInfo();
+
+        initCoolAnimation(phoneTemperature);
+    }
+
+    private void initCoolAnimation(int phoneTemperature) {
+        mProgressBar.setArcBgColor(getResources().getColor(R.color.color_progress_bg));
+        mProgressBar.setProgressColor(getResources().getColor(R.color.white));
+        mProgressBar.setUpdateListener(new OnProgressUpdateListener() {
+            @Override
+            public void onProgressUpdate(float progress) {
+                mImagePoint.setRotation(progress);
+            }
+        });
+        mProgressBar.setProgress(phoneTemperature);
+        initAnimator(phoneTemperature);
+    }
+
+    /**
+     * 数字增加动画
+     *
+     * @param phoneTemperature
+     */
+    private void initAnimator(int phoneTemperature) {
+        ValueAnimator valueAnimator = ObjectAnimator.ofInt(0, phoneTemperature);
+        valueAnimator.setDuration(3000);
+        valueAnimator.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            mTextTemperatureNumber.setText(String.valueOf(animatedValue));
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setViewTrans();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        valueAnimator.start();
+    }
+
+    /**
+     * 数字动画播放完后上移，布局高度缩小
+     */
+    public void setViewTrans() {
+        int bottom = mBgTitle.getBottom();
+        mLayoutContentCool.setVisibility(VISIBLE);
+        int startHeight = DeviceUtils.getScreenHeight();
+        ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
+        new Handler().postDelayed(() -> {
+            ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
+            mBgTitle.setVisibility(VISIBLE);
+            alpha.setDuration(300);
+            alpha.start();
+        }, 700);
+        anim.setDuration(1000);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutContentCool.getLayoutParams();
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.topMargin = currentValue;
+            mLayoutContentCool.setLayoutParams(rlp);
+        });
+        anim.start();
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+            }
+        });
     }
 
     private void initAdapter() {
@@ -114,13 +218,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
-        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","tools_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Operating_components_click", "\"手机降温\"返回", "tools_page", "temperature_result_display_page");
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Operating_components_click","\"手机降温\"返回","tools_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Operating_components_click", "\"手机降温\"返回", "tools_page", "temperature_result_display_page");
         super.onBackPressed();
     }
 
@@ -136,13 +240,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_process)
     public void onMLayoutProcessClicked() {
-        StatisticsUtils.trackClick("Running_applications_click ","\"运行的应用\"点击","tools_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Running_applications_click ", "\"运行的应用\"点击", "tools_page", "temperature_result_display_page");
         startActivity(RouteConstants.PROCESS_INFO_ACTIVITY);
     }
 
     @OnClick(R.id.layout_hardware)
     public void onMLayoutHardwareClicked() {
-        StatisticsUtils.trackClick("Operating_components_click ","\"运行的部件\"点击","tools_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Operating_components_click ", "\"运行的部件\"点击", "tools_page", "temperature_result_display_page");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
@@ -151,19 +255,19 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.text_cool_now)
     public void onMLayoutCoolClicked() {
-        StatisticsUtils.trackClick("Cool_down_immediately_click","\"立即降温\"点击","tools_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Cool_down_immediately_click", "\"立即降温\"点击", "tools_page", "temperature_result_display_page");
 
         //立即降温
         for (FirstJunkInfo firstJunkInfo : mRunningProcess) {
-            CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(),firstJunkInfo.getPid());
+            CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(), firstJunkInfo.getPid());
         }
 
         finish();
 
         Bundle bundle = new Bundle();
-        bundle.putString("CLEAN_TYPE",CleanFinishActivity.TYPE_COOLING);
-        bundle.putLong("clean_count", new Random().nextInt(3)+1);
-        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY,bundle);
+        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_COOLING);
+        bundle.putLong("clean_count", new Random().nextInt(3) + 1);
+        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
     }
 
     /**
@@ -244,6 +348,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("Cell_phone_cooling_view_page","\"手机降温\"浏览","tools_page","temperature_result_display_page");
+        StatisticsUtils.trackClick("Cell_phone_cooling_view_page", "\"手机降温\"浏览", "tools_page", "temperature_result_display_page");
     }
 }

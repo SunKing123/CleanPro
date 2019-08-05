@@ -9,6 +9,16 @@ public class CleanWxItemInfo {
     private long fileSize = 0;
     private int fileType;
     private boolean isChecked;
+    private boolean isSelect;
+
+    public boolean getIsSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(boolean select) {
+        isSelect = select;
+    }
+
     private String stringDay;
 
     public long getFileSize() {
