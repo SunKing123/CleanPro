@@ -230,6 +230,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanFileActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.tool.wechat.activity.WechatCleanAudActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

@@ -138,7 +138,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         objectAnimatorScanIng = mPresenter.setScaningAnim(ivScanFrame);
     }
 
-    @OnClick({R.id.cons_aud,R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1})
+    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
@@ -170,9 +170,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
             getSelectCacheSize();
-        }else if (ids == R.id.cons_aud) {
-          Intent intent=new Intent(WechatCleanHomeActivity.this,WechatCleanAudActivity.class);
-          startActivity(intent);
+        } else if (ids == R.id.cons_aud) {
+            Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanAudActivity.class);
+            startActivity(intent);
+        }else if (ids == R.id.cons_file) {
+            Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanFileActivity.class);
+            startActivity(intent);
         }
 
     }

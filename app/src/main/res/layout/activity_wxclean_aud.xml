@@ -47,6 +47,8 @@
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_marginLeft="@dimen/dimen_17dp"
+        android:drawablePadding="@dimen/dimen_4dp"
+        android:drawableLeft="@mipmap/icon_notice"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dimen_12sp"
         android:text="由于微信对语音加密，暂不支持播放，删除后无法恢复。"
