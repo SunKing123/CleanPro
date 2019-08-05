@@ -284,7 +284,7 @@ public class WXVideoCleanSaveListPresenter extends RxPresenter<WXVideoSaveListFr
                 for (File file : files) {
                     if (file.isDirectory()) {
                         scanAllVideoCamera(path + "/" + file.getName());
-                    } else if (file.getName().startsWith("wx_camera") && file.getName().endsWith(".mp4") ) {
+                    } else if (!file.getName().startsWith("wx_camera") && file.getName().endsWith(".mp4") ) {
                         FileChildEntity fileChildEntity = new FileChildEntity();
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
