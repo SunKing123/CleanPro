@@ -3,14 +3,11 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.scwang.smartrefresh.layout.util.DensityUtil;
@@ -23,10 +20,12 @@ import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.POST;
+
 /**
  * Created by lang.chen on 2019/8/2
  */
-public class WXImgChatAdapter extends BaseExpandableListAdapter {
+public class WXVideoChatAdapter extends BaseExpandableListAdapter {
 
 
     private Context mContext;
@@ -36,11 +35,12 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
     private ViewHolderParent mViewParent;
     private ViewHolderChild mViewChild;
 
-    private WXImgAdapter mWXImgAdapter;
+    private WXVideoAdapter mWXVideoAdapter;
+    private WXImgAdapter  mWXImgAdapter;
 
     private  OnCheckListener onCheckListener;
 
-    public WXImgChatAdapter(Context context) {
+    public WXVideoChatAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -138,11 +138,6 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             }
         });
 
-
-        //                    Intent intent = new Intent(mActivity, PreviewImageActivity.class);
-        //                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-        //                    CleanAllFileScanUtil.clean_image_list = listImage;
-        //                    mActivity.startActivityForResult(intent, 209);
         return convertView;
     }
 
@@ -156,26 +151,62 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             mViewChild = (ViewHolderChild) convertView.getTag();
         }
         List<FileChildEntity> lists = mLists.get(groupPosition).lists;
-        if(mWXImgAdapter==null){
+        int fileType=lists.get(childPosition).fileType;
+
+        if((fileType==0 && mWXImgAdapter==null) || (fileType==1 && mWXVideoAdapter==null)){
             mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
         }
-        mWXImgAdapter = new WXImgAdapter(mContext, lists);
-        mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
-            @Override
-            public void select(int position, boolean isSelect) {
-                if(null!=onCheckListener){
-                    onCheckListener.onCheck(groupPosition,childPosition,isSelect);
-                }
-            }
 
-            @Override
-            public void onClickImg(int position) {
-                if(null!=onCheckListener){
-                    onCheckListener.onCheckImg(groupPosition,position);
+        if(fileType==0){
+            mWXImgAdapter=new WXImgAdapter(mContext,lists);
+        }else if(fileType==1){
+            mWXVideoAdapter = new WXVideoAdapter(mContext, lists);
+        }
+
+        if(null!=mWXVideoAdapter){
+            mWXVideoAdapter.setOnSelectListener(new WXVideoAdapter.OnSelectListener() {
+                @Override
+                public void select(int position, boolean isSelect) {
+                    if(null!=onCheckListener){
+                        onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                    }
                 }
-            }
-        });
-        mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
+
+                @Override
+                public void onClickImg(int position) {
+                    if(null!=onCheckListener){
+
+                        onCheckListener.onCheckVideo(groupPosition,position);
+                    }
+                }
+            });
+        }
+        if(null!=mWXImgAdapter){
+            mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
+                @Override
+                public void select(int position, boolean isSelect) {
+                    if(null!=onCheckListener){
+                        onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                    }
+                }
+
+                @Override
+                public void onClickImg(int position) {
+                    if(null!=onCheckListener){
+                        onCheckListener.onCheckImg(groupPosition,position);
+                    }
+                }
+            });
+
+        }
+        //显示图片
+        if(fileType==0){
+            mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
+        }else {
+            //显示视频
+            mViewChild.mRecyclerView.setAdapter(mWXVideoAdapter);
+
+        }
 
 
         return convertView;
@@ -225,9 +256,11 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
     }
 
     public interface OnCheckListener{
-        void  onCheck(int groupPosition,int position,boolean isCheck);
+        void  onCheck(int groupPosition, int position, boolean isCheck);
 
-        void onCheckImg(int groupPosition,int position);
+        void onCheckImg(int groupPosition, int position);
+
+        void onCheckVideo(int groupPosition, int position);
     }
 
 }

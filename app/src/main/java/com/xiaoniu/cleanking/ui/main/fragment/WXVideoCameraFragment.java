@@ -2,11 +2,12 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -15,7 +16,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
-import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
+import com.xiaoniu.cleanking.ui.main.adapter.WXVideoChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
@@ -24,10 +25,13 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
+import com.xiaoniu.cleanking.ui.main.presenter.WXVideoCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,13 +48,13 @@ import butterknife.OnClick;
  * 微信拍摄图片清理
  * Created by lang.chen on 2019/8/1
  */
-public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
+public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> {
 
 
     private  static  final  int REQUEST_CODE_IMG_VIEW=0x1022;
     @BindView(R.id.list_view_camera)
     ExpandableListView mListView;
-    private WXImgChatAdapter mAdapter;
+    private WXVideoChatAdapter mAdapter;
 
     @BindView(R.id.btn_del)
     Button mBtnDel;
@@ -63,8 +67,8 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;;
 
-    public static WXImgCameraFragment newInstance() {
-        WXImgCameraFragment instance = new WXImgCameraFragment();
+    public static WXVideoCameraFragment newInstance() {
+        WXVideoCameraFragment instance = new WXVideoCameraFragment();
 
         return instance;
     }
@@ -90,7 +94,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     protected void initView() {
         mLoading=CleanFileLoadingDialogFragment.newInstance();
         mProgress=FileCopyProgressDialogFragment.newInstance();
-        mAdapter=new WXImgChatAdapter(getContext());
+        mAdapter=new WXVideoChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -127,7 +131,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
             }
         });
 
-        mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
+        mAdapter.setOnCheckListener(new WXVideoChatAdapter.OnCheckListener() {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
                 setSelectChildStatus(groupPosition);
@@ -142,8 +146,57 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
                 CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition,position);
                 startActivityForResult(intent, REQUEST_CODE_IMG_VIEW);
             }
+
+            @Override
+            public void onCheckVideo(int groupPosition, int position) {
+                List<FileTitleEntity> lists= mAdapter.getList();
+                if(groupPosition<lists.size()){
+                    FileTitleEntity fileTitleEntity=lists.get(groupPosition);
+                    //获取子集
+                    List<FileChildEntity> flieChilds=fileTitleEntity.lists;
+                    if(position<flieChilds.size()){
+                        FileChildEntity fileChildEntity=flieChilds.get(position);
+                        play(fileChildEntity.name,fileChildEntity.path,fileChildEntity.size);
+                    }
+                }
+            }
         });
 
+    }
+    public void play(String name,String path,long lenth) {
+        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(name,FileSizeUtils.formatFileSize(lenth)
+                ,"时长: "+ MusicFileUtils.getPlayDuration2(path),"未知");
+        FragmentManager fm = getActivity().getFragmentManager();
+        videoPlayFragment.show(fm,"");
+        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onConfirm() {
+                playAudio(path);
+            }
+        });
+    }
+
+    public void playAudio(String audioPath) {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        //解决8.0以上问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            builder.detectFileUriExposure();
+        }
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("file:///" + audioPath);
+            intent.setDataAndType(uri, "video/*");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
     }
     /**
      * 照片查看选择集合包装
@@ -352,7 +405,6 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
-
     }
 
     public long getDelTotalFileSize(List<FileChildEntity> paths){
@@ -385,7 +437,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         switch (ids){
             case R.id.btn_del:
 
-                String title=String.format("确定删除这%s个图片?",getSelectSize());
+                String title=String.format("确定删除这%s个视频?",getSelectSize());
                 DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm,"");

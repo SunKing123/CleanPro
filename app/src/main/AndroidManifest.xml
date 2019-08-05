@@ -295,6 +295,11 @@
             android:name=".ui.main.activity.WXCleanImgActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WXCleanVideoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
 
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"

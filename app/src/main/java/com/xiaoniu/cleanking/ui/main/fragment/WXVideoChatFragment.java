@@ -2,9 +2,11 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -14,7 +16,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
-import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
+import com.xiaoniu.cleanking.ui.main.adapter.WXVideoChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
@@ -22,10 +24,12 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
-import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
+import com.xiaoniu.cleanking.ui.main.presenter.WXCleanVideoPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import java.io.File;
@@ -36,13 +40,19 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 微信图片保存图片
+ * 微信聊天图片清理
  * Created by lang.chen on 2019/8/1
+ * <p>
+ * 图片分类
  */
-public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter> {
-    private static final int REQUEST_CODE_IMG_VIEW = 0x1022;
-    @BindView(R.id.list_view_save_list)
+public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
+
+
+    private  static  final  int REQUEST_CODE_IMG_VIEW=0x1021;
+    @BindView(R.id.list_view)
     ExpandableListView mListView;
+    private WXVideoChatAdapter mAdapter;
+
 
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
@@ -52,39 +62,37 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     private boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;
-    ;
 
-    private WXImgChatAdapter mAdapter;
+    private  int mGroupPosition;
 
-    private int mGroupPosition;
+    public static WXVideoChatFragment newInstance() {
+        WXVideoChatFragment wxImgChatFragment = new WXVideoChatFragment();
 
-    public static WXImgSaveListFragment newInstance() {
-        WXImgSaveListFragment instance = new WXImgSaveListFragment();
-        return instance;
+        return wxImgChatFragment;
     }
-
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
+        mPresenter.init(getContext());
+        mPresenter.start();
     }
 
     @Override
     public void netError() {
-
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.wx_img_save_list;
+        return R.layout.activity_wx_img_chat;
     }
 
     @Override
     protected void initView() {
+        mAdapter = new WXVideoChatAdapter(getContext());
+        mListView.setAdapter(mAdapter);
         mLoading = CleanFileLoadingDialogFragment.newInstance();
         mProgress = FileCopyProgressDialogFragment.newInstance();
-        mAdapter = new WXImgChatAdapter(getContext());
-        mListView.setAdapter(mAdapter);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -101,12 +109,9 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                     }
                 }
                 mAdapter.notifyDataSetChanged();
-
                 return false;
             }
         });
-        mPresenter.init(mContext);
-        mPresenter.start();
 
         mLLCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +127,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
             }
         });
 
-        mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
+        mAdapter.setOnCheckListener(new WXVideoChatAdapter.OnCheckListener() {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
                 setSelectChildStatus(groupPosition);
@@ -131,14 +136,114 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
             @Override
             public void onCheckImg(int groupPosition, int position) {
-                mGroupPosition = groupPosition;
+                mGroupPosition=groupPosition;
                 Intent intent = new Intent(mActivity, PreviewImageActivity.class);
                 intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition, position);
+                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition,position);
                 startActivityForResult(intent, REQUEST_CODE_IMG_VIEW);
+            }
+
+            @Override
+            public void onCheckVideo(int groupPosition, int position) {
+               List<FileTitleEntity> lists= mAdapter.getList();
+               if(groupPosition<lists.size()){
+                   FileTitleEntity fileTitleEntity=lists.get(groupPosition);
+                   //获取子集
+                   List<FileChildEntity> flieChilds=fileTitleEntity.lists;
+                    if(position<flieChilds.size()){
+                        FileChildEntity fileChildEntity=flieChilds.get(position);
+                        play(fileChildEntity.name,fileChildEntity.path,fileChildEntity.size);
+                    }
+               }
             }
         });
 
+    }
+
+
+    public void play(String name,String path,long lenth) {
+        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(name,FileSizeUtils.formatFileSize(lenth)
+                ,"时长: "+ MusicFileUtils.getPlayDuration2(path),"未知");
+        FragmentManager fm = getActivity().getFragmentManager();
+        videoPlayFragment.show(fm,"");
+        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onConfirm() {
+                playAudio(path);
+            }
+        });
+    }
+
+    public void playAudio(String audioPath) {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        //解决8.0以上问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            builder.detectFileUriExposure();
+        }
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("file:///" + audioPath);
+            intent.setDataAndType(uri, "video/*");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+         super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_CODE_IMG_VIEW) {
+                List<FileEntity> listTemp = new ArrayList<>();
+                listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
+                refreshData(listTemp);
+            }
+
+    }
+
+
+    /**
+     * 查看图片后刷新数据
+     * @param fileEntities
+     */
+    private  void  refreshData(List<FileEntity> fileEntities){
+
+            List<FileTitleEntity> lists=mAdapter.getList();
+
+            List<FileChildEntity> listsNew=new ArrayList<>();
+            if(lists.size()>0){
+              List<FileChildEntity> fileChildEntities=  lists.get(mGroupPosition).lists;
+
+              for(FileChildEntity fileChildEntity:fileChildEntities){
+
+                  boolean isAdd=false;
+                  for(FileEntity fileEntity:fileEntities){
+                      if(fileEntity.path.equals(fileChildEntity.path)){
+                          fileChildEntity.isSelect=fileEntity.isSelect;
+                          isAdd=true;
+                      }
+                  }
+                  if(isAdd){
+                      listsNew.add(fileChildEntity);
+                  }
+              }
+                fileChildEntities.clear();;
+
+                fileChildEntities.addAll(listsNew);
+                mPresenter.totalFileSize(lists);
+                mAdapter.notifyDataSetChanged();
+                setSelectChildStatus(mGroupPosition);
+                setDelBtnSize();
+
+
+            }
     }
 
     /**
@@ -152,16 +257,17 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         List<FileEntity> wrapperLists = new ArrayList<>();
 
         List<FileTitleEntity> lists = mAdapter.getList();
-        if (lists.size() > 0) {
-            List<FileChildEntity> listChilds = lists.get(groupPosition).lists;
-            for (FileChildEntity fileChildEntity : listChilds) {
-                FileEntity fileEntity = new FileEntity(String.valueOf(fileChildEntity.size), fileChildEntity.path);
-                fileEntity.isSelect = fileChildEntity.isSelect;
+        if(lists.size()>0){
+            List<FileChildEntity> listChilds=lists.get(groupPosition).lists;
+            for(FileChildEntity fileChildEntity: listChilds){
+                FileEntity fileEntity=new FileEntity(String.valueOf(fileChildEntity.size),fileChildEntity.path);
+                fileEntity.isSelect=fileChildEntity.isSelect;
                 wrapperLists.add(fileEntity);
             }
         }
         return wrapperLists;
     }
+
 
 
     /**
@@ -170,6 +276,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     private void setSelectChildStatus(int groupPosition) {
         List<FileTitleEntity> lists = mAdapter.getList();
 
+
         for (int i = 0; i < lists.size(); i++) {
             if (i == groupPosition) {
                 //是否选择所有
@@ -177,6 +284,8 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                 FileTitleEntity fileTitleEntity = lists.get(groupPosition);
                 if(fileTitleEntity.lists.size()==0){
                     fileTitleEntity.isSelect = false;
+                    mAdapter.notifyDataSetChanged();
+                    break;
                 }else {
                     for (FileChildEntity file : fileTitleEntity.lists) {
                         if (file.isSelect == false) {
@@ -185,10 +294,12 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                     }
 
                     fileTitleEntity.isSelect = isCheckAll;
+                    mAdapter.notifyDataSetChanged();
+                    break;
+
                 }
             }
         }
-        mAdapter.notifyDataSetChanged();
 
     }
 
@@ -217,53 +328,6 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         }
         mAdapter.notifyDataSetChanged();
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_IMG_VIEW) {
-            List<FileEntity> listTemp = new ArrayList<>();
-            listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
-            refreshData(listTemp);
-        }
-
-    }
-
-    /**
-     * 查看图片后刷新数据
-     * @param fileEntities
-     */
-    private  void  refreshData(List<FileEntity> fileEntities){
-
-        List<FileTitleEntity> lists=mAdapter.getList();
-
-        List<FileChildEntity> listsNew=new ArrayList<>();
-        if(lists.size()>0){
-            List<FileChildEntity> fileChildEntities=  lists.get(mGroupPosition).lists;
-
-            for(FileChildEntity fileChildEntity:fileChildEntities){
-
-                boolean isAdd=false;
-                for(FileEntity fileEntity:fileEntities){
-                    if(fileEntity.path.equals(fileChildEntity.path)){
-                        fileChildEntity.isSelect=fileEntity.isSelect;
-                        isAdd=true;
-                    }
-                }
-                if(isAdd){
-                    listsNew.add(fileChildEntity);
-                }
-            }
-            fileChildEntities.clear();;
-
-            fileChildEntities.addAll(listsNew);
-            mPresenter.totalFileSize(lists);
-            mAdapter.notifyDataSetChanged();
-            setSelectChildStatus(mGroupPosition);
-            setDelBtnSize();
-
-        }
     }
 
 
@@ -343,8 +407,6 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
     }
 
-
-
     public long getDelTotalFileSize(List<FileChildEntity> paths){
         long size=0L;
         for(FileChildEntity fileChildEntity:paths){
@@ -353,7 +415,6 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         }
         return  size;
     }
-
     /**
      * 获取选中删除的元素
      *
@@ -378,7 +439,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         switch (ids) {
             case R.id.btn_del:
 
-                String title = String.format("确定删除这%s个图片?", getSelectSize());
+                String title = String.format("确定删除这%s个视频?", getSelectSize());
                 DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm, "");
@@ -397,7 +458,9 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                 });
 
                 break;
+            //保存到手机
             case R.id.btn_save:
+
                 List<File> lists = getSelectFiles();
                 if (lists.size() == 0) {
                     ToastUtils.show("未选中照片");
@@ -412,6 +475,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         }
     }
 
+
     /**
      * 导入成功
      *
@@ -424,22 +488,6 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
             ToastUtils.show("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
-    }
-
-
-    private List<File> getSelectFiles() {
-        List<File> files = new ArrayList<>();
-        List<FileTitleEntity> lists = mAdapter.getList();
-
-        for (FileTitleEntity fileTitleEntity : lists) {
-            for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
-                if (fileChildEntity.isSelect) {
-                    File File = new File(fileChildEntity.path);
-                    files.add(File);
-                }
-            }
-        }
-        return files;
     }
 
 
@@ -457,9 +505,28 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         return size;
     }
 
+    private List<File> getSelectFiles() {
+        List<File> files = new ArrayList<>();
+        List<FileTitleEntity> lists = mAdapter.getList();
 
-    public void updateImgSaveList(List<FileTitleEntity> lists) {
+        for (FileTitleEntity fileTitleEntity : lists) {
+            for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
+                if (fileChildEntity.isSelect) {
+                    File File = new File(fileChildEntity.path);
+                    files.add(File);
+                }
+            }
+        }
+        return files;
+    }
 
+
+    /**
+     * 更新微信聊天图片
+     *
+     * @param lists
+     */
+    public void updateImgChat(List<FileTitleEntity> lists) {
         mAdapter.modifyData(lists);
     }
 
@@ -473,5 +540,4 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     public void onDestroyView() {
         super.onDestroyView();
     }
-
 }

@@ -25,6 +25,11 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -135,6 +140,7 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
     }
 
 
+
     public void totalFileSize(List<FileTitleEntity> lists) {
         if (null == lists || lists.size() == 0) {
             return;
@@ -145,6 +151,90 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
                 size += fileChildEntity.size;
             }
             fileTitleEntity.size = size;
+        }
+    }
+    /**
+     * 导入文件
+     * @param files
+     */
+    //文件的总大小
+    private  int mFileTotalSize=0;
+    //文件读写的大小
+    private  int mFileReadSize=0;
+    public   void copyFile(List<File> files ){
+        mFileTotalSize=0;
+        mFileReadSize=0;
+        //相册路径
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+"/img_cl";
+
+        File file=new File(path);
+        if(!file.exists()){
+            file.mkdir();
+        }
+
+        for(File fileSize: files){
+            mFileTotalSize+=fileSize.length();
+        }
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+
+
+                for(File file: files){
+                    File fileCopy=new File(path,file.getName());
+                    copyFileUsingFileStreams(file,fileCopy,emitter);
+
+                }
+                emitter.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Integer value) {
+
+                        mView.copySuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.cancelLoadingDialog();
+                    }
+                });
+
+    }
+
+    /**
+     * 文件拷贝
+     *
+     */
+    private  void copyFileUsingFileStreams(File source, File dest,ObservableEmitter<Integer> emitter)
+            throws IOException {
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            input = new FileInputStream(source);
+            output = new FileOutputStream(dest);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+                mFileReadSize+=bytesRead;
+                int progress = (int) (mFileReadSize * 1.0f / mFileTotalSize * 100);
+                emitter.onNext(progress);
+            }
+        } finally {
+            input.close();
+            output.close();
         }
     }
 

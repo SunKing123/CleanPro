@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.WXVideoCameraFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.utils.DateUtils;
 
@@ -34,7 +35,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by lang.chen on 2019/8/3
  */
-public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, CleanMainModel> {
+public class WXVideoCameraPresenter extends RxPresenter<WXVideoCameraFragment, CleanMainModel> {
 
 
     private static final String TAG = "WXImgCamera.class";
@@ -51,7 +52,7 @@ public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, Clean
 
 
     @Inject
-    public WXImgCameraPresenter() {
+    public WXVideoCameraPresenter() {
 
     }
 
@@ -61,7 +62,7 @@ public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, Clean
      * 初始化 一级目录标题
      */
     public void init(Context context) {
-        String[] titles = context.getResources().getStringArray(R.array.wx_file_titles);
+        String[] titles = context.getResources().getStringArray(R.array.wx_file_titles_video);
         for (int i = 0; i < titles.length; i++) {
             FileTitleEntity fileEntity = new FileTitleEntity();
             fileEntity.title = titles[i];
@@ -84,7 +85,7 @@ public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, Clean
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                scanAllImgCamera(pathLocal);
+                scanAllVideoCamera(pathLocal);
                 emitter.onNext("");
                 emitter.onComplete();
             }
@@ -258,35 +259,37 @@ public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, Clean
 
 
     /**
-     * 扫描聊天中的图片，包括缩略图
+     * 扫描聊天中的视频
      *
      * @param path
      */
-    private void scanAllImgCamera(String path) {
+    private void scanAllVideoCamera(String path) {
         File fileRoot = new File(path);
         if (fileRoot.isDirectory()) {
             File[] files = fileRoot.listFiles();
             if (null != files) {
                 for (File file : files) {
                     if (file.isDirectory()) {
-                        scanAllImgCamera(path + "/" + file.getName());
-                    } else if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
+                        scanAllVideoCamera(path + "/" + file.getName());
+                    } else if (file.getName().startsWith("wx_camera") && file.getName().endsWith(".mp4") ) {
                         FileChildEntity fileChildEntity = new FileChildEntity();
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
+                        fileChildEntity.fileType=1;
                         Log.i(TAG, "filename=" + fileChildEntity.path);
-                        if (file.getName().startsWith("wx_camera") && DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
+                        if (DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
                             //是否为今天
-                            listsCamera.get(FileTitleEntity.Type.TODAY).lists.add(fileChildEntity);
-                        } else if (file.getName().startsWith("wx_camera") && DateUtils.isYesterday(file.lastModified())) {
+                            listsCamera.get(0).lists.add(fileChildEntity);
+                        } else if ( DateUtils.isYesterday(file.lastModified())) {
                             //是否为昨天
-                            listsCamera.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
-                        } else if (file.getName().startsWith("wx_camera") && DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
+                            listsCamera.get(1).lists.add(fileChildEntity);
+                        } else if ( DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
                             //是否为同一个月
-                            listsCamera.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
-                        } else if (file.getName().startsWith("wx_camera")) {
+                            listsCamera.get(2).lists.add(fileChildEntity);
+                        } else  {
                             //是否为半年内
+                            listsCamera.get(3).lists.add(fileChildEntity);
                         }
 
                     }

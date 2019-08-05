@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by lang.chen on 2019/8/2
  */
-public class WXImgAdapter extends RecyclerView.Adapter {
+public class WXVideoAdapter extends RecyclerView.Adapter {
 
 
     private Context mContext;
@@ -29,7 +29,7 @@ public class WXImgAdapter extends RecyclerView.Adapter {
 
     private  OnSelectListener onSelectListener;
 
-    public WXImgAdapter(Context context, List<FileChildEntity> lists) {
+    public WXVideoAdapter(Context context, List<FileChildEntity> lists) {
         this.mContext = context;
         this.mLists=lists;
     }
@@ -37,7 +37,7 @@ public class WXImgAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_wx_img_content, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_wx_video_content, parent, false);
         return new ViewHolder(view);
     }
 
