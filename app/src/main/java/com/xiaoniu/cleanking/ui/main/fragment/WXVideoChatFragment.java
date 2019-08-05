@@ -2,7 +2,10 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanVideoPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -140,30 +144,57 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
 
             @Override
             public void onCheckVideo(int groupPosition, int position) {
-
+               List<FileTitleEntity> lists= mAdapter.getList();
+               if(groupPosition<lists.size()){
+                   FileTitleEntity fileTitleEntity=lists.get(groupPosition);
+                   //获取子集
+                   List<FileChildEntity> flieChilds=fileTitleEntity.lists;
+                    if(position<flieChilds.size()){
+                        FileChildEntity fileChildEntity=flieChilds.get(position);
+                        play(fileChildEntity.name,fileChildEntity.path,fileChildEntity.size);
+                    }
+               }
             }
         });
 
     }
 
 
-//    public void play(VideoInfoBean appInfoBean) {
-//        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(appInfoBean.name,FileSizeUtils.formatFileSize(appInfoBean.packageSize)
-//                ,"时长: "+ MusicFileUtils.getPlayDuration2(appInfoBean.path),"未知");
-//        videoPlayFragment.show(getFragmentManager(),"");
-//        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
-//            @Override
-//            public void onCancel() {
-//
-//            }
-//
-//            @Override
-//            public void onConfirm() {
-//                playAudio(appInfoBean.path);
-//            }
-//        });
-//    }
-//
+    public void play(String name,String path,long lenth) {
+        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(name,FileSizeUtils.formatFileSize(lenth)
+                ,"时长: "+ MusicFileUtils.getPlayDuration2(path),"未知");
+        FragmentManager fm = getActivity().getFragmentManager();
+        videoPlayFragment.show(fm,"");
+        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onConfirm() {
+                playAudio(path);
+            }
+        });
+    }
+
+    public void playAudio(String audioPath) {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        //解决8.0以上问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            builder.detectFileUriExposure();
+        }
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse("file:///" + audioPath);
+            intent.setDataAndType(uri, "video/*");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
