@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.adapter;
 
 import android.app.Activity;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +11,10 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +78,12 @@ public class WechatCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         mOnCheckListener.onCheck(listImage, position);
                 }
             });
+            ((ImageViewHolder) holder).conslayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AndroidUtil.openFileSafe("text/plain",mActivity,String.valueOf(listImage.get(position).getFile()));
+                }
+            });
 
         }
     }
@@ -90,6 +99,7 @@ public class WechatCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public TextView tv_name;
         public TextView tv_size;
         public TextView tv_time;
+        public ConstraintLayout conslayout;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
@@ -97,6 +107,7 @@ public class WechatCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_size = (TextView) itemView.findViewById(R.id.tv_size);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            conslayout = (ConstraintLayout) itemView.findViewById(R.id.conslayout);
         }
     }
 

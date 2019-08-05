@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
+import com.xiaoniu.cleanking.ui.tool.wechat.fragment.WXFileFragment;
 
 import dagger.Component;
 
@@ -29,4 +30,5 @@ public interface FragmentComponent {
     void inject(WXImgCameraFragment wxImgCameraFragment);
 
     void inject(WXImgChatFragment wxImgChatFragment);
+    void inject(WXFileFragment wxImgChatFragment);
 }
