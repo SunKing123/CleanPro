@@ -63,6 +63,15 @@
         <item>半年内</item>
     </string-array>
 
+
+    <string-array name="wx_file_titles_video">
+        <item>今天</item>
+        <item>昨天</item>
+        <item>一月内</item>
+        <item>半年内</item>
+    </string-array>
+
+
     <declare-styleable name="ArcProgressBar">
         <attr name="arc_max_progress" format="float"/>
         <attr name="arc_bg_color" format="color"/>

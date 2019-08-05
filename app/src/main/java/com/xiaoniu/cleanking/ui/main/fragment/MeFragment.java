@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
@@ -207,11 +208,13 @@ public class MeFragment extends SimpleFragment {
     }
 
 
-    @OnClick({R.id.ll_clean})
-    public void onClickS(View view){
-        int ids=view.getId();
-        if(ids==R.id.ll_clean){
+    @OnClick({R.id.ll_clean, R.id.ll_video})
+    public void onClickS(View view) {
+        int ids = view.getId();
+        if (ids == R.id.ll_clean) {
             startActivity(new Intent(getContext(), WXCleanImgActivity.class));
+        } else if (ids == R.id.ll_video) {
+            startActivity(new Intent(getContext(), WXCleanVideoActivity.class));
         }
     }
 

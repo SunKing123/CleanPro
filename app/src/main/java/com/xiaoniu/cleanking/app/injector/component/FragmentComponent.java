@@ -8,6 +8,9 @@ import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.WXVideoCameraFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.WXVideoChatFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.WXVideoSaveListFragment;
 
 import dagger.Component;
 
@@ -29,4 +32,10 @@ public interface FragmentComponent {
     void inject(WXImgCameraFragment wxImgCameraFragment);
 
     void inject(WXImgChatFragment wxImgChatFragment);
+
+    void inject(WXVideoSaveListFragment wxVideoSaveListFragment);
+
+    void inject(WXVideoChatFragment wxVideoChatFragment);
+
+    void inject(WXVideoCameraFragment wxVideoCameraFragment);
 }

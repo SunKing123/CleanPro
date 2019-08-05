@@ -17,6 +17,9 @@ public class FileChildEntity {
     //父类id，对应type
     public int parentId;
 
+    //文件类型  0 图片， 1视频
+    public int fileType;
+
 
     @Override
     public String toString() {
