@@ -53,7 +53,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
     <!-- 友盟 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
@@ -118,8 +119,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.usercenter.activity.FloatActivity"
-            android:theme="@style/transparent_activity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
         <activity
             android:name=".ui.main.activity.PreviewImageActivity"
             android:screenOrientation="portrait" />
@@ -240,14 +241,16 @@
         <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.usercenter.activity.PermissionActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.usercenter.activity.PermissionDetailActivity"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.PermissionActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.PermissionDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
             android:name=".ui.main.activity.QuestionReportActivity"
@@ -272,9 +275,10 @@
             android:screenOrientation="portrait" />
 
         <!-- 软件管理-->
-        <activity android:name=".ui.main.activity.SoftManageActivity"
+        <activity
+            android:name=".ui.main.activity.SoftManageActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -282,6 +286,11 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".ui.main.activity.WXCleanImgActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"

@@ -92,4 +92,6 @@
     <color name="color_EDEDED">#EDEDED</color>
     <color name="color_DEDEDE">#DEDEDE</color>
     <color name="color_D9E8FF">#D9E8FF</color>
+    <color name="color_b2ffffff">#B2ffffff</color>
+    <color name="color_progress_bg">#B3FFFFFF</color>
 </resources>
