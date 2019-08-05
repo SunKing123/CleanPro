@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="12dp"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_52dp"
+        android:paddingRight="@dimen/dimen_24dp"
+        android:background="@drawable/bg_dialog_del_file_success"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_52dp"
+            android:layout_height="@dimen/dimen_52dp"
+            android:background="@color/color_06C581">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/icon_check"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dimen_12dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_title_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_13dp"
+                android:text="本次删除"/>
+
+            <TextView
+                android:id="@+id/txt_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_06C581"
+                android:textSize="@dimen/dimen_13dp"
+                android:layout_marginLeft="@dimen/dimen_5dp"
+                android:layout_toRightOf="@id/txt_title_size"
+                android:text="0M"/>
+
+            <TextView
+                android:id="@+id/txt_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_title_size"
+                android:textSize="@dimen/dimen_11sp"
+                android:textColor="@color/color_666666"
+                android:layout_alignLeft="@id/txt_title_size"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:text="0个文件删除成功"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_80dp"
+        android:background="@android:color/transparent"/>
+</LinearLayout>

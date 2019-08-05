@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -18,6 +19,7 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;

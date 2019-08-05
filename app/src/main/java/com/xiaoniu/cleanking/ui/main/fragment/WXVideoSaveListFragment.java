@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
@@ -388,11 +389,23 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
         mPresenter.totalFileSize(listsNew);
         mAdapter.clear();
         mAdapter.modifyData(listsNew);
-        ToastUtils.show("删除成功");
         setDelBtnSize();
         setSelectChildStatus();
+
+        FragmentManager fm = getActivity().getFragmentManager();
+        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        String fileSize=String.valueOf(paths.size());
+        DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
     }
 
+    public long getDelTotalFileSize(List<FileChildEntity> paths){
+        long size=0L;
+        for(FileChildEntity fileChildEntity:paths){
+            size+=fileChildEntity.size;
+
+        }
+        return  size;
+    }
     /**
      * 获取选中删除的元素
      *
@@ -417,7 +430,7 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
         switch (ids) {
             case R.id.btn_del:
 
-                String title = String.format("确定删除这%s个图片?", getSelectSize());
+                String title = String.format("确定删除这%s个视频?", getSelectSize());
                 DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm, "");

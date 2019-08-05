@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.event.WXImgCameraEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -344,12 +345,24 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         mPresenter.totalFileSize(listsNew);
         mAdapter.clear();
         mAdapter.modifyData(listsNew);
-        ToastUtils.show("删除成功");
         setDelBtnSize();
         setSelectChildStatus();
 
+        FragmentManager fm = getActivity().getFragmentManager();
+        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        String fileSize=String.valueOf(paths.size());
+        DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+
     }
 
+    public long getDelTotalFileSize(List<FileChildEntity> paths){
+        long size=0L;
+        for(FileChildEntity fileChildEntity:paths){
+            size+=fileChildEntity.size;
+
+        }
+        return  size;
+    }
     /**
      * 获取选中删除的元素
      * @return
