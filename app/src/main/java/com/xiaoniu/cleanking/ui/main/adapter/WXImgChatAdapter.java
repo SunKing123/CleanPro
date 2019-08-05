@@ -138,6 +138,11 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             }
         });
 
+
+        //                    Intent intent = new Intent(mActivity, PreviewImageActivity.class);
+        //                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
+        //                    CleanAllFileScanUtil.clean_image_list = listImage;
+        //                    mActivity.startActivityForResult(intent, 209);
         return convertView;
     }
 
@@ -160,6 +165,13 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             public void select(int position, boolean isSelect) {
                 if(null!=onCheckListener){
                     onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                }
+            }
+
+            @Override
+            public void onClickImg(int position) {
+                if(null!=onCheckListener){
+                    onCheckListener.onCheckImg(groupPosition,position);
                 }
             }
         });
@@ -214,6 +226,8 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
 
     public interface OnCheckListener{
         void  onCheck(int groupPosition,int position,boolean isCheck);
+
+        void onCheckImg(int groupPosition,int position);
     }
 
 }

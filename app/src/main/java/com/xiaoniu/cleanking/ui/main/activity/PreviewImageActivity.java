@@ -155,8 +155,10 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
                     @Override
                     public void clickOKBtn() {
                         for (int i = 0; i < listF.size(); i++) {
-//                            File f = new File(listF.get(i).getPath());
-//                            f.delete();
+                            File f = new File(listF.get(i).getPath());
+                            if(null!=f && f.exists()){
+                                f.delete();
+                            }
                             AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+listF.get(i).getPath()+"\"",null);
 
                         }

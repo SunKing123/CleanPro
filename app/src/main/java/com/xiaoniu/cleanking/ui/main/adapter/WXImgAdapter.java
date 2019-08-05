@@ -73,6 +73,15 @@ public class WXImgAdapter extends RecyclerView.Adapter {
             }
         });
 
+        viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(null!=onSelectListener){
+                    onSelectListener.onClickImg(position);
+                }
+            }
+        });
+
     }
 
 
@@ -107,5 +116,7 @@ public class WXImgAdapter extends RecyclerView.Adapter {
 
     interface   OnSelectListener{
         void select(int position, boolean isSelect);
+
+        void onClickImg(int position);
     }
 }

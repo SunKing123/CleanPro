@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -12,13 +13,17 @@ import android.widget.LinearLayout;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
@@ -34,7 +39,7 @@ import butterknife.OnClick;
  * Created by lang.chen on 2019/8/1
  */
 public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter> {
-
+    private static final int REQUEST_CODE_IMG_VIEW = 0x1022;
     @BindView(R.id.list_view_save_list)
     ExpandableListView mListView;
 
@@ -49,6 +54,8 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     ;
 
     private WXImgChatAdapter mAdapter;
+
+    private int mGroupPosition;
 
     public static WXImgSaveListFragment newInstance() {
         WXImgSaveListFragment instance = new WXImgSaveListFragment();
@@ -117,25 +124,86 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
-                setSelectChildStatus(groupPosition, position, isCheck);
+                setSelectChildStatus(groupPosition);
                 setDelBtnSize();
+            }
+
+            @Override
+            public void onCheckImg(int groupPosition, int position) {
+                mGroupPosition = groupPosition;
+                Intent intent = new Intent(mActivity, PreviewImageActivity.class);
+                intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
+                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition, position);
+                startActivityForResult(intent, REQUEST_CODE_IMG_VIEW);
             }
         });
 
     }
 
     /**
-     * 改变子视图的选择状态
+     * 照片查看选择集合包装
      *
-     * @param isCheck
+     * @param groupPosition
+     * @param childPosition
+     * @return
      */
-    private void setSelectChildStatus(int groupPosition, int position, boolean isCheck) {
+    private List<FileEntity> wrapperImg(int groupPosition, int childPosition) {
+        List<FileEntity> wrapperLists = new ArrayList<>();
+
         List<FileTitleEntity> lists = mAdapter.getList();
+        if (lists.size() > 0) {
+            List<FileChildEntity> listChilds = lists.get(groupPosition).lists;
+            for (FileChildEntity fileChildEntity : listChilds) {
+                FileEntity fileEntity = new FileEntity(String.valueOf(fileChildEntity.size), fileChildEntity.path);
+                fileEntity.isSelect = fileChildEntity.isSelect;
+                wrapperLists.add(fileEntity);
+            }
+        }
+        return wrapperLists;
+    }
+
+
+    /**
+     * 改变子视图的选择状态
+     */
+    private void setSelectChildStatus(int groupPosition) {
+        List<FileTitleEntity> lists = mAdapter.getList();
+
         for (int i = 0; i < lists.size(); i++) {
             if (i == groupPosition) {
                 //是否选择所有
                 boolean isCheckAll = true;
                 FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                if(fileTitleEntity.lists.size()==0){
+                    fileTitleEntity.isSelect = false;
+                }else {
+                    for (FileChildEntity file : fileTitleEntity.lists) {
+                        if (file.isSelect == false) {
+                            isCheckAll = false;
+                        }
+                    }
+
+                    fileTitleEntity.isSelect = isCheckAll;
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    /**
+     * 改变父类文件选择状态
+     */
+    private void setSelectChildStatus() {
+        List<FileTitleEntity> lists = mAdapter.getList();
+
+        for (int i = 0; i < lists.size(); i++) {
+            //是否选择所有
+            boolean isCheckAll = true;
+            FileTitleEntity fileTitleEntity = lists.get(i);
+            if (fileTitleEntity.lists.size() == 0) {
+                fileTitleEntity.isSelect = false;
+            } else {
                 for (FileChildEntity file : fileTitleEntity.lists) {
                     if (file.isSelect == false) {
                         isCheckAll = false;
@@ -143,12 +211,58 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                 }
 
                 fileTitleEntity.isSelect = isCheckAll;
-                mAdapter.notifyDataSetChanged();
-                break;
             }
+
+        }
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_IMG_VIEW) {
+            List<FileEntity> listTemp = new ArrayList<>();
+            listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
+            refreshData(listTemp);
         }
 
+    }
 
+    /**
+     * 查看图片后刷新数据
+     * @param fileEntities
+     */
+    private  void  refreshData(List<FileEntity> fileEntities){
+
+        List<FileTitleEntity> lists=mAdapter.getList();
+
+        List<FileChildEntity> listsNew=new ArrayList<>();
+        if(lists.size()>0){
+            List<FileChildEntity> fileChildEntities=  lists.get(mGroupPosition).lists;
+
+            for(FileChildEntity fileChildEntity:fileChildEntities){
+
+                boolean isAdd=false;
+                for(FileEntity fileEntity:fileEntities){
+                    if(fileEntity.path.equals(fileChildEntity.path)){
+                        fileChildEntity.isSelect=fileEntity.isSelect;
+                        isAdd=true;
+                    }
+                }
+                if(isAdd){
+                    listsNew.add(fileChildEntity);
+                }
+            }
+            fileChildEntities.clear();;
+
+            fileChildEntities.addAll(listsNew);
+            mPresenter.totalFileSize(lists);
+            mAdapter.notifyDataSetChanged();
+            setSelectChildStatus(mGroupPosition);
+            setDelBtnSize();
+
+        }
     }
 
 
@@ -216,10 +330,12 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
             listsNew.add(fileTitle);
         }
         mLoading.dismissAllowingStateLoss();
-        ToastUtils.show("删除成功");
         mPresenter.totalFileSize(listsNew);
         mAdapter.clear();
         mAdapter.modifyData(listsNew);
+        ToastUtils.show("删除成功");
+        setDelBtnSize();
+        setSelectChildStatus();
     }
 
     /**

@@ -150,10 +150,10 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
 
                 for (FileEntity appInfoBean : files) {
                     AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+appInfoBean.getPath()+"\"",null);
-//                    File file = new File(appInfoBean.path);
-//                    if (null != file) {
-//                        file.delete();
-//                    }
+                    File file = new File(appInfoBean.path);
+                    if (null != file) {
+                        file.delete();
+                    }
                 }
                 emitter.onNext("");
                 emitter.onComplete();
