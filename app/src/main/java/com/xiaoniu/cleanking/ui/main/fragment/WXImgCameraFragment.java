@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.event.WXImgCameraEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
@@ -26,6 +27,7 @@ import com.xiaoniu.cleanking.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     private  boolean mIsCheckAll;
 
     private CleanFileLoadingDialogFragment mLoading;
+    private FileCopyProgressDialogFragment mProgress;;
 
     public static WXImgCameraFragment newInstance() {
         WXImgCameraFragment instance = new WXImgCameraFragment();
@@ -77,6 +80,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     @Override
     protected void initView() {
         mLoading=CleanFileLoadingDialogFragment.newInstance();
+        mProgress=FileCopyProgressDialogFragment.newInstance();
         mAdapter=new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -262,6 +266,17 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
 
                 break;
             case R.id.btn_save:
+
+                List<File> lists=getSelectFiles();
+                if(lists.size()==0){
+                    ToastUtils.show("未选中照片");
+                }else {
+                    FragmentManager fmProgress= getActivity().getFragmentManager();
+                    mProgress.show(fmProgress,"");
+                    //导入图片
+                    mPresenter.copyFile(lists);
+                }
+
                 break;
         }
     }
@@ -282,6 +297,22 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         return  size;
     }
 
+    private  List<File> getSelectFiles(){
+        List<File> files=new ArrayList<>();
+        List<FileTitleEntity> lists = mAdapter.getList();
+
+        for(FileTitleEntity fileTitleEntity: lists){
+            for(FileChildEntity fileChildEntity:fileTitleEntity.lists){
+                if(fileChildEntity.isSelect){
+                    File File =new File(fileChildEntity.path);
+                    files.add(File);
+                }
+            }
+        }
+        return  files;
+    }
+
+
 
     @Subscribe
     public void onEnvent(WXImgCameraEvent wxImgCameraEvent){
@@ -289,6 +320,18 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         mAdapter.modifyData(lists);
     }
 
+    /**
+     * 导入成功
+     * @param progress
+     */
+    public void copySuccess(int progress){
+
+        mProgress.setValue(progress);
+        if(progress>=100){
+            ToastUtils.show("保存成功，请至手机相册查看");
+            mProgress.dismissAllowingStateLoss();
+        }
+    }
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);

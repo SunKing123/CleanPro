@@ -13,6 +13,11 @@ import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.utils.DateUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +34,10 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by lang.chen on 2019/8/3
  */
-public class WXImgCameraPresenter  extends RxPresenter<WXImgCameraFragment, CleanMainModel> {
+public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, CleanMainModel> {
 
 
-    private  static  final  String TAG="WXImgCamera.class";
+    private static final String TAG = "WXImgCamera.class";
 
     /**
      * 微信根目录
@@ -45,11 +50,11 @@ public class WXImgCameraPresenter  extends RxPresenter<WXImgCameraFragment, Clea
     private List<FileTitleEntity> listsCamera = new ArrayList<>();
 
 
-
     @Inject
-    public WXImgCameraPresenter(){
+    public WXImgCameraPresenter() {
 
     }
+
     /**
      * 获取聊天图片保存目录
      * <p>
@@ -74,7 +79,7 @@ public class WXImgCameraPresenter  extends RxPresenter<WXImgCameraFragment, Clea
      */
     private void getImgCamera() {
 
-        String pathLocal=wxRootPath+"/WeiXin";
+        String pathLocal = wxRootPath + "/WeiXin";
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
@@ -110,13 +115,37 @@ public class WXImgCameraPresenter  extends RxPresenter<WXImgCameraFragment, Clea
     }
 
 
+    /**
+     * 文件拷贝
+     */
+    private void copyFileUsingFileStreams(File source, File dest, ObservableEmitter<Integer> emitter)
+            throws IOException {
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            input = new FileInputStream(source);
+            output = new FileOutputStream(dest);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+                mFileReadSize += bytesRead;
+                int progress = (int) (mFileReadSize * 1.0f / mFileTotalSize * 100);
+                emitter.onNext(progress);
+            }
+        } finally {
+            input.close();
+            output.close();
+        }
+    }
+
     public void delFile(List<FileChildEntity> list) {
         List<FileChildEntity> files = list;
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                for ( FileChildEntity fileChildEntity : files) {
+                for (FileChildEntity fileChildEntity : files) {
                     File file = new File(fileChildEntity.path);
                     if (null != file) {
                         file.delete();
@@ -151,18 +180,80 @@ public class WXImgCameraPresenter  extends RxPresenter<WXImgCameraFragment, Clea
     }
 
 
-
-    public   void totalFileSize(List<FileTitleEntity> lists){
-        if(null==lists ||  lists.size()==0){
+    public void totalFileSize(List<FileTitleEntity> lists) {
+        if (null == lists || lists.size() == 0) {
             return;
         }
-        for(FileTitleEntity fileTitleEntity: lists){
-            long size=0L;
-            for(FileChildEntity fileChildEntity:fileTitleEntity.lists){
-                size+=fileChildEntity.size;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            long size = 0L;
+            for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
+                size += fileChildEntity.size;
             }
-            fileTitleEntity.size=size;
+            fileTitleEntity.size = size;
         }
+    }
+
+
+    /**
+     * 导入文件
+     *
+     * @param files
+     */
+    //文件的总大小
+    private int mFileTotalSize = 0;
+    //文件读写的大小
+    private int mFileReadSize = 0;
+
+    public void copyFile(List<File> files) {
+        mFileTotalSize = 0;
+        mFileReadSize = 0;
+        //相册路径
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + "/img_cl";
+
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+
+        for (File fileSize : files) {
+            mFileTotalSize += fileSize.length();
+        }
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+
+
+                for (File file : files) {
+                    File fileCopy = new File(path, file.getName());
+                    copyFileUsingFileStreams(file, fileCopy, emitter);
+
+                }
+                emitter.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Integer value) {
+
+                        mView.copySuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.cancelLoadingDialog();
+                    }
+                });
+
     }
 
 
@@ -184,17 +275,17 @@ public class WXImgCameraPresenter  extends RxPresenter<WXImgCameraFragment, Clea
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
-                        Log.i(TAG,"filename="+fileChildEntity.path);
+                        Log.i(TAG, "filename=" + fileChildEntity.path);
                         if (file.getName().startsWith("wx_camera") && DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
                             //是否为今天
                             listsCamera.get(FileTitleEntity.Type.TODAY).lists.add(fileChildEntity);
-                        } else if ( file.getName().startsWith("wx_camera") && DateUtils.isYesterday(file.lastModified())) {
+                        } else if (file.getName().startsWith("wx_camera") && DateUtils.isYesterday(file.lastModified())) {
                             //是否为昨天
                             listsCamera.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
                         } else if (file.getName().startsWith("wx_camera") && DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
                             //是否为同一个月
                             listsCamera.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
-                        } else if(file.getName().startsWith("wx_camera")){
+                        } else if (file.getName().startsWith("wx_camera")) {
                             //是否为半年内
                         }
 
