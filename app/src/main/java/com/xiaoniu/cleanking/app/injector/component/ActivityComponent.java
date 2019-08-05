@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanAudActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.FeedBackActivity;
@@ -84,5 +85,7 @@ public interface ActivityComponent {
     void inject(SoftManageActivity softManageActivity);
 
     void inject(WechatCleanHomeActivity wechatCleanHomeActivity);
+
+    void inject(WechatCleanAudActivity wechatCleanAudActivity);
 }
 
