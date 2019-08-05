@@ -39,4 +39,5 @@ public interface FragmentComponent {
     void inject(WXVideoChatFragment wxVideoChatFragment);
 
     void inject(WXVideoCameraFragment wxVideoCameraFragment);
+    void inject(WXFileFragment wxVideoCameraFragment);
 }

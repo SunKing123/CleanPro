@@ -113,13 +113,13 @@ public class WXFileFragment extends BaseFragment<WXCleanFilePresenter> {
             }
         });
 
-        mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
-            @Override
-            public void onCheck(int groupPosition, int position, boolean isCheck) {
-                setSelectChildStatus(groupPosition,position,isCheck);
-                setDelBtnSize();
-            }
-        });
+//        mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
+//            @Override
+//            public void onCheck(int groupPosition, int position, boolean isCheck) {
+//                setSelectChildStatus(groupPosition,position,isCheck);
+//                setDelBtnSize();
+//            }
+//        });
 
     }
 
