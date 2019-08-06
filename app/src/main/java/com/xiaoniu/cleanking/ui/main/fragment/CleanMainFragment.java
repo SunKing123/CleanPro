@@ -522,11 +522,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     boolean isError = false;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host;
+        String url = ApiModule.Base_H5_Host + "/activity_page.html";
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavaInterface(), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(getActivity()), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
