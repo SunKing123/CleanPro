@@ -273,17 +273,17 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //图片请求返回
-        if(requestCode==REQUEST_CODE_QQ_IMG && null!=data.getExtras()){
-            ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>)data.getExtras().getSerializable(Constant.PARAMS_QQ_IMG_LIST);
-            if(null!=lists && lists.size()>0){
+        if (requestCode == REQUEST_CODE_QQ_IMG && null != data && null != data.getExtras()) {
+            ArrayList<FileTitleEntity> lists = (ArrayList<FileTitleEntity>) data.getExtras().getSerializable(Constant.PARAMS_QQ_IMG_LIST);
+            if (null != lists && lists.size() > 0) {
                 mListImg.clear();
                 mListImg.addAll(lists);
             }
 
-        }else if(requestCode==REQUEST_CODE_QQ_VIDEO && null !=data.getExtras()){
+        } else if (requestCode == REQUEST_CODE_QQ_VIDEO && null != data && null != data.getExtras()) {
             //视频列表选中返回更新
-            ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>)data.getExtras().getSerializable(Constant.PARAMS_QQ_VIDEO_LIST);
-            if(null!=lists && lists.size()>0){
+            ArrayList<FileTitleEntity> lists = (ArrayList<FileTitleEntity>) data.getExtras().getSerializable(Constant.PARAMS_QQ_VIDEO_LIST);
+            if (null != lists && lists.size() > 0) {
                 mListVideo.clear();
                 mListVideo.addAll(lists);
             }
