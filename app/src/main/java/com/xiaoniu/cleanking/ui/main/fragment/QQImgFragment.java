@@ -10,6 +10,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
@@ -35,6 +36,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -379,42 +381,52 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         }
         return  files;
     }
+
     @OnClick({R.id.btn_del,R.id.btn_save})
     public void onClickView(View view){
         int ids=view.getId();
         switch (ids){
             case R.id.btn_del:
 
-                String title=String.format("确定删除这%s个图片?",getSelectSize());
-                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
-                FragmentManager fm = getActivity().getFragmentManager();
-                dialogFragment.show(fm,"");
-                dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
-                    @Override
-                    public void onCancel() {
+//                String title=String.format("确定删除这%s个图片?",getSelectSize());
+//                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
+//                FragmentManager fm = getActivity().getFragmentManager();
+//                dialogFragment.show(fm,"");
+//                dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
+//                    @Override
+//                    public void onCancel() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onConfirm() {
+//                        mLoading.show(getActivity().getSupportFragmentManager(),"");
+//                        List<FileChildEntity> files=getDelFile();
+//                        mPresenter.delFile(files);
+//                    }
+//                });
 
-                    }
-
-                    @Override
-                    public void onConfirm() {
-                        mLoading.show(getActivity().getSupportFragmentManager(),"");
-                        List<FileChildEntity> files=getDelFile();
-                        mPresenter.delFile(files);
-                    }
-                });
+                ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();
+                Bundle bundle=new Bundle();
+                bundle.putSerializable(Constant.PARAMS_QQ_IMG_LIST, lists);
+                Intent intent=new Intent();
+                intent.putExtras(bundle);
+                getActivity().setResult(0x11,intent);
+                getActivity().finish();
 
                 break;
             case R.id.btn_save:
 
-                List<File> lists=getSelectFiles();
-                if(lists.size()==0){
-                    ToastUtils.show("未选中照片");
-                }else {
-                    FragmentManager fmProgress= getActivity().getFragmentManager();
-                    mProgress.show(fmProgress,"");
-                    //导入图片
-                    mPresenter.copyFile(lists);
-                }
+//                List<File> lists=getSelectFiles();
+//                if(lists.size()==0){
+//                    ToastUtils.show("未选中照片");
+//                }else {
+//                    FragmentManager fmProgress= getActivity().getFragmentManager();
+//                    mProgress.show(fmProgress,"");
+//                    //导入图片
+//                    mPresenter.copyFile(lists);
+//                }
+
 
                 break;
         }
