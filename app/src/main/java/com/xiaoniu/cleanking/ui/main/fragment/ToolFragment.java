@@ -9,7 +9,10 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleFragment;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 
 import butterknife.BindView;
@@ -44,20 +47,20 @@ public class ToolFragment extends SimpleFragment {
     }
 
 
-    @OnClick({R.id.rl_chat,R.id.rl_qq,R.id.ll_phone_speed,R.id.text_cooling,R.id.text_phone_thin})
+    @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin})
     public void onCoolingViewClicked(View view) {
-        int ids=view.getId();
+        int ids = view.getId();
         if (ids == R.id.rl_chat) {
-            //TODO 微信清理
-        }else if (ids == R.id.rl_qq) {
-            //TODO QQ清理
-        }else if (ids == R.id.ll_phone_speed){
-            //TODO 一键加速
-        }else if(ids==R.id.text_cooling){
+            startActivity(WechatCleanHomeActivity.class);
+        } else if (ids == R.id.rl_qq) {
+            startActivity(QQCleanHomeActivity.class);
+        } else if (ids == R.id.ll_phone_speed) {
+            startActivity(PhoneAccessActivity.class);
+        } else if (ids == R.id.text_cooling) {
             //手机降温
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-        }else if(ids==R.id.text_phone_thin){
-            startActivity(new Intent(getContext(),PhoneThinActivity.class));
+        } else if (ids == R.id.text_phone_thin) {
+            startActivity(new Intent(getContext(), PhoneThinActivity.class));
         }
     }
 
