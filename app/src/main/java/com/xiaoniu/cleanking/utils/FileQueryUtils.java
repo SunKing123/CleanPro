@@ -219,7 +219,9 @@ public class FileQueryUtils {
             list.add(firstJunkInfo);
 
             if (index > (float)total * 3 / 4 && !isScanFile && list.size() > 0) {
-                mScanFileListener.currentNumber();
+                if(mScanFileListener != null) {
+                    mScanFileListener.currentNumber();
+                }
             }
         }
 
@@ -272,8 +274,9 @@ public class FileQueryUtils {
                         if (str != null) {
                             CharSequence loadLabel = this.mPackageManager.getPackageInfo(str, 0).applicationInfo.loadLabel(this.mPackageManager);
                             if (runningAppProcessInfo.importance >= 200 && !str.equals(this.mContext.getPackageName()) && !str.contains("com.xiaoniu")) {
-
-                                mScanFileListener.scanFile(str);
+                                if (mScanFileListener != null) {
+                                    mScanFileListener.scanFile(str);
+                                }
                                 long totalPss = (long) (this.mActivityManager.getProcessMemoryInfo(new int[]{i2})[0].getTotalPss() * 1024);
                                 if (hashMap.containsKey(str)) {
                                     FirstJunkInfo onelevelGarbageInfo2 = (FirstJunkInfo) hashMap.get(str);
@@ -353,7 +356,9 @@ public class FileQueryUtils {
                     //停止扫描
                     return junkList;
                 }
-                mScanFileListener.scanFile(usageStats.getPackageName());
+                if (mScanFileListener != null) {
+                    mScanFileListener.scanFile(usageStats.getPackageName());
+                }
                 if (!(usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.xiaoniu"))) {
                     String packageName = usageStats.getPackageName();
                     if (!isSystemAppliation(packageName)) {
@@ -429,7 +434,9 @@ public class FileQueryUtils {
                 }
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 ApplicationInfo applicationInfo = getApplicationInfo(appMemoryInfo2.getName());
-                mScanFileListener.scanFile(appMemoryInfo2.getName());
+                if (mScanFileListener != null) {
+                    mScanFileListener.scanFile(appMemoryInfo2.getName());
+                }
                 if (applicationInfo != null && !appMemoryInfo2.getName().contains("com.xiaoniu")) {
                     long totalPss = ((long) mActivityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {
@@ -519,7 +526,9 @@ public class FileQueryUtils {
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
                 String name = appMemoryInfo2.getName();
-                mScanFileListener.scanFile(name);
+                if(mScanFileListener != null) {
+                    mScanFileListener.scanFile(name);
+                }
                 if (name != null && !name.contains("com.xiaoniu")) {
                     long totalPss = ((long) activityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {

@@ -20,7 +20,14 @@ public class CleanWxClearInfo implements MultiItemEntity, Serializable {
     private long size;
     private long time;
     private int type;
+    private boolean isSelect;
+    public boolean getIsSelect() {
+        return isSelect;
+    }
 
+    public void setIsSelect(boolean select) {
+        isSelect = select;
+    }
     public boolean isPicLoadFaile() {
         return this.isPicLoadFaile;
     }

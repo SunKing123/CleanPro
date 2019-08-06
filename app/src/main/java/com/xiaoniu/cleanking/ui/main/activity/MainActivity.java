@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
@@ -133,6 +134,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
+                    .addItem(new BottomBarTab(this, R.mipmap.tool_normal, getString(R.string.tool)))
                     .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         }
@@ -257,9 +259,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         CleanMainFragment mainFragment = new CleanMainFragment();
         String url = ApiModule.Base_H5_Host;
 
-//        ToolFragment toolFragment = new ToolFragment();
+        ToolFragment toolFragment = new ToolFragment();
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
         mFragments.add(mainFragment);
+
+        mFragments.add(toolFragment);
 
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
@@ -270,11 +274,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         mManager.beginTransaction()
                 .add(R.id.frame_layout, mainFragment)
-//                .add(R.id.frame_layout, toolFragment)
+                .add(R.id.frame_layout, toolFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
                 .add(R.id.frame_layout, mineFragment)
                 .hide(mainFragment)
-//                .hide(toolFragment)
+                .hide(toolFragment)
                 .hide(upQuotaFragment)
                 .hide(mineFragment)
                 .commitAllowingStateLoss();
