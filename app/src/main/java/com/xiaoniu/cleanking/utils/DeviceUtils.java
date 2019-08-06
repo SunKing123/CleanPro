@@ -1,10 +1,12 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.StatFs;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
@@ -257,6 +259,19 @@ public class DeviceUtils {
         }
 
         return mFreeS;
+    }
+
+    public static int getRealHeight() {
+        WindowManager windowManager = (WindowManager) AppApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            display.getRealMetrics(dm);
+        } else {
+            display.getMetrics(dm);
+        }
+        int realHeight = dm.heightPixels;
+        return realHeight;
     }
 
 }
