@@ -88,7 +88,7 @@ public class ApplicationDelegate extends DefaultApplicationLike {
         super.onCreate();
         initNiuData();
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
-        PlatformConfig.setQQZone("1106787504", "KjjMEbU64j1qFg1u");
+        PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
         PlatformConfig.setSinaWeibo("2480041639", "fc45c092d152a6382b0d84d1868a5d21", "");
         Bugly.init(getApplication(), "bdd6fe23ab", false);
 
