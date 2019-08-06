@@ -412,7 +412,7 @@ public class TimeUtil {
      * @return
      */
     public static String getTimesByLong(long time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日");
         @SuppressWarnings("unused")
         String times = sdr.format(new Date(time));
         return times;

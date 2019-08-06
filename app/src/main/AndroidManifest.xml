@@ -304,6 +304,10 @@
             android:name=".ui.tool.qq.activity.QQCleanHomeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.qq.activity.QQCleanFileActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

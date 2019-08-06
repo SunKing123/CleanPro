@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dimen_12dp"
-            android:text="接受的文件"
+            android:text="接收的文件"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_18sp" />
 

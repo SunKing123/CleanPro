@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class QQUtil {
-    public static final List<CleanWxClearInfo> fileList = null;
+    public static  List<CleanWxClearInfo> fileList = null;
 
     public long getEasyCleanBackGround(boolean z) {
         long j = 0;
