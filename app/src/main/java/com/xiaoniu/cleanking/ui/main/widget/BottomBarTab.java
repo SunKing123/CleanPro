@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 
 
 /**
@@ -33,8 +32,8 @@ public class BottomBarTab extends FrameLayout {
     private Context mContext;
     private int mTabPosition = -1;
 
-    private int[] iconsSelect = {R.mipmap.clean_select, R.mipmap.msg_select, R.mipmap.me_select};
-    private int[] icons = {R.mipmap.clean_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
+    private int[] iconsSelect = {R.mipmap.clean_select, R.mipmap.tool_select, R.mipmap.msg_select, R.mipmap.me_select};
+    private int[] icons = {R.mipmap.clean_normal, R.mipmap.tool_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
 
 
     private TextView mTvUnreadCount;
@@ -61,8 +60,8 @@ public class BottomBarTab extends FrameLayout {
             icons = new int[]{R.mipmap.clean_normal, R.mipmap.me_normal};
             iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.me_select};
         } else {
-            icons = new int[]{R.mipmap.clean_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
-            iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.msg_select, R.mipmap.me_select};
+            icons = new int[]{R.mipmap.clean_normal,R.mipmap.tool_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
+            iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.tool_select,R.mipmap.msg_select, R.mipmap.me_select};
         }
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
