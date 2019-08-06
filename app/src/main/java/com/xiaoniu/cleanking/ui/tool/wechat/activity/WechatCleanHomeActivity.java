@@ -250,7 +250,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             selectSize += WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize();
         tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
     }
 
     public void deleteResult(long result) {
