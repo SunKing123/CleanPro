@@ -4,16 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.widget.CircleProgressView;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ToolFragment extends SimpleFragment {
 
+    @BindView(R.id.tv_chat_subtitle)
+    TextView mTvChatSubtitle;//微信清理
+    @BindView(R.id.tv_qq_subtitle)
+    TextView mTvQqSubtitle;  //qq清理
+    @BindView(R.id.tool_circle_progress)
+    CircleProgressView mToolCircleProgress;
+    @BindView(R.id.tv_tool_percent_num)
+    TextView mTvToolPercentNum;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -27,13 +38,22 @@ public class ToolFragment extends SimpleFragment {
 
     @Override
     protected void initView() {
+        mToolCircleProgress.startAnimProgress(34, 700);
+        //监听进度条进度
+        mToolCircleProgress.setOnAnimProgressListener(progress -> mTvToolPercentNum.setText("" + progress + "%"));
     }
 
 
-    @OnClick({R.id.text_cooling,R.id.text_phone_thin})
+    @OnClick({R.id.rl_chat,R.id.rl_qq,R.id.ll_phone_speed,R.id.text_cooling,R.id.text_phone_thin})
     public void onCoolingViewClicked(View view) {
         int ids=view.getId();
-        if(ids==R.id.text_cooling){
+        if (ids == R.id.rl_chat) {
+            //TODO 微信清理
+        }else if (ids == R.id.rl_qq) {
+            //TODO QQ清理
+        }else if (ids == R.id.ll_phone_speed){
+            //TODO 一键加速
+        }else if(ids==R.id.text_cooling){
             //手机降温
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         }else if(ids==R.id.text_phone_thin){
