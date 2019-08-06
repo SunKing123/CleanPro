@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,16 +14,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
@@ -30,8 +39,10 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -42,6 +53,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
@@ -86,10 +98,29 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     ConstraintLayout mLayoutAnimCool;
     @BindView(R.id.layout_content_cool)
     LinearLayout mLayoutContentCool;
+    @BindView(R.id.layout_cool_view)
+    ConstraintLayout mLayoutCoolView;
+    @BindView(R.id.layout_title_content)
+    RelativeLayout mLayoutTitleContent;
+    @BindView(R.id.view_lottie_cool)
+    LottieAnimationView mLottieAnimationView;
+    @BindView(R.id.layout_clean_finish)
+    ConstraintLayout mLayoutCleanFinish;
+    @BindView(R.id.web_view)
+    WebView mWebView;
+    @BindView(R.id.layout_not_net)
+    LinearLayout mLayoutNotNet;
+    @BindView(R.id.layout_junk_clean)
+    RelativeLayout mLayoutJunkClean;
+    @BindView(R.id.layout_bottom_content)
+    LinearLayout mLayoutBottomContent;
+    @BindView(R.id.tv_number_cool)
+    TextView mTextNumberCool;
 
     private ProcessIconAdapter mProcessIconAdapter;
     private HardwareInfo mHardwareInfo;
     public static ArrayList<FirstJunkInfo> mRunningProcess;
+    boolean isError = false;
 
     @Override
     protected int getLayoutId() {
@@ -127,6 +158,21 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mPresenter.getHardwareInfo();
 
         initCoolAnimation(phoneTemperature);
+
+        initWebView();
+
+        //降温
+        int tem = new Random().nextInt(3) + 1;
+        mTextNumberCool.setText("成功降温" + tem + "°C" );
+
+        mLayoutContentCool.post(this::initBottomLayout);
+    }
+
+    private void initBottomLayout() {
+        int measureHeight = mLayoutBottomContent.getMeasuredHeight();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLayoutBottomContent.getLayoutParams();
+        layoutParams.height = measureHeight;
+        mLayoutBottomContent.setLayoutParams(layoutParams);
     }
 
     private void initCoolAnimation(int phoneTemperature) {
@@ -189,10 +235,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         new Handler().postDelayed(() -> {
             ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
             mBgTitle.setVisibility(VISIBLE);
-            alpha.setDuration(300);
+            alpha.setDuration(200);
             alpha.start();
-        }, 700);
-        anim.setDuration(1000);
+        }, 200);
+        anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutContentCool.getLayoutParams();
         anim.addUpdateListener(animation -> {
@@ -205,6 +251,126 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                mLayoutAnimCool.setVisibility(GONE);
+            }
+        });
+    }
+
+    /**
+     * 播放降温动画
+     */
+    public void setViewPlay() {
+        int bottom = mBgTitle.getBottom();
+        int startHeight = DeviceUtils.getScreenHeight();
+        ValueAnimator anim = ValueAnimator.ofInt(0, startHeight - bottom);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(mLayoutTitleContent, "alpha", 1, 0);
+        alpha.setDuration(200);
+        alpha.start();
+        anim.setDuration(500);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCoolView.getLayoutParams();
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.height = currentValue;
+            mLayoutCoolView.setLayoutParams(rlp);
+        });
+        anim.start();
+        mLayoutCoolView.setVisibility(VISIBLE);
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                startAnimation();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setViewFinishTrans();
+                    }
+                }, 3500);
+            }
+        });
+    }
+
+    private void startAnimation() {
+        mLottieAnimationView.useHardwareAcceleration();
+        mLottieAnimationView.setImageAssetsFolder("images");
+        mLottieAnimationView.setAnimation("data_cool.json");
+        mLottieAnimationView.playAnimation();
+    }
+
+
+    /**
+     * 清理动画播放完成
+     */
+    public void setViewFinishTrans() {
+        int bottom = mLayoutTitleBar.getBottom();
+        mLayoutCleanFinish.setVisibility(VISIBLE);
+        int startHeight = DeviceUtils.getScreenHeight();
+        ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
+        anim.setDuration(500);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.topMargin = currentValue;
+            mLayoutCleanFinish.setLayoutParams(rlp);
+        });
+        anim.start();
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+            }
+        });
+    }
+
+    public void initWebView() {
+        String url = ApiModule.Base_H5_Host;
+        WebSettings settings = mWebView.getSettings();
+        settings.setDomStorageEnabled(true);
+        settings.setJavaScriptEnabled(true);
+        mWebView.loadUrl(url);
+        mWebView.addJavascriptInterface(new JavaInterface(), "cleanPage");
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+//                showLoadingDialog();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+//                cancelLoadingDialog();
+                if (!isError) {
+                    if (mLayoutNotNet != null) {
+                        mLayoutNotNet.setVisibility(GONE);
+                    }
+                    if (mWebView != null) {
+                        mWebView.setVisibility(AndroidUtil.isInAudit() ? GONE : View.VISIBLE);
+                    }
+                }
+                isError = false;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                isError = true;
+                if (mLayoutNotNet != null) {
+                    mLayoutNotNet.setVisibility(VISIBLE);
+                }
+                if (mWebView != null) {
+                    mWebView.setVisibility(GONE);
+                }
+            }
+        });
+
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
             }
         });
     }
@@ -262,12 +428,19 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(), firstJunkInfo.getPid());
         }
 
-        finish();
+        setViewPlay();
 
-        Bundle bundle = new Bundle();
-        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_COOLING);
-        bundle.putLong("clean_count", new Random().nextInt(3) + 1);
-        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
+//        finish();
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_COOLING);
+//        bundle.putLong("clean_count", );
+//        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
+    }
+
+    @OnClick(R.id.layout_not_net)
+    public void onNetLayoutClicked() {
+        mWebView.loadUrl(ApiModule.Base_H5_Host);
     }
 
     /**
