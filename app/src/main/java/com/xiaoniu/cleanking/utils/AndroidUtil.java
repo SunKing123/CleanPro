@@ -375,19 +375,24 @@ public class AndroidUtil {
 
     /**
      * 打开文件
-     * @param str  text/plain
+     * @param type  text/plain
      * @param context
      * @param str2
      */
-    public static void openFileSafe(String str, Context context, String str2) {
+    public static void openFileSafe(String type, Context context, String str2) {
         Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
-        intent.setDataAndType(Uri.fromFile(new File(str2)), str);
-        intent.setFlags(268435456);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(Uri.fromFile(new File(str2)), type);
+        } else {
+            intent.setAction(android.content.Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(str2)), type);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         try {
             context.startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(context, "没有打开相关应用的软件...", 0).show();
+            Toast.makeText(context, "没有打开相关应用的软件...", Toast.LENGTH_SHORT).show();
         }
     }
 

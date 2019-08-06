@@ -195,4 +195,15 @@ public class Constant {
     /**运营商开关关闭*/
     public static final String OPERATOR_SWITCH_OFF = "0";
 
+
+    /**
+     * QQ专清图片集合
+     */
+    public static final String PARAMS_QQ_IMG_LIST="params_qq_img_list";
+
+    /**
+     * QQ专清视频集合
+     */
+    public static final String PARAMS_QQ_VIDEO_LIST="params_qq_video_list";
+
 }

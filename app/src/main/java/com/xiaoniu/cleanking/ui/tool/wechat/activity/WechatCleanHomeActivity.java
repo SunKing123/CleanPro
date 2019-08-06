@@ -23,6 +23,8 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
@@ -138,7 +140,9 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         objectAnimatorScanIng = mPresenter.setScaningAnim(ivScanFrame);
     }
 
-    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file})
+    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile
+            , R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file
+            ,R.id.cons_wxsp,R.id.cons_pic})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
@@ -176,6 +180,13 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         }else if (ids == R.id.cons_file) {
             Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanFileActivity.class);
             startActivity(intent);
+        }else if(ids==R.id.cons_wxsp){
+            //微信视频跳转
+            startActivity(new Intent(this, WXCleanVideoActivity.class));
+
+        }else if(ids==R.id.cons_pic){
+            //微信图片跳转
+            startActivity(new Intent(this, WXCleanImgActivity.class));
         }
 
     }
@@ -250,7 +261,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             selectSize += WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize();
         tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
     }
 
     public void deleteResult(long result) {

@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleFragment;
+import com.xiaoniu.cleanking.ui.main.activity.QQCleanImgActivity;
+import com.xiaoniu.cleanking.ui.main.activity.QQCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
@@ -203,14 +205,18 @@ public class MeFragment extends SimpleFragment {
     }
 
 
-    @OnClick({R.id.ll_clean, R.id.ll_video})
+/*    @OnClick({R.id.ll_clean, R.id.ll_video,R.id.ll_qq,R.id.ll_qq_video})
     public void onClickS(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_clean) {
             startActivity(new Intent(getContext(), WXCleanImgActivity.class));
         } else if (ids == R.id.ll_video) {
             startActivity(new Intent(getContext(), WXCleanVideoActivity.class));
+        }else if(ids==R.id.ll_qq){
+            startActivity(new Intent(getContext(), QQCleanImgActivity.class));
+        }else if(ids==R.id.ll_qq_video){
+            startActivity(new Intent(getContext(), QQCleanVideoActivity.class));
         }
-    }
+    }*/
 
 }
