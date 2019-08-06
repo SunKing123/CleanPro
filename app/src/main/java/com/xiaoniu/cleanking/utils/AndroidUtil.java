@@ -16,6 +16,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -371,6 +372,25 @@ public class AndroidUtil {
         map.put("phone-number", AndroidUtil.getPhoneNum());
         return Base64.encodeToString(new Gson().toJson(map).getBytes(), Base64.NO_WRAP);
     }
+
+    /**
+     * 打开文件
+     * @param str  text/plain
+     * @param context
+     * @param str2
+     */
+    public static void openFileSafe(String str, Context context, String str2) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        intent.setDataAndType(Uri.fromFile(new File(str2)), str);
+        intent.setFlags(268435456);
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(context, "没有打开相关应用的软件...", 0).show();
+        }
+    }
+
 
     /**
      * 通过HmacSHA256进行哈希

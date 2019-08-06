@@ -88,7 +88,7 @@ public class WechatCleanFilePresenter extends RxPresenter<WechatCleanFileActivit
     }
 
     //删除本地文件
-    public void delFile(List<CleanWxItemInfo> list) {
+    public void delFile(List<CleanWxItemInfo> list,List<CleanWxItemInfo> list1,List<CleanWxItemInfo> list2,List<CleanWxItemInfo> list3,List<CleanWxItemInfo> list4) {
         mView.showLoadingDialog();
         List<CleanWxItemInfo> files = list;
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -124,7 +124,7 @@ public class WechatCleanFilePresenter extends RxPresenter<WechatCleanFileActivit
                     @Override
                     public void onComplete() {
                         mView.cancelLoadingDialog();
-                        mView.deleteSuccess(list);
+                        mView.deleteSuccess(list1,list2,list3,list4);
                     }
                 });
 
