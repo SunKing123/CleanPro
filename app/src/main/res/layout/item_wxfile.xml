@@ -23,12 +23,12 @@
         android:layout_width="@dimen/dimen_200dp"
         android:layout_height="wrap_content"
         android:lines="1"
-        android:layout_marginLeft="@dimen/dimen_60dp"
+        android:layout_marginLeft="@dimen/dimen_8dp"
         android:text="msg-561123-8bd102.amr8bd1028bd1028bd102"
         android:textColor="#333333"
         android:textSize="@dimen/dimen_14sp"
         app:layout_constraintBottom_toTopOf="@id/tv_time"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_photo_filelist_pic"
 
         app:layout_constraintTop_toTopOf="@id/iv_photo_filelist_pic" />
 
