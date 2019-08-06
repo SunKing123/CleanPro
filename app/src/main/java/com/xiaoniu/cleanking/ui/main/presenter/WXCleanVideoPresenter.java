@@ -33,7 +33,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 图片清理
+ * 视频清理
  * Created by lang.chen on 2019/7/2
  */
 public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, CleanMainModel> {
@@ -114,7 +114,7 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
      * 初始化 一级目录标题
      */
     public void init(Context context) {
-        path = getPath(wxRootPath)+"/video";
+        //path = getPath(wxRootPath)+"/video";
         String[] titles = context.getResources().getStringArray(R.array.wx_file_titles);
         for (int i = 0; i < titles.length; i++) {
             //聊天图片
@@ -183,7 +183,7 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                scanAllVideoChat(path);
+                scanAllVideoChat(wxRootPath);
                 emitter.onNext("");
                 emitter.onComplete();
             }
@@ -326,7 +326,7 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
      *
      * @param path
      */
-    private void scanAllVideoChat(String path) {
+/*    private void scanAllVideoChat(String path) {
         File fileRoot = new File(path);
         if (fileRoot.isDirectory()) {
             File[] files = fileRoot.listFiles();
@@ -366,6 +366,74 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
                             fileChildEntity.parentId=FileTitleEntity.Type.YEAR_HALF;
                             listsChat.get(FileTitleEntity.Type.YEAR_HALF).lists.add(fileChildEntity);
                         }
+                    }
+                }
+            }
+        }
+    }*/
+
+
+    /**
+     * 扫描聊天中的图片，包括缩略图
+     *
+     * @param path
+     */
+    private void scanAllVideoChat(String path) {
+        File fileRoot = new File(path);
+        if (fileRoot.isDirectory()) {
+            File[] files = fileRoot.listFiles();
+            if (null != files) {
+                for (File file1 : files) { //第一层
+                    if (file1.isDirectory() && file1.getName().length() > 20) {
+                        File[] files2 = file1.listFiles();
+                        if (null != files2) {
+                            for (File file2C : files2) { //第2层  /a/ 遍历
+                                if (file2C.isDirectory() && file2C.getName().equals("video")) {
+                                    File[] files3 = file2C.listFiles(); //
+                                    if (null != files3) {
+                                        for (File file : files3) { //第3层  /a/video/
+                                            if (!file.isDirectory()) {
+                                                if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
+                                                    FileChildEntity fileChildEntity = new FileChildEntity();
+                                                    fileChildEntity.name = file.getName();
+                                                    fileChildEntity.path = file.getPath();
+                                                    fileChildEntity.size = file.length();
+                                                    fileChildEntity.parentId = FileTitleEntity.Type.TH;
+                                                    listsChat.get(FileTitleEntity.Type.TH).lists.add(fileChildEntity);
+
+                                                } else if (file.getName().endsWith(".mp4")) {
+                                                    FileChildEntity fileChildEntity = new FileChildEntity();
+                                                    fileChildEntity.name = file.getName();
+                                                    fileChildEntity.path = file.getPath();
+                                                    fileChildEntity.size = file.length();
+                                                    fileChildEntity.fileType = 1;
+                                                    Log.i(TAG, "file=" + file.getName() + ",time=" + file.lastModified());
+                                                    if (DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
+                                                        //是否为今天
+                                                        fileChildEntity.parentId = FileTitleEntity.Type.TODAY;
+                                                        listsChat.get(FileTitleEntity.Type.TODAY).lists.add(fileChildEntity);
+                                                    } else if (DateUtils.isYesterday(file.lastModified())) {
+                                                        //是否为昨天
+                                                        fileChildEntity.parentId = FileTitleEntity.Type.YESTERDAY;
+                                                        listsChat.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
+                                                    } else if (DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
+                                                        //是否为同一个月
+                                                        fileChildEntity.parentId = FileTitleEntity.Type.MONTH;
+                                                        listsChat.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
+                                                    } else {
+                                                        //是否为半年内
+                                                        fileChildEntity.parentId = FileTitleEntity.Type.YEAR_HALF;
+                                                        listsChat.get(FileTitleEntity.Type.YEAR_HALF).lists.add(fileChildEntity);
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }
