@@ -138,19 +138,19 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
             listFAll.addAll(listF4);
 
 
-            mPresenter.alertBanLiveDialog(QQCleanFileActivity.this, listFAll.size(), new ImageListPresenter.ClickListener() {
-                @Override
-                public void clickOKBtn() {
-                    //删除本地文件
-                    mPresenter.delFile(listFAll, listF, listF2, listF3, listF4);
-                    //数据库删除选中的文件
-                }
-
-                @Override
-                public void cancelBtn() {
-
-                }
-            });
+//            mPresenter.alertBanLiveDialog(QQCleanFileActivity.this, listFAll.size(), new ImageListPresenter.ClickListener() {
+//                @Override
+//                public void clickOKBtn() {
+//                    //删除本地文件
+//                    mPresenter.delFile(listFAll, listF, listF2, listF3, listF4);
+//                    //数据库删除选中的文件
+//                }
+//
+//                @Override
+//                public void cancelBtn() {
+//
+//                }
+//            });
 
 
         } else if (ids == R.id.cons_today) {
@@ -198,7 +198,6 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         cleanWxEasyInfoFile = WxQqUtil.n;
 
         List<CleanWxClearInfo> listData = QQUtil.fileList;
-
 
         for (int j = 0; j < listData.size(); j++) {
             try {
@@ -259,6 +258,8 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
                 compulateDeleteSize();
             }
         });
+        compulateDeleteSize();
+        isSelectAllData();
 
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
@@ -329,7 +330,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         setSelectSize(listData2, tvSizeYestoday, tvSelectYestoday);
         setSelectSize(listData3, tvSizeMonth, tvSelectMonth);
         setSelectSize(listData4, tvSizeHalfyear, tvSelectHalfyear);
-        tv_delete.setText(deleteSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(deleteSize));
+        tv_delete.setText(deleteSize == 0 ? "未选中" : "选中 " + CleanAllFileScanUtil.byte2FitSizeOne(deleteSize));
     }
 
     //今天、明天、一月内选中对应的recyclerview是否全选
