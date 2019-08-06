@@ -140,7 +140,9 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         objectAnimatorScanIng = mPresenter.setScaningAnim(ivScanFrame);
     }
 
-    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file})
+    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile
+            , R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file
+            ,R.id.cons_wxsp,R.id.cons_pic})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
