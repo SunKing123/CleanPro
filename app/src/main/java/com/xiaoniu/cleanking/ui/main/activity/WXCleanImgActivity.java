@@ -14,17 +14,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CommonFragmentPageAdapter;
-import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
-import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.event.EmptyEvent;
-import com.xiaoniu.cleanking.ui.main.event.WXImgCameraEvent;
-import com.xiaoniu.cleanking.ui.main.event.WXImgChatEvent;
-import com.xiaoniu.cleanking.ui.main.event.WXImgSaveListEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
-import com.xiaoniu.cleanking.ui.main.presenter.WXCleanImgPresenter;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

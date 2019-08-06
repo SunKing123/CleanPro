@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.WXVideoCameraPresenter;
@@ -93,7 +94,9 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
     @Override
     protected void initView() {
         mLoading=CleanFileLoadingDialogFragment.newInstance();
-        mProgress=FileCopyProgressDialogFragment.newInstance();
+        String title="聊天视频";
+        String content=getString(R.string.msg_save_video);
+        mProgress = FileCopyProgressDialogFragment.newInstance(title,content);
         mAdapter=new WXVideoChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -438,7 +441,8 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
             case R.id.btn_del:
 
                 String title=String.format("确定删除这%s个视频?",getSelectSize());
-                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
+                String cotnent=getString(R.string.msg_del_video);
+                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title,cotnent);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm,"");
                 dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
@@ -523,6 +527,19 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
             mProgress.dismissAllowingStateLoss();
         }
     }
+
+
+    /**
+     * 导出失败
+     */
+    public void onCopyFaile(){
+        if(null!=mProgress){
+            mProgress.dismissAllowingStateLoss();
+        }
+        FragmentManager fm = getActivity().getFragmentManager();
+        MFullDialogStyleFragment.newInstance().show(fm,"");
+    }
+
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);

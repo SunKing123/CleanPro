@@ -134,7 +134,15 @@ public class WXVideoCameraPresenter extends RxPresenter<WXVideoCameraFragment, C
                 int progress = (int) (mFileReadSize * 1.0f / mFileTotalSize * 100);
                 emitter.onNext(progress);
             }
-        } finally {
+        }catch (Exception e){
+            e.printStackTrace();
+            mView.onCopyFaile();
+            if(null!=mDispoableCopyFile){
+                mDispoableCopyFile.dispose();
+            }
+            return;
+        }
+        finally {
             input.close();
             output.close();
         }
@@ -205,6 +213,9 @@ public class WXVideoCameraPresenter extends RxPresenter<WXVideoCameraFragment, C
     //文件读写的大小
     private int mFileReadSize = 0;
 
+    private Disposable mDispoableCopyFile;
+
+
     public void copyFile(List<File> files) {
         mFileTotalSize = 0;
         mFileReadSize = 0;
@@ -237,6 +248,7 @@ public class WXVideoCameraPresenter extends RxPresenter<WXVideoCameraFragment, C
                 .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
+                        mDispoableCopyFile=d;
                     }
 
                     @Override

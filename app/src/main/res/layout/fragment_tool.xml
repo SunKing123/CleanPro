@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -16,7 +17,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="227dp"
                 android:background="@drawable/bg_big_home"
                 android:orientation="vertical">
 
@@ -25,45 +26,221 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_20dp"
-                    android:text="悟空清理"
+                    android:text="工具箱"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="180dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="@dimen/dimen_30dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/icon_scan" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/dimen_24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content">
 
+                    <FrameLayout
+                        android:id="@+id/frame_layout"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.xiaoniu.cleanking.widget.CircleProgressView
+                            android:id="@+id/tool_circle_progress"
+                            android:layout_width="97dp"
+                            android:layout_height="97dp"
+                            android:layout_gravity="center_horizontal"
+                            app:location_start="top"
+                            app:progress_color="#FFFFFF"
+                            app:progress_normal_color="#1AFFFFFF"
+                            app:progress_width="9dp" />
+
+                        <TextView
+                            android:id="@+id/tv_tool_percent_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="70"
+                            android:layout_gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_24sp" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tv_phone_space"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="29dp"
+                        android:layout_marginLeft="@dimen/dimen_20dp"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:layout_toRightOf="@id/frame_layout"
+                        android:text="手机空间充足"/>
+
+                    <TextView
+                        android:id="@+id/tv_phone_space_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="@dimen/dimen_20dp"
+                        android:layout_toRightOf="@id/frame_layout"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_below="@id/tv_phone_space"
+                        android:text="剩余:26.65G  总计:32G"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rl_chat"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="@dimen/dimen_4dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:background="@drawable/bg_home_btn"
+                    android:layout_height="86dp">
+
+                    <ImageView
+                        android:id="@+id/iv_icon_chat"
+                        android:layout_width="53dp"
+                        android:layout_height="53dp"
+                        android:src="@mipmap/icon_chat" />
+
+                    <TextView
+                        android:id="@+id/tv_chat_title"
+                        android:layout_width="wrap_content"
+                        android:text="微信清理"
+                        android:textSize="@dimen/dimen_15dp"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_toRightOf="@id/iv_icon_chat"
+                        android:textColor="@color/color_333333"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_chat_subtitle"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_06C581"
+                        android:layout_toRightOf="@id/iv_icon_chat"
+                        android:layout_below="@id/tv_chat_title"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="@dimen/dimen_20dp"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:text="1.38GB"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_qq"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:background="@drawable/bg_home_btn"
+                    android:layout_height="86dp">
+
+                    <ImageView
+                        android:id="@+id/iv_icon_qq"
+                        android:layout_width="53dp"
+                        android:src="@mipmap/icon_qq"
+                        android:layout_height="53dp" />
+
+                    <TextView
+                        android:id="@+id/tv_qq_title"
+                        android:layout_width="wrap_content"
+                        android:text="QQ清理"
+                        android:textSize="@dimen/dimen_15dp"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_toRightOf="@id/iv_icon_qq"
+                        android:textColor="@color/color_333333"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_qq_subtitle"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/color_06C581"
+                        android:layout_toRightOf="@id/iv_icon_qq"
+                        android:layout_below="@id/tv_qq_title"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:text="2.45GB"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_20dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dimen_16dp"
                 android:paddingRight="@dimen/dimen_16dp"
                 android:weightSum="3">
 
                 <LinearLayout
-                    android:id="@+id/text_cooling"
+                    android:id="@+id/ll_phone_speed"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/dimen_10dp"
                     android:background="@drawable/bg_home_btn"
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="@dimen/dimen_32dp"
-                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_width="@dimen/dimen_25dp"
+                        android:layout_height="@dimen/dimen_25dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_yjjs" />
+                        android:src="@mipmap/icon_speed" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:text="手机加速"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:textColor="#999999"
+                        android:text="内存占用69%"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/text_cooling"
+                    android:layout_width="0px"
+                    android:layout_marginLeft="@dimen/dimen_10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/bg_home_btn"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_25dp"
+                        android:layout_height="@dimen/dimen_25dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_cooling" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -80,7 +257,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/dimen_20dp"
                         android:layout_marginTop="@dimen/dimen_4dp"
-                        android:text="内存占用加速"
+                        android:text="当前温度正常"
                         android:textColor="#999999"
                         android:textSize="10sp" />
                 </LinearLayout>
@@ -91,16 +268,17 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:layout_marginLeft="@dimen/dimen_10dp"
                     android:background="@drawable/bg_home_btn"
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="@dimen/dimen_32dp"
-                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_width="@dimen/dimen_25dp"
+                        android:layout_height="@dimen/dimen_25dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_yjjs" />
+                        android:src="@mipmap/icon_thin" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -118,10 +296,9 @@
                         android:layout_marginBottom="@dimen/dimen_20dp"
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
+                        android:text="视频软件清理"
                         android:textSize="10sp" />
                 </LinearLayout>
-
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

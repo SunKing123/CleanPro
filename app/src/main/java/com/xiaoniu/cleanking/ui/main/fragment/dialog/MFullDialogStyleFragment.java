@@ -12,35 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 
 /**
- * 文件copy进度条
+ * 内存已满提示
  * Created by lang.chen on 2019/7/2
  */
-public class FileCopyProgressDialogFragment extends DialogFragment {
+public class MFullDialogStyleFragment extends DialogFragment {
 
 
     private Context mContext;
 
+    private DialogClickListener dialogClickListener;
 
-    private ProgressBar mProgressBar;
 
     /**
      * @param strs strs[0] 为标题
      */
-    public static FileCopyProgressDialogFragment newInstance(String... strs) {
-        FileCopyProgressDialogFragment delDialogFragment = new FileCopyProgressDialogFragment();
+    public static MFullDialogStyleFragment newInstance(String... strs) {
+        MFullDialogStyleFragment delDialogFragment = new MFullDialogStyleFragment();
         Bundle bundle = new Bundle();
         if (strs.length ==1) {
             bundle.putString("title", strs[0]);
         }else if(strs.length==2){
-            bundle.putString("title", strs[0]);
-            bundle.putString("content", strs[1]);
-
+            bundle.putString("title",strs[0]);
+            bundle.putString("content",strs[1]);
         }
         delDialogFragment.setArguments(bundle);
         return delDialogFragment;
@@ -49,7 +47,7 @@ public class FileCopyProgressDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        getDialog().getWindow().setGravity(Gravity.CENTER);
+        getDialog().getWindow().setGravity(Gravity.BOTTOM);
         getDialog().getWindow().setLayout(getScreenWidth(mContext) - dip2px(mContext, 43), ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
@@ -59,7 +57,7 @@ public class FileCopyProgressDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NORMAL, R.style.common_dialog_style);
+        setStyle(STYLE_NORMAL, R.style.common_dialog_style_c);
     }
 
     @Override
@@ -86,7 +84,7 @@ public class FileCopyProgressDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity();
-        View view = inflater.inflate(R.layout.dialog_file_copy_progress, container, true);
+        View view = inflater.inflate(R.layout.dialog_memory_full, container, true);
         initView(view);
         return view;
     }
@@ -94,23 +92,35 @@ public class FileCopyProgressDialogFragment extends DialogFragment {
 
     private void initView(View view) {
 
-        if (null != getArguments()) {
-            String title = getArguments().getString("title", "");
-            String content=getArguments().getString("content","");
-            if (!TextUtils.isEmpty(title)) {
-                TextView txtTitle = view.findViewById(R.id.txt_title);
-                txtTitle.setText(title);
+
+        Button btnDel = view.findViewById(R.id.btn_del);
+
+        btnDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissAllowingStateLoss();
+                if (null != dialogClickListener) {
+                    dialogClickListener.onConfirm();
+                }
             }
-            if(!TextUtils.isEmpty(content)){
-                TextView txtTitle=view.findViewById(R.id.txt_content);
-                txtTitle.setText(content);
-            }
-        }
-        mProgressBar = view.findViewById(R.id.prgress_bar);
+        });
     }
 
 
-    public void setValue(int progress) {
-        mProgressBar.setProgress(progress);
+    public void setDialogClickListener(DialogClickListener dialogClickListener) {
+        this.dialogClickListener = dialogClickListener;
     }
+
+    /**
+     * dialog listener
+     */
+    public interface DialogClickListener {
+
+        //取消
+        void onCancel();
+
+        //确认
+        void onConfirm();
+    }
+
 }
