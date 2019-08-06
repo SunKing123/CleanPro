@@ -23,6 +23,8 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
@@ -176,6 +178,13 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         }else if (ids == R.id.cons_file) {
             Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanFileActivity.class);
             startActivity(intent);
+        }else if(ids==R.id.cons_wxsp){
+            //微信视频跳转
+            startActivity(new Intent(this, WXCleanVideoActivity.class));
+
+        }else if(ids==R.id.cons_pic){
+            //微信图片跳转
+            startActivity(new Intent(this, WXCleanImgActivity.class));
         }
 
     }
