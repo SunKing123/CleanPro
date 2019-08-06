@@ -1,11 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
@@ -19,17 +16,13 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
-import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
-import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
+import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
+import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -77,7 +70,7 @@ public class MeFragment extends SimpleFragment {
             @Override
             public void onClick(View v) {
                 Log.e("fdsa", "dsd");
-                startActivity(WechatCleanHomeActivity.class);
+                startActivity(QQCleanHomeActivity.class);
 //                PrefsCleanUtil.getInstance().init(getContext(), "xnpre", Context.MODE_APPEND);
 //                getActivity().getWindow().getDecorView().post(new Runnable() {
 //                    public void run() {
