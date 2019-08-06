@@ -368,11 +368,11 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
         if(size>0){
             mBtnDel.setSelected(true);
             mBtnDel.setEnabled(true);
-            mBtnDel.setText("删除"+ FileSizeUtils.formatFileSize(size));
+            mBtnDel.setText("确认选中"+ FileSizeUtils.formatFileSize(size));
         }else {
             mBtnDel.setSelected(false);
             mBtnDel.setEnabled(false);
-            mBtnDel.setText("删除");
+            mBtnDel.setText("未选中");
         }
 
     }
