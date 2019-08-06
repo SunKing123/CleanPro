@@ -18,8 +18,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.activity.QQCleanImgActivity;
+import com.xiaoniu.cleanking.ui.main.activity.QQCleanVideoActivity;
+import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanHomePresenter;
@@ -55,6 +60,11 @@ import butterknife.OnClick;
  * 微信清理首页
  */
 public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
+
+    //qq图片请求编码
+    private static  final  int REQUEST_CODE_QQ_IMG=0x3301;
+    //qq视频请求编码
+    private static  final  int REQUEST_CODE_QQ_VIDEO=0x3302;
     @BindView(R.id.tv_gabsize)
     TextView tvGabsize;
     @BindView(R.id.tv_gb)
@@ -107,6 +117,11 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     LinearLayout lineSmed;
     ObjectAnimator objectAnimatorScanIng;
 
+    //qq图片
+    private ArrayList<FileTitleEntity> mListImg=new ArrayList<>();
+    //qq视频
+    private ArrayList<FileTitleEntity> mListVideo=new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_qqclean_home;
@@ -137,7 +152,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         objectAnimatorScanIng = mPresenter.setScaningAnim(ivScanFrame);
     }
 
-    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select1, R.id.cons_file})
+    @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select1, R.id.cons_file
+        ,R.id.cons_pic,R.id.cons_wxsp})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
@@ -168,6 +184,14 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             QQUtil.fileList = aB;
             Intent intent = new Intent(QQCleanHomeActivity.this, QQCleanFileActivity.class);
             startActivity(intent);
+        }else if(ids==R.id.cons_pic){
+            //聊天图片
+            Intent intent=new Intent(this, QQCleanImgActivity.class);
+            startActivityForResult(intent,REQUEST_CODE_QQ_IMG);
+        }else if(ids==R.id.cons_wxsp){
+            //视频
+            Intent intent=new Intent(this, QQCleanVideoActivity.class);
+            startActivityForResult(intent,REQUEST_CODE_QQ_VIDEO);
         }
 
     }
@@ -245,6 +269,46 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     public void netError() {
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //图片请求返回
+        if (requestCode == REQUEST_CODE_QQ_IMG && null != data && null != data.getExtras()) {
+            ArrayList<FileTitleEntity> lists = (ArrayList<FileTitleEntity>) data.getExtras().getSerializable(Constant.PARAMS_QQ_IMG_LIST);
+            if (null != lists && lists.size() > 0) {
+                mListImg.clear();
+                mListImg.addAll(lists);
+            }
+
+        } else if (requestCode == REQUEST_CODE_QQ_VIDEO && null != data && null != data.getExtras()) {
+            //视频列表选中返回更新
+            ArrayList<FileTitleEntity> lists = (ArrayList<FileTitleEntity>) data.getExtras().getSerializable(Constant.PARAMS_QQ_VIDEO_LIST);
+            if (null != lists && lists.size() > 0) {
+                mListVideo.clear();
+                mListVideo.addAll(lists);
+            }
+
+        }
+    }
+
+    /**
+     * 获取选中删除的元素
+     * @return
+     */
+    public List<FileChildEntity> getDelFiles(List<FileTitleEntity> fileTitleEntities){
+        List<FileChildEntity> files=new ArrayList<>();
+        List<FileTitleEntity> lists=fileTitleEntities;
+        for(FileTitleEntity fileTitleEntity:lists){
+            for(FileChildEntity file:fileTitleEntity.lists){
+                if(file.isSelect){
+                    files.add(file);
+                }
+            }
+        }
+        return  files;
+    }
+
 
     private void c() {
         this.e = true;

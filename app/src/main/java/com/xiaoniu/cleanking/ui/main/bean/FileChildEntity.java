@@ -1,9 +1,11 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by lang.chen on 2019/8/1
  */
-public class FileChildEntity {
+public class FileChildEntity  implements Serializable {
 
     public String id;
     public String name;
