@@ -383,7 +383,7 @@ public class AndroidUtil {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
         intent.setDataAndType(Uri.fromFile(new File(str2)), str);
-        intent.setFlags(268435456);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             context.startActivity(intent);
         } catch (Exception e) {

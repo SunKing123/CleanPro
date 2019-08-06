@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 public class QQUtil {
     public static  List<CleanWxClearInfo> fileList = null;
+    public static  List<CleanWxClearInfo> audioList = null;
 
     public long getEasyCleanBackGround(boolean z) {
         long j = 0;
