@@ -164,7 +164,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             Intent intent = new Intent(QQCleanHomeActivity.this, WechatCleanAudActivity.class);
             startActivity(intent);
         } else if (ids == R.id.cons_file) {
-            Intent intent = new Intent(QQCleanHomeActivity.this, WechatCleanFileActivity.class);
+            QQUtil.fileList = aB;
+            Intent intent = new Intent(QQCleanHomeActivity.this, QQCleanFileActivity.class);
             startActivity(intent);
         }
 
