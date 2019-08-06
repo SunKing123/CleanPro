@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -425,6 +426,19 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
             mProgress.dismissAllowingStateLoss();
         }
     }
+
+
+    /**
+     * 导出失败
+     */
+    public void onCopyFaile(){
+        if(null!=mProgress){
+            mProgress.dismissAllowingStateLoss();
+        }
+        FragmentManager fm = getActivity().getFragmentManager();
+        MFullDialogStyleFragment.newInstance().show(fm,"");
+    }
+
 
 
     private List<File> getSelectFiles() {

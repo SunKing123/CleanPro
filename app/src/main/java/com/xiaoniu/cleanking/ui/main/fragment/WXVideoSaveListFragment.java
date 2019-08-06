@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.WXVideoCleanSaveListPresenter;
@@ -88,7 +89,9 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
     @Override
     protected void initView() {
         mLoading = CleanFileLoadingDialogFragment.newInstance();
-        mProgress = FileCopyProgressDialogFragment.newInstance();
+        String title="聊天视频";
+        String content=getString(R.string.msg_save_video);
+        mProgress = FileCopyProgressDialogFragment.newInstance(title,content);
         mAdapter = new WXVideoChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -431,7 +434,8 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
             case R.id.btn_del:
 
                 String title = String.format("确定删除这%s个视频?", getSelectSize());
-                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
+                String content=getString(R.string.msg_del_video);
+                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title,content);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm, "");
                 dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
@@ -477,6 +481,18 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
             mProgress.dismissAllowingStateLoss();
         }
     }
+
+    /**
+     * 导出失败
+     */
+    public void onCopyFaile(){
+        if(null!=mProgress){
+            mProgress.dismissAllowingStateLoss();
+        }
+        FragmentManager fm = getActivity().getFragmentManager();
+        MFullDialogStyleFragment.newInstance().show(fm,"");
+    }
+
 
 
     private List<File> getSelectFiles() {

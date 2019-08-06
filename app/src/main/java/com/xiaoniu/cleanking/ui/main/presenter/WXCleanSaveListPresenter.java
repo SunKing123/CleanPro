@@ -161,6 +161,7 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
     private  int mFileTotalSize=0;
     //文件读写的大小
     private  int mFileReadSize=0;
+    private Disposable mDispoableCopyFile;
     public   void copyFile(List<File> files ){
         mFileTotalSize=0;
         mFileReadSize=0;
@@ -193,6 +194,7 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
                 .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
+                        mDispoableCopyFile=d;
                     }
 
                     @Override
@@ -217,7 +219,7 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
      * 文件拷贝
      *
      */
-    private  void copyFileUsingFileStreams(File source, File dest,ObservableEmitter<Integer> emitter)
+    private void copyFileUsingFileStreams(File source, File dest, ObservableEmitter<Integer> emitter)
             throws IOException {
         InputStream input = null;
         OutputStream output = null;
@@ -228,10 +230,17 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
             int bytesRead;
             while ((bytesRead = input.read(buf)) > 0) {
                 output.write(buf, 0, bytesRead);
-                mFileReadSize+=bytesRead;
+                mFileReadSize += bytesRead;
                 int progress = (int) (mFileReadSize * 1.0f / mFileTotalSize * 100);
                 emitter.onNext(progress);
             }
+        } catch (Exception e) {
+            mView.onCopyFaile();
+            if (null != mDispoableCopyFile) {
+                mDispoableCopyFile.dispose();
+            }
+            return;
+
         } finally {
             input.close();
             output.close();

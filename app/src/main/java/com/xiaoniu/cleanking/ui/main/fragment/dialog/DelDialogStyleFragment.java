@@ -33,8 +33,11 @@ public class DelDialogStyleFragment extends DialogFragment {
     public static DelDialogStyleFragment newInstance(String... strs) {
         DelDialogStyleFragment delDialogFragment = new DelDialogStyleFragment();
         Bundle bundle = new Bundle();
-        if (strs.length > 0) {
+        if (strs.length ==1) {
             bundle.putString("title", strs[0]);
+        }else if(strs.length==2){
+            bundle.putString("title",strs[0]);
+            bundle.putString("content",strs[1]);
         }
         delDialogFragment.setArguments(bundle);
         return delDialogFragment;
@@ -90,9 +93,14 @@ public class DelDialogStyleFragment extends DialogFragment {
 
         if(null!=getArguments()){
            String title= getArguments().getString("title","");
+           String content=getArguments().getString("content","");
            if(!TextUtils.isEmpty(title)){
                TextView txtTitle=view.findViewById(R.id.txt_title);
                 txtTitle.setText(title);
+           }
+           if(!TextUtils.isEmpty(content)){
+               TextView txtContent=view.findViewById(R.id.txt_content);
+               txtContent.setText(content);
            }
         }
         Button btnCancel = view.findViewById(R.id.btn_cancel);

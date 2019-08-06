@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -471,6 +472,19 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
             mProgress.dismissAllowingStateLoss();
         }
     }
+
+
+    /**
+     * 导出失败
+     */
+    public void onCopyFaile(){
+        if(null!=mProgress){
+            mProgress.dismissAllowingStateLoss();
+        }
+        FragmentManager fm = getActivity().getFragmentManager();
+        MFullDialogStyleFragment.newInstance().show(fm,"");
+    }
+
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);

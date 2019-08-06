@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanVideoPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -92,7 +93,9 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         mAdapter = new WXVideoChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mLoading = CleanFileLoadingDialogFragment.newInstance();
-        mProgress = FileCopyProgressDialogFragment.newInstance();
+        String title="聊天视频";
+        String content=getString(R.string.msg_save_video);
+        mProgress = FileCopyProgressDialogFragment.newInstance(title,content);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -440,7 +443,8 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
             case R.id.btn_del:
 
                 String title = String.format("确定删除这%s个视频?", getSelectSize());
-                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
+                String content=getString(R.string.msg_del_video);
+                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title,content);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm, "");
                 dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
@@ -488,6 +492,14 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
             ToastUtils.show("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
+    }
+
+    public void onCopyFaile(){
+        if(null!=mProgress){
+            mProgress.dismissAllowingStateLoss();
+        }
+        FragmentManager fm = getActivity().getFragmentManager();
+        MFullDialogStyleFragment.newInstance().show(fm,"");
     }
 
 

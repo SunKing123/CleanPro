@@ -41,4 +41,7 @@
     <string name="text_apk_white_add">此路径已加入保护名单</string>
     <string name="text_close">关闭</string>
     <string name="text_confirm_select">确认勾选</string>
+    <string name="msg_del_video">永久从设备中删除这些视频，删除后将不可恢复。</string>
+    <string name="msg_save_video">正在导出聊天视频，请稍等…</string>
+
 </resources>
