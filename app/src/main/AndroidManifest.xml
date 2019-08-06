@@ -300,6 +300,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".ui.main.activity.QQCleanImgActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.main.activity.QQCleanVideoActivity" />
 
         <provider
             android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"

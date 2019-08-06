@@ -57,13 +57,14 @@
             <Button
                 android:id="@+id/btn_del"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_width="@dimen/dimen_106dp"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_36dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dimen_34dp"
                 android:layout_marginRight="@dimen/dimen_20dp"
                 android:background="@drawable/bg_btn_del"
                 android:enabled="false"
-                android:text="删除"
+                android:text="未选中"
                 android:textColor="@color/white" />
 
             <Button
@@ -74,6 +75,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/bg_btn_save"
                 android:text="保存到手机"
+                android:visibility="gone"
                 android:textColor="@color/color_06C581" />
 
         </LinearLayout>
