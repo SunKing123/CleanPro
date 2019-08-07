@@ -19,6 +19,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -94,17 +96,29 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("qq_file_cleaning_view_page", "文件清理页面浏览");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("qq_file_cleaning_view_page", "文件清理页面浏览");
+    }
 
     @OnClick({R.id.tv_select_today, R.id.tv_select_yestoday, R.id.tv_select_month, R.id.tv_select_halfyear, R.id.cons_halfyear, R.id.cons_month, R.id.cons_yestoday, R.id.cons_today, R.id.iv_back, R.id.tv_delete})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
+            StatisticsUtils.trackClick("receive_files_return_click", "接收文件返回点击", "qq_cleaning_page", "qq_file_cleaning_page");
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
             finish();
+            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
 
         } else if (ids == R.id.cons_today) {
             recycleViewToday.setVisibility(recycleViewToday.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
@@ -233,6 +247,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
                     cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                     tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                     compulateDeleteSize();
+                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
                 }
             }
         });

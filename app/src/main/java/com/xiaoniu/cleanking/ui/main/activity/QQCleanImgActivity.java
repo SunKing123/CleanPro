@@ -53,6 +53,9 @@ public class QQCleanImgActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(3);
     }
 
+
+
+
     @OnClick({R.id.img_back})
     public void onClickView(View view) {
         int ids = view.getId();

@@ -1,11 +1,19 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
@@ -44,6 +52,10 @@ public class HardwareInfoActivity extends SimpleActivity {
     TextView mTextGpsClose;
     @BindView(R.id.text_wifi_close)
     TextView mTextWifiClose;
+
+    public static final int REQUEST_CODE_BLUETOOTH = 1001;
+    public static final int REQUEST_CODE_LOCATION = 1002;
+    public static final int REQUEST_CODE_WIFI = 1003;
 
     @Override
     protected int getLayoutId() {
@@ -87,7 +99,11 @@ public class HardwareInfoActivity extends SimpleActivity {
         //CPU核心数
         mTextCpuCores.setText("CPU核心数:  " + hardwareInfo.getCPUCore());
         //CPU负载
-        mTextCpuLoad.setText("CPU负载:  " + hardwareInfo.getCPULoad());
+        if (TextUtils.isEmpty(hardwareInfo.getCPULoad())) {
+            mTextCpuLoad.setText("CPU负载:  0%");
+        } else {
+            mTextCpuLoad.setText("CPU负载:  " + hardwareInfo.getCPULoad());
+        }
     }
 
     @OnClick({R.id.img_back})
@@ -99,11 +115,76 @@ public class HardwareInfoActivity extends SimpleActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.text_bluetooth_close:
+                startActivityForResult(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS), REQUEST_CODE_BLUETOOTH);
                 break;
             case R.id.text_gps_close:
+                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQUEST_CODE_LOCATION);
                 break;
             case R.id.text_wifi_close:
+                //关闭wifi
+                startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS), REQUEST_CODE_WIFI);
                 break;
+            default:
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_BLUETOOTH) {
+            if (!isBluetoothOpen()) {
+                mTextBluetoothStatus.setText("已关闭");
+                mTextBluetoothStatus.setTextColor(getResources().getColor(R.color.color_CCCCCC));
+                mTextBluetoothClose.setVisibility(View.GONE);
+            }
+        } else if (requestCode == REQUEST_CODE_LOCATION) {
+            if (!isGPSOPen()) {
+                mTextGpsStatus.setText("已关闭");
+                mTextGpsStatus.setTextColor(getResources().getColor(R.color.color_CCCCCC));
+                mTextGpsClose.setVisibility(View.GONE);
+            }
+        } else if (requestCode == REQUEST_CODE_WIFI) {
+            if (!isWifiOpen()) {
+                mTextWifiStatus.setText("已关闭");
+                mTextWifiStatus.setTextColor(getResources().getColor(R.color.color_CCCCCC));
+                mTextWifiClose.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * gps是否开启
+     *
+     * @return
+     */
+    public boolean isGPSOPen() {
+        LocationManager locationManager
+                = (LocationManager) AppApplication.getInstance().getSystemService(Context.LOCATION_SERVICE);
+        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    /**
+     * 是否wifi开启
+     *
+     * @return
+     */
+    private boolean isWifiOpen() {
+        WifiManager wifiManager = (WifiManager) AppApplication.getInstance().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        return wifiManager.isWifiEnabled();
+    }
+
+    /**
+     * 是否蓝牙开启
+     *
+     * @return
+     */
+    private boolean isBluetoothOpen() {
+        BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (blueAdapter != null) {
+            return blueAdapter.isEnabled();
+        }
+        return false;
     }
 }

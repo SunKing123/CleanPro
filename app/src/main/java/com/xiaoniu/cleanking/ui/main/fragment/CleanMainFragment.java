@@ -41,6 +41,8 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
@@ -300,6 +302,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (type == TYPE_SCAN_FINISH) {
             startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
         }
+    }
+    @OnClick(R.id.line_wx)
+    public void mClickWx() {
+        startActivity(WechatCleanHomeActivity.class);
+        StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
+    }
+    @OnClick(R.id.line_qq)
+    public void mClickQq() {
+        startActivity(QQCleanHomeActivity.class);
+        StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
+    }
+    @OnClick(R.id.line_jw)
+    public void mClickJw() {
+        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+        StatisticsUtils.trackClick("Cell_phone_cooling_click", "手机降温点击", "home_page", "home_page");
     }
 
     /**
@@ -649,12 +666,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
             clickDownload(mFirstViewAdClick, dataBean.getDownloadUrl(), position);
-            mTextBottomTitle.setVisibility(VISIBLE);
+            mTextBottomTitle.setVisibility(GONE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
             clickDownload(mSecondViewAdClick, dataBean.getDownloadUrl(), position);
-            mTextBottomTitle.setVisibility(VISIBLE);
+            mTextBottomTitle.setVisibility(GONE);
         }
         StatisticsUtils.trackClickHolderCustom("ad_show", "\"广告展示曝光", "home_page"
                 , "home_page_clean_up_page", String.valueOf(position));

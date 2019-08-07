@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
@@ -37,6 +40,7 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,12 +145,13 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     }
 
     @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_wxxcx, R.id.iv_wxxcx, R.id.tv1_file, R.id.iv_chatfile
-            , R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1,R.id.cons_file
-            ,R.id.cons_wxsp,R.id.cons_pic})
+            , R.id.iv_back, R.id.tv_delete, R.id.tv_select, R.id.tv_select1, R.id.cons_file
+            , R.id.cons_wxsp, R.id.cons_pic})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
+            StatisticsUtils.trackClick("wechat_cleaning_return_click", "微信清理返回点击", "home_page", "wechat_cleaning_page");
         } else if (ids == R.id.iv_gabcache) {
             consGabcache.setVisibility(consGabcache.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivGabcache.setImageResource(consGabcache.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
@@ -168,27 +173,45 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         } else if (ids == R.id.tv_delete) {
             if (!tvSelect.isSelected() && !tvSelect.isSelected()) return;
             mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
+            StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
         } else if (ids == R.id.tv_select) {
             tvSelect.setSelected(tvSelect.isSelected() ? false : true);
             getSelectCacheSize();
+            StatisticsUtils.trackClick("Icon_caching_click", "图标缓存点击", "home_page", "wechat_cleaning_page");
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
             getSelectCacheSize();
+            StatisticsUtils.trackClick("Wechat_garbage_click", "微信垃圾点击", "home_page", "wechat_cleaning_page");
         } else if (ids == R.id.cons_aud) {
             Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanAudActivity.class);
             startActivity(intent);
-        }else if (ids == R.id.cons_file) {
+            StatisticsUtils.trackClick("Wechat_Voice", "微信语音点击", "home_page", "wechat_cleaning_page");
+        } else if (ids == R.id.cons_file) {
             Intent intent = new Intent(WechatCleanHomeActivity.this, WechatCleanFileActivity.class);
             startActivity(intent);
-        }else if(ids==R.id.cons_wxsp){
+            StatisticsUtils.trackClick("receive_files_click", "接收文件点击", "home_page", "wechat_cleaning_page");
+        } else if (ids == R.id.cons_wxsp) {
             //微信视频跳转
             startActivity(new Intent(this, WXCleanVideoActivity.class));
-
-        }else if(ids==R.id.cons_pic){
+            StatisticsUtils.trackClick("Wechat_Video_click", "微信视频点击", "home_page", "wechat_cleaning_page");
+        } else if (ids == R.id.cons_pic) {
             //微信图片跳转
             startActivity(new Intent(this, WXCleanImgActivity.class));
+            StatisticsUtils.trackClick("Chat_pictures_click", "聊天图片点击", "home_page", "wechat_cleaning_page");
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("wechat_ceaning_view_page", "微信清理页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("wechat_ceaning_view_page", "微信清理页面浏览");
     }
 
 
@@ -262,6 +285,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
+        sp.edit().putLong(SpCacheConfig.WX_CACHE_SIZE, selectSize).commit();
     }
 
     public void deleteResult(long result) {
