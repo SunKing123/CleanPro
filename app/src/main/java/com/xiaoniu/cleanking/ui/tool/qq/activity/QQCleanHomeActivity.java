@@ -177,7 +177,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
             getSelectCacheSize();
         } else if (ids == R.id.cons_aud) {
-            Intent intent = new Intent(QQCleanHomeActivity.this, WechatCleanAudActivity.class);
+            QQUtil.audioList = az;
+            Intent intent = new Intent(QQCleanHomeActivity.this, QQCleanAudActivity.class);
             startActivity(intent);
         } else if (ids == R.id.cons_file) {
             QQUtil.fileList = aB;

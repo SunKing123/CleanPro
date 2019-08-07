@@ -486,7 +486,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
          * 分享
          */
         @JavascriptInterface
-        public void shareLink(String picurl, String linkurl, String title, String content, String activityEvtType) {
+        public void shareLink(String picurl, String linkurl, String title, String content) {
             //动态权限申请
             if (ContextCompat.checkSelfPermission(UserLoadH5Activity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(UserLoadH5Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

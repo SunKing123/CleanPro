@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -133,7 +134,9 @@ public class CleanAnimView extends RelativeLayout {
         iv_back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) listener.onClick();
+                if (listener != null) {
+                    listener.onClick();
+                }
             }
         });
         mLayoutNotNet.setOnClickListener(view -> onTvRefreshClicked());
@@ -146,12 +149,12 @@ public class CleanAnimView extends RelativeLayout {
     boolean isError = false;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host;
+        String url = ApiModule.Base_H5_Host + "/activity_page.html";
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
-        mWebView.addJavascriptInterface(new JavaInterface(), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

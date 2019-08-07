@@ -205,7 +205,7 @@ public class MeFragment extends SimpleFragment {
     }
 
 
-    @OnClick({R.id.ll_clean, R.id.ll_video,R.id.ll_qq,R.id.ll_qq_video})
+/*    @OnClick({R.id.ll_clean, R.id.ll_video,R.id.ll_qq,R.id.ll_qq_video})
     public void onClickS(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_clean) {
@@ -217,6 +217,6 @@ public class MeFragment extends SimpleFragment {
         }else if(ids==R.id.ll_qq_video){
             startActivity(new Intent(getContext(), QQCleanVideoActivity.class));
         }
-    }
+    }*/
 
 }

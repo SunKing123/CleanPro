@@ -74,7 +74,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
     //扫描中动画
     public ObjectAnimator setScaningAnim(View viewY) {
-        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DeviceUtils.dip2px(99), DeviceUtils.getScreenWidth() );
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DeviceUtils.dip2px(99), DeviceUtils.getScreenWidth());
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
         animator.setDuration(600);
         animator.setRepeatCount(ValueAnimator.INFINITE);
@@ -197,13 +197,14 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
             }
         });
     }
-    public void getHsize(){
+
+    public void getHsize() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> e) throws Exception {
                 int totalH = 0;
-                List<CleanWxFourItemInfo> listFour=new ArrayList<>();
-                List<CleanWxItemInfo> listData=new ArrayList<>();
+                List<CleanWxFourItemInfo> listFour = new ArrayList<>();
+                List<CleanWxItemInfo> listData = new ArrayList<>();
                 for (int i = 0; i < WxQqUtil.h.getList().size(); i++) {
                     if (WxQqUtil.h.getList().get(i) instanceof CleanWxFourItemInfo) {
                         CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) WxQqUtil.h.getList().get(i);
@@ -211,10 +212,10 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
                     }
                 }
 
-                for(int j=0;j<listFour.size();j++){
+                for (int j = 0; j < listFour.size(); j++) {
                     listData.addAll(listFour.get(j).getFourItem());
                 }
-                Log.e("asdfg", "Step2："  + totalH);
+                Log.e("asdfg", "Step2：" + totalH);
                 e.onNext(totalH);
             }
         }).subscribeOn(Schedulers.io())
@@ -233,6 +234,23 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
     }
 
+    //根据提供的bean筛选list
+    public List<CleanWxItemInfo> getAllSelectList(CleanWxEasyInfo cleanWxEasyInfoFile) {
+        List<CleanWxFourItemInfo> listFour = new ArrayList<>();
+        List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
+        for (int i = 0; i < cleanWxEasyInfoFile.getList().size(); i++) {
+            if (cleanWxEasyInfoFile.getList().get(i) instanceof CleanWxFourItemInfo) {
+                CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoFile.getList().get(i);
+                listFour.add(cleanWxHeadInfo);
+            }
+        }
+
+        for (int j = 0; j < listFour.size(); j++) {
+            listDataTemp.addAll(listFour.get(j).getFourItem());
+        }
+        return listDataTemp;
+    }
+
     //清理缓存垃圾
     public void onekeyCleanDelete(boolean isTopSelect, boolean isBottomSelect) {
         CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
@@ -243,18 +261,25 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
         List<CleanWxItemInfo> listTemp = new ArrayList<>();
         if (isTopSelect) {
-            listTemp.addAll(headCacheInfo.getTempList());
-            listTemp.addAll(gabageFileInfo.getTempList());
-            listTemp.addAll(wxCircleInfo.getTempList());
+            listTemp.addAll(getAllSelectList(headCacheInfo));
+            listTemp.addAll(getAllSelectList(gabageFileInfo));
+            listTemp.addAll(getAllSelectList(wxCircleInfo));
         }
         if (isBottomSelect) {
-            listTemp.addAll(wxprogramInfo.getTempList());
-//            listTemp.add(wxprogramInfo.getTempList().get(0));
-//            listTemp.add(wxprogramInfo.getTempList().get(1));
-//            listTemp.add(wxprogramInfo.getTempList().get(2));
-//            listTemp.add(wxprogramInfo.getTempList().get(3));
+            listTemp.addAll(getAllSelectList(wxprogramInfo));
         }
-        delFile(listTemp);
+        //测试代码**************************************
+//        List<CleanWxItemInfo> listTempTest = new ArrayList<>();
+//        long tempSize = 0;
+//        for (int i = 0; i < listTemp.size(); i++) {
+//            if (i < 10){
+//                tempSize += listTemp.get(i).getFileSize();
+//                listTempTest.add(listTemp.get(i));
+//            }
+//        }
+//        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
+        Log.e("fddf", "删除大小：" + listTemp);
+//        delFile(listTemp);
     }
 
     public void delFile(List<CleanWxItemInfo> list) {

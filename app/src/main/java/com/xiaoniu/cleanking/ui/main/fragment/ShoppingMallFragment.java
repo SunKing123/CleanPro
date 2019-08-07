@@ -17,13 +17,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.just.agentweb.AgentWeb;
+import com.just.agentweb.WebViewClient;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -53,12 +53,15 @@ import butterknife.OnClick;
  * Created on 2018/3/21.
  */
 public class ShoppingMallFragment extends SimpleFragment implements MainActivity.OnKeyBackListener {
-    @BindView(R.id.web_view)
-    WebView mWebView;
+    @BindView(R.id.web_container)
+    RelativeLayout mRootView;
     @BindView(R.id.layout_not_net)
     LinearLayout mLayoutNetError;
     private String url = ApiModule.SHOPPING_MALL;
     private boolean isFirst = true;
+    private boolean isFirstPause = true;
+
+    private AgentWeb mAgentWeb;
 
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -122,123 +125,140 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     }
 
     private void initWebView() {
-        WebSettings settings = mWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
 
-
-/**
- * 启用mixed content    android 5.0以上默认不支持Mixed Content
- *
- * 5.0以上允许加载http和https混合的页面(5.0以下默认允许，5.0+默认禁止)
- * */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-        mWebView.addJavascriptInterface(new Javascript(), "cleanPage");
-        //分享
-        mWebView.addJavascriptInterface(new Javascript(), "sharePage");
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                if (!isSuccess) {
-                    showLoadingDialog();
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-                mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                cancelLoadingDialog();
-                if (!isError) {
-                    isSuccess = true;
-                    //回调成功后的相关操作
-                    if (mLayoutNetError != null) {
-                        mLayoutNetError.setVisibility(View.GONE);
+        mAgentWeb = AgentWeb.with(this)
+                .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
+                .closeIndicator()
+                .setMainFrameErrorView(R.layout.web_error_layout, R.id.tv_reload)
+                .setWebChromeClient(new CustomWebChromeClient())
+                .setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                        super.onPageStarted(view, url, favicon);
+                        if (!isSuccess) {
+                            showLoadingDialog();
+                        }
                     }
-                    if (mWebView != null) {
-                        mWebView.setVisibility(View.VISIBLE);
+
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+
+                        getWebView().setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                        cancelLoadingDialog();
+                        if (!isError) {
+                            isSuccess = true;
+                            //回调成功后的相关操作
+                            if (mLayoutNetError != null) {
+                                mLayoutNetError.setVisibility(View.GONE);
+                            }
+                            if (mRootView != null) {
+                                mRootView.setVisibility(View.VISIBLE);
+                            }
+                        }
+                        isError = false;
                     }
-                }
-                isError = false;
-            }
 
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    @Override
+                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
-                // 不要使用super，否则有些手机访问不了，因为包含了一条 handler.cancel()
-                // super.onReceivedSslError(view, handler, error);
+                        // 不要使用super，否则有些手机访问不了，因为包含了一条 handler.cancel()
+                        // super.onReceivedSslError(view, handler, error);
 
-                // 接受所有网站的证书，忽略SSL错误，执行访问网页
-                handler.proceed();
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                super.onReceivedError(view, errorCode, description, failingUrl);
-                isError = true;
-                isSuccess = false;
-                if (mLayoutNetError != null) {
-                    mLayoutNetError.setVisibility(View.VISIBLE);
-                }
-                if (mWebView != null) {
-                    mWebView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // 如下方案可在非微信内部WebView的H5页面中调出微信支付
-                try {
-                    if (url.startsWith("weixin://wap/pay?")) {
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        startActivity(intent);
-                        return true;
-                    } else {
-                        Map<String, String> extraHeaders = new HashMap<String, String>();
-                        extraHeaders.put("Referer", "http://chinamrgift.com.cn");
-                        view.loadUrl(url, extraHeaders);
+                        // 接受所有网站的证书，忽略SSL错误，执行访问网页
+                        handler.proceed();
                     }
-                } catch (Exception e) {
-                    ToastUtils.showShort("请安装微信最新版!");
-                    mWebView.goBack();
-                }
-                return super.shouldOverrideUrlLoading(view, url);
+
+                    @Override
+                    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                        super.onReceivedError(view, errorCode, description, failingUrl);
+                        isError = true;
+                        isSuccess = false;
+                        if (mLayoutNetError != null) {
+                            mLayoutNetError.setVisibility(View.VISIBLE);
+                        }
+                        if (mRootView != null) {
+                            mRootView.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        // 如下方案可在非微信内部WebView的H5页面中调出微信支付
+                        try {
+                            if (url.startsWith("weixin://wap/pay?")) {
+                                Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(url));
+                                startActivity(intent);
+                                return true;
+                            } else {
+                                Map<String, String> extraHeaders = new HashMap<String, String>();
+                                extraHeaders.put("Referer", "http://chinamrgift.com.cn");
+                                view.loadUrl(url, extraHeaders);
+                            }
+                        } catch (Exception e) {
+                            ToastUtils.showShort("请安装微信最新版!");
+                        }
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
+                })
+                .createAgentWeb()
+                .ready()
+                .go(url);
+
+        mAgentWeb.getJsInterfaceHolder().addJavaObject("cleanPage",new Javascript());
+        mAgentWeb.getJsInterfaceHolder().addJavaObject("sharePage",new Javascript());
+    }
+
+    private class CustomWebChromeClient extends com.just.agentweb.WebChromeClient {
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+            super.onReceivedTitle(view, title);
+            if (view != null && !TextUtils.isEmpty(view.getUrl())
+                    && view.getUrl().contains(title)) {
+                return;
             }
-        });
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
+            if (getActivity() != null) {
                 mCanGoBack = !"悟空清理商城".equals(title);
             }
-        });
+        }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            mAgentWeb.getWebLifeCycle().onResume();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), true);
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
             }
             if (isFirst) {
-                mWebView.loadUrl(url);
+                getWebView().loadUrl(url);
                 isFirst = false;
             }
+        }else {
+            if (!isFirstPause) {
+                mAgentWeb.getWebLifeCycle().onPause();
+            }else {
+                isFirstPause = false;
+            }
+
         }
+    }
+
+    public WebView getWebView() {
+        return mAgentWeb.getWebCreator().getWebView();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (!isHidden()) {
+            mAgentWeb.getWebLifeCycle().onPause();
+        }
         NiuDataAPI.onPageEnd("information_iew_page", "信息页面");
     }
 
@@ -248,6 +268,9 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
 //        if (!isHidden()) {
 //            mWebView.reload();
 //        }
+        if (!isHidden()) {
+            mAgentWeb.getWebLifeCycle().onResume();
+        }
         NiuDataAPI.onPageStart("information_iew_page", "信息页面");
     }
 
@@ -255,8 +278,8 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
 
     @Override
     public void onKeyBack() {
-        if (mWebView.canGoBack() && mCanGoBack) {
-            mWebView.goBack();
+        if (getWebView().canGoBack() && mCanGoBack) {
+            getWebView().goBack();
             firstTime = 0;
         } else {
             long currentTimeMillis = System.currentTimeMillis();
@@ -269,6 +292,12 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
 //                AppManager.getAppManager().AppExit(getContext(), false);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        mAgentWeb.getWebLifeCycle().onDestroy();
+        super.onDestroy();
     }
 
     public class Javascript {
@@ -387,11 +416,11 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(url);
+        getWebView().loadUrl(url);
     }
 
     private void refresh() {
-        mWebView.loadUrl(url);
+        getWebView().loadUrl(url);
     }
 
     private void showToast(String msg) {

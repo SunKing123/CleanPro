@@ -73,9 +73,9 @@
             android:layout_marginLeft="@dimen/dimen_34dp"
             android:layout_marginRight="@dimen/dimen_16dp"
             android:layout_toRightOf="@id/tv_qx"
-            android:background="@drawable/delete_select_bg"
+            android:background="@drawable/delete_unselect_bg"
             android:gravity="center"
-            android:text="清理"
+            android:text="未选中"
             android:textColor="@color/white" />
 
     </RelativeLayout>
@@ -315,7 +315,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:text="半年内"
+                    android:text="更早"
                     android:textColor="#333333"
                     android:textSize="@dimen/dimen_16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
