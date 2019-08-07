@@ -17,6 +17,8 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
+import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
@@ -199,5 +201,56 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
     }
 
+    //获取选中的语音大小
+    public long getSelectAudioSize() {
+        long selectAudSize = 0;
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.audioList == null) return 0;
+        for (int i = 0; i < QQUtil.audioList.size(); i++) {
+            if (QQUtil.audioList.get(i).getIsSelect())
+                listTemp.add(QQUtil.audioList.get(i));
+        }
+        for (int i = 0; i < listTemp.size(); i++) {
+            selectAudSize += listTemp.get(i).getSize();
+        }
+        return selectAudSize;
+    }
+
+    //获取选中的语音列表
+    public List<CleanWxClearInfo> getSelectAudioList() {
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.audioList == null) return null;
+        for (int i = 0; i < QQUtil.audioList.size(); i++) {
+            if (QQUtil.audioList.get(i).getIsSelect())
+                listTemp.add(QQUtil.audioList.get(i));
+        }
+        return listTemp;
+    }
+
+    //获取选中的文件大小
+    public long getSelectFileSize() {
+        long selectAudSize = 0;
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.fileList == null) return 0;
+        for (int i = 0; i < QQUtil.fileList.size(); i++) {
+            if (QQUtil.fileList.get(i).getIsSelect())
+                listTemp.add(QQUtil.fileList.get(i));
+        }
+        for (int i = 0; i < listTemp.size(); i++) {
+            selectAudSize += listTemp.get(i).getSize();
+        }
+        return selectAudSize;
+    }
+
+    //获取选中的文件列表
+    public List<CleanWxClearInfo> getSelectFileList() {
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.fileList == null) return null;
+        for (int i = 0; i < QQUtil.fileList.size(); i++) {
+            if (QQUtil.fileList.get(i).getIsSelect())
+                listTemp.add(QQUtil.fileList.get(i));
+        }
+        return listTemp;
+    }
 
 }

@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 
@@ -53,6 +54,10 @@ public class ToolFragment extends SimpleFragment {
         if (ids == R.id.rl_chat) {
             startActivity(WechatCleanHomeActivity.class);
         } else if (ids == R.id.rl_qq) {
+            if (QQUtil.audioList != null)
+                QQUtil.audioList.clear();
+            if (QQUtil.fileList != null)
+            QQUtil.fileList.clear();
             startActivity(QQCleanHomeActivity.class);
         } else if (ids == R.id.ll_phone_speed) {
             startActivity(PhoneAccessActivity.class);
