@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -93,6 +94,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     AccessAnimView acceview;
     @BindView(R.id.rel_bottom)
     RelativeLayout rel_bottom;
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout mAppBarLayout;
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -258,6 +261,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 setCleanedView(0);
                 rel_bottom.setVisibility(View.GONE);
+                mAppBarLayout.setExpanded(true);
             }
 
             @Override
