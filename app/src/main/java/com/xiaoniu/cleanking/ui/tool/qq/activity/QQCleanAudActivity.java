@@ -52,32 +52,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
-            List<CleanWxClearInfo> listF = new ArrayList<>();
-            List<CleanWxClearInfo> listData = audAdapter.getListImage();
-            for (int i = 0; i < listData.size(); i++) {
-                if (listData.get(i).getIsSelect())
-                    listF.add(audAdapter.getListImage().get(i));
-            }
-
-
-//            mPresenter.alertBanLiveDialog(QQCleanAudActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
-//                @Override
-//                public void clickOKBtn() {
-//                    //删除本地文件
-//                    mPresenter.delFile(listF);
-//                    //数据库删除选中的文件
-//                }
-//
-//                @Override
-//                public void cancelBtn() {
-//
-//                }
-//            });
-//
-//            String pageName = "";
-//            if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
-//                pageName = "file_cleaning_page";
-//            }
+            finish();
         }
     }
 

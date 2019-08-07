@@ -57,7 +57,7 @@ public class ToolFragment extends SimpleFragment {
             if (QQUtil.audioList != null)
                 QQUtil.audioList.clear();
             if (QQUtil.fileList != null)
-            QQUtil.fileList.clear();
+                QQUtil.fileList.clear();
             startActivity(QQCleanHomeActivity.class);
         } else if (ids == R.id.ll_phone_speed) {
             startActivity(PhoneAccessActivity.class);

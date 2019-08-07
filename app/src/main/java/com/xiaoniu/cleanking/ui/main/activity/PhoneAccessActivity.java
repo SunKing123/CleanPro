@@ -123,7 +123,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host;
+        String url = ApiModule.Base_H5_Host + "/activity_page.html";
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
@@ -478,7 +478,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host);
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
     }
 
     @Override
