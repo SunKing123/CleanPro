@@ -42,7 +42,9 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -162,6 +164,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
+            StatisticsUtils.trackClick("qq_cleaning_return_click", "qq清理返回点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.iv_gabcache) {
             consGabcache.setVisibility(consGabcache.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivGabcache.setImageResource(consGabcache.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
@@ -177,25 +180,31 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         } else if (ids == R.id.tv_delete) {
 //            if (!tvSelect.isSelected() && !tvSelect1.isSelected()) return;
             mPresenter.onekeyCleanDelete(getCacheList(),tvSelect1.isSelected());
+            StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
             getSelectCacheSize();
+            StatisticsUtils.trackClick("Spam_files_click", "垃圾文件点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.cons_aud) {
             QQUtil.audioList = az;
             Intent intent = new Intent(QQCleanHomeActivity.this, QQCleanAudActivity.class);
             startActivity(intent);
+            StatisticsUtils.trackClick("qq_voice_click", "qq语音点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.cons_file) {
             QQUtil.fileList = aB;
             Intent intent = new Intent(QQCleanHomeActivity.this, QQCleanFileActivity.class);
             startActivity(intent);
+            StatisticsUtils.trackClick("receive_files_click", "接收文件点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.cons_pic) {
             //聊天图片
             Intent intent = new Intent(this, QQCleanImgActivity.class);
             startActivityForResult(intent, REQUEST_CODE_QQ_IMG);
+            StatisticsUtils.trackClick("Chat_pictures_click", "聊天图片点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.cons_wxsp) {
             //视频
             Intent intent = new Intent(this, QQCleanVideoActivity.class);
             startActivityForResult(intent, REQUEST_CODE_QQ_VIDEO);
+            StatisticsUtils.trackClick("qq_video_click", "QQ视频点击", "home_page", "qq_cleaning_page");
         }
 
     }
@@ -204,10 +213,16 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart("qq_ceaning_view_page", "qq清理页面浏览");
         tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
         tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("qq_ceaning_view_page", "qq清理页面浏览");
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

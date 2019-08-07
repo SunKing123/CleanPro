@@ -214,7 +214,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onClick(View v) {
                 finish();
-                StatisticsUtils.trackClick("One_click_acceleration_Clean_click", "返回按钮", "home_page", "One_click_acceleration_Clean_up_page");
+                StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", "home_page", "once_accelerate_page");
             }
         });
 
@@ -241,7 +241,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setCleanedView(total);
                 if (Build.VERSION.SDK_INT >= 26)
                     SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
-
+                StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "once_accelerate_page");
             }
         });
 
@@ -278,11 +278,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             isFromProtect = false;
             return;
         }
+        NiuDataAPI.onPageStart("once_accelerate_view_page", "一键清理页面浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        NiuDataAPI.onPageEnd("once_accelerate_view_page", "一键清理页面浏览");
         NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
 

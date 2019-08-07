@@ -13,6 +13,8 @@ import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanAudPresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +51,25 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
+            StatisticsUtils.trackClick("qq_voice_return_click", "qq语音返回点击", "qq_cleaning_page", "qq_voice_cleaning_page");
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
             finish();
+            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("qq_voice_cleaning_view_page", "语音清理页面浏览");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("qq_voice_cleaning_view_page", "语音清理页面浏览");
+    }
     @Override
     public void initView() {
 
@@ -92,6 +106,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
                     cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                     tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                     compulateDeleteSize();
+                    StatisticsUtils.trackClick("voice_cleaning_all_election_click ", "全选按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
                 }
             }
         });
