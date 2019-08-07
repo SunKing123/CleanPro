@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
@@ -102,8 +103,7 @@ public class ToolFragment extends SimpleFragment {
 
             mTvChatGbTitle.setVisibility(View.VISIBLE);
             mTvChatSubTitle.setVisibility(View.VISIBLE);
-            //TODO wxCatheSize的值是808900，不知道是不是需要转化
-            mTvChatSubTitle.setText(String.valueOf(10.0));
+            mTvChatSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSize));
             mTvDefChatSubTitleGb.setVisibility(View.VISIBLE);
         }else {
             mTvChatTitle.setVisibility(View.VISIBLE);
@@ -111,7 +111,7 @@ public class ToolFragment extends SimpleFragment {
 
             mTvChatGbTitle.setVisibility(View.GONE);
             mTvChatSubTitle.setVisibility(View.GONE);
-            mTvDefChatSubTitleGb.setVisibility(View.GONE);
+//            mTvDefChatSubTitleGb.setVisibility(View.GONE);
         }
         if (qqCatheSize >0){
             mTvQqTitle.setVisibility(View.GONE);
@@ -119,8 +119,8 @@ public class ToolFragment extends SimpleFragment {
 
             mTvQqGbTitle.setVisibility(View.VISIBLE);
             mTvQqSubTitle.setVisibility(View.VISIBLE);
-            mTvQqTitle.setText(String.valueOf(wxCatheSize));
-            mTvDefQqSubTitleGb.setVisibility(View.VISIBLE);
+            mTvQqTitle.setText(CleanAllFileScanUtil.byte2FitSizeOne(qqCatheSize));
+//            mTvDefQqSubTitleGb.setVisibility(View.VISIBLE);
         }else {
             mTvQqTitle.setVisibility(View.VISIBLE);
             mTvDefQqTitle.setVisibility(View.VISIBLE);

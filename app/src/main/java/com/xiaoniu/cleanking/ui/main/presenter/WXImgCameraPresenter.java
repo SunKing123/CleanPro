@@ -294,8 +294,9 @@ public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, Clean
                         } else if (file.getName().startsWith("wx_camera") && DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
                             //是否为同一个月
                             listsCamera.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
-                        } else if (file.getName().startsWith("wx_camera")) {
+                        } else  {
                             //是否为半年内
+                            listsCamera.get(FileTitleEntity.Type.YEAR_HALF).lists.add(fileChildEntity);
                         }
 
                     }
