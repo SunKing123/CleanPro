@@ -1,6 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,9 +15,12 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -22,17 +28,42 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class ToolFragment extends SimpleFragment {
 
-    @BindView(R.id.tv_chat_subtitle)
-    TextView mTvChatSubtitle;//微信清理
-    @BindView(R.id.tv_qq_subtitle)
-    TextView mTvQqSubtitle;  //qq清理
     @BindView(R.id.tool_circle_progress)
     CircleProgressView mToolCircleProgress;
     @BindView(R.id.tv_tool_percent_num)
     TextView mTvToolPercentNum;
+    @BindView(R.id.tv_phone_space_state)
+    TextView mTvPhoneSpaceState;
+
+    @BindView(R.id.tv_chat_title)
+    TextView mTvChatTitle;
+    @BindView(R.id.tv_qq_title)
+    TextView mTvQqTitle;
+    @BindView(R.id.tv_chat_gb_title)
+    TextView mTvChatGbTitle;
+    @BindView(R.id.tv_qq_gb_title)
+    TextView mTvQqGbTitle;
+    @BindView(R.id.tv_def_chat_title)
+    TextView mTvDefChatTitle;
+    @BindView(R.id.tv_def_qq_title)
+    TextView mTvDefQqTitle;
+    @BindView(R.id.tv_chat_subtitle)
+    TextView mTvChatSubTitle;
+    @BindView(R.id.tv_qq_subtitle)
+    TextView mTvQqSubTitle;
+    @BindView(R.id.tv_chat_subtitle_gb)
+    TextView mTvDefChatSubTitleGb;
+    @BindView(R.id.tv_qq_subtitle_gb)
+    TextView mTvDefQqSubTitleGb;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -44,12 +75,60 @@ public class ToolFragment extends SimpleFragment {
         return R.layout.fragment_tool;
     }
 
-
     @Override
     protected void initView() {
         mToolCircleProgress.startAnimProgress(34, 700);
+        setData();
         //监听进度条进度
         mToolCircleProgress.setOnAnimProgressListener(progress -> mTvToolPercentNum.setText("" + progress + "%"));
+    }
+
+    @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
+    private void setData() {
+        Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{DeviceUtils.getFreeSpace(), DeviceUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(strings -> {
+                    //String数组第一个是剩余存储量，第二个是总存储量
+                    mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", Double.valueOf(strings[0]))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
+                    int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));
+                    mToolCircleProgress.startAnimProgress(spaceProgress, 700);
+                });
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
+        long qqCatheSize = sp.getLong(SpCacheConfig.QQ_CACHE_SIZE,0L);
+        long wxCatheSize = sp.getLong(SpCacheConfig.WX_CACHE_SIZE,0L);
+        if (wxCatheSize > 0){
+            mTvChatTitle.setVisibility(View.GONE);
+            mTvDefChatTitle.setVisibility(View.GONE);
+
+            mTvChatGbTitle.setVisibility(View.VISIBLE);
+            mTvChatSubTitle.setVisibility(View.VISIBLE);
+            //TODO wxCatheSize的值是808900，不知道是不是需要转化
+            mTvChatSubTitle.setText(String.valueOf(10.0));
+            mTvDefChatSubTitleGb.setVisibility(View.VISIBLE);
+        }else {
+            mTvChatTitle.setVisibility(View.VISIBLE);
+            mTvDefChatTitle.setVisibility(View.VISIBLE);
+
+            mTvChatGbTitle.setVisibility(View.GONE);
+            mTvChatSubTitle.setVisibility(View.GONE);
+            mTvDefChatSubTitleGb.setVisibility(View.GONE);
+        }
+        if (qqCatheSize >0){
+            mTvQqTitle.setVisibility(View.GONE);
+            mTvDefQqTitle.setVisibility(View.GONE);
+
+            mTvQqGbTitle.setVisibility(View.VISIBLE);
+            mTvQqSubTitle.setVisibility(View.VISIBLE);
+            mTvQqTitle.setText(String.valueOf(wxCatheSize));
+            mTvDefQqSubTitleGb.setVisibility(View.VISIBLE);
+        }else {
+            mTvQqTitle.setVisibility(View.VISIBLE);
+            mTvDefQqTitle.setVisibility(View.VISIBLE);
+
+            mTvQqGbTitle.setVisibility(View.GONE);
+            mTvQqSubTitle.setVisibility(View.GONE);
+            mTvDefQqSubTitleGb.setVisibility(View.GONE);
+        }
     }
 
 
@@ -88,6 +167,7 @@ public class ToolFragment extends SimpleFragment {
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
             }
+            setData();
         }
         if (hidden) {
             NiuDataAPI.onPageEnd("clean-up_toolbox_view_page", "工具页面浏览");
