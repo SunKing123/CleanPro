@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.xiaoniu.cleanking.R;
@@ -10,7 +11,9 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +47,27 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
 
     @Override
     public void initView() {
+
+        initNiuData();
+
         skip();
+    }
+
+    /**
+     * 埋点事件
+     */
+    private void initNiuData() {
+        if (!mSPHelper.isUploadImei()) {
+            //有没有传过imei
+            String imei = AndroidUtil.getNiuDeviceID();
+            if (TextUtils.isEmpty(imei)) {
+                NiuDataAPI.setIMEI("");
+                mSPHelper.setUploadImeiStatus(false);
+            } else {
+                NiuDataAPI.setIMEI(imei);
+                mSPHelper.setUploadImeiStatus(true);
+            }
+        }
     }
 
     /**

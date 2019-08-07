@@ -177,7 +177,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
 //            if (!tvSelect.isSelected() && !tvSelect1.isSelected()) return;
-//            mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
+            mPresenter.onekeyCleanDelete(getCacheList(),tvSelect1.isSelected());
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
             getSelectCacheSize();
@@ -219,6 +219,16 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     //获取扫描结果
     boolean isFirst = true;
+
+    //获取扫描的所有垃圾文件
+    public List<CleanWxClearInfo> getCacheList() {
+        List<CleanWxClearInfo> listAllCache = new ArrayList<>();
+        listAllCache.addAll(al);
+        listAllCache.addAll(an);
+        listAllCache.addAll(ah);
+        listAllCache.addAll(ag);
+        return listAllCache;
+    }
 
     public void getScanResult() {
         if (!isFirst) return;

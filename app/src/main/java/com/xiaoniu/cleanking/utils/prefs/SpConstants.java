@@ -63,4 +63,5 @@ public class SpConstants {
     public static final String PAGE_WAIT_HINT = "page_wait_hint";
     public static final String OPERATOR_SWITCH = "operator_switch";
     public static final String OPERATOR_TOKEN = "operator_token";
+    public static final String OPERATOR_IS_UPLOAD_IMEI = "operator_is_upload_imei";
 }
