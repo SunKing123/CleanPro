@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.os.Environment;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
@@ -244,6 +245,23 @@ public class CleanAllFileScanUtil {
         }
     }
 
+    public static String byte2FitSizeTwo(long byteNum, TextView textView) {
+        if (byteNum < 0) {
+            return "shouldn't be less than zero!";
+        } else if (byteNum < KB) {
+            textView.setText("B");
+            return String.format(Locale.getDefault(), "%.1f", (double) byteNum);
+        } else if (byteNum < MB) {
+            textView.setText("KB");
+            return String.format(Locale.getDefault(), "%.1f", (double) byteNum / KB);
+        } else if (byteNum < GB) {
+            textView.setText("MB");
+            return String.format(Locale.getDefault(), "%.1f", (double) byteNum / MB);
+        } else {
+            textView.setText("GB");
+            return String.format(Locale.getDefault(), "%.1f", (double) byteNum / GB);
+        }
+    }
     /**
      * 多个数组赋值
      *
