@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -126,6 +127,10 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
                 mLLCheckAll.setSelected(mIsCheckAll);
                 setSelectStatus(mIsCheckAll);
                 setDelBtnSize();
+                StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
+                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+
+
             }
         });
 
@@ -386,7 +391,8 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         int ids=view.getId();
         switch (ids){
             case R.id.btn_del:
-
+                StatisticsUtils.trackClick("picture_cleaning_delete_click","\"删除\"按钮点击"
+                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
                 String title=String.format("确定删除这%s个图片?",getSelectSize());
                 DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
                 FragmentManager fm = getActivity().getFragmentManager();
@@ -407,6 +413,8 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
 
                 break;
             case R.id.btn_save:
+                StatisticsUtils.trackClick("Save_to_cell_phone_click","\"保存到手机\"点击"
+                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
 
                 List<File> lists=getSelectFiles();
                 if(lists.size()==0){

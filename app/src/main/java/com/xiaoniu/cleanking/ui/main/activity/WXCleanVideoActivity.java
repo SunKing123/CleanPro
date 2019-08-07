@@ -16,6 +16,8 @@ import com.xiaoniu.cleanking.ui.main.event.EmptyEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoSaveListFragment;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -161,6 +163,8 @@ public class WXCleanVideoActivity extends BaseActivity{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
+                StatisticsUtils.trackClick("wechat_video_return_click","\"聊天视频返回\"点击"
+                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
                 finish();
                 break;
             case R.id.ll_img_chat:
@@ -176,6 +180,13 @@ public class WXCleanVideoActivity extends BaseActivity{
                 setSelcteStatusView(2);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        StatisticsUtils.trackClick("wechat_video_return_click","\"聊天视频返回\"点击"
+                ,"wechat_cleaning_page","wechat_video_cleaning_page");
     }
 
     @Override
@@ -195,4 +206,16 @@ public class WXCleanVideoActivity extends BaseActivity{
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("wechat_video_cleaning_view_page","视频清理页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("wechat_video_cleaning_view_page","视频清理页面浏览");
+    }
 }
