@@ -295,7 +295,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         getSelectCacheSize();
         tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(az)));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(aB)));
-        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag));
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag) + getSize(az) + getSize(aB) + totalImgSize + totalVideoSize);
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         float sizeMb = 0;
