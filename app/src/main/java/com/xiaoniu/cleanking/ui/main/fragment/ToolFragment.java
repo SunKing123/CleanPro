@@ -44,15 +44,6 @@ public class ToolFragment extends SimpleFragment {
         return R.layout.fragment_tool;
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {
-            NiuDataAPI.onPageEnd("clean-up_toolbox_view_page", "工具页面浏览");
-        } else {
-            NiuDataAPI.onPageStart("clean-up_toolbox_view_page", "工具页面浏览");
-        }
-    }
 
     @Override
     protected void initView() {
@@ -97,6 +88,11 @@ public class ToolFragment extends SimpleFragment {
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
             }
+        }
+        if (hidden) {
+            NiuDataAPI.onPageEnd("clean-up_toolbox_view_page", "工具页面浏览");
+        } else {
+            NiuDataAPI.onPageStart("clean-up_toolbox_view_page", "工具页面浏览");
         }
     }
 }
