@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -95,7 +96,7 @@
                         android:layout_toRightOf="@id/frame_layout"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_below="@id/tv_phone_space"
-                        android:text="剩余   26.65G  总计   32G"/>
+                        android:text="已用: 0.0GB/0.0GB"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -130,7 +131,16 @@
                         android:text="微信清理"
                         android:textColor="@color/color_333333"
                         android:textSize="@dimen/dimen_14dp" />
-
+                    <TextView
+                        android:id="@+id/tv_chat_gb_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_toRightOf="@id/iv_icon_chat"
+                        android:text="微信清理"
+                        android:visibility="gone"
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dimen_14dp" />
                     <TextView
                         android:id="@+id/tv_def_chat_title"
                         android:layout_width="wrap_content"
@@ -147,7 +157,7 @@
                         android:id="@+id/tv_chat_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dimen_28dp"
-                        android:layout_below="@id/tv_chat_title"
+                        android:layout_below="@id/tv_chat_gb_title"
                         android:layout_marginLeft="@dimen/dimen_16dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
@@ -158,9 +168,10 @@
                         android:textSize="@dimen/dimen_20dp" />
 
                     <TextView
+                        android:id="@+id/tv_chat_subtitle_gb"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dimen_28dp"
-                        android:layout_below="@id/tv_chat_title"
+                        android:layout_below="@id/tv_chat_gb_title"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@id/tv_chat_subtitle"
                         android:gravity="bottom"
@@ -191,7 +202,6 @@
                         android:layout_width="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="QQ清理"
-                        android:visibility="gone"
                         android:textSize="@dimen/dimen_14dp"
                         android:layout_marginLeft="@dimen/dimen_16dp"
                         android:layout_toRightOf="@id/iv_icon_qq"
@@ -204,6 +214,7 @@
                         android:text="QQ清理"
                         android:textSize="@dimen/dimen_14dp"
                         android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@id/iv_icon_qq"
                         android:textColor="@color/color_333333"
                         android:layout_height="wrap_content" />
@@ -212,11 +223,10 @@
                         android:id="@+id/tv_def_qq_title"
                         android:layout_width="wrap_content"
                         android:textSize="@dimen/dimen_11dp"
-                        android:text="清理聊天垃圾"
+                        android:text="释放更多空间"
                         android:layout_below="@id/tv_qq_title"
                         android:layout_marginLeft="@dimen/dimen_16dp"
                         android:layout_marginTop="4dp"
-                        android:visibility="gone"
                         android:gravity="bottom"
                         android:textColor="@color/color_999999"
                         android:layout_toRightOf="@id/iv_icon_qq"
@@ -229,11 +239,13 @@
                         android:layout_below="@id/tv_qq_gb_title"
                         android:layout_height="@dimen/dimen_28dp"
                         android:textSize="@dimen/dimen_20dp"
+                        android:visibility="gone"
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:layout_marginLeft="@dimen/dimen_16dp"
                         android:gravity="bottom"
                         android:text="2.45"/>
                     <TextView
+                        android:id="@+id/tv_qq_subtitle_gb"
                         android:layout_width="wrap_content"
                         android:textColor="@color/color_06C581"
                         android:layout_toRightOf="@id/tv_qq_subtitle"
@@ -241,6 +253,7 @@
                         android:layout_height="@dimen/dimen_28dp"
                         android:layout_marginTop="4dp"
                         android:gravity="bottom"
+                        android:visibility="gone"
                         android:textSize="@dimen/dimen_17dp"
                         android:text="GB"/>
                 </RelativeLayout>

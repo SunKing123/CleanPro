@@ -299,7 +299,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
                     @Override
                     public void onNext(String value) {
-                        mView.updateQQImgSize(FileSizeUtils.formatFileSize(mQQImgFileSize));
+                        mView.updateQQImgSize(FileSizeUtils.formatFileSize(mQQImgFileSize),mQQImgFileSize);
                     }
 
                     @Override
@@ -339,7 +339,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
                     @Override
                     public void onNext(String value) {
-                        mView.updateVideoSize(FileSizeUtils.formatFileSize(mQQVideoFileSize));
+                        mView.updateVideoSize(FileSizeUtils.formatFileSize(mQQVideoFileSize),mQQVideoFileSize);
                     }
 
                     @Override
