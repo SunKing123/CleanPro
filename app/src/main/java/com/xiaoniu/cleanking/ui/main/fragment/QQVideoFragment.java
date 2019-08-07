@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -132,6 +133,8 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
                 mLLCheckAll.setSelected(mIsCheckAll);
                 setSelectStatus(mIsCheckAll);
                 setDelBtnSize();
+                StatisticsUtils.trackClick("video_cleaning_all_election_click","\"全选\"按钮点击"
+                        ,"qq_cleaning_page","qq_video_cleaning_page");
             }
         });
 
@@ -459,6 +462,10 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 //                        mPresenter.delFile(files);
 //                    }
 //                });
+
+                StatisticsUtils.trackClick("video_cleaning_delete_click","\"删除\"按钮点击"
+                        ,"qq_cleaning_page","qq_video_cleaning_page");
+
 
                 ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();
                 Bundle bundle=new Bundle();
