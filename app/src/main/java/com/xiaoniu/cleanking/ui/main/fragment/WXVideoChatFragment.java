@@ -543,6 +543,15 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
     }
 
 
+    /**
+     * 更新系统相册
+     * @param file
+     */
+    public void updateDIM(File file){
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

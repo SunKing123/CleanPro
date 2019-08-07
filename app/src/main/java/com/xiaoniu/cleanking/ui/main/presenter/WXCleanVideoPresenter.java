@@ -319,6 +319,7 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
         } finally {
             input.close();
             output.close();
+            mView.updateDIM(dest);
         }
     }
     /**
