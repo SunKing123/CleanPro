@@ -375,26 +375,46 @@ public class AndroidUtil {
 
     /**
      * 打开文件
-     * @param type  text/plain
      * @param context
-     * @param str2
+     * @param path
      */
-    public static void openFileSafe(String type, Context context, String str2) {
-        Intent intent = new Intent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setDataAndType(Uri.fromFile(new File(str2)), type);
-        } else {
-            intent.setAction(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(new File(str2)), type);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
+    public static void openFileSafe(Context context, String path) {
+
+        String format = path.substring(path.lastIndexOf(".") + 1);
+        File file = new File(path);
         try {
-            context.startActivity(intent);
+                if (TextUtils.equals("doc", format) || TextUtils.equals("docx", format)) {
+                    context.startActivity(IntentDocumentUtil.getWordFileIntent(path));
+                } else if (TextUtils.equals("xls", format) || TextUtils.equals("xlsx", format)) {
+                    context.startActivity(IntentDocumentUtil.getExcelFileIntent(path));
+                } else if (TextUtils.equals("zip", format) || TextUtils.equals("rar", format)) {
+                    context.startActivity(IntentDocumentUtil.getZipRarFileIntent(path));
+                }else if (TextUtils.equals("pdf", format) || TextUtils.equals("PDF", format)) {
+                    context.startActivity(IntentDocumentUtil.getPdfFileIntent(path));
+                }else if (TextUtils.equals("txt", format) || TextUtils.equals("text", format)) {
+                    context.startActivity(IntentDocumentUtil.getTextFileIntent(path,false));
+                }
         } catch (Exception e) {
-            Toast.makeText(context, "没有打开相关应用的软件...", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Toast.makeText(context,  "请先安装可以查看" + format + "格式的软件", Toast.LENGTH_SHORT).show();
         }
+//        Intent intent = new Intent();
+//        intent.addCategory("android.intent.category.DEFAULT");
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            intent.setDataAndType(Uri.fromFile(new File(path)), "");
+//        } else {
+//            intent.setAction(android.content.Intent.ACTION_VIEW);
+//            intent.setDataAndType(Uri.fromFile(new File(path)), "");
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        }
+//        try {
+//            context.startActivity(intent);
+//        } catch (Exception e) {
+//            Toast.makeText(context, "没有打开相关应用的软件...", Toast.LENGTH_SHORT).show();
+//        }
     }
+
 
 
     /**

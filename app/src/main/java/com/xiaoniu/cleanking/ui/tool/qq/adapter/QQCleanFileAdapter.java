@@ -80,7 +80,7 @@ public class QQCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ImageViewHolder) holder).conslayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AndroidUtil.openFileSafe("text/plain", mActivity, String.valueOf(listImage.get(position).getFileName()));
+                    AndroidUtil.openFileSafe( mActivity, String.valueOf(listImage.get(position).getFileName()));
                 }
             });
 
