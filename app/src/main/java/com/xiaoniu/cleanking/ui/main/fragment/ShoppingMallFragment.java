@@ -4,9 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,14 +13,11 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.WebViewClient;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -42,11 +36,7 @@ import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * 首页tab H5页面（商城页、生活页）
@@ -55,16 +45,11 @@ import butterknife.OnClick;
 public class ShoppingMallFragment extends SimpleFragment implements MainActivity.OnKeyBackListener {
     @BindView(R.id.web_container)
     RelativeLayout mRootView;
-    @BindView(R.id.layout_not_net)
-    LinearLayout mLayoutNetError;
     private String url = ApiModule.SHOPPING_MALL;
     private boolean isFirst = true;
     private boolean isFirstPause = true;
 
     private AgentWeb mAgentWeb;
-
-    private boolean isSuccess = false;
-    private boolean isError = false;
     private boolean mCanGoBack = true;
     private final int REQUEST_SDCARD = 638;
     public final static int SHARE_SUCCESS = 0;
@@ -129,80 +114,8 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.web_error_layout, R.id.tv_reload)
+                .setMainFrameErrorView(R.layout.web_error_layout, R.id.layout_not_net)
                 .setWebChromeClient(new CustomWebChromeClient())
-                .setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                        super.onPageStarted(view, url, favicon);
-                        if (!isSuccess) {
-                            showLoadingDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        super.onPageFinished(view, url);
-
-                        getWebView().setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                        cancelLoadingDialog();
-                        if (!isError) {
-                            isSuccess = true;
-                            //回调成功后的相关操作
-                            if (mLayoutNetError != null) {
-                                mLayoutNetError.setVisibility(View.GONE);
-                            }
-                            if (mRootView != null) {
-                                mRootView.setVisibility(View.VISIBLE);
-                            }
-                        }
-                        isError = false;
-                    }
-
-                    @Override
-                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-
-                        // 不要使用super，否则有些手机访问不了，因为包含了一条 handler.cancel()
-                        // super.onReceivedSslError(view, handler, error);
-
-                        // 接受所有网站的证书，忽略SSL错误，执行访问网页
-                        handler.proceed();
-                    }
-
-                    @Override
-                    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                        super.onReceivedError(view, errorCode, description, failingUrl);
-                        isError = true;
-                        isSuccess = false;
-                        if (mLayoutNetError != null) {
-                            mLayoutNetError.setVisibility(View.VISIBLE);
-                        }
-                        if (mRootView != null) {
-                            mRootView.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        // 如下方案可在非微信内部WebView的H5页面中调出微信支付
-                        try {
-                            if (url.startsWith("weixin://wap/pay?")) {
-                                Intent intent = new Intent();
-                                intent.setAction(Intent.ACTION_VIEW);
-                                intent.setData(Uri.parse(url));
-                                startActivity(intent);
-                                return true;
-                            } else {
-                                Map<String, String> extraHeaders = new HashMap<String, String>();
-                                extraHeaders.put("Referer", "http://chinamrgift.com.cn");
-                                view.loadUrl(url, extraHeaders);
-                            }
-                        } catch (Exception e) {
-                            ToastUtils.showShort("请安装微信最新版!");
-                        }
-                        return super.shouldOverrideUrlLoading(view, url);
-                    }
-                })
                 .createAgentWeb()
                 .ready()
                 .go(url);
@@ -289,7 +202,9 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 firstTime = currentTimeMillis;
             } else {
                 SPUtil.setInt(getContext(), "turnask", 0);
-//                AppManager.getAppManager().AppExit(getContext(), false);
+                if(getActivity() != null) {
+                    getActivity().finish();
+                }
             }
         }
     }
@@ -412,11 +327,6 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @OnClick(R.id.layout_not_net)
-    public void onTvRefreshClicked() {
-        getWebView().loadUrl(url);
     }
 
     private void refresh() {
