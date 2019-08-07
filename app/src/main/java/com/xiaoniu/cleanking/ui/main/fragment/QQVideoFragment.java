@@ -89,7 +89,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.wx_img_camera;
+        return R.layout.qq_img_camera;
     }
 
     @Override
