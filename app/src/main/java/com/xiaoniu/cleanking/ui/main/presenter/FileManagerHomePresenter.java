@@ -72,7 +72,7 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                     @Override
                     public void accept(String[] strings) throws Exception {
                         //String数组第一个是剩余存储量，第二个是总存储量
-                        textView.setText("剩余：" + strings[0] + "G 总计：" + strings[1] + "G");
+                        textView.setText("已用：" + strings[0] + "GB/" + strings[1] + "GB");
                         int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));
                         circleProgressView.startAnimProgress(spaceProgress, 700);
                     }
