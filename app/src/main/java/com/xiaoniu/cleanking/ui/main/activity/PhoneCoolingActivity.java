@@ -122,6 +122,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     public static ArrayList<FirstJunkInfo> mRunningProcess;
     boolean isError = false;
 
+    /**
+     * 数字增加动画
+     */
+    ValueAnimator numberAnimator;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_cooling;
@@ -170,7 +175,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             public void run() {
                 initBottomLayout();
             }
-        },500);
+        },1000);
     }
 
     private void initBottomLayout() {
@@ -186,7 +191,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mProgressBar.setUpdateListener(new OnProgressUpdateListener() {
             @Override
             public void onProgressUpdate(float progress) {
-                mImagePoint.setRotation(progress);
+                if (mImagePoint != null) {
+                    mImagePoint.setRotation(progress);
+                }
             }
         });
         mProgressBar.setProgress(phoneTemperature);
@@ -199,13 +206,15 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * @param phoneTemperature
      */
     private void initAnimator(int phoneTemperature) {
-        ValueAnimator valueAnimator = ObjectAnimator.ofInt(0, phoneTemperature);
-        valueAnimator.setDuration(3000);
-        valueAnimator.addUpdateListener(animation -> {
+        numberAnimator = ObjectAnimator.ofInt(0, phoneTemperature);
+        numberAnimator.setDuration(3000);
+        numberAnimator.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
-            mTextTemperatureNumber.setText(String.valueOf(animatedValue));
+            if (mTextTemperatureNumber != null) {
+                mTextTemperatureNumber.setText(String.valueOf(animatedValue));
+            }
         });
-        valueAnimator.addListener(new Animator.AnimatorListener() {
+        numberAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -226,37 +235,45 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             }
         });
-        valueAnimator.start();
+        numberAnimator.start();
     }
 
     /**
      * 数字动画播放完后上移，布局高度缩小
      */
     public void setViewTrans() {
+        if (isDestroyed()) {
+            return;
+        }
         int bottom = mBgTitle.getBottom();
         mLayoutContentCool.setVisibility(VISIBLE);
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         new Handler().postDelayed(() -> {
-            ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
-            mBgTitle.setVisibility(VISIBLE);
-            alpha.setDuration(200);
-            alpha.start();
+            if(!isDestroyed()) {
+                ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
+                mBgTitle.setVisibility(VISIBLE);
+                alpha.setDuration(200);
+                alpha.start();
+            }
         }, 200);
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutContentCool.getLayoutParams();
         anim.addUpdateListener(animation -> {
-            int currentValue = (int) animation.getAnimatedValue();
-            rlp.topMargin = currentValue;
-            mLayoutContentCool.setLayoutParams(rlp);
+            rlp.topMargin = (int) animation.getAnimatedValue();
+            if (mLayoutContentCool != null) {
+                mLayoutContentCool.setLayoutParams(rlp);
+            }
         });
         anim.start();
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                mLayoutAnimCool.setVisibility(GONE);
+                if (mLayoutAnimCool != null) {
+                    mLayoutAnimCool.setVisibility(GONE);
+                }
             }
         });
     }
@@ -275,32 +292,33 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCoolView.getLayoutParams();
         anim.addUpdateListener(animation -> {
-            int currentValue = (int) animation.getAnimatedValue();
-            rlp.height = currentValue;
-            mLayoutCoolView.setLayoutParams(rlp);
+            rlp.height = (int) animation.getAnimatedValue();
+            if (mLayoutCoolView != null) {
+                mLayoutCoolView.setLayoutParams(rlp);
+            }
         });
         anim.start();
         mLayoutCoolView.setVisibility(VISIBLE);
+        //抢夺点击事件。。。
+        mLayoutCoolView.setOnClickListener(v -> {
+        });
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 startAnimation();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setViewFinishTrans();
-                    }
-                }, 3500);
+                new Handler().postDelayed(() -> setViewFinishTrans(), 3500);
             }
         });
     }
 
     private void startAnimation() {
-        mLottieAnimationView.useHardwareAcceleration();
-        mLottieAnimationView.setImageAssetsFolder("images");
-        mLottieAnimationView.setAnimation("data_cool.json");
-        mLottieAnimationView.playAnimation();
+        if (!isDestroyed()) {
+            mLottieAnimationView.useHardwareAcceleration();
+            mLottieAnimationView.setImageAssetsFolder("images");
+            mLottieAnimationView.setAnimation("data_cool.json");
+            mLottieAnimationView.playAnimation();
+        }
     }
 
 
@@ -308,6 +326,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * 清理动画播放完成
      */
     public void setViewFinishTrans() {
+        if (isDestroyed()) {
+            //页面关闭后，不进行动画
+            return;
+        }
         int bottom = mLayoutTitleBar.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
         int startHeight = DeviceUtils.getScreenHeight();
@@ -316,16 +338,16 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
         anim.addUpdateListener(animation -> {
-            int currentValue = (int) animation.getAnimatedValue();
-            rlp.topMargin = currentValue;
-            mLayoutCleanFinish.setLayoutParams(rlp);
+            rlp.topMargin = (int) animation.getAnimatedValue();
+            if (mLayoutCleanFinish != null) {
+                mLayoutCleanFinish.setLayoutParams(rlp);
+            }
         });
         anim.start();
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-
             }
         });
     }
@@ -333,6 +355,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     public void initWebView() {
 //        String url = ApiModule.Base_H5_Host;
         String url = ApiModule.Base_H5_Host + "/activity_page.html";
+        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
@@ -390,13 +413,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
-        StatisticsUtils.trackClick("Operating_components_click", "\"手机降温\"返回", "tools_page", "temperature_result_display_page");
+        StatisticsUtils.trackClick("Cell_phone_cooling_return_click", "\"手机降温\"返回", "tools_page", "temperature_result_display_page");
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Operating_components_click", "\"手机降温\"返回", "tools_page", "temperature_result_display_page");
+        StatisticsUtils.trackClick("Cell_phone_cooling_return_click", "\"手机降温\"返回", "tools_page", "temperature_result_display_page");
         super.onBackPressed();
     }
 
@@ -528,5 +551,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     protected void onStart() {
         super.onStart();
         StatisticsUtils.trackClick("Cell_phone_cooling_view_page", "\"手机降温\"浏览", "tools_page", "temperature_result_display_page");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (numberAnimator != null && numberAnimator.isStarted()) {
+            //关闭页面，取消动画
+            numberAnimator.cancel();
+        }
     }
 }

@@ -348,4 +348,20 @@ public class NoClearSPHelper {
     public String getOperatorToken() {
         return mSPrefs.getString(SpConstants.OPERATOR_TOKEN, "");
     }
+
+    /**
+     * 是否上传imei
+     * @return
+     */
+    public boolean isUploadImei() {
+        return mSPrefs.getBoolean(SpConstants.OPERATOR_IS_UPLOAD_IMEI, false);
+    }
+
+    /**
+     * 设置上传imei状态
+     * @param isUpload
+     */
+    public void setUploadImeiStatus(boolean isUpload) {
+        mSPrefs.edit().putBoolean(SpConstants.OPERATOR_IS_UPLOAD_IMEI, isUpload).apply();
+    }
 }
