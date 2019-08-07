@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -122,6 +123,12 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     public static ArrayList<FirstJunkInfo> mRunningProcess;
     boolean isError = false;
 
+    public static final int REQUEST_CODE_HARDWARE = 10001;
+
+    private int position_bluetooth = 2;
+    private int position_location = 3;
+    private int position_wifi = 4;
+
     /**
      * 数字增加动画
      */
@@ -160,7 +167,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         mPresenter.getRunningProcess();
 
-        mPresenter.getHardwareInfo();
+        mPresenter.getHardwareInfo(false);
 
         initCoolAnimation(phoneTemperature);
 
@@ -445,7 +452,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
-        startActivity(RouteConstants.HARDWARE_INFO_ACTIVITY, bundle);
+        startActivityForResult(RouteConstants.HARDWARE_INFO_ACTIVITY, bundle,REQUEST_CODE_HARDWARE,false);
     }
 
     @OnClick(R.id.text_cool_now)
@@ -497,8 +504,15 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      *
      * @param hardwareInfo
      */
-    public void showHardwareInfo(HardwareInfo hardwareInfo) {
+    public void showHardwareInfo(HardwareInfo hardwareInfo,boolean isRefresh) {
         mHardwareInfo = hardwareInfo;
+
+        if (isRefresh) {
+            int childCount = mLayoutBottom.getChildCount();
+            for (int i = 1; i < childCount; i++) {
+                mLayoutBottom.removeView(mLayoutBottom.getChildAt(1));
+            }
+        }
 
         int totalHardware = 1;
         //电池
@@ -514,6 +528,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             totalHardware += 1;
         } else {
             mLayoutBottom.addView(generateItem(R.mipmap.icon_bluetooth_not, "蓝牙"));
+            position_bluetooth = totalHardware;
         }
 
         //GPS
@@ -522,6 +537,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             totalHardware += 1;
         } else {
             mLayoutBottom.addView(generateItem(R.mipmap.icon_gps_not, "GPS"));
+            position_location = totalHardware;
         }
 
         //WIFI
@@ -530,6 +546,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             totalHardware += 1;
         } else {
             mLayoutBottom.addView(generateItem(R.mipmap.icon_wifi_not, "WIFI"));
+            position_wifi = totalHardware;
         }
 
         mHardwareInfo.setSize(totalHardware);
@@ -559,6 +576,15 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         if (numberAnimator != null && numberAnimator.isStarted()) {
             //关闭页面，取消动画
             numberAnimator.cancel();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_HARDWARE) {
+            //部件关闭回调
+            mPresenter.getHardwareInfo(true);
         }
     }
 }
