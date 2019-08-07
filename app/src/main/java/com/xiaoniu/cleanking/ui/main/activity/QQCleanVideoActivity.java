@@ -77,13 +77,13 @@ public class QQCleanVideoActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("qq_picture_Cleaning_view_page","视频清理页面浏览");
+        NiuDataAPI.onPageStart("qq_video_cleaning_view_page","视频清理页面浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("qq_picture_Cleaning_view_page","视频清理页面浏览");
+        NiuDataAPI.onPageEnd("qq_video_cleaning_view_page","视频清理页面浏览");
 
     }
 }
