@@ -57,6 +57,7 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.http.POST;
 
 /**
  * 微信清理首页
@@ -214,6 +215,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("qq_ceaning_view_page", "qq清理页面浏览");
+        mPresenter.getImgQQ();
+        mPresenter.getVideoFiles();
         tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
         tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
     }
@@ -251,8 +254,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         getSelectCacheSize();
 
 
-        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.h.getTotalSize()));
-        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.i.getTotalSize()));
+        //tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.h.getTotalSize()));
+        //tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.i.getTotalSize()));
         tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(az)));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(aB)));
         String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag));
@@ -334,6 +337,23 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         }
     }
 
+
+
+    public void updateQQImgSize(String size){
+        if(TextUtils.isEmpty(size) || "0".equals(size)){
+            tvPicSize.setText("");
+        }else {
+            tvPicSize.setText(size);
+        }
+    }
+
+    public void  updateVideoSize(String size){
+        if(TextUtils.isEmpty(size) || "0".equals(size)){
+            tvVideoSize.setText("");
+        }else {
+            tvVideoSize.setText(size);
+        }
+    }
     /**
      * 获取选中删除的元素
      *

@@ -150,6 +150,7 @@ public class CleanAnimView extends RelativeLayout {
 
     public void initWebView() {
         String url = ApiModule.Base_H5_Host + "/activity_page.html";
+        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);

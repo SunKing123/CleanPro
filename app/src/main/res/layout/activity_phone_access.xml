@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.design.widget.AppBarLayout
@@ -80,6 +81,7 @@
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             app:contentInsetStart="0dp"
+            android:descendantFocusability="blocksDescendants"
             app:layout_collapseMode="pin">
 
             <LinearLayout
@@ -129,7 +131,12 @@
         android:id="@+id/n_scroll_view"
         android:fillViewport="true"
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay"
+        android:focusable="true"
+        android:touchscreenBlocksFocus="true"
+        android:focusableInTouchMode="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <FrameLayout
             android:layout_width="match_parent"
@@ -154,8 +161,9 @@
                 android:id="@+id/web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:focusable="false"
+                android:touchscreenBlocksFocus="false"
+                android:focusableInTouchMode="false"
                 android:visibility="gone" />
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
