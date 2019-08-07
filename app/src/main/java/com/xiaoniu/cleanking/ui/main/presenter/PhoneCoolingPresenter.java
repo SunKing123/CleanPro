@@ -84,7 +84,7 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
     /**
      * 获取硬件信息
      */
-    public void getHardwareInfo() {
+    public void getHardwareInfo(boolean isRefresh) {
         //电池信息
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
@@ -112,7 +112,7 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
         //CPU信息
         getCpuInfo();
 
-        mView.showHardwareInfo(mHardwareInfo);
+        mView.showHardwareInfo(mHardwareInfo,isRefresh);
     }
 
     /**

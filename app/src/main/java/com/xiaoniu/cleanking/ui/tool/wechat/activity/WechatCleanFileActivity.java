@@ -20,6 +20,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanFilePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -102,6 +104,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
+            StatisticsUtils.trackClick("receive_files_return_click", "接收文件返回点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
@@ -138,7 +141,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             listFAll.addAll(listF3);
             listFAll.addAll(listF4);
 
-
+            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
             mPresenter.alertBanLiveDialog(WechatCleanFileActivity.this, listFAll.size(), new ImageListPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
@@ -281,6 +284,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             @Override
             public void onClick(View v) {
                 if (!recycleViewToday.isComputingLayout()) {
+                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
                     fileAdapterToday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
@@ -293,6 +297,17 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("wechat_receive_files_cleaning_view_page", "文件清理页面浏览");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("wechat_receive_files_cleaning_view_page", "文件清理页面浏览");
     }
 
     public void isSelectAllData() {
