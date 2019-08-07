@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 
 import java.io.File;
 
@@ -47,8 +48,12 @@ public class IntentDocumentUtil {
     public static Intent getTextFileIntent(String param, boolean paramBoolean) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         if (paramBoolean) {
             Uri uri1 = Uri.parse(param);
             intent.setDataAndType(uri1, "text/plain");
@@ -67,15 +72,7 @@ public class IntentDocumentUtil {
         intent.setDataAndType(uri, "application/pdf");
         return intent;
     }
-    // android获取一个用于打开图片文件的intent
-    public static Intent getPicturefFileIntent(String param) {
-        Intent intent = new Intent("android.intent.action.VIEW");
-        intent.addCategory("android.intent.category.DEFAULT");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = Uri.fromFile(new File(param));
-        intent.setDataAndType(uri, "image/*");
-        return intent;
-    }
+
     // android获取一个用于打开压缩包的intent （手机需安装能打开压缩文件的相关软件）
     public static Intent getZipRarFileIntent(String param) {
         Intent intent = new Intent("android.intent.action.VIEW");
@@ -85,5 +82,4 @@ public class IntentDocumentUtil {
         intent.setDataAndType(uri, "application/x-gzip");
         return intent;
     }
-
 }

@@ -81,11 +81,15 @@ public class QQImgPresenter extends RxPresenter<QQImgFragment, CleanMainModel> {
     private void getImgCamera() {
 
         String pathLocal = wxRootPath + "/diskcache";
+        String pathLocal2 = wxRootPath + "/photo";
+        String pathLocal3=wxRootPath+"/thumb";
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
                 scanAllImgCamera(pathLocal);
+                scanAllImgCamera(pathLocal2);
+                scanAllImgCamera(pathLocal3);
                 emitter.onNext("");
                 emitter.onComplete();
             }
