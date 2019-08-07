@@ -128,7 +128,9 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     @BindView(R.id.line_smed)
     LinearLayout lineSmed;
     ObjectAnimator objectAnimatorScanIng;
-
+    boolean scanImgOver = false; //图片是否扫描完毕
+    boolean scanVideoOver = false; //视频是否扫描完毕
+    boolean scanGarbageOver = false; //垃圾是否扫描完毕
     //qq图片
     private ArrayList<FileTitleEntity> mListImg = new ArrayList<>();
     //qq视频
@@ -160,6 +162,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                 i();
             }
         });
+        mPresenter.getImgQQ();
+        mPresenter.getVideoFiles();
 
         objectAnimatorScanIng = mPresenter.setScaningAnim(ivScanFrame);
     }
@@ -220,8 +224,6 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("qq_ceaning_view_page", "qq清理页面浏览");
-        mPresenter.getImgQQ();
-        mPresenter.getVideoFiles();
         tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
         tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
     }
@@ -251,17 +253,42 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         return listAllCache;
     }
 
-    public void getScanResult() {
+    //扫描到图片文件
+    public void updateQQImgSize(String size) {
+        if (TextUtils.isEmpty(size) || "0".equals(size)) {
+            tvPicSize.setText("");
+        } else {
+            tvPicSize.setText(size);
+        }
+        scanImgOver = true;
+        updateScanResult();
+    }
+
+    //扫描到视频文件
+    public void updateVideoSize(String size) {
+        if (TextUtils.isEmpty(size) || "0".equals(size)) {
+            tvVideoSize.setText("");
+        } else {
+            tvVideoSize.setText(size);
+        }
+        scanVideoOver = true;
+        updateScanResult();
+    }
+
+    //扫描到缓存垃圾、语音、文件
+    public void getScanGabageResult() {
         if (!isFirst) return;
         isFirst = false;
-        setScanStatus(false);
+        scanGarbageOver = true;
+        updateScanResult();
+    }
 
+    //开始播放动画显示扫描结果等
+    public void updateScanResult() {
+        if (!scanImgOver || !scanVideoOver || !scanGarbageOver) return;
+        setScanStatus(false);
         tvWxgabageSize.setText("已选" + CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag)));
         getSelectCacheSize();
-
-
-        //tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.h.getTotalSize()));
-        //tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.i.getTotalSize()));
         tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(az)));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(aB)));
         String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag));
@@ -290,7 +317,6 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                 mPresenter.setViewHeightAnim(relGasize, relSelects, tv_ql, iv_dun, DeviceUtils.dip2px(263), DeviceUtils.dip2px(123));
             }
         });
-
     }
 
     //是否在扫描中状态
@@ -345,23 +371,6 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         }
     }
 
-
-    public void updateQQImgSize(String size) {
-        if (TextUtils.isEmpty(size) || "0".equals(size)) {
-            tvPicSize.setText("");
-        } else {
-            tvPicSize.setText(size);
-        }
-    }
-
-    public void updateVideoSize(String size) {
-        if (TextUtils.isEmpty(size) || "0".equals(size)) {
-            tvVideoSize.setText("");
-        } else {
-            tvVideoSize.setText(size);
-        }
-    }
-
     /**
      * 获取选中删除的元素
      *
@@ -389,7 +398,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getScanResult();
+                        getScanGabageResult();
                     }
                 }, 300);
                 Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +48,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
@@ -127,7 +129,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new Javascript(), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -179,21 +181,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
-    public class Javascript {
-        @JavascriptInterface
-        public void toOtherPage(String url) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constant.URL, url);
-            bundle.putString(Constant.Title, "");
-            bundle.putBoolean(Constant.NoTitle, false);
-            startActivity(UserLoadH5Activity.class, bundle);
-        }
 
-        @JavascriptInterface
-        public void onTitleClick(String id, String name) {
-            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
-        }
-    }
 
 
     @Override
