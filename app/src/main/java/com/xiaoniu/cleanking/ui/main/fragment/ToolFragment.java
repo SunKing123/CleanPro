@@ -103,8 +103,9 @@ public class ToolFragment extends SimpleFragment {
 
             mTvChatGbTitle.setVisibility(View.VISIBLE);
             mTvChatSubTitle.setVisibility(View.VISIBLE);
-            mTvChatSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSize));
-//            mTvDefChatSubTitleGb.setVisibility(View.VISIBLE);
+
+            mTvChatSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeTwo(wxCatheSize,mTvDefChatSubTitleGb));
+            mTvDefChatSubTitleGb.setVisibility(View.VISIBLE);
         }else {
             mTvChatTitle.setVisibility(View.VISIBLE);
             mTvDefChatTitle.setVisibility(View.VISIBLE);
@@ -119,8 +120,8 @@ public class ToolFragment extends SimpleFragment {
 
             mTvQqGbTitle.setVisibility(View.VISIBLE);
             mTvQqSubTitle.setVisibility(View.VISIBLE);
-            mTvQqSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeOne(qqCatheSize));
-//            mTvDefQqSubTitleGb.setVisibility(View.VISIBLE);
+            mTvQqSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeTwo(qqCatheSize,mTvDefChatSubTitleGb));
+            mTvDefQqSubTitleGb.setVisibility(View.VISIBLE);
         }else {
             mTvQqTitle.setVisibility(View.VISIBLE);
             mTvDefQqTitle.setVisibility(View.VISIBLE);
