@@ -169,7 +169,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         } else {
             mTitleBar.setVisibility(View.VISIBLE);
         }
-        tvTitle.setText(title);
+        tvTitle.setText("悟空清理");
         //判断是否是刘海屏
 //        boolean haveLiuhai = NotchUtils.hasNotchScreen(this);
         if (isParam) {
@@ -209,7 +209,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(UserLoadH5Activity.this.title) && tvTitle != null) {
-                    tvTitle.setText(title);
+//                    tvTitle.setText(title);
                 }
             }
         });
@@ -291,7 +291,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                 cancelLoadingDialog();
                 String title = view.getTitle();
                 if (!TextUtils.isEmpty(title) && TextUtils.isEmpty(UserLoadH5Activity.this.title) && tvTitle != null) {
-                    tvTitle.setText(title);
+//                    tvTitle.setText(title);
                 }
                 if (!isError) {
                     if (mLayoutNetError != null) {
