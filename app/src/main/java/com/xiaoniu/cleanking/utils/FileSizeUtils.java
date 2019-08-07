@@ -19,7 +19,7 @@ public class FileSizeUtils {
         }
         final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-        DecimalFormat decimalFormat=new DecimalFormat("#0");
+        DecimalFormat decimalFormat=new DecimalFormat("#0.0");
         decimalFormat.setRoundingMode(RoundingMode.HALF_DOWN);
         return decimalFormat.format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 

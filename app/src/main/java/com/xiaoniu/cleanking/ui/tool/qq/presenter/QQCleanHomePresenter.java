@@ -6,6 +6,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -14,7 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
@@ -22,7 +27,9 @@ import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
+import com.xiaoniu.cleanking.utils.DateUtils;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
@@ -50,6 +57,9 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
     private final RxAppCompatActivity mActivity;
     @Inject
     NoClearSPHelper mSPHelper;
+
+
+
 
 
     @Inject
@@ -251,6 +261,148 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
                 listTemp.add(QQUtil.fileList.get(i));
         }
         return listTemp;
+    }
+
+
+    private  long mQQImgFileSize=0;
+    private  long mQQVideoFileSize=0L;
+
+
+
+    /**
+     * 获取QQ聊天图片
+     */
+    public void getImgQQ() {
+        mQQImgFileSize=0L;
+        String wxRootPath = Environment.getExternalStorageDirectory().getPath() + "/tencent/MobileQQ";
+        String pathLocal = wxRootPath + "/diskcache";
+        String pathLocal2 = wxRootPath + "/photo";
+        String pathLocal3=wxRootPath+"/thumb";
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+
+                scanAllImgCamera(pathLocal);
+                scanAllImgCamera(pathLocal2);
+                scanAllImgCamera(pathLocal3);
+                emitter.onNext("");
+                emitter.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        mView.updateQQImgSize(FileSizeUtils.formatFileSize(mQQImgFileSize));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.cancelLoadingDialog();
+                    }
+                });
+
+    }
+
+    /**
+     * 获取相机视频
+     */
+    public void getVideoFiles() {
+        mQQVideoFileSize=0L;
+        String wxRootPath = Environment.getExternalStorageDirectory().getPath() + "/tencent/MobileQQ";
+        String pathLocal = wxRootPath + "/shortvideo";
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+
+                scanAllVideoCamera(pathLocal);
+                emitter.onNext("");
+                emitter.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        mView.updateVideoSize(FileSizeUtils.formatFileSize(mQQVideoFileSize));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.cancelLoadingDialog();
+                    }
+                });
+
+    }
+    /**
+     * 扫描聊天中的视频
+     *
+     * @param path
+     */
+    private void scanAllVideoCamera(String path) {
+        File fileRoot = new File(path);
+        if (fileRoot.isDirectory()) {
+            File[] files = fileRoot.listFiles();
+            if (null != files) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        scanAllVideoCamera(path + "/" + file.getName());
+                    } else if (file.getName().endsWith(".mp4") ) {
+                        FileChildEntity fileChildEntity = new FileChildEntity();
+                        fileChildEntity.name = file.getName();
+                        fileChildEntity.path = file.getPath();
+                        fileChildEntity.size = file.length();
+                        fileChildEntity.fileType=1;
+                        mQQVideoFileSize+=file.length();
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 扫描聊天中的图片，包括缩略图
+     *
+     * @param path
+     */
+    private void scanAllImgCamera(String path) {
+        File fileRoot = new File(path);
+        if (fileRoot.isDirectory()) {
+            File[] files = fileRoot.listFiles();
+            if (null != files) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        scanAllImgCamera(path + "/" + file.getName());
+                    } else {
+                        FileChildEntity fileChildEntity = new FileChildEntity();
+                        fileChildEntity.name = file.getName();
+                        fileChildEntity.path = file.getPath();
+                        fileChildEntity.size = file.length();
+                        mQQImgFileSize+=file.length();
+
+                    }
+                }
+            }
+        }
     }
 
 }
