@@ -18,6 +18,9 @@ import com.xiaoniu.cleanking.ui.main.event.EmptyEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
+import com.xiaoniu.cleanking.utils.NiuDataEvent;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +71,7 @@ public class WXCleanImgActivity extends BaseActivity{
     View mViewLineImgDownload;
     @BindView(R.id.ll_img_save_list)
     LinearLayout llImgSaveList;
+
 
 
     //
@@ -164,6 +168,8 @@ public class WXCleanImgActivity extends BaseActivity{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
+                StatisticsUtils.trackClick("Chat_pictures_Return_click","\"聊天图片返回\"点击"
+                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
                 finish();
                 break;
             case R.id.ll_img_chat:
@@ -182,9 +188,30 @@ public class WXCleanImgActivity extends BaseActivity{
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        StatisticsUtils.trackClick("Chat_pictures_Return_click","\"聊天图片返回\"点击"
+                ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("wechat_picture_Cleaning_view_page","图片清理页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("wechat_picture_Cleaning_view_page","图片清理页面浏览");
+
     }
 
     @Override
@@ -197,5 +224,7 @@ public class WXCleanImgActivity extends BaseActivity{
     public void emptyEvent(EmptyEvent emptyEvent) {
 
     }
+
+
 
 }
