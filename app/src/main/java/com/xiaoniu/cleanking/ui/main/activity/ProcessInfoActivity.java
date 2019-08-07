@@ -62,13 +62,13 @@ public class ProcessInfoActivity extends SimpleActivity {
 
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
-        StatisticsUtils.trackClick("Running_applications_click","\"运行的应用\"返回","temperature_result_display_page","Running_applications_page ");
+        StatisticsUtils.trackClick("Running_application_return_click","\"运行的应用\"返回","temperature_result_display_page","Running_applications_page ");
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Running_applications_click","\"运行的应用\"返回","temperature_result_display_page","Running_applications_page ");
+        StatisticsUtils.trackClick("Running_application_return_click","\"运行的应用\"返回","temperature_result_display_page","Running_applications_page ");
         super.onBackPressed();
     }
 

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,14 +20,13 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.leon.channel.helper.ChannelReaderUtil;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
-import com.leon.channel.helper.ChannelReaderUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,6 +55,7 @@ import okhttp3.RequestBody;
 
 public class AndroidUtil {
     private static String mac = "";
+    private static String sImei;
 
     /**
      * 获取sdk版本
@@ -490,4 +491,41 @@ public class AndroidUtil {
     public static String getClientId() {
         return implPreferencesHelper.getClientId();
     }
+
+    /**
+     * 埋点要用
+     * @return
+     */
+    @SuppressLint({"MissingPermission"})
+    public static String getNiuDeviceID() {
+        Context context = AppApplication.getInstance();
+        if (!TextUtils.isEmpty(sImei)) {
+            return sImei;
+        } else {
+            try {
+                TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    sImei = tm.getImei();
+                } else if (Build.VERSION.SDK_INT >= 23) {
+                    sImei = tm.getDeviceId(0);
+                } else {
+                    sImei = tm.getDeviceId();
+                }
+                return sImei;
+            } catch (Exception var2) {
+                return sImei = "";
+            }
+        }
+    }
+
+    private static String getAndroidId(Context context) {
+        String androidId = "unknown";
+        try {
+            androidId = Settings.Secure.getString(context.getContentResolver(),
+                    "android_id");
+        } catch (Exception e) {
+        }
+        return androidId != null && androidId.length() != 0 ? androidId : "unknown";
+    }
+
 }
