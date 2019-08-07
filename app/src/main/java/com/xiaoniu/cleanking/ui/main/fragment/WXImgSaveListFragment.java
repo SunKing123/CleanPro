@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -475,6 +476,16 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     public void updateImgSaveList(List<FileTitleEntity> lists) {
 
         mAdapter.modifyData(lists);
+    }
+
+
+    /**
+     * 更新系统相册
+     * @param file
+     */
+    public void updateDIM(File file){
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+
     }
 
 

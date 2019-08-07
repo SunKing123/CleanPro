@@ -73,7 +73,7 @@
                 android:layout_height="@dimen/dimen_36dp"
                 android:layout_gravity="center"
                 android:background="@drawable/bg_btn_save"
-                android:text="保存到手机"
+                android:text="导出到相册"
                 android:textColor="@color/color_06C581" />
 
         </LinearLayout>
