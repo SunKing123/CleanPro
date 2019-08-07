@@ -244,6 +244,8 @@ public class WXCleanSaveListPresenter extends RxPresenter<WXImgSaveListFragment,
         } finally {
             input.close();
             output.close();
+            //更新相册
+            mView.updateDIM(dest);
         }
     }
 

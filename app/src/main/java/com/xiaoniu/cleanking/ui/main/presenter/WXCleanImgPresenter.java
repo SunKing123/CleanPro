@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 
@@ -312,6 +313,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
                     File fileCopy=new File(path,file.getName());
                     copyFileUsingFileStreams(file,fileCopy,emitter);
 
+
                 }
                 emitter.onComplete();
             }
@@ -370,6 +372,8 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
         }finally {
             input.close();
             output.close();
+            //更新相册
+            mView.updateDIM(dest);
         }
     }
     /**

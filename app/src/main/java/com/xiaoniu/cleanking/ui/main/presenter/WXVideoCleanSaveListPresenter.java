@@ -235,6 +235,7 @@ public class WXVideoCleanSaveListPresenter extends RxPresenter<WXVideoSaveListFr
         }finally {
             input.close();
             output.close();
+            mView.updateDIM(dest);
         }
     }
 

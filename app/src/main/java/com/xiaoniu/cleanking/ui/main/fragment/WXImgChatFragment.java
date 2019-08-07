@@ -3,7 +3,10 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -496,6 +499,15 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         mAdapter.modifyData(lists);
     }
 
+
+    /**
+     * 更新系统相册
+     * @param file
+     */
+    public void updateDIM(File file){
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
