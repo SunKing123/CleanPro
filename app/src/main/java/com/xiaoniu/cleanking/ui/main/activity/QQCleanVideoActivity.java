@@ -9,6 +9,8 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CommonFragmentPageAdapter;
 import com.xiaoniu.cleanking.ui.main.fragment.QQVideoFragment;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,29 @@ public class QQCleanVideoActivity extends BaseActivity {
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.img_back) {
+            StatisticsUtils.trackClick("qq_video_return_click","\"qq视频返回\"点击"
+                    ,"qq_cleaning_page","qq_video_cleaning_page");
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        StatisticsUtils.trackClick("qq_video_return_click","\"qq视频返回\"点击"
+                ,"qq_cleaning_page","qq_video_cleaning_page");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("qq_picture_Cleaning_view_page","视频清理页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("qq_picture_Cleaning_view_page","视频清理页面浏览");
+
     }
 }

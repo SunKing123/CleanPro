@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <ScrollView
@@ -17,9 +16,10 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_top_layout"
                 android:layout_width="match_parent"
                 android:layout_height="227dp"
-                android:background="@drawable/bg_big_home"
+                android:background="#06C581"
                 android:orientation="vertical">
 
                 <TextView
@@ -33,14 +33,23 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:padding="@dimen/dimen_24dp"
                     android:layout_gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_52dp"
                     android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="108dp"
+                        android:layout_height="122dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dimen_5dp"
+                        android:src="@mipmap/icon_wjhome"
+                        app:layout_constraintRight_toRightOf="parent" />
 
                     <FrameLayout
                         android:id="@+id/frame_layout"
                         android:layout_marginTop="@dimen/dimen_10dp"
                         android:layout_width="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
                         android:layout_height="wrap_content">
 
                         <com.xiaoniu.cleanking.widget.CircleProgressView
@@ -86,7 +95,7 @@
                         android:layout_toRightOf="@id/frame_layout"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_below="@id/tv_phone_space"
-                        android:text="剩余:26.65G  总计:32G"/>
+                        android:text="剩余   26.65G  总计   32G"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -95,145 +104,162 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginRight="@dimen/dimen_4dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginBottom="10dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    card_view:cardCornerRadius="15dp"
-                    card_view:cardElevation="5dp"
-                    card_view:contentPadding="5dp"
-                    android:layout_height="wrap_content">
-
                 <RelativeLayout
                     android:id="@+id/rl_chat"
-                    android:layout_width="match_parent"
-                    android:gravity="center"
-                    android:layout_height="86dp">
+                    android:background="@mipmap/tool_phone_h_bg"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="@dimen/dimen_11dp"
+                    android:layout_marginLeft="@dimen/dimen_11dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_icon_chat"
-                        android:layout_width="53dp"
-                        android:layout_height="53dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@mipmap/icon_chat" />
 
                     <TextView
                         android:id="@+id/tv_chat_title"
                         android:layout_width="wrap_content"
-                        android:text="微信清理"
-                        android:textSize="@dimen/dimen_15dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginTop="@dimen/dimen_5dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
+                        android:text="微信清理"
                         android:textColor="@color/color_333333"
-                        android:layout_height="wrap_content" />
+                        android:textSize="@dimen/dimen_14dp" />
 
+                    <TextView
+                        android:id="@+id/tv_def_chat_title"
+                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/dimen_11dp"
+                        android:text="清理聊天垃圾"
+                        android:layout_below="@id/tv_chat_title"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="bottom"
+                        android:textColor="@color/color_999999"
+                        android:layout_toRightOf="@id/iv_icon_chat"
+                        android:layout_height="wrap_content" />
                     <TextView
                         android:id="@+id/tv_chat_subtitle"
                         android:layout_width="wrap_content"
-                        android:textColor="@color/color_06C581"
-                        android:layout_toRightOf="@id/iv_icon_chat"
-                        android:layout_below="@id/tv_chat_title"
                         android:layout_height="@dimen/dimen_28dp"
-                        android:gravity="bottom"
-                        android:layout_marginTop="4dp"
-                        android:textSize="@dimen/dimen_20dp"
+                        android:layout_below="@id/tv_chat_title"
                         android:layout_marginLeft="@dimen/dimen_16dp"
-                        android:text="1.38"/>
+                        android:layout_marginTop="4dp"
+                        android:layout_toRightOf="@id/iv_icon_chat"
+                        android:gravity="bottom"
+                        android:text="1.38"
+                        android:textColor="@color/color_06C581"
+                        android:visibility="gone"
+                        android:textSize="@dimen/dimen_20dp" />
+
                     <TextView
                         android:layout_width="wrap_content"
-                        android:textColor="@color/color_06C581"
-                        android:layout_toRightOf="@id/tv_chat_subtitle"
-                        android:layout_below="@id/tv_chat_title"
                         android:layout_height="@dimen/dimen_28dp"
+                        android:layout_below="@id/tv_chat_title"
                         android:layout_marginTop="4dp"
+                        android:layout_toRightOf="@id/tv_chat_subtitle"
                         android:gravity="bottom"
-                        android:textSize="@dimen/dimen_18dp"
-                        android:text="GB"/>
+                        android:text="GB"
+                        android:visibility="gone"
+                        android:textColor="@color/color_06C581"
+                        android:textSize="@dimen/dimen_17dp" />
                 </RelativeLayout>
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginRight="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:layout_marginLeft="@dimen/dimen_5dp"
-                    android:layout_marginBottom="10dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    card_view:cardCornerRadius="15dp"
-                    card_view:cardElevation="5dp"
-                    card_view:contentPadding="5dp"
-                    android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:id="@+id/rl_qq"
-                    android:layout_width="match_parent"
                     android:gravity="center"
-                    android:layout_height="86dp">
+                    android:layout_width="0dp"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/dimen_11dp"
+                    android:background="@mipmap/tool_phone_h_bg"
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:id="@+id/iv_icon_qq"
-                        android:layout_width="53dp"
+                        android:layout_width="48dp"
                         android:src="@mipmap/icon_qq"
-                        android:layout_height="53dp" />
+                        android:layout_height="48dp" />
 
                     <TextView
                         android:id="@+id/tv_qq_title"
                         android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="QQ清理"
-                        android:textSize="@dimen/dimen_15dp"
+                        android:visibility="gone"
+                        android:textSize="@dimen/dimen_14dp"
                         android:layout_marginLeft="@dimen/dimen_16dp"
                         android:layout_toRightOf="@id/iv_icon_qq"
                         android:textColor="@color/color_333333"
                         android:layout_height="wrap_content" />
 
+                    <TextView
+                        android:id="@+id/tv_qq_gb_title"
+                        android:layout_width="wrap_content"
+                        android:text="QQ清理"
+                        android:textSize="@dimen/dimen_14dp"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_toRightOf="@id/iv_icon_qq"
+                        android:textColor="@color/color_333333"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_def_qq_title"
+                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/dimen_11dp"
+                        android:text="清理聊天垃圾"
+                        android:layout_below="@id/tv_qq_title"
+                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginTop="4dp"
+                        android:visibility="gone"
+                        android:gravity="bottom"
+                        android:textColor="@color/color_999999"
+                        android:layout_toRightOf="@id/iv_icon_qq"
+                        android:layout_height="wrap_content" />
                     <TextView
                         android:id="@+id/tv_qq_subtitle"
                         android:layout_width="wrap_content"
                         android:textColor="@color/color_06C581"
                         android:layout_toRightOf="@id/iv_icon_qq"
-                        android:layout_below="@id/tv_qq_title"
+                        android:layout_below="@id/tv_qq_gb_title"
                         android:layout_height="@dimen/dimen_28dp"
                         android:textSize="@dimen/dimen_20dp"
-                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:layout_marginTop="@dimen/dimen_4dp"
                         android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:gravity="bottom"
                         android:text="2.45"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:textColor="@color/color_06C581"
                         android:layout_toRightOf="@id/tv_qq_subtitle"
-                        android:layout_below="@id/tv_qq_title"
+                        android:layout_below="@id/tv_qq_gb_title"
                         android:layout_height="@dimen/dimen_28dp"
                         android:layout_marginTop="4dp"
                         android:gravity="bottom"
-                        android:textSize="@dimen/dimen_18dp"
+                        android:textSize="@dimen/dimen_17dp"
                         android:text="GB"/>
                 </RelativeLayout>
-                </android.support.v7.widget.CardView>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_5dp"
                 android:orientation="horizontal"
                 android:weightSum="3">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0px"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    card_view:cardCornerRadius="15dp"
-                    card_view:cardElevation="2dp"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/ll_phone_speed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/dimen_11dp"
+                    android:layout_height="147dp"
+                    android:background="@mipmap/tool_phone_v_bg"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -261,21 +287,15 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="内存占用69%"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="@dimen/dimen_10dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    card_view:cardCornerRadius="15dp"
-                    card_view:cardElevation="2dp"
-                    android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:id="@+id/text_cooling"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:background="@mipmap/tool_phone_v_bg"
+                    android:layout_height="147dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -303,23 +323,16 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="当前温度正常"
                         android:textColor="#999999"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
-                </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="@dimen/dimen_10dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    card_view:cardCornerRadius="15dp"
-                    card_view:cardElevation="2dp"
-                    android:layout_marginRight="@dimen/dimen_16dp"
-                    android:layout_height="wrap_content">
                 <LinearLayout
                     android:id="@+id/text_phone_thin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:background="@mipmap/tool_phone_v_bg"
+                    android:layout_height="147dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -347,9 +360,8 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="视频软件清理"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
-                </android.support.v7.widget.CardView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

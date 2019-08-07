@@ -20,6 +20,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanAudPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
+            StatisticsUtils.trackClick("wechat_voice_return_click", "微信语音返回点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
@@ -66,7 +69,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
                 if (listData.get(i).getIsSelect())
                     listF.add(audAdapter.getListImage().get(i));
             }
-
+            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
 
             mPresenter.alertBanLiveDialog(WechatCleanAudActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                 @Override
@@ -142,6 +145,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
             @Override
             public void onClick(View v) {
                 if (!recycle_view.isComputingLayout()) {
+                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
                     audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
@@ -180,5 +184,16 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
     @Override
     public void netError() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("wechat_voice_cleaning_view_page", "语音清理页面浏览");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("wechat_voice_cleaning_view_page", "语音清理页面浏览");
     }
 }

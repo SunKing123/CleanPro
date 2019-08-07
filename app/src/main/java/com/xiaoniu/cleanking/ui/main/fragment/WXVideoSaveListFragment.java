@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import java.io.File;
@@ -128,6 +129,8 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
                 mLLCheckAll.setSelected(mIsCheckAll);
                 setSelectStatus(mIsCheckAll);
                 setDelBtnSize();
+                StatisticsUtils.trackClick("video_cleaning_all_election_click","\"全选\"按钮点击"
+                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
             }
         });
 
@@ -432,7 +435,8 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
         int ids = view.getId();
         switch (ids) {
             case R.id.btn_del:
-
+                StatisticsUtils.trackClick("video_cleaning_delete_click","\"删除\"按钮点击"
+                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
                 String title = String.format("确定删除这%s个视频?", getSelectSize());
                 String content=getString(R.string.msg_del_video);
                 DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title,content);
@@ -454,6 +458,8 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
 
                 break;
             case R.id.btn_save:
+                StatisticsUtils.trackClick("Save_to_cell_phone_click","\"保存到手机\"点击"
+                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
                 List<File> lists = getSelectFiles();
                 if (lists.size() == 0) {
                     ToastUtils.show("未选中照片");

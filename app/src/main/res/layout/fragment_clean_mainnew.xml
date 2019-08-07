@@ -199,7 +199,7 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@mipmap/bg_item_shadow_bottom"
+
                     android:orientation="vertical">
 
                     <ImageView
@@ -213,20 +213,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="一键加速"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_4dp"
-                        android:layout_marginBottom="@dimen/dimen_20dp"
-                        android:text="内存占用加速"
-                        android:textColor="#999999"
-                        android:textSize="11sp"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -236,7 +228,7 @@
                     android:layout_marginLeft="@dimen/dimen_7dp"
                     android:layout_marginRight="@dimen/dimen_7dp"
                     android:layout_weight="1"
-                    android:background="@mipmap/bg_item_shadow_bottom"
+
                     android:orientation="vertical">
 
                     <ImageView
@@ -250,20 +242,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="手机清理"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_4dp"
-                        android:layout_marginBottom="@dimen/dimen_20dp"
-                        android:text="存储空间清理"
-                        android:textColor="#999999"
-                        android:textSize="11sp"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -271,7 +255,7 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@mipmap/bg_item_shadow_bottom"
+
                     android:orientation="vertical">
 
                     <ImageView
@@ -285,28 +269,124 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="文件清理"
                         android:textColor="#666666"
                         android:textSize="13sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_4dp"
-                        android:layout_marginBottom="@dimen/dimen_20dp"
-                        android:text="照片、视频、音乐"
-                        android:textColor="#999999"
-                        android:textSize="11sp"/>
+
                 </LinearLayout>
 
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/line_wq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_middle_item"
+
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_16dp"
+                android:paddingRight="@dimen/dimen_16dp"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:id="@+id/line_wx"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_home_wx"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:text="微信专清"
+                        android:textColor="#666666"
+                        android:textSize="13sp"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/line_qq"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_7dp"
+                    android:layout_marginRight="@dimen/dimen_7dp"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_home_qq"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:text="QQ专清"
+                        android:textColor="#666666"
+                        android:textSize="13sp"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/line_jw"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_home_jw"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:text="手机降温"
+                        android:textColor="#666666"
+                        android:textSize="13sp"/>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <View
+                android:id="@+id/view_b"
+                android:layout_below="@+id/line_wq"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dimen_48dp"
+                android:layout_height="@dimen/dimen_8dp"
+                android:background="#F7F8FA"
+                />
             <TextView
                 android:id="@+id/text_bottom_title"
-                android:layout_below="@+id/layout_middle_item"
+                android:layout_below="@+id/view_b"
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:text="更多推荐"
                 android:visibility="gone"
@@ -324,7 +404,7 @@
                 android:layout_marginTop="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
                 android:layout_marginBottom="@dimen/dimen_14dp"/>
-            
+
             <View
                 android:id="@+id/view_click_first_ad"
                 android:layout_alignTop="@+id/image_ad_bottom_first"
