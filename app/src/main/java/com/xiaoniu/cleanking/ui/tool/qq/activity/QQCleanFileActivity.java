@@ -208,7 +208,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
                     listDataYestoday.add(listData.get(j));
                 } else if (TimeUtil.IsInMonth(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listData.get(j).getTime()))) {
                     listDataInMonth.add(listData.get(j));
-                } else if (TimeUtil.IsInHalfYear(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listData.get(j).getTime()))) {
+                } else  {
                     listDataInHalfYear.add(listData.get(j));
                 }
             } catch (ParseException e) {

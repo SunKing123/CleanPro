@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <WebView
-        android:id="@+id/web_view"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/web_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        />
+        android:clickable="true"/>
 
     <LinearLayout
         android:id="@+id/layout_not_net"

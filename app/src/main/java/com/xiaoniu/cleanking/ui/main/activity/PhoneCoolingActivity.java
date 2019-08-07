@@ -165,7 +165,12 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         int tem = new Random().nextInt(3) + 1;
         mTextNumberCool.setText("成功降温" + tem + "°C" );
 
-        mLayoutContentCool.post(this::initBottomLayout);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initBottomLayout();
+            }
+        },500);
     }
 
     private void initBottomLayout() {
@@ -326,12 +331,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     }
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host;
+//        String url = ApiModule.Base_H5_Host;
+        String url = ApiModule.Base_H5_Host + "/activity_page.html";
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
-        mWebView.addJavascriptInterface(new JavaInterface(), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(this), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

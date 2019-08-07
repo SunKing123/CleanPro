@@ -213,13 +213,14 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
         for (int j = 0; j < listDataTemp.size(); j++) {
             try {
+                listDataTemp.get(j).setIsSelect(false);
                 if (TimeUtil.IsToday(listDataTemp.get(j).getStringDay())) {
                     listDataToday.add(listDataTemp.get(j));
                 } else if (TimeUtil.IsYesterday(listDataTemp.get(j).getStringDay())) {
                     listDataYestoday.add(listDataTemp.get(j));
                 } else if (TimeUtil.IsInMonth(listDataTemp.get(j).getStringDay())) {
                     listDataInMonth.add(listDataTemp.get(j));
-                } else if (TimeUtil.IsInHalfYear(listDataTemp.get(j).getStringDay())) {
+                } else  {
                     listDataInHalfYear.add(listDataTemp.get(j));
                 }
             } catch (ParseException e) {

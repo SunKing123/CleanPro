@@ -108,8 +108,11 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         }
 
         for (int j = 0; j < listDataTemp.size(); j++) {
-            if (listDataTemp.get(j).getFile().getAbsolutePath().endsWith("amr"))
+            if (listDataTemp.get(j).getFile().getAbsolutePath().endsWith("amr")) {
+                listDataTemp.get(j).setIsSelect(false);
                 listData.add(listDataTemp.get(j));
+            }
+
         }
 
         Log.e("qweewq", "" + listData.size());
@@ -164,6 +167,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         }
         tv_delete.setText(deleteSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(deleteSize));
     }
+
     //删除成功
     public void deleteSuccess(List<CleanWxItemInfo> listF) {
         tv_delete.setSelected(false);
@@ -172,6 +176,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
 //        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
 //        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
     }
+
     @Override
     public void netError() {
 

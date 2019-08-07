@@ -257,7 +257,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         MeFragment mineFragment = new MeFragment();
         CleanMainFragment mainFragment = new CleanMainFragment();
-        String url = ApiModule.Base_H5_Host;
+        String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
         ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
