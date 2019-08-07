@@ -168,8 +168,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_8dp"
-                    android:text="点击管理QQ视频"
-                    android:textColor="@color/color_999999"
+                    android:text="清除后无法恢复，谨慎清理"
+                    android:textColor="#FD6F46"
                     android:textSize="@dimen/dimen_11sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_icon_wxsp"
                     app:layout_constraintLeft_toRightOf="@id/iv_icon_wxsp" />
@@ -189,13 +189,23 @@
                     android:id="@+id/tv_video_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dimen_8dp"
+                    android:layout_marginRight="@dimen/dimen_11dp"
                     android:text="46M"
                     android:textColor="@color/color_999999"
                     android:textSize="@dimen/dimen_12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_wxsp"
+                    app:layout_constraintTop_toTopOf="@id/iv_icon_wxsp"
                     app:layout_constraintRight_toLeftOf="@id/tv_select_vid"
-                    app:layout_constraintTop_toTopOf="@id/iv_icon_wxsp" />
+                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:text="已选择0M"
+                    android:textColor="#FD6F46"
+                    android:textSize="@dimen/dimen_11sp"
+                    app:layout_constraintRight_toLeftOf="@id/tv_select_vid"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_wxsp"
+                    />
             </android.support.constraint.ConstraintLayout>
 
             <View
@@ -239,8 +249,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_8dp"
-                    android:text="点击管理聊天图片"
-                    android:textColor="@color/color_999999"
+                    android:text="清除后无法恢复，谨慎清理"
+                    android:textColor="#FD6F46"
                     android:textSize="@dimen/dimen_11sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_icon_lttp"
                     app:layout_constraintLeft_toRightOf="@id/iv_icon_lttp" />
@@ -260,13 +270,23 @@
                     android:id="@+id/tv_pic_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dimen_8dp"
+                    android:layout_marginRight="@dimen/dimen_11dp"
                     android:text="46M"
                     android:textColor="@color/color_999999"
                     android:textSize="@dimen/dimen_12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_lttp"
+                    app:layout_constraintTop_toTopOf="@id/iv_icon_lttp"
                     app:layout_constraintRight_toLeftOf="@id/tv_select_pic"
-                    app:layout_constraintTop_toTopOf="@id/iv_icon_lttp" />
+                   />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:text="已选择0M"
+                    android:textColor="#FD6F46"
+                    android:textSize="@dimen/dimen_11sp"
+                    app:layout_constraintRight_toLeftOf="@id/tv_select_pic"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_lttp"
+                    />
             </android.support.constraint.ConstraintLayout>
 
             <View
@@ -310,8 +330,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_8dp"
-                    android:text="点击管理文件"
-                    android:textColor="@color/color_999999"
+                    android:text="清除后无法恢复，谨慎清理"
+                    android:textColor="#FD6F46"
                     android:textSize="@dimen/dimen_11sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_icon_file"
                     app:layout_constraintLeft_toRightOf="@id/iv_icon_file" />
@@ -331,13 +351,23 @@
                     android:id="@+id/tv_file_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dimen_8dp"
+                    android:layout_marginRight="@dimen/dimen_11dp"
                     android:text="46M"
                     android:textColor="@color/color_999999"
                     android:textSize="@dimen/dimen_12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_file"
                     app:layout_constraintRight_toLeftOf="@id/tv_select_file"
                     app:layout_constraintTop_toTopOf="@id/iv_icon_file" />
+                <TextView
+                    android:id="@+id/tv_selectfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:text="已选择0M"
+                    android:textColor="#FD6F46"
+                    android:textSize="@dimen/dimen_11sp"
+                    app:layout_constraintRight_toLeftOf="@id/tv_select_file"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_file"
+                    />
             </android.support.constraint.ConstraintLayout>
 
             <View
@@ -381,8 +411,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_8dp"
-                    android:text="点击管理QQ语音"
-                    android:textColor="@color/color_999999"
+                    android:text="清除后无法恢复，谨慎清理"
+                    android:textColor="#FD6F46"
                     android:textSize="@dimen/dimen_11sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_icon_aud"
                     app:layout_constraintLeft_toRightOf="@id/iv_icon_aud" />
@@ -402,13 +432,24 @@
                     android:id="@+id/tv_aud_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dimen_8dp"
+                    android:layout_marginRight="@dimen/dimen_11dp"
                     android:text="46M"
                     android:textColor="@color/color_999999"
                     android:textSize="@dimen/dimen_12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_aud"
+
                     app:layout_constraintRight_toLeftOf="@id/tv_select_aud"
                     app:layout_constraintTop_toTopOf="@id/iv_icon_aud" />
+                <TextView
+                    android:id="@+id/tv_selectaud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:text="已选择0M"
+                    android:textColor="#FD6F46"
+                    android:textSize="@dimen/dimen_11sp"
+                    app:layout_constraintRight_toLeftOf="@id/tv_select_aud"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_icon_aud"
+                    />
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>

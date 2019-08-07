@@ -62,9 +62,9 @@ import butterknife.OnClick;
 public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     //qq图片请求编码
-    private static  final  int REQUEST_CODE_QQ_IMG=0x3301;
+    private static final int REQUEST_CODE_QQ_IMG = 0x3301;
     //qq视频请求编码
-    private static  final  int REQUEST_CODE_QQ_VIDEO=0x3302;
+    private static final int REQUEST_CODE_QQ_VIDEO = 0x3302;
     @BindView(R.id.tv_gabsize)
     TextView tvGabsize;
     @BindView(R.id.tv_gb)
@@ -105,6 +105,10 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     ImageView ivChatfile;
     @BindView(R.id.iv_hua3)
     ImageView ivHua3;
+    @BindView(R.id.tv_selectaud)
+    TextView tvSelectAud;
+    @BindView(R.id.tv_selectfile)
+    TextView tvSelectFile;
     @BindView(R.id.iv_hua1)
     ImageView ivHua1;
     @BindView(R.id.cons_gabcache)
@@ -118,9 +122,9 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     ObjectAnimator objectAnimatorScanIng;
 
     //qq图片
-    private ArrayList<FileTitleEntity> mListImg=new ArrayList<>();
+    private ArrayList<FileTitleEntity> mListImg = new ArrayList<>();
     //qq视频
-    private ArrayList<FileTitleEntity> mListVideo=new ArrayList<>();
+    private ArrayList<FileTitleEntity> mListVideo = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -153,7 +157,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     }
 
     @OnClick({R.id.cons_aud, R.id.iv_gabcache, R.id.tv1_top, R.id.tv1_file, R.id.iv_chatfile, R.id.iv_back, R.id.tv_delete, R.id.tv_select1, R.id.cons_file
-        ,R.id.cons_pic,R.id.cons_wxsp})
+            , R.id.cons_pic, R.id.cons_wxsp})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
@@ -184,16 +188,29 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             QQUtil.fileList = aB;
             Intent intent = new Intent(QQCleanHomeActivity.this, QQCleanFileActivity.class);
             startActivity(intent);
-        }else if(ids==R.id.cons_pic){
+        } else if (ids == R.id.cons_pic) {
             //聊天图片
-            Intent intent=new Intent(this, QQCleanImgActivity.class);
-            startActivityForResult(intent,REQUEST_CODE_QQ_IMG);
-        }else if(ids==R.id.cons_wxsp){
+            Intent intent = new Intent(this, QQCleanImgActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_QQ_IMG);
+        } else if (ids == R.id.cons_wxsp) {
             //视频
-            Intent intent=new Intent(this, QQCleanVideoActivity.class);
-            startActivityForResult(intent,REQUEST_CODE_QQ_VIDEO);
+            Intent intent = new Intent(this, QQCleanVideoActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_QQ_VIDEO);
         }
 
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
+        tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -294,19 +311,20 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     /**
      * 获取选中删除的元素
+     *
      * @return
      */
-    public List<FileChildEntity> getDelFiles(List<FileTitleEntity> fileTitleEntities){
-        List<FileChildEntity> files=new ArrayList<>();
-        List<FileTitleEntity> lists=fileTitleEntities;
-        for(FileTitleEntity fileTitleEntity:lists){
-            for(FileChildEntity file:fileTitleEntity.lists){
-                if(file.isSelect){
+    public List<FileChildEntity> getDelFiles(List<FileTitleEntity> fileTitleEntities) {
+        List<FileChildEntity> files = new ArrayList<>();
+        List<FileTitleEntity> lists = fileTitleEntities;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            for (FileChildEntity file : fileTitleEntity.lists) {
+                if (file.isSelect) {
                     files.add(file);
                 }
             }
         }
-        return  files;
+        return files;
     }
 
 
