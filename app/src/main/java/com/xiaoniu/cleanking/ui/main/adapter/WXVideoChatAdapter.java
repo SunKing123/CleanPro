@@ -245,7 +245,13 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
             mRecyclerView = view.findViewById(R.id.recycle_view);
 
 
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3){
+
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
             mRecyclerView.setLayoutManager(layoutManager);
 
         }

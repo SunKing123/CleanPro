@@ -45,7 +45,7 @@ public class ApiModule {
     public static String Base_Host2 = "https://www.juxinli.com";//聚信立路径
     public static String Base_Host3 = "https://credit.baiqishi.com";//白骑士路径
     public static String ZhiMaXinYong = Base_H5_Host + "/FlashLoanH5/html/page/my/zhima.html";//芝麻信用路径
-    public static String SHOPPING_MALL = Base_H5_Host + "/FenDuoDuoH5/html/page/store/index.html";//商城
+    public static String SHOPPING_MALL = Base_H5_Host + "/home_new.html";//商城
 
 
     public ApiModule(Application application) {
