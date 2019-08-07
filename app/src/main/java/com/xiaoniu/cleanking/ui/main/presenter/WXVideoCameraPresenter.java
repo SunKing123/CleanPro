@@ -145,6 +145,8 @@ public class WXVideoCameraPresenter extends RxPresenter<WXVideoCameraFragment, C
         finally {
             input.close();
             output.close();
+            mView.updateDIM(dest);
+
         }
     }
 

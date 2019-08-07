@@ -10,11 +10,14 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -22,7 +25,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -44,6 +49,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -77,7 +83,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @BindView(R.id.icon_more)
     ImageView icon_more;
     @BindView(R.id.web_view)
-    WebView mWebView;
+    NestedScrollWebView mWebView;
     @BindView(R.id.viewt)
     View viewt;
     @BindView(R.id.line_title)
@@ -86,6 +92,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     LinearLayout mLayoutNetError;
     @BindView(R.id.acceview)
     AccessAnimView acceview;
+    @BindView(R.id.rel_bottom)
+    RelativeLayout rel_bottom;
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout mAppBarLayout;
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -113,7 +123,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host;
+        String url = ApiModule.Base_H5_Host + "/activity_page.html";
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
@@ -250,6 +260,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 setCleanedView(0);
+                rel_bottom.setVisibility(View.GONE);
+                mAppBarLayout.setExpanded(true);
             }
 
             @Override
@@ -466,7 +478,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host);
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
     }
 
     @Override

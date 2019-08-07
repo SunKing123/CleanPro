@@ -146,6 +146,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    private  int mSelectPosition=0;
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (null == convertView) {
@@ -164,6 +165,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             @Override
             public void select(int position, boolean isSelect) {
                 if(null!=onCheckListener){
+                    mSelectPosition=position;
                     onCheckListener.onCheck(groupPosition,childPosition,isSelect);
                 }
             }
@@ -214,7 +216,13 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             mRecyclerView = view.findViewById(R.id.recycle_view);
 
 
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3){
+
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
             mRecyclerView.setLayoutManager(layoutManager);
 
         }

@@ -143,7 +143,7 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host);
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
     }
 
     boolean isError = false;

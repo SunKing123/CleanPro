@@ -68,7 +68,7 @@ public class WXImgAdapter extends RecyclerView.Adapter {
                 if(null!=onSelectListener){
                     onSelectListener.select(position,fileChildEntity.isSelect);
                 }
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
 
             }
         });

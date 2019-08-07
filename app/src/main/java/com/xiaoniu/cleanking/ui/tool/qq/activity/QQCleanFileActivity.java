@@ -104,54 +104,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
-            List<CleanWxClearInfo> listFAll = new ArrayList<>();
-            List<CleanWxClearInfo> listF = new ArrayList<>();
-            List<CleanWxClearInfo> listData = fileAdapterToday.getListImage();
-            for (int i = 0; i < listData.size(); i++) {
-                if (listData.get(i).getIsSelect())
-                    listF.add(fileAdapterToday.getListImage().get(i));
-            }
-
-            List<CleanWxClearInfo> listF2 = new ArrayList<>();
-            List<CleanWxClearInfo> listData2 = fileAdapterYestoday.getListImage();
-            for (int i = 0; i < listData2.size(); i++) {
-                if (listData2.get(i).getIsSelect())
-                    listF2.add(fileAdapterYestoday.getListImage().get(i));
-            }
-
-            List<CleanWxClearInfo> listF3 = new ArrayList<>();
-            List<CleanWxClearInfo> listData3 = fileAdapterInMonth.getListImage();
-            for (int i = 0; i < listData3.size(); i++) {
-                if (listData3.get(i).getIsSelect())
-                    listF3.add(fileAdapterInMonth.getListImage().get(i));
-            }
-
-            List<CleanWxClearInfo> listF4 = new ArrayList<>();
-            List<CleanWxClearInfo> listData4 = fileAdapterInHalfYear.getListImage();
-            for (int i = 0; i < listData4.size(); i++) {
-                if (listData4.get(i).getIsSelect())
-                    listF4.add(fileAdapterInHalfYear.getListImage().get(i));
-            }
-            listFAll.addAll(listF);
-            listFAll.addAll(listF2);
-            listFAll.addAll(listF3);
-            listFAll.addAll(listF4);
-
-
-//            mPresenter.alertBanLiveDialog(QQCleanFileActivity.this, listFAll.size(), new ImageListPresenter.ClickListener() {
-//                @Override
-//                public void clickOKBtn() {
-//                    //删除本地文件
-//                    mPresenter.delFile(listFAll, listF, listF2, listF3, listF4);
-//                    //数据库删除选中的文件
-//                }
-//
-//                @Override
-//                public void cancelBtn() {
-//
-//                }
-//            });
-
+            finish();
 
         } else if (ids == R.id.cons_today) {
             recycleViewToday.setVisibility(recycleViewToday.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
@@ -208,7 +161,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
                     listDataYestoday.add(listData.get(j));
                 } else if (TimeUtil.IsInMonth(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listData.get(j).getTime()))) {
                     listDataInMonth.add(listData.get(j));
-                } else  {
+                } else {
                     listDataInHalfYear.add(listData.get(j));
                 }
             } catch (ParseException e) {

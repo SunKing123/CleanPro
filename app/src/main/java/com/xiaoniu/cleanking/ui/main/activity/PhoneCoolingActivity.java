@@ -469,7 +469,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onNetLayoutClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host);
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
     }
 
     /**

@@ -17,9 +17,12 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
+import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -133,45 +136,48 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
 
     //清理缓存垃圾
-    public void onekeyCleanDelete(boolean isTopSelect, boolean isBottomSelect) {
-        CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
-        CleanWxEasyInfo gabageFileInfo = WxQqUtil.d;  //垃圾文件   不含聊天记录建议清理
-        CleanWxEasyInfo wxCircleInfo = WxQqUtil.g;  //朋友圈缓存
+    public void onekeyCleanDelete(List<CleanWxClearInfo> cacheList, boolean isTopSelect) {
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        List<CleanWxClearInfo> selectAudList = getSelectAudioList();
+        List<CleanWxClearInfo> selectFileList = getSelectFileList();
+        if (selectFileList != null)
+            listTemp.addAll(selectFileList);
+        if (selectAudList != null)
+            listTemp.addAll(selectAudList);
+        if (isTopSelect)
+            listTemp.addAll(cacheList);
+        Log.e("ss", "" + listTemp.size());
 
-        CleanWxEasyInfo wxprogramInfo = WxQqUtil.f;  //微信小程序
+        //测试代码**************************************
+//        List<CleanWxClearInfo> listTempTest = new ArrayList<>();
+//        long tempSize = 0;
+//        for (int i = 0; i < listTemp.size(); i++) {
+//            if (i < 7){
+//                tempSize += listTemp.get(i).getSize();
+//                listTempTest.add(listTemp.get(i));
+//            }
+//        }
+//        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
 
-        List<CleanWxItemInfo> listTemp = new ArrayList<>();
-        if (isTopSelect) {
-            listTemp.addAll(headCacheInfo.getTempList());
-            listTemp.addAll(gabageFileInfo.getTempList());
-            listTemp.addAll(wxCircleInfo.getTempList());
-        }
-        if (isBottomSelect) {
-            listTemp.addAll(wxprogramInfo.getTempList());
-//            listTemp.add(wxprogramInfo.getTempList().get(0));
-//            listTemp.add(wxprogramInfo.getTempList().get(1));
-//            listTemp.add(wxprogramInfo.getTempList().get(2));
-//            listTemp.add(wxprogramInfo.getTempList().get(3));
-        }
         delFile(listTemp);
     }
 
-    public void delFile(List<CleanWxItemInfo> list) {
-        List<CleanWxItemInfo> files = list;
+    public void delFile(List<CleanWxClearInfo> list) {
+        List<CleanWxClearInfo> files = list;
         Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
             public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
 
-                for (CleanWxItemInfo appInfoBean : files) {
-                    File file = appInfoBean.getFile();
+                for (CleanWxClearInfo appInfoBean : files) {
+                    File file = new File(appInfoBean.getFilePath());
                     Log.e("删除路劲:", "" + file.getAbsolutePath());
                     if (null != file) {
                         file.delete();
                     }
                 }
                 long sizes = 0;
-                for (CleanWxItemInfo cleanWxItemInfo : files)
-                    sizes += cleanWxItemInfo.getFileSize();
+                for (CleanWxClearInfo cleanWxItemInfo : files)
+                    sizes += cleanWxItemInfo.getSize();
                 emitter.onNext(sizes);
                 emitter.onComplete();
             }
@@ -199,5 +205,56 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
     }
 
+    //获取选中的语音大小
+    public long getSelectAudioSize() {
+        long selectAudSize = 0;
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.audioList == null) return 0;
+        for (int i = 0; i < QQUtil.audioList.size(); i++) {
+            if (QQUtil.audioList.get(i).getIsSelect())
+                listTemp.add(QQUtil.audioList.get(i));
+        }
+        for (int i = 0; i < listTemp.size(); i++) {
+            selectAudSize += listTemp.get(i).getSize();
+        }
+        return selectAudSize;
+    }
+
+    //获取选中的语音列表
+    public List<CleanWxClearInfo> getSelectAudioList() {
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.audioList == null) return null;
+        for (int i = 0; i < QQUtil.audioList.size(); i++) {
+            if (QQUtil.audioList.get(i).getIsSelect())
+                listTemp.add(QQUtil.audioList.get(i));
+        }
+        return listTemp;
+    }
+
+    //获取选中的文件大小
+    public long getSelectFileSize() {
+        long selectAudSize = 0;
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.fileList == null) return 0;
+        for (int i = 0; i < QQUtil.fileList.size(); i++) {
+            if (QQUtil.fileList.get(i).getIsSelect())
+                listTemp.add(QQUtil.fileList.get(i));
+        }
+        for (int i = 0; i < listTemp.size(); i++) {
+            selectAudSize += listTemp.get(i).getSize();
+        }
+        return selectAudSize;
+    }
+
+    //获取选中的文件列表
+    public List<CleanWxClearInfo> getSelectFileList() {
+        List<CleanWxClearInfo> listTemp = new ArrayList<>();
+        if (QQUtil.fileList == null) return null;
+        for (int i = 0; i < QQUtil.fileList.size(); i++) {
+            if (QQUtil.fileList.get(i).getIsSelect())
+                listTemp.add(QQUtil.fileList.get(i));
+        }
+        return listTemp;
+    }
 
 }

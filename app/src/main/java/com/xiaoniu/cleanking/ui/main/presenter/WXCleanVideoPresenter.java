@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 
@@ -275,7 +276,6 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
 
                     @Override
                     public void onNext(Integer value) {
-
                         mView.copySuccess(value);
                     }
 
@@ -319,6 +319,7 @@ public class WXCleanVideoPresenter extends RxPresenter<WXVideoChatFragment, Clea
         } finally {
             input.close();
             output.close();
+            mView.updateDIM(dest);
         }
     }
     /**

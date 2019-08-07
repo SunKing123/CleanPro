@@ -68,7 +68,7 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
                 if(null!=onSelectListener){
                     onSelectListener.select(position,fileChildEntity.isSelect);
                 }
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
 
             }
         });

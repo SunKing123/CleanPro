@@ -81,7 +81,7 @@ public class WechatCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((ImageViewHolder) holder).conslayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AndroidUtil.openFileSafe("text/plain",mActivity,String.valueOf(listImage.get(position).getFile()));
+                    AndroidUtil.openFileSafe(mActivity,String.valueOf(listImage.get(position).getFile()));
                 }
             });
 

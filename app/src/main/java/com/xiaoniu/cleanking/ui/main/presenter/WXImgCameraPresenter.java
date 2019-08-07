@@ -142,6 +142,8 @@ public class WXImgCameraPresenter extends RxPresenter<WXImgCameraFragment, Clean
         }finally {
             input.close();
             output.close();
+            //更新相册
+            mView.updateDIM(dest);
         }
     }
 
