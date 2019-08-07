@@ -219,7 +219,6 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -254,23 +253,28 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     }
 
     //扫描到图片文件
-    public void updateQQImgSize(String size) {
+    long totalImgSize = 0;
+    long totalVideoSize = 0;
+
+    public void updateQQImgSize(String size, long mQQImgFileSize) {
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
             tvPicSize.setText("");
         } else {
             tvPicSize.setText(size);
         }
+        totalImgSize = mQQImgFileSize;
         scanImgOver = true;
         updateScanResult();
     }
 
     //扫描到视频文件
-    public void updateVideoSize(String size) {
+    public void updateVideoSize(String size, long mQQVideoFileSize) {
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
             tvVideoSize.setText("");
         } else {
             tvVideoSize.setText(size);
         }
+        totalVideoSize = mQQVideoFileSize;
         scanVideoOver = true;
         updateScanResult();
     }
