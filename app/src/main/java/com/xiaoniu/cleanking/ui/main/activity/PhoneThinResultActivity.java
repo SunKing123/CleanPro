@@ -116,7 +116,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     protected void onResume() {
         super.onResume();
         mPresenter.scanData();
-        NiuDataAPI.onPageEnd("cell_phone_slimming_view_page","手机瘦身页面浏览");
+        NiuDataAPI.onPageStart("cell_phone_slimming_view_page","手机瘦身页面浏览");
     }
 
     @Override
