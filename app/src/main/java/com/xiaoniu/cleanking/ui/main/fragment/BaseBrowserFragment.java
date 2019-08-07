@@ -8,7 +8,6 @@ import android.widget.RelativeLayout;
 import com.just.agentweb.AgentWeb;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleFragment;
-import com.xiaoniu.cleanking.utils.ExtraConstant;
 
 import butterknife.BindView;
 
@@ -52,7 +51,7 @@ public class BaseBrowserFragment extends SimpleFragment {
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.web_error_layout, R.id.tv_reload)
+                .setMainFrameErrorView(R.layout.web_error_layout, R.id.layout_not_net)
                 .setWebChromeClient(new CustomWebChromeClient())
 //                .setWebViewClient(new MyBaseWebViewClient(getActivity()))
                 .createAgentWeb()

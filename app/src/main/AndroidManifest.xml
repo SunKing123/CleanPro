@@ -100,7 +100,7 @@
         </activity>
         <activity
             android:name="com.xiaoniu.cleanking.ui.main.activity.MainActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Main.Theme"
