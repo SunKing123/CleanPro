@@ -22,6 +22,8 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinResultPresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.List;
 
@@ -101,10 +103,27 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         return granted;
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        StatisticsUtils.trackClick("cell_phone_slimming_return_click","\"手机瘦身返回\"点击"
+                ,"clean_up_toolbox_page","cell_phone_slimming_page");
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
         mPresenter.scanData();
+        NiuDataAPI.onPageEnd("cell_phone_slimming_view_page","手机瘦身页面浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("cell_phone_slimming_view_page","手机瘦身页面浏览");
+
     }
 
     @Override
@@ -121,10 +140,16 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     public void onViewClick(View view) {
         int ids = view.getId();
         if (ids == R.id.img_back) {
+            StatisticsUtils.trackClick("cell_phone_slimming_return_click","\"手机瘦身返回\"点击"
+                    ,"clean_up_toolbox_page","cell_phone_slimming_page");
             finish();
         } else if (ids == R.id.ll_video) {
+            StatisticsUtils.trackClick("cleanable_video_file_click","\"可清理的视频文件\"点击"
+                    ,"clean_up_toolbox_page","cell_phone_slimming_page");
             startActivity(new Intent(this, CleanVideoManageActivity.class));
         } else if (ids == R.id.ll_soft) {
+            StatisticsUtils.trackClick("Software_uninstaller","\"软件卸载\"点击"
+                    ,"clean_up_toolbox_page","cell_phone_slimming_page");
             startActivity(new Intent(this,SoftManageActivity.class));
         }
     }
@@ -148,4 +173,6 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
             }
         });
     }
+
+
 }
