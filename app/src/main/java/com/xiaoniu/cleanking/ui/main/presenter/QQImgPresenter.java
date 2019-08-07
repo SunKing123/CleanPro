@@ -287,7 +287,6 @@ public class QQImgPresenter extends RxPresenter<QQImgFragment, CleanMainModel> {
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
-                        Log.i(TAG, "filename=" + fileChildEntity.path);
                         if ( DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
                             //是否为今天
                             listsCamera.get(0).lists.add(fileChildEntity);
