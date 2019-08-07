@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.activity.QQCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QQCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanHomePresenter;
@@ -52,7 +55,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -180,7 +185,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
 //            if (!tvSelect.isSelected() && !tvSelect1.isSelected()) return;
-            mPresenter.onekeyCleanDelete(getCacheList(),tvSelect1.isSelected());
+            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected());
             StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
@@ -226,6 +231,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         super.onPause();
         NiuDataAPI.onPageEnd("qq_ceaning_view_page", "qq清理页面浏览");
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -301,6 +307,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setBackgroundResource(tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
+        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, selectSize).commit();
     }
 
     public void deleteResult(long result) {
@@ -338,22 +346,22 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     }
 
 
-
-    public void updateQQImgSize(String size){
-        if(TextUtils.isEmpty(size) || "0".equals(size)){
+    public void updateQQImgSize(String size) {
+        if (TextUtils.isEmpty(size) || "0".equals(size)) {
             tvPicSize.setText("");
-        }else {
+        } else {
             tvPicSize.setText(size);
         }
     }
 
-    public void  updateVideoSize(String size){
-        if(TextUtils.isEmpty(size) || "0".equals(size)){
+    public void updateVideoSize(String size) {
+        if (TextUtils.isEmpty(size) || "0".equals(size)) {
             tvVideoSize.setText("");
-        }else {
+        } else {
             tvVideoSize.setText(size);
         }
     }
+
     /**
      * 获取选中删除的元素
      *
