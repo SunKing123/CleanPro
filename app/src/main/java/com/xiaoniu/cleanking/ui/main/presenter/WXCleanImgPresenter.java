@@ -408,7 +408,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
                         File[] files2 = file1.listFiles();
                         if (null != files2) {
                             for (File file2C : files2) { //第2层  /a/ 遍历
-                                if (file2C.isDirectory() && file2C.getName().equals("image2")) {
+                                if (file2C.isDirectory() && (file2C.getName().equals("image2") || file2C.getName().equals("image"))) {
                                     File[] files3 = file2C.listFiles(); //
                                     if (null != files3) {
                                         for (File file : files3) { //第3层  /a/image2/
