@@ -179,11 +179,10 @@
                     android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>
-
-        <NestedScrollWebView
+        <WebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewt_finish"/>

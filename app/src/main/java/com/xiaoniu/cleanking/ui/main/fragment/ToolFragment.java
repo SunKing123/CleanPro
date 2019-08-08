@@ -65,6 +65,8 @@ public class ToolFragment extends SimpleFragment {
     TextView mTvDefChatSubTitleGb;
     @BindView(R.id.tv_qq_subtitle_gb)
     TextView mTvDefQqSubTitleGb;
+    @BindView(R.id.tv_phone_space)
+    TextView mTvPhoneSpace;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -93,6 +95,13 @@ public class ToolFragment extends SimpleFragment {
                     mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", Double.valueOf(strings[0]))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
                     int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));
                     mToolCircleProgress.startAnimProgress(spaceProgress, 700);
+                    if (Double.valueOf(strings[0]) / Double.valueOf(strings[1]) > 0.75){
+                        //手机内存不足
+                        mTvPhoneSpace.setText(R.string.tool_phone_memory_full);
+                    }else {
+                        //手机内存充足
+                        mTvPhoneSpace.setText(R.string.tool_phone_memory_empty);
+                    }
                 });
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
         long qqCatheSize = sp.getLong(SpCacheConfig.QQ_CACHE_SIZE,0L);

@@ -62,7 +62,7 @@ public class CleanAnimView extends RelativeLayout {
     TextView mTextGb;
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
-    NestedScrollWebView mWebView;
+    WebView mWebView;
     LinearLayout mLayoutNotNet;
 
     /**
