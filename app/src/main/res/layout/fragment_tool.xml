@@ -173,6 +173,7 @@
                         android:layout_height="@dimen/dimen_28dp"
                         android:layout_below="@id/tv_chat_gb_title"
                         android:layout_marginTop="4dp"
+                        android:paddingBottom="1dp"
                         android:layout_toRightOf="@id/tv_chat_subtitle"
                         android:gravity="bottom"
                         android:text="GB"
@@ -253,6 +254,7 @@
                         android:layout_height="@dimen/dimen_28dp"
                         android:layout_marginTop="4dp"
                         android:gravity="bottom"
+                        android:paddingBottom="1dp"
                         android:visibility="gone"
                         android:textSize="@dimen/dimen_15dp"
                         android:text="GB"/>
