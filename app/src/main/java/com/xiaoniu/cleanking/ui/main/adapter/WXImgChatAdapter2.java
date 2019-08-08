@@ -111,7 +111,6 @@ public class WXImgChatAdapter2 extends BaseAdapter implements StickyListHeadersA
         mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
         mViewChild.mRecyclerView.setItemAnimator(null);
 
-
         return convertView;
     }
 
@@ -160,7 +159,7 @@ public class WXImgChatAdapter2 extends BaseAdapter implements StickyListHeadersA
                 if(null!=onCheckListener){
                     onCheckListener.onCheck(position,-1,fileTitleEntity.isSelect);
                 }
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
             }
         });
 
