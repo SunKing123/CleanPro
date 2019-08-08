@@ -21,7 +21,7 @@
         android:id="@+id/viewt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_150dp"
-        android:layout_marginTop="@dimen/dimen_50dp"
+        android:layout_marginTop="@dimen/dimen_56dp"
         android:layout_below="@+id/line_title"
         android:background="#06C581">
 
