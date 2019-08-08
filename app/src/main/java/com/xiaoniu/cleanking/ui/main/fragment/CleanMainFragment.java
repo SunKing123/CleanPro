@@ -241,7 +241,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void text_acce() {
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
-        startActivity(PhoneAccessActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+        startActivity(PhoneAccessActivity.class,bundle);
     }
 
     @OnClick(R.id.line_ql)

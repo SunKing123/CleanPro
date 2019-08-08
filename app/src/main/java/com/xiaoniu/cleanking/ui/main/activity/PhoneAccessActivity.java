@@ -98,6 +98,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     RelativeLayout rel_bottom;
     @BindView(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
+    @BindView(R.id.tv_title_name)
+    TextView mTvTitleName;
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -184,7 +186,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            mTvTitleName.setText(bundle.getString(SpCacheConfig.ITEM_TITLE_NAME));
+        }
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
