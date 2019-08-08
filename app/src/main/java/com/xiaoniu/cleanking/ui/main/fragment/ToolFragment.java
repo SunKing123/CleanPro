@@ -143,6 +143,11 @@ public class ToolFragment extends SimpleFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        setData();
+        super.onResume();
+    }
 
     @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin})
     public void onCoolingViewClicked(View view) {
