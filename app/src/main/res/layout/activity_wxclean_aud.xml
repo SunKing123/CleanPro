@@ -94,7 +94,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/dimen_34dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/delete_select_bg"
+            android:background="@drawable/delete_unselect_bg"
             android:gravity="center"
             android:text="清理"
             android:textColor="@color/white" />
