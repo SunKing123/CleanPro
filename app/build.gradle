@@ -198,6 +198,8 @@ dependencies {
     implementation project(path: ':takephoto_library')
     //AgentWeb
     implementation 'com.just.agentweb:agentweb:4.0.3-beta' // (必选)
+
+    compile 'se.emilsjolander:stickylistheaders:2.5.2'
 }
 
 

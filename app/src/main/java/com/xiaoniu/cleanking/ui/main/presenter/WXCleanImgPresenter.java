@@ -213,6 +213,8 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
                     public void onNext(String value) {
                       totalFileSize(listsChat);
                        mView.updateImgChat(listsChat);
+
+
                     }
 
                     @Override
@@ -232,6 +234,9 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
         if(null==lists ||  lists.size()==0){
             return;
         }
+
+
+
         for(FileTitleEntity fileTitleEntity: lists){
             long size=0L;
             for(FileChildEntity fileChildEntity:fileTitleEntity.lists){
