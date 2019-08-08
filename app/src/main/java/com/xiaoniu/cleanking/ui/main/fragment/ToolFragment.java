@@ -92,10 +92,10 @@ public class ToolFragment extends SimpleFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
                     //String数组第一个是剩余存储量，第二个是总存储量
-                    mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", Double.valueOf(strings[0]))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
+                    mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", (Double.valueOf(strings[1]) - Double.valueOf(strings[0])))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
                     int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));
                     mToolCircleProgress.startAnimProgress(spaceProgress, 700);
-                    if (Double.valueOf(strings[0]) / Double.valueOf(strings[1]) > 0.75){
+                    if ((Double.valueOf(strings[1]) - Double.valueOf(strings[0])) / Double.valueOf(strings[1]) > 0.75){
                         //手机内存不足
                         mTvPhoneSpace.setText(R.string.tool_phone_memory_full);
                     }else {

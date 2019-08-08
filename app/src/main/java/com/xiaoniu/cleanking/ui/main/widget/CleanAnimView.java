@@ -37,7 +37,6 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 
@@ -53,6 +52,7 @@ public class CleanAnimView extends RelativeLayout {
     ImageView mIconInner;
     LinearLayout mLayoutScan;
     LottieAnimationView mAnimationView;
+    LottieAnimationView mAnimationFinishView;
     RelativeLayout mLayoutCount;
     TextView mTextCount;
     TextView mTextUnit;
@@ -122,6 +122,7 @@ public class CleanAnimView extends RelativeLayout {
         mIconInner = v.findViewById(R.id.icon_inner);
         mLayoutScan = v.findViewById(R.id.layout_scan);
         mAnimationView = v.findViewById(R.id.view_lottie);
+        mAnimationFinishView = v.findViewById(R.id.view_lottie_finish);
         mLayoutCount = v.findViewById(R.id.layout_count);
         mTextCount = v.findViewById(R.id.text_count);
         mTextUnit = v.findViewById(R.id.text_unit);
@@ -392,6 +393,41 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     /**
+     * 显示完成动画
+     */
+    private void showFinishLottieView() {
+        mIconOuter.setVisibility(GONE);
+        mIconInner.setVisibility(GONE);
+        mLayoutCount.setVisibility(GONE);
+        mLayoutScan.setVisibility(GONE);
+        mAnimationView.useHardwareAcceleration();
+        mAnimationView.setAnimation("data_clean_finish.json");
+        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.playAnimation();
+        mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setViewTrans();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    /**
      * 第一阶段  红色
      */
     private static final int FirstLevel = 0xffFD6F46;
@@ -429,7 +465,8 @@ public class CleanAnimView extends RelativeLayout {
                 if (animatorSet != null) {
                     animatorSet.end();
                 }
-                setViewTrans();
+                showFinishLottieView();
+
             }
 
             @Override

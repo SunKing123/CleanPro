@@ -42,7 +42,7 @@ public class CleanMainModel extends BaseModel {
 
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
-        map.put("position", "1");
+        map.put("position", "2");
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
 
