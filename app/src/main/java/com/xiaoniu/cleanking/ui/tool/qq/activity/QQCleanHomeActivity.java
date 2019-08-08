@@ -115,6 +115,10 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     ImageView ivHua3;
     @BindView(R.id.tv_selectaud)
     TextView tvSelectAud;
+    @BindView(R.id.tv_selectpic)
+    TextView tvSelectPic;
+    @BindView(R.id.tv_selectvideo)
+    TextView tvSelectVideo;
     @BindView(R.id.tv_selectfile)
     TextView tvSelectFile;
     @BindView(R.id.iv_hua1)
@@ -188,8 +192,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
-//            if (!tvSelect.isSelected() && !tvSelect1.isSelected()) return;
-            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected());
+            if (selectSize == 0) return;
+            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected(),mListImg,mListVideo);
             StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
@@ -223,8 +227,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("qq_ceaning_view_page", "qq清理页面浏览");
-        tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
-        tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
+        setSelectAllFiles();
     }
 
     @Override
@@ -258,7 +261,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     public void updateQQImgSize(String size, long mQQImgFileSize) {
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
-            tvPicSize.setText("");
+            tvPicSize.setText("0KB");
         } else {
             tvPicSize.setText(size);
         }
@@ -270,7 +273,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     //扫描到视频文件
     public void updateVideoSize(String size, long mQQVideoFileSize) {
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
-            tvVideoSize.setText("");
+            tvVideoSize.setText("0KB");
         } else {
             tvVideoSize.setText(size);
         }
@@ -331,14 +334,13 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     //垃圾选中的大小
     public void getSelectCacheSize() {
-        long selectSize = 0;
-        if (tvSelect1.isSelected())
-            selectSize += getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
-        tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setBackgroundResource(tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        setSelectAllFiles();
+        long totalSize = 0;
+        totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
+        tvGabsize.setText(CleanAllFileScanUtil.byte2FitSizeOne(totalSize).substring(0, CleanAllFileScanUtil.byte2FitSizeOne(totalSize).length() - 2));
+        tvGb.setText(CleanAllFileScanUtil.byte2FitSizeOne(totalSize).substring(CleanAllFileScanUtil.byte2FitSizeOne(totalSize).length() - 2, CleanAllFileScanUtil.byte2FitSizeOne(totalSize).length()));
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
-        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, selectSize).commit();
+        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, totalSize).commit();
     }
 
     public void deleteResult(long result) {
@@ -373,6 +375,24 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             }
 
         }
+        setSelectAllFiles();
+    }
+
+    //显示所有的选中的文件、视频音频图片语音
+    long selectSize = 0;
+
+    public void setSelectAllFiles() {
+        tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
+        tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
+        tvSelectVideo.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectImgOrVideoSize(mListVideo)));
+        tvSelectPic.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectImgOrVideoSize(mListImg)));
+        selectSize = 0;
+        selectSize += mPresenter.getSelectFileSize() + mPresenter.getSelectAudioSize() + mPresenter.getSelectImgOrVideoSize(mListVideo) + mPresenter.getSelectImgOrVideoSize(mListImg);
+        if (tvSelect1.isSelected())
+            selectSize += getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
+        tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
+        tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
+        tvDelete.setBackgroundResource(selectSize != 0 ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
     }
 
     /**
