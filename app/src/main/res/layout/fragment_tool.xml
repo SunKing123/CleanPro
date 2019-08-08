@@ -178,7 +178,7 @@
                         android:text="GB"
                         android:visibility="gone"
                         android:textColor="@color/color_06C581"
-                        android:textSize="@dimen/dimen_17dp" />
+                        android:textSize="@dimen/dimen_15dp" />
                 </RelativeLayout>
 
                 <RelativeLayout
