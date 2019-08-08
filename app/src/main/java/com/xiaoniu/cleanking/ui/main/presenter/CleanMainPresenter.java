@@ -49,8 +49,10 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.TimeUtil;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
+import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,6 +73,9 @@ import static com.xiaoniu.cleanking.utils.ResourceUtils.getString;
 public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMainModel> {
 
     private ValueAnimator mScanTranlateColor;
+
+    @Inject
+    NoClearSPHelper mSPHelper;
 
     @Inject
     public CleanMainPresenter() {
@@ -154,8 +159,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             e.onNext(androidDataInfo);
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
-
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa:我执行了");
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
                 for (FirstJunkInfo info : a) {
@@ -574,9 +577,17 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                 }
             }
             e.onNext(total);
-        }).compose(RxUtil.rxObservableSchedulerHelper(mView));
+        }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
 
-
+                double memoryShow = TimeUtil.getMemoryShow();
+                if (memoryShow == 1) {
+                    //清理完成，存储时间点
+                    mSPHelper.saveCleanTime(System.currentTimeMillis());
+                }
+            }
+        });
     }
 
     public void startFinishAnimator(ImageView iconInner, ImageView iconOuter) {

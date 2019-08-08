@@ -279,7 +279,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else if (type == TYPE_NOT_SCAN) {
             long now = System.currentTimeMillis();
             long time = (now - preCleanTime) / 1000;
-            if (time < 30) {
+            if (time < 180) {
                 cleanFinishSign();
             } else {
                 //未扫描， 去扫描
@@ -363,7 +363,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mChangeFinish = false;
 
         mPresenter.stopCleanScanAnimation();
-
 
     }
 

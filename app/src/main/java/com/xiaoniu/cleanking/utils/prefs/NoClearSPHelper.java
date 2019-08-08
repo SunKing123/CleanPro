@@ -364,4 +364,20 @@ public class NoClearSPHelper {
     public void setUploadImeiStatus(boolean isUpload) {
         mSPrefs.edit().putBoolean(SpConstants.OPERATOR_IS_UPLOAD_IMEI, isUpload).apply();
     }
+
+    /**
+     * 存储当前清理完成时间点
+     * @param currentTimeMillis
+     */
+    public void saveCleanTime(long currentTimeMillis) {
+        mSPrefs.edit().putLong(SpConstants.CLEAN_FINISH_TIME, currentTimeMillis).apply();
+    }
+
+    /**
+     * 拿到第一次清理的时间
+     * @return
+     */
+    public long getCleanTime() {
+        return mSPrefs.getLong(SpConstants.CLEAN_FINISH_TIME,0);
+    }
 }

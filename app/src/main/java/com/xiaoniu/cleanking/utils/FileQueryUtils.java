@@ -351,7 +351,17 @@ public class FileQueryUtils {
         ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
         List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
         if (!(lists == null || lists.size() == 0)) {
+
+            if (lists.size() > 30) {
+                lists = lists.subList(0, 30);
+            }
+            int indexP = 0;
+            double size = lists.size() *  TimeUtil.getMemoryShow();
             for (UsageStats usageStats : lists) {
+                if (indexP >= size) {
+                    return junkList;
+                }
+                indexP++;
                 if (isFinish) {
                     //停止扫描
                     return junkList;
@@ -428,7 +438,13 @@ public class FileQueryUtils {
                 }
             }
             Iterator it = arrayList2.iterator();
+            int indexP = 0;
+            double size = arrayList2.size() *  TimeUtil.getMemoryShow();
             while (it.hasNext()) {
+                if (indexP >= size) {
+                    return arrayList;
+                }
+                indexP ++;
                 if (isFinish) {
                     return arrayList;
                 }
@@ -519,7 +535,13 @@ public class FileQueryUtils {
             PackageManager packageManager = context.getPackageManager();
             ArrayList arrayList2 = new ArrayList();
             Iterator it = arrayList.iterator();
+            int indexP = 0;
+            double size = arrayList.size() *  TimeUtil.getMemoryShow();
             while (it.hasNext()) {
+                if (indexP >= size) {
+                    return arrayList2;
+                }
+                indexP ++;
                 if (isFinish) {
                     return arrayList2;
                 }
