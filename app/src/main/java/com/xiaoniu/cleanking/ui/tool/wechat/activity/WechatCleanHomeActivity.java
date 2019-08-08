@@ -221,6 +221,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("wechat_ceaning_view_page", "微信清理页面浏览");
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long wxCatheSizeImg = sp.getLong(Constant.WX_CACHE_SIZE_IMG, 0L);
+        long wxCatheSizeVideo = sp.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
+        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeImg));
+        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeVideo));
     }
 
     @Override
