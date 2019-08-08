@@ -125,11 +125,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -180,8 +180,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         });
     }
-
-
 
 
     @Override
@@ -468,7 +466,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
     }
 
     @Override

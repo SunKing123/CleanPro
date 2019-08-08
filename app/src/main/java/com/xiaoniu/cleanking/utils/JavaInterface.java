@@ -1,24 +1,45 @@
 package com.xiaoniu.cleanking.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.google.gson.Gson;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.BaseEntity;
+import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.cleanking.utils.net.RxUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class JavaInterface {
 
@@ -27,13 +48,15 @@ public class JavaInterface {
     public final static int SHARE_WECHAT = 2;
     public final static int SHARE_QQ = 3;
     public final static int SHARE_SINA = 4;
-
+    @Inject
+    UserApiService mService;
     private Activity mActivity;
-
+    WebView mWebView;
     private SHARE_MEDIA[] platform = {SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA};
 
-    public JavaInterface(Activity activity) {
+    public JavaInterface(Activity activity, WebView mWebView) {
         mActivity = activity;
+        this.mWebView = mWebView;
     }
 
     @JavascriptInterface
@@ -102,7 +125,7 @@ public class JavaInterface {
 
             @Override
             public void onResult(SHARE_MEDIA share_media) {
-
+                handler.sendEmptyMessage(SHARE_SUCCESS);
             }
 
             @Override
@@ -123,7 +146,10 @@ public class JavaInterface {
 
             @Override
             public void onCancel(SHARE_MEDIA share_media) {
-
+                handler.sendEmptyMessage(SHARE_CANCEL);
+                if ("QQ".equals(share_media.name())) {
+                    addShareSuccessRequest();
+                }
             }
         });
 
@@ -132,4 +158,75 @@ public class JavaInterface {
 
     }
 
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SHARE_SUCCESS:
+                    ToastUtils.showShort("分享成功");
+                    addShareSuccessRequest();
+                    break;
+                case SHARE_CANCEL:
+                    ToastUtils.showShort("已取消");
+                    break;
+                case SHARE_WECHAT:
+                    ToastUtils.showShort("没有安装微信，请先安装应用");
+                    break;
+                case SHARE_QQ:
+                    ToastUtils.showShort("没有安装QQ，请先安装应用");
+                    break;
+                case SHARE_SINA:
+                    ToastUtils.showShort("没有安装新浪微博，请先安装应用");
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    onShareSuccessListener listener;
+
+    public void setListener(onShareSuccessListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onShareSuccessListener {
+        public void shareSuccess();
+    }
+
+    public void shareSuccessRequest(Common4Subscriber<BaseEntity> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+//        map.put("channel", AndroidUtil.getMarketId());
+//        map.put("appVersion", AndroidUtil.getAppVersionName());
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+       new ApiModule(AppApplication.getInstance()).provideHomeService().shareSuccess(body).compose(RxUtil.<BaseEntity>rxSchedulerHelper((RxAppCompatActivity) mActivity))
+                .subscribeWith(commonSubscriber);
+    }
+
+    //d分享成功增加领券接口
+    public void addShareSuccessRequest() {
+        shareSuccessRequest(new Common4Subscriber<BaseEntity>() {
+
+
+            @Override
+            public void getData(BaseEntity auditSwitch) {
+                mWebView.reload();
+                if (listener != null) listener.shareSuccess();
+            }
+
+            @Override
+            public void showExtraOp(String code, String message) {
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+            }
+        });
+    }
 }

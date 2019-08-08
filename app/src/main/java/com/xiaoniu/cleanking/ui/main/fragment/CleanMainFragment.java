@@ -539,12 +539,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     boolean isError = false;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
-        url += "?xn_data=" + AndroidUtil.getXnData();
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
+//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavaInterface(getActivity()), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(getActivity(),mWebView), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override

@@ -40,6 +40,14 @@ public interface UserApiService {
     @POST("/auditSwitch/query")
     Flowable<AuditSwitch> queryAuditSwitch(@Body RequestBody body);
 
+    /**
+     * 分享成功增加领券接口
+     * @param body
+     * @return
+     */
+    @POST("/activity/share/succeed")
+    Flowable<BaseEntity> shareSuccess(@Body RequestBody body);
+
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
     /**
