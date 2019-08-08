@@ -57,4 +57,6 @@
     <string name="tool_phone_memory_full">手机空间不足</string>
     <string name="tool_phone_speed">手机加速</string>
     <string name="tool_memory_speed">内存占用加速</string>
+    <string name="tool_no_install_chat">您还未装微信</string>
+    <string name="tool_no_install_qq">您还未装QQ</string>
 </resources>

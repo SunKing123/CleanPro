@@ -27,4 +27,8 @@ public class SpCacheConfig {
     //path 路径
     public static final String WHITE_LIST_KEY_DIRECTORY = "white_list_directory";
 
+    //微信包名
+    public static final String CHAT_PACKAGE = "com.tencent.mm";
+    //QQ包名
+    public static final String QQ_PACKAGE = "com.tencent.mobileqq";
 }

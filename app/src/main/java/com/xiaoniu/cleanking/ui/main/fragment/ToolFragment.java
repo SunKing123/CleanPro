@@ -19,10 +19,12 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -146,9 +148,17 @@ public class ToolFragment extends SimpleFragment {
     public void onCoolingViewClicked(View view) {
         int ids = view.getId();
         if (ids == R.id.rl_chat) {
+            if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+                ToastUtils.showShort(R.string.tool_no_install_chat);
+                return;
+            }
             startActivity(WechatCleanHomeActivity.class);
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "clean_up_toolbox_page");
         } else if (ids == R.id.rl_qq) {
+            if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
+                ToastUtils.showShort(R.string.tool_no_install_qq);
+                return;
+            }
             if (QQUtil.audioList != null)
                 QQUtil.audioList.clear();
             if (QQUtil.fileList != null)
