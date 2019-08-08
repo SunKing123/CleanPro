@@ -27,6 +27,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -43,13 +44,13 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -687,12 +688,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
-            clickDownload(mFirstViewAdClick, dataBean.getDownloadUrl(), position);
+            clickDownload(mImageFirstAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
-            clickDownload(mSecondViewAdClick, dataBean.getDownloadUrl(), position);
+            clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         }
         StatisticsUtils.trackClickHolderCustom("ad_show", "\"广告展示曝光", "home_page"
@@ -711,8 +712,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //广告埋点
             StatisticsUtils.trackClickHolder("ad_click", "\"广告点击", "home_page"
                     , "home_page_clean_up_page", String.valueOf(position));
-            mPresenter.startDownload(downloadUrl);
-            ToastUtils.show("已开始下载");
+//            mPresenter.startDownload(downloadUrl);
+//            ToastUtils.show("已开始下载");
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.URL, downloadUrl);
+            bundle.putBoolean(Constant.NoTitle, false);
+            startActivity(UserLoadH5Activity.class, bundle);
         });
     }
 
