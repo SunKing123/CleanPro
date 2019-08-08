@@ -241,6 +241,7 @@
                 android:layout_marginRight="@dimen/dimen_8dp"
                 android:text="最高可得50元"
                 android:textSize="@dimen/dimen_12sp"
+                android:visibility="gone"
                 android:textColor="#FD6F46" />
             <ImageView
                 android:layout_width="6dp"
