@@ -154,26 +154,25 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
     //扫描微信垃圾、图片】音视频等
     public void scanWxGabage() {
         PrefsCleanUtil.getInstance().init(mView, "xnpre", Context.MODE_APPEND);
-        mView.getWindow().getDecorView().post(new Runnable() {
-            public void run() {
-                ThreadTaskUtil.executeNormalTask("准备扫描微信", new Runnable() {
-                    public void run() {
-                        f = new WxQqUtil();
-                        f.startScanWxGarbage(c, new WxQqUtil.a() {
-                            @Override
-                            public void changeHomeNum() {
-                                e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
-                            }
 
+        ThreadTaskUtil.executeNormalTask("准备扫描微信", new Runnable() {
+            public void run() {
+                f = new WxQqUtil();
+                f.startScanWxGarbage(c, new WxQqUtil.a() {
+                    @Override
+                    public void changeHomeNum() {
+                        e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
+                    }
+
+                    @Override
+                    public void wxEasyScanFinish() {
+                        getHsize();
+                        mView.runOnUiThread(new Runnable() {
                             @Override
-                            public void wxEasyScanFinish() {
-                                getHsize();
-                                mView.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mView.getScanResult();
-                                    }
-                                });
+                            public void run() {
+                                mView.getScanResult();
+                            }
+                        });
 //                                long ls = e + WxQqUtil.m.getTotalSize() + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
 //                                Log.e("fdsa", "" + ls);
 //                                long st = 1024 * 1024;
@@ -182,19 +181,18 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 //                                Log.e("fdsa", "其他缓存浏览公众号小程序产生" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.f.getTotalSize()));
 //                                Log.e("fdsa", "缓存表情浏览聊天记录产生的表情" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.e.getTotalSize()));
 //                                Log.e("fdsa", "总缓存大小" + CleanAllFileScanUtil.byte2FitSize(e));
-                            }
-                        });
                     }
                 });
-                ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
-                    public void run() {
-                        SystemClock.sleep(200);
-                        b();
-                    }
-                });
-
             }
         });
+        ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
+            public void run() {
+                SystemClock.sleep(200);
+                b();
+            }
+        });
+
+
     }
 
     public void getHsize() {

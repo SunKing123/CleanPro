@@ -1,9 +1,14 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.os.StatFs;
 import android.telephony.mbms.FileInfo;
 import android.util.Log;
+import android.view.View;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -11,6 +16,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileInfoEntity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
 
 import java.io.File;
 import java.math.RoundingMode;
@@ -28,6 +34,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.view.View.VISIBLE;
 
 /**
  * Created by lang.chen on 2019/7/9
@@ -144,4 +152,22 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
         return this.mFileTotalSize;
     }
 
+
+    //扫描中动画
+    public ObjectAnimator setScaningAnim(View viewY) {
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DeviceUtils.dip2px(99), DeviceUtils.getScreenWidth());
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
+        animator.setDuration(600);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+//        animator.setRepeatMode(ValueAnimator.INFINITE);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                viewY.setVisibility(VISIBLE);
+            }
+        });
+        animator.start();
+        return animator;
+    }
 }
