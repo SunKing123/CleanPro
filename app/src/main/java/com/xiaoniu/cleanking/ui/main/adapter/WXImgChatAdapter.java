@@ -173,7 +173,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             }
         });
         mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
-
+        mViewChild.mRecyclerView.setItemAnimator(null);
 
         return convertView;
     }
