@@ -9,14 +9,13 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:scrollbars="none"
-        android:layout_weight="1"
         android:footerDividersEnabled="false"
-        android:groupIndicator="@null" />
-
+        android:groupIndicator="@null"
+        android:scrollbars="none" />
 
 
     <LinearLayout

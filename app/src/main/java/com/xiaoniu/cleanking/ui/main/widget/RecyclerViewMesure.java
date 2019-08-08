@@ -23,14 +23,10 @@ public class RecyclerViewMesure extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    /**
-     * 设置不滚动
-     */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
                 MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, expandSpec);
-
     }
 }
