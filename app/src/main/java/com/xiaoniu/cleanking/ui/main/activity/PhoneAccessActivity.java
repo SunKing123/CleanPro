@@ -210,6 +210,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onClick(View v) {
                 if (!canClickDelete) return;
+                mAppBarLayout.setExpanded(true);
                 ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
                 for (FirstJunkInfo info : belowAdapter.getListImage()) {
                     if (info.getIsSelect()) {

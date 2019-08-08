@@ -254,7 +254,7 @@
                         android:layout_marginTop="4dp"
                         android:gravity="bottom"
                         android:visibility="gone"
-                        android:textSize="@dimen/dimen_17dp"
+                        android:textSize="@dimen/dimen_15dp"
                         android:text="GB"/>
                 </RelativeLayout>
             </LinearLayout>
