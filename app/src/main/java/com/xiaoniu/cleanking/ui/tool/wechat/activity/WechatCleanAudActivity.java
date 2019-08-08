@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.adapter.WechatCleanAudAdapter;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
@@ -22,6 +23,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,6 +179,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
     public void deleteSuccess(List<CleanWxItemInfo> listF) {
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
+        tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg );
         audAdapter.deleteData(listF);
 //        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
 //        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
@@ -195,5 +199,23 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
     protected void onPause() {
         super.onPause();
         NiuDataAPI.onPageEnd("wechat_voice_cleaning_view_page", "语音清理页面浏览");
+    }
+
+    @Override
+    public void finish() {
+        EventBus.getDefault().post(new WxQqCleanEvent(WxQqCleanEvent.WX_CLEAN_AUDIO, getAllFileSize()));
+        super.finish();
+    }
+
+    //获取当前文件大小
+    public long getAllFileSize() {
+        long fileSize = 0;
+        List<CleanWxItemInfo> listAll = new ArrayList<>();
+        List<CleanWxItemInfo> listData = audAdapter.getListImage();
+        listAll.addAll(listData);
+        for (int i = 0; i < listAll.size(); i++) {
+            fileSize += listAll.get(i).getFileSize();
+        }
+        return fileSize;
     }
 }
