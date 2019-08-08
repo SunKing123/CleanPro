@@ -344,6 +344,9 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     }
 
     public void deleteResult(long result) {
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
+        long qqCatheSize = sp.getLong(SpCacheConfig.QQ_CACHE_SIZE, 0L);
+        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, qqCatheSize - result).commit();
         Intent intent = new Intent(QQCleanHomeActivity.this, WechatCleanResultActivity.class);
         intent.putExtra("data", result);
         startActivity(intent);

@@ -278,7 +278,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 //        }
 //        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
         Log.e("fddf", "删除大小：" + listTemp);
-//        delFile(listTemp);
+        delFile(listTemp);
     }
 
     public void delFile(List<CleanWxItemInfo> list) {
