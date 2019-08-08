@@ -143,6 +143,11 @@ public class ToolFragment extends SimpleFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        setData();
+        super.onResume();
+    }
 
     @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin})
     public void onCoolingViewClicked(View view) {
@@ -166,7 +171,9 @@ public class ToolFragment extends SimpleFragment {
             startActivity(QQCleanHomeActivity.class);
             StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", "home_page", "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
-            startActivity(PhoneAccessActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
+            startActivity(PhoneAccessActivity.class,bundle);
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", "home_page", "clean_up_toolbox_page");
         } else if (ids == R.id.text_cooling) {
             //手机降温

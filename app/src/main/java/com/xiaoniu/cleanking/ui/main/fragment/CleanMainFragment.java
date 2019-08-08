@@ -241,7 +241,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void text_acce() {
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
-        startActivity(PhoneAccessActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+        startActivity(PhoneAccessActivity.class,bundle);
     }
 
     @OnClick(R.id.line_ql)
@@ -281,7 +283,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else if (type == TYPE_NOT_SCAN) {
             long now = System.currentTimeMillis();
             long time = (now - preCleanTime) / 1000;
-            if (time < 30) {
+            if (time < 180) {
                 cleanFinishSign();
             } else {
                 //未扫描， 去扫描
@@ -373,7 +375,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mChangeFinish = false;
 
         mPresenter.stopCleanScanAnimation();
-
 
     }
 

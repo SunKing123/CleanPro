@@ -7,6 +7,8 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1194,5 +1196,18 @@ public class TimeUtil {
             exception.printStackTrace();
         }
         return 0;
+    }
+
+    public static double getMemoryShow() {
+        NoClearSPHelper noClearSPHelper = new NoClearSPHelper();
+        long cleanTime = noClearSPHelper.getCleanTime();
+        int offectMinutes = getOffectMinutes(System.currentTimeMillis(),cleanTime);
+        if(offectMinutes <6) {
+            return 0.5;
+        }else if(offectMinutes < 10){
+            return 0.7;
+        }else {
+            return 1;
+        }
     }
 }

@@ -206,4 +206,11 @@ public class Constant {
      */
     public static final String PARAMS_QQ_VIDEO_LIST="params_qq_video_list";
 
+    /** 微信图片清理key*/
+    public static final String WX_CACHE_SIZE_IMG="wx_cache_size_img";
+
+    /** 微信视频清理key*/
+    public static final String WX_CACHE_SIZE_VIDEO="wx_cache_size_video";
+
 }
+
