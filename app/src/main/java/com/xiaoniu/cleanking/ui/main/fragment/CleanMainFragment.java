@@ -27,6 +27,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
@@ -43,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
@@ -127,6 +130,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     View mFirstViewAdClick;
     @BindView(R.id.view_click_second_ad)
     View mSecondViewAdClick;
+    @BindView(R.id.animation_clean_finish)
+    LottieAnimationView mFinishAnimator;
+    @BindView(R.id.view_lottie_star)
+    LottieAnimationView mLottieStarView;
+
 
     /**
      * 清理的分类列表
@@ -233,7 +241,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void text_acce() {
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
-        startActivity(PhoneAccessActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+        startActivity(PhoneAccessActivity.class,bundle);
     }
 
     @OnClick(R.id.line_ql)
@@ -246,6 +256,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
+        mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
             mScrollView.scrollTo(mScrollView.getScrollX(), 0);
             //扫描完成点击清理
@@ -269,8 +280,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(GONE);
-
-
         } else if (type == TYPE_NOT_SCAN) {
             long now = System.currentTimeMillis();
             long time = (now - preCleanTime) / 1000;
@@ -305,13 +314,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
     @OnClick(R.id.line_wx)
     public void mClickWx() {
-        startActivity(WechatCleanHomeActivity.class);
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat);
+            return;
+        }
+        startActivity(WechatCleanHomeActivity.class);
     }
     @OnClick(R.id.line_qq)
     public void mClickQq() {
-        startActivity(QQCleanHomeActivity.class);
         StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_qq);
+            return;
+        }
+        startActivity(QQCleanHomeActivity.class);
     }
     @OnClick(R.id.line_jw)
     public void mClickJw() {
@@ -404,10 +421,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     /**
      * 恢复布局
      */
+
     private void restoreLayout() {
         //设置可以点击
         mLayoutRoot.setIntercept(false);
         mIconInner.setVisibility(GONE);
+        mIconOuter.setVisibility(VISIBLE);
+        mLayoutScan.setVisibility(VISIBLE);
+        mLayoutCount.setVisibility(VISIBLE);
+        mAnimationView.setVisibility(VISIBLE);
+        mFinishAnimator.setVisibility(View.INVISIBLE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DeviceUtils.dip2px(460);
@@ -440,6 +463,18 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         type = TYPE_CLEAN_FINISH;
 
         setColorChange(false);
+
+        //播放lottie动画
+        mLottieStarView.setVisibility(VISIBLE);
+        playStarAnimation();
+
+        mPresenter.showOuterViewRotation(mIconOuter);
+    }
+
+    private void playStarAnimation() {
+        mLottieStarView.setImageAssetsFolder("images");
+        mLottieStarView.setAnimation("data_star.json");
+        mLottieStarView.playAnimation();
     }
 
     public void showBottomTab() {
@@ -487,6 +522,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
+    public LottieAnimationView getLottieView() {
+        return mAnimationView;
+    }
+
     /**
      * 清理完成后的页面
      *
@@ -496,12 +535,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         return mLayoutCleanFinish;
     }
 
+    public RelativeLayout getCleanTextLayout() {
+        return mLayoutCount;
+    }
+
+    public LinearLayout getScanLayout() {
+        return mLayoutScan;
+    }
+
     @OnClick(R.id.iv_back)
     public void onViewClicked() {
 
         //
         showBottomTab();
         mLayoutCleanFinish.setVisibility(GONE);
+        playStarAnimation();
     }
 
     private long firstTime;
@@ -510,6 +558,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (mLayoutCleanFinish.getVisibility() == VISIBLE) {
             mLayoutCleanFinish.setVisibility(GONE);
             showBottomTab();
+            playStarAnimation();
         } else {
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - firstTime > 1500) {
@@ -539,12 +588,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     boolean isError = false;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
-        url += "?xn_data=" + AndroidUtil.getXnData();
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
+//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavaInterface(getActivity()), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(getActivity(),mWebView), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -614,10 +663,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             isShow = false;
         }
-        if (!hidden)
+        if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        else
+        } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
+        }
     }
 
     /**
@@ -665,12 +715,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
-            clickDownload(mFirstViewAdClick, dataBean.getDownloadUrl(), position);
+            clickDownload(mImageFirstAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         } else if (position == 1) {
             mImageSecondAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
-            clickDownload(mSecondViewAdClick, dataBean.getDownloadUrl(), position);
+            clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         }
         StatisticsUtils.trackClickHolderCustom("ad_show", "\"广告展示曝光", "home_page"
@@ -689,8 +739,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             //广告埋点
             StatisticsUtils.trackClickHolder("ad_click", "\"广告点击", "home_page"
                     , "home_page_clean_up_page", String.valueOf(position));
-            mPresenter.startDownload(downloadUrl);
-            ToastUtils.show("已开始下载");
+//            mPresenter.startDownload(downloadUrl);
+//            ToastUtils.show("已开始下载");
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.URL, downloadUrl);
+            bundle.putBoolean(Constant.NoTitle, false);
+            startActivity(UserLoadH5Activity.class, bundle);
         });
     }
 
@@ -715,5 +769,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         super.onPause();
         NiuDataAPI.onPageEnd("check_garbage_view_page", "\"清理垃圾\"浏览");
 
+    }
+
+    /**
+     * 获取结束的lottieView
+     * @return
+     */
+    public LottieAnimationView getFinishAnimator() {
+        return mFinishAnimator;
     }
 }

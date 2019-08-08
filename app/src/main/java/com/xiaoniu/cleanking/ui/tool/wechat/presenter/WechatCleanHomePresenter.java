@@ -184,7 +184,6 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 //                                Log.e("fdsa", "总缓存大小" + CleanAllFileScanUtil.byte2FitSize(e));
                             }
                         });
-                        PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_WX_TOTAL_SIZE, WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize());
                     }
                 });
                 ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
@@ -279,7 +278,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 //        }
 //        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
         Log.e("fddf", "删除大小：" + listTemp);
-//        delFile(listTemp);
+        delFile(listTemp);
     }
 
     public void delFile(List<CleanWxItemInfo> list) {

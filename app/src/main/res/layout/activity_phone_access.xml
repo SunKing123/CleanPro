@@ -21,7 +21,7 @@
         android:id="@+id/viewt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_150dp"
-        android:layout_marginTop="@dimen/dimen_50dp"
+        android:layout_marginTop="@dimen/dimen_56dp"
         android:layout_below="@+id/line_title"
         android:background="#06C581">
 
@@ -100,6 +100,7 @@
                     android:background="@mipmap/back_white" />
 
                 <TextView
+                    android:id="@+id/tv_title_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -205,7 +206,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/dimen_50dp"
+        android:layout_marginTop="@dimen/dimen_56dp"
         android:gravity="center"
         android:visibility="gone" >
         <ImageView

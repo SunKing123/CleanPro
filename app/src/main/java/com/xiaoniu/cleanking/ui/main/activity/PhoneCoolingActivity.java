@@ -361,13 +361,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     public void initWebView() {
 //        String url = ApiModule.Base_H5_Host;
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
-        url += "?xn_data=" + AndroidUtil.getXnData();
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
+//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
-        mWebView.addJavascriptInterface(new JavaInterface(this), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(this,mWebView), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -476,7 +476,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onNetLayoutClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
     }
 
     /**
