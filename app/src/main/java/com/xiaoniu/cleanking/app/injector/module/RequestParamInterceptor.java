@@ -78,7 +78,7 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("appVersion", AndroidUtil.getAppVersionName());
         mapHeader.put("channel", AndroidUtil.getMarketId());
         mapHeader.put("deviceId", AndroidUtil.getUdid());
-        mapHeader.put("gtId", "419441fd0260490413e73830c3326298");
+        mapHeader.put("gtId", "");
 
         mapHeader.put("imei", "357755073075671");
         mapHeader.put("os", "android");
@@ -87,7 +87,7 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("sessionId", "");
         mapHeader.put("sign", "7cdd4afd6a0bd76080a973ada0566598");
         mapHeader.put("talkVersion", "");
-        mapHeader.put("timestamp", "1562234756542");
+        mapHeader.put("timestamp", System.currentTimeMillis());
         mapHeader.put("uid", "");
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
         if (original.body() instanceof FormBody) {

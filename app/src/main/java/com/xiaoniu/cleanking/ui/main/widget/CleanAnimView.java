@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -145,19 +146,28 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
     }
 
     boolean isError = false;
+    JavaInterface javaInterface;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
-        url += "?xn_data=" + AndroidUtil.getXnData();
+        javaInterface = new JavaInterface((Activity) mContext, mWebView);
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
+        Log.e("trew", "" + url);
+//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
-        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext), "cleanPage");
+        mWebView.addJavascriptInterface(javaInterface, "cleanPage");
+        javaInterface.setListener(new JavaInterface.onShareSuccessListener() {
+            @Override
+            public void shareSuccess() {
+
+            }
+        });
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

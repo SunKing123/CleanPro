@@ -115,6 +115,10 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     ImageView ivHua3;
     @BindView(R.id.tv_selectaud)
     TextView tvSelectAud;
+    @BindView(R.id.tv_selectpic)
+    TextView tvSelectPic;
+    @BindView(R.id.tv_selectvideo)
+    TextView tvSelectVideo;
     @BindView(R.id.tv_selectfile)
     TextView tvSelectFile;
     @BindView(R.id.iv_hua1)
@@ -188,8 +192,8 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
-//            if (!tvSelect.isSelected() && !tvSelect1.isSelected()) return;
-            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected());
+            if (selectSize == 0) return;
+            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected(),mListImg,mListVideo);
             StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
@@ -223,8 +227,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("qq_ceaning_view_page", "qq清理页面浏览");
-        tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
-        tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
+        setSelectAllFiles();
     }
 
     @Override
@@ -258,7 +261,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     public void updateQQImgSize(String size, long mQQImgFileSize) {
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
-            tvPicSize.setText("");
+            tvPicSize.setText("0KB");
         } else {
             tvPicSize.setText(size);
         }
@@ -270,7 +273,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     //扫描到视频文件
     public void updateVideoSize(String size, long mQQVideoFileSize) {
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
-            tvVideoSize.setText("");
+            tvVideoSize.setText("0KB");
         } else {
             tvVideoSize.setText(size);
         }
@@ -331,17 +334,19 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     //垃圾选中的大小
     public void getSelectCacheSize() {
-        long selectSize = 0;
-        if (tvSelect1.isSelected())
-            selectSize += getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
-        tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setBackgroundResource(tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        setSelectAllFiles();
+        long totalSize = 0;
+        totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
+        tvGabsize.setText(CleanAllFileScanUtil.byte2FitSizeOne(totalSize).substring(0, CleanAllFileScanUtil.byte2FitSizeOne(totalSize).length() - 2));
+        tvGb.setText(CleanAllFileScanUtil.byte2FitSizeOne(totalSize).substring(CleanAllFileScanUtil.byte2FitSizeOne(totalSize).length() - 2, CleanAllFileScanUtil.byte2FitSizeOne(totalSize).length()));
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
-        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, selectSize).commit();
+        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, totalSize).commit();
     }
 
     public void deleteResult(long result) {
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
+        long qqCatheSize = sp.getLong(SpCacheConfig.QQ_CACHE_SIZE, 0L);
+        sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, qqCatheSize - result).commit();
         Intent intent = new Intent(QQCleanHomeActivity.this, WechatCleanResultActivity.class);
         intent.putExtra("data", result);
         startActivity(intent);
@@ -373,6 +378,24 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             }
 
         }
+        setSelectAllFiles();
+    }
+
+    //显示所有的选中的文件、视频音频图片语音
+    long selectSize = 0;
+
+    public void setSelectAllFiles() {
+        tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
+        tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
+        tvSelectVideo.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectImgOrVideoSize(mListVideo)));
+        tvSelectPic.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectImgOrVideoSize(mListImg)));
+        selectSize = 0;
+        selectSize += mPresenter.getSelectFileSize() + mPresenter.getSelectAudioSize() + mPresenter.getSelectImgOrVideoSize(mListVideo) + mPresenter.getSelectImgOrVideoSize(mListImg);
+        if (tvSelect1.isSelected())
+            selectSize += getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
+        tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
+        tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
+        tvDelete.setBackgroundResource(selectSize != 0 ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
     }
 
     /**
@@ -399,30 +422,30 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         if (this.f && this.e) {
             if (this.n > 0) {
 //                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_QQ_TOTAL_SIZE, this.n + this.bT + this.T + this.Q + this.ac + this.W + this.Z + this.af);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getScanGabageResult();
-                    }
-                }, 300);
-                Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());
-                Log.e("eeee", "al大小：" + getSize(al) + "  aj数量：" + al.size());  //头像缓存(联网可重新下载)
-                Log.e("eeee", "an大小：" + getSize(an) + "  an数量：" + an.size());  //空间缓存(浏览空间产生的图片缓存)
-                Log.e("eeee", "ap大小：" + getSize(ap) + "  ap数量：" + ap.size());
-                Log.e("eeee", "ar大小：" + getSize(ar) + "  ar数量：" + ar.size());
-
-                Log.e("eeee", "at大小：" + getSize(at) + "  aj数量：" + at.size());
-                Log.e("eeee", "av大小：" + getSize(av) + "  av数量：" + av.size());
-                Log.e("eeee", "ax大小：" + getSize(ax) + "  ax数量：" + ax.size());
-                Log.e("eeee", "az大小：" + getSize(az) + "  ap数量：" + az.size());  //语音
-
-                Log.e("eeee", "ah大小：" + getSize(ah) + "  ah数量：" + ah.size());   //临时缓存(浏览朋友圈产生的缓存垃圾)
-                Log.e("eeee", "ag大小：" + getSize(ag) + "  ah数量：" + ag.size());  //垃圾文件(不含聊天信息，不影响QQ使用)
-                Log.e("eeee", "aB大小：" + getSize(aB) + "  aB数量：" + aB.size());  //文件
             } else {
-                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_QQ_TOTAL_SIZE, 0);
+//                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_QQ_TOTAL_SIZE, 0);
             }
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getScanGabageResult();
+            }
+        }, 300);
+        Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());
+        Log.e("eeee", "al大小：" + getSize(al) + "  aj数量：" + al.size());  //头像缓存(联网可重新下载)
+        Log.e("eeee", "an大小：" + getSize(an) + "  an数量：" + an.size());  //空间缓存(浏览空间产生的图片缓存)
+        Log.e("eeee", "ap大小：" + getSize(ap) + "  ap数量：" + ap.size());
+        Log.e("eeee", "ar大小：" + getSize(ar) + "  ar数量：" + ar.size());
+
+        Log.e("eeee", "at大小：" + getSize(at) + "  aj数量：" + at.size());
+        Log.e("eeee", "av大小：" + getSize(av) + "  av数量：" + av.size());
+        Log.e("eeee", "ax大小：" + getSize(ax) + "  ax数量：" + ax.size());
+        Log.e("eeee", "az大小：" + getSize(az) + "  ap数量：" + az.size());  //语音
+
+        Log.e("eeee", "ah大小：" + getSize(ah) + "  ah数量：" + ah.size());   //临时缓存(浏览朋友圈产生的缓存垃圾)
+        Log.e("eeee", "ag大小：" + getSize(ag) + "  ah数量：" + ag.size());  //垃圾文件(不含聊天信息，不影响QQ使用)
+        Log.e("eeee", "aB大小：" + getSize(aB) + "  aB数量：" + aB.size());  //文件
         if (this.n <= 0 && !"finishActivity".equals(this.bu) && !"bigGarbageFragment".equals(this.bu)) {
             this.i.sendEmptyMessageDelayed(4, 500);
         }
@@ -665,7 +688,13 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                     Logger.i(Logger.TAG, Logger.ZYTAG, "CleanQqClearActivity---doOneTypeFinihed --QQ_GARBAGE_CACHE_FINISH-- ");
                     if (this.aP && this.aT && this.aS && this.aQ) {
                         Logger.i(Logger.TAG, Logger.ZYTAG, "CleanQqClearActivity---doOneTypeFinihed --QQ_GARBAGE_CACHE_FINISH--1== ");
-                        this.i.sendEmptyMessage(2);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                c();
+                            }
+                        });
+//                        this.i.sendEmptyMessage(2);
                         break;
                     }
                 case 102:

@@ -98,6 +98,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     RelativeLayout rel_bottom;
     @BindView(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
+    @BindView(R.id.tv_title_name)
+    TextView mTvTitleName;
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -125,11 +127,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -182,11 +184,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
 
-
-
     @Override
     public void initView() {
-
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            mTvTitleName.setText(bundle.getString(SpCacheConfig.ITEM_TITLE_NAME));
+        }
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
@@ -469,7 +472,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html");
+        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
     }
 
     @Override

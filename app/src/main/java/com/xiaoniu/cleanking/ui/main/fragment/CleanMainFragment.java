@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
@@ -51,6 +52,7 @@ import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -239,7 +241,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void text_acce() {
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
-        startActivity(PhoneAccessActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+        startActivity(PhoneAccessActivity.class,bundle);
     }
 
     @OnClick(R.id.line_ql)
@@ -310,13 +314,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
     @OnClick(R.id.line_wx)
     public void mClickWx() {
-        startActivity(WechatCleanHomeActivity.class);
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat);
+            return;
+        }
+        startActivity(WechatCleanHomeActivity.class);
     }
     @OnClick(R.id.line_qq)
     public void mClickQq() {
-        startActivity(QQCleanHomeActivity.class);
         StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_qq);
+            return;
+        }
+        startActivity(QQCleanHomeActivity.class);
     }
     @OnClick(R.id.line_jw)
     public void mClickJw() {
@@ -575,12 +587,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     boolean isError = false;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html";
-        url += "?xn_data=" + AndroidUtil.getXnData();
+        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
+//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavaInterface(getActivity()), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(getActivity(),mWebView), "cleanPage");
         mWebView.loadUrl(url);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override

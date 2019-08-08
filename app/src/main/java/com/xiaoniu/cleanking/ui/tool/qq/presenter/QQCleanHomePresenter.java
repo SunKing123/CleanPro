@@ -19,6 +19,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FileDeleteEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -143,7 +144,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
 
     //清理缓存垃圾
-    public void onekeyCleanDelete(List<CleanWxClearInfo> cacheList, boolean isTopSelect) {
+    public void onekeyCleanDelete(List<CleanWxClearInfo> cacheList, boolean isTopSelect, ArrayList<FileTitleEntity> mListImg, ArrayList<FileTitleEntity> mListVideo) {
         List<CleanWxClearInfo> listTemp = new ArrayList<>();
         List<CleanWxClearInfo> selectAudList = getSelectAudioList();
         List<CleanWxClearInfo> selectFileList = getSelectFileList();
@@ -155,6 +156,28 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
             listTemp.addAll(cacheList);
         Log.e("ss", "" + listTemp.size());
 
+        List<FileDeleteEntity> listFileDelete = new ArrayList<>();
+        for (int i = 0; i < listTemp.size(); i++) {
+            FileDeleteEntity fileDeleteEntity = new FileDeleteEntity();
+            fileDeleteEntity.setPath(listTemp.get(i).getFilePath());
+            fileDeleteEntity.setSize(listTemp.get(i).getSize());
+            listFileDelete.add(fileDeleteEntity);
+        }
+
+        for (int i = 0; i < getSelectImgOrVideoList(mListImg).size(); i++) {
+            FileDeleteEntity fileDeleteEntity = new FileDeleteEntity();
+            fileDeleteEntity.setPath(getSelectImgOrVideoList(mListImg).get(i).path);
+            fileDeleteEntity.setSize(getSelectImgOrVideoList(mListImg).get(i).size);
+            listFileDelete.add(fileDeleteEntity);
+        }
+        for (int i = 0; i < getSelectImgOrVideoList(mListVideo).size(); i++) {
+            FileDeleteEntity fileDeleteEntity = new FileDeleteEntity();
+            fileDeleteEntity.setPath(getSelectImgOrVideoList(mListVideo).get(i).path);
+            fileDeleteEntity.setSize(getSelectImgOrVideoList(mListVideo).get(i).size);
+            listFileDelete.add(fileDeleteEntity);
+        }
+
+        Log.e("dsds", "" + listFileDelete.size());
         //测试代码**************************************
 //        List<CleanWxClearInfo> listTempTest = new ArrayList<>();
 //        long tempSize = 0;
@@ -166,24 +189,24 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 //        }
 //        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
 
-        delFile(listTemp);
+        delFile(listFileDelete);
     }
 
-    public void delFile(List<CleanWxClearInfo> list) {
-        List<CleanWxClearInfo> files = list;
+    public void delFile(List<FileDeleteEntity> list) {
+        List<FileDeleteEntity> files = list;
         Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
             public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
 
-                for (CleanWxClearInfo appInfoBean : files) {
-                    File file = new File(appInfoBean.getFilePath());
+                for (FileDeleteEntity appInfoBean : files) {
+                    File file = new File(appInfoBean.getPath());
                     Log.e("删除路劲:", "" + file.getAbsolutePath());
                     if (null != file) {
                         file.delete();
                     }
                 }
                 long sizes = 0;
-                for (CleanWxClearInfo cleanWxItemInfo : files)
+                for (FileDeleteEntity cleanWxItemInfo : files)
                     sizes += cleanWxItemInfo.getSize();
                 emitter.onNext(sizes);
                 emitter.onComplete();
@@ -238,6 +261,30 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         return listTemp;
     }
 
+    //选中的图片或者视频大小
+    public long getSelectImgOrVideoSize(ArrayList<FileTitleEntity> listImg) {
+        long selectAudSize = 0;
+        if (listImg.size() == 0) return 0;
+        for (int i = 0; i < listImg.size(); i++) {
+            for (int k = 0; k < listImg.get(i).lists.size(); k++) {
+                if (listImg.get(i).lists.get(k).isSelect)
+                    selectAudSize += listImg.get(i).lists.get(k).size;
+            }
+        }
+        return selectAudSize;
+    }
+
+    public List<FileChildEntity> getSelectImgOrVideoList(ArrayList<FileTitleEntity> listImg) {
+        List<FileChildEntity> selectImgList = new ArrayList<>();
+        for (int i = 0; i < listImg.size(); i++) {
+            for (int k = 0; k < listImg.get(i).lists.size(); k++) {
+                if (listImg.get(i).lists.get(k).isSelect)
+                    selectImgList.add(listImg.get(i).lists.get(k));
+            }
+        }
+        return selectImgList;
+    }
+
     //获取选中的文件大小
     public long getSelectFileSize() {
         long selectAudSize = 0;
@@ -265,20 +312,19 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
     }
 
 
-    private  long mQQImgFileSize=0;
-    private  long mQQVideoFileSize=0L;
-
+    private long mQQImgFileSize = 0;
+    private long mQQVideoFileSize = 0L;
 
 
     /**
      * 获取QQ聊天图片
      */
     public void getImgQQ() {
-        mQQImgFileSize=0L;
+        mQQImgFileSize = 0L;
         String wxRootPath = Environment.getExternalStorageDirectory().getPath() + "/tencent/MobileQQ";
         String pathLocal = wxRootPath + "/diskcache";
         String pathLocal2 = wxRootPath + "/photo";
-        String pathLocal3=wxRootPath+"/thumb";
+        String pathLocal3 = wxRootPath + "/thumb";
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
@@ -299,7 +345,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
                     @Override
                     public void onNext(String value) {
-                        mView.updateQQImgSize(FileSizeUtils.formatFileSize(mQQImgFileSize),mQQImgFileSize);
+                        mView.updateQQImgSize(FileSizeUtils.formatFileSize(mQQImgFileSize), mQQImgFileSize);
                     }
 
                     @Override
@@ -318,7 +364,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
      * 获取相机视频
      */
     public void getVideoFiles() {
-        mQQVideoFileSize=0L;
+        mQQVideoFileSize = 0L;
         String wxRootPath = Environment.getExternalStorageDirectory().getPath() + "/tencent/MobileQQ";
         String pathLocal = wxRootPath + "/shortvideo";
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -339,7 +385,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
                     @Override
                     public void onNext(String value) {
-                        mView.updateVideoSize(FileSizeUtils.formatFileSize(mQQVideoFileSize),mQQVideoFileSize);
+                        mView.updateVideoSize(FileSizeUtils.formatFileSize(mQQVideoFileSize), mQQVideoFileSize);
                     }
 
                     @Override
@@ -353,6 +399,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
                 });
 
     }
+
     /**
      * 扫描聊天中的视频
      *
@@ -366,13 +413,13 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
                 for (File file : files) {
                     if (file.isDirectory()) {
                         scanAllVideoCamera(path + "/" + file.getName());
-                    } else if (file.getName().endsWith(".mp4") ) {
+                    } else if (file.getName().endsWith(".mp4")) {
                         FileChildEntity fileChildEntity = new FileChildEntity();
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
-                        fileChildEntity.fileType=1;
-                        mQQVideoFileSize+=file.length();
+                        fileChildEntity.fileType = 1;
+                        mQQVideoFileSize += file.length();
 
                     }
                 }
@@ -398,7 +445,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
-                        mQQImgFileSize+=file.length();
+                        mQQImgFileSize += file.length();
 
                     }
                 }
