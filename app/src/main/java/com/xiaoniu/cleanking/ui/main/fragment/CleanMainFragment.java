@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
@@ -51,6 +52,7 @@ import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -310,13 +312,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
     @OnClick(R.id.line_wx)
     public void mClickWx() {
-        startActivity(WechatCleanHomeActivity.class);
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat);
+            return;
+        }
+        startActivity(WechatCleanHomeActivity.class);
     }
     @OnClick(R.id.line_qq)
     public void mClickQq() {
-        startActivity(QQCleanHomeActivity.class);
         StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_qq);
+            return;
+        }
+        startActivity(QQCleanHomeActivity.class);
     }
     @OnClick(R.id.line_jw)
     public void mClickJw() {
