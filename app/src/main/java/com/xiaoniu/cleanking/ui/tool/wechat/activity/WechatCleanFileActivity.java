@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
+import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.adapter.WechatCleanFileAdapter;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
@@ -22,6 +24,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -223,7 +227,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
                     listDataYestoday.add(listDataTemp.get(j));
                 } else if (TimeUtil.IsInMonth(listDataTemp.get(j).getStringDay())) {
                     listDataInMonth.add(listDataTemp.get(j));
-                } else  {
+                } else {
                     listDataInHalfYear.add(listDataTemp.get(j));
                 }
             } catch (ParseException e) {
@@ -304,6 +308,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         super.onResume();
         NiuDataAPI.onPageStart("wechat_receive_files_cleaning_view_page", "文件清理页面浏览");
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -351,10 +356,10 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         for (int i = 0; i < listF.size(); i++) {
             deleteSize += listF.get(i).getFileSize();
         }
-        setSelectSize(listData, tvSizeToday,tvSelectToday);
-        setSelectSize(listData2, tvSizeYestoday,tvSelectYestoday);
-        setSelectSize(listData3, tvSizeMonth,tvSelectMonth);
-        setSelectSize(listData4, tvSizeHalfyear,tvSelectHalfyear);
+        setSelectSize(listData, tvSizeToday, tvSelectToday);
+        setSelectSize(listData2, tvSizeYestoday, tvSelectYestoday);
+        setSelectSize(listData3, tvSizeMonth, tvSelectMonth);
+        setSelectSize(listData4, tvSizeHalfyear, tvSelectHalfyear);
         tv_delete.setText(deleteSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(deleteSize));
     }
 
@@ -377,6 +382,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
     public void deleteSuccess(List<CleanWxItemInfo> list1, List<CleanWxItemInfo> list2, List<CleanWxItemInfo> list3, List<CleanWxItemInfo> list4) {
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
+        tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg );
         fileAdapterToday.deleteData(list1);
         fileAdapterYestoday.deleteData(list2);
         fileAdapterInMonth.deleteData(list3);
@@ -388,5 +394,29 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
     @Override
     public void netError() {
 
+    }
+
+    @Override
+    public void finish() {
+        EventBus.getDefault().post(new WxQqCleanEvent(WxQqCleanEvent.WX_CLEAN_FILE, getAllFileSize()));
+        super.finish();
+    }
+
+    //获取当前文件大小
+    public long getAllFileSize() {
+        long fileSize = 0;
+        List<CleanWxItemInfo> listAll = new ArrayList<>();
+        List<CleanWxItemInfo> listData = fileAdapterToday.getListImage();
+        List<CleanWxItemInfo> listData2 = fileAdapterYestoday.getListImage();
+        List<CleanWxItemInfo> listData3 = fileAdapterInMonth.getListImage();
+        List<CleanWxItemInfo> listData4 = fileAdapterInHalfYear.getListImage();
+        listAll.addAll(listData);
+        listAll.addAll(listData2);
+        listAll.addAll(listData3);
+        listAll.addAll(listData4);
+        for (int i = 0; i < listAll.size(); i++) {
+            fileSize += listAll.get(i).getFileSize();
+        }
+        return fileSize;
     }
 }

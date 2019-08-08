@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
@@ -28,7 +29,10 @@ import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
+import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
+import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
@@ -38,9 +42,13 @@ import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,6 +128,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     LinearLayout lineSmed;
     ObjectAnimator objectAnimatorScanIng;
 
+    //微信文件请求编码
+    private static final int REQUEST_CODE_WX_FILE = 0x3301;
+    //微信语音请求编码
+    private static final int REQUEST_CODE_WX_AUDIO = 0x3302;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_wxclean_home;
@@ -133,6 +146,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
     @Override
     public void initView() {
+        //注册订阅者
+        EventBus.getDefault().register(this);
         ViewHelper.setTextViewToDDINOTF(tvGabsize);
         ViewHelper.setTextViewToDDINOTF(tvGb);
         tvSelect.setSelected(true);
@@ -297,6 +312,26 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         intent.putExtra("data", result);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * 文件扫描后更新size
+     */
+    @Subscribe
+    public void onUpdateSize(WxQqCleanEvent fileCleanSizeEvent) {
+        if (fileCleanSizeEvent.type == WxQqCleanEvent.WX_CLEAN_AUDIO) {
+            tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(fileCleanSizeEvent.cleanSize));
+        } else if (fileCleanSizeEvent.type == WxQqCleanEvent.WX_CLEAN_FILE) {
+            tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(fileCleanSizeEvent.cleanSize));
+        }
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
