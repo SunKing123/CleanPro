@@ -419,30 +419,30 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         if (this.f && this.e) {
             if (this.n > 0) {
 //                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_QQ_TOTAL_SIZE, this.n + this.bT + this.T + this.Q + this.ac + this.W + this.Z + this.af);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getScanGabageResult();
-                    }
-                }, 300);
-                Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());
-                Log.e("eeee", "al大小：" + getSize(al) + "  aj数量：" + al.size());  //头像缓存(联网可重新下载)
-                Log.e("eeee", "an大小：" + getSize(an) + "  an数量：" + an.size());  //空间缓存(浏览空间产生的图片缓存)
-                Log.e("eeee", "ap大小：" + getSize(ap) + "  ap数量：" + ap.size());
-                Log.e("eeee", "ar大小：" + getSize(ar) + "  ar数量：" + ar.size());
-
-                Log.e("eeee", "at大小：" + getSize(at) + "  aj数量：" + at.size());
-                Log.e("eeee", "av大小：" + getSize(av) + "  av数量：" + av.size());
-                Log.e("eeee", "ax大小：" + getSize(ax) + "  ax数量：" + ax.size());
-                Log.e("eeee", "az大小：" + getSize(az) + "  ap数量：" + az.size());  //语音
-
-                Log.e("eeee", "ah大小：" + getSize(ah) + "  ah数量：" + ah.size());   //临时缓存(浏览朋友圈产生的缓存垃圾)
-                Log.e("eeee", "ag大小：" + getSize(ag) + "  ah数量：" + ag.size());  //垃圾文件(不含聊天信息，不影响QQ使用)
-                Log.e("eeee", "aB大小：" + getSize(aB) + "  aB数量：" + aB.size());  //文件
             } else {
-                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_QQ_TOTAL_SIZE, 0);
+//                PrefsCleanUtil.getInstance().putLong(Constants.CLEAN_QQ_TOTAL_SIZE, 0);
             }
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getScanGabageResult();
+            }
+        }, 300);
+        Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());
+        Log.e("eeee", "al大小：" + getSize(al) + "  aj数量：" + al.size());  //头像缓存(联网可重新下载)
+        Log.e("eeee", "an大小：" + getSize(an) + "  an数量：" + an.size());  //空间缓存(浏览空间产生的图片缓存)
+        Log.e("eeee", "ap大小：" + getSize(ap) + "  ap数量：" + ap.size());
+        Log.e("eeee", "ar大小：" + getSize(ar) + "  ar数量：" + ar.size());
+
+        Log.e("eeee", "at大小：" + getSize(at) + "  aj数量：" + at.size());
+        Log.e("eeee", "av大小：" + getSize(av) + "  av数量：" + av.size());
+        Log.e("eeee", "ax大小：" + getSize(ax) + "  ax数量：" + ax.size());
+        Log.e("eeee", "az大小：" + getSize(az) + "  ap数量：" + az.size());  //语音
+
+        Log.e("eeee", "ah大小：" + getSize(ah) + "  ah数量：" + ah.size());   //临时缓存(浏览朋友圈产生的缓存垃圾)
+        Log.e("eeee", "ag大小：" + getSize(ag) + "  ah数量：" + ag.size());  //垃圾文件(不含聊天信息，不影响QQ使用)
+        Log.e("eeee", "aB大小：" + getSize(aB) + "  aB数量：" + aB.size());  //文件
         if (this.n <= 0 && !"finishActivity".equals(this.bu) && !"bigGarbageFragment".equals(this.bu)) {
             this.i.sendEmptyMessageDelayed(4, 500);
         }
@@ -685,7 +685,13 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                     Logger.i(Logger.TAG, Logger.ZYTAG, "CleanQqClearActivity---doOneTypeFinihed --QQ_GARBAGE_CACHE_FINISH-- ");
                     if (this.aP && this.aT && this.aS && this.aQ) {
                         Logger.i(Logger.TAG, Logger.ZYTAG, "CleanQqClearActivity---doOneTypeFinihed --QQ_GARBAGE_CACHE_FINISH--1== ");
-                        this.i.sendEmptyMessage(2);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                c();
+                            }
+                        });
+//                        this.i.sendEmptyMessage(2);
                         break;
                     }
                 case 102:
