@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -352,10 +353,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     /**
      * 开始清理动画
-     *
-     * @param iconInner
+     *  @param iconInner
      * @param iconOuter
-     * @param layoutScan
      * @param layoutScan
      * @param countEntity
      */
@@ -440,7 +439,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
 //                animatorStep2.start();
 
-                startClean(rotation4, rotation3, countEntity);
+                startClean(iconInner,iconOuter,rotation4, rotation3, countEntity);
 
 
             }
@@ -476,10 +475,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     /**
      * 开始清理操作
      *
+     * @param iconInner
+     * @param iconOuter
      * @param animatorSet
      * @param countEntity
      */
-    public void startClean(ObjectAnimator animatorSet, ObjectAnimator animatorSet2, CountEntity countEntity) {
+    public void startClean(ImageView iconInner, ImageView iconOuter, ObjectAnimator animatorSet, ObjectAnimator animatorSet2, CountEntity countEntity) {
         if (countEntity == null) {
             countEntity = new CountEntity();
         }
@@ -508,7 +509,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                 if (animatorSet != null) {
                     //清理完成
                     animatorSet.end();
-                    setViewTrans();
+//                    setViewTrans();
+                    startFinishAnimator(iconInner,iconOuter);
                 }
                 if (animatorSet2 != null) {
                     animatorSet2.end();
@@ -575,6 +577,41 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         }).compose(RxUtil.rxObservableSchedulerHelper(mView));
 
 
+    }
+
+    public void startFinishAnimator(ImageView iconInner, ImageView iconOuter) {
+        mView.getLottieView().setVisibility(View.GONE);
+        LottieAnimationView finishAnimator = mView.getFinishAnimator();
+        finishAnimator.setVisibility(VISIBLE);
+        iconOuter.setVisibility(View.GONE);
+        iconInner.setVisibility(View.GONE);
+        mView.getScanLayout().setVisibility(View.INVISIBLE);
+        mView.getCleanTextLayout().setVisibility(View.INVISIBLE);
+        finishAnimator.useHardwareAcceleration();
+        finishAnimator.setImageAssetsFolder("images");
+        finishAnimator.setAnimation("data_clean_finish.json");
+        finishAnimator.playAnimation();
+        finishAnimator.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setViewTrans();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     //数字动画播放完后火箭上移，布局高度缩小

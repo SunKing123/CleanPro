@@ -127,6 +127,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     View mFirstViewAdClick;
     @BindView(R.id.view_click_second_ad)
     View mSecondViewAdClick;
+    @BindView(R.id.animation_clean_finish)
+    LottieAnimationView mFinishAnimator;
+
 
     /**
      * 清理的分类列表
@@ -404,10 +407,16 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     /**
      * 恢复布局
      */
+
     private void restoreLayout() {
         //设置可以点击
         mLayoutRoot.setIntercept(false);
         mIconInner.setVisibility(GONE);
+        mIconOuter.setVisibility(VISIBLE);
+        mLayoutScan.setVisibility(VISIBLE);
+        mLayoutCount.setVisibility(VISIBLE);
+        mAnimationView.setVisibility(VISIBLE);
+        mFinishAnimator.setVisibility(View.INVISIBLE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DeviceUtils.dip2px(460);
@@ -487,6 +496,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
+    public LottieAnimationView getLottieView() {
+        return mAnimationView;
+    }
+
     /**
      * 清理完成后的页面
      *
@@ -494,6 +507,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public View getCleanFinish() {
         return mLayoutCleanFinish;
+    }
+
+    public RelativeLayout getCleanTextLayout() {
+        return mLayoutCount;
+    }
+
+    public LinearLayout getScanLayout() {
+        return mLayoutScan;
     }
 
     @OnClick(R.id.iv_back)
@@ -614,10 +635,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             isShow = false;
         }
-        if (!hidden)
+        if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        else
+        } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
+        }
     }
 
     /**
@@ -715,5 +737,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         super.onPause();
         NiuDataAPI.onPageEnd("check_garbage_view_page", "\"清理垃圾\"浏览");
 
+    }
+
+    /**
+     * 获取结束的lottieView
+     * @return
+     */
+    public LottieAnimationView getFinishAnimator() {
+        return mFinishAnimator;
     }
 }

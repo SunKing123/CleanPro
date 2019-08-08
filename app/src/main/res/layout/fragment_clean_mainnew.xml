@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                     android:id="@+id/layout_root"
-                                                     android:layout_width="match_parent"
-                                                     android:layout_height="match_parent"
-                                                     android:background="@color/white"
-                                                     android:orientation="vertical">
+                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                       android:id="@+id/layout_root"
+                                                       android:layout_width="match_parent"
+                                                       android:layout_height="match_parent"
+                                                       android:background="@color/white"
+                                                       android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/layout_scroll"
@@ -141,10 +141,10 @@
                             android:id="@+id/text_scan_trace"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:ellipsize="middle"
                             android:gravity="center"
                             android:maxWidth="@dimen/dimen_140dp"
                             android:singleLine="true"
-                            android:ellipsize="middle"
                             android:text="扫描中"
                             android:textColor="@color/white"/>
 
@@ -156,6 +156,8 @@
                             android:src="@mipmap/arrow_right_white"
                             android:visibility="gone"/>
                     </LinearLayout>
+
+
                 </RelativeLayout>
 
                 <TextView
@@ -172,11 +174,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_48dp"
                     android:layout_gravity="bottom"
-                    android:gravity="center"
                     android:layout_marginLeft="@dimen/dimen_60dp"
                     android:layout_marginRight="@dimen/dimen_60dp"
                     android:layout_marginBottom="@dimen/dimen_40dp"
                     android:background="@drawable/bg_btn_white"
+                    android:gravity="center"
                     android:text="立即清理"
                     android:textColor="#06C581"
                     android:textSize="18sp"/>
@@ -376,23 +378,25 @@
 
 
             </LinearLayout>
+
             <View
                 android:id="@+id/view_b"
-                android:layout_below="@+id/line_wq"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/dimen_48dp"
                 android:layout_height="@dimen/dimen_8dp"
+                android:layout_below="@+id/line_wq"
+                android:layout_marginTop="@dimen/dimen_48dp"
                 android:background="#F7F8FA"
                 />
+
             <TextView
                 android:id="@+id/text_bottom_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view_b"
                 android:layout_marginLeft="@dimen/dimen_16dp"
-                android:text="更多推荐"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="更多推荐"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/image_ad_bottom_first"
@@ -400,38 +404,44 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_bottom_title"
                 android:layout_marginLeft="@dimen/dimen_16dp"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
-                android:layout_marginBottom="@dimen/dimen_14dp"/>
+                android:layout_marginBottom="@dimen/dimen_14dp"
+                android:visibility="gone"/>
 
             <View
                 android:id="@+id/view_click_first_ad"
-                android:layout_alignTop="@+id/image_ad_bottom_first"
-                android:layout_alignRight="@+id/image_ad_bottom_first"
                 android:layout_width="@dimen/dimen_64dp"
-                android:layout_height="@dimen/dimen_58dp"/>
+                android:layout_height="@dimen/dimen_58dp"
+                android:layout_alignTop="@+id/image_ad_bottom_first"
+                android:layout_alignRight="@+id/image_ad_bottom_first"/>
 
             <ImageView
                 android:id="@+id/image_ad_bottom_second"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/image_ad_bottom_first"
-                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
-                android:layout_marginBottom="@dimen/dimen_14dp"/>
+                android:layout_marginBottom="@dimen/dimen_14dp"
+                android:visibility="gone"/>
 
             <View
                 android:id="@+id/view_click_second_ad"
-                android:layout_alignTop="@+id/image_ad_bottom_second"
-                android:layout_alignRight="@+id/image_ad_bottom_second"
                 android:layout_width="@dimen/dimen_64dp"
-                android:layout_height="@dimen/dimen_58dp"/>
+                android:layout_height="@dimen/dimen_58dp"
+                android:layout_alignTop="@+id/image_ad_bottom_second"
+                android:layout_alignRight="@+id/image_ad_bottom_second"/>
 
 
         </RelativeLayout>
     </ScrollView>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_clean_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -569,23 +579,24 @@
             android:id="@+id/layout_not_net"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewt"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:visibility="gone"
             >
+
             <ImageView
-                android:src="@mipmap/icon_no_net"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_no_net"/>
 
             <TextView
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:textColor="@color/color_999999"
-                android:text="资讯列表获取失败～"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:text="资讯列表获取失败～"
+                android:textColor="@color/color_999999"/>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>
