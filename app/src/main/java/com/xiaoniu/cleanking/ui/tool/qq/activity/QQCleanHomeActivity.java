@@ -299,17 +299,23 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(az)));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(aB)));
         String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag) + getSize(az) + getSize(aB) + totalImgSize + totalVideoSize);
-        if (str_totalSize.endsWith("KB")) return;
+        String strGb = "MB";
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         float sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
-
+            strGb = "MB";
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
-            sizeMb *= 1024;
+            strGb = "GB";
+        }else if (str_totalSize.endsWith("KB")) {
+            sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
+            strGb = "KB";
+        } else {
+            sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 1));
+            strGb = "B";
         }
-
+        tvGb.setText(strGb);
         ValueAnimator valueAnimator = mPresenter.setTextAnim(tvGabsize, 0, sizeMb);
         valueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
