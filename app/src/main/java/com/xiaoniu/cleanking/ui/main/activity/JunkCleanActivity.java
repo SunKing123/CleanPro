@@ -142,6 +142,7 @@ public class JunkCleanActivity extends SimpleActivity {
         mTextClean.setText("清理" + countEntity.getResultSize());
 
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
+        mCleanAnimView.setListener(() -> finish());
     }
 
     @Override
