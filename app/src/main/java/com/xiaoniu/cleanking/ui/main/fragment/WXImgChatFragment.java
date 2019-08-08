@@ -229,22 +229,22 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
 
 
-//                WXImgChatAdapter.ViewHolderChild viewHolderChild=(WXImgChatAdapter.ViewHolderChild)(mAdapter.mViewChild);
-//                if(null!=viewHolderChild && null!= viewHolderChild.mRecyclerView){
-//                    viewHolderChild.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                        @Override
-//                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                            super.onScrolled(recyclerView, dx, dy);
-//                            Log.i("test","recycleVIew");
-//                        }
-//
-//                        @Override
-//                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                            super.onScrollStateChanged(recyclerView, newState);
-//                        }
-//                    });
-//
-//                }
+                WXImgChatAdapter2.ViewHolderChild viewHolderChild=(WXImgChatAdapter2.ViewHolderChild)(mAdapter.mViewChild);
+                if(null!=viewHolderChild && null!= viewHolderChild.mRecyclerView){
+                    viewHolderChild.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                            Log.i("test","recycleVIew");
+                        }
+
+                        @Override
+                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                        }
+                    });
+
+                }
 //                    mListView.setOnTouchListener(new View.OnTouchListener() {
 //                        @Override
 //                        public boolean onTouch(View v, MotionEvent event) {
@@ -402,7 +402,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                     fileTitleEntity.isSelect = false;
                     mMyHandler.sendEmptyMessage(1);
                     break;
-                }else {
+                } else {
                     for (FileChildEntity file : fileTitleEntity.lists) {
                         if (file.isSelect == false) {
                             isCheckAll = false;
@@ -661,32 +661,33 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
-//        List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
-//        for(int i=0;i<lists.size();i++){
-//            FileTitleEntity fileParent=lists.get(i);
-//            FileTitleEntity fileTitleEntity=FileTitleEntity.copyObject(fileParent.id,fileParent.title,fileParent.type
-//                    ,fileParent.size,fileParent.isExpand,fileParent.isSelect);
-//
-//            List<FileChildEntity> listsNew=new ArrayList<>();
-//            int count=0;
-//            if(fileParent.lists.size()>30){
-//                count=30;
-//            }else {
-//                count=fileParent.lists.size();
-//            }
-//            for(int j=0;j<count;j++){
-//                FileChildEntity childEntity=fileParent.lists.get(j);
-//                listsNew.add(childEntity);
-//            }
-//            fileTitleEntity.lists.addAll(listsNew);
-//            fileCopyEntitys.add(fileTitleEntity);
-//        }
-//        mAdapter.modifyData(fileCopyEntitys);
-        mAdapter.modifyData(lists);
+        List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
+        for(int i=0;i<lists.size();i++){
+            FileTitleEntity fileParent=lists.get(i);
+            FileTitleEntity fileTitleEntity=FileTitleEntity.copyObject(fileParent.id,fileParent.title,fileParent.type
+                    ,fileParent.size,fileParent.isExpand,fileParent.isSelect);
+
+            List<FileChildEntity> listsNew=new ArrayList<>();
+            int count=0;
+            if(fileParent.lists.size()>30){
+                count=30;
+            }else {
+                count=fileParent.lists.size();
+            }
+            for(int j=0;j<count;j++){
+                FileChildEntity childEntity=fileParent.lists.get(j);
+                listsNew.add(childEntity);
+            }
+            fileTitleEntity.lists.addAll(listsNew);
+            fileCopyEntitys.add(fileTitleEntity);
+        }
+        mAdapter.modifyData(fileCopyEntitys);
+
 
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
         SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSize+totalFileSize(lists)));
         editor.commit();
 
 

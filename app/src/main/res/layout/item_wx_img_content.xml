@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             android:focusable="false"
             android:scaleType="fitXY"
-            android:src="@color/color_666666"
+            android:background="@color/color_666666"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintLeft_toLeftOf="parent"
