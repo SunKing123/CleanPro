@@ -130,6 +130,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     View mSecondViewAdClick;
     @BindView(R.id.animation_clean_finish)
     LottieAnimationView mFinishAnimator;
+    @BindView(R.id.view_lottie_star)
+    LottieAnimationView mLottieStarView;
 
 
     /**
@@ -250,6 +252,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
+        mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
             mScrollView.scrollTo(mScrollView.getScrollX(), 0);
             //扫描完成点击清理
@@ -273,8 +276,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextUnit.setText("MB");
             mTextScanTrace.setText("还未扫描");
             mArrowRight.setVisibility(GONE);
-
-
         } else if (type == TYPE_NOT_SCAN) {
             long now = System.currentTimeMillis();
             long time = (now - preCleanTime) / 1000;
@@ -450,6 +451,18 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         type = TYPE_CLEAN_FINISH;
 
         setColorChange(false);
+
+        //播放lottie动画
+        mLottieStarView.setVisibility(VISIBLE);
+        playStarAnimation();
+
+        mPresenter.showOuterViewRotation(mIconOuter);
+    }
+
+    private void playStarAnimation() {
+        mLottieStarView.setImageAssetsFolder("images");
+        mLottieStarView.setAnimation("data_star.json");
+        mLottieStarView.playAnimation();
     }
 
     public void showBottomTab() {
@@ -524,6 +537,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //
         showBottomTab();
         mLayoutCleanFinish.setVisibility(GONE);
+        playStarAnimation();
     }
 
     private long firstTime;
@@ -532,6 +546,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (mLayoutCleanFinish.getVisibility() == VISIBLE) {
             mLayoutCleanFinish.setVisibility(GONE);
             showBottomTab();
+            playStarAnimation();
         } else {
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - firstTime > 1500) {

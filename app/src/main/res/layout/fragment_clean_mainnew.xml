@@ -35,6 +35,13 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"/>
 
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/view_lottie_star"
+                        android:layout_width="140dp"
+                        android:layout_height="120dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="120dp"/>
+
                     <LinearLayout
                         android:id="@+id/layout_content_clean_finish"
                         android:layout_width="wrap_content"
@@ -57,7 +64,7 @@
                             android:layout_marginTop="@dimen/dimen_22dp"
                             android:text="手机很干净了~"
                             android:textColor="@color/white"
-                            android:textSize="19sp"
+                            android:textSize="16sp"
                             android:visibility="visible"/>
                     </LinearLayout>
 

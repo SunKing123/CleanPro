@@ -839,4 +839,15 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         appVersion.setData(dataBean);
         new UpdateAgent(mView.getActivity(), appVersion, null).customerDownload();
     }
+
+    /**
+     * 外部圈缓慢旋转
+     * @param iconOuter
+     */
+    public void showOuterViewRotation(ImageView iconOuter) {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+        rotation.setRepeatCount(-1);
+        rotation.setRepeatMode(ValueAnimator.RESTART);
+        rotation.setDuration(1500);
+    }
 }
