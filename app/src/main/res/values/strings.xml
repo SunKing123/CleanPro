@@ -45,4 +45,16 @@
     <string name="msg_del_video">永久从设备中删除这些视频，删除后将不可恢复。</string>
     <string name="msg_save_video">正在导出聊天视频，请稍等…</string>
 
+    <string name="tool_qq_clear">QQ清理</string>
+    <string name="tool_chat_clear">微信清理</string>
+    <string name="tool_clear_chat">清理聊天垃圾</string>
+    <string name="tool_clear_qq">释放更多空间</string>
+    <string name="tool_temperature_nor">当前温度正常</string>
+    <string name="tool_phone_temperature_low">手机降温</string>
+    <string name="tool_void_soft_clear">视频软件清理</string>
+    <string name="tool_phone_thin">手机瘦身</string>
+    <string name="tool_phone_memory_empty">手机空间充足</string>
+    <string name="tool_phone_memory_full">手机空间不足</string>
+    <string name="tool_phone_speed">手机加速</string>
+    <string name="tool_memory_speed">内存占用加速</string>
 </resources>
