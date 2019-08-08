@@ -549,10 +549,13 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
         mAdapter.modifyData(lists);
+        //保存缓存
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,totalFileSize(lists));
         SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,totalFileSize(lists));
+        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,(totalSize+totalFileSize(lists)));
         editor.commit();
+
     }
 
     public   long totalFileSize(List<FileTitleEntity> lists){

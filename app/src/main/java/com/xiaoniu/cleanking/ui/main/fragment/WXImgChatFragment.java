@@ -684,9 +684,11 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 //        mAdapter.modifyData(fileCopyEntitys);
         mAdapter.modifyData(lists);
 
+
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
         SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSize+totalFileSize(lists)));
         editor.commit();
 
 
