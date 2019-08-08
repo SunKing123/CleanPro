@@ -138,11 +138,6 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             }
         });
 
-
-        //                    Intent intent = new Intent(mActivity, PreviewImageActivity.class);
-        //                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-        //                    CleanAllFileScanUtil.clean_image_list = listImage;
-        //                    mActivity.startActivityForResult(intent, 209);
         return convertView;
     }
 
@@ -158,7 +153,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         }
         List<FileChildEntity> lists = mLists.get(groupPosition).lists;
         if(mWXImgAdapter==null){
-            mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
+            //mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
         }
         mWXImgAdapter = new WXImgAdapter(mContext, lists);
         mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
@@ -178,9 +173,13 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             }
         });
         mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
-
+        mViewChild.mRecyclerView.setItemAnimator(null);
 
         return convertView;
+    }
+
+    public WXImgAdapter getWXImgAdapter(){
+        return  this.mWXImgAdapter;
     }
 
     @Override
