@@ -129,6 +129,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
                 } else {
                     fileTitleEntity.isSelect = true;
                 }
+                mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
                 List<FileChildEntity> listChild = fileTitleEntity.lists;
                 for (FileChildEntity childEntity : listChild) {
                     childEntity.isSelect = fileTitleEntity.isSelect;

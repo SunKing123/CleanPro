@@ -70,6 +70,14 @@ public class WXImgAdapter extends RecyclerView.Adapter {
                 }else {
                     fileChildEntity.isSelect=true;
                 }
+                if (fileChildEntity.isSelect) {
+                    viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check);
+                    viewHolder.mImgLayer.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check_normal);
+                    viewHolder.mImgLayer.setVisibility(View.GONE);
+                }
+
                 if(null!=onSelectListener){
                     onSelectListener.select(position,fileChildEntity.isSelect);
                 }
