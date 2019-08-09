@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
@@ -364,13 +365,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     }
 
     public void initWebView() {
-//        String url = ApiModule.Base_H5_Host;
-        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
-//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.addJavascriptInterface(new JavaInterface(this,mWebView), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -480,7 +478,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onNetLayoutClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
     }
 
     /**

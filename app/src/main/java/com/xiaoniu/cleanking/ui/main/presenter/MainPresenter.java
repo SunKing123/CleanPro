@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.hotfix.listener.MyPatchListener;
 import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
@@ -26,6 +25,7 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
@@ -177,13 +177,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     }
 
-    //动态获取后台WebUrl
+    //动态获取后台WebUrl+
     public void getWebUrl() {
-        //保存的
-        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString(SpCacheConfig.WEB_URL,"/activity_page.html");
-
         mModel.getWebUrl(new Common4Subscriber<WebUrlEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
@@ -192,7 +187,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(WebUrlEntity webUrlEntity) {
-
+                if(webUrlEntity == null)
+                    return;
+                //保存后台webView URL
+//                PreferenceUtil.saveWebViewUrl(webUrlEntity.getData());
             }
 
             @Override
