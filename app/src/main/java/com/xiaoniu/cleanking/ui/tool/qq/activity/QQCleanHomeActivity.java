@@ -32,21 +32,16 @@ import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
-import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanAudActivity;
-import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanFileActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanResultActivity;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Logger;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.WxAndQqScanPathInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
-import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
@@ -55,14 +50,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import retrofit2.http.POST;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 微信清理首页
@@ -193,7 +192,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
             if (selectSize == 0) return;
-            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected(),mListImg,mListVideo);
+            mPresenter.onekeyCleanDelete(getCacheList(), tvSelect1.isSelected(), mListImg, mListVideo);
             StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "qq_cleaning_page");
         } else if (ids == R.id.tv_select1) {
             tvSelect1.setSelected(tvSelect1.isSelected() ? false : true);
@@ -308,7 +307,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
             strGb = "GB";
-        }else if (str_totalSize.endsWith("KB")) {
+        } else if (str_totalSize.endsWith("KB")) {
             sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
             strGb = "KB";
         } else {
@@ -478,8 +477,9 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     boolean j = true;
 
     public void j() {
-        ThreadTaskUtil.executeNormalTask("-CleanQqClearActivity-createScanPath-1419--", new Runnable() {
-            public void run() {
+        Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
                 q = PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_QQ_GARBAGE_FILES_CHECKED, true);
                 v = PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_QQ_TEMP_CACHE_CHECKED, true);
                 A = PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_QQ_SHORT_VIDEO_CHECKED, true);
@@ -556,22 +556,71 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                 }
                 Logger.i(Logger.TAG, Logger.ZYTAG, "CleanQqClearActivity---run --无数据-- ");
                 i.sendEmptyMessage(2);
+                emitter.onNext(10L);
+                emitter.onComplete();
             }
-        });
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     /* access modifiers changed from: private */
     public void i() {
-        ThreadTaskUtil.executeNormalTask("-CleanQqClearActivity-getQqCacheInSystem-962--", new Runnable() {
-            public void run() {
+        Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
                 Long oneAppCache = new QueryFileUtil().getOneAppCache(QQCleanHomeActivity.this, "com.tencent.mobileqq", -1);
                 Logger.i(Logger.TAG, Logger.ZYTAG, "CleanQqClearActivity---getQqCacheInSystem ---- " + oneAppCache);
                 Message obtainMessage = i.obtainMessage();
                 obtainMessage.obj = oneAppCache;
                 obtainMessage.what = 5;
                 i.sendMessage(obtainMessage);
+                emitter.onNext(10L);
+                emitter.onComplete();
+
             }
-        });
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+
     }
 
     a i;
@@ -667,8 +716,9 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     }
 
     public void a(final List<WxAndQqScanPathInfo> list) {
-        ThreadTaskUtil.executeNormalTask("-CleanQqClearActivity-startScanAllOneType-1515--", new Runnable() {
-            public void run() {
+        Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
                 for (int i = 0; i < list.size(); i++) {
                     File file = new File(Environment.getExternalStorageDirectory() + ((WxAndQqScanPathInfo) list.get(i)).getFilePath());
                     if (file.exists()) {
@@ -679,8 +729,32 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                 obtainMessage.what = 11;
                 obtainMessage.obj = Integer.valueOf(((WxAndQqScanPathInfo) list.get(0)).getType());
                 i.sendMessage(obtainMessage);
+                emitter.onNext(10L);
+                emitter.onComplete();
             }
-        });
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
     }
 
     public boolean ba = false;

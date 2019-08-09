@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_root"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/title_bar"
@@ -18,9 +19,11 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
+            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
             android:paddingLeft="@dimen/dimen_16dp"
             android:paddingRight="@dimen/dimen_18dp"
-            android:src="@mipmap/back_white"/>
+            android:src="@mipmap/back_white" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -34,7 +37,7 @@
             android:lines="1"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp"/>
+            android:textSize="@dimen/dimen_18sp" />
 
         <ImageView
             android:id="@+id/img_help"
@@ -44,48 +47,37 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dimen_12dp"
             android:src="@mipmap/wenhao"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
-
-    <View
-        android:id="@+id/view_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/color_eeeeee"/>
-
-    <!--<ProgressBar-->
-    <!--android:id="@+id/progressBar"-->
-    <!--style="?android:attr/progressBarStyleHorizontal"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="3dp"-->
-    <!--android:max="100"-->
-    <!--android:progress="0"-->
-    <!--android:progressDrawable="@drawable/bg_progressbar_horizontal"/>-->
 
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
     <LinearLayout
         android:id="@+id/layout_net_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
 
         <ImageView
-            android:src="@mipmap/icon_no_net"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_no_net" />
 
         <TextView
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:textColor="@color/color_999999"
-            android:text="资讯列表获取失败～"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:text="资讯列表获取失败～"
+            android:textColor="@color/color_999999" />
 
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

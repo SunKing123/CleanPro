@@ -35,7 +35,6 @@
     <RelativeLayout
         android:id="@+id/viewt"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/dimen_55dp"
         android:layout_height="match_parent">
 
         <com.airbnb.lottie.LottieAnimationView

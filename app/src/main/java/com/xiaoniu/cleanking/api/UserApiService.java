@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
+import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
@@ -47,6 +48,14 @@ public interface UserApiService {
      */
     @POST("/activity/share/succeed")
     Flowable<BaseEntity> shareSuccess(@Body RequestBody body);
+
+    /**
+     * 获取后台WebView URL
+     * @param body
+     * @return
+     */
+    @POST("/finish/page/query")
+    Flowable<WebUrlEntity> getWebUrl(@Body RequestBody body);
 
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);

@@ -221,6 +221,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("wechat_ceaning_view_page", "微信清理页面浏览");
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long wxCatheSizeImg = sp.getLong(Constant.WX_CACHE_SIZE_IMG, 0L);
+        long wxCatheSizeVideo = sp.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
+        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeImg));
+        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeVideo));
     }
 
     @Override
@@ -251,14 +256,14 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         Log.e("asdfg", "拍摄及保存的图片：" + WxQqUtil.l.getTotalSize() + "：数量：" + WxQqUtil.l.getTotalNum());
         Log.e("asdfg", "拍摄以及保存的视频：" + WxQqUtil.m.getTotalSize() + "：数量：" + WxQqUtil.m.getTotalNum());
         Log.e("asdfg", "收藏的表情：" + WxQqUtil.j.getTotalSize() + "：数量：" + WxQqUtil.j.getTotalNum());
-        tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.k.getTotalSize()));
+        tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getAudioSize()));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.n.getTotalSize()));
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long wxCatheSizeImg = sp.getLong(Constant.WX_CACHE_SIZE_IMG, 0L);
         long wxCatheSizeVideo = sp.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
         tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeImg));
         tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeVideo));
-        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.n.getTotalSize() + wxCatheSizeImg + wxCatheSizeVideo);
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize() + mPresenter.getAudioSize() + WxQqUtil.n.getTotalSize() + wxCatheSizeImg + wxCatheSizeVideo);
         String strGb = "MB";
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         float sizeMb = 0;
@@ -277,7 +282,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         }
         //存储垃圾以及文件总大小
         SharedPreferences spAll = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
-        spAll.edit().putLong(SpCacheConfig.WX_CACHE_SIZE, wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.n.getTotalSize() + wxCatheSizeImg + wxCatheSizeVideo).commit();
+        spAll.edit().putLong(SpCacheConfig.WX_CACHE_SIZE, wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize() + mPresenter.getAudioSize() + WxQqUtil.n.getTotalSize() + wxCatheSizeImg + wxCatheSizeVideo).commit();
         tvGb.setText(strGb);
         ValueAnimator valueAnimator = mPresenter.setTextAnim(tvGabsize, 0, sizeMb);
         valueAnimator.addListener(new AnimatorListenerAdapter() {

@@ -25,6 +25,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * 微信扫描文件工具类
  */
@@ -136,6 +144,8 @@ public class WxQqUtil {
                         a((List<WxAndQqScanPathInfo>) arrayList2);
                     }
                 }
+//                if (aVar != null)
+//                    aVar.wxEasyScanFinish();
                 return;
             }
             Logger.i(Logger.TAG, Logger.ZYTAG, "CleanWxClearNewActivity---run --pathList列表null-- ");
@@ -154,8 +164,9 @@ public class WxQqUtil {
     }
 
     private void a(final List<WxAndQqScanPathInfo> list) {
-        ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-startScanAllOneType-468--", new Runnable() {
-            public void run() {
+        Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
                 for (int i = 0; i < list.size(); i++) {
                     File file = new File(Environment.getExternalStorageDirectory() + ((WxAndQqScanPathInfo) list.get(i)).getFilePath());
                     if (file.exists()) {
@@ -215,8 +226,32 @@ public class WxQqUtil {
                         break;
                 }
                 LocalBroadcastManager.getInstance(AppApplication.getInstance()).sendBroadcast(new Intent().setAction(WxNotifyRefrshReceiver.b).putExtra(CleanSwitch.CLEAN_DATA, ((WxAndQqScanPathInfo) list.get(0)).getType()));
+
+                emitter.onNext(10L);
+                emitter.onComplete();
             }
-        });
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /* access modifiers changed from: private */
@@ -523,7 +558,7 @@ public class WxQqUtil {
 //            } else if (CleanWxClearNewActivity.a - cleanWxItemInfo.getDays() == 1) {
 //                cleanWxItemInfo.setStringDay("昨天");
 //            } else {
-                cleanWxItemInfo.setStringDay(SimpleDateFormat.getDateInstance().format(new Date(cleanWxItemInfo.getFile().lastModified())));
+            cleanWxItemInfo.setStringDay(SimpleDateFormat.getDateInstance().format(new Date(cleanWxItemInfo.getFile().lastModified())));
 //            }
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i) instanceof CleanWxHeadInfo) {
@@ -591,7 +626,6 @@ public class WxQqUtil {
         } catch (Exception e2) {
         }
     }
-
 
 
     public void stopScan() {
