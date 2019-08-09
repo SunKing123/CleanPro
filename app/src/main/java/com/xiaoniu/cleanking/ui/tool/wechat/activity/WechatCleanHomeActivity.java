@@ -188,9 +188,14 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
-            if (!tvDelete.isSelected()) return;
-            mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
-            StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
+            if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
+                startActivity(WechatCleanedResultActivity.class);
+            } else {
+                if (!tvDelete.isSelected()) return;
+                mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
+                StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
+            }
+
         } else if (ids == R.id.tv_select) {
             tvSelect.setSelected(tvSelect.isSelected() ? false : true);
             getSelectCacheSize();
@@ -339,6 +344,13 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setBackgroundResource(selectSize != 0 ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
         tvDelete.setSelected(selectSize != 0 ? true : false);
+
+
+        if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
+            tvDelete.setText("完成 ");
+            tvDelete.setBackgroundResource(R.drawable.delete_select_bg);
+            tvDelete.setSelected(true);
+        }
     }
 
     public void deleteResult(long result) {
