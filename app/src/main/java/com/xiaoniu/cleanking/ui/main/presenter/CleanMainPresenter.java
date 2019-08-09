@@ -415,15 +415,14 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 335);
+        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360, 0);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
         rotation.setDuration(1200);
         rotation2.setDuration(1100);
+
         rotation3.setDuration(200);
-        rotation.setRepeatCount(-1);
-        rotation2.setRepeatCount(-1);
         rotation3.setRepeatCount(-1);
         rotation4.setRepeatCount(-1);
         rotation4.setDuration(200);
@@ -467,12 +466,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(rotation2, rotation4);
-//        animatorSet.start();
-//        animatorStep2.start();
-
-        AnimatorSet animatorSet1 = new AnimatorSet();
-        animatorSet1.playTogether(animatorStep2,animatorSet);
-        animatorSet1.start();
+        animatorSet.start();
+        animatorStep2.start();
 
     }
 
