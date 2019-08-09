@@ -34,6 +34,7 @@ public class QQCleanImgActivity extends BaseActivity {
     private CommonFragmentPageAdapter mAdapter;
 
 
+
     @Override
     public void inject(ActivityComponent activityComponent) {
 

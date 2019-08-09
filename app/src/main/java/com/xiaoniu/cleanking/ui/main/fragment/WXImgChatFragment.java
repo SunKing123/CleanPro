@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.CommonLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
@@ -87,7 +88,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     private boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;
-
+    private CommonLoadingDialogFragment mLoadingProgress;
     private  int mGroupPosition;
 
     private  MyHandler mMyHandler;
@@ -155,8 +156,12 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     private  int mOfferY=0;
     @Override
     protected void initView() {
-        showLoadingDialog();
+
         mMyHandler=new MyHandler();
+
+        mLoadingProgress=CommonLoadingDialogFragment.newInstance();
+        mLoadingProgress.show(getFragmentManager(),"");
+
         mAdapter = new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mLoading = CleanFileLoadingDialogFragment.newInstance();
@@ -692,7 +697,10 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
-        cancelLoadingDialog();
+        //cancelLoadingDialog();
+        if(null!=mLoadingProgress){
+            mLoadingProgress.dismissAllowingStateLoss();
+        }
         List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
         for(int i=0;i<lists.size();i++){
             FileTitleEntity fileParent=lists.get(i);

@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.event.WXImgCameraEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.CommonLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
@@ -76,7 +77,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;;
-
+    private CommonLoadingDialogFragment mLoadingProgress;
     public static QQImgFragment newInstance() {
         QQImgFragment instance = new QQImgFragment();
 
@@ -102,6 +103,9 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     @Override
     protected void initView() {
+        mLoadingProgress=CommonLoadingDialogFragment.newInstance();
+        mLoadingProgress.show(getFragmentManager(),"");
+
         mLoading=CleanFileLoadingDialogFragment.newInstance();
         mProgress=FileCopyProgressDialogFragment.newInstance();
         mAdapter=new WXImgChatAdapter(getContext());
@@ -633,6 +637,9 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
 
     public void updateImgCamera(List<FileTitleEntity> lists){
+        if(null!=mLoadingProgress){
+            mLoadingProgress.dismissAllowingStateLoss();
+        }
         List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
         for(int i=0;i<lists.size();i++){
             FileTitleEntity fileParent=lists.get(i);
