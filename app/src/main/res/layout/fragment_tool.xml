@@ -90,11 +90,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textColor="@color/white"
+                        android:textColor="#80FFFFFF"
                         android:textSize="16dp"
                         android:layout_marginLeft="@dimen/dimen_20dp"
                         android:layout_toRightOf="@id/frame_layout"
-                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_marginTop="@dimen/dimen_8dp"
                         android:layout_below="@id/tv_phone_space"
                         android:text="已用: 0.0GB/0.0GB"/>
                 </RelativeLayout>
