@@ -115,6 +115,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.queryAppVersion(() -> {
         });
 
+        //获取WebUrl
+        mPresenter.getWebUrl();
         initFragments();
         //初始化sdk 正式版的时候设置false，关闭调试
         JPushInterface.setDebugMode(false);
@@ -406,6 +408,5 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
-
 
 }

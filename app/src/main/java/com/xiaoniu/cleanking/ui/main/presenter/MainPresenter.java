@@ -13,12 +13,14 @@ import android.widget.Toast;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.hotfix.listener.MyPatchListener;
 import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -173,6 +175,36 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     @Override
     public void downloadError(String message) {
 
+    }
+
+    //动态获取后台WebUrl
+    public void getWebUrl() {
+        //保存的
+        SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString(SpCacheConfig.WEB_URL,"/activity_page.html");
+
+        mModel.getWebUrl(new Common4Subscriber<WebUrlEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(WebUrlEntity webUrlEntity) {
+
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
     }
 
     static class LoadFileTask implements Runnable {

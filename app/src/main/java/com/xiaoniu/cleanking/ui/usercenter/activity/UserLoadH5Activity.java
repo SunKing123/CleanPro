@@ -184,7 +184,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         } else {
             mImgHelp.setVisibility(View.VISIBLE);
         }
-        showLoadingDialog();
+//        showLoadingDialog();
         mWebView.loadUrl(url);
 
         WebSettings webSettings = mWebView.getSettings();

@@ -32,4 +32,6 @@ public class SpCacheConfig {
     //QQ包名
     public static final String QQ_PACKAGE = "com.tencent.mobileqq";
     public static final String ITEM_TITLE_NAME = "title_name";
+    //WebView URL
+    public static final String WEB_URL = "web_url";
 }
