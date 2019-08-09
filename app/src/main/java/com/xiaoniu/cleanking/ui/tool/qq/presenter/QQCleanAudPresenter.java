@@ -60,7 +60,7 @@ public class QQCleanAudPresenter extends RxPresenter<QQCleanAudActivity, MainMod
         window.setContentView(R.layout.alite_redp_send_dialog);
         WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
         //这里设置居中
-        lp.gravity = Gravity.CENTER;
+        lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView btnOk = (TextView) window.findViewById(R.id.btnOk);

@@ -54,6 +54,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     TextView tv_use_space;
     private long mTotalSize;
     private ObjectAnimator objectAnimatorScanIng;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -110,6 +111,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
      * 扫描完成
      */
     public void onComplete() {
+        if (tv_use_space == null) return;
         tv_use_space.setVisibility(View.VISIBLE);
         mIvScanFrame.setVisibility(View.GONE);
         if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
