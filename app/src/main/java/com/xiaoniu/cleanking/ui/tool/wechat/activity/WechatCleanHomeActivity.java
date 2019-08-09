@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
+import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
@@ -186,9 +189,16 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
-            if (!tvDelete.isSelected()) return;
-            mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
-            StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
+            if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
+                Intent intent=new Intent(WechatCleanHomeActivity.this,WechatCleanedResultActivity.class);
+                intent.putExtra("title","微信专清");
+                startActivity(intent);
+            } else {
+                if (!tvDelete.isSelected()) return;
+                mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
+                StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
+            }
+
         } else if (ids == R.id.tv_select) {
             tvSelect.setSelected(tvSelect.isSelected() ? false : true);
             getSelectCacheSize();
@@ -289,6 +299,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                if (ivScanFrame == null) return;
                 ivScanFrame.setVisibility(View.GONE);
                 if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
                 lineSming.setVisibility(View.GONE);
@@ -302,10 +313,28 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     }
 
     //是否在扫描中状态
+    ObjectAnimator roundAnim1;
+    ObjectAnimator roundAnim2;
+    ObjectAnimator roundAnim3;
+
     public void setScanStatus(boolean isScaning) {
-        ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
-        ivHua2.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
-        ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
+        ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        ivHua2.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+
+        if (isScaning) {
+            roundAnim1 = mPresenter.playRoundAnim(ivHua1);
+            roundAnim2 = mPresenter.playRoundAnim(ivHua2);
+            roundAnim3 = mPresenter.playRoundAnim(ivHua3);
+        } else {
+            roundAnim1.cancel();
+            roundAnim2.cancel();
+            roundAnim3.cancel();
+            ivHua1.animate().rotation(0).setDuration(10).start();
+            ivHua2.animate().rotation(0).setDuration(10).start();
+            ivHua3.animate().rotation(0).setDuration(10).start();
+        }
+
     }
 
     //垃圾选中的大小
@@ -318,6 +347,13 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setBackgroundResource(selectSize != 0 ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
         tvDelete.setSelected(selectSize != 0 ? true : false);
+
+
+        if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
+            tvDelete.setText("完成 ");
+            tvDelete.setBackgroundResource(R.drawable.delete_select_bg);
+            tvDelete.setSelected(true);
+        }
     }
 
     public void deleteResult(long result) {

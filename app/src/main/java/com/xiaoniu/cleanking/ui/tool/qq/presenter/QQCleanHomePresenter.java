@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -451,6 +453,15 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
                 }
             }
         }
+    }
+
+    public ObjectAnimator playRoundAnim(ImageView iconOuter) {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+        rotation.setDuration(500);
+        rotation.setRepeatCount(ValueAnimator.INFINITE);
+        rotation.setInterpolator(new LinearInterpolator());
+        rotation.start();
+        return rotation;
     }
 
 }

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dimen_12dp"
-            android:text="QQ清理"
+            android:text="@string/tool_qq_clear"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_18sp" />
 

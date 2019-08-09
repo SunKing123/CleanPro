@@ -48,7 +48,7 @@ public class QQImgPresenter extends RxPresenter<QQImgFragment, CleanMainModel> {
     /**
      * 相机图片
      */
-    private List<FileTitleEntity> listsCamera = new ArrayList<>();
+    public List<FileTitleEntity> listsCamera = new ArrayList<>();
 
 
     @Inject

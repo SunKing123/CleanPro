@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
                     .addItem(new BottomBarTab(this, R.mipmap.tool_normal, getString(R.string.tool)))
-                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
+                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "头条"))
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         }
 
@@ -295,18 +295,23 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             eventCode = "home_click";
             currentPage = "home_page";
         } else if (position == 1) {
+            eventCode = "tool_click";
+            currentPage = "tool_page";
+        } else if (position == 2) {
             eventCode = "selected_click";
             currentPage = "selected_page";
-        } else if (position == 2) {
+        } else if (position == 3) {
             eventCode = "mine_click";
             currentPage = "mine_page";
         }
         if (prePosition == 0) {
             sourcePage = "home_page";
         } else if (prePosition == 1) {
-            sourcePage = "selected_page";
+            sourcePage = "tool_page";
         } else if (prePosition == 2) {
-            sourcePage = "mine_page";
+            sourcePage = "selected_page";
+        } else if (position == 3) {
+            currentPage = "mine_page";
         }
         StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)

@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -168,7 +169,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 //            mLayoutTitleBar.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
             mImageTitle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
             mLayoutCoolBottom.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
-
             isOverload = true;
         }
 
@@ -563,12 +563,18 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart("Cell_phone_cooling_view_page", "手机降温浏览");
         if (mRunningProcess != null) {
             showProcess(mRunningProcess);
         }
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("Cell_phone_cooling_view_page", "手机降温浏览");
+    }
     /**
      * 硬件信息
      *
@@ -637,7 +643,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("Cell_phone_cooling_view_page", "\"手机降温\"浏览", "tools_page", "temperature_result_display_page");
     }
 
     @Override

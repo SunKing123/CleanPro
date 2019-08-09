@@ -149,6 +149,12 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
             }
 
             @Override
+            public void onCheckAll(int groupPosition, int position, boolean isCheck) {
+                setSelectChildStatus(groupPosition);
+                setDelBtnSize();
+            }
+
+            @Override
             public void onCheckImg(int groupPosition, int position) {
                 mGroupPosition=groupPosition;
                 Intent intent = new Intent(mActivity, PreviewImageActivity.class);

@@ -153,9 +153,9 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
         List<FileChildEntity> lists = mLists.get(groupPosition).lists;
         int fileType=lists.get(childPosition).fileType;
 
-        if((fileType==0 && mWXImgAdapter==null) || (fileType==1 && mWXVideoAdapter==null)){
-            mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
-        }
+//        if((fileType==0 && mWXImgAdapter==null) || (fileType==1 && mWXVideoAdapter==null)){
+//            mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
+//        }
 
         if(fileType==0){
             mWXImgAdapter=new WXImgAdapter(mContext,lists);

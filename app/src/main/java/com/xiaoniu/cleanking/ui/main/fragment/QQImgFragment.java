@@ -4,7 +4,9 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -70,6 +72,8 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     private  int mGroupPosition;
 
+    private  int mOfferY=0;
+
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;;
 
@@ -102,26 +106,79 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         mProgress=FileCopyProgressDialogFragment.newInstance();
         mAdapter=new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
-        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+
+
+
+        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                List<FileTitleEntity> lists=mAdapter.getList();
-                for(int i=0;i<lists.size();i++){
-                    if(i==groupPosition){
-                        FileTitleEntity fileTitleEntity=lists.get(groupPosition);
-                        if(fileTitleEntity.isExpand){
-                            fileTitleEntity.isExpand=false;
-                        }else {
-                            fileTitleEntity.isExpand=true;
+            public void onGroupExpand(int groupPosition) {
+                List<FileTitleEntity> lists = mAdapter.getList();
+                boolean isExpand = false;
+                for (int i = 0; i < lists.size(); i++) {
+                    if (i == groupPosition) {
+                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                        if (fileTitleEntity.isExpand) {
+                            fileTitleEntity.isExpand = false;
+                        } else {
+                            fileTitleEntity.isExpand = true;
                         }
-                        break;
+                        isExpand = fileTitleEntity.isExpand;
+                    }else {
+                        mListView.collapseGroup(i);
                     }
                 }
                 mAdapter.notifyDataSetChanged();
+                mListView.setSelectedGroup(groupPosition);
 
-                return false;
+                mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
+                            scollPage(groupPosition);
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                        if(firstVisibleItem+visibleItemCount==totalItemCount){
+                            mOfferY=1;
+                        }else {
+                            mOfferY=-1;
+                        }
+
+                    }
+                });
             }
         });
+        mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                List<FileTitleEntity> lists = mAdapter.getList();
+                boolean isExpand = false;
+
+                for (int i = 0; i < lists.size(); i++) {
+                    if (i == groupPosition) {
+                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                        if (fileTitleEntity.isExpand) {
+                            fileTitleEntity.isExpand = false;
+                        } else {
+                            fileTitleEntity.isExpand = true;
+                        }
+                        isExpand = fileTitleEntity.isExpand;
+                        break;
+                    }
+                }
+
+                mAdapter.notifyDataSetChanged();
+
+
+            }
+        });
+
 
         mLLCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +205,21 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
             }
 
             @Override
+            public void onCheckAll(int groupPosition, int position, boolean isCheck) {
+                //更新副本
+                List<FileTitleEntity>  lists= mPresenter.listsCamera;
+                for(int i=0;i<lists.size();i++){
+                    List<FileChildEntity> files= lists.get(groupPosition).lists;
+                    for(FileChildEntity fileChildEntity:files){
+                        fileChildEntity.isSelect=isCheck;
+                    }
+
+                }
+                setSelectChildStatus(groupPosition);
+                setDelBtnSize();
+            }
+
+            @Override
             public void onCheckImg(int groupPosition, int position) {
                 mGroupPosition=groupPosition;
                 Intent intent = new Intent(mActivity, PreviewImageActivity.class);
@@ -158,6 +230,36 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         });
 
     }
+
+    private boolean mIsLoading;
+
+
+    private void scollPage(int groupPosition) {
+        if (mIsLoading) {
+            return;
+        }
+        mIsLoading = true;
+
+        Log.i("test","scollPage()");
+        List<FileTitleEntity> adaterLists = mAdapter.getList();
+        List<FileChildEntity> fileChildEntities = mPresenter.listsCamera.get(groupPosition).lists;
+        int startSize = mAdapter.getList().get(groupPosition).lists.size();
+        if (startSize < fileChildEntities.size()) {
+
+            for (int i = startSize; i < fileChildEntities.size(); i++) {
+                if (i <= startSize +29) {
+                    adaterLists.get(groupPosition).lists.add(fileChildEntities.get(i));
+                } else {
+                    break;
+                }
+            }
+
+            int itemCount = adaterLists.get(groupPosition).lists.size();
+            mAdapter.getWXImgAdapter().notifyItemRangeChanged(startSize+1, itemCount,"");
+            mIsLoading = false;
+        }
+    }
+
     /**
      * 照片查看选择集合包装
      *
@@ -294,6 +396,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     private void setSelectStatus(boolean isCheck){
         List<FileTitleEntity> lists = mAdapter.getList();
+        List<FileTitleEntity> listsLocal=mPresenter.listsCamera;
         for(FileTitleEntity fileTitleEntity :lists){
             if(fileTitleEntity.lists.size()>0){
                 fileTitleEntity.isSelect=isCheck;
@@ -304,12 +407,24 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
             }
 
         }
+
+        for (FileTitleEntity fileTitleEntity : listsLocal) {
+            if (fileTitleEntity.lists.size() > 0) {
+                fileTitleEntity.isSelect = isCheck;
+
+                for (FileChildEntity file : fileTitleEntity.lists) {
+                    file.isSelect = isCheck;
+                }
+            }
+
+        }
         mAdapter.notifyDataSetChanged();
     }
 
     private long totalSelectSize() {
         long size = 0L;
-        List<FileTitleEntity> lists = mAdapter.getList();
+        //List<FileTitleEntity> lists = mAdapter.getList();
+        List<FileTitleEntity> lists=mPresenter.listsCamera;
         for(FileTitleEntity fileTitleEntity :lists){
             for(FileChildEntity file:fileTitleEntity.lists){
                 if(file.isSelect){
@@ -339,6 +454,8 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
      * @param paths 根据路径和父类id是否相等
      */
     public void updateDelFileView(List<FileChildEntity> paths){
+
+        mPresenter.listsCamera.removeAll(paths);
         List<FileTitleEntity> listsNew=new ArrayList<>();
 
         List<FileTitleEntity> lists=mAdapter.getList();
@@ -420,10 +537,11 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 //                    }
 //                });
 
-                StatisticsUtils.trackClick("picture_cleaning_delete_click","\"删除\"按钮点击"
+                StatisticsUtils.trackClick("confirm_the_selection_click","\"删除\"按钮点击"
                         ,"qq_cleaning_page","qq_picture_cleaning_page");
 
-                ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();
+                //ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();
+                ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mPresenter.listsCamera;
                 Bundle bundle=new Bundle();
                 bundle.putSerializable(Constant.PARAMS_QQ_IMG_LIST, lists);
                 Intent intent=new Intent();
@@ -515,7 +633,29 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
 
     public void updateImgCamera(List<FileTitleEntity> lists){
-        mAdapter.modifyData(lists);
+        List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
+        for(int i=0;i<lists.size();i++){
+            FileTitleEntity fileParent=lists.get(i);
+            FileTitleEntity fileTitleEntity=FileTitleEntity.copyObject(fileParent.id,fileParent.title,fileParent.type
+                    ,fileParent.size,fileParent.isExpand,fileParent.isSelect);
+
+            List<FileChildEntity> listsNew=new ArrayList<>();
+            int count=0;
+            if(fileParent.lists.size()>30){
+                count=30;
+            }else {
+                count=fileParent.lists.size();
+            }
+            for(int j=0;j<count;j++){
+                FileChildEntity childEntity=fileParent.lists.get(j);
+                listsNew.add(childEntity);
+            }
+            fileTitleEntity.lists.addAll(listsNew);
+            fileCopyEntitys.add(fileTitleEntity);
+        }
+
+        mAdapter.modifyData(fileCopyEntitys);
+
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
             mTxtEmptyTilte.setText("暂无图片~");

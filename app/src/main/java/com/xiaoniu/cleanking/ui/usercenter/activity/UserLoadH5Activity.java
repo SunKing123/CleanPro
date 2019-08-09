@@ -149,6 +149,14 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getExtras() != null) {
+            mWebView.loadUrl(intent.getExtras().getString(Constant.URL));
+        }
+    }
+
+    @Override
     protected void initView() {
         source_page = "h5";
         bundle = getIntent().getExtras();
@@ -349,26 +357,26 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         mWebView.setWebViewClient(webViewClient);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if (mWebView.canGoBack()) {
-                mWebView.goBack();
-            } else {
-                if (bundle.containsKey(Constant.TAG) && "1".equals(bundle.get(Constant.TAG).toString())) {
-                    startActivity(new Intent(UserLoadH5Activity.this, MainActivity.class));
-                } else {
-                    finish();
-                }
-                if (ApiModule.ZhiMaXinYong.equals(url)) {
-                    UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
-                }
-            }
-            return false;
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+//            if (mWebView.canGoBack()) {
+//                mWebView.goBack();
+//            } else {
+//                if (bundle.containsKey(Constant.TAG) && "1".equals(bundle.get(Constant.TAG).toString())) {
+//                    startActivity(new Intent(UserLoadH5Activity.this, MainActivity.class));
+//                } else {
+//                    finish();
+//                }
+//                if (ApiModule.ZhiMaXinYong.equals(url)) {
+//                    UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
+//                }
+//            }
+//            return false;
+//        } else {
+//            return super.onKeyDown(keyCode, event);
+//        }
+//    }
 
     @Override
     public void netError() {
@@ -573,18 +581,18 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         super.finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mWebView.canGoBack()) {
-            if (mWebView.getUrl().equals(url)) {
-                super.onBackPressed();
-            } else {
-                mWebView.goBack();
-            }
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (mWebView.canGoBack()) {
+//            if (mWebView.getUrl().equals(url)) {
+//                super.onBackPressed();
+//            } else {
+//                mWebView.goBack();
+//            }
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     /**
      * 芝麻信用认证

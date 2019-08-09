@@ -126,6 +126,9 @@
         <activity
             android:name=".ui.main.activity.PreviewImageActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanedResultActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.NewsLoadActivity"

@@ -120,7 +120,9 @@ public class JavaInterface {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-
+                if ("QQ".equals(share_media.name())) {
+                    addShareSuccessRequest();
+                }
             }
 
             @Override
