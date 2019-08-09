@@ -102,6 +102,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
 
 
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -117,7 +118,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     @Override
     protected void onResume() {
         super.onResume();
-
+        totalSelectFiles();
     }
 
     public void updateData(List<AppInfoBean> lists) {
