@@ -222,7 +222,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
-                        android:text="一键加速"
+                        android:text="@string/tool_phone_speed"
                         android:textColor="#666666"
                         android:textSize="13sp" />
 

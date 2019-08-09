@@ -45,8 +45,8 @@
     <string name="msg_del_video">永久从设备中删除这些视频，删除后将不可恢复。</string>
     <string name="msg_save_video">正在导出聊天视频，请稍等…</string>
 
-    <string name="tool_qq_clear">QQ清理</string>
-    <string name="tool_chat_clear">微信清理</string>
+    <string name="tool_qq_clear">QQ专清</string>
+    <string name="tool_chat_clear">微信专清</string>
     <string name="tool_clear_chat">清理聊天垃圾</string>
     <string name="tool_clear_qq">释放更多空间</string>
     <string name="tool_temperature_nor">解决手机发热</string>
@@ -59,5 +59,4 @@
     <string name="tool_memory_speed">内存占用加速</string>
     <string name="tool_no_install_chat">您还未装微信</string>
     <string name="tool_no_install_qq">您还未装QQ</string>
-    <string name="tool_one_key_speed">一键加速</string>
 </resources>

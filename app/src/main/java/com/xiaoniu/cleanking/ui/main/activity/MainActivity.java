@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
                     .addItem(new BottomBarTab(this, R.mipmap.tool_normal, getString(R.string.tool)))
-                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
+                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "头条"))
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         }
 

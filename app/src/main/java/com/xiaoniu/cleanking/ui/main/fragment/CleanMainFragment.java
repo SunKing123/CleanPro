@@ -247,7 +247,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
         Bundle bundle = new Bundle();
-        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
         startActivity(PhoneAccessActivity.class,bundle);
     }
 
