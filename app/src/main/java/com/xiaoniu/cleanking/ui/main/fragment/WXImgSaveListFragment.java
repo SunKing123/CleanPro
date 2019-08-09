@@ -513,6 +513,9 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
 
         mAdapter.modifyData(lists);
+        //默认展开最后一条
+        mListView.expandGroup(lists.size()-1);
+        mListView.setSelectedGroup(0);
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
         }

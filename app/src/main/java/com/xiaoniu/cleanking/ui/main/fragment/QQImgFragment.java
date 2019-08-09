@@ -662,6 +662,8 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         }
 
         mAdapter.modifyData(fileCopyEntitys);
+        mListView.expandGroup(fileCopyEntitys.size()-1);
+        mListView.setSelectedGroup(0);
 
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
