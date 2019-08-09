@@ -155,6 +155,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     private  int mOfferY=0;
     @Override
     protected void initView() {
+        showLoadingDialog();
         mMyHandler=new MyHandler();
         mAdapter = new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
@@ -259,19 +260,25 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
 
+
+                setSelectChildStatus(groupPosition);
+                setDelBtnSize();
+
+            }
+
+            @Override
+            public void onCheckAll(int groupPosition, int position, boolean isCheck) {
                 //更新副本
                 List<FileTitleEntity>  lists= mPresenter.listsChat;
                 for(int i=0;i<lists.size();i++){
-                   List<FileChildEntity> files= lists.get(groupPosition).lists;
+                    List<FileChildEntity> files= lists.get(groupPosition).lists;
                     for(FileChildEntity fileChildEntity:files){
                         fileChildEntity.isSelect=isCheck;
                     }
 
                 }
-
                 setSelectChildStatus(groupPosition);
                 setDelBtnSize();
-
             }
 
             @Override
@@ -660,7 +667,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
-
+        cancelLoadingDialog();
         List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
         for(int i=0;i<lists.size();i++){
             FileTitleEntity fileParent=lists.get(i);

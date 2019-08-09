@@ -134,7 +134,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
                     childEntity.isSelect = fileTitleEntity.isSelect;
                 }
                 if(null!=onCheckListener){
-                    onCheckListener.onCheck(groupPosition,-1,fileTitleEntity.isSelect);
+                    onCheckListener.onCheckAll(groupPosition,-1,fileTitleEntity.isSelect);
                 }
                 //notifyDataSetChanged();
             }
@@ -238,6 +238,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
     public interface OnCheckListener{
         void  onCheck(int groupPosition,int position,boolean isCheck);
 
+        void onCheckAll(int groupPosition,int position,boolean isCheck);
         void onCheckImg(int groupPosition,int position);
     }
 

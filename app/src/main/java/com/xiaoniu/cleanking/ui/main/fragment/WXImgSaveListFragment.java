@@ -145,6 +145,12 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
             }
 
             @Override
+            public void onCheckAll(int groupPosition, int position, boolean isCheck) {
+                setSelectChildStatus(groupPosition);
+                setDelBtnSize();
+            }
+
+            @Override
             public void onCheckImg(int groupPosition, int position) {
                 mGroupPosition = groupPosition;
                 Intent intent = new Intent(mActivity, PreviewImageActivity.class);

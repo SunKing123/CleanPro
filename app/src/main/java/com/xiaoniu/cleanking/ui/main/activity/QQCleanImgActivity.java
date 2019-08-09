@@ -24,6 +24,9 @@ import butterknife.OnClick;
  */
 public class QQCleanImgActivity extends BaseActivity {
 
+    public  static  final  String PARASM_QQ_CLEAN_IMG_LIST="parasm_qq_clean_img_list";
+
+
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
