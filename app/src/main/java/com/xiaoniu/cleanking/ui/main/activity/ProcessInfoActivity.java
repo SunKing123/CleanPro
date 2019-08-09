@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.ProcessInfoAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.List;
 
@@ -75,6 +76,16 @@ public class ProcessInfoActivity extends SimpleActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("Running_applications_view_page","\"运行的应用\"浏览","temperature_result_display_page","Running_applications_page ");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("Running_applications_view_page", "运行的应用浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("Running_applications_view_page", "运行的应用浏览");
     }
 }
