@@ -155,12 +155,10 @@ public class CleanAnimView extends RelativeLayout {
 
     public void initWebView() {
         javaInterface = new JavaInterface((Activity) mContext, mWebView);
-        String url = PreferenceUtil.getWebViewUrl();
-        Log.e("trew", "" + url);
-//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        settings.setTextZoom(100);
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.addJavascriptInterface(javaInterface, "cleanPage");
         javaInterface.setListener(new JavaInterface.onShareSuccessListener() {

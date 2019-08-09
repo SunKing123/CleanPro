@@ -615,6 +615,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        settings.setTextZoom(100);
         mWebView.addJavascriptInterface(new JavaInterface(getActivity(),mWebView), "cleanPage");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.setWebViewClient(new WebViewClient() {
