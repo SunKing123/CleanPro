@@ -485,13 +485,32 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     }
 
     /**
+     * 删除本地
+     * @param paths
+     */
+    public void updateDeLocal(List<FileChildEntity> paths){
+        List<FileTitleEntity> lists=mPresenter.listsChat;
+        for(FileChildEntity file: paths){
+
+            for(FileTitleEntity fileTitleEntity:lists){
+                for(int i=0;i<fileTitleEntity.lists.size();i++){
+                      FileChildEntity fileChildEntity=fileTitleEntity.lists.get(i);
+                      if(file.path.equals(fileChildEntity.path)){
+                          fileTitleEntity.lists.remove(fileChildEntity);
+                      }
+                }
+            }
+
+        }
+    }
+    /**
      * 移除列表中元素
      *
      * @param paths 根据路径和父类id是否相等
      */
     public void updateDelFileView(List<FileChildEntity> paths) {
-        mPresenter.listsChat.removeAll(paths);
-
+        //mPresenter.listsChat.removeAll(paths);
+        updateDeLocal(paths);
         List<FileTitleEntity> listsNew = new ArrayList<>();
 
         List<FileTitleEntity> lists = mAdapter.getList();
@@ -517,9 +536,17 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             mEmptyView.setVisibility(View.VISIBLE);
         }
         FragmentManager fm = getActivity().getFragmentManager();
-        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        long delSize=getDelTotalFileSize(paths);
+        String totalSize=FileSizeUtils.formatFileSize(delSize);
         String fileSize=String.valueOf(paths.size());
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+
+        //更新缓存
+        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSizeCache=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,0l);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSizeCache-delSize));
+        editor.commit();
 
 
 
