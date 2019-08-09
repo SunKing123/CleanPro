@@ -5,17 +5,44 @@
     android:orientation="vertical">
 
 
-    <ExpandableListView
-        android:id="@+id/list_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:cacheColorHint="#00000000"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:footerDividersEnabled="false"
-        android:groupIndicator="@null"
-        android:scrollbars="none" />
+        android:layout_weight="1">
+        <ExpandableListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:footerDividersEnabled="false"
+            android:groupIndicator="@null"
+            android:scrollbars="none" />
+        <LinearLayout
+            android:id="@+id/ll_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_150dp"
+                android:layout_height="@dimen/dimen_150dp"
+                android:src="@mipmap/img_wx_empty_img" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="暂无图片～" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
 
 
     <LinearLayout

@@ -51,6 +51,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -127,12 +128,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -472,7 +472,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
     }
 
     @Override

@@ -56,6 +56,10 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     @BindView(R.id.btn_del)
     Button mBtnDel;
 
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mEmptyView;
+
+
     private boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;
@@ -488,7 +492,11 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
     public void updateImgSaveList(List<FileTitleEntity> lists) {
 
+
         mAdapter.modifyData(lists);
+        if(totalSelectSize()==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
 
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
