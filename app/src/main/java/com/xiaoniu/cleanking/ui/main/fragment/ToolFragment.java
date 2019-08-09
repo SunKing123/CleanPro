@@ -158,7 +158,7 @@ public class ToolFragment extends SimpleFragment {
                 return;
             }
             startActivity(WechatCleanHomeActivity.class);
-            StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.rl_qq) {
             if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
@@ -169,19 +169,19 @@ public class ToolFragment extends SimpleFragment {
             if (QQUtil.fileList != null)
                 QQUtil.fileList.clear();
             startActivity(QQCleanHomeActivity.class);
-            StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", "home_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
             startActivity(PhoneAccessActivity.class,bundle);
-            StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", "home_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.text_cooling) {
             //手机降温
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-            StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", "home_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.text_phone_thin) {
             startActivity(new Intent(getContext(), PhoneThinActivity.class));
-            StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "手机瘦身点击", "home_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "手机瘦身点击", "tool_page", "clean_up_toolbox_page");
         }
     }
 

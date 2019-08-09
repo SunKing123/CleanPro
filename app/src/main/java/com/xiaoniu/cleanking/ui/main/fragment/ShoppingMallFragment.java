@@ -228,7 +228,7 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
 
         @JavascriptInterface
         public void onTitleClick(String id, String name) {
-            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "select_page", "information_page", id, name);
         }
 
 
