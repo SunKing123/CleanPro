@@ -128,8 +128,9 @@
                             android:id="@+id/text_unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:layout_marginTop="@dimen/dimen_14dp"
                             android:layout_toRightOf="@id/text_count"
+                            android:layout_marginLeft="@dimen/dimen_4dp"
                             android:text="MB"
                             android:textColor="@color/white" />
                     </RelativeLayout>
@@ -157,8 +158,8 @@
 
                         <ImageView
                             android:id="@+id/view_arrow"
-                            android:layout_width="@dimen/dimen_16dp"
-                            android:layout_height="@dimen/dimen_16dp"
+                            android:layout_width="@dimen/dimen_12dp"
+                            android:layout_height="@dimen/dimen_12dp"
                             android:layout_marginLeft="@dimen/dimen_4dp"
                             android:src="@mipmap/arrow_right_white"
                             android:visibility="gone" />
@@ -195,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layout_clean_top"
-                android:layout_marginTop="@dimen/dimen_20dp"
+                android:layout_marginTop="@dimen/dimen_28dp"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dimen_16dp"
                 android:paddingRight="@dimen/dimen_16dp"
@@ -304,7 +305,7 @@
                         android:layout_width="@dimen/dimen_32dp"
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_40dp"
                         android:src="@mipmap/icon_home_wx" />
 
                     <TextView
@@ -331,7 +332,7 @@
                         android:layout_width="@dimen/dimen_32dp"
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_40dp"
                         android:src="@mipmap/icon_home_qq" />
 
                     <TextView
@@ -357,7 +358,7 @@
                         android:layout_width="@dimen/dimen_32dp"
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_40dp"
                         android:src="@mipmap/icon_home_jw" />
 
                     <TextView
@@ -426,6 +427,43 @@
                 android:layout_alignTop="@+id/image_ad_bottom_second"
                 android:layout_alignRight="@+id/image_ad_bottom_second" />
 
+            <RelativeLayout
+                android:background="#F7F8FA"
+                android:layout_below="@+id/image_ad_bottom_second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_more_function"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="更多推荐"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/view_news"
+                android:layout_below="@+id/text_more_function"
+                android:src="@mipmap/image_main_news"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="@dimen/dimen_16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/view_phone_thin"
+                android:layout_below="@+id/view_news"
+                android:src="@mipmap/image_main_thin"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:layout_marginRight="@dimen/dimen_16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
 

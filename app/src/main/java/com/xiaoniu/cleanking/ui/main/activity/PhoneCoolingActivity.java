@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -162,6 +163,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_FD6F46), false);
             }
         }
+
+        //设置Ding字体
+        mTextTemperature.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/D-DIN.otf"));
 
         initAdapter();
 
