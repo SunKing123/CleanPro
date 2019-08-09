@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -77,6 +79,13 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
     ConstraintLayout consMonth;
     @BindView(R.id.cons_halfyear)
     ConstraintLayout consHalfyear;
+
+
+    @BindView(R.id.layout_not_net)
+    LinearLayout layoutNotNet;
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
+
     CleanWxEasyInfo cleanWxEasyInfoFile;
     ArrayList<CleanWxClearInfo> listDataToday = new ArrayList<>();
     ArrayList<CleanWxClearInfo> listDataYestoday = new ArrayList<>();
@@ -166,6 +175,13 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
 
         List<CleanWxClearInfo> listData = QQUtil.fileList;
 
+        if(listData.size()==0){
+            layoutNotNet.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.GONE);
+        }else{
+            layoutNotNet.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
+        }
         for (int j = 0; j < listData.size(); j++) {
             try {
 

@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -82,6 +84,12 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
     ConstraintLayout consMonth;
     @BindView(R.id.cons_halfyear)
     ConstraintLayout consHalfyear;
+
+    @BindView(R.id.layout_not_net)
+    LinearLayout layoutNotNet;
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
+
     CleanWxEasyInfo cleanWxEasyInfoFile;
     ArrayList<CleanWxItemInfo> listDataToday = new ArrayList<>();
     ArrayList<CleanWxItemInfo> listDataYestoday = new ArrayList<>();
@@ -216,6 +224,15 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
         for (int j = 0; j < listFour.size(); j++) {
             listDataTemp.addAll(listFour.get(j).getFourItem());
+        }
+
+
+        if(listDataTemp.size()==0){
+            layoutNotNet.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.GONE);
+        }else{
+            layoutNotNet.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
         }
 
         for (int j = 0; j < listDataTemp.size(); j++) {
