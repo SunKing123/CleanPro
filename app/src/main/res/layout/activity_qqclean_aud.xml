@@ -183,8 +183,8 @@
         >
         <ImageView
             android:src="@mipmap/icon_no_net"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="@dimen/dimen_150dp"
+            android:layout_height="@dimen/dimen_150dp"/>
 
         <TextView
             android:layout_marginTop="@dimen/dimen_8dp"

@@ -1,9 +1,11 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -42,6 +44,10 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
     TextView cb_checkall;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
+    @BindView(R.id.cons_title)
+    ConstraintLayout cons_title;
+    @BindView(R.id.layout_not_net)
+    LinearLayout layout_not_net;
     CleanWxEasyInfo cleanWxEasyInfoAud;
     ArrayList<CleanWxItemInfo> listData = new ArrayList<>();
     WechatCleanAudAdapter audAdapter;
@@ -122,7 +128,17 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         }
 
         Log.e("qweewq", "" + listData.size());
-
+        if (listData.size() == 0) {
+            cons_title.setVisibility(View.GONE);
+            recycle_view.setVisibility(View.GONE);
+            layout_not_net.setVisibility(View.VISIBLE);
+            tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
+            return;
+        } else {
+            cons_title.setVisibility(View.VISIBLE);
+            recycle_view.setVisibility(View.VISIBLE);
+            layout_not_net.setVisibility(View.GONE);
+        }
         audAdapter = new WechatCleanAudAdapter(WechatCleanAudActivity.this, listData);
         recycle_view.setLayoutManager(new LinearLayoutManager(WechatCleanAudActivity.this));
         recycle_view.setAdapter(audAdapter);
@@ -147,6 +163,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listData.size() == 0) return;
                 if (!recycle_view.isComputingLayout()) {
                     StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());

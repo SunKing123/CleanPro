@@ -1,8 +1,10 @@
 package com.xiaoniu.cleanking.ui.tool.qq.activity;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -28,6 +30,10 @@ import butterknife.OnClick;
 public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;
+    @BindView(R.id.cons_title)
+    ConstraintLayout cons_title;
+    @BindView(R.id.layout_not_net)
+    LinearLayout layout_not_net;
     @BindView(R.id.cb_checkall)
     TextView cb_checkall;
     @BindView(R.id.tv_delete)
@@ -59,6 +65,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
             StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,10 +77,23 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         super.onPause();
         NiuDataAPI.onPageEnd("qq_voice_cleaning_view_page", "语音清理页面浏览");
     }
+
     @Override
     public void initView() {
 
         listData = QQUtil.audioList;
+
+        if (listData.size() == 0) {
+            cons_title.setVisibility(View.GONE);
+            recycle_view.setVisibility(View.GONE);
+            layout_not_net.setVisibility(View.VISIBLE);
+            tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
+            return;
+        } else {
+            cons_title.setVisibility(View.VISIBLE);
+            recycle_view.setVisibility(View.VISIBLE);
+            layout_not_net.setVisibility(View.GONE);
+        }
 
         audAdapter = new QQCleanAudAdapter(QQCleanAudActivity.this, listData);
         recycle_view.setLayoutManager(new LinearLayoutManager(QQCleanAudActivity.this));
@@ -99,6 +119,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listData.size() == 0) return;
                 if (!recycle_view.isComputingLayout()) {
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
