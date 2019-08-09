@@ -131,8 +131,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        settings.setTextZoom(100);
         mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
+
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -254,6 +256,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setCleanedView(0);
                 rel_bottom.setVisibility(View.GONE);
                 mAppBarLayout.setExpanded(true);
+                icon_more.setVisibility(View.INVISIBLE);
             }
 
             @Override

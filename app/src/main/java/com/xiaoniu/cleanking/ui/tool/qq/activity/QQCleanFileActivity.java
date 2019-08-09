@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -77,6 +79,13 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
     ConstraintLayout consMonth;
     @BindView(R.id.cons_halfyear)
     ConstraintLayout consHalfyear;
+
+
+    @BindView(R.id.layout_not_net)
+    LinearLayout layoutNotNet;
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
+
     CleanWxEasyInfo cleanWxEasyInfoFile;
     ArrayList<CleanWxClearInfo> listDataToday = new ArrayList<>();
     ArrayList<CleanWxClearInfo> listDataYestoday = new ArrayList<>();
@@ -96,6 +105,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -159,13 +169,22 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         }
     }
 
+    List<CleanWxClearInfo> listData;
 
     @Override
     public void initView() {
         cleanWxEasyInfoFile = WxQqUtil.n;
 
-        List<CleanWxClearInfo> listData = QQUtil.fileList;
+        listData = QQUtil.fileList;
 
+        if (listData.size() == 0) {
+            layoutNotNet.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.GONE);
+            return;
+        } else {
+            layoutNotNet.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
+        }
         for (int j = 0; j < listData.size(); j++) {
             try {
 
@@ -237,6 +256,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listData.size() == 0) return;
                 if (!recycleViewToday.isComputingLayout()) {
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
