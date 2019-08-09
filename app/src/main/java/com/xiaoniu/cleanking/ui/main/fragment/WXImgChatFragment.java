@@ -485,13 +485,32 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     }
 
     /**
+     * 删除本地
+     * @param paths
+     */
+    public void updateDeLocal(List<FileChildEntity> paths){
+        List<FileTitleEntity> lists=mPresenter.listsChat;
+        for(FileChildEntity file: paths){
+
+            for(FileTitleEntity fileTitleEntity:lists){
+                for(int i=0;i<fileTitleEntity.lists.size();i++){
+                      FileChildEntity fileChildEntity=fileTitleEntity.lists.get(i);
+                      if(file.path.equals(fileChildEntity.path)){
+                          fileTitleEntity.lists.remove(fileChildEntity);
+                      }
+                }
+            }
+
+        }
+    }
+    /**
      * 移除列表中元素
      *
      * @param paths 根据路径和父类id是否相等
      */
     public void updateDelFileView(List<FileChildEntity> paths) {
-        mPresenter.listsChat.removeAll(paths);
-
+        //mPresenter.listsChat.removeAll(paths);
+        updateDeLocal(paths);
         List<FileTitleEntity> listsNew = new ArrayList<>();
 
         List<FileTitleEntity> lists = mAdapter.getList();

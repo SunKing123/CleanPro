@@ -418,8 +418,6 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
             mLLEmptyView.setVisibility(View.VISIBLE);
         }
 
-
-
         FragmentManager fm = getActivity().getFragmentManager();
         long delSize=getDelTotalFileSize(paths);
         String totalSize=FileSizeUtils.formatFileSize(delSize);
