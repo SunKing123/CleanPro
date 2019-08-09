@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -223,6 +224,8 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
                 }
             };
             mRecyclerView.setLayoutManager(layoutManager);
+
+            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         }
     }

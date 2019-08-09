@@ -21,6 +21,7 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -28,7 +29,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
-import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter2;
+import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
@@ -67,8 +68,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
     private  static  final  int REQUEST_CODE_IMG_VIEW=0x1021;
     @BindView(R.id.list_view)
-    ExpandableStickyListHeadersListView mListView;
-    private WXImgChatAdapter2 mAdapter;
+    ExpandableListView mListView;
+    private WXImgChatAdapter mAdapter;
 
 //    @BindView(R.id.scroll_view)
 //    ObservableScrollView mScrollView;
@@ -125,7 +126,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         if (startSize < fileChildEntities.size()) {
 
             for (int i = startSize; i < fileChildEntities.size(); i++) {
-                if (i <= startSize + 3) {
+                if (i <= startSize + 29) {
                     adaterLists.get(groupPosition).lists.add(fileChildEntities.get(i));
                 } else {
                     break;
@@ -149,129 +150,92 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     @Override
     protected void initView() {
         mMyHandler=new MyHandler();
-        mAdapter = new WXImgChatAdapter2(getContext());
+        mAdapter = new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mLoading = CleanFileLoadingDialogFragment.newInstance();
         mProgress = FileCopyProgressDialogFragment.newInstance();
-//        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//            @Override
-//            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-//                List<FileTitleEntity> lists = mAdapter.getList();
-//                boolean isExpand=false;
-//
-//                for (int i = 0; i < lists.size(); i++) {
-//                    if (i == groupPosition) {
-//                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-//                        if (fileTitleEntity.isExpand) {
-//                            fileTitleEntity.isExpand = false;
-//                        } else {
-//                            fileTitleEntity.isExpand = true;
-//                        }
-//                        isExpand=fileTitleEntity.isExpand;
-//                        break;
-//                    }
-//                }
 
-//                if(isExpand){
-
-        mListView.setOnStickyHeaderOffsetChangedListener(new StickyListHeadersListView.OnStickyHeaderOffsetChangedListener() {
+        mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
-            public void onStickyHeaderOffsetChanged(StickyListHeadersListView l, View header, int offset) {
-                Log.i("test","offset"+offset);
-            }
-        });
+            public void onGroupCollapse(int groupPosition) {
+                List<FileTitleEntity> lists = mAdapter.getList();
+                boolean isExpand = false;
 
-
-        mListView.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
-            @Override
-            public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-                if(mListView.isHeaderCollapsed(headerId)){
-                    mListView.expand(headerId);
-                }else {
-                    mListView.collapse(headerId);
+                for (int i = 0; i < lists.size(); i++) {
+                    if (i == groupPosition) {
+                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                        if (fileTitleEntity.isExpand) {
+                            fileTitleEntity.isExpand = false;
+                        } else {
+                            fileTitleEntity.isExpand = true;
+                        }
+                        isExpand = fileTitleEntity.isExpand;
+                        break;
+                    }
                 }
-                WXImgChatAdapter2.ViewHolderChild viewHolderChild=(WXImgChatAdapter2.ViewHolderChild)mAdapter.mViewChild;
-
-                if(null!=viewHolderChild ){
-
-                }
-//                viewHolderChild.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                    @Override
-//                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                        super.onScrollStateChanged(recyclerView, newState);
-//                        Log.i("test", "onScrollStateChanged" + mOfferY);
-//                        LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                        // 当不滚动时
-//                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                            //获取最后一个完全显示的ItemPosition
-//                            int lastVisibleItem = manager.findLastCompletelyVisibleItemPosition();
-//                            int totalItemCount = manager.getItemCount();
-//
-//                            // 判断是否滚动到底部，并且是向右滚动
-//                            if (lastVisibleItem == (totalItemCount - 1) && mOfferY>0) {
-//                                //加载更多功能的代码
-//                                scollPage(itemPosition);
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                        super.onScrolled(recyclerView, dx, dy);
-//                        mOfferY=dy;
-//                        Log.i("test", "y=" + mOfferY);
-//                    }
-//                });
-
+                mAdapter.notifyDataSetChanged();
 
             }
         });
 
+        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                List<FileTitleEntity> lists = mAdapter.getList();
 
 
-                WXImgChatAdapter2.ViewHolderChild viewHolderChild=(WXImgChatAdapter2.ViewHolderChild)(mAdapter.mViewChild);
-                if(null!=viewHolderChild && null!= viewHolderChild.mRecyclerView){
-                    viewHolderChild.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-                            Log.i("test","recycleVIew");
+                boolean isExpand = false;
+                for (int i = 0; i < lists.size(); i++) {
+                    if (i == groupPosition) {
+                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                        if (fileTitleEntity.isExpand) {
+                            fileTitleEntity.isExpand = false;
+                        } else {
+                            fileTitleEntity.isExpand = true;
+                        }
+                        isExpand = fileTitleEntity.isExpand;
+                    }else {
+                        mListView.collapseGroup(i);
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+
+                mListView.setSelectedGroup(groupPosition);
+                mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
+                            scollPage(groupPosition);
+                        }
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        if(visibleItemCount-1==groupPosition && mOfferY>0){
+                            mOfferY=1;
+                        }else {
+                            mOfferY=-1;
                         }
 
+                    }
+                });
+              mListView.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
+                        public boolean onTouch(View v, MotionEvent event) {
+                            float startY=0;
+                            switch (event.getAction()){
+                                case MotionEvent.ACTION_DOWN:
+                                    startY=event.getY();
+                                    break;
+                                case  MotionEvent.ACTION_MOVE:
+                                    mOfferY=(int)(event.getY()-startY);
+                                    break;
+                            }
+                            return false;
                         }
                     });
-
-                }
-//                    mListView.setOnTouchListener(new View.OnTouchListener() {
-//                        @Override
-//                        public boolean onTouch(View v, MotionEvent event) {
-//                            float startY=0;
-//                            switch (event.getAction()){
-//                                case MotionEvent.ACTION_DOWN:
-//                                    startY=event.getY();
-//                                    break;
-//                                case  MotionEvent.ACTION_MOVE:
-//                                    mOfferY=(int)(event.getY()-startY);
-//                                    break;
-//                            }
-//                            return false;
-//                        }
-//                    });
-//
-////                }else {
-////                    mListView.setOnScrollListener(null);
-////                }
-//
-//                //mAdapter.notifyDataSetChanged();
-//               // mMyHandler.sendEmptyMessage(1);
-//                return false;
-//            }
-//        });
-//
-//
+            }
+        });
 
 
         mLLCheckAll.setOnClickListener(new View.OnClickListener() {
@@ -294,7 +258,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
 
 
-        mAdapter.setOnCheckListener(new WXImgChatAdapter2.OnCheckListener() {
+        mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
                 setSelectChildStatus(groupPosition);

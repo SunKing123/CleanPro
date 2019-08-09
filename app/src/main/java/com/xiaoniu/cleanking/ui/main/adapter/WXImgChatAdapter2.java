@@ -66,7 +66,7 @@ public class WXImgChatAdapter2 extends BaseAdapter implements StickyListHeadersA
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mLists.get(position);
     }
 
     @Override
@@ -110,7 +110,18 @@ public class WXImgChatAdapter2 extends BaseAdapter implements StickyListHeadersA
         });
         mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
         mViewChild.mRecyclerView.setItemAnimator(null);
+        mViewChild.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
 
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.i("test","onScrolled()");
+            }
+        });
         return convertView;
     }
 
@@ -136,11 +147,11 @@ public class WXImgChatAdapter2 extends BaseAdapter implements StickyListHeadersA
         }else {
             mViewParent.mTxtSize.setText(FileSizeUtils.formatFileSize(fileTitleEntity.size));
         }
-//        if (isExpanded) {
-//            mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_up);
-//        } else {
-//            mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_down);
-//        }
+        if (fileTitleEntity.isExpand) {
+            mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_up);
+        } else {
+            mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_down);
+        }
         mViewParent.mTxtTitle.setText(fileTitleEntity.title);
 
         mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
