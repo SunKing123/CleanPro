@@ -211,10 +211,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                 mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(AbsListView view, int scrollState) {
-                        if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
+                        if((scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING) && mOfferY>0){
                             scollPage(groupPosition);
-
-
                         }
                     }
 

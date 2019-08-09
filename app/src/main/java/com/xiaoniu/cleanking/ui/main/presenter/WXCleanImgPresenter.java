@@ -386,10 +386,11 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
                             //是否为同一个月
                             fileChildEntity.parentId=FileTitleEntity.Type.MONTH;
                             listsChat.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
+                        } else{
+                            //是否为半年内
+                            fileChildEntity.parentId=FileTitleEntity.Type.YEAR_HALF;
+                            listsChat.get(FileTitleEntity.Type.YEAR_HALF).lists.add(fileChildEntity);
                         }
-//                        else if(){
-//                            //是否为半年内
-//                        }
                     }
                 }
             }
