@@ -565,7 +565,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
-
+        mListView.expandGroup(lists.size()-1);
         if(totalFileSizeL(lists)==0){
             mTxtEmptyTile.setText("暂无视频~");
             mEmptyView.setVisibility(View.VISIBLE);

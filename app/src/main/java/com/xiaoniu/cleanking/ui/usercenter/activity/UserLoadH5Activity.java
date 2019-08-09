@@ -318,19 +318,20 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mWebView.canGoBack()) {
-                    mWebView.goBack();
-                } else {
-                    if (bundle.containsKey(Constant.TAG) && "1".equals(bundle.get(Constant.TAG).toString())) {
-                        startActivity(new Intent(UserLoadH5Activity.this, MainActivity.class));
-                    } else {
-                        finish();
-                    }
-
-                    if (ApiModule.ZhiMaXinYong.equals(url)) {
-                        UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
-                    }
-                }
+                finish();
+//                if (mWebView.canGoBack()) {
+//                    mWebView.goBack();
+//                } else {
+//                    if (bundle.containsKey(Constant.TAG) && "1".equals(bundle.get(Constant.TAG).toString())) {
+//                        startActivity(new Intent(UserLoadH5Activity.this, MainActivity.class));
+//                    } else {
+//                        finish();
+//                    }
+//
+//                    if (ApiModule.ZhiMaXinYong.equals(url)) {
+//                        UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
+//                    }
+//                }
             }
         });
         mWebView.setWebViewClient(webViewClient);
