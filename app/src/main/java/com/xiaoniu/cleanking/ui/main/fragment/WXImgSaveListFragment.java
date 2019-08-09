@@ -352,6 +352,11 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         setDelBtnSize();
         setSelectChildStatus();
 
+        if(totalFileSizeL(mAdapter.getList())==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+
+
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
@@ -494,7 +499,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
 
         mAdapter.modifyData(lists);
-        if(totalSelectSize()==0){
+        if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
         }
 
@@ -503,6 +508,23 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSize+totalFileSize(lists)));
         editor.commit();
+    }
+
+
+
+    public   long totalFileSizeL(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
     }
 
 

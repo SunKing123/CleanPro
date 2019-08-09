@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -59,6 +60,12 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
     Button mBtnDel;
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mEmptyView;
+    @BindView(R.id.txt_empty_title)
+    TextView mTxtEmptyTilte;
+
+
     private  boolean mIsCheckAll;
 
     private  int mGroupPosition;
@@ -354,6 +361,9 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         setDelBtnSize();
         setSelectChildStatus();
 
+        if(totalFileSizeL(mAdapter.getList())==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
@@ -506,7 +516,27 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
+        if(totalFileSizeL(lists)==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+            mTxtEmptyTilte.setText("暂无图片~");
+        }
     }
+
+    public   long totalFileSizeL(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

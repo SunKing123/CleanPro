@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -67,6 +68,11 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
     private  boolean mIsCheckAll;
+
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mEmptyView;
+    @BindView(R.id.txt_empty_title)
+    TextView mTxtTitle;
 
     private  int mGroupPosition;
 
@@ -411,6 +417,10 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
         setDelBtnSize();
         setSelectChildStatus();
 
+        if(totalFileSize(lists)==0){
+            mTxtTitle.setText("暂无视频");
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
@@ -553,6 +563,10 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
 
+        if(totalFileSize(lists)==0){
+            mTxtTitle.setText("暂无视频");
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
         //保存缓存
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,totalFileSize(lists));
