@@ -287,7 +287,7 @@ public class MeFragment extends SimpleFragment {
                     ToastUtils.showShort("分享成功");
                     break;
                 case SHARE_CANCEL:
-                    ToastUtils.showShort("已取消");
+//                    ToastUtils.showShort("已取消");
                     break;
                 case SHARE_WECHAT:
                     ToastUtils.showShort("没有安装微信，请先安装应用");

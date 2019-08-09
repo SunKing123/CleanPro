@@ -186,7 +186,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
                     mView.showToast("分享成功");
                     break;
                 case SHARE_CANCEL:
-                    mView.showToast("已取消");
+//                    mView.showToast("已取消");
                     break;
                 case SHARE_WECHAT:
                     mView.showToast("没有安装微信，请先安装应用");
