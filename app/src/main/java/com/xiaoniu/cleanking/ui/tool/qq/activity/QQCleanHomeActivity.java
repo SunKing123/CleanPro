@@ -436,7 +436,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             public void run() {
                 getScanGabageResult();
             }
-        }, 300);
+        }, 800);
         Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());
         Log.e("eeee", "al大小：" + getSize(al) + "  aj数量：" + al.size());  //头像缓存(联网可重新下载)
         Log.e("eeee", "an大小：" + getSize(an) + "  an数量：" + an.size());  //空间缓存(浏览空间产生的图片缓存)
