@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (prePosition == 2) {
             sourcePage = "selected_page";
         } else if (position == 3) {
-            currentPage = "mine_page";
+            sourcePage = "mine_page";
         }
         StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
