@@ -256,6 +256,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setCleanedView(0);
                 rel_bottom.setVisibility(View.GONE);
                 mAppBarLayout.setExpanded(true);
+                icon_more.setVisibility(View.INVISIBLE);
             }
 
             @Override
