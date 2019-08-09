@@ -59,6 +59,9 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     ExpandableListView mListView;
     private WXImgChatAdapter mAdapter;
 
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mLLEmptyView;
+
     @BindView(R.id.btn_del)
     Button mBtnDel;
     @BindView(R.id.ll_check_all)
@@ -509,8 +512,11 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     }
 
     public void updateImgCamera(List<FileTitleEntity> lists){
-        mAdapter.modifyData(lists);
 
+        mAdapter.modifyData(lists);
+        if(totalSelectSize()==0){
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
         SharedPreferences.Editor editor=sharedPreferences.edit();

@@ -71,6 +71,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     ExpandableListView mListView;
     private WXImgChatAdapter mAdapter;
 
+
+
 //    @BindView(R.id.scroll_view)
 //    ObservableScrollView mScrollView;
 
@@ -78,6 +80,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     LinearLayout mLLCheckAll;
     @BindView(R.id.btn_del)
     Button mBtnDel;
+
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mEmptyView;
 
     private boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
@@ -649,6 +654,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
+
         List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
         for(int i=0;i<lists.size();i++){
             FileTitleEntity fileParent=lists.get(i);
@@ -670,7 +676,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             fileCopyEntitys.add(fileTitleEntity);
         }
         mAdapter.modifyData(fileCopyEntitys);
-
+        if(totalSelectSize()==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
 
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
