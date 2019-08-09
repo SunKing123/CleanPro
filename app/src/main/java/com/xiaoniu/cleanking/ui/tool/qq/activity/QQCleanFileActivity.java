@@ -105,6 +105,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -168,17 +169,19 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         }
     }
 
+    List<CleanWxClearInfo> listData;
 
     @Override
     public void initView() {
         cleanWxEasyInfoFile = WxQqUtil.n;
 
-        List<CleanWxClearInfo> listData = QQUtil.fileList;
+        listData = QQUtil.fileList;
 
-        if(listData.size()==0){
+        if (listData.size() == 0) {
             layoutNotNet.setVisibility(View.VISIBLE);
             scrollView.setVisibility(View.GONE);
-        }else{
+            return;
+        } else {
             layoutNotNet.setVisibility(View.GONE);
             scrollView.setVisibility(View.VISIBLE);
         }
@@ -253,6 +256,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listData.size() == 0) return;
                 if (!recycleViewToday.isComputingLayout()) {
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());

@@ -208,13 +208,14 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         }
     }
 
+    List<CleanWxItemInfo> listDataTemp;
 
     @Override
     public void initView() {
         cleanWxEasyInfoFile = WxQqUtil.n;
 
         List<CleanWxFourItemInfo> listFour = new ArrayList<>();
-        List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
+        listDataTemp = new ArrayList<>();
         for (int i = 0; i < cleanWxEasyInfoFile.getList().size(); i++) {
             if (cleanWxEasyInfoFile.getList().get(i) instanceof CleanWxFourItemInfo) {
                 CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoFile.getList().get(i);
@@ -227,10 +228,11 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         }
 
 
-        if(listDataTemp.size()==0){
+        if (listDataTemp.size() == 0) {
             layoutNotNet.setVisibility(View.VISIBLE);
             scrollView.setVisibility(View.GONE);
-        }else{
+            return;
+        } else {
             layoutNotNet.setVisibility(View.GONE);
             scrollView.setVisibility(View.VISIBLE);
         }
@@ -304,6 +306,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listDataTemp.size() == 0) return;
                 if (!recycleViewToday.isComputingLayout()) {
                     StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());
@@ -399,7 +402,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
     public void deleteSuccess(List<CleanWxItemInfo> list1, List<CleanWxItemInfo> list2, List<CleanWxItemInfo> list3, List<CleanWxItemInfo> list4) {
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
-        tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg );
+        tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
         fileAdapterToday.deleteData(list1);
         fileAdapterYestoday.deleteData(list2);
         fileAdapterInMonth.deleteData(list3);
