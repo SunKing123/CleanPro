@@ -1,12 +1,19 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -17,6 +24,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
+import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 
 import butterknife.BindView;
@@ -74,12 +82,46 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
         mTotalSize = mPresenter.queryStorageSize(mPath);
 
-        mPresenter.scanFile(mPath);
+
         objectAnimatorScanIng = mPresenter.setScaningAnim(mIvScanFrame);
         setScanStatus(true);
+
+        //8.0权限判断
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!hasUsageStatsPermission(this)) {
+                //没有权限
+                startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
+                mPresenter.scanFile(mPath);
+            }else {
+                //有权限
+                mPresenter.scanData();
+
+            }
+        }else {
+            mPresenter.scanData();
+
+        }
     }
 
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static boolean hasUsageStatsPermission(Context context) {
+        //http://stackoverflow.com/a/42390614/878126
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            return false;
+        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        final int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.getPackageName());
+        boolean granted = false;
+        if (mode == AppOpsManager.MODE_DEFAULT)
+            granted = (context.checkCallingOrSelfPermission(android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
+        else
+            granted = (mode == AppOpsManager.MODE_ALLOWED);
+        return granted;
+    }
+
+
     private long mCurrentTime;
+    private long mSizeL;
 
     public void updateText(String path, long size) {
 
@@ -91,11 +133,30 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                 }
                 if (null != mTxtSpaceSize) {
                     mCurrentTime = System.currentTimeMillis();
-                    mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
+                    Log.i("test","size="+ FileSizeUtils.formatFileSize(size)+",totalSize="+FileSizeUtils.formatFileSize(mTotalSize));
+
+                    mTxtSpaceSize.setText(mPresenter.accuracy(size+mSizeL, mTotalSize, 0));
                 }
             }
         }
     }
+
+    /**
+     * 更新软件数据
+     * @param size 安装应用大小
+     * @param totalSize  应用总大小
+     */
+    public void updateData(int size,long totalSize){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mSizeL=size;
+                mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
+                mPresenter.scanFile(mPath);
+            }
+        });
+    }
+
 
 
     @OnClick({R.id.img_back})
