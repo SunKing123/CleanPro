@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 
@@ -61,6 +62,9 @@ public class JavaInterface {
 
     @JavascriptInterface
     public void toOtherPage(String url) {
+        if(mActivity instanceof UserLoadH5Activity){
+            mActivity.finish();
+        }
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
         bundle.putString(Constant.Title, "");

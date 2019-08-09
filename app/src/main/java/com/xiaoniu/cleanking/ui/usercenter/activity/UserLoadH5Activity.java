@@ -318,6 +318,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
 //                if (mWebView.canGoBack()) {
 //                    mWebView.goBack();
