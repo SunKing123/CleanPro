@@ -168,7 +168,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 //            mLayoutTitleBar.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
             mImageTitle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
             mLayoutCoolBottom.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
-
             isOverload = true;
         }
 
