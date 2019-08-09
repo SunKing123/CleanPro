@@ -266,8 +266,8 @@
 
                 <ImageView
                     android:id="@+id/tv_select_vid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="6dp"
+                    android:layout_height="@dimen/dimen_11dp"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:src="@mipmap/arrow_right"
                     android:textColor="#333333"
@@ -337,8 +337,8 @@
 
                 <ImageView
                     android:id="@+id/tv_select_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="6dp"
+                    android:layout_height="@dimen/dimen_11dp"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:src="@mipmap/arrow_right"
                     android:textColor="#333333"
@@ -408,8 +408,8 @@
 
                 <ImageView
                     android:id="@+id/tv_select_file"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="6dp"
+                    android:layout_height="@dimen/dimen_11dp"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:src="@mipmap/arrow_right"
                     android:textColor="#333333"
@@ -479,8 +479,8 @@
 
                 <ImageView
                     android:id="@+id/tv_select_aud"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="6dp"
+                    android:layout_height="@dimen/dimen_11dp"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:src="@mipmap/arrow_right"
                     android:textColor="#333333"

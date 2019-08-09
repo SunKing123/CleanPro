@@ -150,8 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/rel_bottom"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginRight="@dimen/dimen_16dp"
+
                 android:layout_marginTop="@dimen/dimen_4dp"
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
