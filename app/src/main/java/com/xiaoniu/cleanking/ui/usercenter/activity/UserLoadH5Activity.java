@@ -190,6 +190,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setDomStorageEnabled(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setTextZoom(100);
         // 为图片添加放大缩小功能
         webSettings.setUseWideViewPort(true);
         //自适应屏幕

@@ -368,6 +368,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        settings.setTextZoom(100);
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.addJavascriptInterface(new JavaInterface(this,mWebView), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
