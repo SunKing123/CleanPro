@@ -201,7 +201,6 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
                 });
 
 
-
         ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
             public void run() {
                 SystemClock.sleep(200);
@@ -310,5 +309,33 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
     }
 
+    //筛选语音大小d
+    public long getAudioSize() {
+        CleanWxEasyInfo cleanWxEasyInfoAud = WxQqUtil.k;
+
+        List<CleanWxFourItemInfo> listFour = new ArrayList<>();
+        List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
+        List<CleanWxItemInfo> listData = new ArrayList<>();
+        long audioSize = 0;
+        for (int i = 0; i < cleanWxEasyInfoAud.getList().size(); i++) {
+            if (cleanWxEasyInfoAud.getList().get(i) instanceof CleanWxFourItemInfo) {
+                CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoAud.getList().get(i);
+                listFour.add(cleanWxHeadInfo);
+            }
+        }
+
+        for (int j = 0; j < listFour.size(); j++) {
+            listDataTemp.addAll(listFour.get(j).getFourItem());
+        }
+
+        for (int j = 0; j < listDataTemp.size(); j++) {
+            if (listDataTemp.get(j).getFile().getAbsolutePath().endsWith("amr")) {
+                listDataTemp.get(j).setIsSelect(false);
+                listData.add(listDataTemp.get(j));
+                audioSize += listDataTemp.get(j).getFileSize();
+            }
+        }
+        return audioSize;
+    }
 
 }
