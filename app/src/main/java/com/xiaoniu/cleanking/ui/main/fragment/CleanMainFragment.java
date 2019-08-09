@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -67,6 +69,7 @@ import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.xiaoniu.cleanking.app.injector.module.ApiModule.SHOPPING_MALL;
 
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
@@ -253,6 +256,22 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //手机清理
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
+
+    @OnClick(R.id.view_news)
+    public void ViewNewsClick() {
+        //新闻点击
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.URL,SHOPPING_MALL);
+        startActivity(RouteConstants.NEWS_LOAD_ACTIVITY,bundle);
+    }
+
+    @OnClick(R.id.view_phone_thin)
+    public void ViewPhoneThinClick() {
+       //手机瘦身
+        startActivity(new Intent(getActivity(), PhoneThinActivity.class));
+    }
+
+
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
