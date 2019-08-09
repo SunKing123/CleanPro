@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.just.agentweb.AgentWeb;
@@ -19,6 +20,7 @@ import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 首页tab H5页面（商城页、生活页）
@@ -28,6 +30,8 @@ import butterknife.BindView;
 public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnKeyBackListener {
     @BindView(R.id.web_container)
     RelativeLayout mRootView;
+    @BindView(R.id.tv_title)
+    TextView mTextTitle;
     private String url = ApiModule.SHOPPING_MALL;
     private boolean isFirst = true;
     private boolean isFirstPause = true;
@@ -37,7 +41,7 @@ public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnK
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_shopping_mall;
+        return R.layout.activity_news_load;
     }
 
     @Override
@@ -60,8 +64,8 @@ public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnK
                 .ready()
                 .go(url);
 
-        mAgentWeb.getJsInterfaceHolder().addJavaObject("cleanPage",new Javascript());
-        mAgentWeb.getJsInterfaceHolder().addJavaObject("sharePage",new Javascript());
+        mAgentWeb.getJsInterfaceHolder().addJavaObject("cleanPage", new Javascript());
+        mAgentWeb.getJsInterfaceHolder().addJavaObject("sharePage", new Javascript());
     }
 
     private class CustomWebChromeClient extends com.just.agentweb.WebChromeClient {
@@ -74,6 +78,9 @@ public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnK
             }
             if (!isDestroyed()) {
                 mCanGoBack = !"悟空清理商城".equals(title);
+            }
+            if (mTextTitle != null) {
+                mTextTitle.setText("新闻热点");
             }
         }
     }
@@ -106,6 +113,15 @@ public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnK
     }
 
     @Override
+    public void onBackPressed() {
+        if (mAgentWeb.back()) {
+            getWebView().goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         mAgentWeb.getWebLifeCycle().onDestroy();
         super.onDestroy();
@@ -131,6 +147,15 @@ public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnK
         @JavascriptInterface
         public void canGoBack(boolean canGoBack) {
             mCanGoBack = canGoBack;
+        }
+    }
+
+    @OnClick(R.id.back)
+    public void onBackClick() {
+        if (mAgentWeb.back()) {
+            getWebView().goBack();
+        } else {
+            finish();
         }
     }
 

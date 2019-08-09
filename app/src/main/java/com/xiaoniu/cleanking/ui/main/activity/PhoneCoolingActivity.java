@@ -35,7 +35,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
@@ -162,7 +161,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         int phoneTemperature = mPresenter.getPhoneTemperature();
         mTextTemperature.setText(String.valueOf(phoneTemperature));
-        if (phoneTemperature > 30) {
+        if (phoneTemperature > 36) {
             mTextTemperatureTips.setText("手机温度较高");
             mBgTitle.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
             mLayoutCoolView.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
