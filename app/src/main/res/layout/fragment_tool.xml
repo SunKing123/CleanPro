@@ -90,11 +90,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textColor="@color/white"
+                        android:textColor="#80FFFFFF"
                         android:textSize="16dp"
                         android:layout_marginLeft="@dimen/dimen_20dp"
                         android:layout_toRightOf="@id/frame_layout"
-                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_marginTop="@dimen/dimen_8dp"
                         android:layout_below="@id/tv_phone_space"
                         android:text="已用: 0.0GB/0.0GB"/>
                 </RelativeLayout>
@@ -294,7 +294,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_speed"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
                     <TextView
@@ -330,7 +330,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_temperature_low"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
                     <TextView
@@ -367,7 +367,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_thin"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
                     <TextView

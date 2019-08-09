@@ -102,6 +102,14 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     TextView tvSelect1;
     @BindView(R.id.tv_select_size)
     TextView tvSelectSize;
+    @BindView(R.id.tv_video_des)
+    TextView tvVideoDes;
+    @BindView(R.id.tv_pic_des)
+    TextView tvPicDes;
+    @BindView(R.id.tv_file_des)
+    TextView tvFileDes;
+    @BindView(R.id.tv_aud_des)
+    TextView tvAudDes;
     @BindView(R.id.iv_dun)
     ImageView iv_dun;
     @BindView(R.id.iv_gabcache)
@@ -390,9 +398,24 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     long selectSize = 0;
 
     public void setSelectAllFiles() {
+        tvFileDes.setTextColor(getResources().getColor(mPresenter.getSelectFileSize() == 0 ? R.color.color_999999 : R.color.color_FD6F46));
+        tvFileDes.setText(mPresenter.getSelectFileSize() == 0 ? "点击管理文件" : "清除后无法恢复，谨慎清理");
+        tvSelectFile.setVisibility(mPresenter.getSelectFileSize() == 0 ? View.GONE : View.VISIBLE);
         tvSelectFile.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectFileSize()));
+
+        tvAudDes.setTextColor(getResources().getColor(mPresenter.getSelectAudioSize() == 0 ? R.color.color_999999 : R.color.color_FD6F46));
+        tvAudDes.setText(mPresenter.getSelectAudioSize() == 0 ? "点击管理QQ语音" : "清除后无法恢复，谨慎清理");
+        tvSelectAud.setVisibility(mPresenter.getSelectAudioSize() == 0 ? View.GONE : View.VISIBLE);
         tvSelectAud.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectAudioSize()));
+
+        tvVideoDes.setTextColor(getResources().getColor(mPresenter.getSelectImgOrVideoSize(mListVideo) == 0 ? R.color.color_999999 : R.color.color_FD6F46));
+        tvVideoDes.setText(mPresenter.getSelectImgOrVideoSize(mListVideo) == 0 ? "点击管理QQ视频" : "清除后无法恢复，谨慎清理");
+        tvSelectVideo.setVisibility(mPresenter.getSelectImgOrVideoSize(mListVideo) == 0 ? View.GONE : View.VISIBLE);
         tvSelectVideo.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectImgOrVideoSize(mListVideo)));
+
+        tvPicDes.setTextColor(getResources().getColor(mPresenter.getSelectImgOrVideoSize(mListImg) == 0 ? R.color.color_999999 : R.color.color_FD6F46));
+        tvPicDes.setText(mPresenter.getSelectImgOrVideoSize(mListImg) == 0 ? "点击管理聊天图片" : "清除后无法恢复，谨慎清理");
+        tvSelectPic.setVisibility(mPresenter.getSelectImgOrVideoSize(mListImg) == 0 ? View.GONE : View.VISIBLE);
         tvSelectPic.setText("已选择" + CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getSelectImgOrVideoSize(mListImg)));
         selectSize = 0;
         selectSize += mPresenter.getSelectFileSize() + mPresenter.getSelectAudioSize() + mPresenter.getSelectImgOrVideoSize(mListVideo) + mPresenter.getSelectImgOrVideoSize(mListImg);
@@ -436,7 +459,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             public void run() {
                 getScanGabageResult();
             }
-        }, 300);
+        }, 800);
         Log.e("eeee", "aj大小：" + getSize(aj) + "  aj数量：" + aj.size());
         Log.e("eeee", "al大小：" + getSize(al) + "  aj数量：" + al.size());  //头像缓存(联网可重新下载)
         Log.e("eeee", "an大小：" + getSize(an) + "  an数量：" + an.size());  //空间缓存(浏览空间产生的图片缓存)

@@ -108,6 +108,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mPresenter.scanBigFile();
 
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
+        mCleanAnimView.setListener(() ->  finish());
     }
 
     private void initAdapter() {

@@ -126,6 +126,12 @@
             android:name=".ui.main.activity.PreviewImageActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.main.activity.NewsLoadActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenSize"/>
+
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />

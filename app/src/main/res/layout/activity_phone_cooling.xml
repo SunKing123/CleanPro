@@ -113,7 +113,7 @@
                 android:layout_marginTop="@dimen/dimen_24dp"
                 android:text="30"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dimen_50dp"/>
+                android:textSize="@dimen/dimen_70dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -130,6 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_temperature"
                 android:layout_centerHorizontal="true"
+                android:alpha="0.9"
                 android:text="手机温度正常"
                 android:textColor="@color/white"/>
         </RelativeLayout>
@@ -330,7 +331,6 @@
                     android:id="@+id/iv_dun"
                     android:layout_width="47dp"
                     android:layout_height="54dp"
-                    android:layout_marginRight="@dimen/dimen_15dp"
                     android:src="@mipmap/icon_dun"/>
 
                 <LinearLayout
@@ -338,7 +338,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -353,7 +353,7 @@
                         android:layout_height="wrap_content"
                         android:text="60s后达到最佳降温效果"
                         android:layout_marginTop="@dimen/dimen_7dp"
-                        android:alpha="0.6"
+                        android:alpha="0.87"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
                 </LinearLayout>

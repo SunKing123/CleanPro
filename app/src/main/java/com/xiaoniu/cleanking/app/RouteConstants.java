@@ -44,4 +44,9 @@ public class RouteConstants {
      */
     public static final String CLEAN_FINISH_ACTIVITY = "/main/CleanFinishActivity";
 
+    /**
+     * 资讯加载页面
+     */
+    public static final String NEWS_LOAD_ACTIVITY = "/main/NewsLoadActivity";
+
 }
