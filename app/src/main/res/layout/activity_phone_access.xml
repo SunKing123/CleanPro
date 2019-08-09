@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:text="手机加速"
+                    android:text="@string/tool_one_key_speed"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_18sp" />
 
@@ -150,8 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/rel_bottom"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginRight="@dimen/dimen_16dp"
+
                 android:layout_marginTop="@dimen/dimen_4dp"
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
@@ -195,12 +194,6 @@
             android:textColor="@color/white" />
     </RelativeLayout>
 
-    <com.xiaoniu.cleanking.ui.main.widget.AccessAnimView
-        android:id="@+id/acceview"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <LinearLayout
         android:id="@+id/layout_not_net"
         android:layout_width="match_parent"
@@ -221,5 +214,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
+
+    <com.xiaoniu.cleanking.ui.main.widget.AccessAnimView
+        android:id="@+id/acceview"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

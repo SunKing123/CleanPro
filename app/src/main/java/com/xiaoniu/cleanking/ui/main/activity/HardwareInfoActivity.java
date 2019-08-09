@@ -9,6 +9,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -28,6 +29,8 @@ import butterknife.OnClick;
 @Route(path = RouteConstants.HARDWARE_INFO_ACTIVITY)
 public class HardwareInfoActivity extends SimpleActivity {
 
+    @BindView(R.id.layout_title_bar)
+    RelativeLayout mLayoutTitleBar;
     @BindView(R.id.tv_title)
     TextView mTextTitle;
     @BindView(R.id.text_battery_status)

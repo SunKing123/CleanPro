@@ -537,7 +537,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 //                    }
 //                });
 
-                StatisticsUtils.trackClick("picture_cleaning_delete_click","\"删除\"按钮点击"
+                StatisticsUtils.trackClick("confirm_the_selection_click","\"删除\"按钮点击"
                         ,"qq_cleaning_page","qq_picture_cleaning_page");
 
                 //ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();

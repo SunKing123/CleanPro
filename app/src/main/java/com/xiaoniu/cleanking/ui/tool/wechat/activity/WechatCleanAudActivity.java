@@ -1,9 +1,11 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -42,6 +44,10 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
     TextView cb_checkall;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
+    @BindView(R.id.cons_title)
+    ConstraintLayout cons_title;
+    @BindView(R.id.layout_not_net)
+    LinearLayout layout_not_net;
     CleanWxEasyInfo cleanWxEasyInfoAud;
     ArrayList<CleanWxItemInfo> listData = new ArrayList<>();
     WechatCleanAudAdapter audAdapter;
@@ -72,7 +78,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
                 if (listData.get(i).getIsSelect())
                     listF.add(audAdapter.getListImage().get(i));
             }
-            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
+            StatisticsUtils.trackClick("wechat_voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
 
             mPresenter.alertBanLiveDialog(WechatCleanAudActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                 @Override
@@ -122,7 +128,17 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         }
 
         Log.e("qweewq", "" + listData.size());
-
+        if (listData.size() == 0) {
+            cons_title.setVisibility(View.GONE);
+            recycle_view.setVisibility(View.GONE);
+            layout_not_net.setVisibility(View.VISIBLE);
+            tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
+            return;
+        } else {
+            cons_title.setVisibility(View.VISIBLE);
+            recycle_view.setVisibility(View.VISIBLE);
+            layout_not_net.setVisibility(View.GONE);
+        }
         audAdapter = new WechatCleanAudAdapter(WechatCleanAudActivity.this, listData);
         recycle_view.setLayoutManager(new LinearLayoutManager(WechatCleanAudActivity.this));
         recycle_view.setAdapter(audAdapter);
@@ -147,8 +163,9 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         cb_checkall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listData.size() == 0) return;
                 if (!recycle_view.isComputingLayout()) {
-                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
+                    StatisticsUtils.trackClick("wechat_voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
                     audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
@@ -179,7 +196,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
     public void deleteSuccess(List<CleanWxItemInfo> listF) {
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
-        tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg );
+        tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
         audAdapter.deleteData(listF);
 //        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
 //        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
@@ -195,6 +212,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         super.onResume();
         NiuDataAPI.onPageStart("wechat_voice_cleaning_view_page", "语音清理页面浏览");
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -209,6 +227,8 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
 
     //获取当前文件大小
     public long getAllFileSize() {
+        if (audAdapter == null)
+            return 0;
         long fileSize = 0;
         List<CleanWxItemInfo> listAll = new ArrayList<>();
         List<CleanWxItemInfo> listData = audAdapter.getListImage();

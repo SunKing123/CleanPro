@@ -190,7 +190,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public void initView() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
-            mTvTitleName.setText(bundle.getString(SpCacheConfig.ITEM_TITLE_NAME));
+            String title = bundle.getString(SpCacheConfig.ITEM_TITLE_NAME);
+            mTvTitleName.setText(title);
+            acceview.setTitleName(title);
         }
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
@@ -269,6 +271,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
             isFromProtect = false;
             return;

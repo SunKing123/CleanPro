@@ -21,7 +21,7 @@ public class PreferenceUtil {
     public static void saveWebViewUrl(String url){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SpCacheConfig.WEB_URL, url).commit();
+        editor.putString(SpCacheConfig.WEB_URL, url + "?deviceId=" + AndroidUtil.getUdid()).commit();
 
     }
 }

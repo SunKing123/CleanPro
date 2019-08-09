@@ -9,6 +9,8 @@ import android.os.StatFs;
 import android.telephony.mbms.FileInfo;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -169,5 +171,14 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
         });
         animator.start();
         return animator;
+    }
+
+    public ObjectAnimator playRoundAnim(ImageView iconOuter) {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+        rotation.setDuration(500);
+        rotation.setRepeatCount(ValueAnimator.INFINITE);
+        rotation.setInterpolator(new LinearInterpolator());
+        rotation.start();
+        return rotation;
     }
 }

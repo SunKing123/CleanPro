@@ -21,11 +21,12 @@
             android:background="@mipmap/back_white" />
 
         <TextView
+            android:id="@+id/tv_title_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dimen_12dp"
-            android:text="手机加速"
+            android:text="@string/tool_one_key_speed"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_18sp" />
     </LinearLayout>

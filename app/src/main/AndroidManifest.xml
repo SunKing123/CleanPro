@@ -170,10 +170,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneAccessActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity

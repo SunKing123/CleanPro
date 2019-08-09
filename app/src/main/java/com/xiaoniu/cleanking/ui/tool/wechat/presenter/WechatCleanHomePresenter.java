@@ -3,15 +3,19 @@ package com.xiaoniu.cleanking.ui.tool.wechat.presenter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +23,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
@@ -336,6 +341,15 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
             }
         }
         return audioSize;
+    }
+
+    public ObjectAnimator playRoundAnim(ImageView iconOuter) {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+        rotation.setDuration(500);
+        rotation.setRepeatCount(ValueAnimator.INFINITE);
+        rotation.setInterpolator(new LinearInterpolator());
+        rotation.start();
+        return rotation;
     }
 
 }

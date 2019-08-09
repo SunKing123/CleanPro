@@ -86,8 +86,8 @@ public class BottomBarTab extends FrameLayout {
         mTvTitle = new TextView(context);
         mTvTitle.setText(title);
         LinearLayout.LayoutParams paramsTv = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
-        mTvTitle.setTextSize(10);
+        paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
+        mTvTitle.setTextSize(11);
         mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.color_666666));
         mTvTitle.setLayoutParams(paramsTv);
         lLContainer.addView(mTvTitle);

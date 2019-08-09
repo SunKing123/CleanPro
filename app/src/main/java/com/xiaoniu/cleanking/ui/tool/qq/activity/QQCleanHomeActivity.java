@@ -301,6 +301,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     public void updateScanResult() {
         if (!scanImgOver || !scanVideoOver || !scanGarbageOver) return;
         setScanStatus(false);
+        if (tvWxgabageSize == null) return;
         tvWxgabageSize.setText("已选" + CleanAllFileScanUtil.byte2FitSizeOne(getSize(al) + getSize(an) + getSize(ah) + getSize(ag)));
         getSelectCacheSize();
         tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(getSize(az)));
@@ -328,6 +329,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                if (ivScanFrame == null) return;
                 ivScanFrame.setVisibility(View.GONE);
                 if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
                 lineSming.setVisibility(View.GONE);
@@ -340,9 +342,21 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     }
 
     //是否在扫描中状态
+    ObjectAnimator roundAnim1;
+    ObjectAnimator roundAnim3;
     public void setScanStatus(boolean isScaning) {
-        ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
-        ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
+        if (ivHua1 == null) return;
+        ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        if (isScaning) {
+            roundAnim1 = mPresenter.playRoundAnim(ivHua1);
+            roundAnim3 = mPresenter.playRoundAnim(ivHua3);
+        } else {
+            roundAnim1.cancel();
+            roundAnim3.cancel();
+            ivHua1.animate().rotation(0).setDuration(10).start();
+            ivHua3.animate().rotation(0).setDuration(10).start();
+        }
     }
 
     //垃圾选中的大小

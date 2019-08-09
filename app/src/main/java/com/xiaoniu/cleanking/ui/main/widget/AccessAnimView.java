@@ -50,6 +50,7 @@ public class AccessAnimView extends RelativeLayout {
     ImageView iv_yu8;
     TextView tv_size;
     TextView tv_gb;
+    TextView tv_title_name;
     LinearLayout line_allnum;
     int sizeMb;
     String strGb;
@@ -102,7 +103,7 @@ public class AccessAnimView extends RelativeLayout {
         iv_yu6 = v.findViewById(R.id.iv_yu6);
         iv_yu7 = v.findViewById(R.id.iv_yu7);
         iv_yu8 = v.findViewById(R.id.iv_yu8);
-
+        tv_title_name = v.findViewById(R.id.tv_title_name);
     }
 
     public void setData(int sizeMb, String strGb) {
@@ -110,6 +111,10 @@ public class AccessAnimView extends RelativeLayout {
         this.strGb = strGb;
         tv_size.setText(sizeMb + "");
         tv_gb.setText("MB");
+    }
+
+    public void setTitleName(String name){
+        tv_title_name.setText(name);
     }
 
     //Step1:上面红色布局和中间1dp的布局动画开始

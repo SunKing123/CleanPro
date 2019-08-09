@@ -39,6 +39,7 @@
                         android:id="@+id/view_lottie_star"
                         android:layout_width="140dp"
                         android:layout_height="120dp"
+                        android:alpha="0.8"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="120dp"/>
 
@@ -221,7 +222,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
-                        android:text="一键加速"
+                        android:text="@string/tool_one_key_speed"
                         android:textColor="#666666"
                         android:textSize="13sp" />
 

@@ -128,7 +128,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
             if (!tv_delete.isSelected())
                 return;
             finish();
-            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
+            StatisticsUtils.trackClick("qq_file_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
 
         } else if (ids == R.id.cons_today) {
             recycleViewToday.setVisibility(recycleViewToday.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
@@ -267,7 +267,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
                     cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                     tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                     compulateDeleteSize();
-                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
+                    StatisticsUtils.trackClick("qq_file_cleaning_all_election_click", "全选按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
                 }
             }
         });

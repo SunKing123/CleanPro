@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
@@ -33,7 +35,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
@@ -49,6 +50,7 @@ import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -119,6 +121,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     LinearLayout mLayoutBottomContent;
     @BindView(R.id.tv_number_cool)
     TextView mTextNumberCool;
+    @BindView(R.id.layout_cool_bottom)
+    ImageView mLayoutCoolBottom;
 
     private ProcessIconAdapter mProcessIconAdapter;
     private HardwareInfo mHardwareInfo;
@@ -130,6 +134,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     private int position_bluetooth = 2;
     private int position_location = 3;
     private int position_wifi = 4;
+
+    /**
+     * 是否温度过高
+     */
+    private boolean isOverload = false;
 
     /**
      * 数字增加动画
@@ -153,20 +162,19 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         int phoneTemperature = mPresenter.getPhoneTemperature();
         mTextTemperature.setText(String.valueOf(phoneTemperature));
-        if (phoneTemperature > 40) {
+        if (phoneTemperature > 36) {
             mTextTemperatureTips.setText("手机温度较高");
             mBgTitle.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
-            mLayoutTitleBar.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
+            mLayoutCoolView.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
+//            mLayoutTitleBar.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
             mImageTitle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_FD6F46), true);
-            } else {
-                StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_FD6F46), false);
-            }
+            mLayoutCoolBottom.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
+            isOverload = true;
         }
 
         //设置Ding字体
-        mTextTemperature.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/D-DIN.otf"));
+        mTextTemperature.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
+        mTextTemperatureNumber.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
 
         initAdapter();
 
@@ -180,17 +188,20 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         //降温
         int tem = new Random().nextInt(3) + 1;
-        mTextNumberCool.setText("成功降温" + tem + "°C" );
+        mTextNumberCool.setText("成功降温" + tem + "°C");
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 initBottomLayout();
             }
-        },1000);
+        }, 1000);
     }
 
     private void initBottomLayout() {
+        if (isDestroyed()) {
+            return;
+        }
         int measureHeight = mLayoutBottomContent.getMeasuredHeight();
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLayoutBottomContent.getLayoutParams();
         layoutParams.height = measureHeight;
@@ -212,12 +223,29 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         initAnimator(phoneTemperature);
     }
 
+    private static final int FirstLevel = 0xffFD6F46;
+    private static final int SecondLevel = 0xffF1D53B;
+    private static final int ThirdLevel = 0xff06C581;
+
     /**
      * 数字增加动画
      *
      * @param phoneTemperature
      */
     private void initAnimator(int phoneTemperature) {
+
+        ValueAnimator colorAnim = ObjectAnimator.ofInt(mLayoutAnimCool, "backgroundColor", ThirdLevel, FirstLevel);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLayoutTitleBar, "backgroundColor", ThirdLevel, FirstLevel);
+        colorAnim.setEvaluator(new ArgbEvaluator());
+        colorAnim2.setEvaluator(new ArgbEvaluator());
+        colorAnim.setDuration(1000);
+        colorAnim2.setDuration(1000);
+        colorAnim.setStartDelay(2000);
+        colorAnim2.setStartDelay(2000);
+        colorAnim.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            showBarColor(animatedValue);
+        });
         numberAnimator = ObjectAnimator.ofInt(0, phoneTemperature);
         numberAnimator.setDuration(3000);
         numberAnimator.addUpdateListener(animation -> {
@@ -247,7 +275,27 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             }
         });
-        numberAnimator.start();
+        AnimatorSet animatorSetTimer = new AnimatorSet();
+        if (isOverload) {
+            animatorSetTimer.playTogether(numberAnimator, colorAnim, colorAnim2);
+        } else {
+            animatorSetTimer.play(numberAnimator);
+        }
+
+        animatorSetTimer.start();
+    }
+
+    /**
+     * 状态栏颜色变化
+     *
+     * @param animatedValue
+     */
+    public void showBarColor(int animatedValue) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, false);
+        }
     }
 
     /**
@@ -262,7 +310,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         new Handler().postDelayed(() -> {
-            if(!isDestroyed()) {
+            if (!isDestroyed()) {
                 ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
                 mBgTitle.setVisibility(VISIBLE);
                 alpha.setDuration(200);
@@ -309,7 +357,32 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 mLayoutCoolView.setLayoutParams(rlp);
             }
         });
-        anim.start();
+
+        ValueAnimator colorAnim = ObjectAnimator.ofInt(mLayoutCoolView, "backgroundColor", FirstLevel, ThirdLevel);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mBgTitle, "backgroundColor", FirstLevel, ThirdLevel);
+        ValueAnimator colorAnim3 = ObjectAnimator.ofInt(mLayoutTitleBar, "backgroundColor", FirstLevel, ThirdLevel);
+        colorAnim.setEvaluator(new ArgbEvaluator());
+        colorAnim2.setEvaluator(new ArgbEvaluator());
+        colorAnim3.setEvaluator(new ArgbEvaluator());
+        colorAnim.setDuration(1000);
+        colorAnim2.setDuration(1000);
+        colorAnim3.setDuration(1000);
+        colorAnim.setStartDelay(3000);
+        colorAnim2.setStartDelay(3000);
+        colorAnim3.setStartDelay(3000);
+        colorAnim.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            showBarColor(animatedValue);
+            mLayoutCoolBottom.setVisibility(GONE);
+        });
+
+        AnimatorSet animatorSetTimer = new AnimatorSet();
+        if (isOverload) {
+            animatorSetTimer.playTogether(anim, colorAnim, colorAnim2,colorAnim3);
+        } else {
+            animatorSetTimer.play(anim);
+        }
+        animatorSetTimer.start();
         mLayoutCoolView.setVisibility(VISIBLE);
         //抢夺点击事件。。。
         mLayoutCoolView.setOnClickListener(v -> {
@@ -342,6 +415,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             //页面关闭后，不进行动画
             return;
         }
+
         int bottom = mLayoutTitleBar.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
         int startHeight = DeviceUtils.getScreenHeight();
@@ -455,7 +529,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
-        startActivityForResult(RouteConstants.HARDWARE_INFO_ACTIVITY, bundle,REQUEST_CODE_HARDWARE,false);
+        startActivityForResult(RouteConstants.HARDWARE_INFO_ACTIVITY, bundle, REQUEST_CODE_HARDWARE, false);
     }
 
     @OnClick(R.id.text_cool_now)
@@ -468,13 +542,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         }
 
         setViewPlay();
-
-//        finish();
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putString("CLEAN_TYPE", CleanFinishActivity.TYPE_COOLING);
-//        bundle.putLong("clean_count", );
-//        startActivity(RouteConstants.CLEAN_FINISH_ACTIVITY, bundle);
     }
 
     @OnClick(R.id.layout_not_net)
@@ -496,18 +563,24 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart("Cell_phone_cooling_view_page", "手机降温浏览");
         if (mRunningProcess != null) {
             showProcess(mRunningProcess);
         }
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("Cell_phone_cooling_view_page", "手机降温浏览");
+    }
     /**
      * 硬件信息
      *
      * @param hardwareInfo
      */
-    public void showHardwareInfo(HardwareInfo hardwareInfo,boolean isRefresh) {
+    public void showHardwareInfo(HardwareInfo hardwareInfo, boolean isRefresh) {
         mHardwareInfo = hardwareInfo;
 
         if (isRefresh) {
@@ -570,7 +643,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onStart() {
         super.onStart();
-        StatisticsUtils.trackClick("Cell_phone_cooling_view_page", "\"手机降温\"浏览", "tools_page", "temperature_result_display_page");
     }
 
     @Override

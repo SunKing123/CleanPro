@@ -469,7 +469,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 //                    }
 //                });
 
-                StatisticsUtils.trackClick("video_cleaning_delete_click","\"删除\"按钮点击"
+                StatisticsUtils.trackClick("qq_video_confirm_the_selection_click","\"删除\"按钮点击"
                         ,"qq_cleaning_page","qq_video_cleaning_page");
 
 

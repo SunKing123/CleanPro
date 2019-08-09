@@ -44,17 +44,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_150dp"
+        android:gravity="center"
         android:background="@color/color_4690FD">
 
         <TextView
             android:id="@+id/txt_space_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_26dp"
             android:text="0"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_55dp" />
+            android:textSize="@dimen/dimen_70dp" />
 
         <TextView
             android:id="@+id/txt_percentage"
@@ -62,21 +63,21 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/txt_space_size"
             android:layout_marginLeft="@dimen/dimen_4dp"
-            android:layout_marginTop="@dimen/dimen_14dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
             android:layout_toRightOf="@id/txt_space_size"
             android:text="%"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_14sp" />
+            android:textSize="@dimen/dimen_16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/txt_percentage"
             android:layout_alignLeft="@id/txt_percentage"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:text="已用空间"
+            android:layout_marginTop="@dimen/dimen_22dp"
+            android:text="已使用"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_15sp" />
+            android:textSize="@dimen/dimen_12sp" />
 
 
     </RelativeLayout>

@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -289,6 +291,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                if (ivScanFrame == null) return;
                 ivScanFrame.setVisibility(View.GONE);
                 if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
                 lineSming.setVisibility(View.GONE);
@@ -302,10 +305,28 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     }
 
     //是否在扫描中状态
+    ObjectAnimator roundAnim1;
+    ObjectAnimator roundAnim2;
+    ObjectAnimator roundAnim3;
+
     public void setScanStatus(boolean isScaning) {
-        ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
-        ivHua2.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
-        ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.drawable.icon_select);
+        ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        ivHua2.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+
+        if (isScaning) {
+            roundAnim1 = mPresenter.playRoundAnim(ivHua1);
+            roundAnim2 = mPresenter.playRoundAnim(ivHua2);
+            roundAnim3 = mPresenter.playRoundAnim(ivHua3);
+        } else {
+            roundAnim1.cancel();
+            roundAnim2.cancel();
+            roundAnim3.cancel();
+            ivHua1.animate().rotation(0).setDuration(10).start();
+            ivHua2.animate().rotation(0).setDuration(10).start();
+            ivHua3.animate().rotation(0).setDuration(10).start();
+        }
+
     }
 
     //垃圾选中的大小

@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinResultPresenter;
+import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -69,6 +70,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
             mSize = bundle.getString(PhoneThinActivity.PARAMS_SPACE_SIZE_AVAILABLE,"0");
         }
        setData();
+        ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
 
         //8.0权限判断
         if (android.os.Build.VERSION.SDK_INT >=Build.VERSION_CODES.O) {
@@ -88,7 +90,11 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
 
     private void setData() {
         mTxtVideoSize.setText(FileSizeUtils.formatFileSize(mPresenter.getVideoTotalSize()));
-        mTxtSpaceSize.setText(mSize);
+        if (Double.valueOf(mSize) == 0) {
+            mTxtSpaceSize.setText("1");
+        }else {
+            mTxtSpaceSize.setText(mSize);
+        }
     }
 
 

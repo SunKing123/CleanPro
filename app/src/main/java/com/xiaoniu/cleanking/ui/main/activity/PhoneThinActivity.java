@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinPresenter;
+import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 
 
 import butterknife.BindView;
@@ -36,7 +37,6 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     //占内存百分比
     @BindView(R.id.txt_space_size)
     TextView mTxtSpaceSize;
-    //
     @BindView(R.id.txt_scan_content)
     TextView mTxtScanContent;
     @BindView(R.id.img_progress)
@@ -44,16 +44,16 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     @BindView(R.id.img_progress_system)
     ImageView mImgProgressSystem;
 
-    @BindView(R.id.progress_video)
-    ProgressBar mProgressVideo;
-    @BindView(R.id.progress_system)
-    ProgressBar mProgressSystem;
     @BindView(R.id.iv_scan_frame)
     ImageView mIvScanFrame;
     @BindView(R.id.tv_use_space)
     TextView tv_use_space;
     private long mTotalSize;
     private ObjectAnimator objectAnimatorScanIng;
+
+    //是否在扫描中状态
+    private ObjectAnimator roundAnim1;
+    private ObjectAnimator roundAnim3;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -71,10 +71,12 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
 
     @Override
     protected void initView() {
+        ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
         mTotalSize = mPresenter.queryStorageSize(mPath);
 
         mPresenter.scanFile(mPath);
         objectAnimatorScanIng = mPresenter.setScaningAnim(mIvScanFrame);
+        setScanStatus(true);
     }
 
     private long mCurrentTime;
@@ -92,9 +94,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                     mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
                 }
             }
-
         }
-
     }
 
 
@@ -106,38 +106,41 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         }
     }
 
+    public void setScanStatus(boolean isScaning) {
+        if (mImgProgress == null) return;
+        mImgProgress.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        mImgProgressSystem.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
+        if (isScaning) {
+            roundAnim1 = mPresenter.playRoundAnim(mImgProgress);
+            roundAnim3 = mPresenter.playRoundAnim(mImgProgressSystem);
+        } else {
+            roundAnim1.cancel();
+            roundAnim3.cancel();
+            mImgProgress.animate().rotation(0).setDuration(10).start();
+            mImgProgressSystem.animate().rotation(0).setDuration(10).start();
+        }
+    }
     /**
      * 扫描完成
      */
     public void onComplete() {
-        tv_use_space.setVisibility(View.VISIBLE);
+        if (tv_use_space == null) return;
         mIvScanFrame.setVisibility(View.GONE);
+        long fileTotalSize = mPresenter.getFileSize();
+        String s = mPresenter.accuracy(fileTotalSize, mTotalSize, 0);
+        if (Double.valueOf(s) == 0) {
+            mTxtSpaceSize.setText("1");
+        }else {
+            mTxtSpaceSize.setText(s);
+        }
         if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
-        if (null != mProgressVideo) {
-            mProgressVideo.setVisibility(View.GONE);
-        }
-        if (null != mProgressSystem) {
-            mProgressSystem.setVisibility(View.GONE);
-        }
-        if (null != mImgProgress) {
-            mImgProgress.setVisibility(View.VISIBLE);
-        }
+        setScanStatus(false);
         if (null != mImgProgressSystem) {
-            mImgProgressSystem.setVisibility(View.VISIBLE);
-        }
-        if (null != mTxtScanContent) {
-            mTxtScanContent.setText("扫描完成");
-        }
-        if (null != mImgProgressSystem) {
-            mImgProgressSystem.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
-                    long fileTotalSize = mPresenter.getFileSize();
-                    intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
-                    startActivity(intent);
-                    finish();
-                }
+            mImgProgressSystem.postDelayed(() -> {
+                Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
+                intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
+                startActivity(intent);
+                finish();
             }, 500);
 
         }
