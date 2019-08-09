@@ -42,6 +42,9 @@ public class SPUtil {
 
     public static String Guide = "";
 
+    public static String IS_First = "is_first";
+    public static String IS_CLEAR = "is_clear";
+    public static String TOTLE_CLEAR_CATH = "totle_clear_cath";
 
     public static void setMyToken(String mytokens) {
         mytoken = mytokens;
@@ -308,5 +311,20 @@ public class SPUtil {
         }
         sp.edit().clear().apply();
     }
+
+    public static void setIsClear(Context ctx, String key, boolean value) {
+        if (guideSp == null) {
+            guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
+        }
+        guideSp.edit().putBoolean(key, value).commit();
+    }
+
+    public static void getIsClear(Context ctx, String key, boolean value) {
+        if (guideSp == null) {
+            guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
+        }
+        guideSp.edit().putBoolean(key, value).commit();
+    }
+
 }
 

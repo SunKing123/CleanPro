@@ -62,7 +62,7 @@
                             android:id="@+id/text_content"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dimen_22dp"
+                            android:layout_marginTop="@dimen/dimen_16dp"
                             android:text="手机很干净了~"
                             android:textColor="@color/white"
                             android:textSize="16sp"

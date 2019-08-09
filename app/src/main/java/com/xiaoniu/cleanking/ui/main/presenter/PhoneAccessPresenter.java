@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -133,30 +134,25 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     }
 
     //当前sdk版本高于22时
+    @SuppressLint("CheckResult")
     public void getAccessAbove22() {
         mView.showLoadingDialog();
-        Observable.create(new ObservableOnSubscribe<List<ActivityManager.RunningAppProcessInfo>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<ActivityManager.RunningAppProcessInfo>> e) throws Exception {
-                //获取到可以加速的应用名单
-                List<ActivityManager.RunningAppProcessInfo> listApp = getProcessAbove();
+        Observable.create((ObservableOnSubscribe<List<ActivityManager.RunningAppProcessInfo>>) e -> {
+            //获取到可以加速的应用名单
+            List<ActivityManager.RunningAppProcessInfo> listApp = getProcessAbove();
 
-                List<ActivityManager.RunningAppProcessInfo> listTemp = new ArrayList<>();
-                for (int i = 0; i < listApp.size(); i++) {
-                    if (!isSystemApp(mView, listApp.get(i).processName)) {
-                        listTemp.add(listApp.get(i));
-                    }
+            List<ActivityManager.RunningAppProcessInfo> listTemp = new ArrayList<>();
+            for (int i = 0; i < listApp.size(); i++) {
+                if (!isSystemApp(mView, listApp.get(i).processName)) {
+                    listTemp.add(listApp.get(i));
                 }
-                e.onNext(listTemp);
             }
+            e.onNext(listTemp);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<ActivityManager.RunningAppProcessInfo>>() {
-                    @Override
-                    public void accept(List<ActivityManager.RunningAppProcessInfo> strings) throws Exception {
-                        mView.cancelLoadingDialog();
-                        mView.getAccessListAbove22(strings);
-                    }
+                .subscribe(strings -> {
+                    mView.cancelLoadingDialog();
+                    mView.getAccessListAbove22(strings);
                 });
     }
 
