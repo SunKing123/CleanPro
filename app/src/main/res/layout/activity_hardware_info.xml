@@ -30,8 +30,7 @@
                 android:layout_height="wrap_content"/>
             
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -48,8 +47,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -66,8 +64,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -100,8 +97,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -143,8 +139,7 @@
             </LinearLayout>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -186,8 +181,7 @@
             </LinearLayout>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -229,8 +223,7 @@
             </LinearLayout>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -263,8 +256,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -281,8 +273,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -299,8 +290,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
@@ -317,8 +307,7 @@
                 android:layout_height="wrap_content"/>
 
             <View
-                android:background="@color/black"
-                android:alpha="0.1"
+                android:background="@color/color_DEDEDE"
                 android:layout_marginLeft="@dimen/dimen_44dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"/>
