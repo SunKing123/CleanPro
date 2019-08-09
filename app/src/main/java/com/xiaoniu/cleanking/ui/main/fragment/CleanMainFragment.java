@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -347,6 +348,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             ToastUtils.showShort(R.string.tool_no_install_qq);
             return;
         }
+        if (QQUtil.audioList != null)
+            QQUtil.audioList.clear();
+        if (QQUtil.fileList != null)
+            QQUtil.fileList.clear();
         startActivity(QQCleanHomeActivity.class);
     }
     @OnClick(R.id.line_jw)
