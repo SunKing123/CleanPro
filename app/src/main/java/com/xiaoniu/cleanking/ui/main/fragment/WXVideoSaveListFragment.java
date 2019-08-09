@@ -558,7 +558,7 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
     public void updateImgSaveList(List<FileTitleEntity> lists) {
 
         mAdapter.modifyData(lists);
-        mListView.expandGroup(lists.size()-1);
+        mListView.setSelectedGroup(0);
 
         if(totalFileSize(lists)==0){
             mTxtTitle.setText("暂无视频");

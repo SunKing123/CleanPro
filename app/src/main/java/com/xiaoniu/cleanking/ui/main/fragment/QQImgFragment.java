@@ -541,7 +541,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 //                    }
 //                });
 
-                StatisticsUtils.trackClick("confirm_the_selection_click","\"删除\"按钮点击"
+                StatisticsUtils.trackClick("confirm_the_selection_click","\"确认选中\"点击"
                         ,"qq_cleaning_page","qq_picture_cleaning_page");
 
                 //ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();
@@ -663,6 +663,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
         mAdapter.modifyData(fileCopyEntitys);
         mListView.expandGroup(fileCopyEntitys.size()-1);
+        mListView.setSelectedGroup(0);
 
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);

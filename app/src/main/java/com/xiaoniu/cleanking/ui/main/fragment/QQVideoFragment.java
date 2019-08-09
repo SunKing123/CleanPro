@@ -469,7 +469,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 //                    }
 //                });
 
-                StatisticsUtils.trackClick("qq_video_confirm_the_selection_click","\"删除\"按钮点击"
+                StatisticsUtils.trackClick("qq_video_confirm_the_selection_click","\"确认选中\"点击"
                         ,"qq_cleaning_page","qq_video_cleaning_page");
 
 
@@ -566,6 +566,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
         mListView.expandGroup(lists.size()-1);
+        mListView.setSelectedGroup(0);
         if(totalFileSizeL(lists)==0){
             mTxtEmptyTile.setText("暂无视频~");
             mEmptyView.setVisibility(View.VISIBLE);
