@@ -104,6 +104,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Main.Theme"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity"

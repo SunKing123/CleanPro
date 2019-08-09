@@ -140,7 +140,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @BindView(R.id.view_lottie_star)
     LottieAnimationView mLottieStarView;
 
-
     /**
      * 清理的分类列表
      */
