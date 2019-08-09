@@ -53,6 +53,9 @@ import io.reactivex.schedulers.Schedulers;
 public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMainModel> {
 
 
+    //加载大小基数
+    public static  final  int BASE_SIZE=100;
+
     private static final String TAG = "WXCleanImg.class";
     /**
      * 微信根目录
@@ -70,11 +73,7 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
     /**
      * 聊天图片
      */
-    private List<FileTitleEntity> listsChat = new ArrayList<>();
-    /**
-     * 相机图片
-     */
-    private List<FileTitleEntity> listsCamera = new ArrayList<>();
+    public List<FileTitleEntity> listsChat = new ArrayList<>();
 
 
 
@@ -214,6 +213,8 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
                     public void onNext(String value) {
                       totalFileSize(listsChat);
                        mView.updateImgChat(listsChat);
+
+
                     }
 
                     @Override
@@ -233,6 +234,9 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
         if(null==lists ||  lists.size()==0){
             return;
         }
+
+
+
         for(FileTitleEntity fileTitleEntity: lists){
             long size=0L;
             for(FileChildEntity fileChildEntity:fileTitleEntity.lists){

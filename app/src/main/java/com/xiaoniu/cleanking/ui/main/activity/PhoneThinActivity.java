@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -47,8 +48,12 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     ProgressBar mProgressVideo;
     @BindView(R.id.progress_system)
     ProgressBar mProgressSystem;
+    @BindView(R.id.iv_scan_frame)
+    ImageView mIvScanFrame;
+    @BindView(R.id.tv_use_space)
+    TextView tv_use_space;
     private long mTotalSize;
-
+    private ObjectAnimator objectAnimatorScanIng;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -69,6 +74,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         mTotalSize = mPresenter.queryStorageSize(mPath);
 
         mPresenter.scanFile(mPath);
+        objectAnimatorScanIng = mPresenter.setScaningAnim(mIvScanFrame);
     }
 
     private long mCurrentTime;
@@ -104,6 +110,9 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
      * 扫描完成
      */
     public void onComplete() {
+        tv_use_space.setVisibility(View.VISIBLE);
+        mIvScanFrame.setVisibility(View.GONE);
+        if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
         if (null != mProgressVideo) {
             mProgressVideo.setVisibility(View.GONE);
         }

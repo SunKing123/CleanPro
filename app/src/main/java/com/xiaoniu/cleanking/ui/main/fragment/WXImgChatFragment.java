@@ -1,36 +1,46 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
-import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
+import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanImgPresenter;
+
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
@@ -44,6 +54,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import se.emilsjolander.stickylistheaders.ExpandableStickyListHeadersListView;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * 微信聊天图片清理
@@ -59,6 +71,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     ExpandableListView mListView;
     private WXImgChatAdapter mAdapter;
 
+//    @BindView(R.id.scroll_view)
+//    ObservableScrollView mScrollView;
 
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
@@ -70,6 +84,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     private FileCopyProgressDialogFragment mProgress;
 
     private  int mGroupPosition;
+
+    private  MyHandler mMyHandler;
 
     public static WXImgChatFragment newInstance() {
         WXImgChatFragment wxImgChatFragment = new WXImgChatFragment();
@@ -93,16 +109,58 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         return R.layout.activity_wx_img_chat;
     }
 
+
+
+    private boolean mIsLoading;
+
+
+    private void scollPage(int groupPosition) {
+        if (mIsLoading) {
+            return;
+        }
+        mIsLoading = true;
+
+        List<FileTitleEntity> adaterLists = mAdapter.getList();
+        List<FileChildEntity> fileChildEntities = mPresenter.listsChat.get(groupPosition).lists;
+        int startSize = mAdapter.getList().get(groupPosition).lists.size();
+        if (startSize < fileChildEntities.size()) {
+
+            for (int i = startSize; i < fileChildEntities.size(); i++) {
+                if (i <= startSize + 29) {
+                    adaterLists.get(groupPosition).lists.add(fileChildEntities.get(i));
+                } else {
+                    break;
+                }
+            }
+
+            mMyHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    int itemCount = adaterLists.get(groupPosition).lists.size();
+                    mAdapter.getWXImgAdapter().notifyItemRangeChanged(startSize+1, itemCount,"");
+                    mIsLoading = false;
+                }
+            }, 0);
+        }
+    }
+
+
+
+    private  int mOfferY=0;
     @Override
     protected void initView() {
+        mMyHandler=new MyHandler();
         mAdapter = new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mLoading = CleanFileLoadingDialogFragment.newInstance();
         mProgress = FileCopyProgressDialogFragment.newInstance();
-        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+        mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+            public void onGroupCollapse(int groupPosition) {
                 List<FileTitleEntity> lists = mAdapter.getList();
+                boolean isExpand = false;
+
                 for (int i = 0; i < lists.size(); i++) {
                     if (i == groupPosition) {
                         FileTitleEntity fileTitleEntity = lists.get(groupPosition);
@@ -111,13 +169,74 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                         } else {
                             fileTitleEntity.isExpand = true;
                         }
+                        isExpand = fileTitleEntity.isExpand;
                         break;
                     }
                 }
                 mAdapter.notifyDataSetChanged();
-                return false;
+
             }
         });
+
+        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                List<FileTitleEntity> lists = mAdapter.getList();
+
+
+                boolean isExpand = false;
+                for (int i = 0; i < lists.size(); i++) {
+                    if (i == groupPosition) {
+                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                        if (fileTitleEntity.isExpand) {
+                            fileTitleEntity.isExpand = false;
+                        } else {
+                            fileTitleEntity.isExpand = true;
+                        }
+                        isExpand = fileTitleEntity.isExpand;
+                    }else {
+                        mListView.collapseGroup(i);
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+
+                mListView.setSelectedGroup(groupPosition);
+                mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
+                            scollPage(groupPosition);
+                        }
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        if(visibleItemCount-1==groupPosition && mOfferY>0){
+                            mOfferY=1;
+                        }else {
+                            mOfferY=-1;
+                        }
+
+                    }
+                });
+              mListView.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            float startY=0;
+                            switch (event.getAction()){
+                                case MotionEvent.ACTION_DOWN:
+                                    startY=event.getY();
+                                    break;
+                                case  MotionEvent.ACTION_MOVE:
+                                    mOfferY=(int)(event.getY()-startY);
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+            }
+        });
+
 
         mLLCheckAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +256,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             }
         });
 
+
+
         mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
@@ -155,7 +276,6 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         });
 
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -198,7 +318,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
                 fileChildEntities.addAll(listsNew);
                 mPresenter.totalFileSize(lists);
-                mAdapter.notifyDataSetChanged();
+                mMyHandler.sendEmptyMessage(1);
                 setSelectChildStatus(mGroupPosition);
                 setDelBtnSize();
 
@@ -244,9 +364,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                 FileTitleEntity fileTitleEntity = lists.get(groupPosition);
                 if(fileTitleEntity.lists.size()==0){
                     fileTitleEntity.isSelect = false;
-                    mAdapter.notifyDataSetChanged();
+                    mMyHandler.sendEmptyMessage(1);
                     break;
-                }else {
+                } else {
                     for (FileChildEntity file : fileTitleEntity.lists) {
                         if (file.isSelect == false) {
                             isCheckAll = false;
@@ -254,7 +374,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                     }
 
                     fileTitleEntity.isSelect = isCheckAll;
-                    mAdapter.notifyDataSetChanged();
+                    mMyHandler.sendEmptyMessage(1);
                     break;
 
                 }
@@ -286,7 +406,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             }
 
         }
-        mAdapter.notifyDataSetChanged();
+        mMyHandler.sendEmptyMessage(1);
 
     }
 
@@ -303,7 +423,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             }
 
         }
-        mAdapter.notifyDataSetChanged();
+        mMyHandler.sendEmptyMessage(1);
     }
 
     private long totalSelectSize() {
@@ -505,10 +625,67 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
-        mAdapter.modifyData(lists);
+        List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
+        for(int i=0;i<lists.size();i++){
+            FileTitleEntity fileParent=lists.get(i);
+            FileTitleEntity fileTitleEntity=FileTitleEntity.copyObject(fileParent.id,fileParent.title,fileParent.type
+                    ,fileParent.size,fileParent.isExpand,fileParent.isSelect);
+
+            List<FileChildEntity> listsNew=new ArrayList<>();
+            int count=0;
+            if(fileParent.lists.size()>30){
+                count=30;
+            }else {
+                count=fileParent.lists.size();
+            }
+            for(int j=0;j<count;j++){
+                FileChildEntity childEntity=fileParent.lists.get(j);
+                listsNew.add(childEntity);
+            }
+            fileTitleEntity.lists.addAll(listsNew);
+            fileCopyEntitys.add(fileTitleEntity);
+        }
+        mAdapter.modifyData(fileCopyEntitys);
+
+
+        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSize+totalFileSize(lists)));
+        editor.commit();
+
+
+    }
+
+    public   long totalFileSize(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
     }
 
 
+    private  class  MyHandler extends Handler{
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int what=msg.what;
+            switch (what){
+                case 1:
+                    mAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    }
     /**
      * 更新系统相册
      * @param file

@@ -186,7 +186,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
-            if (!tvSelect.isSelected() && !tvSelect.isSelected()) return;
+            if (!tvDelete.isSelected()) return;
             mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
             StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
         } else if (ids == R.id.tv_select) {
@@ -221,6 +221,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("wechat_ceaning_view_page", "微信清理页面浏览");
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long wxCatheSizeImg = sp.getLong(Constant.WX_CACHE_SIZE_IMG, 0L);
+        long wxCatheSizeVideo = sp.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
+        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeImg));
+        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeVideo));
     }
 
     @Override
@@ -251,22 +256,34 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         Log.e("asdfg", "拍摄及保存的图片：" + WxQqUtil.l.getTotalSize() + "：数量：" + WxQqUtil.l.getTotalNum());
         Log.e("asdfg", "拍摄以及保存的视频：" + WxQqUtil.m.getTotalSize() + "：数量：" + WxQqUtil.m.getTotalNum());
         Log.e("asdfg", "收藏的表情：" + WxQqUtil.j.getTotalSize() + "：数量：" + WxQqUtil.j.getTotalNum());
-        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.h.getTotalSize()));
-        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.i.getTotalSize()));
-        tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.k.getTotalSize()));
+        tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getAudioSize()));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.n.getTotalSize()));
-        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize());
-        if (str_totalSize.endsWith("KB")) return;
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long wxCatheSizeImg = sp.getLong(Constant.WX_CACHE_SIZE_IMG, 0L);
+        long wxCatheSizeVideo = sp.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
+        tvPicSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeImg));
+        tvVideoSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(wxCatheSizeVideo));
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize() + mPresenter.getAudioSize() + WxQqUtil.n.getTotalSize() + wxCatheSizeImg + wxCatheSizeVideo);
+        String strGb = "MB";
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         float sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
-
+            strGb = "MB";
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
-            sizeMb *= 1024;
+            strGb = "GB";
+        } else if (str_totalSize.endsWith("KB")) {
+            sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 2));
+            strGb = "KB";
+        } else {
+            sizeMb = NumberUtils.getFloat(str_totalSize.substring(0, str_totalSize.length() - 1));
+            strGb = "B";
         }
-
+        //存储垃圾以及文件总大小
+        SharedPreferences spAll = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
+        spAll.edit().putLong(SpCacheConfig.WX_CACHE_SIZE, wxprogramInfo.getTotalSize() + headCacheInfo.getTotalSize() + gabageFileInfo.getTotalSize() + wxCircleInfo.getTotalSize() + mPresenter.getAudioSize() + WxQqUtil.n.getTotalSize() + wxCatheSizeImg + wxCatheSizeVideo).commit();
+        tvGb.setText(strGb);
         ValueAnimator valueAnimator = mPresenter.setTextAnim(tvGabsize, 0, sizeMb);
         valueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -299,9 +316,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             selectSize += WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize();
         tvSelectSize.setText("已经选择：" + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
         tvDelete.setText("清理 " + CleanAllFileScanUtil.byte2FitSizeOne(selectSize));
-        tvDelete.setBackgroundResource(tvSelect.isSelected() || tvSelect1.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
-        sp.edit().putLong(SpCacheConfig.WX_CACHE_SIZE, selectSize).commit();
+        tvDelete.setBackgroundResource(selectSize != 0 ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        tvDelete.setSelected(selectSize != 0 ? true : false);
     }
 
     public void deleteResult(long result) {

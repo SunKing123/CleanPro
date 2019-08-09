@@ -49,7 +49,9 @@ public class WXImgAdapter extends RecyclerView.Adapter {
         RequestOptions options = new RequestOptions()
                 .placeholder(R.color.color_666666)// 正在加载中的图片
                 .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
-        Glide.with(mContext).load(new File(fileChildEntity.path)).apply(options).into(viewHolder.mImg);
+
+        Glide.with(mContext).load(new File(fileChildEntity.path)).into(viewHolder.mImg);
+
         if (fileChildEntity.isSelect) {
             viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check);
         } else {
@@ -90,12 +92,19 @@ public class WXImgAdapter extends RecyclerView.Adapter {
         return mLists.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public  void modifyData(List<FileChildEntity> lists){
         if(null!=lists){
             this.mLists.addAll(lists);
             notifyDataSetChanged();
         }
     }
+
+
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImg;

@@ -1,7 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
@@ -20,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.WXVideoChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
@@ -86,7 +90,7 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_wx_img_chat;
+        return R.layout.activity_wx_video_chat;
     }
 
     @Override
@@ -545,8 +549,29 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
         mAdapter.modifyData(lists);
+        //保存缓存
+        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,totalFileSize(lists));
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,(totalSize+totalFileSize(lists)));
+        editor.commit();
+
     }
 
+    public   long totalFileSize(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
+    }
 
     /**
      * 更新系统相册

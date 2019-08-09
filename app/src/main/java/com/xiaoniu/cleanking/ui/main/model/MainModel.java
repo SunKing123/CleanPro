@@ -3,11 +3,13 @@ package com.xiaoniu.cleanking.ui.main.model;
 
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
+import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -46,6 +48,15 @@ public class MainModel extends BaseModel {
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
+                .subscribeWith(commonSubscriber);
+    }
+
+    public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.getWebUrl(body).compose(RxUtil.<WebUrlEntity>rxSchedulerHelper(mActivity))
                 .subscribeWith(commonSubscriber);
     }
 

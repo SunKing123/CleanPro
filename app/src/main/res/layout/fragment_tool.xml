@@ -90,11 +90,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textColor="@color/white"
+                        android:textColor="#80FFFFFF"
                         android:textSize="16dp"
                         android:layout_marginLeft="@dimen/dimen_20dp"
                         android:layout_toRightOf="@id/frame_layout"
-                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_marginTop="@dimen/dimen_8dp"
                         android:layout_below="@id/tv_phone_space"
                         android:text="已用: 0.0GB/0.0GB"/>
                 </RelativeLayout>
@@ -119,13 +119,14 @@
                         android:id="@+id/iv_icon_chat"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
+                        android:layout_marginBottom="5dp"
                         android:src="@mipmap/icon_chat" />
 
                     <TextView
                         android:id="@+id/tv_chat_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
                         android:text="@string/tool_chat_clear"
@@ -135,7 +136,7 @@
                         android:id="@+id/tv_chat_gb_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
                         android:text="@string/tool_chat_clear"
                         android:visibility="gone"
@@ -147,7 +148,7 @@
                         android:textSize="@dimen/dimen_11dp"
                         android:text="@string/tool_clear_chat"
                         android:layout_below="@id/tv_chat_title"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_marginTop="4dp"
                         android:gravity="bottom"
                         android:textColor="@color/color_999999"
@@ -158,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dimen_28dp"
                         android:layout_below="@id/tv_chat_gb_title"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
                         android:gravity="bottom"
@@ -195,6 +196,7 @@
                     <ImageView
                         android:id="@+id/iv_icon_qq"
                         android:layout_width="48dp"
+                        android:layout_marginBottom="5dp"
                         android:src="@mipmap/icon_qq"
                         android:layout_height="48dp" />
 
@@ -204,7 +206,7 @@
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="@string/tool_qq_clear"
                         android:textSize="@dimen/dimen_14dp"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_toRightOf="@id/iv_icon_qq"
                         android:textColor="@color/color_333333"
                         android:layout_height="wrap_content" />
@@ -214,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:text="@string/tool_qq_clear"
                         android:textSize="@dimen/dimen_14dp"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:visibility="gone"
                         android:layout_toRightOf="@id/iv_icon_qq"
                         android:textColor="@color/color_333333"
@@ -226,7 +228,7 @@
                         android:textSize="@dimen/dimen_11dp"
                         android:text="@string/tool_clear_qq"
                         android:layout_below="@id/tv_qq_title"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_marginTop="4dp"
                         android:gravity="bottom"
                         android:textColor="@color/color_999999"
@@ -280,8 +282,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="@dimen/dimen_25dp"
-                        android:layout_height="@dimen/dimen_25dp"
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
                         android:src="@mipmap/icon_speed" />
@@ -292,7 +294,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_speed"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
                     <TextView
@@ -303,7 +305,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="@string/tool_memory_speed"
-                        android:textSize="11sp" />
+                        android:textSize="11dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -316,8 +318,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="@dimen/dimen_25dp"
-                        android:layout_height="@dimen/dimen_25dp"
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
                         android:src="@mipmap/icon_cooling" />
@@ -328,8 +330,8 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_temperature_low"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:textColor="@color/color_333333"
+                        android:textSize="13dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -339,7 +341,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="@string/tool_temperature_nor"
                         android:textColor="#999999"
-                        android:textSize="11sp" />
+                        android:textSize="11dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -353,8 +355,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="@dimen/dimen_25dp"
-                        android:layout_height="@dimen/dimen_25dp"
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
                         android:src="@mipmap/icon_thin" />
@@ -365,7 +367,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_thin"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
                     <TextView
@@ -376,7 +378,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="@string/tool_void_soft_clear"
-                        android:textSize="11sp" />
+                        android:textSize="11dp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

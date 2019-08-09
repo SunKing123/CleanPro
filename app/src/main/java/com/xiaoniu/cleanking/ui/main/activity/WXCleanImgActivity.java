@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CommonFragmentPageAdapter;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.EmptyEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
@@ -96,7 +100,10 @@ public class WXCleanImgActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-
+        SharedPreferences sharedPreferences =getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG,0);
+        editor.commit();
         mFragments.add(WXImgChatFragment.newInstance());
         mFragments.add(WXImgCameraFragment.newInstance());
         mFragments.add(WXImgSaveListFragment.newInstance());

@@ -49,9 +49,9 @@
     <string name="tool_chat_clear">微信清理</string>
     <string name="tool_clear_chat">清理聊天垃圾</string>
     <string name="tool_clear_qq">释放更多空间</string>
-    <string name="tool_temperature_nor">当前温度正常</string>
+    <string name="tool_temperature_nor">解决手机发热</string>
     <string name="tool_phone_temperature_low">手机降温</string>
-    <string name="tool_void_soft_clear">视频软件清理</string>
+    <string name="tool_void_soft_clear">视频、软件清理</string>
     <string name="tool_phone_thin">手机瘦身</string>
     <string name="tool_phone_memory_empty">手机空间充足</string>
     <string name="tool_phone_memory_full">手机空间不足</string>

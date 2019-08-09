@@ -154,78 +154,63 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
     //扫描微信垃圾、图片】音视频等
     public void scanWxGabage() {
         PrefsCleanUtil.getInstance().init(mView, "xnpre", Context.MODE_APPEND);
-        mView.getWindow().getDecorView().post(new Runnable() {
-            public void run() {
-                ThreadTaskUtil.executeNormalTask("准备扫描微信", new Runnable() {
-                    public void run() {
-                        f = new WxQqUtil();
-                        f.startScanWxGarbage(c, new WxQqUtil.a() {
-                            @Override
-                            public void changeHomeNum() {
-                                e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
-                            }
 
+        Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
+                f = new WxQqUtil();
+                f.startScanWxGarbage(c, new WxQqUtil.a() {
+                    @Override
+                    public void changeHomeNum() {
+                        e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
+                    }
+
+                    @Override
+                    public void wxEasyScanFinish() {
+                        emitter.onNext(10L);
+                        emitter.onComplete();
+                    }
+                });
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())//回调在主线程
+                .subscribeOn(Schedulers.io())//执行在io线程
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.runOnUiThread(new Runnable() {
                             @Override
-                            public void wxEasyScanFinish() {
-                                getHsize();
-                                mView.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mView.getScanResult();
-                                    }
-                                });
-//                                long ls = e + WxQqUtil.m.getTotalSize() + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
-//                                Log.e("fdsa", "" + ls);
-//                                long st = 1024 * 1024;
-//                                Log.e("fdsa", "垃圾文件不含聊天记录建议清理" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.d.getTotalSize()));
-//                                Log.e("fdsa", "朋友圈缓存" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.g.getTotalSize()));
-//                                Log.e("fdsa", "其他缓存浏览公众号小程序产生" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.f.getTotalSize()));
-//                                Log.e("fdsa", "缓存表情浏览聊天记录产生的表情" + CleanAllFileScanUtil.byte2FitSize(WxQqUtil.e.getTotalSize()));
-//                                Log.e("fdsa", "总缓存大小" + CleanAllFileScanUtil.byte2FitSize(e));
+                            public void run() {
+                                mView.getScanResult();
                             }
                         });
                     }
                 });
-                ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
-                    public void run() {
-                        SystemClock.sleep(200);
-                        b();
-                    }
-                });
 
+
+        ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
+            public void run() {
+                SystemClock.sleep(200);
+                b();
             }
         });
+
+
     }
 
-    public void getHsize() {
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-                int totalH = 0;
-                List<CleanWxFourItemInfo> listFour = new ArrayList<>();
-                List<CleanWxItemInfo> listData = new ArrayList<>();
-                for (int i = 0; i < WxQqUtil.h.getList().size(); i++) {
-                    if (WxQqUtil.h.getList().get(i) instanceof CleanWxFourItemInfo) {
-                        CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) WxQqUtil.h.getList().get(i);
-                        listFour.add(cleanWxHeadInfo);
-                    }
-                }
-
-                for (int j = 0; j < listFour.size(); j++) {
-                    listData.addAll(listFour.get(j).getFourItem());
-                }
-                Log.e("asdfg", "Step2：" + totalH);
-                e.onNext(totalH);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer strings) throws Exception {
-                        Log.e("asdfg", "图片：" + WxQqUtil.h.getTotalSize() + "：数量：" + strings);
-                    }
-                });
-    }
 
     public void b() {
         Long oneAppCache = new QueryFileUtil().getOneAppCache(mView, "com.tencent.mm", -1);
@@ -324,5 +309,33 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
     }
 
+    //筛选语音大小d
+    public long getAudioSize() {
+        CleanWxEasyInfo cleanWxEasyInfoAud = WxQqUtil.k;
+
+        List<CleanWxFourItemInfo> listFour = new ArrayList<>();
+        List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
+        List<CleanWxItemInfo> listData = new ArrayList<>();
+        long audioSize = 0;
+        for (int i = 0; i < cleanWxEasyInfoAud.getList().size(); i++) {
+            if (cleanWxEasyInfoAud.getList().get(i) instanceof CleanWxFourItemInfo) {
+                CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoAud.getList().get(i);
+                listFour.add(cleanWxHeadInfo);
+            }
+        }
+
+        for (int j = 0; j < listFour.size(); j++) {
+            listDataTemp.addAll(listFour.get(j).getFourItem());
+        }
+
+        for (int j = 0; j < listDataTemp.size(); j++) {
+            if (listDataTemp.get(j).getFile().getAbsolutePath().endsWith("amr")) {
+                listDataTemp.get(j).setIsSelect(false);
+                listData.add(listDataTemp.get(j));
+                audioSize += listDataTemp.get(j).getFileSize();
+            }
+        }
+        return audioSize;
+    }
 
 }

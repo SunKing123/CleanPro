@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,7 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -182,7 +184,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         } else {
             mImgHelp.setVisibility(View.VISIBLE);
         }
-        showLoadingDialog();
+//        showLoadingDialog();
         mWebView.loadUrl(url);
 
         WebSettings webSettings = mWebView.getSettings();
@@ -193,6 +195,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         //自适应屏幕
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setLoadWithOverviewMode(true);
+        mWebView.addJavascriptInterface( new JavaInterface((Activity) mContext, mWebView), "cleanPage");
         mWebView.addJavascriptInterface(new JsInterface(), "mapPage");
         mWebView.addJavascriptInterface(new JsInterface(), "kefuPage");
         mWebView.addJavascriptInterface(new JsInterface(), "backPage");

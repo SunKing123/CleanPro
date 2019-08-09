@@ -46,6 +46,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     TextView mTxtInstallSize;//安装应用大小
     @BindView(R.id.txt_soft_size)
     TextView mTxtSoftSize;//软件大小
+    private String mSize;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -63,13 +64,11 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
 
     @Override
     protected void initView() {
-        mTxtVideoSize.setText(FileSizeUtils.formatFileSize(mPresenter.getVideoTotalSize()));
-
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null){
-            String size=bundle.getString(PhoneThinActivity.PARAMS_SPACE_SIZE_AVAILABLE,"0");
-            mTxtSpaceSize.setText(size);
+            mSize = bundle.getString(PhoneThinActivity.PARAMS_SPACE_SIZE_AVAILABLE,"0");
         }
+       setData();
 
         //8.0权限判断
         if (android.os.Build.VERSION.SDK_INT >=Build.VERSION_CODES.O) {
@@ -85,6 +84,11 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
             mPresenter.scanData();
 
         }
+    }
+
+    private void setData() {
+        mTxtVideoSize.setText(FileSizeUtils.formatFileSize(mPresenter.getVideoTotalSize()));
+        mTxtSpaceSize.setText(mSize);
     }
 
 
@@ -116,6 +120,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     protected void onResume() {
         super.onResume();
         mPresenter.scanData();
+        setData();
         NiuDataAPI.onPageStart("cell_phone_slimming_view_page","手机瘦身页面浏览");
     }
 

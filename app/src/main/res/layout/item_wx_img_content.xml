@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             android:focusable="false"
             android:scaleType="fitXY"
-            android:src="@color/color_666666"
+            android:background="@color/color_666666"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -48,12 +48,17 @@
                 android:layout_marginRight="@dimen/dimen_4dp"
                 android:layout_marginBottom="@dimen/dimen_4dp"
                 android:src="@mipmap/icon_check_normal"
-                android:visibility="visible"
-    />
+                android:visibility="visible" />
 
         </LinearLayout>
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_10dp"
+            app:layout_constraintTop_toBottomOf="@id/ll_check_select"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/white"/>
     </android.support.constraint.ConstraintLayout>
 
 
