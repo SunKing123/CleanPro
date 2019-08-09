@@ -190,7 +190,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 if(webUrlEntity == null)
                     return;
                 //保存后台webView URL
-//                PreferenceUtil.saveWebViewUrl(webUrlEntity.getData());
+                PreferenceUtil.saveWebViewUrl(webUrlEntity.getData());
             }
 
             @Override
