@@ -373,9 +373,18 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         }
 
         FragmentManager fm = getActivity().getFragmentManager();
-        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        long delSize=getDelTotalFileSize(paths);
+        String totalSize=FileSizeUtils.formatFileSize(delSize);
         String fileSize=String.valueOf(paths.size());
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+
+
+        //更新缓存
+        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSizeCache=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,0l);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSizeCache-delSize));
+        editor.commit();
 
 
 

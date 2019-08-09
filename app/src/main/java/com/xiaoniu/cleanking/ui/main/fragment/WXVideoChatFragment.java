@@ -418,10 +418,21 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
             mLLEmptyView.setVisibility(View.VISIBLE);
         }
 
+
+
         FragmentManager fm = getActivity().getFragmentManager();
-        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        long delSize=getDelTotalFileSize(paths);
+        String totalSize=FileSizeUtils.formatFileSize(delSize);
         String fileSize=String.valueOf(paths.size());
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+
+        //保存缓存
+        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSizeCache=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,0L);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,(totalSizeCache-delSize));
+        editor.commit();
+
     }
 
     public long getDelTotalFileSize(List<FileChildEntity> paths){
@@ -567,6 +578,9 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         editor.commit();
 
     }
+
+
+
 
     public   long totalFileSize(List<FileTitleEntity> lists){
         if(null==lists ||  lists.size()==0){
