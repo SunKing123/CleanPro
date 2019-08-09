@@ -47,6 +47,8 @@
 
     <string name="tool_qq_clear">QQ专清</string>
     <string name="tool_chat_clear">微信专清</string>
+    <string name="tool_qq_clear_n">QQ清理</string>
+    <string name="tool_chat_clear_n">微信清理</string>
     <string name="tool_clear_chat">清理聊天垃圾</string>
     <string name="tool_clear_qq">释放更多空间</string>
     <string name="tool_temperature_nor">解决手机发热</string>
@@ -59,4 +61,5 @@
     <string name="tool_memory_speed">内存占用加速</string>
     <string name="tool_no_install_chat">您还未装微信</string>
     <string name="tool_no_install_qq">您还未装QQ</string>
+    <string name="tool_one_key_speed">一键加速</string>
 </resources>
