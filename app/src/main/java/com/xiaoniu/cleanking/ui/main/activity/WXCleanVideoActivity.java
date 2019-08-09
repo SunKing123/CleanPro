@@ -98,6 +98,7 @@ public class WXCleanVideoActivity extends BaseActivity{
         SharedPreferences sharedPreferences =getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,0);
+        editor.commit();
 
         mFragments.add(WXVideoChatFragment.newInstance());
         mFragments.add(WXVideoCameraFragment.newInstance());
