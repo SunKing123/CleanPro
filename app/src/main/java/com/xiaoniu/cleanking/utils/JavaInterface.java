@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 
@@ -61,6 +62,9 @@ public class JavaInterface {
 
     @JavascriptInterface
     public void toOtherPage(String url) {
+        if (mActivity instanceof UserLoadH5Activity) {
+            mActivity.finish();
+        }
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
         bundle.putString(Constant.Title, "");
@@ -127,7 +131,10 @@ public class JavaInterface {
 
             @Override
             public void onResult(SHARE_MEDIA share_media) {
-                handler.sendEmptyMessage(SHARE_SUCCESS);
+                if (!"QQ".equals(share_media.name())) {
+                    handler.sendEmptyMessage(SHARE_SUCCESS);
+                }
+
             }
 
             @Override
@@ -149,9 +156,9 @@ public class JavaInterface {
             @Override
             public void onCancel(SHARE_MEDIA share_media) {
                 handler.sendEmptyMessage(SHARE_CANCEL);
-                if ("QQ".equals(share_media.name())) {
-                    addShareSuccessRequest();
-                }
+//                if ("QQ".equals(share_media.name())) {
+//                    addShareSuccessRequest();
+//                }
             }
         });
 
@@ -203,7 +210,7 @@ public class JavaInterface {
 //        map.put("appVersion", AndroidUtil.getAppVersionName());
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-       new ApiModule(AppApplication.getInstance()).provideHomeService().shareSuccess(body).compose(RxUtil.<BaseEntity>rxSchedulerHelper((RxAppCompatActivity) mActivity))
+        new ApiModule(AppApplication.getInstance()).provideHomeService().shareSuccess(body).compose(RxUtil.<BaseEntity>rxSchedulerHelper((RxAppCompatActivity) mActivity))
                 .subscribeWith(commonSubscriber);
     }
 

@@ -128,7 +128,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
             if (!tv_delete.isSelected())
                 return;
             finish();
-            StatisticsUtils.trackClick("qq_file_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_file_cleaning_page");
+            StatisticsUtils.trackClick("qq_file_confirm_the_selection_click", "\"确认选中\"点击", "qq_cleaning_page", "qq_file_cleaning_page");
 
         } else if (ids == R.id.cons_today) {
             recycleViewToday.setVisibility(recycleViewToday.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
