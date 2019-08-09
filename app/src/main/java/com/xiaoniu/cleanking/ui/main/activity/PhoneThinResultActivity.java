@@ -88,7 +88,11 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
 
     private void setData() {
         mTxtVideoSize.setText(FileSizeUtils.formatFileSize(mPresenter.getVideoTotalSize()));
-        mTxtSpaceSize.setText(mSize);
+        if (Double.valueOf(mSize) == 0) {
+            mTxtSpaceSize.setText("1");
+        }else {
+            mTxtSpaceSize.setText(mSize);
+        }
     }
 
 
