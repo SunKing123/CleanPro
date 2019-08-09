@@ -56,6 +56,10 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     @BindView(R.id.btn_del)
     Button mBtnDel;
 
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mEmptyView;
+
+
     private boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;
@@ -348,6 +352,11 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         setDelBtnSize();
         setSelectChildStatus();
 
+        if(totalFileSizeL(mAdapter.getList())==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+
+
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
@@ -488,13 +497,34 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
     public void updateImgSaveList(List<FileTitleEntity> lists) {
 
+
         mAdapter.modifyData(lists);
+        if(totalFileSizeL(lists)==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
 
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSize+totalFileSize(lists)));
         editor.commit();
+    }
+
+
+
+    public   long totalFileSizeL(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
     }
 
 

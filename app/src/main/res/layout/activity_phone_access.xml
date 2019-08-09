@@ -195,12 +195,6 @@
             android:textColor="@color/white" />
     </RelativeLayout>
 
-    <com.xiaoniu.cleanking.ui.main.widget.AccessAnimView
-        android:id="@+id/acceview"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <LinearLayout
         android:id="@+id/layout_not_net"
         android:layout_width="match_parent"
@@ -221,5 +215,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
+
+    <com.xiaoniu.cleanking.ui.main.widget.AccessAnimView
+        android:id="@+id/acceview"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

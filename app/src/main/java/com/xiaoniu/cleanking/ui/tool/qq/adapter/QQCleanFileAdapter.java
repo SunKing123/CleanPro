@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -64,6 +65,8 @@ public class QQCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            Glide.with(mActivity)
 //                    .load(path)
 //                    .into(((ImageViewHolder) holder).iv_photo_filelist_pic);
+
+            ((ImageViewHolder) holder).iv_photo_filelist_pic.setImageResource(getImgRes(listImage.get(position).getFileName()));
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getFileName());
             ((ImageViewHolder) holder).tv_time.setText(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listImage.get(position).getTime()));
             ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSizeOne(listImage.get(position).getSize()));
@@ -80,11 +83,32 @@ public class QQCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ImageViewHolder) holder).conslayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AndroidUtil.openFileSafe( mActivity, String.valueOf(listImage.get(position).getFileName()));
+                    AndroidUtil.openFileSafe(mActivity, String.valueOf(listImage.get(position).getFileName()));
                 }
             });
 
         }
+    }
+
+    //zip rar txt xlsx pdf docx pptx
+    public int getImgRes(String filename) {
+        int resImg = R.mipmap.icon_file;
+        if (filename.contains("zip")) {
+            resImg = R.mipmap.icon_zip;
+        } else if (filename.contains("rar")) {
+            resImg = R.mipmap.icon_zip;
+        } else if (filename.contains("txt")) {
+            resImg = R.mipmap.icon_txt;
+        } else if (filename.contains("xls")) {
+            resImg = R.mipmap.icon_excel;
+        } else if (filename.contains("pdf")) {
+            resImg = R.mipmap.icon_pdf;
+        } else if (filename.contains("docx")) {
+            resImg = R.mipmap.icon_file;
+        } else if (filename.contains("ppt")) {
+            resImg = R.mipmap.icon_ppt;
+        }
+        return resImg;
     }
 
     @Override
@@ -94,6 +118,7 @@ public class QQCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
+        public ImageView iv_photo_filelist_pic;
         public TextView tv_select;
         public TextView tv_name;
         public TextView tv_size;
@@ -102,6 +127,7 @@ public class QQCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public ImageViewHolder(View itemView) {
             super(itemView);
+            iv_photo_filelist_pic = (ImageView) itemView.findViewById(R.id.iv_photo_filelist_pic);
             tv_select = (TextView) itemView.findViewById(R.id.tv_select);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_size = (TextView) itemView.findViewById(R.id.tv_size);

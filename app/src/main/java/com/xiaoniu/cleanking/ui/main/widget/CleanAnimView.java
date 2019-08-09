@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 
@@ -146,7 +147,7 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid());
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
     }
 
     boolean isError = false;
@@ -154,13 +155,11 @@ public class CleanAnimView extends RelativeLayout {
 
     public void initWebView() {
         javaInterface = new JavaInterface((Activity) mContext, mWebView);
-        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
-        Log.e("trew", "" + url);
-//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
-        mWebView.loadUrl(url);
+        settings.setTextZoom(100);
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.addJavascriptInterface(javaInterface, "cleanPage");
         javaInterface.setListener(new JavaInterface.onShareSuccessListener() {
             @Override

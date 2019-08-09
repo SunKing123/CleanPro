@@ -150,7 +150,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 
     @Override
     protected void initView() {
-        source_page="h5";
+        source_page = "h5";
         bundle = getIntent().getExtras();
         if (bundle != null) {
             title = bundle.getString(Constant.Title);
@@ -176,9 +176,9 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 //        boolean haveLiuhai = NotchUtils.hasNotchScreen(this);
         if (isParam) {
             if (url.contains("?")) {
-//                url = url + "&xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
+                url = url + "&deviceId=" + AndroidUtil.getUdid();
             } else {
-//                url = url + "?xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
+                url = url + "?deviceId=" + AndroidUtil.getUdid();
             }
             mImgHelp.setVisibility(View.GONE);
         } else {
@@ -190,12 +190,13 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setDomStorageEnabled(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setTextZoom(100);
         // 为图片添加放大缩小功能
         webSettings.setUseWideViewPort(true);
         //自适应屏幕
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setLoadWithOverviewMode(true);
-        mWebView.addJavascriptInterface( new JavaInterface((Activity) mContext, mWebView), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
         mWebView.addJavascriptInterface(new JsInterface(), "mapPage");
         mWebView.addJavascriptInterface(new JsInterface(), "kefuPage");
         mWebView.addJavascriptInterface(new JsInterface(), "backPage");
@@ -521,8 +522,6 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         }
 
 
-
-
         /**
          * 打开新的h5页面
          */
@@ -534,10 +533,12 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);
         }
+
         @JavascriptInterface
         public void onTitleClick(String id, String name) {
             StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
         }
+
         @JavascriptInterface
         public void toOtherPage_gj(String url, String productId, String isRefresh) {
             Bundle bundle = new Bundle();

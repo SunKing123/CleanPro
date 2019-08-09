@@ -59,6 +59,9 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     ExpandableListView mListView;
     private WXImgChatAdapter mAdapter;
 
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mLLEmptyView;
+
     @BindView(R.id.btn_del)
     Button mBtnDel;
     @BindView(R.id.ll_check_all)
@@ -359,10 +362,16 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         setDelBtnSize();
         setSelectChildStatus();
 
+        if(totalFileSizeL(mAdapter.getList())==0){
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
+
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+
+
 
     }
 
@@ -509,8 +518,11 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     }
 
     public void updateImgCamera(List<FileTitleEntity> lists){
-        mAdapter.modifyData(lists);
 
+        mAdapter.modifyData(lists);
+        if(totalFileSizeL(lists)==0){
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
         SharedPreferences.Editor editor=sharedPreferences.edit();
@@ -518,6 +530,23 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         editor.commit();
 
     }
+
+
+    public   long totalFileSizeL(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
+    }
+
 
     public   long totalFileSize(List<FileTitleEntity> lists){
         if(null==lists ||  lists.size()==0){

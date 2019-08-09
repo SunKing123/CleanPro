@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +136,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
                 if(null!=onCheckListener){
                     onCheckListener.onCheck(groupPosition,-1,fileTitleEntity.isSelect);
                 }
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
             }
         });
 
@@ -216,7 +217,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             mRecyclerView = view.findViewById(R.id.recycle_view);
 
 
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3){
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3) {
 
                 @Override
                 public boolean canScrollVertically() {

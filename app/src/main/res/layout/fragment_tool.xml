@@ -81,7 +81,7 @@
                         android:layout_marginTop="29dp"
                         android:layout_marginLeft="@dimen/dimen_20dp"
                         android:textColor="@color/white"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         android:layout_toRightOf="@id/frame_layout"
                         android:text="@string/tool_phone_memory_empty"/>
 
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textColor="#80FFFFFF"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:layout_marginLeft="@dimen/dimen_20dp"
                         android:layout_toRightOf="@id/frame_layout"
                         android:layout_marginTop="@dimen/dimen_8dp"
@@ -131,7 +131,7 @@
                         android:layout_toRightOf="@id/iv_icon_chat"
                         android:text="@string/tool_chat_clear"
                         android:textColor="@color/color_333333"
-                        android:textSize="@dimen/dimen_14dp" />
+                        android:textSize="14sp" />
                     <TextView
                         android:id="@+id/tv_chat_gb_title"
                         android:layout_width="wrap_content"
@@ -141,11 +141,11 @@
                         android:text="@string/tool_chat_clear"
                         android:visibility="gone"
                         android:textColor="@color/color_333333"
-                        android:textSize="@dimen/dimen_14dp" />
+                        android:textSize="14sp" />
                     <TextView
                         android:id="@+id/tv_def_chat_title"
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/dimen_11dp"
+                        android:textSize="11sp"
                         android:text="@string/tool_clear_chat"
                         android:layout_below="@id/tv_chat_title"
                         android:layout_marginLeft="@dimen/dimen_12dp"
@@ -205,7 +205,7 @@
                         android:layout_width="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="@string/tool_qq_clear"
-                        android:textSize="@dimen/dimen_14dp"
+                        android:textSize="14sp"
                         android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_toRightOf="@id/iv_icon_qq"
                         android:textColor="@color/color_333333"
@@ -215,7 +215,7 @@
                         android:id="@+id/tv_qq_gb_title"
                         android:layout_width="wrap_content"
                         android:text="@string/tool_qq_clear"
-                        android:textSize="@dimen/dimen_14dp"
+                        android:textSize="14sp"
                         android:layout_marginLeft="@dimen/dimen_12dp"
                         android:visibility="gone"
                         android:layout_toRightOf="@id/iv_icon_qq"
@@ -225,7 +225,7 @@
                     <TextView
                         android:id="@+id/tv_def_qq_title"
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/dimen_11dp"
+                        android:textSize="11sp"
                         android:text="@string/tool_clear_qq"
                         android:layout_below="@id/tv_qq_title"
                         android:layout_marginLeft="@dimen/dimen_12dp"
@@ -242,10 +242,10 @@
                         android:layout_toRightOf="@id/iv_icon_qq"
                         android:layout_below="@id/tv_qq_gb_title"
                         android:layout_height="@dimen/dimen_28dp"
-                        android:textSize="@dimen/dimen_20dp"
+                        android:textSize="20sp"
                         android:visibility="gone"
                         android:layout_marginTop="@dimen/dimen_4dp"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:gravity="bottom"
                         android:text="2.45"/>
                     <TextView
@@ -259,7 +259,7 @@
                         android:gravity="bottom"
                         android:paddingBottom="1dp"
                         android:visibility="gone"
-                        android:textSize="@dimen/dimen_15dp"
+                        android:textSize="15sp"
                         android:text="GB"/>
                 </RelativeLayout>
             </LinearLayout>
@@ -331,7 +331,7 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_temperature_low"
                         android:textColor="@color/color_333333"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -341,7 +341,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="@string/tool_temperature_nor"
                         android:textColor="#999999"
-                        android:textSize="11dp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -378,7 +378,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="@string/tool_void_soft_clear"
-                        android:textSize="11dp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

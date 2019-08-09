@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -55,6 +56,7 @@ import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -347,6 +349,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             ToastUtils.showShort(R.string.tool_no_install_qq);
             return;
         }
+        if (QQUtil.audioList != null)
+            QQUtil.audioList.clear();
+        if (QQUtil.fileList != null)
+            QQUtil.fileList.clear();
         startActivity(QQCleanHomeActivity.class);
     }
     @OnClick(R.id.line_jw)
@@ -606,13 +612,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     boolean isError = false;
 
     public void initWebView() {
-        String url = ApiModule.Base_H5_Host + "/activity_page.html?deviceId=" + AndroidUtil.getUdid();
-//        url += "?xn_data=" + AndroidUtil.getXnData();
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
+        settings.setTextZoom(100);
         mWebView.addJavascriptInterface(new JavaInterface(getActivity(),mWebView), "cleanPage");
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

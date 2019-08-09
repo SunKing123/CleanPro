@@ -65,6 +65,9 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
     @BindView(R.id.btn_del)
     Button mBtnDel;
 
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mLLEmptyView;
+
     private boolean mIsCheckAll;
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;
@@ -411,6 +414,10 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         setDelBtnSize();
         setSelectChildStatus();
 
+        if(totalFileSize(lists)==0){
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
+
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
@@ -549,6 +556,9 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
         mAdapter.modifyData(lists);
+        if(totalFileSize(lists)==0){
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
         //保存缓存
         SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,totalFileSize(lists));
