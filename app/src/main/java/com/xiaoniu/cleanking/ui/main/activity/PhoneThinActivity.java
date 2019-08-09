@@ -90,10 +90,10 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                 if (null != mTxtSpaceSize) {
                     mCurrentTime = System.currentTimeMillis();
                     String s = mPresenter.accuracy(size, mTotalSize, 0);
-                    if (Double.valueOf(s) > 1) {
-                        mTxtSpaceSize.setText(s);
-                    }else {
+                    if (Double.valueOf(s) == 0) {
                         mTxtSpaceSize.setText("1");
+                    }else {
+                        mTxtSpaceSize.setText(s);
                     }
                 }
             }
