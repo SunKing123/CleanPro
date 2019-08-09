@@ -568,7 +568,7 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
-        mListView.expandGroup(lists.size()-1);
+        mListView.setSelectedGroup(0);
 
         if(totalFileSize(lists)==0){
             mTxtTitle.setText("暂无视频");
