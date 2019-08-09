@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="55dp"
         android:background="#06C581"
         android:gravity="center_vertical">
 
@@ -21,7 +21,7 @@
             android:paddingTop="@dimen/dimen_16dp"
             android:paddingLeft="@dimen/dimen_16dp"
             android:paddingRight="@dimen/dimen_18dp"
-            android:src="@mipmap/back_white" />
+            android:src="@mipmap/back" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -31,7 +31,6 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dimen_100dp"
             android:ellipsize="end"
-            android:gravity="center"
             android:lines="1"
             android:text=""
             android:textColor="@color/white"
