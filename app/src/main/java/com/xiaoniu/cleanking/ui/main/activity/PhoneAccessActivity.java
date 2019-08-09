@@ -190,7 +190,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public void initView() {
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
+        if (bundle != null) {
             String title = bundle.getString(SpCacheConfig.ITEM_TITLE_NAME);
             mTvTitleName.setText(title);
             acceview.setTitleName(title);
@@ -198,31 +198,29 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (Build.VERSION.SDK_INT >= 26) {
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0 ){
+            if (lastCheckTime == 0) {
                 mPresenter.getAccessAbove22();
-            }else  if (timeTemp <= 3 * 60 * 1000) {
+            } else if (timeTemp < 3 * 60 * 1000) {
                 setCleanedView(0);
-                //3分钟内（含3分钟），提示手机很干净
-            }else  if (timeTemp > 3 * 60 * 1000 || timeTemp <= 6 * 60 * 1000) {
-                //3分钟到6分钟之间
-                if (SPUtil.getBoolean(PhoneAccessActivity.this, SPUtil.IS_CLEAR, false)){
-                    SPUtil.setBoolean(PhoneAccessActivity.this, SPUtil.IS_CLEAR, false);
-                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L) / 2);
-
-                }else {
-                    setCleanedView(0);
-                }
-            }else  if (timeTemp > 6 * 60 * 1000 || timeTemp <= 10 * 60 * 1000) {
-                //6分钟到10分钟之间
-                if (!SPUtil.getBoolean(PhoneAccessActivity.this, SPUtil.IS_CLEAR, false)){
-                    SPUtil.setBoolean(PhoneAccessActivity.this, SPUtil.IS_CLEAR, true);
-                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L) *  (7/ 10));
-
-                }
-            }else {
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L);
+            } else if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
+                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                cacheSize = (long) (cacheSize * 0.5);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
+                mPresenter.getAccessAbove22();
+            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
+                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                cacheSize = (long) (cacheSize * 0.3);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
+                mPresenter.getAccessAbove22();
+            } else {
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 mPresenter.getAccessAbove22();
             }
+//            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
+//                mPresenter.getAccessAbove22();
+//            else
+//                setCleanedView(0);
         } else {
             mPresenter.getAccessListBelow();
         }
@@ -381,25 +379,36 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         } else {
             ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
-            for (ActivityManager.RunningAppProcessInfo info : listInfo) {
-                FirstJunkInfo mInfo = new FirstJunkInfo();
-                mInfo.setAppPackageName(info.processName);
-                mInfo.setAppName(info.processName);
-                aboveListInfo.add(mInfo);
+            if(listInfo.size()<15){
+                for (ActivityManager.RunningAppProcessInfo info : listInfo) {
+                    FirstJunkInfo mInfo = new FirstJunkInfo();
+                    mInfo.setAppPackageName(info.processName);
+                    mInfo.setAppName(info.processName);
+                    aboveListInfo.add(mInfo);
+                }
+            }else{
+                for (int i=0;i<15;i++) {
+                    FirstJunkInfo mInfo = new FirstJunkInfo();
+                    mInfo.setAppPackageName(listInfo.get(i).processName);
+                    mInfo.setAppName(listInfo.get(i).processName);
+                    aboveListInfo.add(mInfo);
+                }
             }
+
             long total = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L);
 //            long oneG = (1024 * 1024 * 1024) / aboveListInfo.size();
             long un = 80886656;
-            if (total > 0) {
-                un = total;
-            }else {
-                if (aboveListInfo.size() < 10 && aboveListInfo.size() > 0) {
-                    un = 80886656;
-                } else if (aboveListInfo.size() < 20 && aboveListInfo.size() >= 10) {
-                    un = 40886656;
-                } else {
-                    un = 20886656;
-                }
+            if (total == 0) {
+                un = 80886656;
+            } else {
+                un = total / aboveListInfo.size();
+//                if (aboveListInfo.size() < 10 && aboveListInfo.size() > 0) {
+//                    un = 80886656;
+//                } else if (aboveListInfo.size() < 20 && aboveListInfo.size() >= 10) {
+//                    un = 40886656;
+//                } else {
+//                    un = 20886656;
+//                }
             }
             setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);
             computeTotalSize(aboveListInfo);
@@ -473,6 +482,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");
         setHasCleaned(sized);
+        rel_bottom.setVisibility(View.GONE);
     }
 
     @Override
