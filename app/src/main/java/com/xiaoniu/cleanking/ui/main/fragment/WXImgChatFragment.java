@@ -722,6 +722,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             fileCopyEntitys.add(fileTitleEntity);
         }
         mAdapter.modifyData(fileCopyEntitys);
+
+        //默认展开最后一条
+        mListView.expandGroup(fileCopyEntitys.size()-1);
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
         }
