@@ -305,7 +305,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="@string/tool_memory_speed"
-                        android:textSize="11dp" />
+                        android:textSize="12dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -341,7 +341,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:text="@string/tool_temperature_nor"
                         android:textColor="#999999"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -378,7 +378,7 @@
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
                         android:text="@string/tool_void_soft_clear"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
