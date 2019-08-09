@@ -182,7 +182,7 @@
         android:visibility="gone"
         >
         <ImageView
-            android:src="@mipmap/icon_no_net"
+            android:src="@mipmap/icon_none_aud"
             android:layout_width="@dimen/dimen_150dp"
             android:layout_height="@dimen/dimen_150dp"/>
 

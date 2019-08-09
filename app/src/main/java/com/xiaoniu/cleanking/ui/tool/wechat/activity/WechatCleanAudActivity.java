@@ -78,7 +78,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
                 if (listData.get(i).getIsSelect())
                     listF.add(audAdapter.getListImage().get(i));
             }
-            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
+            StatisticsUtils.trackClick("wechat_voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
 
             mPresenter.alertBanLiveDialog(WechatCleanAudActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
                 @Override
@@ -165,7 +165,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
             public void onClick(View v) {
                 if (listData.size() == 0) return;
                 if (!recycle_view.isComputingLayout()) {
-                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
+                    StatisticsUtils.trackClick("wechat_voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
                     audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);

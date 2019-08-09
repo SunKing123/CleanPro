@@ -153,7 +153,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             listFAll.addAll(listF3);
             listFAll.addAll(listF4);
 
-            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
+            StatisticsUtils.trackClick("wechat_receive_files_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
             mPresenter.alertBanLiveDialog(WechatCleanFileActivity.this, listFAll.size(), new ImageListPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
@@ -308,7 +308,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             public void onClick(View v) {
                 if (listDataTemp.size() == 0) return;
                 if (!recycleViewToday.isComputingLayout()) {
-                    StatisticsUtils.trackClick("voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
+                    StatisticsUtils.trackClick("wechat_receive_files_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
                     cb_checkall.setSelected(!cb_checkall.isSelected());
                     tv_delete.setSelected(cb_checkall.isSelected());
                     fileAdapterToday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
