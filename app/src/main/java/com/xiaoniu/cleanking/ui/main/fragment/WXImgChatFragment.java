@@ -120,6 +120,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         }
         mIsLoading = true;
 
+        Log.i("test","scollPage()");
         List<FileTitleEntity> adaterLists = mAdapter.getList();
         List<FileChildEntity> fileChildEntities = mPresenter.listsChat.get(groupPosition).lists;
         int startSize = mAdapter.getList().get(groupPosition).lists.size();
@@ -206,12 +207,15 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                     public void onScrollStateChanged(AbsListView view, int scrollState) {
                         if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
                             scollPage(groupPosition);
+
+
                         }
                     }
 
                     @Override
                     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                        if(visibleItemCount-1==groupPosition && mOfferY>0){
+
+                        if(firstVisibleItem+visibleItemCount==totalItemCount){
                             mOfferY=1;
                         }else {
                             mOfferY=-1;
@@ -219,23 +223,11 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
                     }
                 });
-              mListView.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            float startY=0;
-                            switch (event.getAction()){
-                                case MotionEvent.ACTION_DOWN:
-                                    startY=event.getY();
-                                    break;
-                                case  MotionEvent.ACTION_MOVE:
-                                    mOfferY=(int)(event.getY()-startY);
-                                    break;
-                            }
-                            return false;
-                        }
-                    });
+
+
             }
         });
+
 
 
         mLLCheckAll.setOnClickListener(new View.OnClickListener() {
@@ -261,8 +253,20 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
             @Override
             public void onCheck(int groupPosition, int position, boolean isCheck) {
+
+                //更新副本
+                List<FileTitleEntity>  lists= mPresenter.listsChat;
+                for(int i=0;i<lists.size();i++){
+                   List<FileChildEntity> files= lists.get(groupPosition).lists;
+                    for(FileChildEntity fileChildEntity:files){
+                        fileChildEntity.isSelect=isCheck;
+                    }
+
+                }
+
                 setSelectChildStatus(groupPosition);
                 setDelBtnSize();
+
             }
 
             @Override
@@ -276,6 +280,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         });
 
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -356,7 +361,6 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     private void setSelectChildStatus(int groupPosition) {
         List<FileTitleEntity> lists = mAdapter.getList();
 
-
         for (int i = 0; i < lists.size(); i++) {
             if (i == groupPosition) {
                 //是否选择所有
@@ -380,6 +384,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                 }
             }
         }
+
 
     }
 
@@ -413,7 +418,19 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
     private void setSelectStatus(boolean isCheck) {
         List<FileTitleEntity> lists = mAdapter.getList();
+        List<FileTitleEntity> listsLocal=mPresenter.listsChat;
         for (FileTitleEntity fileTitleEntity : lists) {
+            if (fileTitleEntity.lists.size() > 0) {
+                fileTitleEntity.isSelect = isCheck;
+
+                for (FileChildEntity file : fileTitleEntity.lists) {
+                    file.isSelect = isCheck;
+                }
+            }
+
+        }
+
+        for (FileTitleEntity fileTitleEntity : listsLocal) {
             if (fileTitleEntity.lists.size() > 0) {
                 fileTitleEntity.isSelect = isCheck;
 
@@ -428,7 +445,10 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
     private long totalSelectSize() {
         long size = 0L;
-        List<FileTitleEntity> lists = mAdapter.getList();
+        //List<FileTitleEntity> lists = mAdapter.getList();
+
+        List<FileTitleEntity> lists=mPresenter.listsChat;
+
         for (FileTitleEntity fileTitleEntity : lists) {
             for (FileChildEntity file : fileTitleEntity.lists) {
                 if (file.isSelect) {
@@ -459,6 +479,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param paths 根据路径和父类id是否相等
      */
     public void updateDelFileView(List<FileChildEntity> paths) {
+        mPresenter.listsChat.removeAll(paths);
+
         List<FileTitleEntity> listsNew = new ArrayList<>();
 
         List<FileTitleEntity> lists = mAdapter.getList();
@@ -591,7 +613,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
     private int getSelectSize() {
         int size = 0;
-        List<FileTitleEntity> lists = mAdapter.getList();
+        //List<FileTitleEntity> lists = mAdapter.getList();
+
+        List<FileTitleEntity> lists =mPresenter.listsChat;
 
         for (FileTitleEntity fileTitleEntity : lists) {
             for (FileChildEntity file : fileTitleEntity.lists) {
@@ -605,8 +629,8 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
 
     private List<File> getSelectFiles() {
         List<File> files = new ArrayList<>();
-        List<FileTitleEntity> lists = mAdapter.getList();
-
+        //List<FileTitleEntity> lists = mAdapter.getList();
+        List<FileTitleEntity> lists =mPresenter.listsChat;
         for (FileTitleEntity fileTitleEntity : lists) {
             for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
                 if (fileChildEntity.isSelect) {
