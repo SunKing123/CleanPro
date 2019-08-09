@@ -47,7 +47,7 @@ public class DelDialogStyleFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         getDialog().getWindow().setGravity(Gravity.BOTTOM);
-        getDialog().getWindow().setLayout(getScreenWidth(mContext) - dip2px(mContext, 43), ViewGroup.LayoutParams.WRAP_CONTENT);
+        getDialog().getWindow().setLayout(getScreenWidth(mContext), ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
     }

@@ -47,15 +47,18 @@ public class WXImgAdapter extends RecyclerView.Adapter {
         FileChildEntity fileChildEntity = mLists.get(position);
 
         RequestOptions options = new RequestOptions()
-                .placeholder(R.color.color_666666)// 正在加载中的图片
-                .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
+                .placeholder(R.color.color_666666)
+                .dontAnimate();// 正在加载中的图片
 
-        Glide.with(mContext).load(new File(fileChildEntity.path)).into(viewHolder.mImg);
+
+        Glide.with(mContext).load(new File(fileChildEntity.path)).apply(options).into(viewHolder.mImg);
 
         if (fileChildEntity.isSelect) {
             viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check);
+            viewHolder.mImgLayer.setVisibility(View.VISIBLE);
         } else {
             viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check_normal);
+            viewHolder.mImgLayer.setVisibility(View.GONE);
         }
 
 
@@ -110,12 +113,13 @@ public class WXImgAdapter extends RecyclerView.Adapter {
         private ImageView mImg;
         private ImageView mImgSelect;
         private LinearLayout mLLSelect;
-
+        private ImageView mImgLayer;
         public ViewHolder(View itemView) {
             super(itemView);
             mImg = itemView.findViewById(R.id.img);
             mImgSelect = itemView.findViewById(R.id.check_select);
             mLLSelect=itemView.findViewById(R.id.ll_check_select);
+            mImgLayer=itemView.findViewById(R.id.img_layer);
         }
     }
 
