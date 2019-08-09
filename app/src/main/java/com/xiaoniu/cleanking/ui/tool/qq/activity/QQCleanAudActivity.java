@@ -62,7 +62,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
             if (!tv_delete.isSelected())
                 return;
             finish();
-            StatisticsUtils.trackClick("qq_voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
+            StatisticsUtils.trackClick("qq_voice_confirm_the_selection_click", "\"确认选中\"点击", "qq_cleaning_page", "qq_voice_cleaning_page");
         }
     }
 
