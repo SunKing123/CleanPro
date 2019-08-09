@@ -464,6 +464,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         return size;
     }
 
+
     private void setDelBtnSize() {
         long size = totalSelectSize();
         if (size > 0) {
@@ -507,11 +508,16 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         mAdapter.modifyData(listsNew);
         setDelBtnSize();
         setSelectChildStatus();
-
+        if(totalFileSizeL(mAdapter.getList())==0){
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
         FragmentManager fm = getActivity().getFragmentManager();
         String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
         String fileSize=String.valueOf(paths.size());
         DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+
+
+
 
     }
 
@@ -676,7 +682,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
             fileCopyEntitys.add(fileTitleEntity);
         }
         mAdapter.modifyData(fileCopyEntitys);
-        if(totalSelectSize()==0){
+        if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
         }
 
@@ -687,6 +693,22 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         editor.commit();
 
 
+    }
+
+
+    public   long totalFileSizeL(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
     }
 
     public   long totalFileSize(List<FileTitleEntity> lists){

@@ -36,6 +36,7 @@
                 android:src="@mipmap/img_wx_empty_img" />
 
             <TextView
+                android:id="@+id/txt_empty_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="暂无图片～" />
