@@ -294,7 +294,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_speed"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
                     <TextView
@@ -330,7 +330,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_temperature_low"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
                     <TextView
@@ -367,7 +367,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="@string/tool_phone_thin"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
                     <TextView
