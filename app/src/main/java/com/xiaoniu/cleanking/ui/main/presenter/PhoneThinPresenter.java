@@ -123,7 +123,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
                     e.onNext(fileName);
                     if (file1.isDirectory()) {
                         scanDirectory(path + "/" + file1.getName(),e);
-                    } else if(fileName.equals(".mp4") || fileName.equals(".apk")){
+                    } else if(fileName.endsWith(".mp4")){
                         mFileTotalSize += file1.length();
                     }
                 }

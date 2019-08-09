@@ -60,7 +60,7 @@
             android:id="@+id/txt_space_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
+            android:text="0"
             android:gravity="right|top"
             android:layout_centerInParent="true"
             android:textColor="@color/white"
