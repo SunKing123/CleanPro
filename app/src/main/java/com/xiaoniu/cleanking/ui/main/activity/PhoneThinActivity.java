@@ -89,17 +89,10 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                 }
                 if (null != mTxtSpaceSize) {
                     mCurrentTime = System.currentTimeMillis();
-                    String s = mPresenter.accuracy(size, mTotalSize, 0);
-                    if (Double.valueOf(s) == 0) {
-                        mTxtSpaceSize.setText("1");
-                    }else {
-                        mTxtSpaceSize.setText(s);
-                    }
+                    mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
                 }
             }
-
         }
-
     }
 
 
@@ -137,8 +130,14 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
             mImgProgressSystem.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
                     long fileTotalSize = mPresenter.getFileSize();
+                    String s = mPresenter.accuracy(fileTotalSize, mTotalSize, 0);
+                    if (Double.valueOf(s) == 0) {
+                        mTxtSpaceSize.setText("1");
+                    }else {
+                        mTxtSpaceSize.setText(s);
+                    }
+                    Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
                     intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
                     startActivity(intent);
                     finish();
