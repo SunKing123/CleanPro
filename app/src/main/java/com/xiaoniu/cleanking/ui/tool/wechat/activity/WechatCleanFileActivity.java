@@ -424,6 +424,8 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
     //获取当前文件大小
     public long getAllFileSize() {
+        if (fileAdapterToday == null)
+            return 0;
         long fileSize = 0;
         List<CleanWxItemInfo> listAll = new ArrayList<>();
         List<CleanWxItemInfo> listData = fileAdapterToday.getListImage();

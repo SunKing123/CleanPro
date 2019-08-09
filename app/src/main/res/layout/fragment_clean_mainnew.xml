@@ -39,6 +39,7 @@
                         android:id="@+id/view_lottie_star"
                         android:layout_width="140dp"
                         android:layout_height="120dp"
+                        android:alpha="0.8"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="120dp"/>
 
