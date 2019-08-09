@@ -380,7 +380,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         if (isOverload) {
             animatorSetTimer.playTogether(anim, colorAnim, colorAnim2,colorAnim3);
         } else {
-            animatorSetTimer.play(numberAnimator);
+            animatorSetTimer.play(anim);
         }
         animatorSetTimer.start();
         mLayoutCoolView.setVisibility(VISIBLE);
