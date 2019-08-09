@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
+import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
@@ -189,7 +190,9 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
-                startActivity(WechatCleanedResultActivity.class);
+                Intent intent=new Intent(WechatCleanHomeActivity.this,WechatCleanedResultActivity.class);
+                intent.putExtra("title","微信专清");
+                startActivity(intent);
             } else {
                 if (!tvDelete.isSelected()) return;
                 mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());

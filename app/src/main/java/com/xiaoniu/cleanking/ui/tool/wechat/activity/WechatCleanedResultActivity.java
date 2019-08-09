@@ -41,7 +41,7 @@ public class WechatCleanedResultActivity extends SimpleActivity {
      * @param countEntity
      */
     public void startCleanAnim(CountEntity countEntity) {
-        mCleanAnimView.setTitle("微信清理");
+        mCleanAnimView.setTitle(getIntent().getExtras().getString("title"));
         mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DeviceUtils.dip2px(49), DeviceUtils.dip2px(49));
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
