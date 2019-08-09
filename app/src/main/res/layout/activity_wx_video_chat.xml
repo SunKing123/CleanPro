@@ -27,6 +27,7 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:gravity="center"
+            android:paddingBottom="@dimen/dimen_55dp"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -38,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="暂无图片～" />
+                android:text="暂无视频～" />
         </LinearLayout>
 
     </FrameLayout>

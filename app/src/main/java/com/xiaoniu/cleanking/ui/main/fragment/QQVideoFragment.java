@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -58,6 +59,11 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
     @BindView(R.id.list_view_camera)
     ExpandableListView mListView;
     private WXVideoChatAdapter mAdapter;
+
+    @BindView(R.id.ll_empty_view)
+    LinearLayout mEmptyView;
+    @BindView(R.id.txt_empty_title)
+    TextView mTxtEmptyTile;
 
     @BindView(R.id.btn_del)
     Button mBtnDel;
@@ -559,7 +565,31 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
+
+        if(totalFileSizeL(lists)==0){
+            mTxtEmptyTile.setText("暂无视频~");
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
+
     }
+
+
+
+    public   long totalFileSizeL(List<FileTitleEntity> lists){
+        if(null==lists ||  lists.size()==0){
+            return 0L;
+        }
+
+        long size=0L;
+
+        for(FileTitleEntity fileTitleEntity: lists) {
+            size+=fileTitleEntity.size;
+
+        }
+
+        return  size;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
