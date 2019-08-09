@@ -52,8 +52,10 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
         Glide.with(mContext).load(new File(fileChildEntity.path)).apply(options).into(viewHolder.mImg);
         if (fileChildEntity.isSelect) {
             viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check);
+            viewHolder.mImgLayer.setVisibility(View.VISIBLE);
         } else {
             viewHolder.mImgSelect.setBackgroundResource(R.mipmap.icon_check_normal);
+            viewHolder.mImgLayer.setVisibility(View.GONE);
         }
 
 
@@ -101,12 +103,14 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
         private ImageView mImg;
         private ImageView mImgSelect;
         private LinearLayout mLLSelect;
+        private ImageView mImgLayer;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mImg = itemView.findViewById(R.id.img);
             mImgSelect = itemView.findViewById(R.id.check_select);
             mLLSelect=itemView.findViewById(R.id.ll_check_select);
+            mImgLayer=itemView.findViewById(R.id.img_check);
         }
     }
 
