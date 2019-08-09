@@ -42,6 +42,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
@@ -307,7 +308,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         }
         int bottom = mBgTitle.getBottom();
         mLayoutContentCool.setVisibility(VISIBLE);
-        int startHeight = DeviceUtils.getScreenHeight();
+        int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         new Handler().postDelayed(() -> {
             if (!isDestroyed()) {
@@ -418,7 +419,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         int bottom = mLayoutTitleBar.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
-        int startHeight = DeviceUtils.getScreenHeight();
+        int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());

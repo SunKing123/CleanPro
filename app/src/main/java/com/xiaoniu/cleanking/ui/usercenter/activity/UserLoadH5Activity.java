@@ -16,7 +16,6 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
@@ -50,10 +49,8 @@ import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -270,24 +267,6 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                     return true;
                 }
                 // ------- 处理结束 -------
-
-                //--------微信-------
-                try {
-                    if (url.startsWith("weixin://wap/pay?")) {
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        startActivity(intent);
-                        return true;
-                    } else {
-                        Map<String, String> extraHeaders = new HashMap<String, String>();
-                        extraHeaders.put("Referer", "http://paytest.1an.com");
-                        view.loadUrl(url, extraHeaders);
-                    }
-                } catch (Exception e) {
-                    ToastUtils.showShort("请安装微信最新版!");
-                    mWebView.goBack();
-                }
                 //------微信处理结束--------
                 return super.shouldOverrideUrlLoading(view, url);
             }
@@ -339,19 +318,20 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mWebView.canGoBack()) {
-                    mWebView.goBack();
-                } else {
-                    if (bundle.containsKey(Constant.TAG) && "1".equals(bundle.get(Constant.TAG).toString())) {
-                        startActivity(new Intent(UserLoadH5Activity.this, MainActivity.class));
-                    } else {
-                        finish();
-                    }
-
-                    if (ApiModule.ZhiMaXinYong.equals(url)) {
-                        UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
-                    }
-                }
+                finish();
+//                if (mWebView.canGoBack()) {
+//                    mWebView.goBack();
+//                } else {
+//                    if (bundle.containsKey(Constant.TAG) && "1".equals(bundle.get(Constant.TAG).toString())) {
+//                        startActivity(new Intent(UserLoadH5Activity.this, MainActivity.class));
+//                    } else {
+//                        finish();
+//                    }
+//
+//                    if (ApiModule.ZhiMaXinYong.equals(url)) {
+//                        UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
+//                    }
+//                }
             }
         });
         mWebView.setWebViewClient(webViewClient);
