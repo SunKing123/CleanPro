@@ -127,7 +127,7 @@
 
             <ImageView
                 android:id="@+id/img_progress"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dimen_18dp"
                 android:layout_height="@dimen/dimen_18dp"
                 android:src="@mipmap/icon_pro"/>
 
