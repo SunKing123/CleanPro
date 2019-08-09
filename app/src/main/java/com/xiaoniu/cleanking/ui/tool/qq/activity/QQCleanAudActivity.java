@@ -62,7 +62,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
             if (!tv_delete.isSelected())
                 return;
             finish();
-            StatisticsUtils.trackClick("voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
+            StatisticsUtils.trackClick("qq_voice_cleaning_delete_click", "删除按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
         }
     }
 
@@ -127,7 +127,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
                     cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                     tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                     compulateDeleteSize();
-                    StatisticsUtils.trackClick("voice_cleaning_all_election_click ", "全选按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
+                    StatisticsUtils.trackClick("qq_voice_cleaning_all_election_click", "全选按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
                 }
             }
         });
