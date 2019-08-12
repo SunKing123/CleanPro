@@ -150,6 +150,9 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (mTxtSpaceSize == null)
+                    return;
+
                 mSizeL=size;
                 mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
                 mPresenter.scanFile(mPath);
