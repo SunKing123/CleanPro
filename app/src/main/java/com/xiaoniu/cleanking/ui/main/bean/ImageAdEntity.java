@@ -6,13 +6,13 @@ import java.util.List;
 
 public class ImageAdEntity extends BaseEntity {
 
-    private List<DataBean> data;
+    private DataBean data;
 
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
