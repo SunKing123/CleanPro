@@ -372,8 +372,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         colorAnim3.setStartDelay(3000);
         colorAnim.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
+            if (isDestroyed()) {
+                return;
+            }
             showBarColor(animatedValue);
-            mLayoutCoolBottom.setVisibility(GONE);
+            if (mLayoutCoolBottom != null) {
+                mLayoutCoolBottom.setVisibility(GONE);
+            }
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
