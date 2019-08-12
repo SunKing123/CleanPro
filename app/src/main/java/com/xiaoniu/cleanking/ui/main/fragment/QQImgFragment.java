@@ -326,6 +326,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
             }
             fileChildEntities.clear();;
 
+
             fileChildEntities.addAll(listsNew);
             mPresenter.totalFileSize(lists);
             mAdapter.notifyDataSetChanged();
@@ -473,7 +474,9 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
                     fileTitle.lists.add(fileChildEntity);
                 }
             }
-            listsNew.add(fileTitle);
+            if(fileTitleEntity.size !=0) {
+                listsNew.add(fileTitle);
+            }
         }
         mLoading.dismissAllowingStateLoss();
         mPresenter.totalFileSize(listsNew);

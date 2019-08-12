@@ -49,6 +49,7 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -135,7 +136,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         settings.setTextZoom(100);
         mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -310,6 +310,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onPause() {
         super.onPause();
+        KeyboardUtil.closeKeybord(mWebView);
         NiuDataAPI.onPageEnd("once_accelerate_view_page", "一键清理页面浏览");
         NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }

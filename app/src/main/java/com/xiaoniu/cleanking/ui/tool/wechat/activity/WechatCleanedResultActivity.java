@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.CleanedAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import butterknife.BindView;
@@ -67,5 +68,9 @@ public class WechatCleanedResultActivity extends SimpleActivity {
         }
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        KeyboardUtil.closeKeybord(mCleanAnimView);
+    }
 }

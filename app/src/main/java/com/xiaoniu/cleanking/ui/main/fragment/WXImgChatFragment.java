@@ -529,7 +529,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                     fileTitle.lists.add(fileChildEntity);
                 }
             }
-            listsNew.add(fileTitle);
+            if(fileTitleEntity.size !=0) {
+                listsNew.add(fileTitle);
+            }
         }
         mLoading.dismissAllowingStateLoss();
         mPresenter.totalFileSize(listsNew);

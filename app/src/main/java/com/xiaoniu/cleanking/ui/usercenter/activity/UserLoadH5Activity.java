@@ -48,6 +48,7 @@ import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 
@@ -662,6 +663,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
     @Override
     public void onPause() {
         super.onPause();
+        KeyboardUtil.closeKeybord(mWebView);
     }
 
 }

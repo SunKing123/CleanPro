@@ -282,8 +282,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         startActivity(new Intent(getActivity(), PhoneThinActivity.class));
     }
 
-
-
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
         mLottieStarView.setVisibility(GONE);

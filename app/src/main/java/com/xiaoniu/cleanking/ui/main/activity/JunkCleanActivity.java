@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -269,6 +270,8 @@ public class JunkCleanActivity extends SimpleActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //隐藏键盘
+        KeyboardUtil.closeKeybord(mCleanAnimView);
         if (mCleanAnimView != null && mCleanAnimView.getVisibility() == View.VISIBLE) {
             NiuDataAPI.onPageEnd("clean_up_page_view","清理完成页浏览");
         }else {
