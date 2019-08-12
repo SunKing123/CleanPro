@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -34,6 +35,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -139,7 +141,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LottieAnimationView mFinishAnimator;
     @BindView(R.id.view_lottie_star)
     LottieAnimationView mLottieStarView;
-
+    @BindView(R.id.view_news)
+    ImageView mIvNews;
     /**
      * 清理的分类列表
      */
@@ -215,6 +218,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
         //请求广告接口
         mPresenter.requestBottomAd();
+        //状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(getActivity(), AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "0")) {
+            mIvNews.setVisibility(GONE);
+        }else {
+            mIvNews.setVisibility(VISIBLE);
+        }
 
     }
 
