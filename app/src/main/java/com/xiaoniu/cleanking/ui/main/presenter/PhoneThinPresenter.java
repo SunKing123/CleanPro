@@ -331,6 +331,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
                 getPackageSizeInfo.invoke(mPackageManager, pkgName, new PhoneThinPresenter.PkgSizeObserver(pkgName, isLast));// 方法使用的参数
 
             } catch (Exception ex) {
+                Log.e("asdfg",""+ex.getMessage());
                 ex.printStackTrace();
 
             }

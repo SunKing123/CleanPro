@@ -83,12 +83,14 @@
 	public *;
 }
 -keep class com.xiaoniu.cleanking.widget.** { *; } #自定义控件不参与混淆
+-keep class com.xiaoniu.cleanking.ui.main.presenter.** { *; } #自定义控件不参与混淆
 -keep class com.xiaoniu.cleanking.base.** { *; } #base不参与混淆
 -keep public class * extends installment.loan.base.BaseEntity  #Bean类不参与混淆
 -keep class com.xiaoniu.cleanking.ui.main.bean.**{ *; }  #Bean类不参与混淆
 -keep class com.xiaoniu.cleanking.ui.repayment.bean.**{ *; }  #Bean类不参与混淆
 -keep class com.xiaoniu.cleanking.ui.usercenter.bean.**{ *; }  #Bean类不参与混淆
 -keep class com.xiaoniu.cleanking.callback.** { *; }
+-keep class android.content.pm.** { *; }
 -keep public class * extends android.view
 -keep public class * extends android.app.Fragment
 -keep public class * extends android.app.Activity

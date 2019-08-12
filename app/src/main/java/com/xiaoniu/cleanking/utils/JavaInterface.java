@@ -124,14 +124,14 @@ public class JavaInterface {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                if ("QQ".equals(share_media.name())) {
+                if ("QQ".equals(share_media.name()) || "QZONE".equals(share_media.name())) {
                     addShareSuccessRequest();
                 }
             }
 
             @Override
             public void onResult(SHARE_MEDIA share_media) {
-                if (!"QQ".equals(share_media.name())) {
+                if (!"QQ".equals(share_media.name())&&!"QZONE".equals(share_media.name())) {
                     handler.sendEmptyMessage(SHARE_SUCCESS);
                 }
 
@@ -177,7 +177,7 @@ public class JavaInterface {
                     addShareSuccessRequest();
                     break;
                 case SHARE_CANCEL:
-                    ToastUtils.showShort("已取消");
+//                    ToastUtils.showShort("已取消");
                     break;
                 case SHARE_WECHAT:
                     ToastUtils.showShort("没有安装微信，请先安装应用");
