@@ -49,6 +49,7 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
     public void updateCache(List<AppInfoBean> lists) {
         apps.removeAll(lists);
         Set<String> caches = new HashSet<>();
+        caches.add("com.xiaoniu.cleanking");
         for (AppInfoBean appInfoBean : apps) {
             caches.add(appInfoBean.packageName);
         }
