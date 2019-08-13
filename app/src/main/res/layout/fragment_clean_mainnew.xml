@@ -11,6 +11,8 @@
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fadingEdgeLength="@dimen/dimen_0dp"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <RelativeLayout
@@ -260,7 +262,7 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <ImageView
@@ -281,7 +283,31 @@
 
 
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/line_wx"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    android:orientation="vertical">
 
+                    <ImageView
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_home_wx" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:text="微信专清"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -295,30 +321,7 @@
                 android:paddingRight="@dimen/dimen_16dp"
                 android:weightSum="3">
 
-                <LinearLayout
-                    android:id="@+id/line_wx"
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/dimen_32dp"
-                        android:layout_height="@dimen/dimen_32dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_40dp"
-                        android:src="@mipmap/icon_home_wx" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_12dp"
-                        android:text="微信专清"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/line_qq"
