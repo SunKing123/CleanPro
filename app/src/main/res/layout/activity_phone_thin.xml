@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="手机瘦身"
+                android:text="@string/tool_phone_thin"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_18sp" />
