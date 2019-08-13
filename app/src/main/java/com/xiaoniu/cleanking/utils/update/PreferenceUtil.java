@@ -14,7 +14,7 @@ public class PreferenceUtil {
     //获取WebView URL
     public static String getWebViewUrl(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(SpCacheConfig.WEB_URL,ApiModule.Base_H5_Host +"/activity_page.html" + "?deviceId=" + AndroidUtil.getUdid());
+        return sharedPreferences.getString(SpCacheConfig.WEB_URL,ApiModule.Base_H5_Host + "?deviceId=" + AndroidUtil.getUdid());
     }
 
     //保存WebView URL
