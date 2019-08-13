@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
     private String mTitle;
+    private ShoppingMallFragment upQuotaFragment;
+
     /**
      * 版本更新代理
      */
@@ -153,6 +156,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onTabSelected(int position, int prePosition) {
                 showHideFragment(position, prePosition);
+                upQuotaFragment.getWebView().reload();
             }
 
             @Override
@@ -262,7 +266,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
-        ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
+        upQuotaFragment = ShoppingMallFragment.getIntance(url);
         mFragments.add(mainFragment);
 
         mFragments.add(toolFragment);

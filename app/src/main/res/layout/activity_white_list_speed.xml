@@ -11,7 +11,6 @@
         android:background="@color/color_4690FD"
         android:orientation="horizontal">
 
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="@dimen/dimen_55dp"
@@ -37,22 +36,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_add"
-            android:layout_width="@dimen/dimen_50dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|right"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/dimen_16dp"
-                android:text="添加"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dimen_15sp" />
-
-        </LinearLayout>
     </LinearLayout>
 
 
@@ -81,8 +64,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_weight="1"
+        android:layout_height="0dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle_view"
@@ -111,7 +94,33 @@
                 android:layout_height="wrap_content"
                 android:text="加速白名单为空～" />
         </LinearLayout>
-
     </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_add"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:id="@+id/viewline"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#EDEDED" />
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/delete_select_bg"
+            android:gravity="center"
+            android:text="添加"
+            android:textColor="@color/white" />
+    </RelativeLayout>
 
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.app.AppOpsManager;
 import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageInfo;
@@ -16,25 +15,18 @@ import android.os.RemoteException;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -90,15 +82,16 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                apps.add(appInfoBean);
+                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking"))
+                    apps.add(appInfoBean);
             }
         }
 
         //
-        if(android.os.Build.VERSION.SDK_INT>=Build.VERSION_CODES.O
-                && !hasUsageStatsPermission(mContext)){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                && !hasUsageStatsPermission(mContext)) {
             refreshData();
-        }else {
+        } else {
             for (int i = 0; i < apps.size(); i++) {
                 AppInfoBean appInfoBean = apps.get(i);
                 boolean isLast = i == apps.size() - 1 ? true : false;
@@ -137,7 +130,7 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
         StorageManager storageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
         //获取所有应用的StorageVolume列表
         List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
-        UUID uuid=null;
+        UUID uuid = null;
         for (StorageVolume item : storageVolumes) {
             String uuidStr = item.getUuid();
 
@@ -166,6 +159,7 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
         }
 
     }
+
     /**
      * 根据应用包名获取对应uid
      */
@@ -185,7 +179,7 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
      * @return
      */
     public void refreshData() {
-        if(apps.size()==packageSize.size()){
+        if (apps.size() == packageSize.size()) {
             mView.updateData(apps);
             for (int i = 0; i < apps.size(); i++) {
                 AppInfoBean appInfoBean = apps.get(i);
