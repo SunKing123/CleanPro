@@ -35,6 +35,7 @@
                 android:src="@mipmap/back"/>
 
             <TextView
+                android:id="@+id/tv_title_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tool_phone_thin"
@@ -110,6 +111,7 @@
         android:id="@+id/ll_video_file"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_57dp"
+        android:visibility="gone"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:background="@color/white"
@@ -147,6 +149,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:background="@color/white"
+        android:visibility="gone"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
 

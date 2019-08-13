@@ -10,6 +10,8 @@
     <ScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
+        android:fadingEdgeLength="@dimen/dimen_0dp"
+        android:overScrollMode="never"
         android:layout_height="wrap_content"
         android:scrollbars="none">
 
@@ -175,6 +177,18 @@
                     android:layout_marginTop="@dimen/dimen_20dp"
                     android:text="悟空清理"
                     android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/iv_permission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen_5dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/dimen_15dp"
+                    android:layout_marginRight="@dimen/dimen_10dp"
+                    android:textColor="@color/white"
+                    android:src="@mipmap/icon_permission"
                     android:textSize="20sp" />
 
                 <TextView
