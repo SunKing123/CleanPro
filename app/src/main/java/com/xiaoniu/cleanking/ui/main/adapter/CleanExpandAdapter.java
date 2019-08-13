@@ -120,7 +120,12 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                             mOnItemSelectListener.onItemChecked(false, entity3);
                         }
                     } else {
-                        showConfirmDialog(entity3);
+                        entity3.setChecked(true);
+                        notifyDataSetChanged();
+                        if (mOnItemSelectListener != null) {
+                            mOnItemSelectListener.onItemChecked(true, entity3);
+                        }
+//                        showConfirmDialog(entity3);
                     }
                 });
                 break;
@@ -152,8 +157,8 @@ public class CleanExpandAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
         mTextCancel.setOnClickListener(v -> dialog.dismiss());
         mTextConfirm.setOnClickListener(v -> {
             entity.setChecked(true);
-            dialog.dismiss();
             notifyDataSetChanged();
+            dialog.dismiss();
             if (mOnItemSelectListener != null) {
                 mOnItemSelectListener.onItemChecked(true, entity);
             }

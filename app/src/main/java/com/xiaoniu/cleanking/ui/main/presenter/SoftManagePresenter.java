@@ -5,6 +5,7 @@ import android.app.AppOpsManager;
 import android.app.usage.StorageStats;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageInfo;
@@ -21,6 +22,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 
 import java.io.IOException;
@@ -68,13 +70,12 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
      * 存储大小对应的是 packname/files;
      */
     public void getApplicaionInfo() {
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
         List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
-
 
         for (int i = 0; i < packages.size(); i++) {
             PackageInfo packageInfo = packages.get(i);
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-
 
                 AppInfoBean appInfoBean = new AppInfoBean();
                 appInfoBean.name = packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString();
@@ -82,7 +83,7 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking"))
+                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking") || !packageInfo.packageName.contains(sp.getString(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME,null)));
                     apps.add(appInfoBean);
             }
         }
