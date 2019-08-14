@@ -31,9 +31,10 @@
                 android:src="@mipmap/icon_left_arrow_white" />
 
             <TextView
+                android:id="@+id/tv_title_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="手机瘦身"
+                android:text="@string/tool_phone_thin"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_18sp" />
@@ -87,6 +88,7 @@
         android:id="@+id/ll_video_file"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_60dp"
+        android:visibility="gone"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -117,6 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_64dp"
         android:background="@color/white"
+        android:visibility="gone"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dimen_16dp"
@@ -154,10 +157,11 @@
     </LinearLayout>
 
     <LinearLayout
-
+        android:id="@+id/ll_soft_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_60dp"
         android:layout_marginTop="@dimen/dimen_12dp"
+        android:visibility="gone"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -186,6 +190,7 @@
         android:id="@+id/ll_soft"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_64dp"
+        android:visibility="gone"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"

@@ -150,7 +150,6 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             for (AppInfoBean appInfoBean : lists) {
                 if (appInfoBean.isSelect) {
                     uninstallApk(getBaseContext(), appInfoBean.packageName);
-
                 }
             }
         }

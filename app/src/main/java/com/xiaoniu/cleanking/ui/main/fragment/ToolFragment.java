@@ -180,8 +180,10 @@ public class ToolFragment extends SimpleFragment {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.text_phone_thin) {
-            startActivity(new Intent(getContext(), PhoneThinActivity.class));
-            StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "手机瘦身点击", "tool_page", "clean_up_toolbox_page");
+            Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
+            intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,getString(R.string.tool_phone_thin));
+            startActivity(intent);
+            StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", "tool_page", "clean_up_toolbox_page");
         }
     }
 

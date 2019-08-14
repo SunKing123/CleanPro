@@ -1,11 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -48,6 +51,7 @@ import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +77,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private FragmentManager mManager = getSupportFragmentManager();
     private String mUrl;
     private String mTitle;
+    private ShoppingMallFragment upQuotaFragment;
+
     /**
      * 版本更新代理
      */
@@ -101,6 +107,20 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Inject
     NoClearSPHelper mSPHelper;
 
+    MyHandler mHandler = new MyHandler(this);
+
+    class MyHandler extends Handler{
+        WeakReference<Activity> mActivity;
+        public MyHandler(Activity con){
+            this.mActivity = new WeakReference<>(con);
+        }
+        public void handleMessage(android.os.Message msg) {
+            if(msg.what == 1 ){
+                //TODO 头条显示红点推荐
+
+            }
+        }
+    }
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -108,6 +128,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
+        mHandler.sendEmptyMessageAtTime(1, 10 * 60 * 1000);
 //        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         //检查是否有补丁
         mPresenter.queryPatch();
@@ -137,7 +158,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
                     .addItem(new BottomBarTab(this, R.mipmap.tool_normal, getString(R.string.tool)))
-                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "头条"))
+                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, getString(R.string.top)))
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         }
 
@@ -153,6 +174,14 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onTabSelected(int position, int prePosition) {
                 showHideFragment(position, prePosition);
+                upQuotaFragment.getWebView().reload();
+                //清空所有的消息
+                mHandler.removeCallbacksAndMessages(null);
+                //如果没有选中头条，开始10分记时
+                if (position != 2){
+                    mHandler.sendEmptyMessageAtTime(1, 10 * 60 * 1000);
+
+                }
             }
 
             @Override
@@ -262,7 +291,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
-        ShoppingMallFragment upQuotaFragment = ShoppingMallFragment.getIntance(url);
+        upQuotaFragment = ShoppingMallFragment.getIntance(url);
         mFragments.add(mainFragment);
 
         mFragments.add(toolFragment);

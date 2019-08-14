@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -222,7 +223,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         String auditSwitch = SPUtil.getString(getActivity(), AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mIvNews.setVisibility(GONE);
-        }else {
+        } else {
             mIvNews.setVisibility(VISIBLE);
         }
 
@@ -257,7 +258,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //一键加速
         Bundle bundle = new Bundle();
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
-        startActivity(PhoneAccessActivity.class,bundle);
+        startActivity(PhoneAccessActivity.class, bundle);
     }
 
     @OnClick(R.id.line_ql)
@@ -272,14 +273,20 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void ViewNewsClick() {
         //新闻点击
         Bundle bundle = new Bundle();
-        bundle.putString(Constant.URL,SHOPPING_MALL);
-        startActivity(RouteConstants.NEWS_LOAD_ACTIVITY,bundle);
+        bundle.putString(Constant.URL, SHOPPING_MALL);
+        startActivity(RouteConstants.NEWS_LOAD_ACTIVITY, bundle);
     }
 
     @OnClick(R.id.view_phone_thin)
     public void ViewPhoneThinClick() {
-       //手机瘦身
-        startActivity(new Intent(getActivity(), PhoneThinActivity.class));
+        //软件管理
+        Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
+        intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_soft_manager));
+        startActivity(intent);
+    }
+    @OnClick(R.id.iv_permission)
+    public void onClick(){
+        startActivity(new Intent(getContext(), PermissionActivity.class));
     }
 
     @OnClick(R.id.btn_ljql)
@@ -340,6 +347,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
         }
     }
+
     @OnClick(R.id.line_wx)
     public void mClickWx() {
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
@@ -349,6 +357,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }
         startActivity(WechatCleanHomeActivity.class);
     }
+
     @OnClick(R.id.line_qq)
     public void mClickQq() {
         StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
@@ -362,6 +371,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             QQUtil.fileList.clear();
         startActivity(QQCleanHomeActivity.class);
     }
+
     @OnClick(R.id.line_jw)
     public void mClickJw() {
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
@@ -440,7 +450,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             restoreLayout();
             //清理完成后通知 文件数据库同步(陈浪)
             EventBus.getDefault().post(new ScanFileEvent());
-
+            //保存清理次数
+            PreferenceUtil.saveCleanNum();
             preCleanTime = System.currentTimeMillis();
         }
     }
@@ -623,7 +634,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);
-        mWebView.addJavascriptInterface(new JavaInterface(getActivity(),mWebView), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(getActivity(), mWebView), "cleanPage");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -803,6 +814,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     /**
      * 获取结束的lottieView
+     *
      * @return
      */
     public LottieAnimationView getFinishAnimator() {

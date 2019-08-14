@@ -7,26 +7,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -58,10 +53,16 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     TextView tv_use_space;
     private long mTotalSize;
     private ObjectAnimator objectAnimatorScanIng;
-
+    @BindView(R.id.ll_video_file)
+    LinearLayout mLlVideoFile;
+    @BindView(R.id.ll_system_space)
+    LinearLayout mLlSystemSpace;
     //是否在扫描中状态
     private ObjectAnimator roundAnim1;
     private ObjectAnimator roundAnim3;
+    private String mTitleName;
+    @BindView(R.id.tv_title_name)
+    TextView mTvTitleName;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -81,7 +82,17 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     protected void initView() {
         ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
         mTotalSize = mPresenter.queryStorageSize(mPath);
-
+        Intent intent = getIntent();
+        if(intent != null){
+            mTitleName = intent.getStringExtra(SpCacheConfig.ITEM_TITLE_NAME);
+            mTvTitleName.setText(mTitleName);
+            if (getString(R.string.tool_phone_thin).equals(mTitleName)){
+                //视频专清
+                mLlVideoFile.setVisibility(View.VISIBLE);
+            }else {
+                mLlSystemSpace.setVisibility(View.VISIBLE);
+            }
+        }
 
         objectAnimatorScanIng = mPresenter.setScaningAnim(mIvScanFrame);
         setScanStatus(true);
@@ -203,6 +214,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
             mImgProgressSystem.postDelayed(() -> {
                 Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
                 intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
+                intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,mTitleName);
                 startActivity(intent);
                 finish();
             }, 500);

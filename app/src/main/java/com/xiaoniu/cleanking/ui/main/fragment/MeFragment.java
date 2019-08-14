@@ -231,6 +231,10 @@ public class MeFragment extends SimpleFragment {
                     StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", pageName, "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
                     StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", pageName, "Sharing_page");
+                } else if (share_media == SHARE_MEDIA.QZONE) {
+                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", pageName, "Sharing_page");
+                } else if (SHARE_MEDIA.QQ == share_media) {
+                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", pageName, "Sharing_page");
                 }
             }
 

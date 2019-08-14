@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -10,27 +9,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.tbruyelle.rxpermissions2.Permission;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinResultPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 
 /**
  * 手机瘦身结果页
@@ -48,6 +40,17 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     @BindView(R.id.txt_soft_size)
     TextView mTxtSoftSize;//软件大小
     private String mSize;
+    private String mTitleName;
+    @BindView(R.id.ll_video_file)
+    LinearLayout mLlVideoFile;
+    @BindView(R.id.ll_video)
+    LinearLayout mLlVideo;
+    @BindView(R.id.ll_soft_title)
+    LinearLayout mLlSoftTitle;
+    @BindView(R.id.ll_soft)
+    LinearLayout mLlSoft;
+    @BindView(R.id.tv_title_name)
+    TextView mTvTitleName;
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -65,9 +68,21 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
 
     @Override
     protected void initView() {
-        Bundle bundle=getIntent().getExtras();
-        if(bundle!=null){
-            mSize = bundle.getString(PhoneThinActivity.PARAMS_SPACE_SIZE_AVAILABLE,"0");
+        Intent intent = getIntent();
+        if(intent != null){
+            mSize = intent.getStringExtra(PhoneThinActivity.PARAMS_SPACE_SIZE_AVAILABLE);
+            mTitleName = intent.getStringExtra(SpCacheConfig.ITEM_TITLE_NAME);
+            mTvTitleName.setText(mTitleName);
+        }
+
+        if (getString(R.string.tool_phone_thin).equals(mTitleName)){
+            //视频专清
+            mLlVideoFile.setVisibility(View.VISIBLE);
+            mLlVideo.setVisibility(View.VISIBLE);
+        }else {
+            //软件管理
+            mLlSoftTitle.setVisibility(View.VISIBLE);
+            mLlSoft.setVisibility(View.VISIBLE);
         }
        setData();
         ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);

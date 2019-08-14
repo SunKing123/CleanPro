@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 
@@ -27,6 +28,12 @@ public class WechatCleanedResultActivity extends SimpleActivity {
 
     @Override
     protected void initView() {
+        Intent intent = getIntent();
+        if (intent != null){
+           String title = intent.getStringExtra("title");
+           mCleanAnimView.setTitle(title);
+        }
+
         CountEntity countEntity = CleanUtil.formatShortFileSize(0);
         startCleanAnim(countEntity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -42,7 +49,6 @@ public class WechatCleanedResultActivity extends SimpleActivity {
      * @param countEntity
      */
     public void startCleanAnim(CountEntity countEntity) {
-        mCleanAnimView.setTitle(getIntent().getExtras().getString("title"));
         mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DeviceUtils.dip2px(49), DeviceUtils.dip2px(49));
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
