@@ -26,6 +26,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import java.util.logging.Handler;
 
@@ -440,6 +441,9 @@ public class AccessAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                //保存清理完成次数
+                PreferenceUtil.saveCleanNum();
+
                 mAnimationView.setVisibility(View.GONE);
                 mValueAnimator.start();
                 if (listener != null)

@@ -125,7 +125,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     TextView mTextNumberCool;
     @BindView(R.id.layout_cool_bottom)
     ImageView mLayoutCoolBottom;
-
+    @BindView(R.id.tv_cooling_show)
+    TextView mTvCooling;
     private ProcessIconAdapter mProcessIconAdapter;
     private HardwareInfo mHardwareInfo;
     public static ArrayList<FirstJunkInfo> mRunningProcess;
@@ -420,7 +421,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             //页面关闭后，不进行动画
             return;
         }
-        mLottieAnimationView.setVisibility(GONE);
+        mTvCooling.setVisibility(GONE);
         //TODO 添加清理完成动画
         startFinishAnimator();
     }
@@ -664,6 +665,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                //保存清理完成次数
+                PreferenceUtil.saveCleanNum();
+
                 mAnimationView.setVisibility(View.GONE);
                 int bottom = mLayoutTitleBar.getBottom();
                 mLayoutCleanFinish.setVisibility(VISIBLE);
