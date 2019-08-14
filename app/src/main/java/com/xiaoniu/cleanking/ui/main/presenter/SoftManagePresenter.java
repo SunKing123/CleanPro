@@ -28,7 +28,9 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -83,7 +85,8 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking") || !packageInfo.packageName.contains(sp.getString(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME,null)));
+                Set<String> whitePkgs =  sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<String>());
+                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking") || !whitePkgs.contains(packageInfo.packageName));
                     apps.add(appInfoBean);
             }
         }

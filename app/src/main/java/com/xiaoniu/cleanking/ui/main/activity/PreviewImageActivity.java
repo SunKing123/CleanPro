@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,8 +18,6 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImagePreviewAdapter;
 import com.xiaoniu.cleanking.ui.main.adapter.PreviewImagePagerAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
-import com.xiaoniu.cleanking.ui.main.bean.Image;
-import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.ImagePreviewPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -28,13 +25,10 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-
-import static com.xiaoniu.cleanking.utils.ExtraConstant.PREVIEW_IMAGE_SELECT;
 
 /**
  * 预览图片
@@ -124,7 +118,10 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
             public void onClick(View v) {
                 tvSelectImage.setSelected(!tvSelectImage.isSelected());
                 tvSelectImage.setBackgroundResource(tvSelectImage.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-               adapter.getListImage().get(selectPos).setIsSelect(tvSelectImage.isSelected());
+                if (selectPos > adapter.getListImage().size()-1) {
+                    return;
+                }
+                adapter.getListImage().get(selectPos).setIsSelect(tvSelectImage.isSelected());
                 if (adapter != null)
                     adapter.setSelectPosition(selectPos);
                 computeDeleteSize();
