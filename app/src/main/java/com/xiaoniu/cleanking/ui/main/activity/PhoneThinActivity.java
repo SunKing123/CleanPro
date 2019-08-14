@@ -146,7 +146,11 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                     mCurrentTime = System.currentTimeMillis();
                     Log.i("test","size="+ FileSizeUtils.formatFileSize(size)+",totalSize="+FileSizeUtils.formatFileSize(mTotalSize));
 
-                    mTxtSpaceSize.setText(mPresenter.accuracy(size+mSizeL, mTotalSize, 0));
+                    if (getString(R.string.tool_phone_thin).equals(mTitleName)){
+                        mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
+                    }else {
+                        mTxtSpaceSize.setText(mPresenter.accuracy(mSizeL, mTotalSize, 0));
+                    }
                 }
             }
         }
