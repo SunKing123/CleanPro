@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -535,9 +533,12 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
     public void updateImgCamera(List<FileTitleEntity> lists){
 
         mAdapter.modifyData(lists);
-        //默认展开最后一条
-        mListView.expandGroup(lists.size()-1);
-        mListView.setSelectedGroup(0);
+        if (lists.size() > 0) {
+            //默认展开最后一条
+            mListView.expandGroup(lists.size()-1);
+            mListView.setSelectedGroup(0);
+        }
+
         if(totalFileSizeL(lists)==0){
             mLLEmptyView.setVisibility(View.VISIBLE);
         }

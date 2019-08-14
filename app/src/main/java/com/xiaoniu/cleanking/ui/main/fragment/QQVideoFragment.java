@@ -24,13 +24,11 @@ import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.event.WXImgCameraEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QQVideoPresenter;
-import com.xiaoniu.cleanking.ui.main.presenter.WXVideoCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
@@ -565,8 +563,10 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
-        mListView.expandGroup(lists.size()-1);
-        mListView.setSelectedGroup(0);
+        if (lists.size() > 0) {
+            mListView.expandGroup(lists.size() - 1);
+            mListView.setSelectedGroup(0);
+        }
         if(totalFileSizeL(lists)==0){
             mTxtEmptyTile.setText("暂无视频~");
             mEmptyView.setVisibility(View.VISIBLE);

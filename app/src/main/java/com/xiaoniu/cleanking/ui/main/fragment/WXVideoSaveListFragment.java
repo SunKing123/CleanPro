@@ -20,7 +20,6 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
-import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.adapter.WXVideoChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
@@ -32,7 +31,6 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
-import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.WXVideoCleanSaveListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -558,8 +556,9 @@ public class WXVideoSaveListFragment extends BaseFragment<WXVideoCleanSaveListPr
     public void updateImgSaveList(List<FileTitleEntity> lists) {
 
         mAdapter.modifyData(lists);
-        mListView.setSelectedGroup(0);
-
+        if (lists.size() > 0) {
+            mListView.setSelectedGroup(0);
+        }
         if(totalFileSize(lists)==0){
             mTxtTitle.setText("暂无视频");
             mEmptyView.setVisibility(View.VISIBLE);

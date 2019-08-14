@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -513,9 +512,12 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
 
         mAdapter.modifyData(lists);
-        //默认展开最后一条
-        mListView.expandGroup(lists.size()-1);
-        mListView.setSelectedGroup(0);
+        if (lists.size() > 0) {
+            //默认展开最后一条
+            mListView.expandGroup(lists.size()-1);
+            mListView.setSelectedGroup(0);
+        }
+
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
         }

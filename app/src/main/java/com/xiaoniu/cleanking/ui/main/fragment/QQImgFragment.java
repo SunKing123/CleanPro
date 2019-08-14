@@ -24,12 +24,10 @@ import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.event.WXImgCameraEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CommonLoadingDialogFragment;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QQImgPresenter;
-import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
@@ -41,7 +39,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -665,8 +662,10 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         }
 
         mAdapter.modifyData(fileCopyEntitys);
-        mListView.expandGroup(fileCopyEntitys.size()-1);
-        mListView.setSelectedGroup(0);
+        if (fileCopyEntitys.size() > 0) {
+            mListView.expandGroup(fileCopyEntitys.size()-1);
+            mListView.setSelectedGroup(0);
+        }
 
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);

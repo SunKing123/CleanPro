@@ -3,32 +3,24 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
-import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.adapter.WXImgChatAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
@@ -41,7 +33,6 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanImgPresenter;
-
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
@@ -50,13 +41,10 @@ import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import se.emilsjolander.stickylistheaders.ExpandableStickyListHeadersListView;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * 微信聊天图片清理
@@ -725,9 +713,12 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         }
         mAdapter.modifyData(fileCopyEntitys);
 
-        //默认展开最后一条
-        mListView.expandGroup(fileCopyEntitys.size()-1);
-        mListView.setSelectedGroup(0);
+        if (fileCopyEntitys.size() > 0) {
+            //默认展开最后一条
+            mListView.expandGroup(fileCopyEntitys.size()-1);
+            mListView.setSelectedGroup(0);
+        }
+
         if(totalFileSizeL(lists)==0){
             mEmptyView.setVisibility(View.VISIBLE);
         }

@@ -572,8 +572,11 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
             mLoadingProgress.dismissAllowingStateLoss();
         }
         mAdapter.modifyData(lists);
-        mListView.expandGroup(lists.size()-1);
-        mListView.setSelectedGroup(0);
+        if (lists.size() > 0) {
+            mListView.expandGroup(lists.size()-1);
+            mListView.setSelectedGroup(0);
+        }
+
         if(totalFileSize(lists)==0){
             mLLEmptyView.setVisibility(View.VISIBLE);
         }

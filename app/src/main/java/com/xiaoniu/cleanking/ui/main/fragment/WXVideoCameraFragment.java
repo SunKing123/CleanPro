@@ -32,7 +32,6 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelFileSuccessFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
-import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.WXVideoCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -568,7 +567,9 @@ public class WXVideoCameraFragment extends BaseFragment<WXVideoCameraPresenter> 
 
     public void updateImgCamera(List<FileTitleEntity> lists){
         mAdapter.modifyData(lists);
-        mListView.setSelectedGroup(0);
+        if (lists.size() > 0) {
+            mListView.setSelectedGroup(0);
+        }
 
         if(totalFileSize(lists)==0){
             mTxtTitle.setText("暂无视频");

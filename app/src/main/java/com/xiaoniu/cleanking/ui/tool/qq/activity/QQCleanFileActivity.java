@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.adapter.QQCleanFileAdapter;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanFilePresenter;
@@ -203,6 +202,19 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
 
         }
 
+        /*隐藏数据为0的分组标题*/
+        if (listDataToday.size() <= 0) {
+            consToday.setVisibility(View.GONE);
+        }
+        if (listDataYestoday.size() <= 0) {
+            consYestoday.setVisibility(View.GONE);
+        }
+        if (listDataInMonth.size() <= 0) {
+            consMonth.setVisibility(View.GONE);
+        }
+        if (listDataInHalfYear.size() <= 0) {
+            consHalfyear.setVisibility(View.GONE);
+        }
 
         fileAdapterToday = new QQCleanFileAdapter(QQCleanFileActivity.this, listDataToday);
         fileAdapterYestoday = new QQCleanFileAdapter(QQCleanFileActivity.this, listDataYestoday);
