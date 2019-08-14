@@ -2,12 +2,11 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -109,11 +108,14 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                         , MediaStore.Images.Media.DATA
                         , MediaStore.Images.Media.SIZE
                         , MediaStore.Images.Media.DISPLAY_NAME};
-                Cursor mCursor = mActivity.getContentResolver().query(mImageUri,
-                        projImage,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
-                        new String[]{"image/jpeg", "image/png"},
-                        MediaStore.Images.Media.DATE_MODIFIED + " desc");
+                Cursor mCursor = null;
+                try {
+                    mCursor = mActivity.getContentResolver().query(mImageUri,
+                            projImage,
+                            MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
+                            new String[]{"image/jpeg", "image/png"},
+                            MediaStore.Images.Media.DATE_MODIFIED + " desc");
+                } catch (Throwable t) {}
 
                 if (mCursor != null) {
                     while (mCursor.moveToNext()) {

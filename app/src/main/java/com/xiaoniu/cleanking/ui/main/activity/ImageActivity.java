@@ -10,28 +10,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.db.FileDBManager;
-import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -176,6 +168,9 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
      */
     public void getImageList() {
         List<FileEntity> listImages = CleanAllFileScanUtil.clean_image_list;
+        if (listImages == null) {
+            return;
+        }
         imageAdapter = new ImageShowAdapter(ImageActivity.this, listImages, listSelect);
         recycle_view.setLayoutManager(new GridLayoutManager(ImageActivity.this, 3));
         recycle_view.setAdapter(imageAdapter);

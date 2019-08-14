@@ -37,7 +37,6 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
