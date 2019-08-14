@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -30,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -64,6 +66,8 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.view.View.VISIBLE;
 
 /**
  * 手机加速--一键清理内存页面
@@ -102,6 +106,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     AppBarLayout mAppBarLayout;
     @BindView(R.id.tv_title_name)
     TextView mTvTitleName;
+    @BindView(R.id.view_lottie)
+    LottieAnimationView mAnimationView;
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -278,15 +284,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                //动画结束时
-                setStatusBar(R.color.color_06C581);
-                if (viewt == null || line_title == null) return;
-                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                setCleanedView(0);
-                rel_bottom.setVisibility(View.GONE);
-                mAppBarLayout.setExpanded(true);
-                icon_more.setVisibility(View.INVISIBLE);
+                mAppBarLayout.setExpanded(false);
+                //显示成功布局
+                startFinishAnimator();
             }
 
             @Override
@@ -296,6 +296,43 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
+    public void startFinishAnimator() {
+        mAnimationView.setVisibility(View.GONE);
+        mAnimationView.useHardwareAcceleration();
+        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("data_clean_finish.json");
+        mAnimationView.playAnimation();
+        mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                //动画结束时
+                setStatusBar(R.color.color_06C581);
+                if (viewt == null || line_title == null) return;
+                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                setCleanedView(0);
+                rel_bottom.setVisibility(View.GONE);
+                mAppBarLayout.setExpanded(true);
+                icon_more.setVisibility(View.INVISIBLE);
+                mAnimationView.cancelAnimation();
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
     @Override
     protected void onResume() {
         super.onResume();
