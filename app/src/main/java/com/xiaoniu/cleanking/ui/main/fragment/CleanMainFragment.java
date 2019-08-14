@@ -144,6 +144,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LottieAnimationView mLottieStarView;
     @BindView(R.id.view_news)
     ImageView mIvNews;
+    @BindView(R.id.fl_anim)
+    FrameLayout mFlAnim;
     /**
      * 清理的分类列表
      */
@@ -472,7 +474,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mLayoutScan.setVisibility(VISIBLE);
         mLayoutCount.setVisibility(VISIBLE);
         mAnimationView.setVisibility(VISIBLE);
-        mFinishAnimator.setVisibility(View.INVISIBLE);
+        mFlAnim.setVisibility(View.INVISIBLE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DeviceUtils.dip2px(460);
@@ -819,5 +821,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public LottieAnimationView getFinishAnimator() {
         return mFinishAnimator;
+    }
+
+    public FrameLayout getmFlAnim() {
+        return mFlAnim;
     }
 }
