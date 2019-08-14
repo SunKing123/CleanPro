@@ -109,6 +109,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     RelativeLayout mLayoutTitleContent;
     @BindView(R.id.view_lottie_cool)
     LottieAnimationView mLottieAnimationView;
+    @BindView(R.id.view_lottie_cool_finish)
+    LottieAnimationView mAnimationView;
     @BindView(R.id.layout_clean_finish)
     ConstraintLayout mLayoutCleanFinish;
     @BindView(R.id.web_view)
@@ -328,7 +330,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                //TODO
                 if (mLayoutAnimCool != null) {
                     mLayoutAnimCool.setVisibility(GONE);
                 }
@@ -419,27 +420,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             //页面关闭后，不进行动画
             return;
         }
-
-        int bottom = mLayoutTitleBar.getBottom();
-        mLayoutCleanFinish.setVisibility(VISIBLE);
-        int startHeight = ScreenUtils.getFullActivityHeight();
-        ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
-        anim.setDuration(500);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
-        anim.addUpdateListener(animation -> {
-            rlp.topMargin = (int) animation.getAnimatedValue();
-            if (mLayoutCleanFinish != null) {
-                mLayoutCleanFinish.setLayoutParams(rlp);
-            }
-        });
-        anim.start();
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-            }
-        });
+        mLottieAnimationView.setVisibility(GONE);
+        //TODO 添加清理完成动画
+        startFinishAnimator();
     }
 
     public void initWebView() {
@@ -666,4 +649,47 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             mPresenter.getHardwareInfo(true);
         }
     }
+
+    public void startFinishAnimator() {
+        mAnimationView.setVisibility(VISIBLE);
+        mAnimationView.useHardwareAcceleration();
+        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("data_clean_finish.json");
+        mAnimationView.playAnimation();
+        mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mAnimationView.setVisibility(View.GONE);
+                int bottom = mLayoutTitleBar.getBottom();
+                mLayoutCleanFinish.setVisibility(VISIBLE);
+                int startHeight = ScreenUtils.getFullActivityHeight();
+                ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
+                anim.setDuration(500);
+                anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
+                anim.addUpdateListener(valueAnimator -> {
+                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
+                    if (mLayoutCleanFinish != null)
+                        mLayoutCleanFinish.setLayoutParams(rlp);
+                });
+                anim.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
 }
