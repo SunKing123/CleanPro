@@ -34,4 +34,8 @@ public class SpCacheConfig {
     public static final String ITEM_TITLE_NAME = "title_name";
     //WebView URL
     public static final String WEB_URL = "web_url";
+    //分享次数
+    public static final String SHARE_NUM = "share_num";
+    //清理次数
+    public static final String CLEAR_NUM = "clean_num";
 }

@@ -106,8 +106,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     AppBarLayout mAppBarLayout;
     @BindView(R.id.tv_title_name)
     TextView mTvTitleName;
-    @BindView(R.id.view_lottie)
-    LottieAnimationView mAnimationView;
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -284,9 +282,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                mAppBarLayout.setExpanded(false);
-                //显示成功布局
-                startFinishAnimator();
+                setStatusBar(R.color.color_06C581);
+                if (viewt == null || line_title == null) return;
+                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                //动画结束时
+                setCleanedView(0);
+                rel_bottom.setVisibility(View.GONE);
+                mAppBarLayout.setExpanded(true);
+                icon_more.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -296,43 +300,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
-    public void startFinishAnimator() {
-        mAnimationView.setVisibility(View.GONE);
-        mAnimationView.useHardwareAcceleration();
-        mAnimationView.setImageAssetsFolder("images");
-        mAnimationView.setAnimation("data_clean_finish.json");
-        mAnimationView.playAnimation();
-        mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                //动画结束时
-                setStatusBar(R.color.color_06C581);
-                if (viewt == null || line_title == null) return;
-                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                setCleanedView(0);
-                rel_bottom.setVisibility(View.GONE);
-                mAppBarLayout.setExpanded(true);
-                icon_more.setVisibility(View.INVISIBLE);
-                mAnimationView.cancelAnimation();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-    }
     @Override
     protected void onResume() {
         super.onResume();

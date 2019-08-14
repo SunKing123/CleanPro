@@ -211,12 +211,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     private void initCoolAnimation(int phoneTemperature) {
         mProgressBar.setArcBgColor(getResources().getColor(R.color.color_progress_bg));
         mProgressBar.setProgressColor(getResources().getColor(R.color.white));
-        mProgressBar.setUpdateListener(new OnProgressUpdateListener() {
-            @Override
-            public void onProgressUpdate(float progress) {
-                if (mImagePoint != null) {
-                    mImagePoint.setRotation(progress);
-                }
+        mProgressBar.setUpdateListener(progress -> {
+            if (mImagePoint != null) {
+                mImagePoint.setRotation(progress);
             }
         });
         mProgressBar.setProgress(phoneTemperature);
@@ -331,6 +328,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                //TODO
                 if (mLayoutAnimCool != null) {
                     mLayoutAnimCool.setVisibility(GONE);
                 }
@@ -397,6 +395,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 startAnimation();
+
                 new Handler().postDelayed(() -> setViewFinishTrans(), 3500);
             }
         });

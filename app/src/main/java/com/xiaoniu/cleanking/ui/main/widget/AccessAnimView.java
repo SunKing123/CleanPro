@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -55,7 +56,8 @@ public class AccessAnimView extends RelativeLayout {
     int sizeMb;
     String strGb;
     onAnimEndListener listener;
-
+    LottieAnimationView mAnimationView;
+    ValueAnimator mValueAnimator;
     public void setListener(onAnimEndListener listener) {
         this.listener = listener;
     }
@@ -104,6 +106,7 @@ public class AccessAnimView extends RelativeLayout {
         iv_yu7 = v.findViewById(R.id.iv_yu7);
         iv_yu8 = v.findViewById(R.id.iv_yu8);
         tv_title_name = v.findViewById(R.id.tv_title_name);
+        mAnimationView = v.findViewById(R.id.view_lottie);
     }
 
     public void setData(int sizeMb, String strGb) {
@@ -258,14 +261,7 @@ public class AccessAnimView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                if (listener != null)
-                    listener.onAnimEnd();
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setViewTrans();
-                    }
-                }, 200);
+                new android.os.Handler().postDelayed(() -> setViewTrans(), 200);
             }
         });
 
@@ -345,27 +341,31 @@ public class AccessAnimView extends RelativeLayout {
 
         int endHeight = DeviceUtils.dip2px(150);
         int startHeight = DeviceUtils.getScreenHeight();
-        ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
-        anim.setDuration(500);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        mValueAnimator = ValueAnimator.ofInt(startHeight, endHeight);
+        mValueAnimator.setDuration(500);
+        mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (LayoutParams) viewt.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                rlp.height = currentValue;
-                viewt.setLayoutParams(rlp);
-            }
+        mValueAnimator.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.height = currentValue;
+            viewt.setLayoutParams(rlp);
         });
-        anim.start();
-        anim.addListener(new AnimatorListenerAdapter() {
+
+        mValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 setVisibility(GONE);
             }
         });
-        createFadeAnimator();
+        ObjectAnimator animator = createFadeAnimator();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                startFinishAnimator();
+            }
+        });
     }
 
     /**
@@ -424,6 +424,38 @@ public class AccessAnimView extends RelativeLayout {
         iv_yu6.setVisibility(GONE);
         iv_yu7.setVisibility(GONE);
         iv_yu8.setVisibility(GONE);
+    }
+
+    public void startFinishAnimator() {
+        mAnimationView.setVisibility(VISIBLE);
+        mAnimationView.useHardwareAcceleration();
+        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("data_clean_finish.json");
+        mAnimationView.playAnimation();
+        mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mAnimationView.setVisibility(View.GONE);
+                mValueAnimator.start();
+                if (listener != null)
+                    listener.onAnimEnd();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 }
 

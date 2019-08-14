@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,6 +109,8 @@ public class JavaInterface {
      */
     @JavascriptInterface
     public void shareLink(String picurl, String linkurl, String title, String content) {
+        //保存分享次数
+        PreferenceUtil.saveShareNum();
         //分享链接
         UMWeb web = new UMWeb(linkurl);
         //标题

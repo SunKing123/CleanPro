@@ -450,7 +450,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             restoreLayout();
             //清理完成后通知 文件数据库同步(陈浪)
             EventBus.getDefault().post(new ScanFileEvent());
-
+            //保存清理次数
+            PreferenceUtil.saveCleanNum();
             preCleanTime = System.currentTimeMillis();
         }
     }

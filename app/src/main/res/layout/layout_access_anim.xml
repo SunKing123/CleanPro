@@ -134,4 +134,11 @@
             android:src="@mipmap/hj_bottom1" />
     </LinearLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/view_lottie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
+
 </RelativeLayout>

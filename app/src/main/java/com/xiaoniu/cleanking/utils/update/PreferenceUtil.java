@@ -14,6 +14,10 @@ public class PreferenceUtil {
     //获取WebView URL
     public static String getWebViewUrl(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        // 如果用户成功分享一次后使用悟空清理三次则完成页的分享领券页面永久切换到资讯页面；如果用户没有分享但使用悟空清理超过20次则完成页的分享领券页面永久切换到资讯页面 开发中
+        if (!getClearNum() || !getShareNum())
+            return ApiModule.Base_H5_Host + "?deviceId=" + AndroidUtil.getUdid();
+
         return sharedPreferences.getString(SpCacheConfig.WEB_URL,ApiModule.Base_H5_Host + "?deviceId=" + AndroidUtil.getUdid());
     }
 
@@ -22,6 +26,46 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SpCacheConfig.WEB_URL, url + "?deviceId=" + AndroidUtil.getUdid()).commit();
+    }
 
+    /**
+     * 保存分享次数  超过3次永久不能分享
+     * @return
+     */
+    public static boolean saveShareNum(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.SHARE_NUM, sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) + 1).commit();
+        return true;
+    }
+
+    /**
+     * 保存分享次数  超过3次永久不能分享
+     * @return
+     */
+    private static boolean getShareNum(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3)
+            return false;
+        return true;
+    }
+
+
+    //保存清理次数  清理20次后，永久显示资讯页面
+    public static boolean saveCleanNum(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAR_NUM, sharedPreferences.getInt(SpCacheConfig.CLEAR_NUM,0) + 1).commit();
+        return true;
+    }
+    /**
+     * 保存分享次数  超过3次永久不能分享
+     * @return
+     */
+    private static boolean getClearNum(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3)
+            return false;
+        return true;
     }
 }
