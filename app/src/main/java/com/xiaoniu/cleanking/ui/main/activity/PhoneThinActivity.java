@@ -162,20 +162,18 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
      * @param totalSize  应用总大小
      */
     public void updateData(int size,long totalSize){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mTxtSpaceSize == null)
-                    return;
+        runOnUiThread(() -> {
+            if (mTxtSpaceSize == null)
+                return;
 
-                mSizeL=size;
-                mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
+            mSizeL=size;
+            if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
                 mPresenter.scanFile(mPath);
+            }else {
+                onComplete();
             }
         });
     }
-
-
 
     @OnClick({R.id.img_back})
     public void onViewClick(View view) {
@@ -222,7 +220,6 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                 startActivity(intent);
                 finish();
             }, 500);
-
         }
     }
 }
