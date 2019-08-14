@@ -593,6 +593,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     public void startFinishAnimator(ImageView iconInner, ImageView iconOuter) {
         mView.getLottieView().setVisibility(View.GONE);
         LottieAnimationView finishAnimator = mView.getFinishAnimator();
+        mView.getmFlAnim().setVisibility(VISIBLE);
         finishAnimator.setVisibility(VISIBLE);
         iconOuter.setVisibility(View.GONE);
         iconInner.setVisibility(View.GONE);
