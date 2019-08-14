@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.just.agentweb.AgentWeb;
-import com.just.agentweb.IAgentWebSettings;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -121,8 +120,8 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 .ready()
                 .go(url);
         mAgentWeb.getWebCreator().getWebView().getSettings().setTextZoom(100);
-        mAgentWeb.getJsInterfaceHolder().addJavaObject("cleanPage",new Javascript());
-        mAgentWeb.getJsInterfaceHolder().addJavaObject("sharePage",new Javascript());
+        mAgentWeb.getJsInterfaceHolder().addJavaObject("cleanPage", new Javascript());
+        mAgentWeb.getJsInterfaceHolder().addJavaObject("sharePage", new Javascript());
     }
 
     private class CustomWebChromeClient extends com.just.agentweb.WebChromeClient {
@@ -152,11 +151,14 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             if (isFirst) {
                 getWebView().loadUrl(url);
                 isFirst = false;
+                hideBadgeView();
+            } else {
+                refreshList(10);
             }
-        }else {
+        } else {
             if (!isFirstPause) {
                 mAgentWeb.getWebLifeCycle().onPause();
-            }else {
+            } else {
                 isFirstPause = false;
             }
 
@@ -168,11 +170,25 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
     }
 
     public void refreshList(int num) {
-        WebView webView = getWebView();
-        if (webView != null) {
-            webView.loadUrl("javascript:refreshList(" + num + ")");
+        if (hideBadgeView()) {
+            WebView webView = getWebView();
+            if (webView != null) {
+                webView.loadUrl("javascript:refreshList(" + num + ")");
+            }
         }
     }
+
+    private boolean hideBadgeView() {
+        if (getActivity() instanceof MainActivity) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity.isBadgeViewShow()) {
+                mainActivity.hideBadgeView();
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -209,7 +225,7 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 firstTime = currentTimeMillis;
             } else {
                 SPUtil.setInt(getContext(), "turnask", 0);
-                if(getActivity() != null) {
+                if (getActivity() != null) {
                     getActivity().finish();
                 }
             }

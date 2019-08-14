@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.adapter.WechatCleanFileAdapter;
@@ -255,6 +253,19 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
         }
 
+        /*隐藏数据为0的分组标题*/
+        if (listDataToday.size() <= 0) {
+            consToday.setVisibility(View.GONE);
+        }
+        if (listDataYestoday.size() <= 0) {
+            consYestoday.setVisibility(View.GONE);
+        }
+        if (listDataInMonth.size() <= 0) {
+            consMonth.setVisibility(View.GONE);
+        }
+        if (listDataInHalfYear.size() <= 0) {
+            consHalfyear.setVisibility(View.GONE);
+        }
 
         fileAdapterToday = new WechatCleanFileAdapter(WechatCleanFileActivity.this, listDataToday);
         fileAdapterYestoday = new WechatCleanFileAdapter(WechatCleanFileActivity.this, listDataYestoday);

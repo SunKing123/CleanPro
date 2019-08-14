@@ -10,17 +10,13 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
-import com.xiaoniu.cleanking.ui.main.widget.GrideWXImgManagerWrapper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.http.POST;
 
 /**
  * Created by lang.chen on 2019/8/2
@@ -45,7 +41,18 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
     }
 
     public void modifyData(List<FileTitleEntity> lists) {
-        if (null != lists && lists.size() > 0) {
+        if (null == lists) {
+            return;
+        }
+        for (int i = 0; i < lists.size(); i++) {
+            FileTitleEntity entity = lists.get(i);
+            if (entity == null || entity.lists == null || entity.lists.size() <= 0) {
+                lists.remove(i);
+                i--;
+            }
+        }
+
+        if (lists.size() > 0) {
             mLists.addAll(lists);
             notifyDataSetChanged();
         }

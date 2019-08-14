@@ -4,22 +4,16 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
-import com.xiaoniu.cleanking.ui.main.widget.GrideWXImgManagerWrapper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
@@ -47,7 +41,19 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
     }
 
     public void modifyData(List<FileTitleEntity> lists) {
-        if (null != lists && lists.size() > 0) {
+        if (null == lists) {
+            return;
+        }
+
+        for (int i = 0; i < lists.size(); i++) {
+            FileTitleEntity entity = lists.get(i);
+            if (entity == null || entity.lists == null || entity.lists.size() <= 0) {
+                lists.remove(i);
+                i--;
+            }
+        }
+
+        if (lists.size() > 0) {
             mLists.addAll(lists);
             notifyDataSetChanged();
         }

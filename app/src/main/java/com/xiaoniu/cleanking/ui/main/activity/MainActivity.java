@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -78,7 +77,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private String mUrl;
     private String mTitle;
     private ShoppingMallFragment upQuotaFragment;
-
+    private static final long DEFAULT_REFRESH_TIME = 5*1000L;
     /**
      * 版本更新代理
      */
@@ -120,7 +119,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 if (isSelectTop)
                     return;
                 if (mBottomBarTab != null){
-                    mBottomBarTab.showBageView("...");
+                    mBottomBarTab.showBadgeView("...");
                 }
             }
         }
@@ -133,7 +132,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void initView() {
 //        mHandler.sendEmptyMessageDelayed(1, 10 * 60 * 1000);
-        mHandler.sendEmptyMessageDelayed(1, 5 * 1000);
+        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
 //        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         //检查是否有补丁
         mPresenter.queryPatch();
@@ -183,21 +182,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 //如果没有选中头条，开始10分钟记时
                 if (position == 2){
                     isSelectTop = true;
-                    if (mBottomBarTab.isBageViewShow()) {
-                        //TODO 刷新数据
-                        upQuotaFragment.refreshList(10);
-//                        upQuotaFragment.getWebView().reload();
-                    }
-
-                    if (mBottomBarTab != null){
-                        mBottomBarTab.hideBageView();
-                    }
                 }else {
                     if (isSelectTop) {
                         isSelectTop = false;
                         //清空所有的消息
                         mHandler.removeCallbacksAndMessages(null);
-                        mHandler.sendEmptyMessageDelayed(1, 5 * 1000);
+                        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
                     }
                 }
             }
@@ -461,4 +451,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
+    public boolean isBadgeViewShow() {
+        return mBottomBarTab.isBadgeViewShow();
+    }
+
+    public void hideBadgeView() {
+        mBottomBarTab.hideBadgeView();
+    }
 }

@@ -388,6 +388,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         sp.edit().putLong(SpCacheConfig.QQ_CACHE_SIZE, qqCatheSize - result).commit();
         Intent intent = new Intent(QQCleanHomeActivity.this, WechatCleanResultActivity.class);
         intent.putExtra("data", result);
+        intent.putExtra("title", getString(R.string.tool_qq_clear));
         startActivity(intent);
         finish();
     }
