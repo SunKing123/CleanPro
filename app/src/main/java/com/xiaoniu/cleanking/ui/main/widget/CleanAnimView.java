@@ -23,6 +23,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -65,7 +66,8 @@ public class CleanAnimView extends RelativeLayout {
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
     LinearLayout mLayoutNotNet;
-
+    TextView mTvAnimTitle;
+    FrameLayout mFlAnim;
     /**
      * 一键清理页面
      */
@@ -133,14 +135,13 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
         mWebView = v.findViewById(R.id.web_view);
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
+        mTvAnimTitle = v.findViewById(R.id.tv_anim_title);
+        mFlAnim = v.findViewById(R.id.fl_anim);
 
         initWebView();
-        iv_back.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onClick();
-                }
+        iv_back.setOnClickListener(v1 -> {
+            if (listener != null) {
+                listener.onClick();
             }
         });
         mLayoutNotNet.setOnClickListener(view -> onTvRefreshClicked());
@@ -161,11 +162,8 @@ public class CleanAnimView extends RelativeLayout {
         settings.setTextZoom(100);
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.addJavascriptInterface(javaInterface, "cleanPage");
-        javaInterface.setListener(new JavaInterface.onShareSuccessListener() {
-            @Override
-            public void shareSuccess() {
+        javaInterface.setListener(() -> {
 
-            }
         });
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -399,6 +397,7 @@ public class CleanAnimView extends RelativeLayout {
         mIconInner.setVisibility(GONE);
         mLayoutCount.setVisibility(GONE);
         mLayoutScan.setVisibility(GONE);
+        mTvAnimTitle.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
         mAnimationView.setAnimation("data_clean_finish.json");
         mAnimationView.setImageAssetsFolder("images");
@@ -497,9 +496,9 @@ public class CleanAnimView extends RelativeLayout {
 
     }
 
-
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
+        mTvAnimTitle.setVisibility(GONE);
         int bottom = mLineTitle.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
         int startHeight = DeviceUtils.getScreenHeight();
@@ -527,6 +526,9 @@ public class CleanAnimView extends RelativeLayout {
             NiuDataAPI.onPageStart("clean_up_page_view", "清理完成页浏览");
         }
     }
+    public void setAnimTitle(String animTitle){
+        mTvAnimTitle.setText(animTitle);
+    }
 
     public void setTitle(String title) {
         tv_qltitle.setText(title);
@@ -547,7 +549,7 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public interface onBackClickListener {
-        public void onClick();
+        void onClick();
     }
 }
 

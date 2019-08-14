@@ -38,16 +38,35 @@
         android:layout_height="match_parent">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/view_lottie"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie_finish"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fl_anim"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/view_lottie"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_anim_title"
+                android:layout_width="wrap_content"
+                android:text="@string/tool_cleaned_up"
+                android:layout_marginTop="150dp"
+                android:layout_gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/icon_outer"

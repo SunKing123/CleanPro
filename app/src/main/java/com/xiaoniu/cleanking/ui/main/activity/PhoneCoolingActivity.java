@@ -24,6 +24,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,7 +37,6 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
@@ -127,6 +127,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     ImageView mLayoutCoolBottom;
     @BindView(R.id.tv_cooling_show)
     TextView mTvCooling;
+    @BindView(R.id.fl_anim)
+    FrameLayout mFlAnim;
     private ProcessIconAdapter mProcessIconAdapter;
     private HardwareInfo mHardwareInfo;
     public static ArrayList<FirstJunkInfo> mRunningProcess;
@@ -652,7 +654,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     }
 
     public void startFinishAnimator() {
-        mAnimationView.setVisibility(VISIBLE);
+        mFlAnim.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data_clean_finish.json");
@@ -668,7 +670,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 //保存清理完成次数
                 PreferenceUtil.saveCleanNum();
 
-                mAnimationView.setVisibility(View.GONE);
+                mFlAnim.setVisibility(View.GONE);
                 int bottom = mLayoutTitleBar.getBottom();
                 mLayoutCleanFinish.setVisibility(VISIBLE);
                 int startHeight = ScreenUtils.getFullActivityHeight();
