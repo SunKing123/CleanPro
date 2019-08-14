@@ -106,7 +106,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Inject
     NoClearSPHelper mSPHelper;
-
+    private BottomBarTab mBottomBarTab;
+    private boolean isSelectTop = false;
     MyHandler mHandler = new MyHandler(this);
 
     class MyHandler extends Handler{
@@ -116,8 +117,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
         public void handleMessage(android.os.Message msg) {
             if(msg.what == 1 ){
-                //TODO 头条显示红点推荐
-
+                if (isSelectTop)
+                    return;
+                if (mBottomBarTab != null){
+                    mBottomBarTab.showBageView("...");
+                }
             }
         }
     }
@@ -128,7 +132,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-        mHandler.sendEmptyMessageAtTime(1, 10 * 60 * 1000);
+//        mHandler.sendEmptyMessageDelayed(1, 10 * 60 * 1000);
+        mHandler.sendEmptyMessageDelayed(1, 5 * 1000);
 //        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         //检查是否有补丁
         mPresenter.queryPatch();
@@ -155,10 +160,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         } else {
+            mBottomBarTab = new BottomBarTab(this, R.mipmap.msg_normal, getString(R.string.top));
             mBottomBar
                     .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
                     .addItem(new BottomBarTab(this, R.mipmap.tool_normal, getString(R.string.tool)))
-                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, getString(R.string.top)))
+                    .addItem(mBottomBarTab)
                     .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
         }
 
@@ -174,13 +180,25 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onTabSelected(int position, int prePosition) {
                 showHideFragment(position, prePosition);
-                upQuotaFragment.getWebView().reload();
-                //清空所有的消息
-                mHandler.removeCallbacksAndMessages(null);
-                //如果没有选中头条，开始10分记时
-                if (position != 2){
-                    mHandler.sendEmptyMessageAtTime(1, 10 * 60 * 1000);
+                //如果没有选中头条，开始10分钟记时
+                if (position == 2){
+                    isSelectTop = true;
+                    if (mBottomBarTab.isBageViewShow()) {
+                        //TODO 刷新数据
+                        upQuotaFragment.refreshList(10);
+//                        upQuotaFragment.getWebView().reload();
+                    }
 
+                    if (mBottomBarTab != null){
+                        mBottomBarTab.hideBageView();
+                    }
+                }else {
+                    if (isSelectTop) {
+                        isSelectTop = false;
+                        //清空所有的消息
+                        mHandler.removeCallbacksAndMessages(null);
+                        mHandler.sendEmptyMessageDelayed(1, 5 * 1000);
+                    }
                 }
             }
 

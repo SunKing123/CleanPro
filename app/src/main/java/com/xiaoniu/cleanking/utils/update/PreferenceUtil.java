@@ -11,17 +11,23 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 //TODO 待优化
 public class PreferenceUtil {
 
-    //获取WebView URL
+    /**
+     * 获取WebView URL
+     * @return
+     */
     public static String getWebViewUrl(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         // 如果用户成功分享一次后使用悟空清理三次则完成页的分享领券页面永久切换到资讯页面；如果用户没有分享但使用悟空清理超过20次则完成页的分享领券页面永久切换到资讯页面 开发中
         if (!getClearNum() || !getShareNum())
-            return ApiModule.Base_H5_Host + "?deviceId=" + AndroidUtil.getUdid();
+            return ApiModule.SHOPPING_MALL + "?deviceId=" + AndroidUtil.getUdid();
 
-        return sharedPreferences.getString(SpCacheConfig.WEB_URL,ApiModule.Base_H5_Host + "?deviceId=" + AndroidUtil.getUdid());
+        return sharedPreferences.getString(SpCacheConfig.WEB_URL,ApiModule.SHOPPING_MALL + "?deviceId=" + AndroidUtil.getUdid());
     }
 
-    //保存WebView URL
+    /**
+     * 保存WebView URL
+     * @param url
+     */
     public static void saveWebViewUrl(String url){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,20 +57,24 @@ public class PreferenceUtil {
     }
 
 
-    //保存清理次数  清理20次后，永久显示资讯页面
+    /**
+     * 保存清理次数  清理20次后，永久显示资讯页面
+     * @return
+     */
     public static boolean saveCleanNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SpCacheConfig.CLEAR_NUM, sharedPreferences.getInt(SpCacheConfig.CLEAR_NUM,0) + 1).commit();
         return true;
     }
+
     /**
-     * 保存分享次数  超过3次永久不能分享
+     * 保存清理次数  清理20次后，永久显示资讯页面
      * @return
      */
     private static boolean getClearNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3)
+        if (sharedPreferences.getInt(SpCacheConfig.CLEAR_NUM,0) > 20)
             return false;
         return true;
     }

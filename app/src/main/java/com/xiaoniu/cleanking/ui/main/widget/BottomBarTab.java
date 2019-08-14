@@ -247,4 +247,8 @@ public class BottomBarTab extends FrameLayout {
     public void hideBageView() {
         mBadgeView.setVisibility(GONE);
     }
+
+    public boolean isBageViewShow(){
+        return mBadgeView.getVisibility() == VISIBLE;
+    }
 }

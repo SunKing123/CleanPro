@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.IAgentWebSettings;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -119,7 +120,7 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 .createAgentWeb()
                 .ready()
                 .go(url);
-
+        mAgentWeb.getWebCreator().getWebView().getSettings().setTextZoom(100);
         mAgentWeb.getJsInterfaceHolder().addJavaObject("cleanPage",new Javascript());
         mAgentWeb.getJsInterfaceHolder().addJavaObject("sharePage",new Javascript());
     }
@@ -151,8 +152,6 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             if (isFirst) {
                 getWebView().loadUrl(url);
                 isFirst = false;
-            } else {
-                refreshList(10);
             }
         }else {
             if (!isFirstPause) {

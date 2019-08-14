@@ -47,7 +47,6 @@ public class ApiModule {
     public static String ZhiMaXinYong = Base_H5_Host + "/FlashLoanH5/html/page/my/zhima.html";//芝麻信用路径
     public static String SHOPPING_MALL = Base_H5_Host + "/home_new.html";//商城
 
-
     public ApiModule(Application application) {
         //原生Log日志拦截
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
