@@ -83,7 +83,8 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking") || !packageInfo.packageName.contains(sp.getString(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME,null)));
+                sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME,null);
+                if (!packageInfo.packageName.equals("com.xiaoniu.cleanking"));
                     apps.add(appInfoBean);
             }
         }

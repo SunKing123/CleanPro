@@ -65,6 +65,7 @@ public class CleanAnimView extends RelativeLayout {
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
     LinearLayout mLayoutNotNet;
+    TextView mTvAnimTitle;
 
     /**
      * 一键清理页面
@@ -133,6 +134,7 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
         mWebView = v.findViewById(R.id.web_view);
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
+        mTvAnimTitle = v.findViewById(R.id.fl_anim);
 
         initWebView();
         iv_back.setOnClickListener(new OnClickListener() {
@@ -526,6 +528,9 @@ public class CleanAnimView extends RelativeLayout {
         } else if (currentPage == page_junk_clean) {
             NiuDataAPI.onPageStart("clean_up_page_view", "清理完成页浏览");
         }
+    }
+    public void setAnimTitle(String animTitle){
+        mTvAnimTitle.setText(animTitle);
     }
 
     public void setTitle(String title) {

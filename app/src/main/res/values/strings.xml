@@ -64,4 +64,7 @@
     <string name="tool_no_install_qq">您还未装QQ</string>
     <string name="tool_one_key_speed">一键加速</string>
     <string name="tool_soft_manager">软件管理</string>
+    <string name="tool_cleaned_up">已清理</string>
+    <string name="tool_accelerated">已加速</string>
+    <string name="tool_cooled_down">已降温</string>
 </resources>

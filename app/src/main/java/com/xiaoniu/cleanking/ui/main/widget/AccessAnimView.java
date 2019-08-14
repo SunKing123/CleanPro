@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -57,6 +58,7 @@ public class AccessAnimView extends RelativeLayout {
     int sizeMb;
     String strGb;
     onAnimEndListener listener;
+    FrameLayout mFlAnim;
     LottieAnimationView mAnimationView;
     ValueAnimator mValueAnimator;
     public void setListener(onAnimEndListener listener) {
@@ -108,6 +110,7 @@ public class AccessAnimView extends RelativeLayout {
         iv_yu8 = v.findViewById(R.id.iv_yu8);
         tv_title_name = v.findViewById(R.id.tv_title_name);
         mAnimationView = v.findViewById(R.id.view_lottie);
+        mFlAnim = v.findViewById(R.id.fl_anim);
     }
 
     public void setData(int sizeMb, String strGb) {
@@ -428,7 +431,7 @@ public class AccessAnimView extends RelativeLayout {
     }
 
     public void startFinishAnimator() {
-        mAnimationView.setVisibility(VISIBLE);
+        mFlAnim.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data_clean_finish.json");
@@ -444,7 +447,7 @@ public class AccessAnimView extends RelativeLayout {
                 //保存清理完成次数
                 PreferenceUtil.saveCleanNum();
 
-                mAnimationView.setVisibility(View.GONE);
+                mFlAnim.setVisibility(View.GONE);
                 mValueAnimator.start();
                 if (listener != null)
                     listener.onAnimEnd();
