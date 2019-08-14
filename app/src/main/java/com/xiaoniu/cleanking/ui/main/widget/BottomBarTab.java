@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.utils.DeviceUtils;
 
 
 /**
@@ -38,6 +40,7 @@ public class BottomBarTab extends FrameLayout {
 
     private TextView mTvUnreadCount;
     private ObjectAnimator mObjectAnimator;
+    private TextView mBadgeView;
 
     public BottomBarTab(Context context, @DrawableRes int icon, CharSequence title) {
         this(context, null, icon, title);
@@ -94,6 +97,18 @@ public class BottomBarTab extends FrameLayout {
 
         addView(lLContainer);
 
+        mBadgeView = new TextView(context);
+        mBadgeView.setTextColor(Color.WHITE);
+        mBadgeView.setPadding(DeviceUtils.dip2px(5),0,DeviceUtils.dip2px(5),0);
+        mBadgeView.setTextSize(10);
+        mBadgeView.setGravity(Gravity.CENTER);
+        FrameLayout.LayoutParams badgeParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DeviceUtils.dip2px(16));
+        badgeParams.gravity = Gravity.RIGHT;
+        badgeParams.rightMargin = DeviceUtils.dip2px(30);
+        badgeParams.topMargin = DeviceUtils.dip2px(5);
+        mBadgeView.setBackgroundResource(R.drawable.bg_bottom_badge_shape);
+        mBadgeView.setVisibility(GONE);
+        addView(mBadgeView, badgeParams);
 //        int min = dip2px(context, 20);
 //        int padding = dip2px(context, 5);
 //        mTvUnreadCount = new TextView(context);
@@ -220,5 +235,16 @@ public class BottomBarTab extends FrameLayout {
         //执行一次
         animationDrawable.setOneShot(true);
         animationDrawable.start();
+    }
+
+    public void showBageView(String content) {
+        if (!TextUtils.isEmpty(content)) {
+            mBadgeView.setVisibility(VISIBLE);
+            mBadgeView.setText(content);
+        }
+    }
+
+    public void hideBageView() {
+        mBadgeView.setVisibility(GONE);
     }
 }

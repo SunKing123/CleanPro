@@ -151,6 +151,8 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             if (isFirst) {
                 getWebView().loadUrl(url);
                 isFirst = false;
+            } else {
+                refreshList(10);
             }
         }else {
             if (!isFirstPause) {
@@ -166,6 +168,12 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
         return mAgentWeb.getWebCreator().getWebView();
     }
 
+    public void refreshList(int num) {
+        WebView webView = getWebView();
+        if (webView != null) {
+            webView.loadUrl("javascript:refreshList(" + num + ")");
+        }
+    }
     @Override
     public void onPause() {
         super.onPause();
