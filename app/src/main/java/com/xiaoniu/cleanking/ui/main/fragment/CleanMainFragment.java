@@ -35,7 +35,6 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -277,6 +276,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, SHOPPING_MALL);
         startActivity(RouteConstants.NEWS_LOAD_ACTIVITY, bundle);
+        StatisticsUtils.trackClick("Headline_News_Re'dian_click", "头条新闻热点", "home_page", "information_page");
     }
 
     @OnClick(R.id.view_phone_thin)
@@ -285,10 +285,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_soft_manager));
         startActivity(intent);
+        StatisticsUtils.trackClick("Software_management_click", "软件管理", "home_page", "cell_phone_slimming_page");
     }
     @OnClick(R.id.iv_permission)
     public void onClick(){
         startActivity(new Intent(getContext(), PermissionActivity.class));
+        StatisticsUtils.trackClick("Triangular_yellow_mark_click", "三角黄标", "home_page", "permission_page");
     }
 
     @OnClick(R.id.btn_ljql)

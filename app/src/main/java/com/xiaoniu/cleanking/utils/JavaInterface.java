@@ -29,7 +29,6 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseEntity;
-import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -109,6 +108,8 @@ public class JavaInterface {
      */
     @JavascriptInterface
     public void shareLink(String picurl, String linkurl, String title, String content) {
+        StatisticsUtils.trackClick("Sharing_coupons_click", "分享领优惠券", "", "");
+
         //保存分享次数
         PreferenceUtil.saveShareNum();
         //分享链接

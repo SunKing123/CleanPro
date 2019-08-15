@@ -18,7 +18,7 @@ public class PreferenceUtil {
     public static String getWebViewUrl(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         // 如果用户成功分享一次后使用悟空清理三次则完成页的分享领券页面永久切换到资讯页面；如果用户没有分享但使用悟空清理超过20次则完成页的分享领券页面永久切换到资讯页面 开发中
-        String infoStream = ApiModule.SHOPPING_MALL + "?deviceId=" + AndroidUtil.getUdid() +"&type=2";
+        String infoStream = ApiModule.SHOPPING_MALL + "?deviceId=" + AndroidUtil.getUdid() +"&type=]\2";
         if (!getClearNum() || !getShareNum())
             return infoStream;
 
