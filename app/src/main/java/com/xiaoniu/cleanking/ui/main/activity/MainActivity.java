@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private String mUrl;
     private String mTitle;
     private ShoppingMallFragment upQuotaFragment;
-    private static final long DEFAULT_REFRESH_TIME = 5*1000L;
+    private static final long DEFAULT_REFRESH_TIME = 10*60*1000L;
     /**
      * 版本更新代理
      */
