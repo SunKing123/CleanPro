@@ -2,17 +2,17 @@ package com.xiaoniu.cleanking.ui.main.bean;
 
 import com.xiaoniu.cleanking.base.BaseEntity;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ImageAdEntity extends BaseEntity {
 
-    private DataBean data;
+    private ArrayList<DataBean> data;
 
-    public DataBean getData() {
+    public ArrayList<DataBean> getData() {
         return data;
     }
 
-    public void setData(DataBean data) {
+    public void setData(ArrayList<DataBean> data) {
         this.data = data;
     }
 

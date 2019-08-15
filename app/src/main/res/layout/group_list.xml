@@ -31,12 +31,16 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:src="@mipmap/arrow_down"/>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/package_size"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="right|center_vertical"
+            android:clickable="true"
             android:text="已选123MB"
             android:textColor="@drawable/color_select_clean_detail"/>
 
@@ -44,12 +48,12 @@
             android:id="@+id/layout_check"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingRight="@dimen/dimen_12dp"
-            android:paddingLeft="@dimen/dimen_12dp">
+            android:paddingRight="@dimen/dimen_16dp"
+            android:paddingLeft="@dimen/dimen_8dp">
         <ImageView
             android:id="@+id/icon_check"
-            android:layout_width="@dimen/dimen_18dp"
-            android:layout_height="@dimen/dimen_18dp"
+            android:layout_width="@dimen/dimen_20dp"
+            android:layout_height="@dimen/dimen_20dp"
             android:layout_gravity="center"
             android:background="@drawable/icon_choose_selector"/>
         </FrameLayout>

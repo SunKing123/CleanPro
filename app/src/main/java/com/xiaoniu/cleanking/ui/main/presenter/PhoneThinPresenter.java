@@ -19,7 +19,6 @@ import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.support.annotation.RequiresApi;
-import android.telephony.mbms.FileInfo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +29,6 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.ui.main.bean.FileInfoEntity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 
@@ -206,8 +204,33 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
     //扫描已安装的apk信息
     public void scanData() {
         try {
-            apps.clear();
-            getApplicaionInfo();
+            Observable.create(new ObservableOnSubscribe<String>() {
+                @Override
+                public void subscribe(ObservableEmitter<String> e) throws Exception {
+                    Thread.sleep(1000);
+                    apps.clear();
+                    getApplicaionInfo();
+                    e.onComplete();
+                }
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<String>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                        }
+
+                        @Override
+                        public void onNext(String o) {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -274,8 +297,11 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
             try {
                 storageStats = storageStatsManager.queryStatsForUid(uuid, uid);
                 packageSize.add(storageStats.getAppBytes());
+                mFileTotalSize += storageStats.getAppBytes();
                 if (isLast) {
-                    refreshData();
+                    mView.updateData(apps.size(), mFileTotalSize, true);
+                } else {
+                    mView.updateData(apps.size(), mFileTotalSize, false);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -308,8 +334,13 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
             AppInfoBean appInfoBean = apps.get(i);
             appInfoBean.packageSize = packageSize.get(i);
             mFileTotalSize += appInfoBean.packageSize;
+            if (i == apps.size()-1) {
+                mView.updateData(apps.size(), mFileTotalSize, true);
+            } else {
+                mView.updateData(apps.size(), mFileTotalSize, false);
+            }
         }
-        mView.updateData(apps.size(), mFileTotalSize);
+
     }
 
     /**
@@ -355,8 +386,11 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
         @Override
         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded) throws RemoteException {
             packageSize.add(pStats.codeSize);
+            mFileTotalSize += pStats.codeSize;
             if (mIsLast) {
-                refreshData();
+                mView.updateData(apps.size(), mFileTotalSize, true);
+            } else {
+                mView.updateData(apps.size(), mFileTotalSize, false);
             }
         }
     }

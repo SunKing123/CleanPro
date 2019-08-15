@@ -145,7 +145,7 @@
                 <LinearLayout
                     android:id="@+id/viewt_finish"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="130dp"
                     android:background="#06C581"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -158,7 +158,7 @@
                         android:id="@+id/iv_dun"
                         android:layout_width="47dp"
                         android:layout_height="54dp"
-                        android:layout_marginRight="@dimen/dimen_15dp"
+                        android:layout_marginRight="@dimen/dimen_8dp"
                         android:src="@mipmap/icon_dun" />
 
                     <TextView
@@ -184,17 +184,17 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dimen_10dp"
                             android:text="手机很干净"
-
+                            android:textStyle="bold"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/tv_ql"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="快去体验其他功能"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />
+                            android:textColor="#ccffffff"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 

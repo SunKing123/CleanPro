@@ -102,6 +102,9 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
             PackageInfo packageInfo = packages.get(i);
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
 
+                if ("com.xiaoniu.cleanking".equals(packageInfo.packageName)) {
+                   continue;
+                }
                 boolean isExist = false;
                 for (String packeName : caches) {
                     if (packeName.equals(packageInfo.packageName)){

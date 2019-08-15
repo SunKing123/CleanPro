@@ -175,7 +175,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         //垃圾大小
         holder.mJunkSizeTv.setText(CleanUtil.formatShortFileSize(mContext, info.getTotalSize()));
         //选择框
-        holder.mCheckButton.setSelected(info.isAllchecked());
+        holder.mLayoutCheck.setSelected(info.isAllchecked());
         //只有安装包文件显示版本信息
         if ("TYPE_APK".equals(info.getGarbageType())) {
             holder.mTextVersion.setVisibility(View.VISIBLE);
@@ -353,6 +353,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public ImageView mCheckButton;
         public TextView mTextVersion;
         public LinearLayout mRootView;
-        public FrameLayout mLayoutCheck;
+        public LinearLayout mLayoutCheck;
     }
 }

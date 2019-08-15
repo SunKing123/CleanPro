@@ -97,22 +97,26 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         objectAnimatorScanIng = mPresenter.setScaningAnim(mIvScanFrame);
         setScanStatus(true);
 
-        //8.0权限判断
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!hasUsageStatsPermission(this)) {
-                //没有权限
-                startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
-                mPresenter.scanFile(mPath);
-            }else {
-                //有权限
+        if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
+            mPresenter.scanFile(mPath);
+        } else {
+            //8.0权限判断
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!hasUsageStatsPermission(this)) {
+                    //没有权限
+                    startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
+                    mPresenter.scanData();
+                } else {
+                    //有权限
+                    mPresenter.scanData();
+                }
+            } else {
                 mPresenter.scanData();
-
             }
-        }else {
-            mPresenter.scanData();
-
         }
+
     }
+
 
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -161,7 +165,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
      * @param size 安装应用大小
      * @param totalSize  应用总大小
      */
-    public void updateData(int size,long totalSize){
+    public void updateData(int size,long totalSize,final boolean isFinish){
         runOnUiThread(() -> {
             if (mTxtSpaceSize == null)
                 return;
@@ -170,7 +174,15 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
             if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
                 mPresenter.scanFile(mPath);
             }else {
-                onComplete();
+                String s = mPresenter.accuracy(totalSize, mTotalSize, 0);
+                if (Double.valueOf(s) == 0) {
+                    mTxtSpaceSize.setText("1");
+                }else {
+                    mTxtSpaceSize.setText(s);
+                }
+                if (isFinish) {
+                    onComplete();
+                }
             }
         });
     }
@@ -213,13 +225,14 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
         setScanStatus(false);
         if (null != mImgProgressSystem) {
-            mImgProgressSystem.postDelayed(() -> {
+            mImgProgressSystem.post(() -> {
                 Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
                 intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
                 intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,mTitleName);
                 startActivity(intent);
+                Log.i("123","onComplete");
                 finish();
-            }, 500);
+            });
         }
     }
 }

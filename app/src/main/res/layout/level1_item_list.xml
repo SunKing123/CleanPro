@@ -50,19 +50,23 @@
 
 
 
-            <TextView
-                android:id="@+id/junk_size"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
-                android:textColor="@drawable/color_select_clean_detail"/>
 
-            <FrameLayout
+
+            <LinearLayout
                 android:id="@+id/layout_check"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/dimen_12dp"
-                android:paddingRight="@dimen/dimen_12dp">
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dimen_16dp">
+
+                <TextView
+                    android:id="@+id/junk_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dimen_8dp"
+                    android:textColor="@drawable/color_select_clean_detail_text"/>
+
                 <ImageView
                     android:id="@+id/icon_check"
                     android:layout_gravity="center"
@@ -70,7 +74,7 @@
                     android:layout_height="@dimen/dimen_20dp"
                     android:src="@drawable/icon_choose_selector"
                     android:checked="true"/>
-            </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

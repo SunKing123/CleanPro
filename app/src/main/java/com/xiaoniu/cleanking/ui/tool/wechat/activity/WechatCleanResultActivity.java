@@ -27,7 +27,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
     @Override
     protected void initView() {
         showBarColor(getResources().getColor(R.color.color_FD6F46));
-        CountEntity countEntity = CleanUtil.formatShortFileSize(getIntent().getExtras().getLong("data"));
+        CountEntity countEntity = CleanUtil.formatShortFileSize(getIntent().getExtras().getLong("data",0));
         startCleanAnim(countEntity);
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
     }

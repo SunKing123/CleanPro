@@ -102,11 +102,11 @@ public class BottomBarTab extends FrameLayout {
         mBadgeView.setPadding(DeviceUtils.dip2px(5),0,DeviceUtils.dip2px(5),0);
         mBadgeView.setTextSize(10);
         mBadgeView.setGravity(Gravity.CENTER);
-        FrameLayout.LayoutParams badgeParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DeviceUtils.dip2px(16));
+        FrameLayout.LayoutParams badgeParams = new FrameLayout.LayoutParams(DeviceUtils.dip2px(17), DeviceUtils.dip2px(10));
         badgeParams.gravity = Gravity.CENTER_HORIZONTAL;
-        badgeParams.rightMargin = DeviceUtils.dip2px(-10);
+        badgeParams.rightMargin = DeviceUtils.dip2px(-12);
         badgeParams.topMargin = DeviceUtils.dip2px(5);
-        mBadgeView.setBackgroundResource(R.drawable.bg_bottom_badge_shape);
+        mBadgeView.setBackgroundResource(R.drawable.icon_bottom_badge);
         mBadgeView.setVisibility(GONE);
         addView(mBadgeView, badgeParams);
 //        int min = dip2px(context, 20);
@@ -240,7 +240,7 @@ public class BottomBarTab extends FrameLayout {
     public void showBadgeView(String content) {
         if (!TextUtils.isEmpty(content)) {
             mBadgeView.setVisibility(VISIBLE);
-            mBadgeView.setText(content);
+//            mBadgeView.setText(content);
         }
     }
 
