@@ -216,6 +216,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         mScanTranlateColor.setDuration(500);
         mScanTranlateColor.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
+            if (mView == null)
+                return;
             if (mView.getViewShow()) {
                 //只有首页显示的时候会显示状态栏变化
                 mView.showBarColor(animatedValue);

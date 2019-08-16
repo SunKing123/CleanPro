@@ -601,6 +601,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     private long firstTime;
 
     public void onKeyBack() {
+        if (mLayoutCleanFinish == null)
+            return;
         if (mLayoutCleanFinish.getVisibility() == VISIBLE) {
             mLayoutCleanFinish.setVisibility(GONE);
             showBottomTab();
