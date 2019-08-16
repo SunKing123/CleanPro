@@ -82,10 +82,13 @@ public class ToolFragment extends SimpleFragment {
 
     @Override
     protected void initView() {
-        mToolCircleProgress.startAnimProgress(34, 700);
+        mToolCircleProgress.startAnimProgress(34, 13700);
         setData();
         //监听进度条进度
-        mToolCircleProgress.setOnAnimProgressListener(progress -> mTvToolPercentNum.setText("" + progress + "%"));
+        mToolCircleProgress.setOnAnimProgressListener(progress -> {
+//            if (mTvToolPercentNum != null)
+                mTvToolPercentNum.setText("" + progress + "%");
+        });
     }
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
