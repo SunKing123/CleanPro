@@ -1,17 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.os.Environment;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -39,13 +35,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     @BindView(R.id.recycler)
     RecyclerView mRecyclerView;
-
     @BindView(R.id.txt_install)
     TextView mTxtInstall;
     @BindView(R.id.view_line_intall)
     View mViewLineIntall;
-    @BindView(R.id.txt_uninstall)
-    TextView mTxtUninstall;
     @BindView(R.id.view_line_uninstall)
     View mViewLineUninstall;
     @BindView(R.id.btn_del)
@@ -54,11 +47,8 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     ImageButton mCheckBoxAll;
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
-
-
     @BindView(R.id.ll_install_empty_view)
     LinearLayout mLLEmptyView;
-
 
     //tab类型  0 已安装，1 未安装
     private int mType;
@@ -103,20 +93,17 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mAdapter.setTabType(mType);
         mAdapter.setOnCheckListener(this);
 
-        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsCheckAll) {
-                    mIsCheckAll = false;
-                } else {
-                    mIsCheckAll = true;
-                    StatisticsUtils.trackClick("Installation_pack_pleaning_all_election_click","\"全选按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
+        mLLCheckAll.setOnClickListener(v -> {
+            if (mIsCheckAll) {
+                mIsCheckAll = false;
+            } else {
+                mIsCheckAll = true;
+                StatisticsUtils.trackClick("Installation_pack_pleaning_all_election_click","\"全选按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
 
-                }
-                mCheckBoxAll.setSelected(mIsCheckAll);
-                checkAll(mIsCheckAll);
-                totalSelectFiles();
             }
+            mCheckBoxAll.setSelected(mIsCheckAll);
+            checkAll(mIsCheckAll);
+            totalSelectFiles();
         });
     }
 
@@ -383,9 +370,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     @Override
     protected void onResume() {
         super.onResume();
-        //StatisticsUtils.trackClick("Installation_pack_pleaning_view_page","\"安装包清理\"浏览","file_cleaning_page","Installation_pack_pleaning_page");
         NiuDataAPI.onPageStart("Installation_pack_pleaning_view_page", "安装包清理浏览");
-
     }
 
     @Override

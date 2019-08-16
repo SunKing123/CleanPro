@@ -1,19 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -30,13 +24,11 @@ import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -46,25 +38,19 @@ import butterknife.OnClick;
  */
 public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePresenter> implements CleanVideoManageAdapter.OnCheckListener {
 
-
     @BindView(R.id.recycler)
     RecyclerView mRecyclerView;
-
     @BindView(R.id.btn_del)
     Button mBtnDel;
     @BindView(R.id.check_all)
     ImageButton mCheckBoxAll;
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
-
     @BindView(R.id.ll_video_empty_view)
     LinearLayout mLLEmptyView;
 
-
     private CleanVideoManageAdapter mAdapter;
-
     private  boolean mIsCheckAll;
-
     private CleanFileLoadingDialogFragment mLoading;
 
     //loading是否为首次弹窗
@@ -109,21 +95,17 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         mRecyclerView.addItemDecoration(new GrideManagerWrapper(DensityUtil.dp2px(8)));
         mAdapter.setOnCheckListener(this);
 
+        mLLCheckAll.setOnClickListener(v -> {
+            if(mIsCheckAll){
+                mIsCheckAll=false;
+            }else {
+                mIsCheckAll=true;
+                StatisticsUtils.trackClick("all_election_click","\"全选\"点击","file_cleaning_page","video_cleaning_page");
 
-        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
-                }else {
-                    mIsCheckAll=true;
-                    StatisticsUtils.trackClick("all_election_click","\"全选\"点击","file_cleaning_page","video_cleaning_page");
-
-                }
-                mCheckBoxAll.setSelected(mIsCheckAll);
-                checkAll(mIsCheckAll);
-                totalSelectFiles();
             }
+            mCheckBoxAll.setSelected(mIsCheckAll);
+            checkAll(mIsCheckAll);
+            totalSelectFiles();
         });
 
 
@@ -359,17 +341,6 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
         mIsCheckAll=isCheckAll;
         mCheckBoxAll.setSelected(mIsCheckAll);
-//
-//        if (totalSize > 0) {
-//            mBtnDel.setText("删除" + FileSizeUtils.formatFileSize(totalSize));
-//            mBtnDel.setSelected(true);
-//            mBtnDel.setClickable(true);
-//        } else {
-//            mBtnDel.setText("删除");
-//            mBtnDel.setSelected(false);
-//            mBtnDel.setClickable(false);
-//        }
-
         totalSelectFiles();
     }
 
@@ -398,10 +369,6 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
      */
     public void playAudio(String audioPath) {
         try {
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            Uri uri = Uri.parse("file:///" + audioPath);
-//            intent.setDataAndType(uri, "video/*");
-//            mContext.startActivity(intent);
             File file = new File(audioPath);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             AndroidUtil.fileUri(this, intent, file, "video/*");

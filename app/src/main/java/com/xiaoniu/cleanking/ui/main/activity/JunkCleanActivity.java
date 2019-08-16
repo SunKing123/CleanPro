@@ -12,7 +12,6 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -32,9 +31,7 @@ import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,12 +59,6 @@ public class JunkCleanActivity extends SimpleActivity {
     @BindView(R.id.do_junk_clean)
     TextView mTextClean;
 
-    @BindView(R.id.layout_show_list)
-    RelativeLayout mLayoutList;
-    @BindView(R.id.layout_clean_finish)
-    RelativeLayout mLayoutFinish;
-    @BindView(R.id.text_clean_number)
-    TextView mTextCleanNumber;
     @BindView(R.id.view_clean_anim)
     CleanAnimView mCleanAnimView;
 

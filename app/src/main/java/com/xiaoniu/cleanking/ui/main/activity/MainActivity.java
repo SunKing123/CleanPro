@@ -64,24 +64,15 @@ import cn.jpush.android.api.JPushInterface;
  */
 @Route(path = RouteConstants.MAIN_ACTIVITY)
 public class MainActivity extends BaseActivity<MainPresenter> {
-
-    private static final String TAG = "MainActivity.class";
     private static final int REQUEST_STORAGE_PERMISSION = 1111;
-    @Inject
-    NoClearSPHelper mPreferencesHelper;
+
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
-    ImageView mBottomShadow;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
-    private String mUrl;
-    private String mTitle;
     private ShoppingMallFragment upQuotaFragment;
     private static final long DEFAULT_REFRESH_TIME = 10*60*1000L;
-    /**
-     * 版本更新代理
-     */
-    private UpdateAgent mUpdateAgent;
+
     /**
      * 借款页
      */
@@ -202,9 +193,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
             }
         });
-//        EventBus.getDefault().register(this);
-
-
         DbHelper.copyDb();
 
         checkReadPermission();
@@ -378,10 +366,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void onDestroy() {
-
-        if (mUpdateAgent != null) {
-            mUpdateAgent.dissmiss();
-        }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

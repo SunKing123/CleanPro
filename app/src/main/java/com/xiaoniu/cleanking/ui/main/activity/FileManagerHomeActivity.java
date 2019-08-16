@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
@@ -82,20 +79,12 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         //查询手机存储使用率
         mPresenter.getSpaceUse(tv_spaceinfos, circleProgressView);
         //监听进度条进度
-        circleProgressView.setOnAnimProgressListener(new CircleProgressView.OnAnimProgressListener() {
-            @Override
-            public void valueUpdate(int progress) {
-                tv_percent_num.setText("" + progress);
-            }
-        });
+        circleProgressView.setOnAnimProgressListener(progress -> tv_percent_num.setText("" + progress));
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        iv_back.setOnClickListener(v -> {
+            finish();
 
-                StatisticsUtils.trackClick("file_clean_back_click", "返回按钮", "home_page", "file_cleaning_page");
-            }
+            StatisticsUtils.trackClick("file_clean_back_click", "返回按钮", "home_page", "file_cleaning_page");
         });
     }
 
@@ -113,16 +102,13 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         }else {
             tvImageSize.setText("");
         }
-        viewImagearea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
-                for (FileEntity fileEntity : listPhoto)
-                    fileEntity.setIsSelect(false);
-                CleanAllFileScanUtil.clean_image_list = listPhoto;
-                startActivity(intent);
-                StatisticsUtils.trackClick("picture_cleaning_page_click", "图片清理", "home_page", "file_cleaning_page");
-            }
+        viewImagearea.setOnClickListener(v -> {
+            Intent intent = new Intent(FileManagerHomeActivity.this, ImageActivity.class);
+            for (FileEntity fileEntity : listPhoto)
+                fileEntity.setIsSelect(false);
+            CleanAllFileScanUtil.clean_image_list = listPhoto;
+            startActivity(intent);
+            StatisticsUtils.trackClick("picture_cleaning_page_click", "图片清理", "home_page", "file_cleaning_page");
         });
     }
 

@@ -19,14 +19,6 @@ import butterknife.OnClick;
 @Route(path = RouteConstants.CLEAN_FINISH_ACTIVITY)
 public class CleanFinishActivity extends SimpleActivity {
 
-    @BindView(R.id.view_top)
-    View mViewTop;
-    @BindView(R.id.iv_back)
-    ImageView mIvBack;
-    @BindView(R.id.viewt)
-    View mViewt;
-    @BindView(R.id.iv_dun)
-    ImageView mIvDun;
     @BindView(R.id.text_title)
     TextView mTextTitle;
     @BindView(R.id.tv_size)
@@ -37,8 +29,6 @@ public class CleanFinishActivity extends SimpleActivity {
     TextView mTvQl;
     @BindView(R.id.layout_right_content)
     LinearLayout mLayoutRightContent;
-    @BindView(R.id.web_view)
-    WebView mWebView;
     @BindView(R.id.tv_number_cool)
     TextView mTvNumberCool;
     @BindView(R.id.layout_right_cooling)
