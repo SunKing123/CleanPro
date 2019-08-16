@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -48,8 +47,6 @@ public class DelFileSuccessFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         getDialog().getWindow().setGravity(Gravity.BOTTOM);
-       // getDialog().getWindow().setLayout(getScreenWidth(mContext) - dip2px(mContext, 43), ViewGroup.LayoutParams.WRAP_CONTENT);
-
     }
 
 

@@ -7,15 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.utils.DateUtils;
-import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +53,9 @@ public class WhiteListSpeedAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             Glide.with(mContext).load(appInfoBean.icon).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
-            viewHolder.mBtnRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.packageName);
-                    }
+            viewHolder.mBtnRemove.setOnClickListener(v -> {
+                if (null != onCheckListener) {
+                    onCheckListener.onCheck(appInfoBean.packageName);
                 }
             });
 

@@ -1,7 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
-import com.xiaoniu.cleanking.base.BaseEntity;
-
 import java.io.Serializable;
 
 /**

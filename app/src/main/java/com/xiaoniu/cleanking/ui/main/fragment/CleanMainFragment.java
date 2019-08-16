@@ -240,11 +240,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }, 500);
     }
 
-    //    @OnClick(R.id.text_cooling)
-//    public void onCoolingViewClicked() {
-//        //手机降温
-//        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-//    }
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
         StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", "home_page", "home_page");
@@ -646,13 +641,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-//                showLoadingDialog();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-//                cancelLoadingDialog();
                 if (!isError) {
                     if (mLayoutNotNet != null) {
                         mLayoutNotNet.setVisibility(View.GONE);

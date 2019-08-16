@@ -32,10 +32,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ToolFragment extends SimpleFragment {
@@ -86,7 +84,7 @@ public class ToolFragment extends SimpleFragment {
         setData();
         //监听进度条进度
         mToolCircleProgress.setOnAnimProgressListener(progress -> {
-//            if (mTvToolPercentNum != null)
+            if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
     }

@@ -12,8 +12,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
-import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.adapter.WechatCleanAudAdapter;
@@ -142,37 +140,31 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         audAdapter = new WechatCleanAudAdapter(WechatCleanAudActivity.this, listData);
         recycle_view.setLayoutManager(new LinearLayoutManager(WechatCleanAudActivity.this));
         recycle_view.setAdapter(audAdapter);
-        audAdapter.setmOnCheckListener(new WechatCleanAudAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<CleanWxItemInfo> listFile, int pos) {
-                int selectCount = 0;
-                for (int i = 0; i < listFile.size(); i++) {
-                    if (listFile.get(i).getIsSelect()) {
-                        selectCount++;
-                    }
+        audAdapter.setmOnCheckListener((listFile, pos) -> {
+            int selectCount = 0;
+            for (int i = 0; i < listFile.size(); i++) {
+                if (listFile.get(i).getIsSelect()) {
+                    selectCount++;
                 }
-                cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
-                tv_delete.setSelected(selectCount == 0 ? false : true);
-                compulateDeleteSize();
             }
+            cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+            tv_delete.setSelected(selectCount == 0 ? false : true);
+            compulateDeleteSize();
         });
 
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
-        cb_checkall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listData.size() == 0) return;
-                if (!recycle_view.isComputingLayout()) {
-                    StatisticsUtils.trackClick("wechat_voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
-                    cb_checkall.setSelected(!cb_checkall.isSelected());
-                    tv_delete.setSelected(cb_checkall.isSelected());
-                    audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-                    compulateDeleteSize();
-                }
+        cb_checkall.setOnClickListener(v -> {
+            if (listData.size() == 0) return;
+            if (!recycle_view.isComputingLayout()) {
+                StatisticsUtils.trackClick("wechat_voice_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_voice_cleaning_page");
+                cb_checkall.setSelected(!cb_checkall.isSelected());
+                tv_delete.setSelected(cb_checkall.isSelected());
+                audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+                compulateDeleteSize();
             }
         });
     }
@@ -198,8 +190,6 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
         tv_delete.setText("删除");
         tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
         audAdapter.deleteData(listF);
-//        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
-//        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
     }
 
     @Override

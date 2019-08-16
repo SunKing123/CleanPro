@@ -1,7 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
-import android.graphics.drawable.Drawable;
-
 import java.io.Serializable;
 
 /**

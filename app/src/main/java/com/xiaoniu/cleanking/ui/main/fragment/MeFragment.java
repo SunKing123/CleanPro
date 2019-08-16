@@ -23,13 +23,8 @@ import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.SimpleFragment;
-import com.xiaoniu.cleanking.ui.main.activity.QQCleanImgActivity;
-import com.xiaoniu.cleanking.ui.main.activity.QQCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
-import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
-import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
-import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
@@ -56,8 +51,6 @@ public class MeFragment extends SimpleFragment {
     LinearLayout line_about;
     @BindView(R.id.line_permisson)
     LinearLayout line_permisson;
-//    @BindView(R.id.line_feedback)
-//    LinearLayout line_feedback;
 
     public static MeFragment getIntance() {
         MeFragment fragment = new MeFragment();
@@ -80,13 +73,10 @@ public class MeFragment extends SimpleFragment {
 
     @Override
     protected void initView() {
-        line_about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("fdsa", "dsd");
-                StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
-                startActivity(AboutActivity.class);
-            }
+        line_about.setOnClickListener(v -> {
+            Log.e("fdsa", "dsd");
+            StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
+            startActivity(AboutActivity.class);
         });
 
         ConstraintLayout.LayoutParams clp = (ConstraintLayout.LayoutParams) iv_top.getLayoutParams();
@@ -96,13 +86,6 @@ public class MeFragment extends SimpleFragment {
         ConstraintLayout.LayoutParams clpt = (ConstraintLayout.LayoutParams) viewmid.getLayoutParams();
         clpt.topMargin = DeviceUtils.getScreenHeight() * 26 / 100 - DeviceUtils.dip2px(15);
         viewmid.setLayoutParams(clpt);
-
-//        line_feedback.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(FeedBackActivity.class);
-//            }
-//        });
     }
 
     public long e = 0;

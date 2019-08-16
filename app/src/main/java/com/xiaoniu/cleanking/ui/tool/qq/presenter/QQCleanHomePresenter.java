@@ -1,12 +1,10 @@
 package com.xiaoniu.cleanking.ui.tool.qq.presenter;
 
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileDeleteEntity;
@@ -27,11 +24,6 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
-import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
-import com.xiaoniu.cleanking.utils.DateUtils;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -44,7 +36,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -75,7 +66,6 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
         animator.setDuration(600);
         animator.setRepeatCount(ValueAnimator.INFINITE);
-//        animator.setRepeatMode(ValueAnimator.INFINITE);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -92,12 +82,9 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         ValueAnimator anim = ValueAnimator.ofFloat(startNum, endNum);
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currentValue = (float) animation.getAnimatedValue();
-                tvGab.setText(NumberUtils.getFloatStr1(currentValue) + "");
-            }
+        anim.addUpdateListener(animation -> {
+            float currentValue = (float) animation.getAnimatedValue();
+            tvGab.setText(NumberUtils.getFloatStr1(currentValue) + "");
         });
         anim.start();
         return anim;
@@ -108,12 +95,9 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         ValueAnimator anim = ValueAnimator.ofFloat(startSize, endSize);
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currentValue = (float) animation.getAnimatedValue();
-                tvGab.setTextSize(currentValue);
-            }
+        anim.addUpdateListener(animation -> {
+            float currentValue = (float) animation.getAnimatedValue();
+            tvGab.setTextSize(currentValue);
         });
         anim.start();
     }
@@ -124,13 +108,10 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         LinearLayout.LayoutParams llp = (LinearLayout.LayoutParams) tvGab.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                llp.height = currentValue;
-                tvGab.setLayoutParams(llp);
-            }
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            llp.height = currentValue;
+            tvGab.setLayoutParams(llp);
         });
         anim.start();
         anim.addListener(new AnimatorListenerAdapter() {
@@ -178,41 +159,25 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
             fileDeleteEntity.setSize(getSelectImgOrVideoList(mListVideo).get(i).size);
             listFileDelete.add(fileDeleteEntity);
         }
-
-        Log.e("dsds", "" + listFileDelete.size());
-        //测试代码**************************************
-//        List<CleanWxClearInfo> listTempTest = new ArrayList<>();
-//        long tempSize = 0;
-//        for (int i = 0; i < listTemp.size(); i++) {
-//            if (i < 7){
-//                tempSize += listTemp.get(i).getSize();
-//                listTempTest.add(listTemp.get(i));
-//            }
-//        }
-//        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
-
         delFile(listFileDelete);
     }
 
     public void delFile(List<FileDeleteEntity> list) {
         List<FileDeleteEntity> files = list;
-        Observable.create(new ObservableOnSubscribe<Long>() {
-            @Override
-            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<Long>) emitter -> {
 
-                for (FileDeleteEntity appInfoBean : files) {
-                    File file = new File(appInfoBean.getPath());
-                    Log.e("删除路劲:", "" + file.getAbsolutePath());
-                    if (null != file) {
-                        file.delete();
-                    }
+            for (FileDeleteEntity appInfoBean : files) {
+                File file = new File(appInfoBean.getPath());
+                Log.e("删除路劲:", "" + file.getAbsolutePath());
+                if (null != file) {
+                    file.delete();
                 }
-                long sizes = 0;
-                for (FileDeleteEntity cleanWxItemInfo : files)
-                    sizes += cleanWxItemInfo.getSize();
-                emitter.onNext(sizes);
-                emitter.onComplete();
             }
+            long sizes = 0;
+            for (FileDeleteEntity cleanWxItemInfo : files)
+                sizes += cleanWxItemInfo.getSize();
+            emitter.onNext(sizes);
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程
@@ -327,16 +292,13 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         String pathLocal = wxRootPath + "/diskcache";
         String pathLocal2 = wxRootPath + "/photo";
         String pathLocal3 = wxRootPath + "/thumb";
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
 
-                scanAllImgCamera(pathLocal);
-                scanAllImgCamera(pathLocal2);
-                scanAllImgCamera(pathLocal3);
-                emitter.onNext("");
-                emitter.onComplete();
-            }
+            scanAllImgCamera(pathLocal);
+            scanAllImgCamera(pathLocal2);
+            scanAllImgCamera(pathLocal3);
+            emitter.onNext("");
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程
@@ -369,14 +331,11 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
         mQQVideoFileSize = 0L;
         String wxRootPath = Environment.getExternalStorageDirectory().getPath() + "/tencent/MobileQQ";
         String pathLocal = wxRootPath + "/shortvideo";
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
 
-                scanAllVideoCamera(pathLocal);
-                emitter.onNext("");
-                emitter.onComplete();
-            }
+            scanAllVideoCamera(pathLocal);
+            emitter.onNext("");
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程

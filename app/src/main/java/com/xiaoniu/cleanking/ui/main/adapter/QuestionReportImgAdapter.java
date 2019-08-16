@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.lzy.imagepicker.ui.ImagePreviewActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
 
@@ -23,8 +21,6 @@ import java.util.List;
  * Created by lang.chen on 2019/7/5
  */
 public class QuestionReportImgAdapter extends RecyclerView.Adapter {
-
-
     private List<ImgBean> mLists = new ArrayList<>();
 
     private Context mContext;
@@ -69,24 +65,18 @@ public class QuestionReportImgAdapter extends RecyclerView.Adapter {
             if (bean.itemType == 1) {
                 Glide.with(mContext).load(R.mipmap.icon_btn_camera).into(mViewHolder.mImg);
                 mViewHolder.mImgClose.setVisibility(View.INVISIBLE);
-                mViewHolder.mImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (null != mOnItemImgClickListener) {
-                            mOnItemImgClickListener.onSelectImg();
-                        }
+                mViewHolder.mImg.setOnClickListener(v -> {
+                    if (null != mOnItemImgClickListener) {
+                        mOnItemImgClickListener.onSelectImg();
                     }
                 });
             }else {
                 mViewHolder.mImg.setOnClickListener(null);
                 mViewHolder.mImgClose.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(new File(bean.path)).into(mViewHolder.mImg);
-                mViewHolder.mImgClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(null!=mOnItemImgClickListener){
-                            mOnItemImgClickListener.onDelImg(position);
-                        }
+                mViewHolder.mImgClose.setOnClickListener(v -> {
+                    if(null!=mOnItemImgClickListener){
+                        mOnItemImgClickListener.onDelImg(position);
                     }
                 });
             }

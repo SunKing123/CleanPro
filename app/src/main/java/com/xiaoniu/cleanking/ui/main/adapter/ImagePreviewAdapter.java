@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
-import com.xiaoniu.cleanking.ui.main.bean.Image;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ImagePreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<FileEntity> listImage = new ArrayList<>();
+    List<FileEntity> listImage;
 
     public List<FileEntity> getListImage() {
         return listImage;
@@ -91,15 +88,15 @@ public class ImagePreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public ImageViewHolder(View itemView) {
             super(itemView);
-            iv_photo_filelist_pic = (ImageView) itemView.findViewById(R.id.iv_photo_filelist_pic);
-            tv_select = (TextView) itemView.findViewById(R.id.tv_select);
-            rel_select = (RelativeLayout) itemView.findViewById(R.id.rel_select);
+            iv_photo_filelist_pic = itemView.findViewById(R.id.iv_photo_filelist_pic);
+            tv_select = itemView.findViewById(R.id.tv_select);
+            rel_select = itemView.findViewById(R.id.rel_select);
         }
     }
 
 
     public interface onCheckListener {
-        public void onCheck(int pos);
+        void onCheck(int pos);
     }
 
     public void setmOnCheckListener(onCheckListener mOnCheckListener) {

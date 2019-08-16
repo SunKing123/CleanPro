@@ -4,23 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.utils.DateUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
 import java.util.ArrayList;
@@ -68,20 +61,14 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             } else {
                 viewHolder.mCheckSelect.setSelected(false);
             }
-            viewHolder.mLLCheckSelect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.path, !appInfoBean.isSelect);
-                    }
+            viewHolder.mLLCheckSelect.setOnClickListener(v -> {
+                if (null != onCheckListener) {
+                    onCheckListener.onCheck(appInfoBean.path, !appInfoBean.isSelect);
                 }
             });
-            viewHolder.mLLContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(null!=onCheckListener){
-                        onCheckListener.play(appInfoBean);
-                    }
+            viewHolder.mLLContent.setOnClickListener(v -> {
+                if(null!=onCheckListener){
+                    onCheckListener.play(appInfoBean);
                 }
             });
         }

@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.OnOutsidePhotoTapListener;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -24,8 +22,6 @@ import java.util.List;
  * Created by SonnyJack on 2018/7/18 18:43.
  */
 public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsidePhotoTapListener, OnPhotoTapListener {
-
-    private Context mContext;
     private List<FileEntity> mDataList;
 
     public void deleteData(List<Image> tempList) {
@@ -34,7 +30,6 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
     }
 
     public PreviewImagePagerAdapter(Context context, List<FileEntity> dataList) {
-        mContext = context;
         mDataList = dataList;
     }
 
@@ -50,7 +45,6 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        //super.destroyItem(container, position, object);
         View view = (View) object;
         container.removeView(view);
     }
@@ -62,20 +56,6 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
         photoView.setMinimumScale(0.5f);
         FileEntity image = mDataList.get(position);
         if (null != image) {
-//            if (image.getHeight() > ScreenUtils.getScreenHeight()) {
-//                //长截图的话
-//                photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                IImageLoader.loadOriginalImage(photoView, image.getPath(), ((imageView, drawable) -> {
-//                    Matrix matrix = new Matrix();
-//                    photoView.getSuppMatrix(matrix);
-//                    //fuck：dy不能太大，精度可能会截取，无法已到最顶部【目前dy先写死，后期可以根据imageView和drawable大小计算平移】
-//                    matrix.postTranslate(0, 99999999);
-//                    photoView.post(() -> photoView.setSuppMatrix(matrix));
-//                }));
-//            } else {
-//                photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//                IImageLoader.loadOriginalImage(photoView, image.getPath(), null);
-//            }
             loadArtworkImage(photoView,image.getPath(),0,0);
 
         }
@@ -96,9 +76,6 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
     }
 
     private void finishActivity() {
-//        if (mContext instanceof Activity) {
-//            ((Activity) mContext).finish();
-//        }
     }
 
 
@@ -116,7 +93,6 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
         if (isValidContextForGlide(context) == false) {
             return;
         }
-//        Log.e("GlideUtils", "loadImage: " + url);
         Glide.with(image)
                 .load(url)
                 .into(image);

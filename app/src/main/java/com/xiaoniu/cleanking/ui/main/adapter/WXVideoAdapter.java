@@ -59,28 +59,21 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
         }
 
 
-        viewHolder.mLLSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(fileChildEntity.isSelect){
-                    fileChildEntity.isSelect=false;
-                }else {
-                    fileChildEntity.isSelect=true;
-                }
-                if(null!=onSelectListener){
-                    onSelectListener.select(position,fileChildEntity.isSelect);
-                }
-                //notifyDataSetChanged();
-
+        viewHolder.mLLSelect.setOnClickListener(v -> {
+            if(fileChildEntity.isSelect){
+                fileChildEntity.isSelect=false;
+            }else {
+                fileChildEntity.isSelect=true;
             }
+            if(null!=onSelectListener){
+                onSelectListener.select(position,fileChildEntity.isSelect);
+            }
+
         });
 
-        viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(null!=onSelectListener){
-                    onSelectListener.onClickImg(position);
-                }
+        viewHolder.mImg.setOnClickListener(v -> {
+            if(null!=onSelectListener){
+                onSelectListener.onClickImg(position);
             }
         });
 

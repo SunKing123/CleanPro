@@ -20,13 +20,10 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<FileEntity> listImage = new ArrayList<>();
-
+    List<FileEntity> listImage;
 
     public void setListImage(List<FileEntity> listImage) {
         this.listImage.clear();
@@ -80,24 +77,18 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             llp.width = (DeviceUtils.getScreenWidth() - DeviceUtils.dip2px(48)) / 3;
             llp.height = llp.width;
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setLayoutParams(llp);
-            ((ImageViewHolder) holder).iv_photo_filelist_pic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mActivity, PreviewImageActivity.class);
-                    intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-                    CleanAllFileScanUtil.clean_image_list = listImage;
-                    mActivity.startActivityForResult(intent, 209);
-                }
+            ((ImageViewHolder) holder).iv_photo_filelist_pic.setOnClickListener(v -> {
+                Intent intent = new Intent(mActivity, PreviewImageActivity.class);
+                intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
+                CleanAllFileScanUtil.clean_image_list = listImage;
+                mActivity.startActivityForResult(intent, 209);
             });
             ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            ((ImageViewHolder) holder).rel_select.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listImage.get(position).setIsSelect(!listImage.get(position).getIsSelect());
-                    ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    if (mOnCheckListener != null)
-                        mOnCheckListener.onCheck(listImage, position);
-                }
+            ((ImageViewHolder) holder).rel_select.setOnClickListener(v -> {
+                listImage.get(position).setIsSelect(!listImage.get(position).getIsSelect());
+                ((ImageViewHolder) holder).cb_choose.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                if (mOnCheckListener != null)
+                    mOnCheckListener.onCheck(listImage, position);
             });
 
         }
@@ -116,15 +107,15 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public ImageViewHolder(View itemView) {
             super(itemView);
-            iv_photo_filelist_pic = (ImageView) itemView.findViewById(R.id.iv_photo_filelist_pic);
-            cb_choose = (TextView) itemView.findViewById(R.id.cb_choose);
-            rel_select = (RelativeLayout) itemView.findViewById(R.id.rel_select);
+            iv_photo_filelist_pic = itemView.findViewById(R.id.iv_photo_filelist_pic);
+            cb_choose = itemView.findViewById(R.id.cb_choose);
+            rel_select = itemView.findViewById(R.id.rel_select);
         }
     }
 
 
     public interface onCheckListener {
-        public void onCheck(List<FileEntity> listFile, int pos);
+        void onCheck(List<FileEntity> listFile, int pos);
     }
 
     public void setmOnCheckListener(onCheckListener mOnCheckListener) {

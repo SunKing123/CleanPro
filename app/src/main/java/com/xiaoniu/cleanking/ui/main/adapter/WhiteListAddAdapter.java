@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,12 +56,9 @@ public class WhiteListAddAdapter extends RecyclerView.Adapter {
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mImgCheck.setSelected(appInfoBean.isSelect);
 
-            viewHolder.mLLCheck.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.packageName, !appInfoBean.isSelect);
-                    }
+            viewHolder.mLLCheck.setOnClickListener(v -> {
+                if (null != onCheckListener) {
+                    onCheckListener.onCheck(appInfoBean.packageName, !appInfoBean.isSelect);
                 }
             });
         }

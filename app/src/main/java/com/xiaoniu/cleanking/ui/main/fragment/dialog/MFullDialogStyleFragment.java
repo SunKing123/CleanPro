@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 
@@ -95,13 +93,10 @@ public class MFullDialogStyleFragment extends DialogFragment {
 
         Button btnDel = view.findViewById(R.id.btn_del);
 
-        btnDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-                if (null != dialogClickListener) {
-                    dialogClickListener.onConfirm();
-                }
+        btnDel.setOnClickListener(v -> {
+            dismissAllowingStateLoss();
+            if (null != dialogClickListener) {
+                dialogClickListener.onConfirm();
             }
         });
     }

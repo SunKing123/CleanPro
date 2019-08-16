@@ -60,11 +60,6 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
     ExpandableListView mListView;
     private WXImgChatAdapter mAdapter;
 
-
-
-//    @BindView(R.id.scroll_view)
-//    ObservableScrollView mScrollView;
-
     @BindView(R.id.ll_check_all)
     LinearLayout mLLCheckAll;
     @BindView(R.id.btn_del)
@@ -128,13 +123,10 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
                 }
             }
 
-            mMyHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    int itemCount = adaterLists.get(groupPosition).lists.size();
-                    mAdapter.getWXImgAdapter().notifyItemRangeChanged(startSize+1, itemCount,"");
-                    mIsLoading = false;
-                }
+            mMyHandler.postDelayed(() -> {
+                int itemCount = adaterLists.get(groupPosition).lists.size();
+                mAdapter.getWXImgAdapter().notifyItemRangeChanged(startSize+1, itemCount,"");
+                mIsLoading = false;
             }, 0);
         }
     }
@@ -155,94 +147,85 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         mLoading = CleanFileLoadingDialogFragment.newInstance();
         mProgress = FileCopyProgressDialogFragment.newInstance();
 
-        mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                List<FileTitleEntity> lists = mAdapter.getList();
-                boolean isExpand = false;
+        mListView.setOnGroupCollapseListener(groupPosition -> {
+            List<FileTitleEntity> lists = mAdapter.getList();
+            boolean isExpand = false;
 
-                for (int i = 0; i < lists.size(); i++) {
-                    if (i == groupPosition) {
-                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                        if (fileTitleEntity.isExpand) {
-                            fileTitleEntity.isExpand = false;
-                        } else {
-                            fileTitleEntity.isExpand = true;
-                        }
-                        isExpand = fileTitleEntity.isExpand;
-                        break;
+            for (int i = 0; i < lists.size(); i++) {
+                if (i == groupPosition) {
+                    FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                    if (fileTitleEntity.isExpand) {
+                        fileTitleEntity.isExpand = false;
+                    } else {
+                        fileTitleEntity.isExpand = true;
                     }
+                    isExpand = fileTitleEntity.isExpand;
+                    break;
                 }
-                mAdapter.notifyDataSetChanged();
-
             }
+            mAdapter.notifyDataSetChanged();
+
         });
 
-        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                List<FileTitleEntity> lists = mAdapter.getList();
+        mListView.setOnGroupExpandListener(groupPosition -> {
+            List<FileTitleEntity> lists = mAdapter.getList();
 
 
-                boolean isExpand = false;
-                for (int i = 0; i < lists.size(); i++) {
-                    if (i == groupPosition) {
-                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                        if (fileTitleEntity.isExpand) {
-                            fileTitleEntity.isExpand = false;
-                        } else {
-                            fileTitleEntity.isExpand = true;
-                        }
-                        isExpand = fileTitleEntity.isExpand;
+            boolean isExpand = false;
+            for (int i = 0; i < lists.size(); i++) {
+                if (i == groupPosition) {
+                    FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                    if (fileTitleEntity.isExpand) {
+                        fileTitleEntity.isExpand = false;
+                    } else {
+                        fileTitleEntity.isExpand = true;
+                    }
+                    isExpand = fileTitleEntity.isExpand;
+                }else {
+                    mListView.collapseGroup(i);
+                }
+            }
+            mAdapter.notifyDataSetChanged();
+
+            mListView.setSelectedGroup(groupPosition);
+            mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                    if((scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING) && mOfferY>0){
+                        scollPage(groupPosition);
+                    }
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                    if(firstVisibleItem+visibleItemCount==totalItemCount){
+                        mOfferY=1;
                     }else {
-                        mListView.collapseGroup(i);
+                        mOfferY=-1;
                     }
+
                 }
-                mAdapter.notifyDataSetChanged();
-
-                mListView.setSelectedGroup(groupPosition);
-                mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
-                        if((scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING) && mOfferY>0){
-                            scollPage(groupPosition);
-                        }
-                    }
-
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                        if(firstVisibleItem+visibleItemCount==totalItemCount){
-                            mOfferY=1;
-                        }else {
-                            mOfferY=-1;
-                        }
-
-                    }
-                });
+            });
 
 
-            }
         });
 
 
 
-        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsCheckAll) {
-                    mIsCheckAll = false;
-                } else {
-                    mIsCheckAll = true;
-                }
-                mLLCheckAll.setSelected(mIsCheckAll);
-                setSelectStatus(mIsCheckAll);
-                setDelBtnSize();
-
-                StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
-                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
-
+        mLLCheckAll.setOnClickListener(v -> {
+            if (mIsCheckAll) {
+                mIsCheckAll = false;
+            } else {
+                mIsCheckAll = true;
             }
+            mLLCheckAll.setSelected(mIsCheckAll);
+            setSelectStatus(mIsCheckAll);
+            setDelBtnSize();
+
+            StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
+                    ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+
         });
 
 

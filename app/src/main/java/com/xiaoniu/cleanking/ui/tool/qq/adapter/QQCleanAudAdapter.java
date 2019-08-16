@@ -12,11 +12,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QQCleanAudAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<CleanWxClearInfo> listImage = new ArrayList<>();
+    List<CleanWxClearInfo> listImage;
 
 
     public void deleteData(List<CleanWxClearInfo> tempList) {
@@ -58,22 +57,15 @@ public class QQCleanAudAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
-//            String path = listImage.get(position).getPath();
-//            Glide.with(mActivity)
-//                    .load(path)
-//                    .into(((ImageViewHolder) holder).iv_photo_filelist_pic);
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getFileName());
             ((QQCleanAudAdapter.ImageViewHolder) holder).tv_time.setText(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listImage.get(position).getTime()));
             ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSizeOne(listImage.get(position).getSize()));
             ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            ((ImageViewHolder) holder).tv_select.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listImage.get(position).setIsSelect(!listImage.get(position).getIsSelect());
-                    ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    if (mOnCheckListener != null)
-                        mOnCheckListener.onCheck(listImage, position);
-                }
+            ((ImageViewHolder) holder).tv_select.setOnClickListener(v -> {
+                listImage.get(position).setIsSelect(!listImage.get(position).getIsSelect());
+                ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                if (mOnCheckListener != null)
+                    mOnCheckListener.onCheck(listImage, position);
             });
 
         }
@@ -93,16 +85,16 @@ public class QQCleanAudAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ImageViewHolder(View itemView) {
             super(itemView);
-            tv_select = (TextView) itemView.findViewById(R.id.tv_select);
-            tv_name = (TextView) itemView.findViewById(R.id.tv_name);
-            tv_size = (TextView) itemView.findViewById(R.id.tv_size);
-            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+            tv_select =  itemView.findViewById(R.id.tv_select);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_size = itemView.findViewById(R.id.tv_size);
+            tv_time = itemView.findViewById(R.id.tv_time);
         }
     }
 
 
     public interface onCheckListener {
-        public void onCheck(List<CleanWxClearInfo> listFile, int pos);
+        void onCheck(List<CleanWxClearInfo> listFile, int pos);
     }
 
     public void setmOnCheckListener(onCheckListener mOnCheckListener) {

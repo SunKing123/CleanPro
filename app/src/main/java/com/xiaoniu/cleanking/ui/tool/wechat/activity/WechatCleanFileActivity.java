@@ -279,33 +279,21 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         recycleViewYestoday.setAdapter(fileAdapterYestoday);
         recycleViewMonth.setAdapter(fileAdapterInMonth);
         recycleViewHalfyear.setAdapter(fileAdapterInHalfYear);
-        fileAdapterToday.setmOnCheckListener(new WechatCleanFileAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<CleanWxItemInfo> listFile, int pos) {
-                isSelectAllData();
-                compulateDeleteSize();
-            }
+        fileAdapterToday.setmOnCheckListener((listFile, pos) -> {
+            isSelectAllData();
+            compulateDeleteSize();
         });
-        fileAdapterYestoday.setmOnCheckListener(new WechatCleanFileAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<CleanWxItemInfo> listFile, int pos) {
-                isSelectAllData();
-                compulateDeleteSize();
-            }
+        fileAdapterYestoday.setmOnCheckListener((listFile, pos) -> {
+            isSelectAllData();
+            compulateDeleteSize();
         });
-        fileAdapterInMonth.setmOnCheckListener(new WechatCleanFileAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<CleanWxItemInfo> listFile, int pos) {
-                isSelectAllData();
-                compulateDeleteSize();
-            }
+        fileAdapterInMonth.setmOnCheckListener((listFile, pos) -> {
+            isSelectAllData();
+            compulateDeleteSize();
         });
-        fileAdapterInHalfYear.setmOnCheckListener(new WechatCleanFileAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<CleanWxItemInfo> listFile, int pos) {
-                isSelectAllData();
-                compulateDeleteSize();
-            }
+        fileAdapterInHalfYear.setmOnCheckListener((listFile, pos) -> {
+            isSelectAllData();
+            compulateDeleteSize();
         });
 
         tv_delete.setSelected(false);
@@ -314,22 +302,19 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         tvSelectYestoday.setSelected(false);
         tvSelectMonth.setSelected(false);
         tvSelectHalfyear.setSelected(false);
-        cb_checkall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listDataTemp.size() == 0) return;
-                if (!recycleViewToday.isComputingLayout()) {
-                    StatisticsUtils.trackClick("wechat_receive_files_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
-                    cb_checkall.setSelected(!cb_checkall.isSelected());
-                    tv_delete.setSelected(cb_checkall.isSelected());
-                    fileAdapterToday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    fileAdapterYestoday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    fileAdapterInMonth.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    fileAdapterInHalfYear.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-                    compulateDeleteSize();
-                }
+        cb_checkall.setOnClickListener(v -> {
+            if (listDataTemp.size() == 0) return;
+            if (!recycleViewToday.isComputingLayout()) {
+                StatisticsUtils.trackClick("wechat_receive_files_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
+                cb_checkall.setSelected(!cb_checkall.isSelected());
+                tv_delete.setSelected(cb_checkall.isSelected());
+                fileAdapterToday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                fileAdapterYestoday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                fileAdapterInMonth.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                fileAdapterInHalfYear.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+                compulateDeleteSize();
             }
         });
     }
@@ -418,8 +403,6 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         fileAdapterYestoday.deleteData(list2);
         fileAdapterInMonth.deleteData(list3);
         fileAdapterInHalfYear.deleteData(list4);
-//        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
-//        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
     }
 
     @Override

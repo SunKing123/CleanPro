@@ -43,11 +43,6 @@ public class BaseBrowserFragment extends SimpleFragment {
     @Override
     protected void initView() {
         String url = getArguments().getString("url");
-//        if (url.contains("?")) {
-//            url = url + "&xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
-//        } else {
-//            url = url + "?xn_data=" + AndroidUtil.getXnData() + "&haveLiuhai=" + haveLiuhai;
-//        }
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()

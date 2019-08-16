@@ -108,94 +108,82 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         mAdapter=new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
 
-
-
-
-        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                List<FileTitleEntity> lists = mAdapter.getList();
-                boolean isExpand = false;
-                for (int i = 0; i < lists.size(); i++) {
-                    if (i == groupPosition) {
-                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                        if (fileTitleEntity.isExpand) {
-                            fileTitleEntity.isExpand = false;
-                        } else {
-                            fileTitleEntity.isExpand = true;
-                        }
-                        isExpand = fileTitleEntity.isExpand;
-                    }else {
-                        mListView.collapseGroup(i);
+        mListView.setOnGroupExpandListener(groupPosition -> {
+            List<FileTitleEntity> lists = mAdapter.getList();
+            boolean isExpand = false;
+            for (int i = 0; i < lists.size(); i++) {
+                if (i == groupPosition) {
+                    FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                    if (fileTitleEntity.isExpand) {
+                        fileTitleEntity.isExpand = false;
+                    } else {
+                        fileTitleEntity.isExpand = true;
                     }
-                }
-                mAdapter.notifyDataSetChanged();
-                mListView.setSelectedGroup(groupPosition);
-
-                mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
-                        if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
-                            scollPage(groupPosition);
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                        if(firstVisibleItem+visibleItemCount==totalItemCount){
-                            mOfferY=1;
-                        }else {
-                            mOfferY=-1;
-                        }
-
-                    }
-                });
-            }
-        });
-        mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                List<FileTitleEntity> lists = mAdapter.getList();
-                boolean isExpand = false;
-
-                for (int i = 0; i < lists.size(); i++) {
-                    if (i == groupPosition) {
-                        FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                        if (fileTitleEntity.isExpand) {
-                            fileTitleEntity.isExpand = false;
-                        } else {
-                            fileTitleEntity.isExpand = true;
-                        }
-                        isExpand = fileTitleEntity.isExpand;
-                        break;
-                    }
-                }
-
-                mAdapter.notifyDataSetChanged();
-
-
-            }
-        });
-
-
-        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
+                    isExpand = fileTitleEntity.isExpand;
                 }else {
-                    mIsCheckAll=true;
+                    mListView.collapseGroup(i);
                 }
-                mLLCheckAll.setSelected(mIsCheckAll);
-                setSelectStatus(mIsCheckAll);
-                setDelBtnSize();
-                StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
-                        ,"qq_cleaning_page","qq_picture_cleaning_page");
-
             }
+            mAdapter.notifyDataSetChanged();
+            mListView.setSelectedGroup(groupPosition);
+
+            mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                    if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
+                        scollPage(groupPosition);
+
+
+                    }
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                    if(firstVisibleItem+visibleItemCount==totalItemCount){
+                        mOfferY=1;
+                    }else {
+                        mOfferY=-1;
+                    }
+
+                }
+            });
+        });
+        mListView.setOnGroupCollapseListener(groupPosition -> {
+            List<FileTitleEntity> lists = mAdapter.getList();
+            boolean isExpand = false;
+
+            for (int i = 0; i < lists.size(); i++) {
+                if (i == groupPosition) {
+                    FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                    if (fileTitleEntity.isExpand) {
+                        fileTitleEntity.isExpand = false;
+                    } else {
+                        fileTitleEntity.isExpand = true;
+                    }
+                    isExpand = fileTitleEntity.isExpand;
+                    break;
+                }
+            }
+
+            mAdapter.notifyDataSetChanged();
+
+
+        });
+
+
+        mLLCheckAll.setOnClickListener(v -> {
+            if(mIsCheckAll){
+                mIsCheckAll=false;
+            }else {
+                mIsCheckAll=true;
+            }
+            mLLCheckAll.setSelected(mIsCheckAll);
+            setSelectStatus(mIsCheckAll);
+            setDelBtnSize();
+            StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
+                    ,"qq_cleaning_page","qq_picture_cleaning_page");
+
         });
 
         mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {
@@ -425,7 +413,6 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     private long totalSelectSize() {
         long size = 0L;
-        //List<FileTitleEntity> lists = mAdapter.getList();
         List<FileTitleEntity> lists=mPresenter.listsCamera;
         for(FileTitleEntity fileTitleEntity :lists){
             for(FileChildEntity file:fileTitleEntity.lists){
@@ -522,29 +509,9 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         int ids=view.getId();
         switch (ids){
             case R.id.btn_del:
-
-//                String title=String.format("确定删除这%s个图片?",getSelectSize());
-//                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
-//                FragmentManager fm = getActivity().getFragmentManager();
-//                dialogFragment.show(fm,"");
-//                dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
-//                    @Override
-//                    public void onCancel() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onConfirm() {
-//                        mLoading.show(getActivity().getSupportFragmentManager(),"");
-//                        List<FileChildEntity> files=getDelFile();
-//                        mPresenter.delFile(files);
-//                    }
-//                });
-
                 StatisticsUtils.trackClick("confirm_the_selection_click","\"确认选中\"点击"
                         ,"qq_cleaning_page","qq_picture_cleaning_page");
 
-                //ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mAdapter.getList();
                 ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mPresenter.listsCamera;
                 Bundle bundle=new Bundle();
                 bundle.putSerializable(Constant.PARAMS_QQ_IMG_LIST, lists);
@@ -555,7 +522,6 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
                 break;
             case R.id.btn_save:
-
 //                List<File> lists=getSelectFiles();
 //                if(lists.size()==0){
 //                    ToastUtils.show("未选中照片");
@@ -565,8 +531,6 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 //                    //导入图片
 //                    mPresenter.copyFile(lists);
 //                }
-
-
                 break;
         }
     }

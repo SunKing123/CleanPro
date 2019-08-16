@@ -75,7 +75,6 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         }
 
         Intent intent = getIntent();
-//        mImageArrayList = intent.getParcelableArrayListExtra(ExtraConstant.PREVIEW_IMAGE_DATA);
         mImageArrayList = CleanAllFileScanUtil.clean_image_list;
         int position = intent.getIntExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, 0);
 
@@ -101,75 +100,63 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
 
         computeDeleteSize();
 
-        adapter.setmOnCheckListener(new ImagePreviewAdapter.onCheckListener() {
-            @Override
-            public void onCheck(int pos) {
-                adapter.setSelectPosition(pos);
-                mViewPager.setCurrentItem(pos);
-                if (pos == 0) {
-                    setPosition(pos);
-                }
+        adapter.setmOnCheckListener(pos -> {
+            adapter.setSelectPosition(pos);
+            mViewPager.setCurrentItem(pos);
+            if (pos == 0) {
+                setPosition(pos);
             }
         });
         tvSelectImage.setSelected(false);
         //顶部选中此张图
-        tvSelectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvSelectImage.setSelected(!tvSelectImage.isSelected());
-                tvSelectImage.setBackgroundResource(tvSelectImage.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                if (selectPos > adapter.getListImage().size()-1) {
-                    return;
-                }
-                adapter.getListImage().get(selectPos).setIsSelect(tvSelectImage.isSelected());
-                if (adapter != null)
-                    adapter.setSelectPosition(selectPos);
-                computeDeleteSize();
+        tvSelectImage.setOnClickListener(v -> {
+            tvSelectImage.setSelected(!tvSelectImage.isSelected());
+            tvSelectImage.setBackgroundResource(tvSelectImage.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+            if (selectPos > adapter.getListImage().size()-1) {
+                return;
             }
+            adapter.getListImage().get(selectPos).setIsSelect(tvSelectImage.isSelected());
+            if (adapter != null)
+                adapter.setSelectPosition(selectPos);
+            computeDeleteSize();
         });
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backToActivity();
-                finish();
-            }
+        iv_back.setOnClickListener(v -> {
+            backToActivity();
+            finish();
         });
 
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        tvDelete.setOnClickListener(v -> {
 
-                List<FileEntity> listF = new ArrayList<>();
-                List<FileEntity> listData=adapter.getListImage();
-                for (int i = 0; i < listData.size(); i++) {
-                    if (listData.get(i).getIsSelect())
-                        listF.add(adapter.getListImage().get(i));
-                }
-                if (listF.size() == 0)
-                    return;
-                mPresenter.alertBanLiveDialog(PreviewImageActivity.this, listF.size(), new ImagePreviewPresenter.ClickListener() {
-                    @Override
-                    public void clickOKBtn() {
-                        for (int i = 0; i < listF.size(); i++) {
-                            File f = new File(listF.get(i).getPath());
-                            if(null!=f && f.exists()){
-                                f.delete();
-                            }
-                            AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+listF.get(i).getPath()+"\"",null);
-
+            List<FileEntity> listF = new ArrayList<>();
+            List<FileEntity> listData=adapter.getListImage();
+            for (int i = 0; i < listData.size(); i++) {
+                if (listData.get(i).getIsSelect())
+                    listF.add(adapter.getListImage().get(i));
+            }
+            if (listF.size() == 0)
+                return;
+            mPresenter.alertBanLiveDialog(PreviewImageActivity.this, listF.size(), new ImagePreviewPresenter.ClickListener() {
+                @Override
+                public void clickOKBtn() {
+                    for (int i = 0; i < listF.size(); i++) {
+                        File f = new File(listF.get(i).getPath());
+                        if(null!=f && f.exists()){
+                            f.delete();
                         }
-                        //数据库删除选中的文件
-                        mPresenter.deleteFromDatabase(listF);
-                    }
-
-                    @Override
-                    public void cancelBtn() {
+                        AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+listF.get(i).getPath()+"\"",null);
 
                     }
-                });
+                    //数据库删除选中的文件
+                    mPresenter.deleteFromDatabase(listF);
+                }
 
-            }
+                @Override
+                public void cancelBtn() {
+
+                }
+            });
+
         });
     }
 

@@ -2,12 +2,10 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +17,6 @@ import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.utils.DateUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,12 +78,9 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
                 }
             }
             viewHolder.mCheckSelect.setSelected(appInfoBean.isSelect);
-            viewHolder.mLLCheckSelect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.packageName, !appInfoBean.isSelect);
-                    }
+            viewHolder.mLLCheckSelect.setOnClickListener(v -> {
+                if (null != onCheckListener) {
+                    onCheckListener.onCheck(appInfoBean.packageName, !appInfoBean.isSelect);
                 }
             });
         }

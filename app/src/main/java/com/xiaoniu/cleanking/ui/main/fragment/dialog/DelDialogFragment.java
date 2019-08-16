@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by lang.chen on 2019/7/2
  */
@@ -100,19 +98,11 @@ public class DelDialogFragment extends DialogFragment {
         Button btnCancel = view.findViewById(R.id.btn_cancel);
         Button btnDel = view.findViewById(R.id.btn_del);
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-            }
-        });
-        btnDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-                if (null != dialogClickListener) {
-                    dialogClickListener.onConfirm();
-                }
+        btnCancel.setOnClickListener(v -> dismissAllowingStateLoss());
+        btnDel.setOnClickListener(v -> {
+            dismissAllowingStateLoss();
+            if (null != dialogClickListener) {
+                dialogClickListener.onConfirm();
             }
         });
     }

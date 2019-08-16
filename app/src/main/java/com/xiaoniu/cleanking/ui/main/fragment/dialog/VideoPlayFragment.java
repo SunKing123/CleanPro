@@ -113,19 +113,11 @@ public class VideoPlayFragment extends DialogFragment {
             txtFrom.setText(String.format("来自: %s", from));
         }
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-            }
-        });
-        btnDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-                if (null != dialogClickListener) {
-                    dialogClickListener.onConfirm();
-                }
+        btnCancel.setOnClickListener(v -> dismissAllowingStateLoss());
+        btnDel.setOnClickListener(v -> {
+            dismissAllowingStateLoss();
+            if (null != dialogClickListener) {
+                dialogClickListener.onConfirm();
             }
         });
     }

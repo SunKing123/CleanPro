@@ -4,30 +4,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-
-import com.xiaoniu.cleanking.Manifest;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.InstallPackageManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.SoftManagePresenter;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -79,21 +68,16 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
         mAdapter.setOnCheckListener(this);
         mAdapter.setIsShowSubTitle(false);
 
-        //mAdapter.modifyList(mPresenter.getData());
-        mCheckBoxAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mIsCheckAll) {
-                    mIsCheckAll = false;
-                } else {
-                    mIsCheckAll = true;
-                }
-                mCheckBoxAll.setSelected(mIsCheckAll);
-                checkAll(mIsCheckAll);
-                totalSelectFiles();
+        mCheckBoxAll.setOnClickListener(v -> {
+            if (mIsCheckAll) {
+                mIsCheckAll = false;
+            } else {
+                mIsCheckAll = true;
             }
+            mCheckBoxAll.setSelected(mIsCheckAll);
+            checkAll(mIsCheckAll);
+            totalSelectFiles();
         });
-
 
         mPresenter.scanData();
 
@@ -122,12 +106,9 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     }
 
     public void updateData(List<AppInfoBean> lists) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                    mAdapter.clear();
-                    mAdapter.modifyList(lists);
-            }
+        runOnUiThread(() -> {
+                mAdapter.clear();
+                mAdapter.modifyList(lists);
         });
     }
 

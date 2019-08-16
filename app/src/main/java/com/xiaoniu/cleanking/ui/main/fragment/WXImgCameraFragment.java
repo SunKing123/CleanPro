@@ -100,43 +100,37 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
         mProgress=FileCopyProgressDialogFragment.newInstance();
         mAdapter=new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
-        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                List<FileTitleEntity> lists=mAdapter.getList();
-                for(int i=0;i<lists.size();i++){
-                    if(i==groupPosition){
-                        FileTitleEntity fileTitleEntity=lists.get(groupPosition);
-                        if(fileTitleEntity.isExpand){
-                            fileTitleEntity.isExpand=false;
-                        }else {
-                            fileTitleEntity.isExpand=true;
-                        }
-                        break;
+        mListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            List<FileTitleEntity> lists=mAdapter.getList();
+            for(int i=0;i<lists.size();i++){
+                if(i==groupPosition){
+                    FileTitleEntity fileTitleEntity=lists.get(groupPosition);
+                    if(fileTitleEntity.isExpand){
+                        fileTitleEntity.isExpand=false;
+                    }else {
+                        fileTitleEntity.isExpand=true;
                     }
+                    break;
                 }
-                mAdapter.notifyDataSetChanged();
-
-                return false;
             }
+            mAdapter.notifyDataSetChanged();
+
+            return false;
         });
 
-        mLLCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
-                }else {
-                    mIsCheckAll=true;
-                }
-                mLLCheckAll.setSelected(mIsCheckAll);
-                setSelectStatus(mIsCheckAll);
-                setDelBtnSize();
-                StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
-                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
-
-
+        mLLCheckAll.setOnClickListener(v -> {
+            if(mIsCheckAll){
+                mIsCheckAll=false;
+            }else {
+                mIsCheckAll=true;
             }
+            mLLCheckAll.setSelected(mIsCheckAll);
+            setSelectStatus(mIsCheckAll);
+            setDelBtnSize();
+            StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
+                    ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+
+
         });
 
         mAdapter.setOnCheckListener(new WXImgChatAdapter.OnCheckListener() {

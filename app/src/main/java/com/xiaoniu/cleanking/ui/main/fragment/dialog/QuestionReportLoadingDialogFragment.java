@@ -22,7 +22,6 @@ import com.xiaoniu.cleanking.R;
  */
 public class QuestionReportLoadingDialogFragment extends DialogFragment {
 
-
     private ProgressBar mProgressBar;
     private TextView mTxtContent;
     private ImageView mImgSuccessful;

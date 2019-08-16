@@ -9,9 +9,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WhiteListInstallPackageAdapter;
-import com.xiaoniu.cleanking.ui.main.adapter.WhiteListSpeedAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.ui.main.presenter.WhiteListInstallPManagePresenter;
 import com.xiaoniu.cleanking.ui.main.presenter.WhiteListIntallPackagePresenter;
 
 import java.util.ArrayList;

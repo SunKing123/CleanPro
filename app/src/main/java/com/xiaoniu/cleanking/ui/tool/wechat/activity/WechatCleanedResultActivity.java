@@ -53,12 +53,7 @@ public class WechatCleanedResultActivity extends SimpleActivity {
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
 //        mCleanAnimView.startTopAnim(true);
-        mCleanAnimView.setListener(new CleanedAnimView.onBackClickListener() {
-            @Override
-            public void onClick() {
-                finish();
-            }
-        });
+        mCleanAnimView.setListener(() -> finish());
     }
 
     /**

@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -24,7 +23,6 @@ import butterknife.OnClick;
  * Created by lang.chen on 2019/7/4
  */
 public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPresenter> implements WhiteListSpeedAdapter.OnCheckListener {
-
 
     public static final int REQUEST_CODE_UPDATE = 0x1101;
     @BindView(R.id.recycle_view)
@@ -110,7 +108,6 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
         } else {
             mLLEmptyView.setVisibility(View.VISIBLE);
             mLLHead.setVisibility(View.GONE);
-
         }
     }
 }

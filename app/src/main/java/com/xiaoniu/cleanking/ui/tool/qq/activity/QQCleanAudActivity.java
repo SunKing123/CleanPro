@@ -98,37 +98,31 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         audAdapter = new QQCleanAudAdapter(QQCleanAudActivity.this, listData);
         recycle_view.setLayoutManager(new LinearLayoutManager(QQCleanAudActivity.this));
         recycle_view.setAdapter(audAdapter);
-        audAdapter.setmOnCheckListener(new QQCleanAudAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<CleanWxClearInfo> listFile, int pos) {
-                int selectCount = 0;
-                for (int i = 0; i < listFile.size(); i++) {
-                    if (listFile.get(i).getIsSelect()) {
-                        selectCount++;
-                    }
+        audAdapter.setmOnCheckListener((listFile, pos) -> {
+            int selectCount = 0;
+            for (int i = 0; i < listFile.size(); i++) {
+                if (listFile.get(i).getIsSelect()) {
+                    selectCount++;
                 }
-                cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
-                tv_delete.setSelected(selectCount == 0 ? false : true);
-                compulateDeleteSize();
             }
+            cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+            tv_delete.setSelected(selectCount == 0 ? false : true);
+            compulateDeleteSize();
         });
 
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
-        cb_checkall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listData.size() == 0) return;
-                if (!recycle_view.isComputingLayout()) {
-                    cb_checkall.setSelected(!cb_checkall.isSelected());
-                    tv_delete.setSelected(cb_checkall.isSelected());
-                    audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-                    compulateDeleteSize();
-                    StatisticsUtils.trackClick("qq_voice_cleaning_all_election_click", "全选按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
-                }
+        cb_checkall.setOnClickListener(v -> {
+            if (listData.size() == 0) return;
+            if (!recycle_view.isComputingLayout()) {
+                cb_checkall.setSelected(!cb_checkall.isSelected());
+                tv_delete.setSelected(cb_checkall.isSelected());
+                audAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+                compulateDeleteSize();
+                StatisticsUtils.trackClick("qq_voice_cleaning_all_election_click", "全选按钮点击", "qq_cleaning_page", "qq_voice_cleaning_page");
             }
         });
         compulateDeleteSize();
@@ -157,8 +151,6 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         tv_delete.setSelected(false);
         tv_delete.setText("未选中");
         audAdapter.deleteData(listF);
-//        line_none.setVisibility(imageAdapter.getListImage().size() == 0 ? View.VISIBLE : View.GONE);
-//        recycle_view.setVisibility(imageAdapter.getListImage().size() == 0 ? View.GONE : View.VISIBLE);
     }
 
     @Override

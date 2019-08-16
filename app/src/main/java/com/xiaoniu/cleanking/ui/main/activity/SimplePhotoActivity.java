@@ -2,17 +2,12 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-
-
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.app.TakePhotoActivity;
 import org.devio.takephoto.compress.CompressConfig;
 import org.devio.takephoto.model.LubanOptions;
 import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TResult;
-
-import java.io.File;
 import java.util.ArrayList;
 
 /**

@@ -53,12 +53,9 @@ public class WhiteListInstallPackageAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             Glide.with(mContext).load(R.mipmap.icon_directory).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
-            viewHolder.mBtnRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != onCheckListener) {
-                        onCheckListener.onCheck(appInfoBean.name);
-                    }
+            viewHolder.mBtnRemove.setOnClickListener(v -> {
+                if (null != onCheckListener) {
+                    onCheckListener.onCheck(appInfoBean.name);
                 }
             });
 

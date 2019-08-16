@@ -127,24 +127,21 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         mViewParent.mTxtTitle.setText(fileTitleEntity.title);
 
         mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
-        mViewParent.mImgSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fileTitleEntity.isSelect) {
-                    fileTitleEntity.isSelect = false;
-                } else {
-                    fileTitleEntity.isSelect = true;
-                }
-                mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
-                List<FileChildEntity> listChild = fileTitleEntity.lists;
-                for (FileChildEntity childEntity : listChild) {
-                    childEntity.isSelect = fileTitleEntity.isSelect;
-                }
-                if(null!=onCheckListener){
-                    onCheckListener.onCheckAll(groupPosition,-1,fileTitleEntity.isSelect);
-                }
-                //notifyDataSetChanged();
+        mViewParent.mImgSelect.setOnClickListener(v -> {
+            if (fileTitleEntity.isSelect) {
+                fileTitleEntity.isSelect = false;
+            } else {
+                fileTitleEntity.isSelect = true;
             }
+            mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
+            List<FileChildEntity> listChild = fileTitleEntity.lists;
+            for (FileChildEntity childEntity : listChild) {
+                childEntity.isSelect = fileTitleEntity.isSelect;
+            }
+            if(null!=onCheckListener){
+                onCheckListener.onCheckAll(groupPosition,-1,fileTitleEntity.isSelect);
+            }
+            //notifyDataSetChanged();
         });
 
         return convertView;
@@ -161,9 +158,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             mViewChild = (ViewHolderChild) convertView.getTag();
         }
         List<FileChildEntity> lists = mLists.get(groupPosition).lists;
-        if(mWXImgAdapter==null){
-            //mViewChild.mRecyclerView.addItemDecoration(new GrideWXImgManagerWrapper(DensityUtil.dp2px(4)));
-        }
+
         mWXImgAdapter = new WXImgAdapter(mContext, lists);
         mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
             @Override

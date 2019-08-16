@@ -3,8 +3,6 @@ package com.xiaoniu.cleanking.ui.main.bean;
 import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mazhuang on 16/1/14.

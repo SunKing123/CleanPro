@@ -3,32 +3,21 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -44,10 +33,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,8 +44,6 @@ import butterknife.OnClick;
  */
 public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter> implements QuestionReportImgAdapter.OnItemImgClickListener {
 
-
-    private static final String TAG = "QuestionReportActivity";
     //照片选择
     public static final int CODE_IMG_SELECT = 0X2100;
     //图片上传大小
@@ -341,14 +325,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
                         @Override
                         public void getData(BaseEntity baseEntity) {
                             mLoading.setReportSuccess(1);
-                            mBtnSumbit.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    finish();
-                                }
-                            }, 1000);
-
-
+                            mBtnSumbit.postDelayed(() -> finish(), 1000);
                         }
 
                         @Override
@@ -383,42 +360,6 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             }
         });
     }
-
-
-
-/*    Common4Subscriber<BaseEntity> common4Subscriber = new Common4Subscriber<BaseEntity>() {
-        @Override
-        public void showExtraOp(String code, String message) {
-
-        }
-
-        @Override
-        public void getData(BaseEntity baseEntity) {
-            mLoading.setReportSuccess(1);
-            mBtnSumbit.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                }
-            }, 1000);
-
-
-        }
-
-        @Override
-        public void showExtraOp(String message) {
-            mLoading.dismissAllowingStateLoss();
-        }
-
-        @Override
-        public void netConnectError() {
-            mLoading.dismissAllowingStateLoss();
-            Toast toast = Toast.makeText(mContext, "网络异常，请稍后重试", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-
-        }
-    };*/
 
     @Override
     protected void onResume() {

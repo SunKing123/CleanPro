@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,7 +20,6 @@ import com.xiaoniu.cleanking.ui.main.event.EmptyEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
-import com.xiaoniu.cleanking.utils.NiuDataEvent;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -34,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -76,9 +72,6 @@ public class WXCleanImgActivity extends BaseActivity{
     @BindView(R.id.ll_img_save_list)
     LinearLayout llImgSaveList;
 
-
-
-    //
     private List<Fragment> mFragments = new ArrayList<>();
     private CommonFragmentPageAdapter mAdapter;
 

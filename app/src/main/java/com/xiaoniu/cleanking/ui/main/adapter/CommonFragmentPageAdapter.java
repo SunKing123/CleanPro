@@ -14,7 +14,6 @@ import java.util.List;
 
 public class CommonFragmentPageAdapter extends FragmentStatePagerAdapter {
 
-
     private List<Fragment> mFragments = new ArrayList<Fragment>();
 
     public CommonFragmentPageAdapter(FragmentManager fm) {
@@ -51,14 +50,4 @@ public class CommonFragmentPageAdapter extends FragmentStatePagerAdapter {
         return (null == mFragments) ? 0 : mFragments.size();
     }
 
-
-    /**
-     * 重写该方法用来实现pageAdapter刷新
-     * @param object
-     * @return
-     */
-//    @Override
-//    public int getItemPosition(Object object) {
-//        return POSITION_NONE;
-//    }
 }

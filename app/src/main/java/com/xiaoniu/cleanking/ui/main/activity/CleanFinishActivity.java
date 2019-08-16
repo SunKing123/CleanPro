@@ -1,8 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 

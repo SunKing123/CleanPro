@@ -1,13 +1,11 @@
 package com.xiaoniu.cleanking.ui.tool.qq.presenter;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -27,7 +25,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,26 +59,20 @@ public class QQCleanFilePresenter extends RxPresenter<QQCleanFileActivity, MainM
         lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
+        TextView btnOk = window.findViewById(R.id.btnOk);
 
-        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
-        TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
-        TextView content = (TextView) window.findViewById(R.id.content);
+        TextView btnCancle = window.findViewById(R.id.btnCancle);
+        TextView tipTxt = window.findViewById(R.id.tipTxt);
+        TextView content = window.findViewById(R.id.content);
         content.setText("永久从设备中删除这些文件，删除后将不可恢复。");
         tipTxt.setText("确定删除这" + deleteNum + "个文件？");
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                okListener.clickOKBtn();
-            }
+        btnOk.setOnClickListener(v -> {
+            dlg.dismiss();
+            okListener.clickOKBtn();
         });
-        btnCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                okListener.cancelBtn();
-            }
+        btnCancle.setOnClickListener(v -> {
+            dlg.dismiss();
+            okListener.cancelBtn();
         });
         return dlg;
     }
@@ -90,20 +81,16 @@ public class QQCleanFilePresenter extends RxPresenter<QQCleanFileActivity, MainM
     public void delFile(List<CleanWxClearInfo> list, List<CleanWxClearInfo> list1, List<CleanWxClearInfo> list2, List<CleanWxClearInfo> list3, List<CleanWxClearInfo> list4) {
         mView.showLoadingDialog();
         List<CleanWxClearInfo> files = list;
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
 
-                for (CleanWxClearInfo appInfoBean : files) {
-                    File file = new File(appInfoBean.getFilePath());
-                    if (null != file) {
-                        file.delete();
-                    }
+            for (CleanWxClearInfo appInfoBean : files) {
+                File file = new File(appInfoBean.getFilePath());
+                if (null != file) {
+                    file.delete();
                 }
-                emitter.onNext("");
-                emitter.onComplete();
             }
-
+            emitter.onNext("");
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

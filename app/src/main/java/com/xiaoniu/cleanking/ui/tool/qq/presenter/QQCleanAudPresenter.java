@@ -1,13 +1,11 @@
 package com.xiaoniu.cleanking.ui.tool.qq.presenter;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -18,7 +16,6 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanAudActivity;
-import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanAudActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
@@ -28,7 +25,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,26 +59,20 @@ public class QQCleanAudPresenter extends RxPresenter<QQCleanAudActivity, MainMod
         lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
+        TextView btnOk = window.findViewById(R.id.btnOk);
 
-        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
-        TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
-        TextView content = (TextView) window.findViewById(R.id.content);
+        TextView btnCancle = window.findViewById(R.id.btnCancle);
+        TextView tipTxt = window.findViewById(R.id.tipTxt);
+        TextView content = window.findViewById(R.id.content);
         content.setText("永久从设备中删除这些文件，删除后将不可恢复。");
         tipTxt.setText("确定删除这" + deleteNum + "个文件？");
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                okListener.clickOKBtn();
-            }
+        btnOk.setOnClickListener(v -> {
+            dlg.dismiss();
+            okListener.clickOKBtn();
         });
-        btnCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                okListener.cancelBtn();
-            }
+        btnCancle.setOnClickListener(v -> {
+            dlg.dismiss();
+            okListener.cancelBtn();
         });
         return dlg;
     }
@@ -91,20 +81,16 @@ public class QQCleanAudPresenter extends RxPresenter<QQCleanAudActivity, MainMod
     public void delFile(List<CleanWxItemInfo> list) {
         mView.showLoadingDialog();
         List<CleanWxItemInfo> files = list;
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
 
-                for (CleanWxItemInfo appInfoBean : files) {
-                    File file = appInfoBean.getFile();
-                    if (null != file) {
-                        file.delete();
-                    }
+            for (CleanWxItemInfo appInfoBean : files) {
+                File file = appInfoBean.getFile();
+                if (null != file) {
+                    file.delete();
                 }
-                emitter.onNext("");
-                emitter.onComplete();
             }
-
+            emitter.onNext("");
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -124,7 +110,6 @@ public class QQCleanAudPresenter extends RxPresenter<QQCleanAudActivity, MainMod
                     @Override
                     public void onComplete() {
                         mView.cancelLoadingDialog();
-//                        mView.deleteSuccess(list);
                     }
                 });
 

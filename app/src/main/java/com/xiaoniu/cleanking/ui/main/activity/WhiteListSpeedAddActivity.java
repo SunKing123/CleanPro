@@ -69,18 +69,15 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
 
         mAdapter.modifyList(mPresenter.getData());
         mAdapter.setOnCheckListener(this);
-        mCheckAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mIsCheckAll){
-                    mIsCheckAll=false;
-                }else {
-                    mIsCheckAll=true;
-                }
-                mCheckBoxAll.setSelected(mIsCheckAll);
-                checkAll(mIsCheckAll);
-                totalSelectFiles();
+        mCheckAll.setOnClickListener(v -> {
+            if(mIsCheckAll){
+                mIsCheckAll=false;
+            }else {
+                mIsCheckAll=true;
             }
+            mCheckBoxAll.setSelected(mIsCheckAll);
+            checkAll(mIsCheckAll);
+            totalSelectFiles();
         });
 
     }

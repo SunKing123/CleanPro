@@ -106,19 +106,11 @@ public class DelDialogStyleFragment extends DialogFragment {
         Button btnCancel = view.findViewById(R.id.btn_cancel);
         Button btnDel = view.findViewById(R.id.btn_del);
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-            }
-        });
-        btnDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissAllowingStateLoss();
-                if (null != dialogClickListener) {
-                    dialogClickListener.onConfirm();
-                }
+        btnCancel.setOnClickListener(v -> dismissAllowingStateLoss());
+        btnDel.setOnClickListener(v -> {
+            dismissAllowingStateLoss();
+            if (null != dialogClickListener) {
+                dialogClickListener.onConfirm();
             }
         });
     }

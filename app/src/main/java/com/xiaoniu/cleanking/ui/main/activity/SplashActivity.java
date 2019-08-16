@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.ImageView;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -14,11 +13,8 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.statistic.NiuDataAPI;
-
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -80,19 +76,14 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
     }
 
     public void jumpActivity() {
-//        if (TextUtils.isEmpty(AndroidUtil.getToken())) {
-//            startActivity(RouteConstants.CHECK_LOGIN_ACTIVITY, true);
-//        } else {
-
-        final boolean isfirst = SPUtil.getFirstIn(SplashActivity.this, "isfirst", true);
-        if (isfirst) {
+        final boolean isFirst = SPUtil.getFirstIn(SplashActivity.this, "isfirst", true);
+        if (isFirst) {
             startActivity(new Intent(SplashActivity.this, NavigationActivity.class));
             finish();
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         }
-//        }
     }
 
     public void getAuditSwitch(AuditSwitch auditSwitch) {
