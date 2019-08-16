@@ -139,6 +139,8 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     private long mSizeL;
 
     public void updateText(String path, long size) {
+        if (mTxtSpaceSize == null)
+            return;
 
         if (!TextUtils.isEmpty(path)) {
 
