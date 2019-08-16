@@ -4,18 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,27 +19,16 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
-import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
-import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
-import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
-import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
-import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
-import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -53,17 +36,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 微信清理首页
@@ -318,6 +292,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     ObjectAnimator roundAnim3;
 
     public void setScanStatus(boolean isScaning) {
+        if (ivHua1 == null)
+            return;
         ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
         ivHua2.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
         ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
