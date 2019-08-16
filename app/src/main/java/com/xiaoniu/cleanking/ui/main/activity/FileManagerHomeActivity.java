@@ -101,6 +101,9 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
 
 
     public void getPhotoInfo(List<FileEntity> listPhoto) {
+        if (tvImageSize == null)
+            return;
+
         long imageSize = 0;
         for (FileEntity fileEntity : listPhoto) {
             imageSize += fileEntity == null ? 0 : NumberUtils.getLong(fileEntity.getSize());
