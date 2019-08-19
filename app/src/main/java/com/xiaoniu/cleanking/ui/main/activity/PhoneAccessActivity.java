@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -125,7 +126,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);
-        mWebView.addJavascriptInterface(new JavaInterface((Activity) mContext, mWebView), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(mContext, mWebView), "cleanPage");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -219,53 +220,42 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             mPresenter.getAccessListBelow();
         }
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", "home_page", "once_accelerate_page");
-            }
+        iv_back.setOnClickListener(v -> {
+            finish();
+            StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", "home_page", "once_accelerate_page");
         });
 
-        tv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!canClickDelete) return;
-                mAppBarLayout.setExpanded(true);
-                ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
-                for (FirstJunkInfo info : belowAdapter.getListImage()) {
-                    if (info.getIsSelect()) {
-                        junkTemp.add(info);
-                    }
+        tv_delete.setOnClickListener(v -> {
+            if (!canClickDelete) return;
+            mAppBarLayout.setExpanded(true);
+            ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
+            for (FirstJunkInfo info : belowAdapter.getListImage()) {
+                if (info.getIsSelect()) {
+                    junkTemp.add(info);
                 }
-                if (junkTemp.size() == 0) return;
-                acceview.setVisibility(View.VISIBLE);
-                acceview.startTopAnim();
-                long total = 0;
-                for (FirstJunkInfo info : junkTemp) {
-                    total += info.getTotalSize();
-                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-                }
-                belowAdapter.deleteData(junkTemp);
-                computeTotalSizeDeleteClick(junkTemp);
-
-                setCleanedView(total);
-                if (Build.VERSION.SDK_INT >= 26) {
-                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
-                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
-                }
-
-
-                StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "once_accelerate_page");
             }
+            if (junkTemp.size() == 0) return;
+            acceview.setVisibility(View.VISIBLE);
+            acceview.startTopAnim();
+            long total = 0;
+            for (FirstJunkInfo info : junkTemp) {
+                total += info.getTotalSize();
+                CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+            }
+            belowAdapter.deleteData(junkTemp);
+            computeTotalSizeDeleteClick(junkTemp);
+
+            setCleanedView(total);
+            if (Build.VERSION.SDK_INT >= 26) {
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
+            }
+
+
+            StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "once_accelerate_page");
         });
 
-        icon_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.showPopupWindow(icon_more);
-            }
-        });
+        icon_more.setOnClickListener(v -> mPresenter.showPopupWindow(icon_more));
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
@@ -447,20 +437,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);
-        belowAdapter.setmOnCheckListener(new PhoneAccessBelowAdapter.onCheckListener() {
-            @Override
-            public void onCheck(List<FirstJunkInfo> listFile, int pos) {
-                int selectCount = 0;
-                for (int i = 0; i < listFile.size(); i++) {
-                    if (listFile.get(i).getIsSelect()) {
-                        selectCount++;
-                    }
+        belowAdapter.setmOnCheckListener((listFile, pos) -> {
+            int selectCount = 0;
+            for (int i = 0; i < listFile.size(); i++) {
+                if (listFile.get(i).getIsSelect()) {
+                    selectCount++;
                 }
-//                cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
-                tv_delete.setSelected(selectCount == 0 ? false : true);
-//                compulateDeleteSize();
             }
+//                cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+            tv_delete.setSelected(selectCount == 0 ? false : true);
+//                compulateDeleteSize();
         });
 
         AnimationItem animationItem = new AnimationItem("Slide from bottom", R.anim.layout_animation_from_bottom);

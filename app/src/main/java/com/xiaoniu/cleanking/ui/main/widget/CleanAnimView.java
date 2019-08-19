@@ -11,10 +11,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.webkit.WebChromeClient;
@@ -32,13 +33,13 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 
@@ -64,10 +65,11 @@ public class CleanAnimView extends RelativeLayout {
     TextView mTextGb;
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
-    WebView mWebView;
+    NestedScrollWebView mWebView;
     LinearLayout mLayoutNotNet;
     TextView mTvAnimTitle;
     FrameLayout mFlAnim;
+    NestedScrollView mScrollView;
     /**
      * 一键清理页面
      */
@@ -137,7 +139,7 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
         mTvAnimTitle = v.findViewById(R.id.tv_anim_title);
         mFlAnim = v.findViewById(R.id.fl_anim);
-
+        mScrollView = v.findViewById(R.id.n_scroll_view);
         initWebView();
         iv_back.setOnClickListener(v1 -> {
             if (listener != null) {
@@ -185,6 +187,8 @@ public class CleanAnimView extends RelativeLayout {
                     }
                 }
                 isError = false;
+
+                ViewGroup.LayoutParams params = mWebView.getLayoutParams();params.width = getResources().getDisplayMetrics().widthPixels;params.height = mWebView.getHeight() - mScrollView.getHeight();mWebView.setLayoutParams(params);
             }
 
             @Override
@@ -234,13 +238,10 @@ public class CleanAnimView extends RelativeLayout {
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         LayoutParams rlp = (LayoutParams) viewt.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                rlp.height = currentValue;
-                viewt.setLayoutParams(rlp);
-            }
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.height = currentValue;
+            viewt.setLayoutParams(rlp);
         });
         anim.start();
         startMiddleAnim(isNeedTranslation);
@@ -251,7 +252,7 @@ public class CleanAnimView extends RelativeLayout {
      */
     public void startMiddleAnim(boolean isNeedTranslation) {
         //位移的距离
-        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(170);
+        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(150);
         ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
         ObjectAnimator scanY = ObjectAnimator.ofFloat(mLayoutScan, "translationY", mLayoutScan.getTranslationY(), height);
         ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);
@@ -477,11 +478,14 @@ public class CleanAnimView extends RelativeLayout {
 
             }
         });
-
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(1000);
         colorAnim1.setStartDelay(4000);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLineTitle, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
+        colorAnim2.setEvaluator(new ArgbEvaluator());
+        colorAnim2.setDuration(1000);
+        colorAnim2.setStartDelay(4000);
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
@@ -491,7 +495,7 @@ public class CleanAnimView extends RelativeLayout {
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator, colorAnim1);
+        animatorSetTimer.playTogether(valueAnimator, colorAnim1,colorAnim2);
         animatorSetTimer.start();
 
     }
@@ -499,8 +503,10 @@ public class CleanAnimView extends RelativeLayout {
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
         mTvAnimTitle.setVisibility(GONE);
+        mLayoutRoot.setVisibility(GONE);
         int bottom = mLineTitle.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
+        mScrollView.setVisibility(VISIBLE);
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         anim.setDuration(500);

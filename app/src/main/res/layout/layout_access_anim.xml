@@ -106,9 +106,9 @@
                 android:textSize="13sp" />
         </LinearLayout>
     </RelativeLayout>
-    <include
-        layout="@layout/layout_yu_anim"
-        />
+
+    <include layout="@layout/layout_yu_anim" />
+
     <LinearLayout
         android:id="@+id/line_hj"
         android:layout_width="59dp"
@@ -136,26 +136,26 @@
 
     <FrameLayout
         android:id="@+id/fl_anim"
-        android:visibility="visible"
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dimen_200dp">
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/view_lottie"
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content" />
+        android:layout_centerInParent="true"
+        android:visibility="visible">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/tv_anim_title"
             android:layout_width="wrap_content"
-            android:text="@string/tool_accelerated"
-            android:layout_marginTop="150dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:layout_marginTop="150dp"
+            android:text="@string/tool_accelerated"
             android:textColor="@color/white"
-            android:layout_height="wrap_content" />
+            android:textSize="16sp" />
 
     </FrameLayout>
 </RelativeLayout>

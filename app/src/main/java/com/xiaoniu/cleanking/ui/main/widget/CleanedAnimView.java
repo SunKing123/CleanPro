@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 
@@ -63,7 +64,7 @@ public class CleanedAnimView extends RelativeLayout {
     TextView mTextGb;
     CoordinatorLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
-    WebView mWebView;
+    NestedScrollWebView mWebView;
     LinearLayout mLayoutNotNet;
     AppBarLayout mAppBarLayout;
 
