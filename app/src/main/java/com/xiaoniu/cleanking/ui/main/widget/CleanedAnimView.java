@@ -11,6 +11,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,10 +61,11 @@ public class CleanedAnimView extends RelativeLayout {
     ImageView iv_back;
     ImageView iv_dun;
     TextView mTextGb;
-    RelativeLayout mLayoutRoot;
+    CoordinatorLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
     WebView mWebView;
     LinearLayout mLayoutNotNet;
+    AppBarLayout mAppBarLayout;
 
     /**
      * 一键清理页面
@@ -131,14 +134,12 @@ public class CleanedAnimView extends RelativeLayout {
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
         mWebView = v.findViewById(R.id.web_view);
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
-
+        mAppBarLayout = v.findViewById(R.id.app_bar_layout);
+        mAppBarLayout.setExpanded(true);
         initWebView();
-        iv_back.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onClick();
-                }
+        iv_back.setOnClickListener(v1 -> {
+            if (listener != null) {
+                listener.onClick();
             }
         });
         mLayoutNotNet.setOnClickListener(view -> onTvRefreshClicked());
@@ -159,11 +160,8 @@ public class CleanedAnimView extends RelativeLayout {
         settings.setTextZoom(100);
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         mWebView.addJavascriptInterface(javaInterface, "cleanPage");
-        javaInterface.setListener(new JavaInterface.onShareSuccessListener() {
-            @Override
-            public void shareSuccess() {
+        javaInterface.setListener(() -> {
 
-            }
         });
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -234,13 +232,10 @@ public class CleanedAnimView extends RelativeLayout {
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         LayoutParams rlp = (LayoutParams) viewt.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                rlp.height = currentValue;
-                viewt.setLayoutParams(rlp);
-            }
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.height = currentValue;
+            viewt.setLayoutParams(rlp);
         });
         anim.start();
         startMiddleAnim(isNeedTranslation);
