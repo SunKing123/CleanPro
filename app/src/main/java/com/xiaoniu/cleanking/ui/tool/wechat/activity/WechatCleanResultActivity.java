@@ -48,12 +48,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);
-        mCleanAnimView.setListener(new CleanAnimView.onBackClickListener() {
-            @Override
-            public void onClick() {
-                finish();
-            }
-        });
+        mCleanAnimView.setListener(() -> finish());
     }
 
     /**
@@ -68,6 +63,5 @@ public class WechatCleanResultActivity extends SimpleActivity {
             StatusBarCompat.setStatusBarColor(this, animatedValue, false);
         }
     }
-
 
 }

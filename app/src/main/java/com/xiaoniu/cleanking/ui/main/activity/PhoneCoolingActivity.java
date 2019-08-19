@@ -13,6 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,6 +51,7 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
+import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -102,7 +105,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @BindView(R.id.layout_anim_cool)
     ConstraintLayout mLayoutAnimCool;
     @BindView(R.id.layout_content_cool)
-    LinearLayout mLayoutContentCool;
+    RelativeLayout mLayoutContentCool;
     @BindView(R.id.layout_cool_view)
     ConstraintLayout mLayoutCoolView;
     @BindView(R.id.layout_title_content)
@@ -114,7 +117,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @BindView(R.id.layout_clean_finish)
     ConstraintLayout mLayoutCleanFinish;
     @BindView(R.id.web_view)
-    WebView mWebView;
+    NestedScrollWebView mWebView;
+    @BindView(R.id.nested_scroll_view)
+    NestedScrollView mNestedScrollView;
     @BindView(R.id.layout_not_net)
     LinearLayout mLayoutNotNet;
     @BindView(R.id.layout_junk_clean)
@@ -129,6 +134,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     TextView mTvCooling;
     @BindView(R.id.fl_anim)
     FrameLayout mFlAnim;
+    @BindView(R.id.app_cooling_bar_layout)
+    AppBarLayout mAppCoolingBarlayout;
+    @BindView(R.id.rl_anim)
+    RelativeLayout mRlAnim;
     private ProcessIconAdapter mProcessIconAdapter;
     private HardwareInfo mHardwareInfo;
     public static ArrayList<FirstJunkInfo> mRunningProcess;
@@ -157,7 +166,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @Override
     protected void initView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        mAppCoolingBarlayout.setExpanded(false);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
@@ -195,12 +206,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         int tem = new Random().nextInt(3) + 1;
         mTextNumberCool.setText("成功降温" + tem + "°C");
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initBottomLayout();
-            }
-        }, 1000);
+        new Handler().postDelayed(() -> initBottomLayout(), 1000);
     }
 
     private void initBottomLayout() {
@@ -208,7 +214,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             return;
         }
         int measureHeight = mLayoutBottomContent.getMeasuredHeight();
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLayoutBottomContent.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutBottomContent.getLayoutParams();
         layoutParams.height = measureHeight;
         mLayoutBottomContent.setLayoutParams(layoutParams);
     }
@@ -315,11 +321,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             if (!isDestroyed()) {
                 ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
                 mBgTitle.setVisibility(VISIBLE);
-                alpha.setDuration(200);
+                alpha.setDuration(1000);
                 alpha.start();
             }
         }, 200);
-        anim.setDuration(500);
+        anim.setDuration(1000);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutContentCool.getLayoutParams();
         anim.addUpdateListener(animation -> {
@@ -669,10 +675,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             public void onAnimationEnd(Animator animation) {
                 //保存清理完成次数
                 PreferenceUtil.saveCleanNum();
-
+                mLayoutCoolView.setVisibility(GONE);
+                mAppCoolingBarlayout.setExpanded(true);
+                mNestedScrollView.setVisibility(VISIBLE);
+                mRlAnim.setVisibility(GONE);
                 mFlAnim.setVisibility(View.GONE);
                 int bottom = mLayoutTitleBar.getBottom();
-                mLayoutCleanFinish.setVisibility(VISIBLE);
+                mLayoutCleanFinish.setVisibility(GONE);
                 int startHeight = ScreenUtils.getFullActivityHeight();
                 ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
                 anim.setDuration(500);
