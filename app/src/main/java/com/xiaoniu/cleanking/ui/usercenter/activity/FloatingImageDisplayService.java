@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
@@ -79,6 +78,7 @@ public class FloatingImageDisplayService extends Service {
     ImageView iv_delete;
 
     private void showFloatingWindow() {
+        if (imageRes == null) return;
 //        if (Build.VERSION.SDK_INT >= 23 &&Settings.canDrawOverlays(this)) {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             displayView = layoutInflater.inflate(R.layout.image_display, null);
@@ -94,58 +94,43 @@ public class FloatingImageDisplayService extends Service {
             index = 0;
             imageView.setImageResource(imageRes[index]);
             setImageParam(imageView, imageWidth[index], imageHeight[index]);
-            iv_next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (index == imageRes.length - 1) return;
-                    index++;
-                    if (index > imageRes.length - 1) {
-                        index -= 1;
-                        return;
-                    }
-                    imageView.setImageResource(imageRes[index]);
-                    setImageParam(imageView, imageWidth[index], imageHeight[index]);
+            iv_next.setOnClickListener(view -> {
+                if (index == imageRes.length - 1) return;
+                index++;
+                if (index > imageRes.length - 1) {
+                    index -= 1;
+                    return;
                 }
+                imageView.setImageResource(imageRes[index]);
+                setImageParam(imageView, imageWidth[index], imageHeight[index]);
             });
 
-            iv_pre.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    index--;
-                    if (index < 0) {
-                        index = 0;
-                        return;
-                    }
-                    imageView.setImageResource(imageRes[index]);
-                    setImageParam(imageView, imageWidth[index], imageHeight[index]);
+            iv_pre.setOnClickListener(view -> {
+                index--;
+                if (index < 0) {
+                    index = 0;
+                    return;
                 }
+                imageView.setImageResource(imageRes[index]);
+                setImageParam(imageView, imageWidth[index], imageHeight[index]);
             });
 
-            iv_back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    iv_zhankai.setVisibility(View.VISIBLE);
-                    iv_delete.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.INVISIBLE);
-                }
+            iv_back.setOnClickListener(view -> {
+                iv_zhankai.setVisibility(View.VISIBLE);
+                iv_delete.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.INVISIBLE);
             });
-            iv_zhankai.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    iv_zhankai.setVisibility(View.GONE);
-                    iv_delete.setVisibility(View.GONE);
-                    imageView.setVisibility(View.VISIBLE);
-                }
+            iv_zhankai.setOnClickListener(view -> {
+                iv_zhankai.setVisibility(View.GONE);
+                iv_delete.setVisibility(View.GONE);
+                imageView.setVisibility(View.VISIBLE);
             });
-            iv_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    iv_zhankai.setVisibility(View.GONE);
-                    iv_delete.setVisibility(View.GONE);
-                    imageView.setVisibility(View.GONE);
-                    displayView.setVisibility(View.GONE);
-                    stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
-                }
+            iv_delete.setOnClickListener(view -> {
+                iv_zhankai.setVisibility(View.GONE);
+                iv_delete.setVisibility(View.GONE);
+                imageView.setVisibility(View.GONE);
+                displayView.setVisibility(View.GONE);
+                stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
             });
             if (displayView.isAttachedToWindow())
                 windowManager.removeViewImmediate(displayView);
