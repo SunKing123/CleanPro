@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.View;
@@ -41,11 +41,11 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
@@ -59,6 +59,7 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -105,6 +106,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ImageView mArrowRight;
     @BindView(R.id.layout_scroll)
     ScrollView mScrollView;
+    @BindView(R.id.home_nested_scroll_view)
+    NestedScrollView mNestedScrollView;
     @BindView(R.id.view_lottie)
     LottieAnimationView mAnimationView;
     @BindView(R.id.text_acce)
@@ -120,11 +123,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @BindView(R.id.tv_gb)
     TextView mTvGb;
     @BindView(R.id.web_view)
-    WebView mWebView;
+    NestedScrollWebView mWebView;
     @BindView(R.id.layout_content_clean_finish)
     LinearLayout mLaoutContentFinish;
-    @BindView(R.id.layout_clean_finish)
-    ConstraintLayout mLayoutCleanFinish;
     @BindView(R.id.image_ad_bottom_first)
     ImageView mImageFirstAd;
     @BindView(R.id.image_ad_bottom_second)
@@ -214,9 +215,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     protected void initView() {
         EventBus.getDefault().register(this);
         mPresenter.checkPermission();
-        ViewGroup.LayoutParams layoutParams = mLayoutCleanFinish.getLayoutParams();
-        layoutParams.height = ScreenUtils.getScreenHeight(AppApplication.getInstance());
-        mLayoutCleanFinish.setLayoutParams(layoutParams);
 
         //请求广告接口
         mPresenter.requestBottomAd();
@@ -442,18 +440,20 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         });
     }
 
-
     @Subscribe
-    public void cleanFinish(String string) {
-        if ("clean_finish".equals(string)) {
-            //清理完成
-            restoreLayout();
-            //清理完成后通知 文件数据库同步(陈浪)
-            EventBus.getDefault().post(new ScanFileEvent());
-            //保存清理次数
-            PreferenceUtil.saveCleanNum();
-            preCleanTime = System.currentTimeMillis();
+    public void cleanFinish(HomeCleanEvent homeCleanEvent) {
+        if (homeCleanEvent.isNowClean()) {
+            if (mLayoutRoot == null) return;
+            mNestedScrollView.setVisibility(VISIBLE);
+            mLayoutRoot.setVisibility(GONE);
         }
+        //清理完成
+        restoreLayout();
+        //清理完成后通知 文件数据库同步(陈浪)
+        EventBus.getDefault().post(new ScanFileEvent());
+        //保存清理次数
+        PreferenceUtil.saveCleanNum();
+        preCleanTime = System.currentTimeMillis();
     }
 
     public FrameLayout getCleanTopLayout() {
@@ -574,7 +574,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @return
      */
     public View getCleanFinish() {
-        return mLayoutCleanFinish;
+        return mNestedScrollView;
     }
 
     public RelativeLayout getCleanTextLayout() {
@@ -587,20 +587,20 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.iv_back)
     public void onViewClicked() {
-
-        //
         showBottomTab();
-        mLayoutCleanFinish.setVisibility(GONE);
+        if (mLayoutRoot == null) return;
+        mNestedScrollView.setVisibility(GONE);
+        mLayoutRoot.setVisibility(VISIBLE);
         playStarAnimation();
     }
 
     private long firstTime;
 
     public void onKeyBack() {
-        if (mLayoutCleanFinish == null)
-            return;
-        if (mLayoutCleanFinish.getVisibility() == VISIBLE) {
-            mLayoutCleanFinish.setVisibility(GONE);
+        if (mLayoutRoot == null) return;
+        if (mNestedScrollView.getVisibility() == VISIBLE) {
+            mNestedScrollView.setVisibility(GONE);
+            mLayoutRoot.setVisibility(VISIBLE);
             showBottomTab();
             playStarAnimation();
         } else {

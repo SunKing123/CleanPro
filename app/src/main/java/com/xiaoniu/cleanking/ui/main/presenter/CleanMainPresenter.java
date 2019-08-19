@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.ui.main.widget.PromptDialog;
@@ -630,14 +632,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
-
         View cleanFinish = mView.getCleanFinish();
-        cleanFinish.setVisibility(VISIBLE);
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
         anim.setDuration(500);
         anim.setInterpolator(new LinearInterpolator());
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) cleanFinish.getLayoutParams();
+        CoordinatorLayout.LayoutParams rlp = (CoordinatorLayout.LayoutParams) cleanFinish.getLayoutParams();
         anim.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
             rlp.topMargin = currentValue;
@@ -651,7 +651,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                EventBus.getDefault().post("clean_finish");
+                HomeCleanEvent homeCleanEvent = new HomeCleanEvent();
+                homeCleanEvent.setNowClean(true);
+                EventBus.getDefault().post(homeCleanEvent);
             }
 
             @Override

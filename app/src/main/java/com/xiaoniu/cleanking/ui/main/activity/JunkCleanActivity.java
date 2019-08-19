@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -176,7 +177,9 @@ public class JunkCleanActivity extends SimpleActivity {
 
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-            EventBus.getDefault().post("clean_finish");
+            HomeCleanEvent homeCleanEvent = new HomeCleanEvent();
+            homeCleanEvent.setNowClean(false);
+            EventBus.getDefault().post(homeCleanEvent);
         });
 
     }
