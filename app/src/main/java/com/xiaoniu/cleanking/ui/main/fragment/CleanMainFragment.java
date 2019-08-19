@@ -384,6 +384,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
         type = TYPE_SCAN_FINISH;
+        if (mTextScanTrace == null)
+            return;
 
         if (mCountEntity != null && mTvSize != null) {
             mTvSize.setText(mCountEntity.getTotalSize());
@@ -391,7 +393,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             if (mCountEntity.getNumber() > 0) {
                 //扫描到垃圾
-
                 mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
                 //设置titlebar颜色
                 if (getViewShow()) {
@@ -399,9 +400,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 }
 
                 mButtonCleanNow.setText("立即清理");
-
                 mJunkGroups = junkGroups;
-
                 mTextScanTrace.setText("查看垃圾详情");
                 mArrowRight.setVisibility(VISIBLE);
             } else {
@@ -436,6 +435,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mCountEntity = CleanUtil.formatShortFileSize(total);
         getActivity().runOnUiThread(() -> {
             CountEntity countEntity = CleanUtil.formatShortFileSize(total);
+            if (mTextCount == null)
+                return;
             mTextCount.setText(countEntity.getTotalSize());
             mTextUnit.setText(countEntity.getUnit());
         });
