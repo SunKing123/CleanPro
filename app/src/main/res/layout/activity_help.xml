@@ -14,29 +14,16 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:paddingBottom="@dimen/dimen_16dp"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingLeft="@dimen/dimen_16dp"
-            android:paddingRight="@dimen/dimen_18dp"
-            android:src="@mipmap/back_white" />
+            android:layout_height="match_parent"
+           style="@style/top_iv_back" />
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dimen_100dp"
+            style="@style/top_tv_title"
             android:ellipsize="end"
-            android:gravity="center"
+            android:layout_centerVertical="true"
             android:lines="1"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp" />
+            android:layout_toRightOf="@id/back" />
 
         <ImageView
             android:id="@+id/img_help"

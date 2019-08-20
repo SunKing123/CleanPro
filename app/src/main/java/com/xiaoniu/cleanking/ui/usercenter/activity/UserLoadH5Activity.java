@@ -41,9 +41,6 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.base.UmengEnum;
-import com.xiaoniu.cleanking.base.UmengUtils;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -51,8 +48,6 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
-
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -128,8 +123,6 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
     private Bundle bundle;
     private String productId;
     private String isRefresh;
-    private String appId;
-    private Map<String, Map<String, Object>> productRegisterMonitorMap;
 
     private boolean isError = false;
     /**
@@ -166,7 +159,6 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             eventId = bundle.getString("eventId");
             productId = bundle.getString("productId");
             isRefresh = bundle.getString("isRefresh");
-            appId = bundle.getString("appId");
             //是否显示titleBar
             noTitleBar = bundle.getBoolean(Constant.NoTitle, false);
             this.mUpdateInfo = bundle.getParcelable("update_info");
@@ -258,12 +250,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                                         startActivity(new Intent("android.intent.action.VIEW", alipayUrl));
                                         UserLoadH5Activity.this.finish();
                                     }
-                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                UserLoadH5Activity.this.finish();
-                            }
-                        }).show();
+                                }).setNegativeButton("取消", (dialog, which) -> UserLoadH5Activity.this.finish()).show();
                     }
                     return true;
                 }
@@ -316,11 +303,9 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                 handler.proceed();// 接受所有网站的证书
             }
         };
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        back.setOnClickListener(v -> {
 
-                finish();
+            finish();
 //                if (mWebView.canGoBack()) {
 //                    mWebView.goBack();
 //                } else {
@@ -334,7 +319,6 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 //                        UmengUtils.event(UserLoadH5Activity.this, UmengEnum.kaihu_zhima_fanhui);
 //                    }
 //                }
-            }
         });
         mWebView.setWebViewClient(webViewClient);
     }
