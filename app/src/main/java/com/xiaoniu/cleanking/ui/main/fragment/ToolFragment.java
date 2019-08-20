@@ -94,6 +94,7 @@ public class ToolFragment extends SimpleFragment {
         Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{DeviceUtils.getFreeSpace(), DeviceUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
+                    if (mTvPhoneSpaceState == null) return;
                     //String数组第一个是剩余存储量，第二个是总存储量
                     mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", (Double.valueOf(strings[1]) - Double.valueOf(strings[0])))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
                     int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));

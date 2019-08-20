@@ -177,21 +177,14 @@
 
                     <ImageView
                         android:id="@+id/iv_back"
-                        android:layout_width="@dimen/dimen_35dp"
                         android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:paddingLeft="@dimen/dimen_12dp"
-                        android:src="@mipmap/back" />
+                        style="@style/top_iv_back"/>
 
                     <TextView
                         android:id="@+id/tv_qltitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/dimen_12dp"
-                        android:text="手机清理"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/dimen_18sp" />
+                        style="@style/top_tv_title"
+                        android:text="手机清理"/>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
