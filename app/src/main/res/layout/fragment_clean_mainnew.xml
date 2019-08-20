@@ -657,9 +657,21 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/image_main_thin" />
+
+                    <ImageView
+                        android:id="@+id/view_phone_thi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view_phone_thin"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_marginRight="@dimen/dimen_16dp"
                         android:layout_marginBottom="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/image_main_thin" />
+
                 </RelativeLayout>
             </RelativeLayout>
         </ScrollView>

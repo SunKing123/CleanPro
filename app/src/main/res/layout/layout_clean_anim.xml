@@ -222,11 +222,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:scrollbarStyle="outsideOverlay"
-        android:touchscreenBlocksFocus="true"
         android:visibility="gone"
+        android:touchscreenBlocksFocus="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -240,6 +238,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:focusable="true"
+                android:visibility="gone"
                 android:focusableInTouchMode="true" />
 
             <LinearLayout

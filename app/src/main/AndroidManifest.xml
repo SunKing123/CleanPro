@@ -457,6 +457,9 @@
         <meta-data
             android:name="com.xiaoniu.statistic.ProductID"
             android:value="18" />
+        <!--超强省电-->
+        <activity android:name=".ui.main.activity.PhoneSuperPowerSavingActivity"
+            android:launchMode="singleTask"/>
 
     </application>
 
