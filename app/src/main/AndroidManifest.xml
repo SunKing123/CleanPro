@@ -134,6 +134,7 @@
             android:name=".ui.main.activity.NewsLoadActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize"/>
 
         <meta-data
