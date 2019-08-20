@@ -160,6 +160,29 @@
                 android:touchscreenBlocksFocus="true"
                 android:focusableInTouchMode="true"
                 android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/dimen_80dp"
+                android:gravity="center_horizontal|top"
+                android:visibility="gone" >
+
+                <ImageView
+                    android:src="@mipmap/icon_no_net"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:textColor="@color/color_999999"
+                    android:text="资讯列表获取失败～"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
     <RelativeLayout
@@ -188,27 +211,6 @@
             android:text="清理"
             android:textColor="@color/white" />
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_not_net"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/dimen_56dp"
-        android:gravity="center"
-        android:visibility="gone" >
-        <ImageView
-            android:src="@mipmap/icon_no_net"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:textColor="@color/color_999999"
-            android:text="资讯列表获取失败～"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 
     <com.xiaoniu.cleanking.ui.main.widget.AccessAnimView
         android:id="@+id/acceview"

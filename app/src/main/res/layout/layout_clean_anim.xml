@@ -224,27 +224,6 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_not_net"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_no_net" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:text="资讯列表获取失败～"
-            android:textColor="@color/color_999999" />
-    </LinearLayout>
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/n_scroll_view"
         android:layout_width="match_parent"
@@ -258,7 +237,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/ll_finish"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -266,10 +244,32 @@
             <com.xiaoniu.cleanking.widget.NestedScrollWebView
                 android:id="@+id/web_view"
                 android:layout_width="match_parent"
+                android:background="@color/white"
                 android:layout_height="match_parent"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="visible" />
+                android:focusableInTouchMode="true"/>
+
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|center_horizontal"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/dimen_80dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_net" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="资讯列表获取失败～"
+                    android:textColor="@color/color_999999" />
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

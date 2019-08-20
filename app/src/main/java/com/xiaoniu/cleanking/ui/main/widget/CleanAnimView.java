@@ -15,7 +15,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.webkit.WebChromeClient;
@@ -187,8 +186,6 @@ public class CleanAnimView extends RelativeLayout {
                     }
                 }
                 isError = false;
-
-                ViewGroup.LayoutParams params = mWebView.getLayoutParams();params.width = getResources().getDisplayMetrics().widthPixels;params.height = mWebView.getHeight() - mScrollView.getHeight();mWebView.setLayoutParams(params);
             }
 
             @Override

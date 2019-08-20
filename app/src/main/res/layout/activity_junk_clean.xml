@@ -45,8 +45,7 @@
         layout="@layout/content_junk_clean"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_title_bar"
-        />
+        android:layout_below="@+id/layout_title_bar" />
 
     <com.xiaoniu.cleanking.ui.main.widget.CleanAnimView
         android:id="@+id/view_clean_anim"

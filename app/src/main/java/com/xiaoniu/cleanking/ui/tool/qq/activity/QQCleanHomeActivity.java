@@ -277,6 +277,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     long totalVideoSize = 0;
 
     public void updateQQImgSize(String size, long mQQImgFileSize) {
+        if (tvPicSize == null) return;
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
             tvPicSize.setText("0KB");
         } else {
@@ -289,6 +290,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     //扫描到视频文件
     public void updateVideoSize(String size, long mQQVideoFileSize) {
+        if (tvVideoSize == null) return;
         if (TextUtils.isEmpty(size) || "0".equals(size)) {
             tvVideoSize.setText("0KB");
         } else {
@@ -372,6 +374,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
 
     //垃圾选中的大小
     public void getSelectCacheSize() {
+        if (tvGabsize == null) return;
         setSelectAllFiles();
         long totalSize = 0;
         totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
@@ -425,6 +428,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
     long selectSize = 0;
 
     public void setSelectAllFiles() {
+        if (tvFileDes == null) return;
         tvFileDes.setTextColor(getResources().getColor(mPresenter.getSelectFileSize() == 0 ? R.color.color_999999 : R.color.color_FD6F46));
         tvFileDes.setText(mPresenter.getSelectFileSize() == 0 ? "点击管理文件" : "清除后无法恢复，谨慎清理");
         tvSelectFile.setVisibility(mPresenter.getSelectFileSize() == 0 ? View.GONE : View.VISIBLE);
