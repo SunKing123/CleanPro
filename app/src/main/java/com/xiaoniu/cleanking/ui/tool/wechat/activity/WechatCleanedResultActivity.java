@@ -54,6 +54,8 @@ public class WechatCleanedResultActivity extends SimpleActivity {
         mCleanAnimView.setVisibility(View.VISIBLE);
 //        mCleanAnimView.startTopAnim(true);
         mCleanAnimView.setListener(() -> finish());
+
+        mCleanAnimView.showWebView();
     }
 
     /**
