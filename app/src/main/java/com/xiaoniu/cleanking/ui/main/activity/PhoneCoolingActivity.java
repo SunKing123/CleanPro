@@ -552,6 +552,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * @param runningProcess
      */
     public void showProcess(ArrayList<FirstJunkInfo> runningProcess) {
+        if (mTextTitleProcess == null || runningProcess == null) return;
         mRunningProcess = runningProcess;
         mTextTitleProcess.setText(runningProcess.size() + "个运行的应用");
         mProcessIconAdapter.setData(runningProcess);
