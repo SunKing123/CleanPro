@@ -63,7 +63,7 @@ public class JavaInterface {
     @JavascriptInterface
     public void toOtherPage(String url) {
         if (mActivity instanceof UserLoadH5Activity) {
-            mActivity.finish();
+//            mActivity.finish();
         }
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
@@ -128,9 +128,6 @@ public class JavaInterface {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                if ("QQ".equals(share_media.name()) || "QZONE".equals(share_media.name())) {
-                    addShareSuccessRequest();
-                }
                 if (share_media == SHARE_MEDIA.WEIXIN) {
 //                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", "", "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
@@ -145,33 +142,30 @@ public class JavaInterface {
             @Override
             public void onResult(SHARE_MEDIA share_media) {
                 if (!"QQ".equals(share_media.name())&&!"QZONE".equals(share_media.name())) {
-                    handler.sendEmptyMessage(SHARE_SUCCESS);
+                    mActivity.runOnUiThread(() -> {
+                        ToastUtils.showShort("分享成功");
+                        addShareSuccessRequest();
+                    });
                 }
 
             }
 
             @Override
             public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (share_media == SHARE_MEDIA.WEIXIN || share_media == SHARE_MEDIA.WEIXIN_CIRCLE) {
-                            Toast.makeText(mActivity, "没有安装微信，请先安装应用", Toast.LENGTH_SHORT).show();
-                        } else if (share_media == SHARE_MEDIA.QQ || share_media == SHARE_MEDIA.QZONE) {
-                            Toast.makeText(mActivity, "没有安装QQ，请先安装应用", Toast.LENGTH_SHORT).show();
-                        } else if (share_media == SHARE_MEDIA.SINA) {
-                            Toast.makeText(mActivity, "没有安装新浪微博，请先安装应用", Toast.LENGTH_SHORT).show();
-                        }
+                mActivity.runOnUiThread(() -> {
+                    if (share_media == SHARE_MEDIA.WEIXIN || share_media == SHARE_MEDIA.WEIXIN_CIRCLE) {
+                        Toast.makeText(mActivity, "没有安装微信，请先安装应用", Toast.LENGTH_SHORT).show();
+                    } else if (share_media == SHARE_MEDIA.QQ || share_media == SHARE_MEDIA.QZONE) {
+                        Toast.makeText(mActivity, "没有安装QQ，请先安装应用", Toast.LENGTH_SHORT).show();
+                    } else if (share_media == SHARE_MEDIA.SINA) {
+                        Toast.makeText(mActivity, "没有安装新浪微博，请先安装应用", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void onCancel(SHARE_MEDIA share_media) {
-                handler.sendEmptyMessage(SHARE_CANCEL);
-//                if ("QQ".equals(share_media.name())) {
-//                    addShareSuccessRequest();
-//                }
+                ToastUtils.showShort("已取消");
             }
         });
 
@@ -185,13 +179,6 @@ public class JavaInterface {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case SHARE_SUCCESS:
-                    ToastUtils.showShort("分享成功");
-                    addShareSuccessRequest();
-                    break;
-                case SHARE_CANCEL:
-//                    ToastUtils.showShort("已取消");
-                    break;
                 case SHARE_WECHAT:
                     ToastUtils.showShort("没有安装微信，请先安装应用");
                     break;
