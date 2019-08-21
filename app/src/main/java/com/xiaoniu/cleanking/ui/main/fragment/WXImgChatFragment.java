@@ -670,6 +670,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
+        if (mListView == null || lists == null) return;
         //cancelLoadingDialog();
         if(null!=mLoadingProgress){
             mLoadingProgress.dismissAllowingStateLoss();

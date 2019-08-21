@@ -272,17 +272,15 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
         canPlaying = true;
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                tv_size.setText(currentValue + "");
-                Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
+        anim.addUpdateListener(animation -> {
+            if (tv_size == null) return;
+            int currentValue = (int) animation.getAnimatedValue();
+            tv_size.setText(currentValue + "");
+            Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
 
-                if (currentValue == endNum) {
-                    tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
-                    tv_gb.setText(type == 1 ? "MB" : "GB");
-                }
+            if (currentValue == endNum) {
+                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
+                tv_gb.setText(type == 1 ? "MB" : "GB");
             }
         });
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);

@@ -518,7 +518,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/line_qq"
+                        android:id="@+id/line_super_power_saving"
                         android:layout_width="0px"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_7dp"
@@ -538,7 +538,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
-                            android:text="QQ专清"
+                            android:text="@string/tool_super_power_saving"
                             android:textColor="#666666"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -661,7 +661,7 @@
                         android:src="@mipmap/image_main_thin" />
 
                     <ImageView
-                        android:id="@+id/view_phone_thi"
+                        android:id="@+id/view_qq_clean"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/view_phone_thin"
