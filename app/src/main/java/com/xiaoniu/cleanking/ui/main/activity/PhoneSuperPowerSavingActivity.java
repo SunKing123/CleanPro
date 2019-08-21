@@ -1,13 +1,21 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.support.design.widget.AppBarLayout;
 import android.view.View;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class PhoneSuperPowerSavingActivity extends SimpleActivity {
+
+    @BindView(R.id.app_power_saving_bar_layout)
+    AppBarLayout mAppBarLayout;
+    @BindView(R.id.tv_num)
+    TextView mTvNum;
 
     @Override
     protected int getLayoutId() {
@@ -16,7 +24,8 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     @Override
     protected void initView() {
-
+        mAppBarLayout.setExpanded(false);
+        mTvNum.setText("80");
     }
 
     @OnClick(R.id.iv_back)
