@@ -137,9 +137,9 @@ public class JavaInterface {
                 addShareSuccessRequest();
 
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-//                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", "", "Sharing_page");
+                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", "", "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-//                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", "", "Sharing_page");
+                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", "", "Sharing_page");
                 } else if (share_media == SHARE_MEDIA.QZONE) {
                     StatisticsUtils.trackClick("qq_space_click", "QQ空间", "", "Sharing_page");
                 } else if (SHARE_MEDIA.QQ == share_media) {

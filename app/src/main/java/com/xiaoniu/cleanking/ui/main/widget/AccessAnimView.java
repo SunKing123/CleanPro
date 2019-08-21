@@ -29,15 +29,12 @@ import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
-import java.util.logging.Handler;
-
-
 /**
  * @author zhang
  */
 public class AccessAnimView extends RelativeLayout {
     private Context mContext;
-    RelativeLayout viewt;
+    RelativeLayout mRlAnimBg;
     LinearLayout line_hj;
     TextView line_access;
     LinearLayout line_size;
@@ -77,9 +74,9 @@ public class AccessAnimView extends RelativeLayout {
     }
 
     public interface onAnimEndListener {
-        public void onAnimEnd();
+        void onAnimEnd();
 
-        public void onStatusBarColorChanged(int colorRes);
+        void onStatusBarColorChanged(int colorRes);
     }
 
     /**
@@ -91,7 +88,7 @@ public class AccessAnimView extends RelativeLayout {
 
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_access_anim, this, true);
-        viewt = v.findViewById(R.id.viewt);
+        mRlAnimBg = v.findViewById(R.id.rl_anim_bg);
         line_hj = v.findViewById(R.id.line_hj);
         iv_bot = v.findViewById(R.id.iv_bot);
         tv_size = v.findViewById(R.id.tv_size);
@@ -131,14 +128,11 @@ public class AccessAnimView extends RelativeLayout {
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        RelativeLayout.LayoutParams rlp = (LayoutParams) viewt.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                rlp.height = currentValue;
-                viewt.setLayoutParams(rlp);
-            }
+        RelativeLayout.LayoutParams rlp = (LayoutParams) mRlAnimBg.getLayoutParams();
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.height = currentValue;
+            mRlAnimBg.setLayoutParams(rlp);
         });
         anim.start();
         startMiddleAnim();
@@ -152,13 +146,10 @@ public class AccessAnimView extends RelativeLayout {
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) line_allnum.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                rlp.topMargin = currentValue;
-                line_allnum.setLayoutParams(rlp);
-            }
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            rlp.topMargin = currentValue;
+            line_allnum.setLayoutParams(rlp);
         });
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -187,7 +178,7 @@ public class AccessAnimView extends RelativeLayout {
                 if (!animationDrawable.isRunning()) {
                     animationDrawable.start();
                 }
-                setNumAnim(tv_size, tv_gb, viewt, sizeMb, 0, TextUtils.equals(strGb, "GB") ? 2 : 1);
+                setNumAnim(tv_size, tv_gb, mRlAnimBg, sizeMb, 0, TextUtils.equals(strGb, "GB") ? 2 : 1);
             }
         });
         animator.start();
@@ -227,23 +218,20 @@ public class AccessAnimView extends RelativeLayout {
         anim.setDuration(3000);
         anim.setInterpolator(new DecelerateInterpolator());
         canPlaying = true;
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                tv_size.setText(currentValue + "");
-                Log.e("asdf", "时间：" + animation.getAnimatedFraction());
-                Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
-                if (canPlaying && animation.getAnimatedFraction() > 0.933) {
-                    canPlaying = false;
-                    cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
-                    //播放的后500ms，背景色改变
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            tv_size.setText(currentValue + "");
+            Log.e("asdf", "时间：" + animation.getAnimatedFraction());
+            Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
+            if (canPlaying && animation.getAnimatedFraction() > 0.933) {
+                canPlaying = false;
+                cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
+                //播放的后500ms，背景色改变
 //                    setBgChanged(viewt, 200);
-                }
-                if (currentValue == endNum) {
-                    tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
-                    tv_gb.setText(type == 1 ? "MB" : "GB");
-                }
+            }
+            if (currentValue == endNum) {
+                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
+                tv_gb.setText(type == 1 ? "MB" : "GB");
             }
         });
 //        anim.start();
@@ -289,51 +277,43 @@ public class AccessAnimView extends RelativeLayout {
         ValueAnimator anim = ValueAnimator.ofInt(0, 100);
         anim.setDuration(time);
         anim.setInterpolator(new DecelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                if (currentValue < 66 && currentValue >= 0) {
-                    if (listener != null && isFirstChangeColor1) {
-                        listener.onStatusBarColorChanged(R.color.color_FD6F46);
-                        isFirstChangeColor1 = false;
-                    }
-                    viewt.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
-                    line_title.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
-                } else if (currentValue < 77 && currentValue >= 66) {
-                    if (listener != null && isFirstChangeColor2) {
-                        listener.onStatusBarColorChanged(R.color.color_06C581);
-                        isFirstChangeColor2 = false;
-                    }
-                    viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                    line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                } else if (currentValue >= 77) {
-                    if (listener != null && isFirstChangeColor3) {
-                        listener.onStatusBarColorChanged(R.color.color_06C581);
-                        isFirstChangeColor3 = false;
-                    }
-                    viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                    line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                    if (isFirstChangeColor) {
-                        isFirstChangeColor = false;
-                        if (listener != null)
-                            listener.onAnimEnd();
-                    }
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            if (currentValue < 66 && currentValue >= 0) {
+                if (listener != null && isFirstChangeColor1) {
+                    listener.onStatusBarColorChanged(R.color.color_FD6F46);
+                    isFirstChangeColor1 = false;
                 }
-
+                viewt.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+                line_title.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+            } else if (currentValue < 77 && currentValue >= 66) {
+                if (listener != null && isFirstChangeColor2) {
+                    listener.onStatusBarColorChanged(R.color.color_06C581);
+                    isFirstChangeColor2 = false;
+                }
+                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+            } else if (currentValue >= 77) {
+                if (listener != null && isFirstChangeColor3) {
+                    listener.onStatusBarColorChanged(R.color.color_06C581);
+                    isFirstChangeColor3 = false;
+                }
+                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+                if (isFirstChangeColor) {
+                    isFirstChangeColor = false;
+                    if (listener != null)
+                        listener.onAnimEnd();
+                }
             }
+
         });
         anim.start();
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setViewTrans();
-                    }
-                }, 200);
+                new android.os.Handler().postDelayed(() -> setViewTrans(), 200);
             }
         });
     }
@@ -348,11 +328,11 @@ public class AccessAnimView extends RelativeLayout {
         mValueAnimator = ValueAnimator.ofInt(startHeight, endHeight);
         mValueAnimator.setDuration(500);
         mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        RelativeLayout.LayoutParams rlp = (LayoutParams) viewt.getLayoutParams();
+        RelativeLayout.LayoutParams rlp = (LayoutParams) mRlAnimBg.getLayoutParams();
         mValueAnimator.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
             rlp.height = currentValue;
-            viewt.setLayoutParams(rlp);
+            mRlAnimBg.setLayoutParams(rlp);
         });
 
         mValueAnimator.addListener(new AnimatorListenerAdapter() {
@@ -401,12 +381,9 @@ public class AccessAnimView extends RelativeLayout {
                 viewY.setVisibility(VISIBLE);
             }
         });
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        new android.os.Handler().postDelayed(() -> {
 //        animator.setRepeatMode(ValueAnimator.INFINITE);
-                animator.start();
-            }
+            animator.start();
         }, delay);
         return animator;
     }

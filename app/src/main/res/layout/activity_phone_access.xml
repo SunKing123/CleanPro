@@ -131,6 +131,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="visible"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -185,6 +186,7 @@
         android:layout_height="72dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
+        android:visibility="visible"
         android:background="@color/white">
 
         <View
@@ -202,7 +204,7 @@
             android:layout_marginRight="@dimen/dimen_16dp"
             android:background="@drawable/delete_select_bg"
             android:gravity="center"
-            android:text="清理"
+            android:text="@string/tool_one_key_clean"
             android:textColor="@color/white" />
     </RelativeLayout>
 
@@ -215,7 +217,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#06C581"
         android:visibility="gone"
         android:layout_marginTop="@dimen/dimen_56dp">
 

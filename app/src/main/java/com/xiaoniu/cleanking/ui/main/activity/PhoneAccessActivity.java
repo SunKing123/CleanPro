@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -187,7 +188,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     /**
-     * 显示lottie动画
+     * 显示lottie动画 火箭从底部飞出
      */
     public void showLottieView() {
         mLottieSpeed.setVisibility(VISIBLE);
@@ -198,6 +199,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
     @Override
     public void initView() {
+        mAppBarLayout.setExpanded(true);
         showLottieView();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -242,7 +244,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         tv_delete.setOnClickListener(v -> {
             if (!canClickDelete) return;
-            mAppBarLayout.setExpanded(true);
             ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
             for (FirstJunkInfo info : belowAdapter.getListImage()) {
                 if (info.getIsSelect()) {
@@ -534,5 +535,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         return super.onKeyDown(keyCode, event);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 }
