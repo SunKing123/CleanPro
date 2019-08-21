@@ -63,7 +63,7 @@ public class JavaInterface {
     @JavascriptInterface
     public void toOtherPage(String url) {
         if (mActivity instanceof UserLoadH5Activity) {
-//            mActivity.finish();
+            mActivity.finish();
         }
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
@@ -128,6 +128,14 @@ public class JavaInterface {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
+
+            }
+
+            @Override
+            public void onResult(SHARE_MEDIA share_media) {
+                ToastUtils.showShort("分享成功");
+                addShareSuccessRequest();
+
                 if (share_media == SHARE_MEDIA.WEIXIN) {
 //                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", "", "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
@@ -137,17 +145,6 @@ public class JavaInterface {
                 } else if (SHARE_MEDIA.QQ == share_media) {
                     StatisticsUtils.trackClick("qq_friends_click", "QQ好友", "", "Sharing_page");
                 }
-            }
-
-            @Override
-            public void onResult(SHARE_MEDIA share_media) {
-                if (!"QQ".equals(share_media.name())&&!"QZONE".equals(share_media.name())) {
-                    mActivity.runOnUiThread(() -> {
-                        ToastUtils.showShort("分享成功");
-                        addShareSuccessRequest();
-                    });
-                }
-
             }
 
             @Override
@@ -200,7 +197,7 @@ public class JavaInterface {
     }
 
     public interface onShareSuccessListener {
-        public void shareSuccess();
+        void shareSuccess();
     }
 
     public void shareSuccessRequest(Common4Subscriber<BaseEntity> commonSubscriber) {
