@@ -1,15 +1,30 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.SimpleActivity;
 
-public class PhoneSuperPowerSavingActivity extends AppCompatActivity {
+import butterknife.OnClick;
+
+public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_super_power_saving);
+    protected int getLayoutId() {
+        return R.layout.activity_phone_super_power_saving;
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_back:
+                finish();
+                break;
+        }
     }
 }
