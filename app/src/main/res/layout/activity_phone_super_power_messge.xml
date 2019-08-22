@@ -27,7 +27,8 @@
         android:id="@+id/ll_low_power"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_60dp"
-        android:padding="@dimen/dimen_16dp"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
         android:layout_below="@id/line_title"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -49,9 +50,19 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
+        android:layout_below="@id/ll_low_power"
+        android:background="@color/color_EDEDED"
+        android:layout_height="0.5dp"/>
+
     <LinearLayout
         android:id="@+id/ll_night"
         android:layout_width="match_parent"
+        android:layout_marginTop="0.5dp"
         android:layout_height="@dimen/dimen_60dp"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp"
@@ -75,12 +86,22 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
+        android:layout_below="@id/ll_night"
+        android:background="@color/color_EDEDED"
+        android:layout_height="0.5dp"/>
+
     <LinearLayout
         android:id="@+id/ll_not_nor"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_60dp"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp"
+        android:layout_marginTop="1dp"
         android:layout_below="@id/ll_night"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -96,7 +117,7 @@
         <com.suke.widget.SwitchButton
             android:layout_width="wrap_content"
             app:sb_show_indicator="false"
-            app:sb_border_width="0.5dp"
+            app:sb_border_width="1dp"
             app:sb_background="@color/color_EDEDED"
             android:layout_height="wrap_content"/>
 
