@@ -65,6 +65,7 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <!-- QQ分享 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -83,19 +84,20 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
+        <!-- 微博分享 -->
         <activity
             android:name="com.umeng.socialize.media.WBShareCallBackActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity> <!-- 腾讯分享 -->
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
         <activity
             android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
             android:launchMode="singleTask"
@@ -105,7 +107,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity> <!-- 微博分享 -->
+        </activity>
         <activity
             android:name=".ui.main.activity.JunkCleanActivity"
             android:screenOrientation="portrait" />
@@ -116,7 +118,7 @@
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" /> <!--  -->
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"
             android:launchMode="singleTop"
@@ -203,28 +205,31 @@
             android:name=".ui.main.activity.SimplePhotoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <!-- 手机瘦身 -->
         <activity
             android:name=".ui.main.activity.PhoneThinActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <!-- 手机瘦身结果页 -->
         <activity
             android:name=".ui.main.activity.PhoneThinResultActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <!-- 软件管理 -->
         <activity
             android:name=".ui.main.activity.SoftManageActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" /> <!-- 手机瘦身 -->
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- 手机瘦身结果页 -->
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.main.activity.WXCleanImgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" /> <!-- 软件管理 -->
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WXCleanVideoActivity"
             android:launchMode="singleTop"
@@ -319,8 +324,10 @@
 
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver> <!-- Required SDK核心功能 -->
-        <receiver android:name=".hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" /> <!-- 热修复回调 -->
+        </receiver>
+        <!-- Required SDK核心功能 -->
+        <receiver android:name=".hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" />
+        <!-- 热修复回调 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
 
         <receiver
