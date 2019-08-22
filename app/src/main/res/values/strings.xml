@@ -69,4 +69,5 @@
     <string name="tool_cooled_down">已降温</string>
     <string name="tool_super_power_saving">超强省电</string>
     <string name="tool_one_key_clean">一键清理</string>
+    <string name="tool_super_power_message">超强省电通知</string>
 </resources>

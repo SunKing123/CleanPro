@@ -3,76 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xiaoniu.cleanking">
 
-    <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
-
-    <permission
-        android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <!-- Required -->
-    <uses-permission android:name="android.permission.REORDER_TASKS" />
-    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-    <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 用于获取运营商信息，用于支持提供运营商信息相关的接口 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- 用于申请调用A-GPS模块 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
-    <!-- Optional. Required for location feature -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
-    <!-- 友盟 -->
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-
     <application
-        android:name="com.xiaoniu.cleanking.app.AppApplication"
+        android:name=".app.AppApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/applogo"
@@ -81,15 +13,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.2" />
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="6c0f162f789cb257e51ceecc1e6b88ec" />
+        <activity android:name=".ui.main.activity.PhoneSuperPowerMessageActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
 
         <activity
-            android:name="com.xiaoniu.cleanking.ui.main.activity.SplashActivity"
+            android:name=".ui.main.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher">
             <intent-filter>
@@ -99,15 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.xiaoniu.cleanking.ui.main.activity.MainActivity"
+            android:name=".ui.main.activity.MainActivity"
             android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Main.Theme"
-            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
-            android:name="com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity"
+            android:name=".ui.usercenter.activity.UserLoadH5Activity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -129,66 +59,53 @@
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanedResultActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.NewsLoadActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize"/>
-
-        <meta-data
-            android:name="PARTNER_CODE"
-            android:value="hlxx" />
-
-        <!--腾讯分享-->
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
-
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tencent1109516379" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--微博分享-->
         <activity
             android:name="com.umeng.socialize.media.WBShareCallBackActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTask"
             android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity> <!-- 腾讯分享 -->
+        <activity
+            android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            >
-
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
             android:launchMode="singleTask"
-            android:name="com.sina.weibo.sdk.share.WbShareTransActivity">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
-        </activity>
-        <!---->
+        </activity> <!-- 微博分享 -->
         <activity
             android:name=".ui.main.activity.JunkCleanActivity"
             android:screenOrientation="portrait" />
@@ -196,18 +113,14 @@
             android:name=".ui.main.activity.PhoneAccessActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait" /> <!--  -->
         <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".ui.main.activity.CleanMusicManageActivity"
             android:launchMode="singleTop"
@@ -216,17 +129,14 @@
             android:name=".ui.usercenter.activity.AboutActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanBigFileActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanVideoManageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.HardwareInfoActivity"
             android:launchMode="singleTop"
@@ -235,7 +145,6 @@
             android:name=".ui.main.activity.ProcessInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.WhiteListInstallPackgeManageActivity"
             android:launchMode="singleTop"
@@ -248,12 +157,10 @@
             android:name=".ui.usercenter.activity.FeedBackActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.WhiteListSpeedAddActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanFinishActivity"
             android:launchMode="singleTop"
@@ -274,7 +181,6 @@
             android:name=".ui.tool.wechat.activity.WechatCleanResultActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
@@ -288,7 +194,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".ui.main.activity.QuestionReportActivity"
             android:launchMode="singleTop"
@@ -298,46 +203,37 @@
             android:name=".ui.main.activity.SimplePhotoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!-- 手机瘦身-->
         <activity
             android:name=".ui.main.activity.PhoneThinActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!--手机瘦身结果页-->
         <activity
             android:name=".ui.main.activity.PhoneThinResultActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!-- 软件管理-->
         <activity
             android:name=".ui.main.activity.SoftManageActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait" /> <!-- 手机瘦身 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- 手机瘦身结果页 -->
         <activity
             android:name=".ui.main.activity.WXCleanImgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" /> <!-- 软件管理 -->
         <activity
             android:name=".ui.main.activity.WXCleanVideoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.main.activity.QQCleanImgActivity"
+        <activity
+            android:name=".ui.main.activity.QQCleanImgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.main.activity.QQCleanVideoActivity" />
-
         <activity
             android:name=".ui.tool.qq.activity.QQCleanHomeActivity"
             android:launchMode="singleTop"
@@ -350,44 +246,59 @@
             android:name=".ui.tool.qq.activity.QQCleanAudActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.xiaoniu.cleanking" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@style/MyDialogStyle">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.xiaoniu.cleanking" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:theme="@style/ImagePickerThemeFullScreen" />
+        <activity
+            android:name=".ui.main.activity.PhoneSuperPowerSavingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <!-- Required SDK 核心功能 -->
+        <!-- 可配置android:process参数将PushService放在其他进程中 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.2" />
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="6c0f162f789cb257e51ceecc1e6b88ec" /> <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <meta-data
+            android:name="PARTNER_CODE"
+            android:value="hlxx" /> <!-- Required SDK核心功能 -->
+        <meta-data
+            android:name="com.xiaoniu.statistic.ProductID"
+            android:value="18" /> <!-- Required SDK核心功能 -->
         <provider
-            android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
+            android:name=".utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/update_cache_path" />
-        </provider>
-
-        <!-- Required SDK 核心功能 -->
-        <!-- 可配置android:process参数将PushService放在其他进程中 -->
-        <service
-            android:name="cn.jpush.android.service.PushService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER" />
-                <action android:name="cn.jpush.android.intent.REPORT" />
-                <action android:name="cn.jpush.android.intent.PushService" />
-                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
-            </intent-filter>
-        </service>
-        <service android:name=".ui.usercenter.activity.FloatingImageDisplayService"></service>
-        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
-        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
-        <service
-            android:name="cn.jpush.android.service.DaemonService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.DaemonService" />
-
-                <category android:name="com.xiaoniu.cleanking" />
-            </intent-filter>
-        </service>
-
-        <!-- Required SDK核心功能 -->
+        </provider> <!-- SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
@@ -408,50 +319,12 @@
 
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver>
-
-        <!-- Required SDK核心功能 -->
-        <activity
-            android:name="cn.jpush.android.ui.PushActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:exported="false"
-            android:theme="@android:style/Theme.NoTitleBar">
-            <intent-filter>
-                <action android:name="cn.jpush.android.ui.PushActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.xiaoniu.cleanking" />
-            </intent-filter>
-        </activity>
-        <!-- SDK核心功能 -->
-        <activity
-            android:name="cn.jpush.android.ui.PopWinActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:exported="false"
-            android:theme="@style/MyDialogStyle">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.xiaoniu.cleanking" />
-            </intent-filter>
-        </activity>
-
-        <!-- Required SDK核心功能 -->
-        <service
-            android:name="cn.jpush.android.service.DownloadService"
-            android:enabled="true"
-            android:exported="false" />
-        <!-- 热修复回调 -->
-        <service
-            android:name="com.xiaoniu.cleanking.hotfix.service.HotFixResultService"
-            android:exported="false" />
-
-        <receiver android:name="com.xiaoniu.cleanking.hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" />
-        <!-- Required SDK核心功能 -->
+        </receiver> <!-- Required SDK核心功能 -->
+        <receiver android:name=".hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" /> <!-- 热修复回调 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
 
-        <!-- User defined. 用户自定义的广播接收器 -->
         <receiver
-            android:name="com.xiaoniu.cleanking.jpush.JPushReceiver"
+            android:name=".jpush.JPushReceiver"
             android:enabled="true">
             <intent-filter>
 
@@ -468,19 +341,90 @@
 
                 <category android:name="com.xiaoniu.cleanking" />
             </intent-filter>
-        </receiver>
+        </receiver> <!-- Required SDK核心功能 -->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter>
+        </service> <!-- User defined. 用户自定义的广播接收器 -->
+        <service android:name=".ui.usercenter.activity.FloatingImageDisplayService" />
 
-        <activity
-            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
-            android:theme="@style/ImagePickerThemeFullScreen" />
-        <!--小牛数据埋点-->
-        <meta-data
-            android:name="com.xiaoniu.statistic.ProductID"
-            android:value="18" />
-        <!--超强省电-->
-        <activity android:name=".ui.main.activity.PhoneSuperPowerSavingActivity"
-            android:launchMode="singleTask"/>
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService" />
 
+                <category android:name="com.xiaoniu.cleanking" />
+            </intent-filter>
+        </service> <!-- 小牛数据埋点 -->
+        <service
+            android:name="cn.jpush.android.service.DownloadService"
+            android:enabled="true"
+            android:exported="false" /> <!-- 超强省电 -->
+        <service
+            android:name=".hotfix.service.HotFixResultService"
+            android:exported="false" />
     </application>
+
+    <permission
+        android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" /> <!-- Required -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" /> <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" /> <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 用于获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> <!-- Optional. Required for location feature -->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" /> <!-- 友盟 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
 
 </manifest>
