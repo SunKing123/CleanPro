@@ -158,13 +158,12 @@
         android:visibility="gone"
         android:layout_height="336dp"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/view_lottie_speed"
         android:layout_width="match_parent"
+        android:scaleType="fitEnd"
+        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
-    </FrameLayout>
+
 </RelativeLayout>

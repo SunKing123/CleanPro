@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,11 +39,13 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private TextView mBtnCancel;
     private TextView mTvNum;
     private RelativeLayout mRlResult;
-    private RelativeLayout mRlResultTop;
+    private LinearLayout mLlResultTop;
     private NestedScrollWebView mNestedScrollWebView;
     private JavaInterface javaInterface;
     private LinearLayout mLayoutNotNet;
+    private FrameLayout mFlAnim;
     private LottieAnimationView mLottieAnimationStartView;
+    private LottieAnimationView mLottieAnimationFinishView;
     private boolean isError = false;
 
     private MyHandler mHandler = new MyHandler(this);
@@ -54,10 +58,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         }
         public void handleMessage(android.os.Message msg) {
             if(msg.what == 1 ){
-                mRlResult.setVisibility(View.GONE);
-                mAppBarLayout.setExpanded(true);
-                mRlResultTop.setVisibility(View.VISIBLE);
-                mNestedScrollWebView.setVisibility(View.VISIBLE);
+                showFinishAnim();
             }else if(msg.what == 2){
                 num --;
                 mTvNum.setText(String.valueOf(num));
@@ -86,10 +87,12 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mBtnCancel = findViewById(R.id.btn_cancel);
         mTvNum = findViewById(R.id.tv_num);
         mRlResult = findViewById(R.id.rl_result);
-        mRlResultTop = findViewById(R.id.rl_result_top);
+        mLlResultTop = findViewById(R.id.viewt_finish);
         mNestedScrollWebView = findViewById(R.id.web_view);
         mLayoutNotNet = findViewById(R.id.layout_not_net);
         mLottieAnimationStartView = findViewById(R.id.view_lottie_super_saving_sleep);
+        mFlAnim = findViewById(R.id.fl_anim);
+        mLottieAnimationFinishView = findViewById(R.id.view_lottie);
 
         mTvNum.setText(String.valueOf(num));
         initWebView();
@@ -120,6 +123,46 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mLottieAnimationStartView.playAnimation();
     }
 
+    /**
+     * 完成动画
+     */
+    public void showFinishAnim(){
+        mRlResult.setVisibility(View.GONE);
+        mFlAnim.setVisibility(View.VISIBLE);
+        mLottieAnimationFinishView.setVisibility(View.VISIBLE);
+        mLottieAnimationFinishView.useHardwareAcceleration();
+        mLottieAnimationFinishView.useHardwareAcceleration();
+        mLottieAnimationFinishView.setImageAssetsFolder("images");
+        mLottieAnimationFinishView.setAnimation("data_clean_finish.json");
+        mLottieAnimationFinishView.playAnimation();
+
+        mLottieAnimationFinishView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mFlAnim.setVisibility(View.GONE);
+                mRlResult.setVisibility(View.GONE);
+                mAppBarLayout.setExpanded(true);
+                mLlResultTop.setVisibility(View.VISIBLE);
+                mNestedScrollWebView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
