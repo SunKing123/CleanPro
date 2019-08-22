@@ -154,7 +154,7 @@ public class CleanUtil {
                         for (SecondJunkInfo secondlevelGarbageInfo : junks.get(i2).getSubGarbages()) {
                             if (secondlevelGarbageInfo != null) {
                                 try {
-                                    FileUtils.deleteFileAndFolder(new File(secondlevelGarbageInfo.getFilecatalog()));
+                                    com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(new File(secondlevelGarbageInfo.getFilecatalog()));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -162,7 +162,7 @@ public class CleanUtil {
                         }
                     }
                     try {
-                        FileUtils.deleteFileAndFolder(new File(junks.get(i2).getGarbageCatalog()));
+                        com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(new File(junks.get(i2).getGarbageCatalog()));
                     } catch (Exception e2) {
                         e2.printStackTrace();
                     }

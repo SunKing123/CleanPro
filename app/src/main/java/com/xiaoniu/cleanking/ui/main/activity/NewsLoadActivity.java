@@ -15,8 +15,8 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;

@@ -1,14 +1,14 @@
 package com.xiaoniu.cleanking.app.injector.module;
 
-import com.xiaoniu.cleanking.BuildConfig;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.google.gson.Gson;
+import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.ContextUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -75,15 +75,15 @@ public class RequestParamInterceptor implements Interceptor {
 //        String json = new Gson().toJson(commonParam);
         Map<String, Object> mapHeader = new HashMap<>();
         mapHeader.put("Ip", "172.16.88.23");
-        mapHeader.put("appVersion", AndroidUtil.getAppVersionName());
-        mapHeader.put("channel", AndroidUtil.getMarketId());
-        mapHeader.put("deviceId", AndroidUtil.getUdid());
+        mapHeader.put("appVersion", AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
+        mapHeader.put("channel", AppUtils.getChannelId());
+        mapHeader.put("deviceId", DeviceUtils.getUdid());
         mapHeader.put("gtId", "");
 
         mapHeader.put("imei", "357755073075671");
         mapHeader.put("os", "android");
-        mapHeader.put("phoneType", AndroidUtil.getSystemModel());
-        mapHeader.put("phoneVersion", "Android"+AndroidUtil.getAndroidSDKVersion()+"");
+        mapHeader.put("phoneType", DeviceUtils.getModel());
+        mapHeader.put("phoneVersion", "Android" + DeviceUtils.getSDKVersion() + "");
         mapHeader.put("sessionId", "");
         mapHeader.put("sign", "7cdd4afd6a0bd76080a973ada0566598");
         mapHeader.put("talkVersion", "");

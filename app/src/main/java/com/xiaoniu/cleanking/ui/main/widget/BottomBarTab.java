@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 
 /**
@@ -99,13 +99,13 @@ public class BottomBarTab extends FrameLayout {
 
         mBadgeView = new TextView(context);
         mBadgeView.setTextColor(Color.WHITE);
-        mBadgeView.setPadding(DeviceUtils.dip2px(5),0,DeviceUtils.dip2px(5),0);
+        mBadgeView.setPadding(DisplayUtils.dip2px(5), 0, DisplayUtils.dip2px(5), 0);
         mBadgeView.setTextSize(10);
         mBadgeView.setGravity(Gravity.CENTER);
-        FrameLayout.LayoutParams badgeParams = new FrameLayout.LayoutParams(DeviceUtils.dip2px(17), DeviceUtils.dip2px(10));
+        FrameLayout.LayoutParams badgeParams = new FrameLayout.LayoutParams(DisplayUtils.dip2px(17), DisplayUtils.dip2px(10));
         badgeParams.gravity = Gravity.CENTER_HORIZONTAL;
-        badgeParams.rightMargin = DeviceUtils.dip2px(-12);
-        badgeParams.topMargin = DeviceUtils.dip2px(5);
+        badgeParams.rightMargin = DisplayUtils.dip2px(-12);
+        badgeParams.topMargin = DisplayUtils.dip2px(5);
         mBadgeView.setBackgroundResource(R.drawable.icon_bottom_badge);
         mBadgeView.setVisibility(GONE);
         addView(mBadgeView, badgeParams);

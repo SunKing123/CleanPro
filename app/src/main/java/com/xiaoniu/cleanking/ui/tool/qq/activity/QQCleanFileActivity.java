@@ -20,7 +20,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.TimeUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.text.ParseException;
@@ -187,11 +188,11 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         for (int j = 0; j < listData.size(); j++) {
             try {
 
-                if (TimeUtil.IsToday(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listData.get(j).getTime()))) {
+                if (TimeUtil.IsToday(TimeUtils.getTimesByLong(listData.get(j).getTime()))) {
                     listDataToday.add(listData.get(j));
-                } else if (TimeUtil.IsYesterday(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listData.get(j).getTime()))) {
+                } else if (TimeUtil.IsYesterday(TimeUtils.getTimesByLong(listData.get(j).getTime()))) {
                     listDataYestoday.add(listData.get(j));
-                } else if (TimeUtil.IsInMonth(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listData.get(j).getTime()))) {
+                } else if (TimeUtil.IsInMonth(TimeUtils.getTimesByLong(listData.get(j).getTime()))) {
                     listDataInMonth.add(listData.get(j));
                 } else {
                     listDataInHalfYear.add(listData.get(j));

@@ -21,12 +21,12 @@ import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.FileUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
@@ -91,7 +91,7 @@ public class ToolFragment extends SimpleFragment {
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
-        Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{DeviceUtils.getFreeSpace(), DeviceUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
+        Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{FileUtils.getFreeSpace(), FileUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
                     if (mTvPhoneSpaceState == null) return;

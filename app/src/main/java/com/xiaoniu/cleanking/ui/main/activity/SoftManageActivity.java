@@ -4,19 +4,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.InstallPackageManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.SoftManagePresenter;
+import com.xiaoniu.common.utils.AppUtils;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -130,21 +133,12 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             List<AppInfoBean> lists = mAdapter.getLists();
             for (AppInfoBean appInfoBean : lists) {
                 if (appInfoBean.isSelect) {
-                    uninstallApk(getBaseContext(), appInfoBean.packageName);
+                    AppUtils.uninstallNormal(getBaseContext(), appInfoBean.packageName);
                 }
             }
         }
 
     }
-
-    /* 卸载apk */
-    public void uninstallApk(Context context, String packageName) {
-        Uri uri = Uri.parse("package:" + packageName);
-        Intent intent = new Intent(Intent.ACTION_DELETE, uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
 
     /**
      * 全选

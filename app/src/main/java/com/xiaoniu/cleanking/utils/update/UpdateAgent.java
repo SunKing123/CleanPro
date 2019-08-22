@@ -42,7 +42,6 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.listener.IDownloadAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateDownloader;
@@ -50,6 +49,7 @@ import com.xiaoniu.cleanking.utils.update.listener.IUpdatePrompter;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.cleanking.utils.update.listener.OnDownloadListener;
 import com.xiaoniu.cleanking.utils.update.listener.OnFailureListener;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
 
@@ -355,7 +355,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                     agent.update();
                 } else {
                     if (hasPermissionDeniedForever(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ToastUtils.show(permissionsHint);
+                        ToastUtils.showShort(permissionsHint);
                         mPrompter.dismiss();
                     }
                 }

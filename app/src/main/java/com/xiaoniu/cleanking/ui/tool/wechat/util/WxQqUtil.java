@@ -16,8 +16,8 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.Logger;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.WxAndQqScanPathInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.WxNotifyRefrshReceiver;
-import com.xiaoniu.cleanking.utils.FileUtils;
-import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
+import com.xiaoniu.common.utils.AsyncTaskUtils;
+import com.xiaoniu.common.utils.FileUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -463,7 +463,7 @@ public class WxQqUtil {
     }
 
     private void c() {
-        ThreadTaskUtil.executeNormalTask("-CleanWxScanUtil-changeHomeNum-456-- ", new Runnable() {
+        AsyncTaskUtils.background(new Runnable() {
             public void run() {
                 while (true) {
                     if ((!d.isFinished() || !g.isFinished() || !f.isFinished() || !e.isFinished()) && !WxQqUtil.this.p) {
@@ -486,7 +486,7 @@ public class WxQqUtil {
     }
 
     private void d() {
-        ThreadTaskUtil.executeNormalTask("-CleanWxScanUtil-refleshAllWxData-481-- ", new Runnable() {
+        AsyncTaskUtils.background(new Runnable() {
             public void run() {
                 while (true) {
                     if ((!WxQqUtil.this.c || !WxQqUtil.this.b) && !WxQqUtil.this.p) {

@@ -5,11 +5,11 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.injector.component.DaggerFragmentComponent;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.FragmentModule;
-import com.xiaoniu.cleanking.hotfix.ApplicationDelegate;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import javax.inject.Inject;
 

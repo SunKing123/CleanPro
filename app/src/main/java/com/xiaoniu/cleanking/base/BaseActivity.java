@@ -3,11 +3,11 @@ package com.xiaoniu.cleanking.base;
 
 import android.text.TextUtils;
 
+import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
-import com.xiaoniu.cleanking.hotfix.ApplicationDelegate;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import javax.inject.Inject;
 

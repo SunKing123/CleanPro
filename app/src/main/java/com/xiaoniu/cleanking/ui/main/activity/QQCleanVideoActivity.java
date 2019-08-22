@@ -9,7 +9,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CommonFragmentPageAdapter;
 import com.xiaoniu.cleanking.ui.main.fragment.QQVideoFragment;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;

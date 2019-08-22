@@ -10,7 +10,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
-import com.xiaoniu.cleanking.utils.DateUtils;
+import com.xiaoniu.common.utils.DateUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

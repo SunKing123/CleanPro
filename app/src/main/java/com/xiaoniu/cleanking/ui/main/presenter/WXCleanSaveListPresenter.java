@@ -3,23 +3,14 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
-import com.trello.rxlifecycle2.components.RxFragment;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
-import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.DateUtils;
+import com.xiaoniu.common.utils.DateUtils;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -31,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;

@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 
 /**

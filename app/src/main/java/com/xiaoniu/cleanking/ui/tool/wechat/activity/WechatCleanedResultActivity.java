@@ -10,9 +10,9 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.CleanedAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
-import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.KeyboardUtils;
 
 import butterknife.BindView;
 
@@ -49,7 +49,7 @@ public class WechatCleanedResultActivity extends SimpleActivity {
      * @param countEntity
      */
     public void startCleanAnim(CountEntity countEntity) {
-        mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DeviceUtils.dip2px(49), DeviceUtils.dip2px(49));
+        mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DisplayUtils.dip2px(49), DisplayUtils.dip2px(49));
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
 //        mCleanAnimView.startTopAnim(true);
@@ -74,6 +74,6 @@ public class WechatCleanedResultActivity extends SimpleActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        KeyboardUtil.closeKeybord(mCleanAnimView);
+        KeyboardUtils.closeKeyboard(mCleanAnimView);
     }
 }

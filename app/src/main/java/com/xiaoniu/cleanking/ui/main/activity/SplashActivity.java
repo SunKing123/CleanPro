@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.ImageView;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -10,11 +11,14 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,7 +59,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> {
     private void initNiuData() {
         if (!mSPHelper.isUploadImei()) {
             //有没有传过imei
-            String imei = AndroidUtil.getNiuDeviceID();
+            String imei = DeviceUtils.getIMEI();
             if (TextUtils.isEmpty(imei)) {
                 NiuDataAPI.setIMEI("");
                 mSPHelper.setUploadImeiStatus(false);

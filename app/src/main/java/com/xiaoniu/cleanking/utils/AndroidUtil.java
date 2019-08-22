@@ -1,37 +1,27 @@
 package com.xiaoniu.cleanking.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.content.FileProvider;
-import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.leon.channel.helper.ChannelReaderUtil;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
+import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,9 +34,6 @@ import java.util.regex.Pattern;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-
 
 /**
  * android系统相关常用操作
@@ -56,83 +43,6 @@ import okhttp3.RequestBody;
 public class AndroidUtil {
     private static String mac = "";
     private static String sImei;
-
-    /**
-     * 获取sdk版本
-     *
-     * @return
-     */
-    public static int getAndroidSDKVersion() {
-        return android.os.Build.VERSION.SDK_INT;
-    }
-
-    public static int getVersionCode() {
-        return BuildConfig.VERSION_CODE;
-    }
-
-    /**
-     * 返回当前程序版本名
-     */
-    public static String getAppVersionName(Context context) {
-        String versionName = "0.0.0";
-        try {
-            // ---get the package info---
-            PackageManager pm = context.getPackageManager();
-            // 这里的context.getPackageName()可以换成你要查看的程序的包名
-            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-            versionName = pi.versionName;
-            if (versionName == null || versionName.length() <= 0) {
-                return "";
-            }
-        } catch (Exception e) {
-            //Log.e("VersionInfo", "Exception", e);
-        }
-        return versionName;
-    }
-
-    /**
-     * 返回当前程序版本名
-     */
-    public static String getAppVersionName() {
-        String versionName = "0.0.0";
-        try {
-            // ---get the package info---
-            PackageManager pm = AppApplication.getInstance().getPackageManager();
-            // 这里的context.getPackageName()可以换成你要查看的程序的包名
-            PackageInfo pi = pm.getPackageInfo(AppApplication.getInstance().getPackageName(), 0);
-            versionName = pi.versionName;
-            if (versionName == null || versionName.length() <= 0) {
-                return "";
-            }
-        } catch (Exception e) {
-            //Log.e("VersionInfo", "Exception", e);
-        }
-        return versionName;
-    }
-
-    /**
-     * 获取屏幕宽
-     *
-     * @return
-     */
-    public static int getScreenWidth() {
-        DisplayMetrics dm = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) AppApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(dm);
-        return dm.widthPixels;
-    }
-
-    /**
-     * 屏幕高度
-     *
-     * @return
-     */
-    public static int getScreenHeight() {
-        DisplayMetrics dm = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) AppApplication.getInstance().getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(dm);
-        return dm.heightPixels;
-    }
 
     /**
      * app是否被安装
@@ -153,148 +63,7 @@ public class AndroidUtil {
         return pName.contains(packageName);
     }
 
-    private static String udid = "";
 
-    /**
-     * 获取设备号
-     *
-     * @param con
-     * @return
-     */
-    public final static String KEY_DEVICE_ID = "UserDeviceId";
-
-    public static String getUdid() {
-        if (!checkUdidValid()) {
-            SharedPreferences sharepre = PreferenceManager.getDefaultSharedPreferences(AppApplication.getInstance());
-            udid = sharepre.getString(KEY_DEVICE_ID, "");
-            if (!checkUdidValid()) {
-                try {
-                    TelephonyManager tm = (TelephonyManager) AppApplication.getInstance().getSystemService(Context.TELEPHONY_SERVICE);
-                    udid = "" + tm.getDeviceId();
-                } catch (Exception e) {
-                    udid = "";
-                }
-
-                if (!checkUdidValid()) {
-                    if (isEffective(mac)) {
-                        udid = "MAC" + mac.replace(':', '0').replace('.', '0');
-                    } else {
-                        udid = "";
-                    }
-                    if (!checkUdidValid()) {
-                        try {
-                            udid = "" + Settings.Secure.getString(AppApplication.getInstance().getContentResolver(), Settings.Secure.ANDROID_ID);
-                        } catch (Exception e) {
-                            udid = "";
-                        }
-                        if (!checkUdidValid()) {
-                            getRandomUdidFromFile();
-                        }
-                    }
-                }
-
-                if (checkUdidValid()) {
-                    SharedPreferences.Editor editor = sharepre.edit();
-                    editor.putString("UserDeviceId", udid);
-                    editor.commit();
-                }
-            }
-        }
-
-        return udid;
-    }
-
-    /**
-     * check whether be empty/null or not
-     *
-     * @param string
-     * @return
-     */
-    public static boolean isEffective(String string) {
-        return !((string == null) || ("".equals(string)) || (" ".equals(string))
-                || ("null".equals(string)) || ("\n".equals(string)));
-    }
-
-    private static boolean checkUdidValid() {
-        if (udid != null && !"".equals(udid) && !"null".equals(udid)
-                && !"NULL".equals(udid) && !checkUdidZero()
-                && !"9774d56d682e549c".equals(udid))
-        // SDK version 2.2, some devices have the same id
-        {
-            int len = 10 - udid.length();
-            for (int i = 0; i < len; i++) {
-                udid = "0" + udid;
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean checkUdidZero() {
-        try {
-            int val = Integer.parseInt(udid);
-            return val == 0;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private synchronized static void getRandomUdidFromFile() {
-        File installation = new File(AppApplication.getInstance().getFilesDir(), "INSTALLATION");
-        try {
-            if (!installation.exists()) {
-                writeInstallationFile(installation);
-            }
-            udid = readInstallationFile(installation);
-        } catch (Exception e) {
-            udid = "";
-        }
-    }
-
-    private static void writeInstallationFile(File installation)
-            throws IOException {
-        FileOutputStream out = new FileOutputStream(installation);
-        String id = UUID.randomUUID().toString();
-        out.write(id.getBytes());
-        out.close();
-    }
-
-    private static String readInstallationFile(File installation)
-            throws IOException {
-        RandomAccessFile f = new RandomAccessFile(installation, "r");
-        byte[] bytes = new byte[(int) f.length()];
-        f.readFully(bytes);
-        f.close();
-        return new String(bytes);
-    }
-
-    /**
-     * 获取市场渠道名
-     *
-     * @return channel
-     */
-    public static String getMarketId() {
-        String channel = "";
-        try {
-            channel = ChannelReaderUtil.getChannel(AppApplication.getInstance());
-        } catch (Exception e) {
-        }
-        return !TextUtils.isEmpty(channel) ? channel : "official";
-    }
-
-    //当前是否为审核状态，审核状态则隐藏相关页面
-    public static boolean isInAudit() {
-        boolean isInAudit = false;
-        //        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(AppApplication.getInstance(), AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "1")) {
-            isInAudit = false;
-        } else {
-            isInAudit = true;
-        }
-        return isInAudit;
-    }
 //调用第三方程序uri版本兼容
     public static void fileUri(Context context, Intent intent, File file, String type) {
         //判断是否是AndroidN以及更高的版本
@@ -357,13 +126,13 @@ public class AndroidUtil {
         map.put("request-id", UUID.randomUUID().toString());
         //1：android、2：iOS、3：PC、4、H5、5：wechat
         map.put("request-agent", "1");
-        map.put("device-id", AndroidUtil.getUdid());
+        map.put("device-id", "");
         //0：android、1：iOS
         map.put("os-version", "0");
-        map.put("sdk-version", AndroidUtil.getAndroidSDKVersion() + "");
-        map.put("phone-model", AndroidUtil.getSystemModel());
-        map.put("market", AndroidUtil.getMarketId());
-        map.put("app-version", AndroidUtil.getAppVersionName());
+        map.put("sdk-version", DeviceUtils.getSDKVersion() + "");
+//        map.put("phone-model", AndroidUtil.getModel());
+        map.put("market", "");
+        map.put("app-version", "");
         map.put("app-name", AndroidUtil.getAppNum());
         map.put("app-id", BuildConfig.API_APPID);
         map.put("timestamp", timeMillis + "");
@@ -436,37 +205,13 @@ public class AndroidUtil {
         maps.put("trace-id", UUID.randomUUID().toString());
         maps.put("request-time", System.currentTimeMillis() + "");
         maps.put("device-type", "android");
-        maps.put("os-version", getAndroidSDKVersion() + "");
-        maps.put("device-id", getUdid());
-        maps.put("app-version", getAppVersionName());
-        maps.put("market", getMarketId());
-        maps.put("phone-models", getModel());
+        maps.put("os-version", DeviceUtils.getSDKVersion() + "");
+//        maps.put("device-id", getUdid());
+//        maps.put("app-version", getAppVersionName());
+//        maps.put("market", getMarketId());
+        maps.put("phone-models", DeviceUtils.getModel());
         maps.put("access-token", getToken());
         return maps;
-    }
-
-    /**
-     * 获取设备型号
-     *
-     * @return 设备型号
-     */
-    public static String getModel() {
-        String model = Build.MODEL;
-        if (model != null) {
-            model = model.trim().replaceAll("\\s*", "");
-        } else {
-            model = "";
-        }
-        return model;
-    }
-
-    /**
-     * 获取手机型号
-     *
-     * @return 手机型号
-     */
-    public static String getSystemModel() {
-        return android.os.Build.MODEL;
     }
 
     /**
@@ -474,58 +219,6 @@ public class AndroidUtil {
      */
     public static String getAppNum() {
         return AppApplication.getInstance().getString(R.string.app_num);
-    }
-
-    /**
-     * 将请求参数转换成RequestBody
-     *
-     * @param map
-     * @return
-     */
-    public static RequestBody getRequestBody(Map<String, Object> map) {
-        Gson gson = new Gson();
-        String json = gson.toJson(map);
-        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-    }
-
-    public static String getClientId() {
-        return implPreferencesHelper.getClientId();
-    }
-
-    /**
-     * 埋点要用
-     * @return
-     */
-    @SuppressLint({"MissingPermission"})
-    public static String getNiuDeviceID() {
-        Context context = AppApplication.getInstance();
-        if (!TextUtils.isEmpty(sImei)) {
-            return sImei;
-        } else {
-            try {
-                TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-                if (Build.VERSION.SDK_INT >= 26) {
-                    sImei = tm.getImei();
-                } else if (Build.VERSION.SDK_INT >= 23) {
-                    sImei = tm.getDeviceId(0);
-                } else {
-                    sImei = tm.getDeviceId();
-                }
-                return sImei;
-            } catch (Exception var2) {
-                return sImei = "";
-            }
-        }
-    }
-
-    private static String getAndroidId(Context context) {
-        String androidId = "unknown";
-        try {
-            androidId = Settings.Secure.getString(context.getContentResolver(),
-                    "android_id");
-        } catch (Exception e) {
-        }
-        return androidId != null && androidId.length() != 0 ? androidId : "unknown";
     }
 
 }

@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 
 public class CutDownView extends RelativeLayout {
@@ -44,7 +44,7 @@ public class CutDownView extends RelativeLayout {
 
     private void initViews() {
         Context context = getContext();
-        int width = getScreenWidth() - DeviceUtils.dip2px(50);
+        int width = getScreenWidth() - DisplayUtils.dip2px(50);
         //添加背景图
         backgroundIv = new ImageView(context);
         LayoutParams bgIvParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

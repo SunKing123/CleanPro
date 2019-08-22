@@ -30,7 +30,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -175,7 +175,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
 
     //扫描中动画
     public ObjectAnimator setScaningAnim(View viewY) {
-        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DeviceUtils.dip2px(99), DeviceUtils.getScreenWidth());
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DisplayUtils.dip2px(99), DisplayUtils.getScreenWidth());
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
         animator.setDuration(600);
         animator.setRepeatCount(ValueAnimator.INFINITE);

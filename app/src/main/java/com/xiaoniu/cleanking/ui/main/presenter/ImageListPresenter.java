@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -21,14 +20,11 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -135,7 +131,7 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
                     public void accept(String strings) throws Exception {
                         mView.cancelLoadingDialog();
                         mView.deleteSuccess(listF);
-                        ToastUtils.show("删除成功");
+                        ToastUtils.showShort("删除成功");
                     }
                 });
     }

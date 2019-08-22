@@ -24,10 +24,10 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class QQCleanHomePresenter extends RxPresenter<QQCleanHomeActivity, MainM
 
     //扫描中动画
     public ObjectAnimator setScaningAnim(View viewY) {
-        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DeviceUtils.dip2px(99), DeviceUtils.getScreenWidth());
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DisplayUtils.dip2px(99), DisplayUtils.getScreenWidth());
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
         animator.setDuration(600);
         animator.setRepeatCount(ValueAnimator.INFINITE);

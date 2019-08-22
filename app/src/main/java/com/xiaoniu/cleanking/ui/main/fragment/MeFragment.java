@@ -29,10 +29,10 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
@@ -80,11 +80,11 @@ public class MeFragment extends SimpleFragment {
         });
 
         ConstraintLayout.LayoutParams clp = (ConstraintLayout.LayoutParams) iv_top.getLayoutParams();
-        clp.height = DeviceUtils.getScreenHeight() * 26 / 100;
+        clp.height = DisplayUtils.getScreenHeight() * 26 / 100;
         iv_top.setLayoutParams(clp);
 
         ConstraintLayout.LayoutParams clpt = (ConstraintLayout.LayoutParams) viewmid.getLayoutParams();
-        clpt.topMargin = DeviceUtils.getScreenHeight() * 26 / 100 - DeviceUtils.dip2px(15);
+        clpt.topMargin = DisplayUtils.getScreenHeight() * 26 / 100 - DisplayUtils.dip2px(15);
         viewmid.setLayoutParams(clpt);
     }
 

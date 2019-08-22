@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.common.utils.TimeUtils;
 
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class QQCleanAudAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getFileName());
-            ((QQCleanAudAdapter.ImageViewHolder) holder).tv_time.setText(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listImage.get(position).getTime()));
+            ((QQCleanAudAdapter.ImageViewHolder) holder).tv_time.setText(TimeUtils.getTimesByLong(listImage.get(position).getTime()));
             ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSizeOne(listImage.get(position).getSize()));
             ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
             ((ImageViewHolder) holder).tv_select.setOnClickListener(v -> {

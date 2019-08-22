@@ -25,9 +25,9 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 /**
  * @author zhang
@@ -123,8 +123,8 @@ public class AccessAnimView extends RelativeLayout {
 
     //Step1:上面红色布局和中间1dp的布局动画开始
     public void startTopAnim() {
-        int startHeight = DeviceUtils.dip2px(150);
-        int endHeight = DeviceUtils.getScreenHeight();
+        int startHeight = DisplayUtils.dip2px(150);
+        int endHeight = DisplayUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -140,8 +140,8 @@ public class AccessAnimView extends RelativeLayout {
 
     //中间的控件高度变化
     public void startMiddleAnim() {
-        int startHeight = DeviceUtils.dip2px(30);
-        int endHeight = DeviceUtils.dip2px(300);
+        int startHeight = DisplayUtils.dip2px(30);
+        int endHeight = DisplayUtils.dip2px(300);
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -323,8 +323,8 @@ public class AccessAnimView extends RelativeLayout {
         line_size.setVisibility(GONE);
         line_access.setVisibility(GONE);
 
-        int endHeight = DeviceUtils.dip2px(150);
-        int startHeight = DeviceUtils.getScreenHeight();
+        int endHeight = DisplayUtils.dip2px(150);
+        int startHeight = DisplayUtils.getScreenHeight();
         mValueAnimator = ValueAnimator.ofInt(startHeight, endHeight);
         mValueAnimator.setDuration(500);
         mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -357,7 +357,7 @@ public class AccessAnimView extends RelativeLayout {
      */
     public ObjectAnimator createFadeAnimator() {
 
-        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DeviceUtils.dip2px(306));
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DisplayUtils.dip2px(306));
 //        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY);
         animator.setDuration(300);
@@ -368,7 +368,7 @@ public class AccessAnimView extends RelativeLayout {
 
     //下雨动画
     public ObjectAnimator setYuAnim(View viewY, long delay) {
-        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", DeviceUtils.dip2px(112) * -1, DeviceUtils.getScreenHeight() + DeviceUtils.dip2px(112));
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", DisplayUtils.dip2px(112) * -1, DisplayUtils.getScreenHeight() + DisplayUtils.dip2px(112));
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationY);
         animator.setDuration(600);
         animator.setInterpolator(new AccelerateInterpolator());

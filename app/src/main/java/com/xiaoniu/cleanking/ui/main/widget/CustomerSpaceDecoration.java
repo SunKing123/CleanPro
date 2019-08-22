@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 /**
  * author : zchu
@@ -19,10 +19,10 @@ public class CustomerSpaceDecoration extends RecyclerView.ItemDecoration {
         // item position
         int position = parent.getChildAdapterPosition(view);
         if (position == 0) {
-            outRect.left = DeviceUtils.dip2px(16);
+            outRect.left = DisplayUtils.dip2px(16);
         }else {
             outRect.left = 0;
         }
-        outRect.right = DeviceUtils.dip2px(27);
+        outRect.right = DisplayUtils.dip2px(27);
     }
 }

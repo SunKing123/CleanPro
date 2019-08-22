@@ -38,17 +38,16 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
-import com.xiaoniu.cleanking.utils.KeyboardUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.KeyboardUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
@@ -168,10 +167,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         mLayoutNetError.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                     if (recycle_view != null) {
-                        recycle_view.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                        recycle_view.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }
                 isError = false;
@@ -307,7 +306,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onPause() {
         super.onPause();
-        KeyboardUtil.closeKeybord(mWebView);
+        KeyboardUtils.closeKeyboard(mWebView);
         NiuDataAPI.onPageEnd("once_accelerate_view_page", "一键清理页面浏览");
         NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
@@ -474,8 +473,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //清理完毕后展示内容
     public void setCleanedView(long sized) {
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
-        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
-        recycle_view.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
+        recycle_view.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
         initWebView();
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");

@@ -2,18 +2,16 @@ package com.xiaoniu.cleanking.ui.main.model;
 
 
 import com.google.gson.Gson;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.api.UserApiService;
-import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
-import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.common.utils.AppUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +42,7 @@ public class MainModel extends BaseModel {
         Map<String, Object> map = new HashMap<>();
         map.put("os", "android");
         map.put("platform", "1");
-        map.put("appVersion", AndroidUtil.getAppVersionName());
+        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
@@ -78,8 +76,8 @@ public class MainModel extends BaseModel {
     public void queryAuditSwitch(Common4Subscriber<AuditSwitch> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
-        map.put("channel", AndroidUtil.getMarketId());
-        map.put("appVersion", AndroidUtil.getAppVersionName());
+        map.put("channel", AppUtils.getChannelId());
+        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.queryAuditSwitch(body).compose(RxUtil.<AuditSwitch>rxSchedulerHelper(mActivity))

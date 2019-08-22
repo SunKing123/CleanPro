@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 public class DockingExpandableListView extends ExpandableListView implements AbsListView.OnScrollListener {
     private View mDockingHeader;

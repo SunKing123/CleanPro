@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 
 public class Banner extends LinearLayout {
@@ -88,13 +88,13 @@ public class Banner extends LinearLayout {
     }
 
     public void changeIndicatorStyle(int count, int height, int color) {
-        int widthDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, count * DeviceUtils.dip2px(6),
+        int widthDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, count * DisplayUtils.dip2px(6),
                 mIndicatorTitle.getContext().getResources()
-                        .getDisplayMetrics()) + DeviceUtils.dip2px(8);
+                        .getDisplayMetrics()) + DisplayUtils.dip2px(8);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(widthDp, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params.setMargins(0, 0, DeviceUtils.dip2px(12), DeviceUtils.dip2px(6));
+        params.setMargins(0, 0, DisplayUtils.dip2px(12), DisplayUtils.dip2px(6));
         mPagerIndicator.setLayoutParams(params);
         if (height != -1) {
             int heightDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, mIndicatorTitle.getContext().getResources()

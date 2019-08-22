@@ -27,8 +27,8 @@ import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.QuestionReportLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QuestionReportPresenter;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;

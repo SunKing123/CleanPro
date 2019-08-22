@@ -14,8 +14,9 @@ import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.hotfix.listener.MyPatchListener;
-import com.xiaoniu.cleanking.hotfix.log.HotfixLogcat;
+import com.xiaoniu.common.hotfix.listener.MyPatchListener;
+import com.xiaoniu.common.hotfix.log.HotfixLogcat;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
@@ -101,8 +102,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void queryPatch() {
         isLoaded = Tinker.with(mActivity).isTinkerLoaded();
         isInstalled = Tinker.with(mActivity).isTinkerInstalled();
-        final String currentVersionName = AndroidUtil.getAppVersionName();
-        final String channel = AndroidUtil.getMarketId();
+        final String currentVersionName = AppUtils.getVersionName(mActivity, mActivity.getPackageName());
+        final String channel = AppUtils.getChannelId();
         if (isLoaded) {
             TinkerLoadResult loadResult = Tinker.with(mActivity).getTinkerLoadResultIfPresent();
             Map<String, String> config = loadResult.packageConfig;

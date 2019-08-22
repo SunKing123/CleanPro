@@ -33,8 +33,8 @@ import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -452,7 +452,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 //                String cotnent=getString(R.string.msg_del_video);
 //                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title,cotnent);
 //                FragmentManager fm = getActivity().getFragmentManager();
-//                dialogFragment.show(fm,"");
+//                dialogFragment.showShort(fm,"");
 //                dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
 //                    @Override
 //                    public void onCancel() {
@@ -461,7 +461,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 //
 //                    @Override
 //                    public void onConfirm() {
-//                        mLoading.show(getActivity().getSupportFragmentManager(),"");
+//                        mLoading.showShort(getActivity().getSupportFragmentManager(),"");
 //                        List<FileChildEntity> files=getDelFile();
 //                        mPresenter.delFile(files);
 //                    }
@@ -483,10 +483,10 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 
 //                List<File> lists=getSelectFiles();
 //                if(lists.size()==0){
-//                    ToastUtils.show("未选中照片");
+//                    ToastUtils.showShort("未选中照片");
 //                }else {
 //                    FragmentManager fmProgress= getActivity().getFragmentManager();
-//                    mProgress.show(fmProgress,"");
+//                    mProgress.showShort(fmProgress,"");
 //                    //导入图片
 //                    mPresenter.copyFile(lists);
 //                }
@@ -543,7 +543,7 @@ public class QQVideoFragment extends BaseFragment<QQVideoPresenter> {
 
         mProgress.setValue(progress);
         if(progress>=100){
-            ToastUtils.show("保存成功，请至手机相册查看");
+            ToastUtils.showShort("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
     }

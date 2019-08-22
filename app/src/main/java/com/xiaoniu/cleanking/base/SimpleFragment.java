@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.xiaoniu.cleanking.utils.LoadingDialog;
 import com.trello.rxlifecycle2.components.support.RxFragment;
+import com.xiaoniu.common.widget.LoadingDialog;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
