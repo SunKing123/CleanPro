@@ -71,7 +71,7 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mLottieAnimationStartView.useHardwareAcceleration();
         mLottieAnimationStartView.useHardwareAcceleration();
         mLottieAnimationStartView.setImageAssetsFolder("images");
-        mLottieAnimationStartView.setAnimation("data2.json");
+        mLottieAnimationStartView.setAnimation("data_super_power_saving.json");
         mLottieAnimationStartView.playAnimation();
     }
 
