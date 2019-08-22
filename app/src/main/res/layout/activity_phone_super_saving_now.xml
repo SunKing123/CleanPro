@@ -86,20 +86,6 @@
                         android:layout_gravity="center_vertical"
                         android:text="@string/tool_super_power_saving" />
 
-                    <View
-                        android:layout_width="0px"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/icon_saving_right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="@dimen/dimen_24dp"
-                        android:paddingRight="@dimen/dimen_21dp"
-                        android:src="@mipmap/icon_power_saving_right" />
-
                 </LinearLayout>
 
             </android.support.v7.widget.Toolbar>
@@ -118,8 +104,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ExpandableListView
-                android:id="@+id/ed_list"
+            <com.xiaoniu.cleanking.widget.NestedScrollWebView
+                android:id="@+id/web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
@@ -135,22 +121,24 @@
                     android:id="@+id/ll_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/view_lottie_super_saving"
+                    android:layout_below="@id/view_lottie_super_saving_sleep"
                     android:layout_centerHorizontal="true">
 
                     <TextView
                         android:id="@+id/tv_num"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="0"
+                        android:gravity="bottom"
                         android:textColor="@color/white"
                         android:textSize="70sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/dimen_18dp"
-                        android:text="%"
+                        android:gravity="bottom"
+                        android:text="/31"
+                        android:paddingBottom="@dimen/dimen_16dp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_16dp" />
                 </LinearLayout>
@@ -161,17 +149,54 @@
                     android:layout_below="@id/ll_num"
                     android:layout_centerHorizontal="true"
                     android:textSize="12sp"
-                    android:text="正在分析耗电信息..."
+                    android:text="正在休眠应用减少耗电..."
                     android:textColor="@color/white" />
 
                 <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/view_lottie_super_saving"
+                    android:id="@+id/view_lottie_super_saving_sleep"
                     android:layout_width="match_parent"
-                    android:layout_height="317dp"
+                    android:layout_height="300dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dimen_48dp" />
 
+                <TextView
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:layout_marginBottom="@dimen/dimen_12dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:text="@string/tool_cancel"
+                    android:background="@drawable/btn_white_bg"
+                    android:layout_height="@dimen/dimen_46dp"/>
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dimen_80dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_net" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="资讯列表获取失败～"
+                    android:textColor="@color/color_999999" />
+            </LinearLayout>
+
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

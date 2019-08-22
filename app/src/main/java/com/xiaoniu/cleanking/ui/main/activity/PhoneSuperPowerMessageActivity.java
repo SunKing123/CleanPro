@@ -8,8 +8,12 @@ import android.widget.ImageView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.common.base.BaseActivity;
 
+/**
+ * 超强省电通知
+ */
 public class PhoneSuperPowerMessageActivity extends BaseActivity implements View.OnClickListener {
-    ImageView mBack;
+
+    private ImageView mBack;
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_phone_super_power_messge;

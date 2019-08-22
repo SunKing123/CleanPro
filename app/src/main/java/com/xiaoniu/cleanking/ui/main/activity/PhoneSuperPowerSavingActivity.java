@@ -17,6 +17,9 @@ import java.lang.ref.WeakReference;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 超强省电
+ */
 public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     AppBarLayout mAppBarLayout;
@@ -79,20 +82,26 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
      * 显示超省电应用信息
      */
     private void showListAppInfo() {
+        if (mRlResult == null) return;
         mRlResult.setVisibility(View.GONE);
         mRlResultTop.setVisibility(View.VISIBLE);
         mEdList.setVisibility(View.VISIBLE);
         mAppBarLayout.setExpanded(true);
     }
 
-    @OnClick({R.id.iv_back,R.id.icon_saving_right})
+    @OnClick({R.id.iv_back,R.id.icon_saving_right,R.id.iv_power})
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.iv_power:
+                startActivity(PhoneSuperSavingNowActivity.class);
+                finish();
+                break;
             case R.id.icon_saving_right:
                 startActivity(PhoneSuperPowerMessageActivity.class);
+                finish();
                 break;
         }
     }

@@ -9,6 +9,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -58,6 +59,9 @@ public class AccessAnimView extends RelativeLayout {
     FrameLayout mFlAnim;
     LottieAnimationView mAnimationView;
     ValueAnimator mValueAnimator;
+    ImageView mIvSpeedAnim;
+    LottieAnimationView mAnimationCloudView;
+
     public void setListener(onAnimEndListener listener) {
         this.listener = listener;
     }
@@ -108,6 +112,8 @@ public class AccessAnimView extends RelativeLayout {
         tv_title_name = v.findViewById(R.id.tv_title_name);
         mAnimationView = v.findViewById(R.id.view_lottie);
         mFlAnim = v.findViewById(R.id.fl_anim);
+        mIvSpeedAnim = v.findViewById(R.id.iv_speed_anim);
+        mAnimationCloudView = v.findViewById(R.id.view_lottie_speed);
     }
 
     public void setData(int sizeMb, String strGb) {
@@ -440,6 +446,33 @@ public class AccessAnimView extends RelativeLayout {
 
             }
         });
+    }
+
+    /**
+     * 显示lottie动画 火箭从底部飞出
+     */
+    public void showLottieView() {
+        //通过设置android:background时，得到AnimationDrawable 用如下方法
+        final AnimationDrawable animationDrawable = new AnimationDrawable();
+        animationDrawable.setOneShot(true);
+        for (int i = 1; i <= 21; i++) {
+            int id = getResources().getIdentifier("icon_one_key_speed_" + i, "drawable", mContext.getPackageName());
+            Drawable drawable = getResources().getDrawable(id);
+            animationDrawable.addFrame(drawable, 50);
+        }
+        mIvSpeedAnim.setBackground(animationDrawable);
+//        animationDrawable.start();
+        startAnimator();
+    }
+
+    /**
+     * 显示lottie动画 火箭从底部飞出
+     */
+    public void startAnimator() {
+        mAnimationCloudView.useHardwareAcceleration();
+        mAnimationCloudView.setImageAssetsFolder("images");
+        mAnimationCloudView.setAnimation("data_one_key_speed.json");
+        mAnimationCloudView.playAnimation();
     }
 }
 

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -58,13 +58,13 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.view.View.VISIBLE;
-
 /**
  * 手机加速--一键清理内存页面
  */
 public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
+    @BindView(R.id.cdl_root)
+    CoordinatorLayout mCdlRoot;
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;
     @BindView(R.id.tv_delete)
@@ -97,8 +97,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     AppBarLayout mAppBarLayout;
     @BindView(R.id.tv_title_name)
     TextView mTvTitleName;
-    @BindView(R.id.view_lottie_speed)
-    LottieAnimationView mLottieSpeed;
+
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -186,20 +185,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
-    /**
-     * 显示lottie动画 火箭从底部飞出
-     */
-    public void showLottieView() {
-        mLottieSpeed.setVisibility(VISIBLE);
-        mLottieSpeed.useHardwareAcceleration();
-        mLottieSpeed.setImageAssetsFolder("images");
-        mLottieSpeed.setAnimation("data_one_key_speed.json");
-        mLottieSpeed.playAnimation();
-    }
     @Override
     public void initView() {
         mAppBarLayout.setExpanded(true);
-        showLottieView();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String title = bundle.getString(SpCacheConfig.ITEM_TITLE_NAME);
@@ -290,6 +278,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setStatusBarNum(colorRes);
             }
         });
+
+        acceview.showLottieView();
     }
 
     @Override

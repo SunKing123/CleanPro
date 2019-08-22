@@ -8,7 +8,7 @@
         android:id="@+id/line_title"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/color_FD6F46"
+        android:background="@color/color_06C581"
         android:orientation="horizontal">
 
         <ImageView
@@ -26,7 +26,7 @@
     <RelativeLayout
         android:id="@+id/rl_anim_bg"
         android:layout_width="match_parent"
-        android:background="@color/color_FD6F46"
+        android:background="@color/color_06C581"
         android:layout_height="match_parent"
         android:layout_below="@+id/line_title" >
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="300dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <LinearLayout
@@ -151,4 +151,20 @@
 
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/iv_speed_anim"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_height="336dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/view_lottie_speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+    </FrameLayout>
 </RelativeLayout>
