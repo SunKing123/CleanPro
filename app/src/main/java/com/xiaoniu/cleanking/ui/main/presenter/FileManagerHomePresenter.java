@@ -16,11 +16,11 @@ import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.db.FileTableManager;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
+import com.xiaoniu.common.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
         Observable.create(new ObservableOnSubscribe<String[]>() {
             @Override
             public void subscribe(ObservableEmitter<String[]> e) throws Exception {
-                e.onNext(new String[]{DeviceUtils.getFreeSpace(), DeviceUtils.getTotalSpace()});
+                e.onNext(new String[]{FileUtils.getFreeSpace(), FileUtils.getTotalSpace()});
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

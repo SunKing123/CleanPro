@@ -53,14 +53,14 @@ import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -475,7 +475,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mFlAnim.setVisibility(View.INVISIBLE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
-        layoutParams.height = DeviceUtils.dip2px(460);
+        layoutParams.height = DisplayUtils.dip2px(460);
         mLayoutCleanTop.setLayoutParams(layoutParams);
         //移动的页面view还原
         mIconOuter.setTranslationY(0);
@@ -523,7 +523,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (getActivity() != null) {
             FrameLayout frameLayout = getActivity().findViewById(R.id.frame_layout);
             ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
-            marginParams.bottomMargin = DeviceUtils.dip2px(53);
+            marginParams.bottomMargin = DisplayUtils.dip2px(53);
             frameLayout.setLayoutParams(marginParams);
             getActivity().findViewById(R.id.bottomBar).setVisibility(VISIBLE);
             getActivity().findViewById(R.id.bottom_shadow).setVisibility(VISIBLE);
@@ -652,7 +652,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                         mLayoutNotNet.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }
                 isError = false;
@@ -764,7 +764,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         }
-        StatisticsUtils.trackClickHolderCustom("ad_show", "\"广告展示曝光", "home_page"
+        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", "home_page"
                 , "home_page_clean_up_page", String.valueOf(position));
 
     }
@@ -778,10 +778,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void clickDownload(View view, String downloadUrl, int position) {
         view.setOnClickListener(v -> {
             //广告埋点
-            StatisticsUtils.trackClickHolder("ad_click", "\"广告点击", "home_page"
+            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", "home_page"
                     , "home_page_clean_up_page", String.valueOf(position));
 //            mPresenter.startDownload(downloadUrl);
-//            ToastUtils.show("已开始下载");
+//            ToastUtils.showShort("已开始下载");
             Bundle bundle = new Bundle();
             bundle.putString(Constant.URL, downloadUrl);
             bundle.putBoolean(Constant.NoTitle, false);

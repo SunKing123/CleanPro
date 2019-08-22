@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-ignorewarning
+-keep class com.xiaoniu.common.hotfix.CleanApplicationLike
+-keep class com.xiaoniu.common.base.** { *; }
+-keep public class * extends com.xiaoniu.common.base.IApplicationDelegate

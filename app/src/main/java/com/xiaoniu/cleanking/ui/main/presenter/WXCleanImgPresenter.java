@@ -1,26 +1,16 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
-import com.xiaoniu.cleanking.ui.main.bean.FileInfoEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
-import com.xiaoniu.cleanking.ui.main.bean.VideoFileCollenctionBean;
-import com.xiaoniu.cleanking.ui.main.bean.VideoInfoBean;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
-import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.DateUtils;
+import com.xiaoniu.common.utils.DateUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,13 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.inject.Inject;
 

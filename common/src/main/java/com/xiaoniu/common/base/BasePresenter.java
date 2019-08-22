@@ -24,15 +24,6 @@ public abstract class BasePresenter<V extends BaseView> {
     protected void onStart() {
     }
 
-    protected void onResume() {
-    }
-
-    protected void onPause() {
-    }
-
-    protected void onStop() {
-    }
-
     protected void onDestroy() {
     }
 

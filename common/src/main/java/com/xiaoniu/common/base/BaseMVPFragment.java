@@ -2,6 +2,7 @@ package com.xiaoniu.common.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -17,12 +18,18 @@ public abstract class BaseMVPFragment<V extends BaseView, T extends BasePresente
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = getInstance(this, 1);
-        mPresenter.attachView((V) this);
         if (mPresenter != null) {
             mPresenter.onCreate(savedInstanceState);
         }
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (mPresenter != null) {
+            mPresenter.attachView((V) this);
+        }
+    }
 
     @Override
     protected void loadData() {
@@ -30,34 +37,10 @@ public abstract class BaseMVPFragment<V extends BaseView, T extends BasePresente
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void lazyLoadData() {
+        super.lazyLoadData();
         if (mPresenter != null) {
             mPresenter.onStart();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mPresenter != null) {
-            mPresenter.onResume();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mPresenter != null) {
-            mPresenter.onPause();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mPresenter != null) {
-            mPresenter.onStop();
         }
     }
 
@@ -83,13 +66,7 @@ public abstract class BaseMVPFragment<V extends BaseView, T extends BasePresente
             return ((Class<T>) ((ParameterizedType) (o.getClass()
                     .getGenericSuperclass())).getActualTypeArguments()[i])
                     .newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

@@ -2,16 +2,14 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.QQImgFragment;
-import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
-import com.xiaoniu.cleanking.utils.DateUtils;
+import com.xiaoniu.common.utils.DateUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

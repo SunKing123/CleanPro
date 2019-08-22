@@ -9,8 +9,8 @@ import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 import butterknife.BindView;
 
@@ -44,7 +44,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
         } else {
             mCleanAnimView.setTitle("微信清理");
         }
-        mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DeviceUtils.dip2px(49), DeviceUtils.dip2px(49));
+        mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DisplayUtils.dip2px(49), DisplayUtils.dip2px(49));
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);

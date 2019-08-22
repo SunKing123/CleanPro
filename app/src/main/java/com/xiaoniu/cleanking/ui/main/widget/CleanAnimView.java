@@ -35,11 +35,11 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
+import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 
@@ -183,7 +183,7 @@ public class CleanAnimView extends RelativeLayout {
                         mLayoutNotNet.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(AndroidUtil.isInAudit() ? View.GONE : View.VISIBLE);
+                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }
                 isError = false;
@@ -228,12 +228,12 @@ public class CleanAnimView extends RelativeLayout {
     public void startTopAnim(boolean isNeedTranslation) {
         int startHeight = 0;
         if (isNeedTranslation) {
-            startHeight = DeviceUtils.dip2px(150);
+            startHeight = DisplayUtils.dip2px(150);
         } else {
-            startHeight = DeviceUtils.dip2px(56);
+            startHeight = DisplayUtils.dip2px(56);
         }
 
-        int endHeight = DeviceUtils.getScreenHeight();
+        int endHeight = DisplayUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -252,7 +252,7 @@ public class CleanAnimView extends RelativeLayout {
      */
     public void startMiddleAnim(boolean isNeedTranslation) {
         //位移的距离
-        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DeviceUtils.dip2px(150);
+        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DisplayUtils.dip2px(150);
         ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
         ObjectAnimator scanY = ObjectAnimator.ofFloat(mLayoutScan, "translationY", mLayoutScan.getTranslationY(), height);
         ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);

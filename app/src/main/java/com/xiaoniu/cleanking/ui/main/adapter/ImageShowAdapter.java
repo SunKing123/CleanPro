@@ -17,8 +17,8 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class ImageShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .load(path)
                     .into(((ImageViewHolder) holder).iv_photo_filelist_pic);
             ConstraintLayout.LayoutParams llp = (ConstraintLayout.LayoutParams) ((ImageViewHolder) holder).iv_photo_filelist_pic.getLayoutParams();
-            llp.width = (DeviceUtils.getScreenWidth() - DeviceUtils.dip2px(48)) / 3;
+            llp.width = (DisplayUtils.getScreenWidth() - DisplayUtils.dip2px(48)) / 3;
             llp.height = llp.width;
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setLayoutParams(llp);
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setOnClickListener(v -> {

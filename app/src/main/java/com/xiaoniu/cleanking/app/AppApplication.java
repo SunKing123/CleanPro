@@ -1,7 +1,8 @@
 package com.xiaoniu.cleanking.app;
 
-import com.tencent.tinker.loader.app.TinkerApplication;
-import com.tencent.tinker.loader.shareutil.ShareConstants;
+import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.common.AppProfile;
+import com.xiaoniu.common.base.BaseApplication;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
  * Created by admin on 2017/7/13.
  */
 
-public class AppApplication extends TinkerApplication {
+public class AppApplication extends BaseApplication {
     private static AppApplication sInstance;
     public static boolean isFromHome;
     public static String mapCoordinate;//坐标
@@ -24,13 +25,22 @@ public class AppApplication extends TinkerApplication {
     public static boolean isAudit;//是否市场审核中
 
     public AppApplication() {
-        super(
-                //tinkerFlags, which types is supported
-                //dex only, library only, all support
-                ShareConstants.TINKER_ENABLE_ALL,
-                // This is passed as a string so the shell application does not
-                // have a binary dependency on your ApplicationLifeCycle class.
-                "com.xiaoniu.cleanking.hotfix.ApplicationDelegate");
+        super();
+        AppProfile.API_APPID = BuildConfig.API_APPID;
+        AppProfile.API_APPSECRET = BuildConfig.API_APPSECRET;
+        AppProfile.APPLICATION_ID = BuildConfig.APPLICATION_ID;
+        AppProfile.BUILD_TYPE = BuildConfig.BUILD_TYPE;
+        AppProfile.DEBUG = BuildConfig.DEBUG;
+        AppProfile.MESSAGE = BuildConfig.MESSAGE;
+        AppProfile.PLATFORM = BuildConfig.PLATFORM;
+        AppProfile.TINKER_ID = BuildConfig.TINKER_ID;
+        AppProfile.VERSION_CODE = BuildConfig.VERSION_CODE;
+        AppProfile.VERSION_NAME = BuildConfig.VERSION_NAME;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         sInstance = this;
     }
 

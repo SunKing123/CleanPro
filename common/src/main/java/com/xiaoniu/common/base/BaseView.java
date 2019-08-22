@@ -6,5 +6,4 @@ package com.xiaoniu.common.base;
  */
 
 public interface BaseView {
-
 }

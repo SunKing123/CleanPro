@@ -19,7 +19,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.example.common_lib.R;
+import com.xiaoniu.common.R;
 
 /**
  * Created by wangbaozhong on 2017/5/25.
@@ -46,11 +46,11 @@ public class SimpleWebActivity extends BaseActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_simple_web;
+        return R.layout.common_activity_simple_web;
     }
 
     @Override
-    protected void initVariable() {
+    protected void initVariable(Intent intent) {
         if (getIntent().getExtras() != null) {
             url = getIntent().getExtras().getString(KEY_URL);
             title = getIntent().getExtras().getString(KEY_TITLE);

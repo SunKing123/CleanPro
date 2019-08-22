@@ -40,9 +40,9 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.WxAndQqScanPathInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
@@ -346,7 +346,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                 lineSmed.setVisibility(View.VISIBLE);
                 mPresenter.setTextSizeAnim(tvGabsize, 110, 55);
                 mPresenter.setTextSizeAnim(tvGb, 24, 12);
-                mPresenter.setViewHeightAnim(relGasize, relSelects, tv_ql, iv_dun, DeviceUtils.dip2px(263), DeviceUtils.dip2px(123));
+                mPresenter.setViewHeightAnim(relGasize, relSelects, tv_ql, iv_dun, DisplayUtils.dip2px(263), DisplayUtils.dip2px(123));
             }
         });
     }

@@ -32,8 +32,8 @@ import com.xiaoniu.cleanking.ui.main.presenter.WXImgCameraPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -438,7 +438,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
 
                 List<File> lists=getSelectFiles();
                 if(lists.size()==0){
-                    ToastUtils.show("未选中照片");
+                    ToastUtils.showShort("未选中照片");
                 }else {
                     FragmentManager fmProgress= getActivity().getFragmentManager();
                     mProgress.show(fmProgress,"");
@@ -497,7 +497,7 @@ public class WXImgCameraFragment extends BaseFragment<WXImgCameraPresenter> {
 
         mProgress.setValue(progress);
         if(progress>=100){
-            ToastUtils.show("保存成功，请至手机相册查看");
+            ToastUtils.showShort("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
     }

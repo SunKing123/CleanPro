@@ -41,16 +41,14 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.base.UmengEnum;
-import com.xiaoniu.cleanking.base.UmengUtils;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
-import com.xiaoniu.cleanking.utils.KeyboardUtil;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
+import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.KeyboardUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.util.Map;
 
@@ -182,9 +180,9 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 //        boolean haveLiuhai = NotchUtils.hasNotchScreen(this);
         if (isParam) {
             if (url.contains("?")) {
-                url = url + "&deviceId=" + AndroidUtil.getUdid();
+                url = url + "&deviceId=" + DeviceUtils.getUdid();
             } else {
-                url = url + "?deviceId=" + AndroidUtil.getUdid();
+                url = url + "?deviceId=" + DeviceUtils.getUdid();
             }
             mImgHelp.setVisibility(View.GONE);
         } else {
@@ -663,7 +661,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
     @Override
     public void onPause() {
         super.onPause();
-        KeyboardUtil.closeKeybord(mWebView);
+        KeyboardUtils.closeKeyboard(mWebView);
     }
 
 }

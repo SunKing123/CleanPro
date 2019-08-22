@@ -31,8 +31,8 @@ import com.xiaoniu.cleanking.ui.main.presenter.WXCleanSaveListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -437,7 +437,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
                 List<File> lists = getSelectFiles();
                 if (lists.size() == 0) {
-                    ToastUtils.show("未选中照片");
+                    ToastUtils.showShort("未选中照片");
                 } else {
                     FragmentManager fmProgress = getActivity().getFragmentManager();
                     mProgress.show(fmProgress, "");
@@ -458,7 +458,7 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
         mProgress.setValue(progress);
         if (progress >= 100) {
-            ToastUtils.show("保存成功，请至手机相册查看");
+            ToastUtils.showShort("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
     }

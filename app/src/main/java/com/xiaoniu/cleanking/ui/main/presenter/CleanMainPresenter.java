@@ -48,14 +48,14 @@ import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.ui.main.widget.PromptDialog;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.TimeUtil;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
+import com.xiaoniu.common.utils.ContextUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -70,7 +70,6 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
 import static android.view.View.VISIBLE;
-import static com.xiaoniu.cleanking.utils.ResourceUtils.getString;
 
 public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMainModel> {
 
@@ -168,7 +167,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                         JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
                         if (cacheGroup == null) {
                             cacheGroup = new JunkGroup();
-                            cacheGroup.mName = getString(R.string.cache_clean);
+                            cacheGroup.mName = ContextUtils.getContext().getString(R.string.cache_clean);
                             cacheGroup.isChecked = true;
                             cacheGroup.isExpand = true;
                             cacheGroup.mChildren = new ArrayList<>();
@@ -180,7 +179,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                         JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
                         if (processGroup == null) {
                             processGroup = new JunkGroup();
-                            processGroup.mName = getString(R.string.process_clean);
+                            processGroup.mName = ContextUtils.getContext().getString(R.string.process_clean);
                             processGroup.isChecked = true;
                             processGroup.isExpand = true;
                             processGroup.mChildren = new ArrayList<>();
@@ -192,7 +191,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                         JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
                         if (apkGroup == null) {
                             apkGroup = new JunkGroup();
-                            apkGroup.mName = getString(R.string.apk_clean);
+                            apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
                             apkGroup.isChecked = true;
                             apkGroup.isExpand = true;
                             apkGroup.mChildren = new ArrayList<>();
@@ -585,7 +584,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             @Override
             public void accept(Object o) throws Exception {
 
-                double memoryShow = TimeUtil.getMemoryShow();
+                double memoryShow = NoClearSPHelper.getMemoryShow();
                 if (memoryShow == 1) {
                     //清理完成，存储时间点
                     mSPHelper.saveCleanTime(System.currentTimeMillis());
@@ -770,7 +769,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 //                    dialog12.dismiss();
 //                })
 //                .create();
-//        dialog.show();
+//        dialog.showShort();
 //    }
 
     AlertDialog dlg;

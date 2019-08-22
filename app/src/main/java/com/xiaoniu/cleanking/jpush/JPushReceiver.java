@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaoniu.cleanking.app.Constant;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
-import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 
 import org.json.JSONException;
@@ -19,8 +16,6 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
-
-import static com.xiaoniu.cleanking.app.Constant.TAG_TURN_MAIN;
 
 /**
  * Created by fengpeihao on 2017/7/10.
@@ -53,7 +48,7 @@ public class JPushReceiver extends BroadcastReceiver {
 
             } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
                 Log.d(TAG, "[JPushReceiver] 用户点击打开了通知");
-                processActionMessage(context,bundle);
+                processActionMessage(context, bundle);
 
             } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
                 Log.d(TAG, "[JPushReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));

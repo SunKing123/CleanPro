@@ -2,16 +2,16 @@ package com.xiaoniu.common.base;
 
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,10 +19,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.common_lib.R;
+import com.alibaba.android.arouter.facade.Postcard;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.trello.rxlifecycle2.components.support.RxFragment;
+import com.xiaoniu.common.R;
+import com.xiaoniu.common.widget.LoadingDialog;
 
 import java.util.List;
 
@@ -31,25 +34,26 @@ import java.util.List;
  * 主要功能包括：支持ViewPager惰加载,重新定义生命周期（模板模式），
  * 加入ToolBar,跳转activity，通用的UI操作。
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
     protected Activity mActivity;//持有Activity的引用,防止onDetach后，getActivity()== null空指针闪退
     public LayoutInflater mInflater;
-    private FrameLayout layBody;
-    private boolean isViewCreated = false;//标示View 是否已经创建
-    private boolean isLoaded = false;//是否已经惰加载过数据
+    private FrameLayout mLayBody;
+    private boolean mViewCreated = false;//标示View 是否已经创建
+    private boolean mIsLoaded = false;//是否已经惰加载过数据
     private Toolbar mToolBar;
-    private TextView tvTitle;
+    private TextView mTvTitle;
     private View mContentView;
     private View mEmptyView;
     private View mErrorView;
     private final int CLICK_TIME = 500;//按钮连续点击最低间隔时间 单位：毫秒
     private long lastClickTime;//记录上次点击启动activity的时间
     private String lastClassName = "";//记录上次启动activity的类名
+    private LoadingDialog mLoadingDialog;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
     }
 
     /*当detach后再attach，该方法不会调用*/
@@ -62,17 +66,17 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mInflater = inflater;
-        View rootView = inflater.inflate(R.layout.fragment_base, container, false);
+        View rootView = inflater.inflate(R.layout.common_fragment_base, container, false);
         // 内容区
-        layBody = (FrameLayout) rootView.findViewById(R.id.layBody);
+        mLayBody = (FrameLayout) rootView.findViewById(R.id.layBody);
         //ToolBar
-        tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
+        mTvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
         mToolBar = (Toolbar) rootView.findViewById(R.id.toolBar);
 
         int resId = getLayoutResId();
         try {
-            mContentView = mInflater.inflate(resId, layBody,false);
-            layBody.addView(mContentView);
+            mContentView = mInflater.inflate(resId, mLayBody, false);
+            mLayBody.addView(mContentView);
         } catch (Resources.NotFoundException e) {
 
         }
@@ -91,16 +95,16 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initViews(mContentView, savedInstanceState);
         setListener();
-        isViewCreated = true;
-        isLoaded = false;
+        mViewCreated = true;
+        mIsLoaded = false;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loadData();
-        if (getUserVisibleHint() && !isLoaded) {
-            isLoaded = true;
+        if (getUserVisibleHint() && !mIsLoaded) {
+            mIsLoaded = true;
             lazyLoadData(); //用于第一个fragment
         }
     }
@@ -108,8 +112,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden && isViewCreated && !isLoaded) {
-            isLoaded = true;
+        if (!hidden && mViewCreated && !mIsLoaded) {
+            mIsLoaded = true;
             lazyLoadData();
         }
     }
@@ -121,8 +125,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isViewCreated && !isLoaded) {
-            isLoaded = true;
+        if (isVisibleToUser && mViewCreated && !mIsLoaded) {
+            mIsLoaded = true;
             lazyLoadData();
         }
     }
@@ -139,9 +143,6 @@ public abstract class BaseFragment extends Fragment {
 
     protected void lazyLoadData() {
     }
-
-    ;//惰加载数据,只针对ViewPager
-
 
     /************************************************
      * **********       ToolBar相关设置***************
@@ -169,14 +170,14 @@ public abstract class BaseFragment extends Fragment {
      * 设置标题
      */
     public void setTitle(String title) {
-        tvTitle.setText(title);
+        mTvTitle.setText(title);
     }
 
     /**
      * 获取标题
      */
     public TextView getTitleView() {
-        return tvTitle;
+        return mTvTitle;
     }
 
     /*设置导航条左边的按钮，一般是返回按钮*/
@@ -195,7 +196,7 @@ public abstract class BaseFragment extends Fragment {
         mToolBar.post(new Runnable() {
             @Override
             public void run() {
-                mToolBar.inflateMenu(R.menu.menu_tool_bar_item);//设置右上角的填充菜单
+                mToolBar.inflateMenu(R.menu.common_menu_tool_bar_item);//设置右上角的填充菜单
                 Menu menu = mToolBar.getMenu();
                 MenuItem item = menu.getItem(menu.size() - 1);
                 item.setIcon(iconResId);
@@ -215,7 +216,7 @@ public abstract class BaseFragment extends Fragment {
         mToolBar.post(new Runnable() {
             @Override
             public void run() {
-                mToolBar.inflateMenu(R.menu.menu_tool_bar_item);//设置右上角的填充菜单
+                mToolBar.inflateMenu(R.menu.common_menu_tool_bar_item);//设置右上角的填充菜单
                 Menu menu = mToolBar.getMenu();
                 MenuItem item = menu.getItem(menu.size() - 1);
                 item.setActionView(btnView);
@@ -230,7 +231,7 @@ public abstract class BaseFragment extends Fragment {
     private void setContentView() {
         int resId = getLayoutResId();
         try {
-            mContentView = mInflater.inflate(resId, layBody);
+            mContentView = mInflater.inflate(resId, mLayBody);
         } catch (Resources.NotFoundException e) {
 
         }
@@ -250,7 +251,7 @@ public abstract class BaseFragment extends Fragment {
             ((ViewGroup) mEmptyView.getParent()).removeView(mEmptyView);
         }
         mEmptyView.setVisibility(View.GONE);
-        layBody.addView(mEmptyView);
+        mLayBody.addView(mEmptyView);
     }
 
     public void showEmptyView() {
@@ -276,7 +277,7 @@ public abstract class BaseFragment extends Fragment {
             ((ViewGroup) mErrorView.getParent()).removeView(mErrorView);
         }
         mErrorView.setVisibility(View.GONE);
-        layBody.addView(mErrorView);
+        mLayBody.addView(mErrorView);
     }
 
     public void showErrorView() {
@@ -293,6 +294,45 @@ public abstract class BaseFragment extends Fragment {
 
     public View getErrorView() {
         return mErrorView;
+    }
+
+
+    /**
+     * 含有flags通过ARouter跳转界面
+     *
+     * @param path   跳转地址
+     * @param flags  flags
+     * @param bundle bundle
+     **/
+    public void startActivity(String path, int[] flags, Bundle bundle) {
+        startActivityForResult(path, flags, bundle, -1);
+    }
+
+    /**
+     * 带返回含有Bundle通过ARouter跳转界面
+     *
+     * @param path        跳转地址
+     * @param requestCode requestCode
+     * @param bundle      bundle
+     **/
+    public void startActivityForResult(String path, int[] flags, Bundle bundle, int requestCode) {
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        Postcard build = ARouter.getInstance().build(path);
+        if (null != bundle) {
+            build.with(bundle);
+        }
+        if (null != flags) {
+            for (int flag : flags) {
+                build.withFlags(flag);
+            }
+        }
+        if (requestCode >= 0) {
+            build.navigation(mActivity, requestCode);
+        } else {
+            build.navigation();
+        }
     }
 
     @Override
@@ -317,15 +357,17 @@ public abstract class BaseFragment extends Fragment {
         return flag;
     }
 
-    public void showProgressDialog() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.getWindow().setBackgroundDrawable(null);
-        ViewGroup decorView = (ViewGroup) dialog.getWindow().getDecorView();
-        decorView.setBackgroundColor(Color.TRANSPARENT);
-        decorView.getChildAt(0).setBackgroundColor(Color.TRANSPARENT);
-        ProgressBar progressBar = new ProgressBar(getContext());
-        dialog.setContentView(progressBar);
-        dialog.show();
+    public void showLoadingDialog() {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog.Builder().createLoadingDialog(getActivity()).build();
+        }
+        mLoadingDialog.showDialog();
+    }
+
+    public void cancelLoadingDialog() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.cancelDialog();
+        }
     }
 
     /***********************************************

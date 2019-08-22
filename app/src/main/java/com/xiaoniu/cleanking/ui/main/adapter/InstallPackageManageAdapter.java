@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
-import com.xiaoniu.cleanking.utils.DateUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.common.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;

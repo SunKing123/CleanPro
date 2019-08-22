@@ -44,15 +44,15 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
@@ -457,7 +457,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                         mLayoutNotNet.setVisibility(GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(AndroidUtil.isInAudit() ? GONE : View.VISIBLE);
+                        mWebView.setVisibility(SPUtil.isInAudit() ? GONE : View.VISIBLE);
                     }
                 }
                 isError = false;

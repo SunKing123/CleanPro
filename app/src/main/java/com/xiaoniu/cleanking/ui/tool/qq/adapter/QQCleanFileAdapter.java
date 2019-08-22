@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.common.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class QQCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof ImageViewHolder) {
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setImageResource(getImgRes(listImage.get(position).getFileName()));
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getFileName());
-            ((ImageViewHolder) holder).tv_time.setText(com.xiaoniu.cleanking.utils.TimeUtil.getTimesByLong(listImage.get(position).getTime()));
+            ((ImageViewHolder) holder).tv_time.setText(TimeUtils.getTimesByLong(listImage.get(position).getTime()));
             ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSizeOne(listImage.get(position).getSize()));
             ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
             ((ImageViewHolder) holder).tv_select.setOnClickListener(v -> {

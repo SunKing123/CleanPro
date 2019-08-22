@@ -2,8 +2,10 @@ package com.xiaoniu.cleanking.ui.main.widget;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
-import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.common.utils.AppUtils;
 
 import java.util.Set;
 
@@ -51,8 +53,8 @@ public class SPUtil {
     }
 
     public static void init(Context context) {
-        XML_NAME = AndroidUtil.getAppVersionName() + "xiaoniu";
-        Guide = AndroidUtil.getAppVersionName() + "guide";
+        XML_NAME = AppUtils.getVersionName(context, context.getPackageName()) + "xiaoniu";
+        Guide = AppUtils.getVersionName(context, context.getPackageName()) + "guide";
     }
 
     public static void setBoolean(Context ctx, String key, boolean value) {
@@ -326,5 +328,17 @@ public class SPUtil {
         guideSp.edit().putBoolean(key, value).commit();
     }
 
+    //当前是否为审核状态，审核状态则隐藏相关页面
+    public static boolean isInAudit() {
+        boolean isInAudit = false;
+        //        状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(AppApplication.getInstance(), AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1")) {
+            isInAudit = false;
+        } else {
+            isInAudit = true;
+        }
+        return isInAudit;
+    }
 }
 

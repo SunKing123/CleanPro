@@ -3,49 +3,37 @@ package com.xiaoniu.cleanking.ui.tool.wechat.presenter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
-import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxFourItemInfo;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxHeadInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.Constants;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.ThreadTaskUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
-
-import org.w3c.dom.Text;
+import com.xiaoniu.common.utils.AsyncTaskUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,7 +44,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
@@ -79,7 +66,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
     //扫描中动画
     public ObjectAnimator setScaningAnim(View viewY) {
-        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DeviceUtils.dip2px(99), DeviceUtils.getScreenWidth());
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", -1 * DisplayUtils.dip2px(99), DisplayUtils.getScreenWidth());
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(viewY, translationX);
         animator.setDuration(600);
         animator.setRepeatCount(ValueAnimator.INFINITE);
@@ -206,7 +193,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
                 });
 
 
-        ThreadTaskUtil.executeNormalTask("-CleanWxClearNewActivity-run-184--", new Runnable() {
+        AsyncTaskUtils.background(new Runnable() {
             public void run() {
                 SystemClock.sleep(200);
                 b();

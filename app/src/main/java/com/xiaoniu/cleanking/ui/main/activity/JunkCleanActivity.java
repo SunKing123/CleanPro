@@ -28,11 +28,13 @@ import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.KeyboardUtil;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.KeyboardUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -265,7 +267,7 @@ public class JunkCleanActivity extends SimpleActivity {
     protected void onPause() {
         super.onPause();
         //隐藏键盘
-        KeyboardUtil.closeKeybord(mCleanAnimView);
+        KeyboardUtils.closeKeyboard(mCleanAnimView);
         if (mCleanAnimView != null && mCleanAnimView.getVisibility() == View.VISIBLE) {
             NiuDataAPI.onPageEnd("clean_up_page_view","清理完成页浏览");
         }else {

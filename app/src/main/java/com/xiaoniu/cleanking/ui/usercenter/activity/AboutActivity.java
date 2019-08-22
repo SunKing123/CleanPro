@@ -15,10 +15,10 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutPresenter;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
@@ -65,7 +65,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
                 finish();
             }
         });
-        tv_version.setText("当前版本 V" + AndroidUtil.getAppVersionName());
+        tv_version.setText("当前版本 V" + AppUtils.getVersionName(this, this.getPackageName()));
         //检测版本更新
         mPresenter.queryAppVersion(1, () -> {
         });
@@ -77,7 +77,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
                     mPresenter.queryAppVersion(2, () -> {
                     });
                 } else {
-                    ToastUtils.show("当前已是最新版本");
+                    ToastUtils.showShort("当前已是最新版本");
                 }
 
             }
@@ -130,7 +130,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     public void setShowVersion(AppVersion result) {
         if (result != null && result.getData() != null) {
             //根据版本号判断是否需要更新
-            String versionName = AndroidUtil.getAppVersionName();
+            String versionName = AppUtils.getVersionName(this, getPackageName());
             //默认可以下载
             if (!TextUtils.isEmpty(versionName) && !TextUtils.equals(versionName, result.getData().versionNumber) && !TextUtils.isEmpty(result.getData().downloadUrl)) {
                 tv_newversion.setVisibility(View.VISIBLE);

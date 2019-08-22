@@ -10,12 +10,12 @@ import android.support.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppManager;
-import com.xiaoniu.cleanking.utils.LoadingDialog;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.widget.LoadingDialog;
 
 import java.lang.ref.WeakReference;
 

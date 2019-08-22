@@ -20,7 +20,7 @@ import com.xiaoniu.cleanking.ui.main.event.EmptyEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoSaveListFragment;
-import com.xiaoniu.cleanking.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;

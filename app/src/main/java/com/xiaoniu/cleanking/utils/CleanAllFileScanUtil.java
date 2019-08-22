@@ -5,9 +5,8 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
-import com.xiaoniu.cleanking.ui.main.bean.Image;
-import com.xiaoniu.cleanking.utils.db.FileDBManager;
 import com.xiaoniu.cleanking.utils.db.FileTableManager;
+import com.xiaoniu.common.utils.AsyncTaskUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -67,7 +66,7 @@ public class CleanAllFileScanUtil {
 
     public void scanAllFiles(fileCheckByScan filecheckbyscan, final String... strArr) {
         this.scanListener = filecheckbyscan;
-        ThreadTaskUtil.executeNormalTask("-CleanUnusedPackageFragment-scanAllDiskForSize10Front2-385--", new Runnable() {
+        AsyncTaskUtils.background(new Runnable() {
             public void run() {
                 int i;
 //                Logger.m6924i(Logger.TAG, Logger.ZYTAG, "CleanAllFileScanUtil-run-28--全局扫描开始 " + System.currentTimeMillis());
@@ -139,7 +138,7 @@ public class CleanAllFileScanUtil {
                     }
 //                    Logger.m6924i(Logger.TAG, Logger.ZYTAG, "CleanAllFileScanUtil-run-98-- " + System.currentTimeMillis());
                     for (int i4 = 0; i4 < 3; i4++) {
-                        ThreadTaskUtil.executeNormalTask("-CleanAllFileScanUtil-run-105-- ", new Runnable() {
+                        AsyncTaskUtils.background(new Runnable() {
                             public void run() {
                                 while (CleanAllFileScanUtil.this.fileTemp != null && CleanAllFileScanUtil.this.fileTemp.size() > 0) {
                                     File access$400 = CleanAllFileScanUtil.this.getWaitingList();

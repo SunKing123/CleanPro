@@ -17,10 +17,9 @@ import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragment;
-import com.xiaoniu.cleanking.ui.main.presenter.WXCleanImgPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WXCleanFilePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
-import com.xiaoniu.cleanking.utils.ToastUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -212,7 +211,7 @@ public class WXFileFragment extends BaseFragment<WXCleanFilePresenter> {
             listsNew.add(fileTitle);
         }
         mLoading.dismissAllowingStateLoss();
-        ToastUtils.show("删除成功");
+       ToastUtils.showShort("删除成功");
          mPresenter.totalFileSize(listsNew);
         mAdapter.clear();
         mAdapter.modifyData(listsNew);
@@ -264,7 +263,7 @@ public class WXFileFragment extends BaseFragment<WXCleanFilePresenter> {
 
                 List<File> lists=getSelectFiles();
                 if(lists.size()==0){
-                    ToastUtils.show("未选中照片");
+                    ToastUtils.showShort("未选中照片");
                 }else {
                     FragmentManager fmProgress= getActivity().getFragmentManager();
                     mProgress.show(fmProgress,"");
@@ -285,7 +284,7 @@ public class WXFileFragment extends BaseFragment<WXCleanFilePresenter> {
 
         mProgress.setValue(progress);
         if(progress>=100){
-            ToastUtils.show("保存成功，请至手机相册查看");
+            ToastUtils.showShort("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
     }

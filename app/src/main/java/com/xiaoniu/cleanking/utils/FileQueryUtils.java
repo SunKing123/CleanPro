@@ -14,7 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Process;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
@@ -26,11 +25,11 @@ import com.xiaoniu.cleanking.ui.main.bean.AppInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
+import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,13 +38,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import static android.content.Context.RECEIVER_VISIBLE_TO_INSTANT_APPS;
 import static android.content.Context.USAGE_STATS_SERVICE;
 import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
 
@@ -356,7 +353,7 @@ public class FileQueryUtils {
                 lists = lists.subList(0, 30);
             }
             int indexP = 0;
-            double size = lists.size() *  TimeUtil.getMemoryShow();
+            double size = lists.size() * NoClearSPHelper.getMemoryShow();
             for (UsageStats usageStats : lists) {
                 if (indexP >= size) {
                     return junkList;
@@ -439,7 +436,7 @@ public class FileQueryUtils {
             }
             Iterator it = arrayList2.iterator();
             int indexP = 0;
-            double size = arrayList2.size() *  TimeUtil.getMemoryShow();
+            double size = arrayList2.size() * NoClearSPHelper.getMemoryShow();
             while (it.hasNext()) {
                 if (indexP >= size) {
                     return arrayList;
@@ -536,7 +533,7 @@ public class FileQueryUtils {
             ArrayList arrayList2 = new ArrayList();
             Iterator it = arrayList.iterator();
             int indexP = 0;
-            double size = arrayList.size() *  TimeUtil.getMemoryShow();
+            double size = arrayList.size() * NoClearSPHelper.getMemoryShow();
             while (it.hasNext()) {
                 if (indexP >= size) {
                     return arrayList2;
@@ -641,7 +638,7 @@ public class FileQueryUtils {
                             onelevelGarbageInfo.setGarbageType("TYPE_APK");
                             onelevelGarbageInfo.setTotalSize(j);
                             onelevelGarbageInfo.setGarbageCatalog(string);
-                            if (FileUtils.haveSDCard()) {
+                            if (com.xiaoniu.common.utils.FileUtils.isSDCardEnable()) {
                                 absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
                             } else {
                                 absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();

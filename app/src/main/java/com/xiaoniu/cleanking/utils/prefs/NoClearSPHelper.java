@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.common.utils.TimeUtils;
 
 import javax.inject.Inject;
 
@@ -379,5 +380,18 @@ public class NoClearSPHelper {
      */
     public long getCleanTime() {
         return mSPrefs.getLong(SpConstants.CLEAN_FINISH_TIME,0);
+    }
+
+    public static double getMemoryShow() {
+        NoClearSPHelper noClearSPHelper = new NoClearSPHelper();
+        long cleanTime = noClearSPHelper.getCleanTime();
+        int offectMinutes = TimeUtils.getOffectMinutes(System.currentTimeMillis(), cleanTime);
+        if (offectMinutes < 6) {
+            return 0.5;
+        } else if (offectMinutes < 10) {
+            return 0.7;
+        } else {
+            return 1;
+        }
     }
 }

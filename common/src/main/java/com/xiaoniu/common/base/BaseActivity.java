@@ -1,16 +1,15 @@
 package com.xiaoniu.common.base;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.example.common_lib.R;
+
+import com.alibaba.android.arouter.facade.Postcard;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.umeng.analytics.MobclickAgent;
+import com.xiaoniu.common.R;
+import com.xiaoniu.common.widget.LoadingDialog;
+import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
+
 import java.util.List;
 
 
@@ -29,31 +35,32 @@ import java.util.List;
  * 主要功能包括：重新定义生命周期（模板模式），
  * 加入ToolBar,跳转activity，通用的UI操作。
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity {
 
     public Context mContext;
     public LayoutInflater mInflater;
     private Toolbar mToolBar;
-    private TextView tvTitle;
-    private FrameLayout layBody;
+    private TextView mTvTitle;
+    private FrameLayout mLayBody;
     private View mContentView;
     private View mEmptyView;
     private View mErrorView;
     private final int CLICK_TIME = 500;//按钮连续点击最低间隔时间 单位：毫秒
-    private long lastClickTime = 0;//记录上次启动activity的时间
-    private String lastClassName = "";//记录上次启动activity的类名
-    private Dialog mProgressDialog;
+    private long mLastClickTime = 0;//记录上次启动activity的时间
+    private String mLastClassName = "";//记录上次启动activity的类名
+    protected LoadingDialog mLoadingDialog;
 
     /* 子类使用的时候无需再次调用onCreate(),如需要加载其他方法可重写该方法 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去掉ActionBar
-        super.setContentView(R.layout.activity_base);
+        super.setContentView(R.layout.common_activity_base);
         initBaseView();
         setContentView();
-        initVariable();
+        initVariable(getIntent());
         initViews(savedInstanceState);
+        setStatusBar();
         setListener();
         loadData();
     }
@@ -65,17 +72,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //ToolBar相关
         mToolBar = (Toolbar) findViewById(R.id.toolBar);
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        mTvTitle = (TextView) findViewById(R.id.tvTitle);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // 内容区
-        layBody = (FrameLayout) findViewById(R.id.layBody);
+        mLayBody = (FrameLayout) findViewById(R.id.layBody);
     }
 
     protected abstract int getLayoutResId();
 
-    protected abstract void initVariable();//包括Intent上的数据和Activity内部使用的变量
+    protected abstract void initVariable(Intent intent);//包括Intent上的数据和Activity内部使用的变量
 
     protected abstract void initViews(Bundle savedInstanceState);//初始化View控件
 
@@ -86,7 +93,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void doClick(View view) {
     }
 
-    ;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     /************************************************
      * **********       ToolBar相关设置***************
@@ -114,14 +132,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 设置标题
      */
     public void setTitle(String title) {
-        tvTitle.setText(title);
+        mTvTitle.setText(title);
     }
 
     /**
      * 获取标题
      */
     public TextView getTitleView() {
-        return tvTitle;
+        return mTvTitle;
     }
 
     /*设置导航条左边的按钮，一般是返回按钮*/
@@ -140,7 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mToolBar.post(new Runnable() {
             @Override
             public void run() {
-                mToolBar.inflateMenu(R.menu.menu_tool_bar_item);//设置右上角的填充菜单
+                mToolBar.inflateMenu(R.menu.common_menu_tool_bar_item);//设置右上角的填充菜单
                 Menu menu = mToolBar.getMenu();
                 MenuItem item = menu.getItem(menu.size() - 1);
                 item.setIcon(iconResId);
@@ -160,7 +178,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mToolBar.post(new Runnable() {
             @Override
             public void run() {
-                mToolBar.inflateMenu(R.menu.menu_tool_bar_item);//设置右上角的填充菜单
+                mToolBar.inflateMenu(R.menu.common_menu_tool_bar_item);//设置右上角的填充菜单
                 Menu menu = mToolBar.getMenu();
                 MenuItem item = menu.getItem(menu.size() - 1);
                 item.setActionView(btnView);
@@ -176,8 +194,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         int resId = getLayoutResId();
         try {
             if (resId > 0) {
-                mContentView = mInflater.inflate(resId, layBody, false);
-                layBody.addView(mContentView);
+                mContentView = mInflater.inflate(resId, mLayBody, false);
+                mLayBody.addView(mContentView);
             }
         } catch (Resources.NotFoundException e) {
 
@@ -198,7 +216,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             ((ViewGroup) mEmptyView.getParent()).removeView(mEmptyView);
         }
         mEmptyView.setVisibility(View.GONE);
-        layBody.addView(mEmptyView);
+        mLayBody.addView(mEmptyView);
     }
 
     public void showEmptyView() {
@@ -224,7 +242,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             ((ViewGroup) mErrorView.getParent()).removeView(mErrorView);
         }
         mErrorView.setVisibility(View.GONE);
-        layBody.addView(mErrorView);
+        mLayBody.addView(mErrorView);
     }
 
     public void showErrorView() {
@@ -243,6 +261,44 @@ public abstract class BaseActivity extends AppCompatActivity {
         return mErrorView;
     }
 
+    /**
+     * 含有flags通过ARouter跳转界面
+     *
+     * @param path   跳转地址
+     * @param flags  flags
+     * @param bundle bundle
+     **/
+    public void startActivity(String path, int[] flags, Bundle bundle) {
+        startActivityForResult(path, flags, bundle, -1);
+    }
+
+    /**
+     * 带返回含有Bundle通过ARouter跳转界面
+     *
+     * @param path        跳转地址
+     * @param requestCode requestCode
+     * @param bundle      bundle
+     **/
+    public void startActivityForResult(String path, int[] flags, Bundle bundle, int requestCode) {
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        Postcard build = ARouter.getInstance().build(path);
+        if (null != bundle) {
+            build.with(bundle);
+        }
+        if (null != flags) {
+            for (int flag : flags) {
+                build.withFlags(flag);
+            }
+        }
+        if (requestCode >= 0) {
+            build.navigation(this, requestCode);
+        } else {
+            build.navigation();
+        }
+    }
+
     /*startActivity(Intent intent)最终也会调用这个方法，所以只需这一处判断*/
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
@@ -258,32 +314,34 @@ public abstract class BaseActivity extends AppCompatActivity {
         boolean flag = true;
         String curClassName = intent.getComponent().getClassName();
         long curClickTime = System.currentTimeMillis();
-        if (curClickTime - lastClickTime <= CLICK_TIME && curClassName.equals(lastClassName)) {
+        if (curClickTime - mLastClickTime <= CLICK_TIME && curClassName.equals(mLastClassName)) {
             flag = false;
         }
-        lastClassName = curClassName;
-        lastClickTime = curClickTime;
+        mLastClassName = curClassName;
+        mLastClickTime = curClickTime;
         return flag;
     }
 
     /********************************************************
      * *******  通用的UI操作，例如显示Dialog，Toast等    ********
      ******************************************************/
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new Dialog(this);
-            mProgressDialog.getWindow().setBackgroundDrawable(null);
-            ViewGroup decorView = (ViewGroup) mProgressDialog.getWindow().getDecorView();
-            decorView.setBackgroundColor(Color.TRANSPARENT);
-            decorView.getChildAt(0).setBackgroundColor(Color.TRANSPARENT);
-            ProgressBar progressBar = new ProgressBar(mContext);
-            mProgressDialog.setContentView(progressBar);
-        }
-        mProgressDialog.show();
+    public void showLoadingDialog() {
+        if (mLoadingDialog == null)
+            mLoadingDialog = new LoadingDialog.Builder().createLoadingDialog(this).build();
+        mLoadingDialog.showDialog();
     }
 
-    public void cancelProgressDialog() {
-        mProgressDialog.cancel();
+    public void cancelLoadingDialog() {
+        if (mLoadingDialog != null)
+            mLoadingDialog.cancelDialog();
+    }
+
+    protected void setStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
+        }
     }
 
     /***********************************************

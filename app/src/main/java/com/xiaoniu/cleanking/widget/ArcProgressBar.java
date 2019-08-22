@@ -16,7 +16,7 @@ import android.view.View;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.callback.OnProgressUpdateListener;
-import com.xiaoniu.cleanking.utils.DeviceUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 
 public class ArcProgressBar extends View {
 
@@ -187,7 +187,7 @@ public class ArcProgressBar extends View {
         //画笔的填充样式，Paint.Style.FILL 填充内部;Paint.Style.FILL_AND_STROKE 填充内部和描边;Paint.Style.STROKE 描边
         mPaint.setStyle(Paint.Style.STROKE);
         //圆弧的宽度
-        mPaint.setStrokeWidth(DeviceUtils.dip2px(2));
+        mPaint.setStrokeWidth(DisplayUtils.dip2px(2));
         //抗锯齿
         mPaint.setAntiAlias(true);
         //画笔的颜色

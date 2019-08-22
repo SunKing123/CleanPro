@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.utils;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -28,13 +27,6 @@ public class FileUtils {
         }
     }
 
-    public static boolean haveSDCard() {
-        try {
-            return Environment.getExternalStorageState().equals("mounted");
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     public static boolean isSystemApK(String str) {
         try {
@@ -47,36 +39,10 @@ public class FileUtils {
         }
     }
 
-    public static void deleteFileAndFolder(File file) {
-        if (file != null && file.exists()) {
-            if (file.isDirectory()) {
-                File[] listFiles = file.listFiles();
-                if (listFiles != null && listFiles.length > 0) {
-                    for (File file2 : listFiles) {
-                        if (file2 != null) {
-                            if (file2.isDirectory()) {
-                                deleteFileAndFolder(file2);
-                            } else {
-                                forceDelete(file2);
-                            }
-                        }
-                    }
-                }
-            }
-            forceDelete(file);
-        }
-    }
-
-    public static void forceDelete(File file) {
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
     public static void showIconByFile(ImageView imageView, File file) {
         if (imageView != null && file != null) {
 //          if (file.getAbsolutePath().endsWith(".apk") || file.getAbsolutePath().endsWith(".apk.1")) {
-//                DisplayUtils.getInstance().displayImage(file.getAbsolutePath(), imageView);
+//                DisplayImageUtils.getInstance().displayImage(file.getAbsolutePath(), imageView);
 //            } else
               if (file.getAbsolutePath().toLowerCase().endsWith(".mp3") || file.getAbsolutePath().toLowerCase().endsWith(".ape") || file.getAbsolutePath().toLowerCase().endsWith(".flac") || file.getAbsolutePath().toLowerCase().endsWith(".wav") || file.getAbsolutePath().toLowerCase().endsWith(".wma") || file.getAbsolutePath().toLowerCase().endsWith(".amr") || file.getAbsolutePath().toLowerCase().endsWith(".rm") || file.getAbsolutePath().toLowerCase().endsWith(".mwv") || file.getAbsolutePath().toLowerCase().endsWith(".amv")) {
                 imageView.setImageResource(R.mipmap.icon_clean_music);
@@ -101,5 +67,4 @@ public class FileUtils {
             }
         }
     }
-
 }
