@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
-import com.xiaoniu.cleanking.utils.ToastUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -20,9 +19,7 @@ import butterknife.OnClick;
 
 public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
-    @BindView(R.id.app_power_saving_bar_layout)
     AppBarLayout mAppBarLayout;
-    @BindView(R.id.tv_num)
     TextView mTvNum;
     @BindView(R.id.rl_result_top)
     RelativeLayout mRlResultTop;
@@ -60,6 +57,8 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     @Override
     protected void initView() {
+        mAppBarLayout = findViewById(R.id.app_power_saving_bar_layout);
+        mTvNum = findViewById(R.id.tv_num);
         showStartAnim();
         mHandler.sendEmptyMessageDelayed(1,5000);
         mHandler.sendEmptyMessageDelayed(2, 30);
@@ -93,7 +92,7 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
                 finish();
                 break;
             case R.id.icon_saving_right:
-                ToastUtils.showShort("消息");
+                startActivity(PhoneSuperPowerMessageActivity.class);
                 break;
         }
     }

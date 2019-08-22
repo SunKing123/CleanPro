@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/line_title"
@@ -26,6 +27,7 @@
         android:id="@+id/ll_low_power"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_60dp"
+        android:padding="@dimen/dimen_16dp"
         android:layout_below="@id/line_title"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -34,12 +36,75 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tool_super_power_message"
+            android:layout_weight="1"
             android:textColor="@color/color_333333"
             android:textSize="16sp" />
 
-        <ImageView
+        <com.suke.widget.SwitchButton
+            android:id="@+id/switch_button"
             android:layout_width="wrap_content"
+            app:sb_show_indicator="false"
+            app:sb_border_width="0.5dp"
+            app:sb_background="@color/color_EDEDED"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_night"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
+        android:layout_below="@id/ll_low_power"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tool_super_power_message"
+            android:layout_weight="1"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp" />
+
+        <com.suke.widget.SwitchButton
+            android:layout_width="wrap_content"
+            app:sb_show_indicator="false"
+            app:sb_border_width="0.5dp"
+            app:sb_background="@color/color_EDEDED"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_not_nor"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
+        android:layout_below="@id/ll_night"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tool_super_power_message"
+            android:layout_weight="1"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp" />
+
+        <com.suke.widget.SwitchButton
+            android:layout_width="wrap_content"
+            app:sb_show_indicator="false"
+            app:sb_border_width="0.5dp"
+            app:sb_background="@color/color_EDEDED"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/ll_not_nor"
+        android:background="@color/color_EDEDED"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
