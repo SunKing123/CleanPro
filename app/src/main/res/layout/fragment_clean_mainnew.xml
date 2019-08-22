@@ -115,22 +115,16 @@
 
                     <ImageView
                         android:id="@+id/iv_back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_16dp"
-                        android:background="@mipmap/back_white"
+                        android:layout_height="match_parent"
+                        style="@style/top_iv_back"
                         app:layout_constraintBottom_toBottomOf="@id/view_top"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@id/view_top" />
 
                     <TextView
                         android:id="@+id/text_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_12dp"
                         android:text="悟空清理"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/dimen_18sp"
+                        style="@style/top_tv_title"
                         app:layout_constraintBottom_toBottomOf="@id/view_top"
                         app:layout_constraintLeft_toRightOf="@id/iv_back"
                         app:layout_constraintTop_toTopOf="@id/view_top" />
@@ -164,6 +158,29 @@
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/viewt" />
+
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|top"
+                android:layout_marginTop="@dimen/dimen_80dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_net" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="资讯列表获取失败～"
+                    android:textColor="@color/color_999999" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -501,7 +518,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/line_qq"
+                        android:id="@+id/line_super_power_saving"
                         android:layout_width="0px"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_7dp"
@@ -521,7 +538,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
-                            android:text="QQ专清"
+                            android:text="@string/tool_super_power_saving"
                             android:textColor="#666666"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -640,9 +657,21 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/image_main_thin" />
+
+                    <ImageView
+                        android:id="@+id/view_qq_clean"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view_phone_thin"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_marginRight="@dimen/dimen_16dp"
                         android:layout_marginBottom="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/image_main_thin" />
+
                 </RelativeLayout>
             </RelativeLayout>
         </ScrollView>
@@ -673,26 +702,4 @@
         </FrameLayout>
     </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_not_net"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dimen_56dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_no_net" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:text="资讯列表获取失败～"
-            android:textColor="@color/color_999999" />
-    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

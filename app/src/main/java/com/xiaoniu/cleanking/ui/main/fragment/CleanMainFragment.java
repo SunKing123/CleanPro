@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerSavingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -280,6 +281,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         startActivity(intent);
         StatisticsUtils.trackClick("Software_management_click", "软件管理", "home_page", "cell_phone_slimming_page");
     }
+
+    @OnClick(R.id.view_qq_clean)
+    public void ViewQQCleanClick() {
+        //QQ专清
+        StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_qq);
+            return;
+        }
+        if (QQUtil.audioList != null)
+            QQUtil.audioList.clear();
+        if (QQUtil.fileList != null)
+            QQUtil.fileList.clear();
+        startActivity(QQCleanHomeActivity.class);
+    }
     @OnClick(R.id.iv_permission)
     public void onClick(){
         startActivity(new Intent(getContext(), PermissionActivity.class));
@@ -355,18 +371,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         startActivity(WechatCleanHomeActivity.class);
     }
 
-    @OnClick(R.id.line_qq)
+    @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
-        StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
-        if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
-            ToastUtils.showShort(R.string.tool_no_install_qq);
-            return;
-        }
-        if (QQUtil.audioList != null)
-            QQUtil.audioList.clear();
-        if (QQUtil.fileList != null)
-            QQUtil.fileList.clear();
-        startActivity(QQCleanHomeActivity.class);
+        //超强省电
+        startActivity(new Intent(getActivity(), PhoneSuperPowerSavingActivity.class));
     }
 
     @OnClick(R.id.line_jw)
@@ -647,6 +655,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if (mLayoutNotNet == null) return;
                 if (!isError) {
                     if (mLayoutNotNet != null) {
                         mLayoutNotNet.setVisibility(View.GONE);

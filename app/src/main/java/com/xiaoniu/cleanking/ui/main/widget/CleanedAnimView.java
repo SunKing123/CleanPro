@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,7 @@ public class CleanedAnimView extends RelativeLayout {
     CoordinatorLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
     NestedScrollWebView mWebView;
+    NestedScrollView mNScrollView;
     LinearLayout mLayoutNotNet;
     AppBarLayout mAppBarLayout;
 
@@ -135,8 +137,10 @@ public class CleanedAnimView extends RelativeLayout {
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
         mWebView = v.findViewById(R.id.web_view);
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
+        mNScrollView = v.findViewById(R.id.n_scroll_view);
         mAppBarLayout = v.findViewById(R.id.app_bar_layout);
         mAppBarLayout.setExpanded(true);
+
         initWebView();
         iv_back.setOnClickListener(v1 -> {
             if (listener != null) {
@@ -496,6 +500,7 @@ public class CleanedAnimView extends RelativeLayout {
     public void setViewTrans() {
         int bottom = mLineTitle.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
+        showWebView();
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         anim.setDuration(500);
@@ -522,6 +527,12 @@ public class CleanedAnimView extends RelativeLayout {
         }
     }
 
+    public void showWebView() {
+        if (mNScrollView == null) return;
+        mNScrollView.setVisibility(VISIBLE);
+        mWebView.setVisibility(VISIBLE);
+    }
+
     public void setTitle(String title) {
         tv_qltitle.setText(title);
     }
@@ -541,7 +552,7 @@ public class CleanedAnimView extends RelativeLayout {
     }
 
     public interface onBackClickListener {
-        public void onClick();
+        void onClick();
     }
 }
 

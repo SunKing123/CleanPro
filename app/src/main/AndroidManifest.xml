@@ -10,7 +10,7 @@
         android:protectionLevel="signature" />
 
     <application
-        android:name="com.xiaoniu.cleanking.app.AppApplication"
+        android:name=".app.AppApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/applogo"
@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" />
@@ -27,11 +28,15 @@
             android:value="6c0f162f789cb257e51ceecc1e6b88ec" />
 
         <meta-data
+            android:name="PARTNER_CODE"
+            android:value="hlxx" />
+
+        <meta-data
             android:name="com.xiaoniu.cleanking.app.ApplicationDelegate"
             android:value="IModuleConfig" />
 
         <activity
-            android:name="com.xiaoniu.cleanking.ui.main.activity.SplashActivity"
+            android:name=".ui.main.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher">
             <intent-filter>
@@ -41,16 +46,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.xiaoniu.cleanking.ui.main.activity.MainActivity"
+            android:name=".ui.main.activity.MainActivity"
             android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Main.Theme"
-            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name="com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity"
 
+        <activity
+            android:name=".ui.usercenter.activity.UserLoadH5Activity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.NavigationActivity"
@@ -71,17 +77,12 @@
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanedResultActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.NewsLoadActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:configChanges="orientation|screenSize"/>
-
-        <meta-data
-            android:name="PARTNER_CODE"
-            android:value="hlxx" />
-
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.main.activity.JunkCleanActivity"
             android:screenOrientation="portrait" />
@@ -89,18 +90,14 @@
             android:name=".ui.main.activity.PhoneAccessActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".ui.main.activity.CleanMusicManageActivity"
             android:launchMode="singleTop"
@@ -109,17 +106,14 @@
             android:name=".ui.usercenter.activity.AboutActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanBigFileActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanVideoManageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.HardwareInfoActivity"
             android:launchMode="singleTop"
@@ -128,7 +122,6 @@
             android:name=".ui.main.activity.ProcessInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.WhiteListInstallPackgeManageActivity"
             android:launchMode="singleTop"
@@ -141,12 +134,10 @@
             android:name=".ui.usercenter.activity.FeedBackActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.WhiteListSpeedAddActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.CleanFinishActivity"
             android:launchMode="singleTop"
@@ -167,7 +158,6 @@
             android:name=".ui.tool.wechat.activity.WechatCleanResultActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"
             android:launchMode="singleTop"
@@ -181,7 +171,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".ui.main.activity.QuestionReportActivity"
             android:launchMode="singleTop"
@@ -191,20 +180,17 @@
             android:name=".ui.main.activity.SimplePhotoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!-- 手机瘦身-->
+        <!-- 手机瘦身 -->
         <activity
             android:name=".ui.main.activity.PhoneThinActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!--手机瘦身结果页-->
+        <!-- 手机瘦身结果页 -->
         <activity
             android:name=".ui.main.activity.PhoneThinResultActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <!-- 软件管理-->
+        <!-- 软件管理 -->
         <activity
             android:name=".ui.main.activity.SoftManageActivity"
             android:launchMode="singleTop"
@@ -218,12 +204,11 @@
             android:name=".ui.main.activity.WXCleanVideoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.main.activity.QQCleanImgActivity"
+        <activity
+            android:name=".ui.main.activity.QQCleanImgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.main.activity.QQCleanVideoActivity" />
-
         <activity
             android:name=".ui.tool.qq.activity.QQCleanHomeActivity"
             android:launchMode="singleTop"
@@ -236,9 +221,15 @@
             android:name=".ui.tool.qq.activity.QQCleanAudActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:theme="@style/ImagePickerThemeFullScreen" />
+        <activity
+            android:name=".ui.main.activity.PhoneSuperPowerSavingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <provider
-            android:name="com.xiaoniu.cleanking.utils.update.UpdateFileProvider"
+            android:name=".utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -247,24 +238,9 @@
                 android:resource="@xml/update_cache_path" />
         </provider>
 
-
-        <service android:name=".ui.usercenter.activity.FloatingImageDisplayService"></service>
-
-
-        <receiver android:name="com.xiaoniu.common.hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" />
-
-        <!-- 热修复回调 -->
-        <service
-            android:name="com.xiaoniu.cleanking.hotfix.service.HotFixResultService"
-            android:exported="false" />
-
-        <activity
-            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
-            android:theme="@style/ImagePickerThemeFullScreen" />
-
         <!-- User defined. 用户自定义的广播接收器 -->
         <receiver
-            android:name="com.xiaoniu.cleanking.jpush.JPushReceiver"
+            android:name=".jpush.JPushReceiver"
             android:enabled="true">
             <intent-filter>
 
@@ -282,6 +258,12 @@
                 <category android:name="com.xiaoniu.cleanking" />
             </intent-filter>
         </receiver>
+
+        <service android:name=".ui.usercenter.activity.FloatingImageDisplayService" />
+
+        <activity android:name=".ui.main.activity.PhoneSuperPowerMessageActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
 
     </application>
 

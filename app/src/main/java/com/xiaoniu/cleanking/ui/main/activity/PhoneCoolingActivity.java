@@ -532,6 +532,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     public void onMLayoutCoolClicked() {
         StatisticsUtils.trackClick("Cool_down_immediately_click", "\"立即降温\"点击", "tools_page", "temperature_result_display_page");
 
+        if (mRunningProcess == null) return;
         //立即降温
         for (FirstJunkInfo firstJunkInfo : mRunningProcess) {
             CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(), firstJunkInfo.getPid());
@@ -551,6 +552,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * @param runningProcess
      */
     public void showProcess(ArrayList<FirstJunkInfo> runningProcess) {
+        if (mTextTitleProcess == null || runningProcess == null) return;
         mRunningProcess = runningProcess;
         mTextTitleProcess.setText(runningProcess.size() + "个运行的应用");
         mProcessIconAdapter.setData(runningProcess);

@@ -177,21 +177,14 @@
 
                     <ImageView
                         android:id="@+id/iv_back"
-                        android:layout_width="@dimen/dimen_35dp"
                         android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:paddingLeft="@dimen/dimen_12dp"
-                        android:src="@mipmap/back" />
+                        style="@style/top_iv_back"/>
 
                     <TextView
                         android:id="@+id/tv_qltitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/dimen_12dp"
-                        android:text="手机清理"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/dimen_18sp" />
+                        style="@style/top_tv_title"
+                        android:text="手机清理"/>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -202,6 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:visibility="gone"
         android:scrollbarStyle="outsideOverlay"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -215,33 +209,36 @@
                 android:id="@+id/web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:focusable="true"
-                android:visibility="visible"
                 android:focusableInTouchMode="true"
+                android:background="@color/white"
                 android:touchscreenBlocksFocus="true" />
+
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dimen_80dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_net" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="资讯列表获取失败～"
+                    android:textColor="@color/color_999999" />
+            </LinearLayout>
 
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
-    <LinearLayout
-        android:id="@+id/layout_not_net"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dimen_80dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_no_net" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:text="资讯列表获取失败～"
-            android:textColor="@color/color_999999" />
-    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

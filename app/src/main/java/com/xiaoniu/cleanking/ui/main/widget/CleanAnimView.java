@@ -15,7 +15,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.webkit.WebChromeClient;
@@ -187,8 +186,6 @@ public class CleanAnimView extends RelativeLayout {
                     }
                 }
                 isError = false;
-
-                ViewGroup.LayoutParams params = mWebView.getLayoutParams();params.width = getResources().getDisplayMetrics().widthPixels;params.height = mWebView.getHeight() - mScrollView.getHeight();mWebView.setLayoutParams(params);
             }
 
             @Override
@@ -506,7 +503,7 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutRoot.setVisibility(GONE);
         int bottom = mLineTitle.getBottom();
         mLayoutCleanFinish.setVisibility(VISIBLE);
-        mScrollView.setVisibility(VISIBLE);
+        showWebView();
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         anim.setDuration(500);
@@ -532,6 +529,12 @@ public class CleanAnimView extends RelativeLayout {
             NiuDataAPI.onPageStart("clean_up_page_view", "清理完成页浏览");
         }
     }
+
+    public void showWebView() {
+        mScrollView.setVisibility(VISIBLE);
+        mWebView.setVisibility(VISIBLE);
+    }
+
     public void setAnimTitle(String animTitle){
         mTvAnimTitle.setText(animTitle);
     }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layout_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_56dp"
@@ -13,29 +12,22 @@
 
         <ImageView
             android:id="@+id/img_back"
-            android:layout_width="@dimen/dimen_35dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/dimen_12dp"
-            android:src="@mipmap/back"/>
+            style="@style/top_iv_back"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/top_tv_title"
+            android:layout_toRightOf="@id/img_back"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dimen_8dp"
-            android:layout_toRightOf="@+id/img_back"
-            android:text="个人信息"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp"/>
+            android:text="个人信息" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_title_content"
-        android:layout_below="@+id/layout_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_150dp"
+        android:layout_below="@+id/layout_title_bar"
         android:background="@color/color_4690FD">
 
         <LinearLayout
@@ -43,8 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="122dp"
             android:gravity="center"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_size"
@@ -53,7 +45,7 @@
                 android:text="0"
                 android:textColor="@color/white"
                 android:textSize="55sp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/layout_right_content"
@@ -70,7 +62,7 @@
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     android:text="GB"
                     android:textColor="@color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_ql"
@@ -78,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:text="垃圾可清理"
                     android:textColor="@color/white"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -88,18 +80,19 @@
             android:layout_height="122dp"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
-                android:src="@mipmap/icon_tips"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_tips" />
 
             <TextView
-                android:text="请选择待清理的项目"
-                android:layout_marginTop="@dimen/dimen_11dp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dimen_18sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_11dp"
+                android:text="请选择待清理的项目"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_18sp" />
         </LinearLayout>
 
         <TextView
@@ -107,17 +100,17 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_26dp"
             android:layout_alignParentBottom="true"
-            android:textColor="@color/white"
             android:background="#1A000000"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_bottom_content"
-        android:layout_below="@+id/layout_title_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/layout_title_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -143,7 +136,7 @@
                     android:gravity="center"
                     android:text="完成"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/dimen_16sp"/>
+                    android:textSize="@dimen/dimen_16sp" />
 
             </FrameLayout>
 
@@ -151,28 +144,29 @@
                 android:id="@+id/junk_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/layout_junk_clean"/>
+                android:layout_above="@id/layout_junk_clean" />
 
             <LinearLayout
                 android:id="@+id/layout_no_file"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_above="@id/layout_junk_clean"
                 android:background="@color/white"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_above="@id/layout_junk_clean">
+                android:visibility="gone">
+
                 <ImageView
-                    android:src="@mipmap/icon_no_big_file"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_big_file" />
 
                 <TextView
-                    android:text="暂无大文件"
-                    android:layout_marginTop="@dimen/dimen_8dp"
-                    android:textColor="@color/color_999999"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="暂无大文件"
+                    android:textColor="@color/color_999999" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -187,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="恭喜你！清理完成"/>
+                android:text="恭喜你！清理完成" />
 
             <TextView
                 android:id="@+id/text_clean_number"
@@ -195,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_clean_finish_title"
                 android:layout_centerHorizontal="true"
-                android:text="清理了 100Mb"/>
+                android:text="清理了 100Mb" />
         </RelativeLayout>
 
     </RelativeLayout>
@@ -211,8 +205,7 @@
         android:id="@+id/acceview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 
 </RelativeLayout>

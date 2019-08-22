@@ -204,7 +204,12 @@ public class MeFragment extends SimpleFragment {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                Log.e("ss", "ss");
+
+            }
+
+            @Override
+            public void onResult(SHARE_MEDIA share_media) {
+                handler.sendEmptyMessage(SHARE_SUCCESS);
                 String pageName = "";
                 if (AppManager.getAppManager().preActivityName().contains("MainActivity")) {
                     pageName = "mine_page";
@@ -222,11 +227,6 @@ public class MeFragment extends SimpleFragment {
             }
 
             @Override
-            public void onResult(SHARE_MEDIA share_media) {
-                handler.sendEmptyMessage(SHARE_SUCCESS);
-            }
-
-            @Override
             public void onError(SHARE_MEDIA share_media, Throwable throwable) {
                 System.out.println("----------------------------------" + throwable.getCause());
                 if (share_media == SHARE_MEDIA.WEIXIN || share_media == SHARE_MEDIA.WEIXIN_CIRCLE) {
@@ -236,7 +236,6 @@ public class MeFragment extends SimpleFragment {
                 } else if (share_media == SHARE_MEDIA.SINA) {
                     handler.sendEmptyMessage(SHARE_SINA);
                 }
-
             }
 
             @Override
@@ -246,7 +245,7 @@ public class MeFragment extends SimpleFragment {
         });
         switch (type) {
             case -1:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA);
                 shareAction.open();
 //                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
 //                shareAction.open();
@@ -260,7 +259,7 @@ public class MeFragment extends SimpleFragment {
                 shareAction.share();
                 break;
             default:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA);
                 shareAction.open();
         }
     }
@@ -274,7 +273,7 @@ public class MeFragment extends SimpleFragment {
                     ToastUtils.showShort("分享成功");
                     break;
                 case SHARE_CANCEL:
-//                    ToastUtils.showShort("已取消");
+                    ToastUtils.showShort("已取消");
                     break;
                 case SHARE_WECHAT:
                     ToastUtils.showShort("没有安装微信，请先安装应用");

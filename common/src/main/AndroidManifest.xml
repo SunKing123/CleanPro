@@ -74,26 +74,49 @@
                 android:resource="@xml/share_file_paths" />
         </provider>
 
+        <!-- QQ分享 -->
         <activity
-            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true"
-            android:screenOrientation="portrait">
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tencent1106147169" />
+                <data android:scheme="tencent1109516379" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- 微博分享 -->
+        <activity
+            android:name="com.umeng.socialize.media.WBShareCallBackActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity
+            android:name="com.sina.weibo.sdk.web.WeiboSdkWebActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name="com.sina.weibo.sdk.share.WbShareTransActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".wxapi.WBShareActivity"
@@ -203,6 +226,12 @@
             android:name="com.xiaoniu.statistic.ProductID"
             android:value="18" />
 
+        <!-- 热修复回调 -->
+        <receiver android:name=".hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" />
+
+        <service
+            android:name=".hotfix.service.HotFixResultService"
+            android:exported="false" />
     </application>
 
 </manifest>

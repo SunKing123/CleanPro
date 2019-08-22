@@ -82,6 +82,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:focusable="true"
+        android:background="@color/white"
         android:focusableInTouchMode="true"
         android:scrollbarStyle="outsideOverlay"
         android:touchscreenBlocksFocus="true"
@@ -97,32 +98,34 @@
                 android:id="@+id/web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <!--无网络-->
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dimen_80dp"
+                android:gravity="center_horizontal|top"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_net" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="资讯列表获取失败～"
+                    android:textColor="@color/color_999999" />
+            </LinearLayout>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    <!--无网络-->
-    <LinearLayout
-        android:id="@+id/layout_not_net"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dimen_56dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/icon_no_net" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:text="资讯列表获取失败～"
-            android:textColor="@color/color_999999" />
-    </LinearLayout>
     <!--降温仪表-->
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_anim_cool"
@@ -454,6 +457,7 @@
                 android:textSize="16sp" />
 
         </FrameLayout>
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

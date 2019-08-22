@@ -23,22 +23,13 @@
 
     <ImageView
         android:id="@+id/iv_back"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_13dp"
-        android:src="@mipmap/icon_left_arrow_white"
+        style="@style/top_iv_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_12dp"
-        android:gravity="center_vertical"
+        style="@style/top_tv_title"
         android:text="文件清理"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dimen_18dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_back"
         app:layout_constraintLeft_toRightOf="@id/iv_back"
         app:layout_constraintTop_toTopOf="@id/iv_back" />

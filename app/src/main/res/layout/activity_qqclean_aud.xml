@@ -13,28 +13,20 @@
         android:background="#06C581"
         android:orientation="horizontal">
 
-
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:background="@mipmap/back_white" />
+            style="@style/top_iv_back"
+            android:layout_height="match_parent"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/top_tv_title"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dimen_12dp"
-            android:text="QQ语音"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp" />
+            android:text="QQ语音" />
+
         <View
             android:layout_width="0px"
             android:layout_height="1dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1"/>
 
     </LinearLayout>
 <RelativeLayout

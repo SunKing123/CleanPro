@@ -177,15 +177,12 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
 
     private void getImgChat() {
 
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
 
-                //scanAllImgChat(path);
-                scanAllImagesChat(wxRootPath);
-                emitter.onNext("");
-                emitter.onComplete();
-            }
+            //scanAllImgChat(path);
+            scanAllImagesChat(wxRootPath);
+            emitter.onNext("");
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程

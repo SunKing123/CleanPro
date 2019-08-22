@@ -16,20 +16,13 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:background="@mipmap/back_white" />
+            android:layout_height="match_parent"
+            style="@style/top_iv_back" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/top_tv_title"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dimen_12dp"
-            android:text="接收的文件"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp" />
+            android:text="接收的文件" />
 
         <View
             android:layout_width="0px"

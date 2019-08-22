@@ -30,8 +30,8 @@ public class FloatingImageDisplayService extends Service {
 
     private View displayView;
     public static int[] imageRes;
-    public static int[] imageWidth ;
-    public static int[] imageHeight ;
+    public static int[] imageWidth;
+    public static int[] imageHeight;
 
     @Override
     public void onCreate() {
@@ -69,7 +69,7 @@ public class FloatingImageDisplayService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-//    int[] imageRes = new int[]{R.mipmap.icon_per2, R.mipmap.icon_per3, R.mipmap.icon_per4, R.mipmap.icon_per1};
+    //    int[] imageRes = new int[]{R.mipmap.icon_per2, R.mipmap.icon_per3, R.mipmap.icon_per4, R.mipmap.icon_per1};
 //    int[] imageWidth = new int[]{275, 275, 275, 275};
 //    int[] imageHeight = new int[]{186, 186, 206, 143};
     int index = 0;
@@ -80,61 +80,61 @@ public class FloatingImageDisplayService extends Service {
     private void showFloatingWindow() {
         if (imageRes == null) return;
 //        if (Build.VERSION.SDK_INT >= 23 &&Settings.canDrawOverlays(this)) {
-            LayoutInflater layoutInflater = LayoutInflater.from(this);
-            displayView = layoutInflater.inflate(R.layout.image_display, null);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        displayView = layoutInflater.inflate(R.layout.image_display, null);
 //            displayView.setOnTouchListener(new FloatingOnTouchListener());
-            imageView = displayView.findViewById(R.id.image_display_imageview);
-            final ImageView iv_next = displayView.findViewById(R.id.iv_next);
-            final ImageView iv_pre = displayView.findViewById(R.id.iv_pre);
-            iv_zhankai = displayView.findViewById(R.id.iv_zhankai);
-            final ImageView iv_back = displayView.findViewById(R.id.iv_back);
-            iv_delete = displayView.findViewById(R.id.iv_delete);
-            iv_zhankai.setVisibility(View.GONE);
-            iv_delete.setVisibility(View.GONE);
-            index = 0;
+        imageView = displayView.findViewById(R.id.image_display_imageview);
+        final ImageView iv_next = displayView.findViewById(R.id.iv_next);
+        final ImageView iv_pre = displayView.findViewById(R.id.iv_pre);
+        iv_zhankai = displayView.findViewById(R.id.iv_zhankai);
+        final ImageView iv_back = displayView.findViewById(R.id.iv_back);
+        iv_delete = displayView.findViewById(R.id.iv_delete);
+        iv_zhankai.setVisibility(View.GONE);
+        iv_delete.setVisibility(View.GONE);
+        index = 0;
+        imageView.setImageResource(imageRes[index]);
+        setImageParam(imageView, imageWidth[index], imageHeight[index]);
+        iv_next.setOnClickListener(view -> {
+            if (index == imageRes.length - 1) return;
+            index++;
+            if (index > imageRes.length - 1) {
+                index -= 1;
+                return;
+            }
             imageView.setImageResource(imageRes[index]);
             setImageParam(imageView, imageWidth[index], imageHeight[index]);
-            iv_next.setOnClickListener(view -> {
-                if (index == imageRes.length - 1) return;
-                index++;
-                if (index > imageRes.length - 1) {
-                    index -= 1;
-                    return;
-                }
-                imageView.setImageResource(imageRes[index]);
-                setImageParam(imageView, imageWidth[index], imageHeight[index]);
-            });
+        });
 
-            iv_pre.setOnClickListener(view -> {
-                index--;
-                if (index < 0) {
-                    index = 0;
-                    return;
-                }
-                imageView.setImageResource(imageRes[index]);
-                setImageParam(imageView, imageWidth[index], imageHeight[index]);
-            });
+        iv_pre.setOnClickListener(view -> {
+            index--;
+            if (index < 0) {
+                index = 0;
+                return;
+            }
+            imageView.setImageResource(imageRes[index]);
+            setImageParam(imageView, imageWidth[index], imageHeight[index]);
+        });
 
-            iv_back.setOnClickListener(view -> {
-                iv_zhankai.setVisibility(View.VISIBLE);
-                iv_delete.setVisibility(View.VISIBLE);
-                imageView.setVisibility(View.INVISIBLE);
-            });
-            iv_zhankai.setOnClickListener(view -> {
-                iv_zhankai.setVisibility(View.GONE);
-                iv_delete.setVisibility(View.GONE);
-                imageView.setVisibility(View.VISIBLE);
-            });
-            iv_delete.setOnClickListener(view -> {
-                iv_zhankai.setVisibility(View.GONE);
-                iv_delete.setVisibility(View.GONE);
-                imageView.setVisibility(View.GONE);
-                displayView.setVisibility(View.GONE);
-                stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
-            });
-            if (displayView.isAttachedToWindow())
-                windowManager.removeViewImmediate(displayView);
-            windowManager.addView(displayView, layoutParams);
+        iv_back.setOnClickListener(view -> {
+            iv_zhankai.setVisibility(View.VISIBLE);
+            iv_delete.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+        });
+        iv_zhankai.setOnClickListener(view -> {
+            iv_zhankai.setVisibility(View.GONE);
+            iv_delete.setVisibility(View.GONE);
+            imageView.setVisibility(View.VISIBLE);
+        });
+        iv_delete.setOnClickListener(view -> {
+            iv_zhankai.setVisibility(View.GONE);
+            iv_delete.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+            displayView.setVisibility(View.GONE);
+            stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
+        });
+        if (displayView.isAttachedToWindow())
+            windowManager.removeViewImmediate(displayView);
+        windowManager.addView(displayView, layoutParams);
 
 //        }
     }

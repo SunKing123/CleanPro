@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <View
         android:id="@+id/view_top"
         android:layout_width="match_parent"
@@ -17,22 +16,15 @@
 
     <ImageView
         android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_16dp"
-        android:background="@mipmap/back_white"
+        style="@style/top_iv_back"
         app:layout_constraintBottom_toBottomOf="@id/view_top"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_top" />
 
     <TextView
         android:id="@+id/tv_pos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_12dp"
+        style="@style/top_tv_title"
         android:text="4/8"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dimen_18sp"
         app:layout_constraintBottom_toBottomOf="@id/view_top"
         app:layout_constraintLeft_toRightOf="@id/iv_back"
         app:layout_constraintTop_toTopOf="@id/view_top" />
@@ -41,21 +33,19 @@
         android:id="@+id/tv_selectimage"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
         android:background="@drawable/icon_unselect"
         app:layout_constraintBottom_toBottomOf="@id/view_top"
-        android:layout_marginRight="@dimen/dimen_16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_top" />
-    <!--<include layout="@layout/base_include_status_bar" />-->
 
     <com.xiaoniu.cleanking.widget.HackyViewPager
         android:id="@+id/preview_image_vp_content"
         android:layout_width="match_parent"
 
-        app:layout_constraintBottom_toTopOf="@id/view_bottom"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/view_top"
-        />
+        app:layout_constraintBottom_toTopOf="@id/view_bottom"
+        app:layout_constraintTop_toBottomOf="@id/view_top" />
 
 
     <ImageView
@@ -65,8 +55,7 @@
         android:layout_margin="25dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/view_bottom"
@@ -77,7 +66,6 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
 
-
     <TextView
         android:id="@+id/tv_select_count"
         android:layout_width="wrap_content"
@@ -85,33 +73,35 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:text="已选:0张"
         android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/view_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_bottom" />
 
     <TextView
         android:id="@+id/tv_delete"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen_10dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_10dp"
         android:background="@drawable/delete_select_bg"
-        android:paddingBottom="@dimen/dimen_10dp"
         android:gravity="center"
         android:paddingTop="@dimen/dimen_10dp"
+        android:paddingBottom="@dimen/dimen_10dp"
         android:text="删除"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/view_bottom"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view_bottom" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
-        android:background="#80000000"
         android:layout_height="53dp"
+        android:background="#80000000"
         android:nestedScrollingEnabled="false"
         android:overScrollMode="never"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@id/view_bottom" />
+    
 </android.support.constraint.ConstraintLayout>

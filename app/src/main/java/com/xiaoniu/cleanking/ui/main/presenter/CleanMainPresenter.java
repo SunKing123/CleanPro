@@ -686,6 +686,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         mModel.getBottomAd(new CommonSubscriber<ImageAdEntity>() {
             @Override
             public void getData(ImageAdEntity imageAdEntity) {
+                if (imageAdEntity == null) return;
                 ArrayList<ImageAdEntity.DataBean> dataList = imageAdEntity.getData();
                 if (dataList != null && dataList.size() > 0) {
                     mView.showFirstAd(dataList.get(0), 0);
