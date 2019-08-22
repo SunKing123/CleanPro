@@ -63,8 +63,8 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mAppBarLayout = findViewById(R.id.app_power_saving_bar_layout);
         mTvNum = findViewById(R.id.tv_num);
         showStartAnim();
-        mHandler.sendEmptyMessageDelayed(1,5000);
-        mHandler.sendEmptyMessageDelayed(2, 30);
+        mHandler.sendEmptyMessageDelayed(1,5500);
+        mHandler.sendEmptyMessageDelayed(2, 1000);
     }
 
     /**

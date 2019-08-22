@@ -62,7 +62,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 num --;
                 mTvNum.setText(String.valueOf(num));
                 if (num > 0) {
-                    sendEmptyMessageDelayed(2, 90);
+                    sendEmptyMessageDelayed(2, 100);
                 }else {
                     sendEmptyMessageDelayed(1, 800);
                 }
@@ -90,6 +90,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mNestedScrollWebView = findViewById(R.id.web_view);
         mLayoutNotNet = findViewById(R.id.layout_not_net);
         mLottieAnimationStartView = findViewById(R.id.view_lottie_super_saving_sleep);
+
+        mTvNum.setText(String.valueOf(num));
         initWebView();
     }
 
@@ -104,7 +106,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     protected void loadData() {
         showStartAnim();
         mHandler.sendEmptyMessageDelayed(1,5000);
-        mHandler.sendEmptyMessageDelayed(2, 60);
+        mHandler.sendEmptyMessageDelayed(2, 1000);
     }
 
     /**
