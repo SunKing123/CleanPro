@@ -117,7 +117,7 @@
         android:scrollbarStyle="outsideOverlay"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -214,14 +214,13 @@
                     android:textColor="@color/color_999999" />
             </LinearLayout>
 
-        </FrameLayout>
+        </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
-
     <FrameLayout
         android:id="@+id/fl_anim"
         android:layout_width="match_parent"
         android:visibility="gone"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie"

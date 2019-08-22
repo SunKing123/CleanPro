@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
@@ -121,25 +124,42 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mLottieAnimationStartView.setImageAssetsFolder("images");
         mLottieAnimationStartView.setAnimation("data_super_power_saving.json");
         mLottieAnimationStartView.playAnimation();
+        mLottieAnimationStartView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mLottieAnimationStartView.cancelAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
     /**
      * 完成动画
      */
     public void showFinishAnim(){
-        mRlResult.setVisibility(View.GONE);
-        mFlAnim.setVisibility(View.VISIBLE);
-        mLottieAnimationFinishView.setVisibility(View.VISIBLE);
-        mLottieAnimationFinishView.useHardwareAcceleration();
         mLottieAnimationFinishView.useHardwareAcceleration();
         mLottieAnimationFinishView.setImageAssetsFolder("images");
         mLottieAnimationFinishView.setAnimation("data_clean_finish.json");
         mLottieAnimationFinishView.playAnimation();
-
         mLottieAnimationFinishView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-
+                mRlResult.setVisibility(View.GONE);
+                mFlAnim.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -149,6 +169,17 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 mAppBarLayout.setExpanded(true);
                 mLlResultTop.setVisibility(View.VISIBLE);
                 mNestedScrollWebView.setVisibility(View.VISIBLE);
+                int startHeight = ScreenUtils.getFullActivityHeight();
+                ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
+                anim.setDuration(500);
+                anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mRlResult.getLayoutParams();
+                anim.addUpdateListener(valueAnimator -> {
+                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
+                    if (mRlResult != null)
+                        mRlResult.setLayoutParams(rlp);
+                });
+                anim.start();
             }
 
             @Override
@@ -191,13 +222,11 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-//                showLoadingDialog();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-//                cancelLoadingDialog();
                 if (!isError) {
                     if (mLayoutNotNet != null) {
                         mLayoutNotNet.setVisibility(View.GONE);

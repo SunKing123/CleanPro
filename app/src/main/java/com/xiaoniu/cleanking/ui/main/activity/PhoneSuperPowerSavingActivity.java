@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -76,6 +77,27 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mLottieAnimationStartView.setImageAssetsFolder("images");
         mLottieAnimationStartView.setAnimation("data_super_power_saving.json");
         mLottieAnimationStartView.playAnimation();
+        mLottieAnimationStartView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mLottieAnimationStartView.cancelAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
     /**
