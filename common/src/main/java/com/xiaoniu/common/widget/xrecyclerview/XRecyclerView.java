@@ -50,8 +50,8 @@ public class XRecyclerView extends RecyclerView {
         //设置Item增加、移除动画
         setItemAnimator(new DefaultItemAnimator());
         //添加分割线
-        addItemDecoration(new DividerItemDecoration(
-                context, DividerItemDecoration.VERTICAL_LIST));
+//        addItemDecoration(new DividerItemDecoration(
+//                context, DividerItemDecoration.VERTICAL_LIST));
     }
 
     /*自动加载更多相关*/

@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -165,8 +167,8 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             CleanWxGroupInfo groupInfo2 = new CleanWxGroupInfo();
             groupInfo2.title = "昨天";
             groupInfo2.isExpanded = true;
-            for (int i = 0; i < listDataToday.size(); i++) {
-                CleanWxItemInfo itemInfo = listDataToday.get(i);
+            for (int i = 0; i < listDataYestoday.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataYestoday.get(i);
                 CleanWxChildInfo childInfo = new CleanWxChildInfo();
                 childInfo.canLoadPic = itemInfo.isCanLoadPic();
                 childInfo.Days = itemInfo.getDays();
@@ -182,8 +184,8 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             CleanWxGroupInfo groupInfo3 = new CleanWxGroupInfo();
             groupInfo3.title = "一月内";
             groupInfo3.isExpanded = true;
-            for (int i = 0; i < listDataToday.size(); i++) {
-                CleanWxItemInfo itemInfo = listDataToday.get(i);
+            for (int i = 0; i < listDataInMonth.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataInMonth.get(i);
                 CleanWxChildInfo childInfo = new CleanWxChildInfo();
                 childInfo.canLoadPic = itemInfo.isCanLoadPic();
                 childInfo.Days = itemInfo.getDays();
@@ -199,8 +201,8 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             CleanWxGroupInfo groupInfo4 = new CleanWxGroupInfo();
             groupInfo4.title = "更早";
             groupInfo4.isExpanded = true;
-            for (int i = 0; i < listDataToday.size(); i++) {
-                CleanWxItemInfo itemInfo = listDataToday.get(i);
+            for (int i = 0; i < listDataInHalfYear.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataInHalfYear.get(i);
                 CleanWxChildInfo childInfo = new CleanWxChildInfo();
                 childInfo.canLoadPic = itemInfo.isCanLoadPic();
                 childInfo.Days = itemInfo.getDays();
@@ -212,10 +214,12 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
             }
             mAllDatas.add(groupInfo4);
         }
-
         cleanFileAdapter = new WechatCleanFileAdapter(WechatCleanFileActivity.this);
         cleanFileAdapter.setData(mAllDatas);
         recyclerView.setAdapter(cleanFileAdapter);
+        DividerItemDecoration decor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        decor.setDrawable(ContextCompat.getDrawable(this, R.drawable.bg_divider_shape)); //这里在就是
+        recyclerView.addItemDecoration(decor);
 
         cleanFileAdapter.setmOnCheckListener((info) -> {
             long allSize = cleanFileAdapter.getSelectedSize();
@@ -235,8 +239,9 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
             cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
             tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-            tv_delete.setSelected(!cb_checkall.isSelected() ? false : true);
+            tv_delete.setSelected(cb_checkall.isSelected() ? true : false);
 
+            cleanFileAdapter.selectAll(cb_checkall.isSelected());
             long allSize = cleanFileAdapter.getSelectedSize();
             tv_delete.setText(allSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(allSize));
         });

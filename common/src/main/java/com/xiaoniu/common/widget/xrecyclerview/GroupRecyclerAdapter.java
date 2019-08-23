@@ -41,6 +41,29 @@ public abstract class GroupRecyclerAdapter extends CommonRecyclerAdapter<MultiIt
         }
     }
 
+    public void selectAll(boolean selected) {
+        for (int i = 0; i < mOriginDatas.size(); i++) {
+            MultiItemInfo itemInfo = mOriginDatas.get(i);
+            itemInfo.selected = selected ? 1 : 0;
+            if (itemInfo.hasChild()) {
+                selectAll(itemInfo.getChildList(), selected);
+            }
+            /*更新选中状态*/
+            updateSelectedData(itemInfo);
+        }
+        notifyDataSetChanged();
+    }
+
+    private void selectAll(List<MultiItemInfo> targetList, boolean selected) {
+        for (int i = 0; i < targetList.size(); i++) {
+            MultiItemInfo itemInfo = targetList.get(i);
+            itemInfo.selected = selected ? 1 : 0;
+            if (itemInfo.hasChild()) {
+                selectAll(itemInfo.getChildList(), selected);
+            }
+        }
+    }
+
     private void removeData(List<MultiItemInfo> targetList, MultiItemInfo targetInfo) {
         targetList.remove(targetInfo);
         for (int i = 0; i < targetList.size(); i++) {

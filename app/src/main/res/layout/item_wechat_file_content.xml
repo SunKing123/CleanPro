@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/conslayout"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/dimen_16dp"
+    android:background="#F7F8FA">
 
     <ImageView
         android:id="@+id/iv_photo_filelist_pic"
@@ -12,6 +14,7 @@
         android:layout_height="36dp"
         android:layout_marginTop="@dimen/dimen_16dp"
         android:layout_marginBottom="@dimen/dimen_16dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
         android:scaleType="fitXY"
         android:src="@mipmap/icon_file"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +53,7 @@
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginLeft="@dimen/dimen_8dp"
-
+        android:layout_marginRight="@dimen/dimen_16dp"
         android:background="@drawable/icon_select"
         android:textColor="#333333"
         app:layout_constraintBottom_toBottomOf="@id/iv_photo_filelist_pic"
@@ -76,6 +79,7 @@
         android:layout_marginTop="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:background="#EDEDED"
+        android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_photo_filelist_pic" />

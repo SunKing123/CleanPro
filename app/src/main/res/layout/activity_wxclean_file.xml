@@ -77,7 +77,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/rel_bottom"
-        android:layout_below="@id/line_title"></com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
+        android:layout_below="@id/line_title">
+
+    </com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
 
     <LinearLayout
         android:id="@+id/layout_not_net"
