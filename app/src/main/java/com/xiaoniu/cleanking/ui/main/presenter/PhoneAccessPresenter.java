@@ -69,6 +69,8 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     @Inject
     NoClearSPHelper mSPHelper;
 
+    private boolean isFromClickClearBtn = true;
+
     @Inject
     public PhoneAccessPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
@@ -250,7 +252,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
      */
     boolean canPlaying = true;
 
-    public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, View view_top, int startNum, int endNum, int type) {
+    public void setNumAnim(View mTvSpeed,View view,TextView tv_size, TextView tv_size_show, TextView tv_gb, View viewt, View view_top, int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -259,8 +261,10 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             if (tv_size == null) return;
             int currentValue = (int) animation.getAnimatedValue();
             tv_size.setText(currentValue + "");
+            tv_size_show.setText(currentValue + "");
             if (currentValue == endNum) {
                 tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
+                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                 tv_gb.setText(type == 1 ? "MB" : "GB");
             }
         });
@@ -268,11 +272,16 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(800);
         colorAnim1.setStartDelay(1200);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(view, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
+        colorAnim2.setEvaluator(new ArgbEvaluator());
+        colorAnim2.setDuration(800);
+        colorAnim2.setStartDelay(1200);
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
             view_top.setBackgroundColor(animatedValue);
             mView.setStatusBarNum(animatedValue);
+
         });
 
         anim.addListener(new AnimatorListenerAdapter() {
@@ -280,12 +289,13 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 mView.setCanClickDelete(true);
+                mTvSpeed.setVisibility(View.VISIBLE);
             }
         });
 //        anim.start();
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(anim, colorAnim1);
+        animatorSetTimer.playTogether(anim, colorAnim1,colorAnim2);
         animatorSetTimer.start();
 
     }

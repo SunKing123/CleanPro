@@ -59,7 +59,6 @@ public class AccessAnimView extends RelativeLayout {
     FrameLayout mFlAnim;
     LottieAnimationView mAnimationView;
     ValueAnimator mValueAnimator;
-    ImageView mIvSpeedAnim;
     LottieAnimationView mAnimationCloudView;
 
     public void setListener(onAnimEndListener listener) {
@@ -95,7 +94,7 @@ public class AccessAnimView extends RelativeLayout {
         mRlAnimBg = v.findViewById(R.id.rl_anim_bg);
         line_hj = v.findViewById(R.id.line_hj);
         iv_bot = v.findViewById(R.id.iv_bot);
-        tv_size = v.findViewById(R.id.tv_size);
+        tv_size = v.findViewById(R.id.tv_size_show);
         tv_gb = v.findViewById(R.id.tv_gb);
         line_access = v.findViewById(R.id.line_access);
         line_size = v.findViewById(R.id.line_size);
@@ -112,7 +111,6 @@ public class AccessAnimView extends RelativeLayout {
         tv_title_name = v.findViewById(R.id.tv_title_name);
         mAnimationView = v.findViewById(R.id.view_lottie);
         mFlAnim = v.findViewById(R.id.fl_anim);
-        mIvSpeedAnim = v.findViewById(R.id.iv_speed_anim);
         mAnimationCloudView = v.findViewById(R.id.view_lottie_speed);
     }
 
@@ -127,8 +125,11 @@ public class AccessAnimView extends RelativeLayout {
         tv_title_name.setText(name);
     }
 
-    //Step1:上面红色布局和中间1dp的布局动画开始
-    public void startTopAnim() {
+    /**
+     * Step1:上面红色布局和中间1dp的布局动画开始
+     * @param b 是否需要展开 由应用换场清理页面动画
+     */
+    public void startTopAnim(boolean b) {
         int startHeight = DisplayUtils.dip2px(150);
         int endHeight = DisplayUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
@@ -140,12 +141,13 @@ public class AccessAnimView extends RelativeLayout {
             rlp.height = currentValue;
             mRlAnimBg.setLayoutParams(rlp);
         });
-        anim.start();
-        startMiddleAnim();
+        if (b)
+          anim.start();
+        startMiddleAnim(b);
     }
 
     //中间的控件高度变化
-    public void startMiddleAnim() {
+    public void startMiddleAnim(boolean b) {
         int startHeight = DisplayUtils.dip2px(30);
         int endHeight = DisplayUtils.dip2px(300);
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
@@ -153,9 +155,11 @@ public class AccessAnimView extends RelativeLayout {
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) line_allnum.getLayoutParams();
         anim.addUpdateListener(animation -> {
+            if (b) {
             int currentValue = (int) animation.getAnimatedValue();
             rlp.topMargin = currentValue;
             line_allnum.setLayoutParams(rlp);
+            }
         });
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -169,11 +173,10 @@ public class AccessAnimView extends RelativeLayout {
 
     //Step2:高度下降完毕，中间的火箭缩放动画开始，动画播放完毕后火箭底部的帧动画开始播放
     public void setHjAnim() {
-        line_hj.setVisibility(VISIBLE);
         PropertyValuesHolder anim4 = PropertyValuesHolder.ofFloat("scaleX",
-                0f, 1.0f);
+                1.0f, 1.0f);
         PropertyValuesHolder anim5 = PropertyValuesHolder.ofFloat("scaleY",
-                0f, 1.0f);
+                1.0f, 1.0f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, anim4, anim5).setDuration(400);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -359,16 +362,50 @@ public class AccessAnimView extends RelativeLayout {
     }
 
     /**
-     * @return 火箭向上飞
+     * @return 火箭向上飞出
      */
     public ObjectAnimator createFadeAnimator() {
 
-        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DisplayUtils.dip2px(306));
-//        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY);
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DisplayUtils.dip2px(706));
+        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
         animator.setDuration(300);
-        animator.setInterpolator(new AccelerateInterpolator());
         animator.start();
+        return animator;
+    }
+
+
+    /**
+     * @return 火箭向上飞进
+     */
+    public ObjectAnimator createStartFadeAnimator() {
+
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + 500, (-1)* DisplayUtils.dip2px(306));
+        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
+        animator.setDuration(800);
+        animator.start();
+        animator.addListener(new Animator.AnimatorListener() {
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                iv_bot.setVisibility(VISIBLE);
+                line_allnum.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
         return animator;
     }
 
@@ -460,7 +497,6 @@ public class AccessAnimView extends RelativeLayout {
             Drawable drawable = getResources().getDrawable(id);
             animationDrawable.addFrame(drawable, 50);
         }
-        mIvSpeedAnim.setBackground(animationDrawable);
 //        animationDrawable.start();
         startAnimator();
     }
@@ -469,6 +505,7 @@ public class AccessAnimView extends RelativeLayout {
      * 显示lottie动画 火箭从底部飞出
      */
     public void startAnimator() {
+        createStartFadeAnimator();
         mAnimationCloudView.useHardwareAcceleration();
         mAnimationCloudView.setImageAssetsFolder("images");
         mAnimationCloudView.setAnimation("data_one_key_speed.json");
