@@ -1,99 +1,135 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.adapter;
 
-import android.app.Activity;
-import android.support.constraint.ConstraintLayout;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.tool.qq.adapter.QQCleanFileAdapter;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxChildInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxGroupInfo;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
+import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
+import com.xiaoniu.common.widget.xrecyclerview.GroupRecyclerAdapter;
+import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-public class WechatCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<CleanWxItemInfo> listImage = new ArrayList<>();
-
-
-    public void deleteData(List<CleanWxItemInfo> tempList) {
-        listImage.removeAll(tempList);
-        Log.e("gfd", "删除后：" + listImage.size());
-        notifyDataSetChanged();
-    }
-
-    public void setIsCheckAll(boolean isCheckAll) {
-
-        for (int i = 0; i < this.listImage.size(); i++) {
-            listImage.get(i).setIsSelect(isCheckAll);
-        }
-        notifyDataSetChanged();
-    }
+public class WechatCleanFileAdapter extends GroupRecyclerAdapter {
 
 
-    public ArrayList<CleanWxItemInfo> getListImage() {
-        return listImage;
-    }
-
-    Activity mActivity;
     onCheckListener mOnCheckListener;
 
-
-    public WechatCleanFileAdapter(Activity mActivity, ArrayList<CleanWxItemInfo> listImage) {
-        super();
-        this.mActivity = mActivity;
-        this.listImage = listImage;
+    public WechatCleanFileAdapter(Context context) {
+        super(context, new WechatMultiItemTypeSupport());
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_wxfile, parent, false);
-        return new ImageViewHolder(view);
+    public void convert(RecyclerView.ViewHolder holder, MultiItemInfo itemData, int position) {
+        final CommonViewHolder viewHolder = (CommonViewHolder) holder;
+        if (itemData instanceof CleanWxGroupInfo) {
+            final CleanWxGroupInfo tileInfo = (CleanWxGroupInfo) itemData;
+            TextView tvTitle = viewHolder.getView(R.id.tvDay);
+            ImageView ivArrow = viewHolder.getView(R.id.ivArrow);
+            TextView tvSelectAll = viewHolder.getView(R.id.tv_select_all);
+            TextView tvFileSize = viewHolder.getView(R.id.tv_file_size);
+            tvTitle.setText(tileInfo.title);
+            if (tileInfo.isExpanded) {
+                ivArrow.setImageResource(R.mipmap.arrow_up);
+            } else {
+                ivArrow.setImageResource(R.mipmap.arrow_down);
+            }
 
-    }
+            if (tileInfo.selected == 1) {
+                tvSelectAll.setBackgroundResource(R.drawable.icon_select);
+            } else {
+                tvSelectAll.setBackgroundResource(R.drawable.icon_unselect);
+            }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ImageViewHolder) {
-//            String path = listImage.get(position).getPath();
-//            Glide.with(mActivity)
-//                    .load(path)
-//                    .into(((ImageViewHolder) holder).iv_photo_filelist_pic);
-            ((ImageViewHolder) holder).iv_photo_filelist_pic.setImageResource(getImgRes(listImage.get(position).getFile().getName()));
-            ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getFile().getName());
-            ((ImageViewHolder) holder).tv_time.setText(listImage.get(position).getStringDay());
-            ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSizeOne(listImage.get(position).getFileSize()));
-            ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            ((ImageViewHolder) holder).tv_select.setOnClickListener(new View.OnClickListener() {
+            tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(tileInfo.selectedSize));
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listImage.get(position).setIsSelect(!listImage.get(position).getIsSelect());
-                    ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).getIsSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                    expandGroup(tileInfo, position);
+                }
+            });
+
+            tvSelectAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setChildSelected(tileInfo);
                     if (mOnCheckListener != null)
-                        mOnCheckListener.onCheck(listImage, position);
-                }
-            });
-            ((ImageViewHolder) holder).conslayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AndroidUtil.openFileSafe(mActivity, String.valueOf(listImage.get(position).getFile()));
+                        mOnCheckListener.onCheck(tileInfo);
                 }
             });
 
+        } else if (itemData instanceof CleanWxChildInfo) {
+            final CleanWxChildInfo itemInfo = (CleanWxChildInfo) itemData;
+            final TextView tv_name = viewHolder.getView(R.id.tv_name);
+            final ImageView iv_photo_filelist_pic = viewHolder.getView(R.id.iv_photo_filelist_pic);
+            final TextView tv_time = viewHolder.getView(R.id.tv_time);
+            final TextView tv_select = viewHolder.getView(R.id.tv_select);
+            final TextView tv_size = viewHolder.getView(R.id.tv_size);
+
+            iv_photo_filelist_pic.setImageResource(getImgRes(itemInfo.file.getName()));
+            tv_name.setText(itemInfo.file.getName());
+            tv_time.setText(itemInfo.stringDay);
+            tv_size.setText(CleanAllFileScanUtil.byte2FitSizeOne(itemInfo.totalSize));
+            tv_select.setBackgroundResource(itemInfo.selected == 1 ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_select.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setChildSelected(itemInfo);
+                    if (mOnCheckListener != null)
+                        mOnCheckListener.onCheck(itemData);
+                }
+            });
+
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AndroidUtil.openFileSafe(mContext, String.valueOf(itemInfo.file));
+                }
+            });
         }
     }
 
     @Override
-    public int getItemCount() {
-        return listImage.size();
+    public RecyclerView.ViewHolder attachToViewHolder(int viewType, View itemView) {
+        return new CommonViewHolder(itemView);
+    }
+
+
+    public static class WechatMultiItemTypeSupport implements CommonRecyclerAdapter.MultiItemTypeSupport<MultiItemInfo> {
+
+        @Override
+        public int getItemViewType(int position, MultiItemInfo itemData) {
+            if (itemData instanceof CleanWxGroupInfo) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+
+        @Override
+        public int getLayoutId(int viewType) {
+            if (viewType == 0) {
+                return R.layout.item_wechat_file_title;
+            } else {
+                return R.layout.item_wechat_file_content;
+            }
+        }
+
+        @Override
+        public boolean isFullSpan(int position) {
+            return false;
+        }
+
+        @Override
+        public int getSpanSize(int position, int spanCount) {
+            return 0;
+        }
     }
 
     //zip rar txt xlsx pdf docx pptx
@@ -117,28 +153,9 @@ public class WechatCleanFileAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return resImg;
     }
 
-    public class ImageViewHolder extends RecyclerView.ViewHolder {
-        public ImageView iv_photo_filelist_pic;
-        public TextView tv_select;
-        public TextView tv_name;
-        public TextView tv_size;
-        public TextView tv_time;
-        public ConstraintLayout conslayout;
-
-        public ImageViewHolder(View itemView) {
-            super(itemView);
-            iv_photo_filelist_pic = (ImageView) itemView.findViewById(R.id.iv_photo_filelist_pic);
-            tv_select = (TextView) itemView.findViewById(R.id.tv_select);
-            tv_name = (TextView) itemView.findViewById(R.id.tv_name);
-            tv_size = (TextView) itemView.findViewById(R.id.tv_size);
-            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
-            conslayout = (ConstraintLayout) itemView.findViewById(R.id.conslayout);
-        }
-    }
-
 
     public interface onCheckListener {
-        public void onCheck(List<CleanWxItemInfo> listFile, int pos);
+        public void onCheck(Object info);
     }
 
     public void setmOnCheckListener(onCheckListener mOnCheckListener) {

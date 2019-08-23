@@ -17,10 +17,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
-import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanAudActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanFileActivity;
-import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxChildInfo;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 
 import java.io.File;
 import java.util.List;
@@ -88,17 +88,19 @@ public class WechatCleanFilePresenter extends RxPresenter<WechatCleanFileActivit
     }
 
     //删除本地文件
-    public void delFile(List<CleanWxItemInfo> list,List<CleanWxItemInfo> list1,List<CleanWxItemInfo> list2,List<CleanWxItemInfo> list3,List<CleanWxItemInfo> list4) {
+    public void delFile(List<MultiItemInfo> list) {
         mView.showLoadingDialog();
-        List<CleanWxItemInfo> files = list;
+        List<MultiItemInfo> files = list;
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                for (CleanWxItemInfo appInfoBean : files) {
-                    File file = appInfoBean.getFile();
-                    if (null != file) {
-                        file.delete();
+                for (MultiItemInfo appInfoBean : files) {
+                    if (appInfoBean instanceof CleanWxChildInfo) {
+                        File file = ((CleanWxChildInfo) appInfoBean).file;
+                        if (null != file) {
+                            file.delete();
+                        }
                     }
                 }
                 emitter.onNext("");
@@ -124,7 +126,7 @@ public class WechatCleanFilePresenter extends RxPresenter<WechatCleanFileActivit
                     @Override
                     public void onComplete() {
                         mView.cancelLoadingDialog();
-                        mView.deleteSuccess(list1,list2,list3,list4);
+                        mView.deleteSuccess();
                     }
                 });
 

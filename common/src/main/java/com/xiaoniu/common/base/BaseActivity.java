@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -69,15 +70,32 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         //常用的对象
         mContext = getApplicationContext();
         mInflater = getLayoutInflater();
-
+        // 内容区
+        mLayBody = (FrameLayout) findViewById(R.id.layBody);
         //ToolBar相关
+        initToolBar();
+        //网络错误显示
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                final View errorView = mInflater.inflate(R.layout.common_layout_web_error, mLayBody, false);
+                setErrorView(errorView);
+            }
+        });
+
+    }
+
+    private void initToolBar() {
         mToolBar = (Toolbar) findViewById(R.id.toolBar);
         mTvTitle = (TextView) findViewById(R.id.tvTitle);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        // 内容区
-        mLayBody = (FrameLayout) findViewById(R.id.layBody);
+        setLeftButton(R.drawable.common_icon_back_arrow_white, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     protected abstract int getLayoutResId();
@@ -211,6 +229,9 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     /*空状态下的View*/
     public void setEmptyView(View emptyView) {
+        if (mEmptyView != null) {
+            mLayBody.removeView(mEmptyView);
+        }
         mEmptyView = emptyView;
         if (mEmptyView.getParent() != null) {
             ((ViewGroup) mEmptyView.getParent()).removeView(mEmptyView);
@@ -237,6 +258,9 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     /*加载失败的View*/
     public void setErrorView(View errorView) {
+        if (mErrorView != null) {
+            mLayBody.removeView(mErrorView);
+        }
         mErrorView = errorView;
         if (mErrorView.getParent() != null) {
             ((ViewGroup) mErrorView.getParent()).removeView(mErrorView);
