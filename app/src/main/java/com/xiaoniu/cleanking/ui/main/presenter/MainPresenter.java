@@ -13,23 +13,24 @@ import android.widget.Toast;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.common.hotfix.listener.MyPatchListener;
-import com.xiaoniu.common.hotfix.log.HotfixLogcat;
-import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
+import com.xiaoniu.common.hotfix.listener.MyPatchListener;
+import com.xiaoniu.common.hotfix.log.HotfixLogcat;
+import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -208,6 +209,65 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
+    /**
+     * 激活极光
+     */
+    public void commitJPushAlias(){
+
+        if (!TextUtils.isEmpty(PreferenceUtil.getIsSaveJPushAlias()))
+            return;
+        PreferenceUtil.saveJPushAlias(DeviceUtils.getUdid());
+
+        mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(BaseEntity baseEntity) {
+
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
+
+    /**
+     * 操作记录(PUSH消息)
+     * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清）
+     */
+    public void commitJpushClickTime(int type){
+        mModel.commitJPushClickTime(type, new Common4Subscriber<BaseEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(BaseEntity baseEntity) {
+
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
     static class LoadFileTask implements Runnable {
         private Patch result;
         private WeakReference<Context> weakReference;

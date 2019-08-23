@@ -70,4 +70,6 @@
     <string name="tool_super_power_saving">超强省电</string>
     <string name="tool_one_key_clean">一键清理</string>
     <string name="tool_super_power_message">超强省电通知</string>
+    <string name="tool_cancel">取消</string>
+    <string name="tool_speed_now">正在加速</string>
 </resources>

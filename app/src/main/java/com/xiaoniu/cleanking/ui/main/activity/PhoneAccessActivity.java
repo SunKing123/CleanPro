@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -58,17 +58,19 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.view.View.VISIBLE;
-
 /**
  * 手机加速--一键清理内存页面
  */
 public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
+    @BindView(R.id.cdl_root)
+    CoordinatorLayout mCdlRoot;
     @BindView(R.id.recycle_view)
     RecyclerView recycle_view;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
+    @BindView(R.id.tv_size_show)
+    TextView tv_size_show;
     @BindView(R.id.tv_size)
     TextView tv_size;
     @BindView(R.id.tv_gb)
@@ -97,8 +99,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     AppBarLayout mAppBarLayout;
     @BindView(R.id.tv_title_name)
     TextView mTvTitleName;
-    @BindView(R.id.view_lottie_speed)
-    LottieAnimationView mLottieSpeed;
+    @BindView(R.id.rl_anim_bg)
+    RelativeLayout mRlAnimBg;
+    @BindView(R.id.tv_speed)
+    TextView mTvSpeed;
+    @BindView(R.id.line_access)
+    TextView mLineAccess;
+
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
     private boolean isError = false;
@@ -167,7 +174,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         mLayoutNetError.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
-                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
+//                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                     if (recycle_view != null) {
                         recycle_view.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
@@ -186,20 +193,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
     }
 
-    /**
-     * 显示lottie动画 火箭从底部飞出
-     */
-    public void showLottieView() {
-        mLottieSpeed.setVisibility(VISIBLE);
-        mLottieSpeed.useHardwareAcceleration();
-        mLottieSpeed.setImageAssetsFolder("images");
-        mLottieSpeed.setAnimation("data_one_key_speed.json");
-        mLottieSpeed.playAnimation();
-    }
     @Override
     public void initView() {
         mAppBarLayout.setExpanded(true);
-        showLottieView();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String title = bundle.getString(SpCacheConfig.ITEM_TITLE_NAME);
@@ -242,47 +238,32 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         });
 
         tv_delete.setOnClickListener(v -> {
-            if (!canClickDelete) return;
-            ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
-            for (FirstJunkInfo info : belowAdapter.getListImage()) {
-                if (info.getIsSelect()) {
-                    junkTemp.add(info);
-                }
-            }
-            if (junkTemp.size() == 0) return;
-            acceview.setVisibility(View.VISIBLE);
-            acceview.startTopAnim();
-            long total = 0;
-            for (FirstJunkInfo info : junkTemp) {
-                total += info.getTotalSize();
-                CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-            }
-            belowAdapter.deleteData(junkTemp);
-            computeTotalSizeDeleteClick(junkTemp);
+            //开始清理
+            startClean(true);
+           });
 
-            setCleanedView(total);
-            if (Build.VERSION.SDK_INT >= 26) {
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
-            }
-
-
-            StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "once_accelerate_page");
+        mTvSpeed.setOnClickListener(view -> {
+            //开始清理
+            startClean(false);
         });
-
+        mLineAccess.setOnClickListener(view -> {
+            acceview.setVisibility(View.GONE);
+        });
         icon_more.setOnClickListener(v -> mPresenter.showPopupWindow(icon_more));
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                setStatusBar(R.color.color_06C581);
                 if (viewt == null || line_title == null) return;
+                setStatusBar(R.color.color_06C581);
                 line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
                 //动画结束时
                 setCleanedView(0);
+                mWebView.setVisibility(View.VISIBLE);
                 rel_bottom.setVisibility(View.GONE);
                 mAppBarLayout.setExpanded(true);
                 icon_more.setVisibility(View.INVISIBLE);
+                acceview.setVisibility(View.GONE);
             }
 
             @Override
@@ -290,6 +271,46 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setStatusBarNum(colorRes);
             }
         });
+
+        acceview.showLottieView();
+    }
+
+    /**
+     * 开始清理
+     * @param b 是否需要展开 由应用换场清理页面动画
+     */
+    private void startClean(boolean b) {
+        if (!canClickDelete || mTvSpeed == null) return;
+        mTvSpeed.setVisibility(View.GONE);
+        mLineAccess.setCompoundDrawables(null, null, null, null);
+        mLineAccess.setText(getString(R.string.tool_speed_now));
+        ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
+        for (FirstJunkInfo info : belowAdapter.getListImage()) {
+            if (info.getIsSelect()) {
+                junkTemp.add(info);
+            }
+        }
+        if (junkTemp.size() == 0) return;
+        acceview.setVisibility(View.VISIBLE);
+        acceview.startTopAnim(b);
+        long total = 0;
+        for (FirstJunkInfo info : junkTemp) {
+            total += info.getTotalSize();
+            CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+        }
+        belowAdapter.deleteData(junkTemp);
+        computeTotalSizeDeleteClick(junkTemp);
+
+        if (total == 0)
+           setCleanedView(total);
+        if (Build.VERSION.SDK_INT >= 26) {
+            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
+            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
+        }
+
+
+        StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "once_accelerate_page");
+
     }
 
     @Override
@@ -348,13 +369,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
             if (canPlayAnim)
-                mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 1);
+                mPresenter.setNumAnim(mTvSpeed,mRlAnimBg,tv_size,tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 1);
             acceview.setData(sizeMb, "MB");
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
             sizeMb *= 1024;
             if (canPlayAnim)
-                mPresenter.setNumAnim(tv_size, tv_gb, viewt, line_title, 0, sizeMb, 2);
+                mPresenter.setNumAnim(mTvSpeed,mRlAnimBg,tv_size,tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 2);
             acceview.setData(sizeMb, "GB");
         }
     }
@@ -476,6 +497,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
         recycle_view.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
         initWebView();
+        setStatusBar(R.color.color_06C581);
+        line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+        viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+        acceview.setVisibility(View.GONE);
         iv_dun.setVisibility(View.VISIBLE);
         tv_ql.setText("内存已清理");
         setHasCleaned(sized);

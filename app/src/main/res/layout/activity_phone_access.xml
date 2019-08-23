@@ -2,7 +2,9 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/cdl_root"
     android:layout_height="match_parent"
+    android:background="@color/color_06C581"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -22,7 +24,7 @@
                 android:layout_height="@dimen/dimen_150dp"
                 android:layout_below="@+id/line_title"
                 android:layout_marginTop="@dimen/dimen_56dp"
-                android:background="#06C581">
+                android:background="@color/color_06C581">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -87,7 +89,7 @@
                     android:id="@+id/line_title"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="#06C581"
+                    android:background="@color/color_06C581"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -129,31 +131,11 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
+            android:id="@+id/fl_web"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
             android:background="@color/white"
             android:orientation="vertical">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/rel_bottom"
-                android:layout_marginTop="@dimen/dimen_4dp"
-                android:layout_marginBottom="72dp"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                android:scrollbars="none" />
-
-            <com.xiaoniu.cleanking.widget.NestedScrollWebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:touchscreenBlocksFocus="true"
-                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/layout_not_net"
@@ -176,6 +158,26 @@
                     android:text="资讯列表获取失败～"
                     android:textColor="@color/color_999999" />
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/rel_bottom"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:layout_marginBottom="72dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+            <com.xiaoniu.cleanking.widget.NestedScrollWebView
+                android:id="@+id/web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:touchscreenBlocksFocus="true"
+                android:visibility="gone" />
 
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -212,18 +214,6 @@
         android:id="@+id/acceview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/dimen_56dp">
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/view_lottie_speed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
-    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

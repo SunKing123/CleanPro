@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -17,6 +18,9 @@ import java.lang.ref.WeakReference;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 超强省电
+ */
 public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     AppBarLayout mAppBarLayout;
@@ -61,7 +65,7 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mTvNum = findViewById(R.id.tv_num);
         showStartAnim();
         mHandler.sendEmptyMessageDelayed(1,5000);
-        mHandler.sendEmptyMessageDelayed(2, 30);
+        mHandler.sendEmptyMessageDelayed(2, 1000);
     }
 
     /**
@@ -71,28 +75,55 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mLottieAnimationStartView.useHardwareAcceleration();
         mLottieAnimationStartView.useHardwareAcceleration();
         mLottieAnimationStartView.setImageAssetsFolder("images");
-        mLottieAnimationStartView.setAnimation("data2.json");
+        mLottieAnimationStartView.setAnimation("data_super_power_saving.json");
         mLottieAnimationStartView.playAnimation();
+        mLottieAnimationStartView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mLottieAnimationStartView.cancelAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
     /**
      * 显示超省电应用信息
      */
     private void showListAppInfo() {
+        if (mRlResult == null) return;
         mRlResult.setVisibility(View.GONE);
         mRlResultTop.setVisibility(View.VISIBLE);
         mEdList.setVisibility(View.VISIBLE);
         mAppBarLayout.setExpanded(true);
     }
 
-    @OnClick({R.id.iv_back,R.id.icon_saving_right})
+    @OnClick({R.id.iv_back,R.id.icon_saving_right,R.id.iv_power})
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.iv_power:
+                startActivity(PhoneSuperSavingNowActivity.class);
+                finish();
+                break;
             case R.id.icon_saving_right:
                 startActivity(PhoneSuperPowerMessageActivity.class);
+                finish();
                 break;
         }
     }

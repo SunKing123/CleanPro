@@ -44,7 +44,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //初始化sdk
         JPushInterface.setDebugMode(false);//正式版的时候设置false，关闭调试
         JPushInterface.init(application);
-        JPushInterface.setAlias(application, DeviceUtils.getIMEI(), null);
+        JPushInterface.setAlias(application, DeviceUtils.getIMEI(), (i, s, set) -> {
+
+        });
         if (BuildConfig.DEBUG) {
             UMConfigure.setLogEnabled(true);
             ARouter.openLog();     // Print log
@@ -53,7 +55,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
         ARouter.init(application);
         UMConfigure.init(application, "5d230f2f4ca357bdb700106d", AppUtils.getChannelId(), UMConfigure.DEVICE_TYPE_PHONE, "");
     }
-
 
     private static AppComponent mAppComponent;
 

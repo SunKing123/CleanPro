@@ -4,31 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/line_title"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/color_FD6F46"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            style="@style/top_iv_back"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/tv_title_name"
-            style="@style/top_tv_title"
-            android:layout_gravity="center_vertical"
-            android:text="@string/tool_one_key_speed" />
-    </LinearLayout>
-
+    <!-- 开始扫描 动画-->
     <RelativeLayout
         android:id="@+id/rl_anim_bg"
+        android:paddingTop="@dimen/dimen_56dp"
         android:layout_width="match_parent"
-        android:background="@color/color_FD6F46"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/line_title" >
+        android:background="@color/color_06C581"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/line_allnum"
@@ -36,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="300dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <LinearLayout
@@ -55,10 +37,10 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tv_size"
+                    android:id="@+id/tv_size_show"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2510"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="55sp" />
 
@@ -93,39 +75,57 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dimen_2dp"
-                android:text="正在加速"
+                android:drawablePadding="@dimen/dimen_4dp"
+                android:drawableRight="@mipmap/icon_right_pic"
+                android:text="查看详情"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
+
+        <!--一键加速按钮-->
+        <TextView
+            android:id="@+id/tv_speed"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:text="一键加速"
+            android:textColor="@color/color_FD6F46"
+            android:gravity="center"
+            android:background="@drawable/btn_white_all_bg"
+            android:layout_height="46dp"/>
     </RelativeLayout>
-
+    <!--下雨动画-->
     <include layout="@layout/layout_yu_anim" />
-
+    <!--小火箭-->
     <LinearLayout
         android:id="@+id/line_hj"
-        android:layout_width="59dp"
+        android:layout_width="74dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="160dp"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
-            android:layout_width="59dp"
-            android:layout_height="95dp"
-            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="124dp"
             android:src="@mipmap/hj_top" />
 
         <ImageView
             android:id="@+id/iv_bot"
-            android:layout_width="25dp"
-            android:layout_height="51dp"
+            android:layout_width="32dp"
+            android:visibility="invisible"
+            android:layout_height="66dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="fitXY"
             android:src="@mipmap/hj_bottom1" />
     </LinearLayout>
 
+    <!--完成动画-->
     <FrameLayout
         android:id="@+id/fl_anim"
         android:layout_width="match_parent"
@@ -151,4 +151,32 @@
 
     </FrameLayout>
 
+    <!--飞机尾部 云彩-->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/view_lottie_speed"
+        android:layout_width="match_parent"
+        android:scaleType="fitEnd"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+    <!--顶部导航栏-->
+    <LinearLayout
+        android:id="@+id/line_title"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/transparent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            style="@style/top_iv_back"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_title_name"
+            style="@style/top_tv_title"
+            android:layout_gravity="center_vertical"
+            android:text="@string/tool_one_key_speed" />
+    </LinearLayout>
 </RelativeLayout>

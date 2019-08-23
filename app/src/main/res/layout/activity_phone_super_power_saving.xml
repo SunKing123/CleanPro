@@ -136,8 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/view_lottie_super_saving"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="54dp">
+                    android:layout_centerHorizontal="true">
 
                     <TextView
                         android:id="@+id/tv_num"
@@ -161,13 +160,14 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ll_num"
                     android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
                     android:text="正在分析耗电信息..."
                     android:textColor="@color/white" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/view_lottie_super_saving"
-                    android:layout_width="217dp"
-                    android:layout_height="217dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="317dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dimen_48dp" />
 
