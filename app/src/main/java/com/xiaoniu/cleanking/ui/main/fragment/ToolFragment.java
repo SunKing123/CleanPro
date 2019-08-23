@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleFragment;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -159,6 +160,7 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_chat);
                 return;
             }
+            ((MainActivity)getActivity()).commitJpushClickTime(5);
             startActivity(WechatCleanHomeActivity.class);
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.rl_qq) {
@@ -166,6 +168,7 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
                 return;
             }
+            ((MainActivity)getActivity()).commitJpushClickTime(7);
             if (QQUtil.audioList != null)
                 QQUtil.audioList.clear();
             if (QQUtil.fileList != null)
@@ -173,12 +176,14 @@ public class ToolFragment extends SimpleFragment {
             startActivity(QQCleanHomeActivity.class);
             StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
+            ((MainActivity)getActivity()).commitJpushClickTime(2);
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
             startActivity(PhoneAccessActivity.class,bundle);
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.text_cooling) {
             //手机降温
+            ((MainActivity)getActivity()).commitJpushClickTime(6);
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", "tool_page", "clean_up_toolbox_page");
         } else if (ids == R.id.text_phone_thin) {

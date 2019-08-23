@@ -201,7 +201,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
-
     }
 
     private void checkReadPermission() {
@@ -443,5 +442,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     public void hideBadgeView() {
         mBottomBarTab.hideBadgeView();
+    }
+
+    /**
+     * 操作记录(PUSH消息)
+     * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清）
+     */
+    public void commitJpushClickTime(int type){
+        mPresenter.commitJpushClickTime(type);
     }
 }

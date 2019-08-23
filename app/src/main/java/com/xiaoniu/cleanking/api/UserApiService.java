@@ -65,6 +65,14 @@ public interface UserApiService {
     @POST("/deviceActivation/save")
     Flowable<BaseEntity> commitJPushAlias(@Body RequestBody body);
 
+    /**
+     * 操作记录(PUSH消息)
+     * @param body
+     * @return
+     */
+    @POST("/operating/save")
+    Flowable<BaseEntity> commitJPushClickTime(@Body RequestBody body);
+
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
     /**

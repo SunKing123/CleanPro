@@ -76,6 +76,20 @@ public class MainModel extends BaseModel {
         mService.commitJPushAlias(body).compose(RxUtil.rxSchedulerHelper(mActivity))
                 .subscribeWith(commonSubscriber);
     }
+
+    /**
+     * 操作记录(PUSH消息)
+     * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清）
+     */
+    public void commitJPushClickTime(int type,Common4Subscriber<BaseEntity> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", type);
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.commitJPushClickTime(body).compose(RxUtil.rxSchedulerHelper(mActivity))
+                .subscribeWith(commonSubscriber);
+    }
     /**
      * 热修复补丁查询
      *

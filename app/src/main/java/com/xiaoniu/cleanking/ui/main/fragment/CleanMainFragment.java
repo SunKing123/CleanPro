@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerSavingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
@@ -229,7 +230,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
-
     public void startScan() {
         new Handler().postDelayed(() -> {
             mPresenter.startScan();
@@ -241,6 +241,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
+        ((MainActivity)getActivity()).commitJpushClickTime(4);
         StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", "home_page", "home_page");
 
         //文件管理
@@ -249,6 +250,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
+        ((MainActivity)getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
         //一键加速
         Bundle bundle = new Bundle();
@@ -258,6 +260,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_ql)
     public void line_ql() {
+        ((MainActivity)getActivity()).commitJpushClickTime(3);
         StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", "home_page", "home_page");
 
         //手机清理
@@ -285,6 +288,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.view_qq_clean)
     public void ViewQQCleanClick() {
         //QQ专清
+        ((MainActivity)getActivity()).commitJpushClickTime(7);
         StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_qq);
@@ -306,6 +310,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void btnLjql() {
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
+            ((MainActivity)getActivity()).commitJpushClickTime(1);
             mScrollView.scrollTo(mScrollView.getScrollX(), 0);
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
@@ -363,6 +368,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_wx)
     public void mClickWx() {
+        ((MainActivity)getActivity()).commitJpushClickTime(5);
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
@@ -379,6 +385,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_jw)
     public void mClickJw() {
+        ((MainActivity)getActivity()).commitJpushClickTime(6);
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         StatisticsUtils.trackClick("Cell_phone_cooling_click", "手机降温点击", "home_page", "home_page");
     }
