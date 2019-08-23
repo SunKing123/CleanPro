@@ -1,9 +1,12 @@
 package com.xiaoniu.cleanking.ui.main.model;
 
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
@@ -11,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.AppUtils;
 
 import java.util.HashMap;
@@ -58,6 +62,20 @@ public class MainModel extends BaseModel {
                 .subscribeWith(commonSubscriber);
     }
 
+    /**
+     * 激活极光推送
+     * @param commonSubscriber
+     */
+    @SuppressLint("CheckResult")
+    public void commitJPushAlias(Common4Subscriber<BaseEntity> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("commitJPushAlias", PreferenceUtil.getIsSaveJPushAlias());
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.commitJPushAlias(body).compose(RxUtil.rxSchedulerHelper(mActivity))
+                .subscribeWith(commonSubscriber);
+    }
     /**
      * 热修复补丁查询
      *

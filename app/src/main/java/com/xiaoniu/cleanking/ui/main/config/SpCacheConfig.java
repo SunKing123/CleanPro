@@ -38,4 +38,6 @@ public class SpCacheConfig {
     public static final String SHARE_NUM = "share_num";
     //清理次数
     public static final String CLEAR_NUM = "clean_num";
+    //记录是否已保存极光
+    public static final String IS_SAVE_JPUSH_ALIAS = "j_push_alias";
 }

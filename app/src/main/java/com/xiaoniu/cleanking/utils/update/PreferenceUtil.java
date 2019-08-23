@@ -79,4 +79,24 @@ public class PreferenceUtil {
             return false;
         return true;
     }
+
+    /**
+     * 保存极光 激活
+     * @param alias
+     * @return
+     */
+    public static boolean saveJPushAlias(String alias) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.IS_SAVE_JPUSH_ALIAS, alias).commit();
+        return true;
+    }
+    /**
+     * 保存极光 激活
+     */
+    public static String getIsSaveJPushAlias() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.IS_SAVE_JPUSH_ALIAS,"");
+    }
+
 }

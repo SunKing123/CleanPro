@@ -57,6 +57,14 @@ public interface UserApiService {
     @POST("/finish/page/query")
     Flowable<WebUrlEntity> getWebUrl(@Body RequestBody body);
 
+    /**
+     * 保存JPush Alias
+     * @param body
+     * @return
+     */
+    @POST("/deviceActivation/save")
+    Flowable<BaseEntity> commitJPushAlias(@Body RequestBody body);
+
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
     /**

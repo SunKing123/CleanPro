@@ -198,6 +198,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         //扫描更新系统数据库
         MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);
+
+        //极光推送 设备激活接口
+        mPresenter.commitJPushAlias();
+
     }
 
     private void checkReadPermission() {

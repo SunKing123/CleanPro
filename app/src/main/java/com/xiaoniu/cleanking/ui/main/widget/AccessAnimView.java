@@ -182,11 +182,6 @@ public class AccessAnimView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                iv_bot.setImageResource(R.drawable.anim_hj);
-                AnimationDrawable animationDrawable = (AnimationDrawable) iv_bot.getDrawable();
-                if (!animationDrawable.isRunning()) {
-                    animationDrawable.start();
-                }
                 setNumAnim(tv_size, tv_gb, mRlAnimBg, sizeMb, 0, TextUtils.equals(strGb, "GB") ? 2 : 1);
             }
         });
@@ -380,7 +375,7 @@ public class AccessAnimView extends RelativeLayout {
      */
     public ObjectAnimator createStartFadeAnimator() {
 
-        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + 500, (-1)* DisplayUtils.dip2px(306));
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + 600, (-1)* DisplayUtils.dip2px(290));
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
         animator.setDuration(800);
@@ -394,6 +389,11 @@ public class AccessAnimView extends RelativeLayout {
             public void onAnimationEnd(Animator animator) {
                 iv_bot.setVisibility(VISIBLE);
                 line_allnum.setVisibility(VISIBLE);
+                iv_bot.setImageResource(R.drawable.anim_hj);
+                AnimationDrawable animationDrawable = (AnimationDrawable) iv_bot.getDrawable();
+                if (!animationDrawable.isRunning()) {
+                    animationDrawable.start();
+                }
             }
 
             @Override
@@ -510,6 +510,7 @@ public class AccessAnimView extends RelativeLayout {
         mAnimationCloudView.setImageAssetsFolder("images");
         mAnimationCloudView.setAnimation("data_one_key_speed.json");
         mAnimationCloudView.playAnimation();
+
     }
 }
 

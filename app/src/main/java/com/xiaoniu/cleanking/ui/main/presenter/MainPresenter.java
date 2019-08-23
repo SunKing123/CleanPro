@@ -13,23 +13,23 @@ import android.widget.Toast;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.common.hotfix.listener.MyPatchListener;
-import com.xiaoniu.common.hotfix.log.HotfixLogcat;
-import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
+import com.xiaoniu.common.hotfix.listener.MyPatchListener;
+import com.xiaoniu.common.hotfix.log.HotfixLogcat;
+import com.xiaoniu.common.utils.AppUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -194,6 +194,36 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     //保存后台webView URL
                     PreferenceUtil.saveWebViewUrl(webUrlEntity.getData());
                 }
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
+
+    /**
+     * 激活极光
+     */
+    public void commitJPushAlias(){
+        if (TextUtils.isEmpty(PreferenceUtil.getIsSaveJPushAlias()))
+            return;
+
+        mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(BaseEntity baseEntity) {
+
             }
 
             @Override
