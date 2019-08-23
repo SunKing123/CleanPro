@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -212,8 +213,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 激活极光
      */
     public void commitJPushAlias(){
-        if (TextUtils.isEmpty(PreferenceUtil.getIsSaveJPushAlias()))
+
+        if (!TextUtils.isEmpty(PreferenceUtil.getIsSaveJPushAlias()))
             return;
+        PreferenceUtil.saveJPushAlias(DeviceUtils.getUdid());
 
         mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
             @Override

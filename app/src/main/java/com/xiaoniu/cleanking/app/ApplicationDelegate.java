@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
-import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.tencent.bugly.Bugly;
@@ -14,7 +13,6 @@ import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -46,13 +44,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //初始化sdk
         JPushInterface.setDebugMode(false);//正式版的时候设置false，关闭调试
         JPushInterface.init(application);
-        //保存极光
-        if (!PreferenceUtil.getIsSaveJPushAlias()){
-            JPushInterface.setAlias(application, DeviceUtils.getIMEI(), (i, s, set) -> {
-                if (!TextUtils.isEmpty(s))
-                PreferenceUtil.saveJPushAlias(s);
-            });
-        }
+        JPushInterface.setAlias(application, DeviceUtils.getIMEI(), (i, s, set) -> {
+
+        });
         if (BuildConfig.DEBUG) {
             UMConfigure.setLogEnabled(true);
             ARouter.openLog();     // Print log

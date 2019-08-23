@@ -14,8 +14,8 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,7 +70,7 @@ public class MainModel extends BaseModel {
     public void commitJPushAlias(Common4Subscriber<BaseEntity> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
-        map.put("commitJPushAlias", PreferenceUtil.getIsSaveJPushAlias());
+        map.put("registrationId", DeviceUtils.getUdid());
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.commitJPushAlias(body).compose(RxUtil.rxSchedulerHelper(mActivity))
