@@ -670,7 +670,7 @@
                         android:layout_marginBottom="@dimen/dimen_16dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/image_main_thin" />
+                        android:src="@mipmap/image_main_qq_clean" />
 
                 </RelativeLayout>
             </RelativeLayout>

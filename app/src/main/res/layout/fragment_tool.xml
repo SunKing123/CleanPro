@@ -406,7 +406,7 @@
                     android:layout_height="@dimen/dimen_32dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/dimen_20dp"
-                    android:src="@mipmap/icon_speed" />
+                    android:src="@mipmap/icon_power" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -424,7 +424,7 @@
                     android:layout_marginBottom="@dimen/dimen_20dp"
                     android:layout_marginTop="@dimen/dimen_4dp"
                     android:textColor="#999999"
-                    android:text="@string/tool_super_power_saving"
+                    android:text="@string/tool_super_power_sub"
                     android:textSize="12dp" />
             </LinearLayout>
         </LinearLayout>
