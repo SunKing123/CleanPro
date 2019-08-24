@@ -2,8 +2,8 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -14,7 +14,7 @@ import com.xiaoniu.common.base.BaseActivity;
  */
 public class NotificationBarMessageActivity extends BaseActivity {
 
-    private FrameLayout mFlClean;
+    private LinearLayout mFlClean;
     private TextView mTvClean;
     private TextView mTvTitle;
     private ImageView mIvRight;

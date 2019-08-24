@@ -102,7 +102,7 @@
     <!--小火箭-->
     <LinearLayout
         android:id="@+id/line_hj"
-        android:layout_width="74dp"
+        android:layout_width="97dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
@@ -113,7 +113,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="124dp"
+            android:layout_height="140dp"
             android:src="@mipmap/hj_top" />
 
         <ImageView
