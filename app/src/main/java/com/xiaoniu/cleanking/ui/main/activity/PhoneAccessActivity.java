@@ -272,7 +272,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         });
 
-        acceview.showLottieView();
+        //小飞机飞入动画
+        acceview.planFlyInAnimator();
     }
 
     /**

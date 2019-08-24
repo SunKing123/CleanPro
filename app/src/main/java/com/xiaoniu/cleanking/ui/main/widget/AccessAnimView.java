@@ -9,7 +9,6 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -111,7 +110,29 @@ public class AccessAnimView extends RelativeLayout {
         tv_title_name = v.findViewById(R.id.tv_title_name);
         mAnimationView = v.findViewById(R.id.view_lottie);
         mFlAnim = v.findViewById(R.id.fl_anim);
-        mAnimationCloudView = v.findViewById(R.id.view_lottie_speed);
+        mAnimationCloudView = v.findViewById(R.id.view_lottie_speed_up);
+
+        mAnimationCloudView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mAnimationCloudView.cancelAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
     public void setData(int sizeMb, String strGb) {
@@ -346,26 +367,19 @@ public class AccessAnimView extends RelativeLayout {
                 setVisibility(GONE);
             }
         });
-        ObjectAnimator animator = createFadeAnimator();
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                startFinishAnimator();
-            }
-        });
+
+        planFlyOutAnimator();
+
     }
 
     /**
      * @return 火箭向上飞出
      */
     public ObjectAnimator createFadeAnimator() {
-
         PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DisplayUtils.dip2px(706));
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
-        animator.setDuration(300);
-        animator.start();
+        animator.setDuration(700);
         return animator;
     }
 
@@ -378,7 +392,7 @@ public class AccessAnimView extends RelativeLayout {
         PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + 600, (-1)* DisplayUtils.dip2px(290));
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
-        animator.setDuration(800);
+        animator.setDuration(700);
         animator.start();
         animator.addListener(new Animator.AnimatorListener() {
             public void onAnimationStart(Animator animator) {
@@ -387,6 +401,7 @@ public class AccessAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                animator.cancel();
                 iv_bot.setVisibility(VISIBLE);
                 line_allnum.setVisibility(VISIBLE);
                 iv_bot.setImageResource(R.drawable.anim_hj);
@@ -467,6 +482,7 @@ public class AccessAnimView extends RelativeLayout {
                 //保存清理完成次数
                 PreferenceUtil.saveCleanNum();
 
+                mAnimationView.cancelAnimation();
                 mFlAnim.setVisibility(View.GONE);
                 mValueAnimator.start();
                 if (listener != null)
@@ -486,31 +502,36 @@ public class AccessAnimView extends RelativeLayout {
     }
 
     /**
-     * 显示lottie动画 火箭从底部飞出
+     * 显示lottie动画 火箭从底部飞入
      */
-    public void showLottieView() {
-        //通过设置android:background时，得到AnimationDrawable 用如下方法
-        final AnimationDrawable animationDrawable = new AnimationDrawable();
-        animationDrawable.setOneShot(true);
-        for (int i = 1; i <= 21; i++) {
-            int id = getResources().getIdentifier("icon_one_key_speed_" + i, "drawable", mContext.getPackageName());
-            Drawable drawable = getResources().getDrawable(id);
-            animationDrawable.addFrame(drawable, 50);
-        }
-//        animationDrawable.start();
-        startAnimator();
-    }
-
-    /**
-     * 显示lottie动画 火箭从底部飞出
-     */
-    public void startAnimator() {
+    public void planFlyInAnimator() {
+        //小飞机 上升动画
         createStartFadeAnimator();
         mAnimationCloudView.useHardwareAcceleration();
         mAnimationCloudView.setImageAssetsFolder("images");
-        mAnimationCloudView.setAnimation("data_one_key_speed.json");
+        mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
         mAnimationCloudView.playAnimation();
-
     }
+    /**
+     * 显示lottie动画 火箭飞出
+     */
+    public void planFlyOutAnimator() {
+        //小飞机 上升动画
+        ObjectAnimator animator = createFadeAnimator();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                startFinishAnimator();
+            }
+        });
+        animator.start();
+
+        mAnimationCloudView.useHardwareAcceleration();
+        mAnimationCloudView.setImageAssetsFolder("images");
+        mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
+        mAnimationCloudView.playAnimation();
+    }
+
 }
 

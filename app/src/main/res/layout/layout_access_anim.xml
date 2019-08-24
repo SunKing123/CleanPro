@@ -151,9 +151,9 @@
 
     </FrameLayout>
 
-    <!--飞机尾部 云彩-->
+    <!--飞机尾部 云彩飞入-->
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/view_lottie_speed"
+        android:id="@+id/view_lottie_speed_up"
         android:layout_width="match_parent"
         android:scaleType="fitEnd"
         android:layout_alignParentBottom="true"
