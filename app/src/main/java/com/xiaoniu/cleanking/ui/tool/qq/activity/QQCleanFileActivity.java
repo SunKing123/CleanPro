@@ -98,7 +98,7 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_wxclean_file;
+        return R.layout.activity_qqclean_file;
     }
 
     @Override

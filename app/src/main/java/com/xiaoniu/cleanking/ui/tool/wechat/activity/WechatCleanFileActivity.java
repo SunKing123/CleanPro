@@ -1,12 +1,9 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -15,14 +12,18 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.adapter.WechatCleanFileAdapter;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxChildInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxFourItemInfo;
+import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxGroupInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanFilePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
+import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,65 +39,23 @@ import butterknife.OnClick;
  * 微信清理文件
  */
 public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresenter> {
-    @BindView(R.id.recycle_view_today)
-    RecyclerView recycleViewToday;
-    @BindView(R.id.recycle_view_yestoday)
-    RecyclerView recycleViewYestoday;
-    @BindView(R.id.recycle_view_month)
-    RecyclerView recycleViewMonth;
-    @BindView(R.id.recycle_view_halfyear)
-    RecyclerView recycleViewHalfyear;
     @BindView(R.id.cb_checkall)
     TextView cb_checkall;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
-    @BindView(R.id.tv_select_today)
-    TextView tvSelectToday;
-    @BindView(R.id.tv_size_today)
-    TextView tvSizeToday;
-    @BindView(R.id.tv_size_yestoday)
-    TextView tvSizeYestoday;
-    @BindView(R.id.tv_size_month)
-    TextView tvSizeMonth;
-    @BindView(R.id.tv_size_halfyear)
-    TextView tvSizeHalfyear;
-    @BindView(R.id.tv_select_yestoday)
-    TextView tvSelectYestoday;
-    @BindView(R.id.tv_select_month)
-    TextView tvSelectMonth;
-    @BindView(R.id.tv_select_halfyear)
-    TextView tvSelectHalfyear;
-    @BindView(R.id.iv_arrow_today)
-    ImageView ivArrowToday;
-    @BindView(R.id.iv_arrow_halfyear)
-    ImageView ivArrowHalfyear;
-    @BindView(R.id.iv_arrow_yestoday)
-    ImageView ivArrowYestoday;
-    @BindView(R.id.iv_arrow_month)
-    ImageView ivArrowMonth;
-    @BindView(R.id.cons_today)
-    ConstraintLayout consToday;
-    @BindView(R.id.cons_yestoday)
-    ConstraintLayout consYestoday;
-    @BindView(R.id.cons_month)
-    ConstraintLayout consMonth;
-    @BindView(R.id.cons_halfyear)
-    ConstraintLayout consHalfyear;
-
     @BindView(R.id.layout_not_net)
     LinearLayout layoutNotNet;
-    @BindView(R.id.scroll_view)
-    ScrollView scrollView;
+    @BindView(R.id.recyclerView)
+    XRecyclerView recyclerView;
 
     CleanWxEasyInfo cleanWxEasyInfoFile;
     ArrayList<CleanWxItemInfo> listDataToday = new ArrayList<>();
     ArrayList<CleanWxItemInfo> listDataYestoday = new ArrayList<>();
     ArrayList<CleanWxItemInfo> listDataInMonth = new ArrayList<>();
     ArrayList<CleanWxItemInfo> listDataInHalfYear = new ArrayList<>();
-    WechatCleanFileAdapter fileAdapterToday;
-    WechatCleanFileAdapter fileAdapterYestoday;
-    WechatCleanFileAdapter fileAdapterInMonth;
-    WechatCleanFileAdapter fileAdapterInHalfYear;
+    private WechatCleanFileAdapter cleanFileAdapter;
+    private ArrayList<MultiItemInfo> mAllDatas;
+    private ArrayList<MultiItemInfo> mItemSelectList;
 
     @Override
     public int getLayoutId() {
@@ -109,7 +68,7 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
     }
 
 
-    @OnClick({R.id.tv_select_today, R.id.tv_select_yestoday, R.id.tv_select_month, R.id.tv_select_halfyear, R.id.cons_halfyear, R.id.cons_month, R.id.cons_yestoday, R.id.cons_today, R.id.iv_back, R.id.tv_delete})
+    @OnClick({R.id.iv_back, R.id.tv_delete})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
@@ -118,45 +77,14 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         } else if (ids == R.id.tv_delete) {
             if (!tv_delete.isSelected())
                 return;
-            List<CleanWxItemInfo> listFAll = new ArrayList<>();
-            List<CleanWxItemInfo> listF = new ArrayList<>();
-            List<CleanWxItemInfo> listData = fileAdapterToday.getListImage();
-            for (int i = 0; i < listData.size(); i++) {
-                if (listData.get(i).getIsSelect())
-                    listF.add(fileAdapterToday.getListImage().get(i));
-            }
-
-            List<CleanWxItemInfo> listF2 = new ArrayList<>();
-            List<CleanWxItemInfo> listData2 = fileAdapterYestoday.getListImage();
-            for (int i = 0; i < listData2.size(); i++) {
-                if (listData2.get(i).getIsSelect())
-                    listF2.add(fileAdapterYestoday.getListImage().get(i));
-            }
-
-            List<CleanWxItemInfo> listF3 = new ArrayList<>();
-            List<CleanWxItemInfo> listData3 = fileAdapterInMonth.getListImage();
-            for (int i = 0; i < listData3.size(); i++) {
-                if (listData3.get(i).getIsSelect())
-                    listF3.add(fileAdapterInMonth.getListImage().get(i));
-            }
-
-            List<CleanWxItemInfo> listF4 = new ArrayList<>();
-            List<CleanWxItemInfo> listData4 = fileAdapterInHalfYear.getListImage();
-            for (int i = 0; i < listData4.size(); i++) {
-                if (listData4.get(i).getIsSelect())
-                    listF4.add(fileAdapterInHalfYear.getListImage().get(i));
-            }
-            listFAll.addAll(listF);
-            listFAll.addAll(listF2);
-            listFAll.addAll(listF3);
-            listFAll.addAll(listF4);
-
             StatisticsUtils.trackClick("wechat_receive_files_cleaning_delete_click", "删除按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
-            mPresenter.alertBanLiveDialog(WechatCleanFileActivity.this, listFAll.size(), new ImageListPresenter.ClickListener() {
+            int fileCount = cleanFileAdapter.getSelectedData().size();
+
+            mPresenter.alertBanLiveDialog(WechatCleanFileActivity.this, fileCount, new ImageListPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
                     //删除本地文件
-                    mPresenter.delFile(listFAll, listF, listF2, listF3, listF4);
+                    mPresenter.delFile(cleanFileAdapter.getSelectedData());
                     //数据库删除选中的文件
                 }
 
@@ -165,44 +93,6 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
                 }
             });
-
-
-        } else if (ids == R.id.cons_today) {
-            recycleViewToday.setVisibility(recycleViewToday.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            ivArrowToday.setImageResource(recycleViewToday.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
-        } else if (ids == R.id.cons_yestoday) {
-            recycleViewYestoday.setVisibility(recycleViewYestoday.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            ivArrowYestoday.setImageResource(recycleViewYestoday.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
-        } else if (ids == R.id.cons_month) {
-            recycleViewMonth.setVisibility(recycleViewMonth.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            ivArrowMonth.setImageResource(recycleViewMonth.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
-        } else if (ids == R.id.cons_halfyear) {
-            recycleViewHalfyear.setVisibility(recycleViewHalfyear.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            ivArrowHalfyear.setImageResource(recycleViewHalfyear.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
-        } else if (ids == R.id.tv_select_today) {
-            tvSelectToday.setSelected(!tvSelectToday.isSelected());
-            fileAdapterToday.setIsCheckAll(tvSelectToday.isSelected() ? true : false);
-            tvSelectToday.setBackgroundResource(tvSelectToday.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            isSelectAllData();
-            compulateDeleteSize();
-        } else if (ids == R.id.tv_select_yestoday) {
-            tvSelectYestoday.setSelected(!tvSelectYestoday.isSelected());
-            fileAdapterYestoday.setIsCheckAll(tvSelectYestoday.isSelected() ? true : false);
-            tvSelectYestoday.setBackgroundResource(tvSelectYestoday.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            isSelectAllData();
-            compulateDeleteSize();
-        } else if (ids == R.id.tv_select_month) {
-            tvSelectMonth.setSelected(!tvSelectMonth.isSelected());
-            fileAdapterInMonth.setIsCheckAll(tvSelectMonth.isSelected() ? true : false);
-            tvSelectMonth.setBackgroundResource(tvSelectMonth.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            isSelectAllData();
-            compulateDeleteSize();
-        } else if (ids == R.id.tv_select_halfyear) {
-            tvSelectHalfyear.setSelected(!tvSelectHalfyear.isSelected());
-            fileAdapterInHalfYear.setIsCheckAll(tvSelectHalfyear.isSelected() ? true : false);
-            tvSelectHalfyear.setBackgroundResource(tvSelectHalfyear.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            isSelectAllData();
-            compulateDeleteSize();
         }
     }
 
@@ -228,11 +118,11 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
         if (listDataTemp.size() == 0) {
             layoutNotNet.setVisibility(View.VISIBLE);
-            scrollView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             return;
         } else {
             layoutNotNet.setVisibility(View.GONE);
-            scrollView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         for (int j = 0; j < listDataTemp.size(); j++) {
@@ -253,69 +143,107 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
         }
 
+        /*以下是封装分组数据，必须继承MultiItemInfo类*/
+        mAllDatas = new ArrayList<>();
         /*隐藏数据为0的分组标题*/
-        if (listDataToday.size() <= 0) {
-            consToday.setVisibility(View.GONE);
+        if (listDataToday.size() > 0) {
+            CleanWxGroupInfo groupInfo1 = new CleanWxGroupInfo();
+            groupInfo1.title = "今天";
+            groupInfo1.isExpanded = true;
+            for (int i = 0; i < listDataToday.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataToday.get(i);
+                CleanWxChildInfo childInfo = new CleanWxChildInfo();
+                childInfo.canLoadPic = itemInfo.isCanLoadPic();
+                childInfo.Days = itemInfo.getDays();
+                childInfo.file = itemInfo.getFile();
+                childInfo.fileType = itemInfo.getFileType();
+                childInfo.totalSize = itemInfo.getFileSize();
+                childInfo.stringDay = itemInfo.getStringDay();
+                groupInfo1.addItemInfo(childInfo);
+            }
+            mAllDatas.add(groupInfo1);
         }
-        if (listDataYestoday.size() <= 0) {
-            consYestoday.setVisibility(View.GONE);
+        if (listDataYestoday.size() > 0) {
+            CleanWxGroupInfo groupInfo2 = new CleanWxGroupInfo();
+            groupInfo2.title = "昨天";
+            groupInfo2.isExpanded = true;
+            for (int i = 0; i < listDataYestoday.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataYestoday.get(i);
+                CleanWxChildInfo childInfo = new CleanWxChildInfo();
+                childInfo.canLoadPic = itemInfo.isCanLoadPic();
+                childInfo.Days = itemInfo.getDays();
+                childInfo.file = itemInfo.getFile();
+                childInfo.fileType = itemInfo.getFileType();
+                childInfo.totalSize = itemInfo.getFileSize();
+                childInfo.stringDay = itemInfo.getStringDay();
+                groupInfo2.addItemInfo(childInfo);
+            }
+            mAllDatas.add(groupInfo2);
         }
-        if (listDataInMonth.size() <= 0) {
-            consMonth.setVisibility(View.GONE);
+        if (listDataInMonth.size() > 0) {
+            CleanWxGroupInfo groupInfo3 = new CleanWxGroupInfo();
+            groupInfo3.title = "一月内";
+            groupInfo3.isExpanded = true;
+            for (int i = 0; i < listDataInMonth.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataInMonth.get(i);
+                CleanWxChildInfo childInfo = new CleanWxChildInfo();
+                childInfo.canLoadPic = itemInfo.isCanLoadPic();
+                childInfo.Days = itemInfo.getDays();
+                childInfo.file = itemInfo.getFile();
+                childInfo.fileType = itemInfo.getFileType();
+                childInfo.totalSize = itemInfo.getFileSize();
+                childInfo.stringDay = itemInfo.getStringDay();
+                groupInfo3.addItemInfo(childInfo);
+            }
+            mAllDatas.add(groupInfo3);
         }
-        if (listDataInHalfYear.size() <= 0) {
-            consHalfyear.setVisibility(View.GONE);
+        if (listDataInHalfYear.size() > 0) {
+            CleanWxGroupInfo groupInfo4 = new CleanWxGroupInfo();
+            groupInfo4.title = "更早";
+            groupInfo4.isExpanded = true;
+            for (int i = 0; i < listDataInHalfYear.size(); i++) {
+                CleanWxItemInfo itemInfo = listDataInHalfYear.get(i);
+                CleanWxChildInfo childInfo = new CleanWxChildInfo();
+                childInfo.canLoadPic = itemInfo.isCanLoadPic();
+                childInfo.Days = itemInfo.getDays();
+                childInfo.file = itemInfo.getFile();
+                childInfo.fileType = itemInfo.getFileType();
+                childInfo.totalSize = itemInfo.getFileSize();
+                childInfo.stringDay = itemInfo.getStringDay();
+                groupInfo4.addItemInfo(childInfo);
+            }
+            mAllDatas.add(groupInfo4);
         }
+        cleanFileAdapter = new WechatCleanFileAdapter(WechatCleanFileActivity.this);
+        cleanFileAdapter.setData(mAllDatas);
+        recyclerView.setAdapter(cleanFileAdapter);
+        DividerItemDecoration decor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        decor.setDrawable(ContextCompat.getDrawable(this, R.drawable.bg_divider_shape)); //这里在就是
+        recyclerView.addItemDecoration(decor);
 
-        fileAdapterToday = new WechatCleanFileAdapter(WechatCleanFileActivity.this, listDataToday);
-        fileAdapterYestoday = new WechatCleanFileAdapter(WechatCleanFileActivity.this, listDataYestoday);
-        fileAdapterInMonth = new WechatCleanFileAdapter(WechatCleanFileActivity.this, listDataInMonth);
-        fileAdapterInHalfYear = new WechatCleanFileAdapter(WechatCleanFileActivity.this, listDataInHalfYear);
-        recycleViewToday.setLayoutManager(new LinearLayoutManager(WechatCleanFileActivity.this));
-        recycleViewYestoday.setLayoutManager(new LinearLayoutManager(WechatCleanFileActivity.this));
-        recycleViewMonth.setLayoutManager(new LinearLayoutManager(WechatCleanFileActivity.this));
-        recycleViewHalfyear.setLayoutManager(new LinearLayoutManager(WechatCleanFileActivity.this));
-        recycleViewToday.setAdapter(fileAdapterToday);
-        recycleViewYestoday.setAdapter(fileAdapterYestoday);
-        recycleViewMonth.setAdapter(fileAdapterInMonth);
-        recycleViewHalfyear.setAdapter(fileAdapterInHalfYear);
-        fileAdapterToday.setmOnCheckListener((listFile, pos) -> {
-            isSelectAllData();
-            compulateDeleteSize();
-        });
-        fileAdapterYestoday.setmOnCheckListener((listFile, pos) -> {
-            isSelectAllData();
-            compulateDeleteSize();
-        });
-        fileAdapterInMonth.setmOnCheckListener((listFile, pos) -> {
-            isSelectAllData();
-            compulateDeleteSize();
-        });
-        fileAdapterInHalfYear.setmOnCheckListener((listFile, pos) -> {
-            isSelectAllData();
-            compulateDeleteSize();
+        cleanFileAdapter.setmOnCheckListener((info) -> {
+            long allSize = cleanFileAdapter.getSelectedSize();
+//            cb_checkall.setBackgroundResource(isAllSelect ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_delete.setBackgroundResource(allSize == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+            tv_delete.setSelected(allSize == 0 ? false : true);
+            tv_delete.setText(allSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(allSize));
         });
 
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
-        tvSelectToday.setSelected(false);
-        tvSelectYestoday.setSelected(false);
-        tvSelectMonth.setSelected(false);
-        tvSelectHalfyear.setSelected(false);
         cb_checkall.setOnClickListener(v -> {
-            if (listDataTemp.size() == 0) return;
-            if (!recycleViewToday.isComputingLayout()) {
-                StatisticsUtils.trackClick("wechat_receive_files_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
-                cb_checkall.setSelected(!cb_checkall.isSelected());
-                tv_delete.setSelected(cb_checkall.isSelected());
-                fileAdapterToday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                fileAdapterYestoday.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                fileAdapterInMonth.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                fileAdapterInHalfYear.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-                compulateDeleteSize();
-            }
+            if (mAllDatas.size() == 0) return;
+            StatisticsUtils.trackClick("wechat_receive_files_cleaning_all_election_click", "全选按钮点击", "wechat_cleaning_page", "wechat_receive_files_cleaning_page");
+            cb_checkall.setSelected(!cb_checkall.isSelected());
+            tv_delete.setSelected(cb_checkall.isSelected());
+
+            cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+            tv_delete.setSelected(cb_checkall.isSelected() ? true : false);
+
+            cleanFileAdapter.selectAll(cb_checkall.isSelected());
+            long allSize = cleanFileAdapter.getSelectedSize();
+            tv_delete.setText(allSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(allSize));
         });
     }
 
@@ -331,78 +259,12 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
         NiuDataAPI.onPageEnd("wechat_receive_files_cleaning_view_page", "文件清理页面浏览");
     }
 
-    public void isSelectAllData() {
-        List<CleanWxItemInfo> listAll = new ArrayList<>();
-        List<CleanWxItemInfo> listF = new ArrayList<>();
-        List<CleanWxItemInfo> listData = fileAdapterToday.getListImage();
-        List<CleanWxItemInfo> listData2 = fileAdapterYestoday.getListImage();
-        List<CleanWxItemInfo> listData3 = fileAdapterInMonth.getListImage();
-        List<CleanWxItemInfo> listData4 = fileAdapterInHalfYear.getListImage();
-        listAll.addAll(listData);
-        listAll.addAll(listData2);
-        listAll.addAll(listData3);
-        listAll.addAll(listData4);
-        for (int i = 0; i < listAll.size(); i++) {
-            if (listAll.get(i).getIsSelect())
-                listF.add(listAll.get(i));
-        }
-        cb_checkall.setBackgroundResource(listF.size() == fileAdapterToday.getListImage().size() + fileAdapterYestoday.getListImage().size() + fileAdapterInMonth.getListImage().size() + fileAdapterInHalfYear.getListImage().size() ? R.drawable.icon_select : R.drawable.icon_unselect);
-        tv_delete.setBackgroundResource(listF.size() == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
-        tv_delete.setSelected(listF.size() == 0 ? false : true);
-
-    }
-
-    //计算删除文件大小
-    public void compulateDeleteSize() {
-        List<CleanWxItemInfo> listAll = new ArrayList<>();
-        List<CleanWxItemInfo> listF = new ArrayList<>();
-        List<CleanWxItemInfo> listData = fileAdapterToday.getListImage();
-        List<CleanWxItemInfo> listData2 = fileAdapterYestoday.getListImage();
-        List<CleanWxItemInfo> listData3 = fileAdapterInMonth.getListImage();
-        List<CleanWxItemInfo> listData4 = fileAdapterInHalfYear.getListImage();
-        listAll.addAll(listData);
-        listAll.addAll(listData2);
-        listAll.addAll(listData3);
-        listAll.addAll(listData4);
-        for (int i = 0; i < listAll.size(); i++) {
-            if (listAll.get(i).getIsSelect())
-                listF.add(listAll.get(i));
-        }
-        long deleteSize = 0;
-        for (int i = 0; i < listF.size(); i++) {
-            deleteSize += listF.get(i).getFileSize();
-        }
-        setSelectSize(listData, tvSizeToday, tvSelectToday);
-        setSelectSize(listData2, tvSizeYestoday, tvSelectYestoday);
-        setSelectSize(listData3, tvSizeMonth, tvSelectMonth);
-        setSelectSize(listData4, tvSizeHalfyear, tvSelectHalfyear);
-        tv_delete.setText(deleteSize == 0 ? "删除" : "删除 " + CleanAllFileScanUtil.byte2FitSizeOne(deleteSize));
-    }
-
-    //今天、明天、一月内选中对应的recyclerview是否全选
-    public void setSelectSize(List<CleanWxItemInfo> listData, TextView tvSize, TextView tvSelect) {
-        List<CleanWxItemInfo> listAll = new ArrayList<>();
-        for (int i = 0; i < listData.size(); i++) {
-            if (listData.get(i).getIsSelect())
-                listAll.add(listData.get(i));
-        }
-        long deleteSize = 0;
-        for (int i = 0; i < listAll.size(); i++) {
-            deleteSize += listAll.get(i).getFileSize();
-        }
-        tvSelect.setBackgroundResource(listAll.size() != 0 ? R.drawable.icon_select : R.drawable.icon_unselect);
-        tvSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(deleteSize));
-    }
-
     //删除成功
-    public void deleteSuccess(List<CleanWxItemInfo> list1, List<CleanWxItemInfo> list2, List<CleanWxItemInfo> list3, List<CleanWxItemInfo> list4) {
+    public void deleteSuccess() {
+        cleanFileAdapter.removeSelectedData();
         tv_delete.setSelected(false);
         tv_delete.setText("删除");
         tv_delete.setBackgroundResource(R.drawable.delete_unselect_bg);
-        fileAdapterToday.deleteData(list1);
-        fileAdapterYestoday.deleteData(list2);
-        fileAdapterInMonth.deleteData(list3);
-        fileAdapterInHalfYear.deleteData(list4);
     }
 
     @Override
@@ -418,20 +280,18 @@ public class WechatCleanFileActivity extends BaseActivity<WechatCleanFilePresent
 
     //获取当前文件大小
     public long getAllFileSize() {
-        if (fileAdapterToday == null)
+        if (mAllDatas == null)
             return 0;
         long fileSize = 0;
-        List<CleanWxItemInfo> listAll = new ArrayList<>();
-        List<CleanWxItemInfo> listData = fileAdapterToday.getListImage();
-        List<CleanWxItemInfo> listData2 = fileAdapterYestoday.getListImage();
-        List<CleanWxItemInfo> listData3 = fileAdapterInMonth.getListImage();
-        List<CleanWxItemInfo> listData4 = fileAdapterInHalfYear.getListImage();
-        listAll.addAll(listData);
-        listAll.addAll(listData2);
-        listAll.addAll(listData3);
-        listAll.addAll(listData4);
-        for (int i = 0; i < listAll.size(); i++) {
-            fileSize += listAll.get(i).getFileSize();
+        for (int i = 0; i < mAllDatas.size(); i++) {
+            CleanWxGroupInfo titleInfo = (CleanWxGroupInfo) mAllDatas.get(i);
+            List<CleanWxChildInfo> listItem = titleInfo.getChildList();
+            if (listItem != null) {
+                for (int j = 0; j < listItem.size(); j++) {
+                    CleanWxChildInfo itemInfo = listItem.get(j);
+                    fileSize += itemInfo.totalSize;
+                }
+            }
         }
         return fileSize;
     }
