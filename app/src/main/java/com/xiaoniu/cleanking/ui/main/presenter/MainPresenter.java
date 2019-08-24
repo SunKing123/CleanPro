@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -41,6 +42,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -225,6 +227,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void getData(BaseEntity baseEntity) {
                 PreferenceUtil.saveJPushAlias(true);
+                JPushInterface.setAlias(mActivity,0, DeviceUtils.getUdid());
             }
 
             @Override

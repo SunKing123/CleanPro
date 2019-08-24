@@ -18,7 +18,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -196,17 +195,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 super.onReceivedTitle(view, title);
 
             }
-        });
-        mWebView.setOnTouchListener((v, event) -> {
-            switch (event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-//                    mNestedScrollView.se
-                    break;
-                case MotionEvent.ACTION_UP:
-
-                    break;
-            }
-            return true;
         });
 
     }

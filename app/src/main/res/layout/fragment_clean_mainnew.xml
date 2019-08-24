@@ -667,6 +667,7 @@
                         android:layout_below="@+id/view_phone_thin"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
+                        android:layout_marginBottom="@dimen/dimen_16dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/image_main_thin" />
