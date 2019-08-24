@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
@@ -30,7 +31,6 @@ import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -213,10 +213,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 激活极光
      */
     public void commitJPushAlias(){
-
-        if (!TextUtils.isEmpty(PreferenceUtil.getIsSaveJPushAlias()))
+        if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
             return;
-        PreferenceUtil.saveJPushAlias(DeviceUtils.getUdid());
 
         mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
             @Override
@@ -226,7 +224,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(BaseEntity baseEntity) {
-
+                PreferenceUtil.saveJPushAlias(true);
             }
 
             @Override

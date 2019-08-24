@@ -379,7 +379,7 @@ public class AccessAnimView extends RelativeLayout {
         PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DisplayUtils.dip2px(706));
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
-        animator.setDuration(700);
+        animator.setDuration(300);
         return animator;
     }
 
@@ -529,7 +529,7 @@ public class AccessAnimView extends RelativeLayout {
 
         mAnimationCloudView.useHardwareAcceleration();
         mAnimationCloudView.setImageAssetsFolder("images");
-        mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
+        mAnimationCloudView.setAnimation("data_one_key_speed_down.json");
         mAnimationCloudView.playAnimation();
     }
 

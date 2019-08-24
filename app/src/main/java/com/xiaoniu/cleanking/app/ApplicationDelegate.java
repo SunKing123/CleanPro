@@ -15,7 +15,6 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -44,9 +43,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //初始化sdk
         JPushInterface.setDebugMode(false);//正式版的时候设置false，关闭调试
         JPushInterface.init(application);
-        JPushInterface.setAlias(application, DeviceUtils.getIMEI(), (i, s, set) -> {
 
-        });
         if (BuildConfig.DEBUG) {
             UMConfigure.setLogEnabled(true);
             ARouter.openLog();     // Print log

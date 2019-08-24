@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -68,6 +70,8 @@ public class MainModel extends BaseModel {
      */
     @SuppressLint("CheckResult")
     public void commitJPushAlias(Common4Subscriber<BaseEntity> commonSubscriber) {
+        String rid = JPushInterface.getRegistrationID( AppApplication.getInstance());
+        if (rid.isEmpty()) return;
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("registrationId", DeviceUtils.getUdid());

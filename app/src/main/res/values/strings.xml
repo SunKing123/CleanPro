@@ -72,4 +72,6 @@
     <string name="tool_super_power_message">超强省电通知</string>
     <string name="tool_cancel">取消</string>
     <string name="tool_speed_now">正在加速</string>
+    <string name="tool_notification_clean">通知栏清理</string>
+    <string name="tool_now_clean">立即清理</string>
 </resources>
