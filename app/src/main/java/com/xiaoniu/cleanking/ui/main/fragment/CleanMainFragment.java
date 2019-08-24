@@ -36,8 +36,8 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NotificationBarMessageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerSavingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -379,8 +379,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
-        //超强省电
-        startActivity(new Intent(getActivity(), PhoneSuperPowerSavingActivity.class));
+        //通知栏清理
+        startActivity(NotificationBarMessageActivity.class);
     }
 
     @OnClick(R.id.line_jw)

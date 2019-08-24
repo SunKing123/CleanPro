@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +13,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -105,6 +108,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     TextView mTvSpeed;
     @BindView(R.id.line_access)
     TextView mLineAccess;
+    @BindView(R.id.n_scroll_view)
+    NestedScrollView mNestedScrollView;
 
     //    PhoneAccessAdapter imageAdapter;
     private boolean isSuccess = false;
@@ -133,6 +138,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         activityComponent.inject(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void initWebView() {
         WebSettings settings = mWebView.getSettings();
         settings.setDomStorageEnabled(true);
@@ -191,6 +197,18 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
             }
         });
+        mWebView.setOnTouchListener((v, event) -> {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+//                    mNestedScrollView.se
+                    break;
+                case MotionEvent.ACTION_UP:
+
+                    break;
+            }
+            return true;
+        });
+
     }
 
     @Override

@@ -538,7 +538,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
-                            android:text="@string/tool_super_power_saving"
+                            android:text="@string/tool_notification_clean"
                             android:textColor="#666666"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -668,7 +668,6 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
-                        android:layout_marginBottom="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/image_main_thin" />
 

@@ -5,34 +5,16 @@
     android:background="@color/color_06C581"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/line_title"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            style="@style/top_iv_back"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/tv_title_name"
-            style="@style/top_tv_title"
-            android:layout_gravity="center_vertical"
-            android:text="@string/tool_notification_clean" />
-
-    </LinearLayout>
-
     <FrameLayout
         android:id="@+id/fl_clean_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     <ImageView
-        android:layout_width="@dimen/dimen_100dp"
+        android:layout_width="@dimen/dimen_200dp"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dimen_100dp"
-        android:layout_height="@dimen/dimen_200dp"
+        android:layout_height="300dp"
         android:background="@color/white"/>
 
     <TextView

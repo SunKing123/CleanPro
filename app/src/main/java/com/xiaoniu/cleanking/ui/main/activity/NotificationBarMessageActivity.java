@@ -22,7 +22,7 @@ public class NotificationBarMessageActivity extends BaseActivity {
 
     @Override
     protected void initVariable(Intent intent) {
-
+        setTitle(getString(R.string.tool_notification_clean));
     }
 
     @Override

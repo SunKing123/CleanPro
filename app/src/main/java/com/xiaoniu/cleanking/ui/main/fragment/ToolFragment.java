@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerSavingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -152,7 +153,7 @@ public class ToolFragment extends SimpleFragment {
         super.onResume();
     }
 
-    @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin})
+    @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin,R.id.ll_notification_clear})
     public void onCoolingViewClicked(View view) {
         int ids = view.getId();
         if (ids == R.id.rl_chat) {
@@ -191,6 +192,10 @@ public class ToolFragment extends SimpleFragment {
             intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,getString(R.string.tool_phone_thin));
             startActivity(intent);
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", "tool_page", "clean_up_toolbox_page");
+        }else if (ids == R.id.ll_notification_clear){
+            //超强省电
+            startActivity(PhoneSuperPowerSavingActivity.class);
+            //TODO 添加埋点
         }
     }
 

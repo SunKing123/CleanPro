@@ -70,11 +70,12 @@ public class MainModel extends BaseModel {
      */
     @SuppressLint("CheckResult")
     public void commitJPushAlias(Common4Subscriber<BaseEntity> commonSubscriber) {
-        String rid = JPushInterface.getRegistrationID( AppApplication.getInstance());
+        String rid = JPushInterface.getRegistrationID(AppApplication.getInstance());
+        JPushInterface.setAlias(AppApplication.getInstance(),0, DeviceUtils.getUdid());
         if (rid.isEmpty()) return;
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
-        map.put("registrationId", DeviceUtils.getUdid());
+        map.put("registrationId", rid);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.commitJPushAlias(body).compose(RxUtil.rxSchedulerHelper(mActivity))
