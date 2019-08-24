@@ -96,6 +96,10 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+
+        //JPush NDK r17 之后不再支持 mips 平台
+        doNotStrip '*/mips/*.so'
+        doNotStrip '*/mips64/*.so'
     }
 
     dexOptions {

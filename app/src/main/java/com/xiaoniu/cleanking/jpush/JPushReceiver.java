@@ -17,10 +17,6 @@ import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
 
-/**
- * Created by fengpeihao on 2017/7/10.
- */
-
 public class JPushReceiver extends BroadcastReceiver {
     private static final String TAG = "JPush";
 

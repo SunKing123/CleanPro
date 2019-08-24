@@ -41,7 +41,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initInjector(application);
 
         //初始化sdk
-        JPushInterface.setDebugMode(false);//正式版的时候设置false，关闭调试
+        JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试
         JPushInterface.init(application);
 
         if (BuildConfig.DEBUG) {
