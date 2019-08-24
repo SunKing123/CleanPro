@@ -138,7 +138,9 @@
                     android:id="@+id/ll_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/view_lottie_super_saving_sleep"
+                    android:paddingTop="@dimen/dimen_60dp"
+                    android:layout_centerInParent="true"
+                    android:paddingLeft="@dimen/dimen_15dp"
                     android:layout_centerHorizontal="true">
 
                     <TextView
@@ -169,11 +171,13 @@
                     android:text="正在休眠应用减少耗电..."
                     android:textColor="@color/white" />
 
-                <com.airbnb.lottie.LottieAnimationView
+                <ImageView
                     android:id="@+id/view_lottie_super_saving_sleep"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_width="@dimen/dimen_160dp"
+                    android:layout_height="@dimen/dimen_160dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dimen_50dp"
+                    android:background="@drawable/super_power_top"/>
                     android:layout_marginTop="@dimen/dimen_48dp" />
 
                 <TextView

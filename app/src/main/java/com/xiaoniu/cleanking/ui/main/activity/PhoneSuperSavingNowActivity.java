@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -47,7 +48,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private JavaInterface javaInterface;
     private LinearLayout mLayoutNotNet;
     private FrameLayout mFlAnim;
-    private LottieAnimationView mLottieAnimationStartView;
+    private ImageView mIvAnimationStartView;
     private LottieAnimationView mLottieAnimationFinishView;
     private boolean isError = false;
 
@@ -93,12 +94,13 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mLlResultTop = findViewById(R.id.viewt_finish);
         mNestedScrollWebView = findViewById(R.id.web_view);
         mLayoutNotNet = findViewById(R.id.layout_not_net);
-        mLottieAnimationStartView = findViewById(R.id.view_lottie_super_saving_sleep);
+        mIvAnimationStartView = findViewById(R.id.view_lottie_super_saving_sleep);
         mFlAnim = findViewById(R.id.fl_anim);
         mLottieAnimationFinishView = findViewById(R.id.view_lottie);
 
         mTvNum.setText(String.valueOf(num));
         initWebView();
+        showStartAnim();
     }
 
     @Override
@@ -110,7 +112,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     @Override
     protected void loadData() {
-        showStartAnim();
+
         mHandler.sendEmptyMessageDelayed(1,5000);
         mHandler.sendEmptyMessageDelayed(2, 1000);
     }
@@ -119,32 +121,13 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      * 正在休眠应用减少耗电...
      */
     private void showStartAnim() {
-        mLottieAnimationStartView.useHardwareAcceleration();
-        mLottieAnimationStartView.useHardwareAcceleration();
-        mLottieAnimationStartView.setImageAssetsFolder("images");
-        mLottieAnimationStartView.setAnimation("data_super_power_saving.json");
-        mLottieAnimationStartView.playAnimation();
-        mLottieAnimationStartView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                mLottieAnimationStartView.cancelAnimation();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
+        //获取背景，并将其强转成AnimationDrawable
+        AnimationDrawable animationDrawable = (AnimationDrawable) mIvAnimationStartView.getBackground();
+        //判断是否在运行
+        if(!animationDrawable.isRunning()){
+            //开启帧动画
+            animationDrawable.start();
+        }
     }
 
     /**
