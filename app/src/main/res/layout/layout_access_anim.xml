@@ -160,6 +160,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
 
+    <!-- 飞机尾部火焰下降-->
+    <ImageView
+        android:id="@+id/iv_plant_fly_out"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_height="306dp"/>
+
     <!--顶部导航栏-->
     <LinearLayout
         android:id="@+id/line_title"
