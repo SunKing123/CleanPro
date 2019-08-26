@@ -9,6 +9,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -52,6 +53,7 @@ public class AccessAnimView extends RelativeLayout {
     TextView tv_gb;
     TextView tv_title_name;
     LinearLayout line_allnum;
+    ImageView mIvPlantFlyOut;
     int sizeMb;
     String strGb;
     onAnimEndListener listener;
@@ -110,6 +112,7 @@ public class AccessAnimView extends RelativeLayout {
         tv_title_name = v.findViewById(R.id.tv_title_name);
         mAnimationView = v.findViewById(R.id.view_lottie);
         mFlAnim = v.findViewById(R.id.fl_anim);
+        mIvPlantFlyOut = v.findViewById(R.id.iv_plant_fly_out);
         mAnimationCloudView = v.findViewById(R.id.view_lottie_speed_up);
 
         mAnimationCloudView.addAnimatorListener(new Animator.AnimatorListener() {
@@ -527,11 +530,15 @@ public class AccessAnimView extends RelativeLayout {
         });
         animator.start();
 
-        mAnimationCloudView.useHardwareAcceleration();
-        mAnimationCloudView.setImageAssetsFolder("images");
-        mAnimationCloudView.setAnimation("data_one_key_speed_down.json");
-        mAnimationCloudView.playAnimation();
+        AnimationDrawable animationDrawable = new AnimationDrawable();
+        animationDrawable.setOneShot(true);
+        for (int i = 1; i <= 20; i++) {
+            int id = getResources().getIdentifier("icon_one_key_speed_" + i, "drawable", mContext.getPackageName());
+            Drawable drawable = getResources().getDrawable(id);
+            animationDrawable.addFrame(drawable, 50);
+        }
+        mIvPlantFlyOut.setBackground(animationDrawable);
+        animationDrawable.start();
     }
 
 }
-

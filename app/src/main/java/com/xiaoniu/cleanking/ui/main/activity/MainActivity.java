@@ -17,19 +17,23 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
@@ -259,6 +263,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if ("wode".equals(type)) {
             mBottomBar.setCurrentItem(MINE);
         }
+        String tabIndex = intent.getString(SchemeConstant.EXTRA_MAIN_INDEX);
+        if (!TextUtils.isEmpty(tabIndex)) {
+            try {
+                int tab = Integer.parseInt(tabIndex);
+                if (tab <= 3) {
+                    mBottomBar.setCurrentItem(tab);
+                }
+            } catch (Exception e) {
+            }
+        }
     }
 
     @Override
@@ -283,7 +297,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private void initFragments() {
 
-        MeFragment mineFragment = new MeFragment();
+        MeFragment mineFragment = MeFragment.getIntance();
         CleanMainFragment mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
@@ -339,6 +353,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (prePosition == 3) {
             sourcePage = "mine_page";
         }
+        //保存选中的currentPage 为 上级页面id
+        AppHolder.getInstance().setSourcePageId(currentPage);
+        //默认二级选中页面为当前页面
+        AppHolder.getInstance().setOtherSourcePageId(currentPage);
         StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
             source_page = "wode";
@@ -362,15 +380,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onCreate(savedInstanceState);
         //注册订阅者
         EventBus.getDefault().register(this);
-
+        AppConfig.showDebugWindow(this);
     }
 
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        try {
+            ViewGroup layout = (ViewGroup) getWindow().getDecorView();
+            layout.removeAllViews();
+        } catch (Exception e) {
+        }
     }
-
 
     long firstTime;
 

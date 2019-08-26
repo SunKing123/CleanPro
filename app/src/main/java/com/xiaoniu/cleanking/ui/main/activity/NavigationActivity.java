@@ -16,7 +16,6 @@ import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ public class NavigationActivity extends SimpleActivity {
     ViewPager mViewPager;
     @BindView(R.id.navigation_main)
     FrameLayout mNavigationMain;
-//    private int[] bitmaps = {R.mipmap.navigation_1, R.mipmap.navigation_2, R.mipmap.navigation_3};
 
     @Override
     public int getLayoutId() {
@@ -46,37 +44,15 @@ public class NavigationActivity extends SimpleActivity {
     @Override
     public void initView() {
         ArrayList<View> views = new ArrayList<View>();
-        int screenHeight = DeviceUtils.getScreenHeight();
         mViewPager.setBackgroundColor(0xff000000);
-        /**
-         * 加入导览图集
-         */
-//        for (int i = 0; i < bitmaps.length; i++) {
-//            View v = getLayoutInflater().inflate(R.layout.activity_navigation_item_view, null);
-//            ImageView image = v.findViewById(R.id.image);
-//
-//
-////            if (screenHeight > 1920) {
-////                image.setImageResource(bitmaps2[i]);
-////                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mImgDot.getLayoutParams();
-////                layoutParams.bottomMargin = DeviceUtils.dip2px(84);
-////                mImgDot.setLayoutParams(layoutParams);
-////            } else {
-//            image.setImageResource(bitmaps[i]);
-////            }
-//            views.add(v);
-//        }
 
         View vlast = getLayoutInflater().inflate(R.layout.activity_navigation_item_viewlast, null);
         TextView cb_checkall = vlast.findViewById(R.id.cb_checkall);
         TextView tv_delete = vlast.findViewById(R.id.tv_delete);
         TextView tv_qx = vlast.findViewById(R.id.tv_qx);
-        tv_qx.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jumpXieyiActivity(AppConstants.Base_H5_Host+"/agree.html");
-                StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
-            }
+        tv_qx.setOnClickListener(v -> {
+            jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+            StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
         });
         initLastClick(cb_checkall, tv_delete);
         views.add(vlast);
@@ -131,23 +107,17 @@ public class NavigationActivity extends SimpleActivity {
 
     public void initLastClick(TextView cb_checkall, TextView tv_delete) {
         cb_checkall.setSelected(true);
-        cb_checkall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cb_checkall.setSelected(!cb_checkall.isSelected());
-                cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+        cb_checkall.setOnClickListener(v -> {
+            cb_checkall.setSelected(!cb_checkall.isSelected());
+            cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+            tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
 
-            }
         });
-        tv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_checkall.isSelected()) {
-                    SPUtil.setFirstIn(NavigationActivity.this, "isfirst", false);
-                    startActivity(MainActivity.class);
-                    finish();
-                }
+        tv_delete.setOnClickListener(v -> {
+            if (cb_checkall.isSelected()) {
+                SPUtil.setFirstIn(NavigationActivity.this, "isfirst", false);
+                startActivity(MainActivity.class);
+                finish();
             }
         });
     }

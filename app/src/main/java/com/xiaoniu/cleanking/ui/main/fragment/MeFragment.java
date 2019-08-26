@@ -3,10 +3,8 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,7 +19,7 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
@@ -53,8 +51,7 @@ public class MeFragment extends SimpleFragment {
     LinearLayout line_permisson;
 
     public static MeFragment getIntance() {
-        MeFragment fragment = new MeFragment();
-        return fragment;
+        return new MeFragment();
     }
 
     @Override
@@ -94,7 +91,6 @@ public class MeFragment extends SimpleFragment {
         this.e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
     }
 
-
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -112,47 +108,18 @@ public class MeFragment extends SimpleFragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), true);
-//        } else {
-//            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
-//        }
-//        StatusBarCompat.translucentStatusBar(getActivity(), false, iv_top, true);
-    }
-
-
     @OnClick({R.id.line_share,R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_setting) {
-            StatisticsUtils.trackClick("set_up_click", "\"设置\"点击", "mine_page", "personal_center_page");
+            StatisticsUtils.trackClick("set_up_click", "\"设置\"点击", AppHolder.getInstance().getSourcePageId(), "personal_center_page");
             startActivity(new Intent(getContext(), WhiteListSettingActivity.class));
         } else if (ids == R.id.ll_question_report) {
-            StatisticsUtils.trackClick("question_feedback_click", "\"问题反馈\"点击", "mine_page", "personal_center_page");
+            StatisticsUtils.trackClick("question_feedback_click", "\"问题反馈\"点击", AppHolder.getInstance().getSourcePageId(), "personal_center_page");
 
             startActivity(new Intent(getContext(), QuestionReportActivity.class));
         } else if (ids == R.id.line_permisson) {
-            StatisticsUtils.trackClick("privilege_management_click", "\"权限管理\"点击", "mine_page", "personal_center_page");
+            StatisticsUtils.trackClick("privilege_management_click", "\"权限管理\"点击", AppHolder.getInstance().getSourcePageId(), "personal_center_page");
             startActivity(new Intent(getContext(), PermissionActivity.class));
 
             long ls = e + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
@@ -160,25 +127,10 @@ public class MeFragment extends SimpleFragment {
         }else if (ids == R.id.line_share) {
             String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
             share("", AppConstants.Base_H5_Host+"/share.html", "悟空清理", shareContent, -1);
-            StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
+            StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", AppHolder.getInstance().getSourcePageId(), "about_page");
 
         }
     }
-
-
-/*    @OnClick({R.id.ll_clean, R.id.ll_video,R.id.ll_qq,R.id.ll_qq_video})
-    public void onClickS(View view) {
-        int ids = view.getId();
-        if (ids == R.id.ll_clean) {
-            startActivity(new Intent(getContext(), WXCleanImgActivity.class));
-        } else if (ids == R.id.ll_video) {
-            startActivity(new Intent(getContext(), WXCleanVideoActivity.class));
-        }else if(ids==R.id.ll_qq){
-            startActivity(new Intent(getContext(), QQCleanImgActivity.class));
-        }else if(ids==R.id.ll_qq_video){
-            startActivity(new Intent(getContext(), QQCleanVideoActivity.class));
-        }
-    }*/
 
     public final static int SHARE_SUCCESS = 0;
     public final static int SHARE_CANCEL = 1;
@@ -210,19 +162,14 @@ public class MeFragment extends SimpleFragment {
             @Override
             public void onResult(SHARE_MEDIA share_media) {
                 handler.sendEmptyMessage(SHARE_SUCCESS);
-                String pageName = "";
-                if (AppManager.getAppManager().preActivityName().contains("MainActivity")) {
-                    pageName = "mine_page";
-                }
-
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", pageName, "Sharing_page");
+                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", pageName, "Sharing_page");
+                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (share_media == SHARE_MEDIA.QZONE) {
-                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", pageName, "Sharing_page");
+                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.QQ == share_media) {
-                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", pageName, "Sharing_page");
+                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 }
             }
 

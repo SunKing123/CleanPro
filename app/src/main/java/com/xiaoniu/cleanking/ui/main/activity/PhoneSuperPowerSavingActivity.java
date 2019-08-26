@@ -6,16 +6,18 @@ import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -25,13 +27,10 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     AppBarLayout mAppBarLayout;
     TextView mTvNum;
-    @BindView(R.id.rl_result_top)
     RelativeLayout mRlResultTop;
-    @BindView(R.id.ed_list)
     ExpandableListView mEdList;
-    @BindView(R.id.rl_result)
     RelativeLayout mRlResult;
-    @BindView(R.id.view_lottie_super_saving)
+    LinearLayout mLlBottom;
     LottieAnimationView mLottieAnimationStartView;
 
     private int num = 0;
@@ -54,6 +53,13 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StatisticsUtils.trackClick("Super_Power_Saving_view_page", "超强省电", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_super_power_saving;
@@ -62,7 +68,13 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
     @Override
     protected void initView() {
         mAppBarLayout = findViewById(R.id.app_power_saving_bar_layout);
+        mLlBottom = findViewById(R.id.ll_bottom);
+        mRlResultTop = findViewById(R.id.rl_result_top);
+        mRlResult = findViewById(R.id.rl_result);
         mTvNum = findViewById(R.id.tv_num);
+        mEdList = findViewById(R.id.ed_list);
+        mLottieAnimationStartView = findViewById(R.id.view_lottie_super_saving);
+
         showStartAnim();
         mHandler.sendEmptyMessageDelayed(1,5000);
         mHandler.sendEmptyMessageDelayed(2, 1000);
@@ -108,22 +120,28 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mRlResult.setVisibility(View.GONE);
         mRlResultTop.setVisibility(View.VISIBLE);
         mEdList.setVisibility(View.VISIBLE);
+        mLlBottom.setVisibility(View.VISIBLE);
         mAppBarLayout.setExpanded(true);
     }
 
-    @OnClick({R.id.iv_back,R.id.icon_saving_right,R.id.iv_power})
+    @OnClick({R.id.iv_back, R.id.icon_saving_right, R.id.iv_power, R.id.ll_bottom})
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_back:
+                StatisticsUtils.trackClick("Super_Power_Saving_Return_click", "“超强省电返回”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
                 finish();
                 break;
             case R.id.iv_power:
-                startActivity(PhoneSuperSavingNowActivity.class);
                 finish();
                 break;
             case R.id.icon_saving_right:
+                StatisticsUtils.trackClick("Super_Power_Saving_Notice_click", "“超强省电通知”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
                 startActivity(PhoneSuperPowerMessageActivity.class);
                 finish();
+                break;
+            case R.id.ll_bottom:
+                StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                startActivity(PhoneSuperSavingNowActivity.class);
                 break;
         }
     }

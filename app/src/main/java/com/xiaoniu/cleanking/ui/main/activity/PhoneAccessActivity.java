@@ -32,6 +32,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
@@ -240,7 +241,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         iv_back.setOnClickListener(v -> {
             finish();
-            StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", "home_page", "once_accelerate_page");
+            StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
         });
 
         tv_delete.setOnClickListener(v -> {
@@ -316,7 +317,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
 
 
-        StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "once_accelerate_page");
+        StatisticsUtils.trackClick("cleaning_click", "清理点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
 
     }
 

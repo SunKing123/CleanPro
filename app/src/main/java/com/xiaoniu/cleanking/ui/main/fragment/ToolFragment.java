@@ -12,10 +12,11 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerSavingActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -163,7 +164,7 @@ public class ToolFragment extends SimpleFragment {
             }
             ((MainActivity)getActivity()).commitJpushClickTime(5);
             startActivity(WechatCleanHomeActivity.class);
-            StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "tool_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.rl_qq) {
             if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
@@ -175,26 +176,26 @@ public class ToolFragment extends SimpleFragment {
             if (QQUtil.fileList != null)
                 QQUtil.fileList.clear();
             startActivity(QQCleanHomeActivity.class);
-            StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", "tool_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
             ((MainActivity)getActivity()).commitJpushClickTime(2);
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
             startActivity(PhoneAccessActivity.class,bundle);
-            StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", "tool_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.text_cooling) {
             //手机降温
             ((MainActivity)getActivity()).commitJpushClickTime(6);
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-            StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", "tool_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.text_phone_thin) {
             Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
             intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,getString(R.string.tool_phone_thin));
             startActivity(intent);
-            StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", "tool_page", "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         }else if (ids == R.id.ll_notification_clear){
             //超强省电
-            startActivity(PhoneSuperPowerSavingActivity.class);
+            startActivity(PhoneSuperPowerActivity.class);
             //TODO 添加埋点
         }
     }

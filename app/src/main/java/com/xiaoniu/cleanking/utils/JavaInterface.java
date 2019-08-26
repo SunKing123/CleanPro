@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -64,6 +65,7 @@ public class JavaInterface {
 
     @JavascriptInterface
     public void toOtherPage(String url) {
+        StatisticsUtils.trackClickUrlH5("banner_share_page", "广告点击", AppHolder.getInstance().getSourcePageId(), "banner_share_page", url);
         if (mActivity instanceof UserLoadH5Activity) {
             mActivity.finish();
         }
@@ -77,7 +79,7 @@ public class JavaInterface {
 
     @JavascriptInterface
     public void onTitleClick(String id, String name) {
-        StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+        StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", AppHolder.getInstance().getSourcePageId(), "information_page", id, name);
     }
 
     @JavascriptInterface
@@ -110,7 +112,7 @@ public class JavaInterface {
      */
     @JavascriptInterface
     public void shareLink(String picurl, String linkurl, String title, String content) {
-        StatisticsUtils.trackClick("Sharing_coupons_click", "分享领优惠券", "", "");
+        StatisticsUtils.trackClick("Sharing_coupons_click", "分享领优惠券", AppHolder.getInstance().getSourcePageId(), "");
 
         //保存分享次数
         PreferenceUtil.saveShareNum();
@@ -139,13 +141,13 @@ public class JavaInterface {
                 addShareSuccessRequest();
 
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", "", "Sharing_page");
+                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", "", "Sharing_page");
+                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (share_media == SHARE_MEDIA.QZONE) {
-                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", "", "Sharing_page");
+                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.QQ == share_media) {
-                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", "", "Sharing_page");
+                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 }
             }
 
