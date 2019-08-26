@@ -87,4 +87,10 @@
         <attr name="arc_angle_size" format="float"/>
         <attr name="arc_start_angle" format="float"/>
     </declare-styleable>
+
+    <declare-styleable name="BattaryView">
+        <attr name="battaryPercnet" format="integer"/>
+        <attr name="color"/>
+    </declare-styleable>
+
 </resources>
