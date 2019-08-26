@@ -2,7 +2,10 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -14,9 +17,14 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.cleanking.ui.main.adapter.PowerExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.BattaryView;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.lang.ref.WeakReference;
@@ -40,7 +48,8 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
 
     private BattaryView mBvView;
     private CountEntity countEntity;
-    private HashMap<Integer, JunkGroup> mJunkGroups;
+    private HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
+    private PowerExpandableListViewAdapter mAdapter;
 
     private int num = 0;
     MyHandler mHandler = new MyHandler(this);
@@ -60,6 +69,16 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
                     sendEmptyMessageDelayed(2, 30);
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
         }
     }
 
@@ -86,11 +105,48 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mLottieAnimationStartView = findViewById(R.id.view_lottie_super_saving);
         mPowerLottieAnimationView = findViewById(R.id.view_lottie_super_saving_power);
 
+        mEdList.setGroupIndicator(null);
+        mEdList.setChildIndicator(null);
+        mEdList.setDividerHeight(0);
+        mEdList.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            JunkGroup junkGroup = mJunkGroups.get(groupPosition);
+            if (junkGroup != null) {
+                junkGroup.isExpand = !junkGroup.isExpand();
+                mAdapter.notifyDataSetChanged();
+            }
+            return false;
+        });
+        mAdapter = new PowerExpandableListViewAdapter(this, mEdList);
+        mAdapter.setOnItemSelectListener(() -> {
+
+        });
+
+        mEdList.setAdapter(mAdapter);
+        mJunkGroups = CleanMainFragment.mJunkGroups;
+        mAdapter.setData(mJunkGroups);
+
+        for (int i = 0; i < mJunkGroups.size(); i++) {
+            mEdList.expandGroup(i);
+        }
+        countEntity = CleanUtil.formatShortFileSize(getTotalSize());
+
         showStartAnim();
         mHandler.sendEmptyMessageDelayed(1,5000);
         mHandler.sendEmptyMessageDelayed(2, 1000);
 
         mBvView.setBattaryPercent(70);
+    }
+
+    private long getTotalSize() {
+        long size = 0L;
+        for (JunkGroup group : mJunkGroups.values()) {
+            for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                if (firstJunkInfo.isAllchecked()) {
+                    size += firstJunkInfo.getTotalSize();
+                }
+            }
+        }
+        return size;
     }
 
     /**
@@ -125,6 +181,9 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         });
     }
 
+    /**
+     * 电池动画
+     */
     private void showPowerAnim(){
         mPowerLottieAnimationView.useHardwareAcceleration();
         mPowerLottieAnimationView.useHardwareAcceleration();
@@ -163,7 +222,6 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
         mEdList.setVisibility(View.VISIBLE);
         mLlBottom.setVisibility(View.VISIBLE);
         mAppBarLayout.setExpanded(true);
-
         showPowerAnim();
     }
 

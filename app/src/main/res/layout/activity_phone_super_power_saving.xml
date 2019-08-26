@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_power_saving_bar_layout"
         android:layout_width="match_parent"
-        app:expanded="true"
+        app:expanded="false"
         android:layout_height="wrap_content"
         app:elevation="0dp">
 

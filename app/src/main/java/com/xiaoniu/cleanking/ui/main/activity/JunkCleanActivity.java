@@ -70,11 +70,6 @@ public class JunkCleanActivity extends SimpleActivity {
     private HashMap<Integer, JunkGroup> mJunkGroups;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
