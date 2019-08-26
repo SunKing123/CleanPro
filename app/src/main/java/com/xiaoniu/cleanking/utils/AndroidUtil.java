@@ -221,4 +221,17 @@ public class AndroidUtil {
         return AppApplication.getInstance().getString(R.string.app_num);
     }
 
+    //防连续点击
+    private static long lastClickTime;
+
+
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        if (0 < timeD && timeD < 800) {
+            return true;
+        }
+        lastClickTime = time;
+        return false;
+    }
 }

@@ -3,12 +3,11 @@ package com.xiaoniu.cleanking.jpush;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,6 +63,7 @@ public class JPushReceiver extends BroadcastReceiver {
 
     /**
      * 处理活动跳转
+     *
      * @param context
      * @param bundle
      */
@@ -73,34 +73,19 @@ public class JPushReceiver extends BroadcastReceiver {
         title = bundle.getString(JPushInterface.EXTRA_ALERT);
         String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
         if (!TextUtils.isEmpty(extras)) {
-                try {
-                    JSONObject extraJson = new JSONObject(extras);
-                    url = extraJson.getString("url");
-                } catch (JSONException e) {}
+            try {
+                JSONObject extraJson = new JSONObject(extras);
+                url = extraJson.getString("url");
+            } catch (JSONException e) {
             }
-
-        if(url.contains("installment://www.51huihuahua.com")){
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if(mContext != null)
-            mContext.startActivity(intent);
-            return;
         }
-
-        //已登录
-        if(!TextUtils.isEmpty(AndroidUtil.getToken())) {
-            //无链接跳首页，有链接跳活动
-
-        }else{
-//            Intent intent = new Intent(AppApplication.getInstance(), CheckLoginActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            AppManager.getAppManager().finishAllActivity();
-//            AppApplication.getInstance().startActivity(intent);
+        if (!TextUtils.isEmpty(url)) {
+            SchemeProxy.openScheme(context, url);
         }
     }
 
     // 打印所有的 intent extra 数据
-    private  String printBundle(Bundle bundle) {
+    private String printBundle(Bundle bundle) {
         StringBuilder sb = new StringBuilder();
         for (String key : bundle.keySet()) {
             if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {

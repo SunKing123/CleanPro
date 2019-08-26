@@ -25,6 +25,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".scheme.ui.DispatcherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppLauncher">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="cleanking" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.main.activity.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -35,7 +50,6 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.usercenter.activity.UserLoadH5Activity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.NavigationActivity"
@@ -43,6 +57,9 @@
 
         <activity
             android:name=".ui.main.activity.FileManagerHomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.DebugActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.ImageActivity"
