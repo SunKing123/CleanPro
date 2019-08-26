@@ -196,7 +196,7 @@ public class ToolFragment extends SimpleFragment {
         }else if (ids == R.id.ll_notification_clear){
             //超强省电
             startActivity(PhoneSuperPowerActivity.class);
-            //TODO 添加埋点
+            StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         }
     }
 
