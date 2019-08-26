@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
@@ -283,7 +284,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private void initFragments() {
 
-        MeFragment mineFragment = new MeFragment();
+        MeFragment mineFragment = MeFragment.getIntance();
         CleanMainFragment mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
@@ -339,6 +340,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (prePosition == 3) {
             sourcePage = "mine_page";
         }
+        //保存选中的currentPage 为 上级页面id
+        AppHolder.getInstance().setSourcePageId(currentPage);
         StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
             source_page = "wode";
@@ -370,7 +373,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
-
 
     long firstTime;
 

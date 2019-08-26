@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
@@ -242,7 +243,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
         ((MainActivity)getActivity()).commitJpushClickTime(4);
-        StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", "home_page", "home_page");
+        StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
 
         //文件管理
         startActivity(FileManagerHomeActivity.class);
@@ -251,7 +252,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.text_acce)
     public void text_acce() {
         ((MainActivity)getActivity()).commitJpushClickTime(2);
-        StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", "home_page", "home_page");
+        StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         //一键加速
         Bundle bundle = new Bundle();
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
@@ -261,7 +262,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.line_ql)
     public void line_ql() {
         ((MainActivity)getActivity()).commitJpushClickTime(3);
-        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", "home_page", "home_page");
+        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
 
         //手机清理
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
@@ -273,7 +274,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, SHOPPING_MALL);
         startActivity(RouteConstants.NEWS_LOAD_ACTIVITY, bundle);
-        StatisticsUtils.trackClick("Headline_News_Re'dian_click", "头条新闻热点", "home_page", "information_page");
+        StatisticsUtils.trackClick("Headline_News_Re'dian_click", "头条新闻热点", AppHolder.getInstance().getSourcePageId(), "information_page");
     }
 
     @OnClick(R.id.view_phone_thin)
@@ -282,14 +283,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_soft_manager));
         startActivity(intent);
-        StatisticsUtils.trackClick("Software_management_click", "软件管理", "home_page", "cell_phone_slimming_page");
+        StatisticsUtils.trackClick("Software_management_click", "软件管理", AppHolder.getInstance().getSourcePageId(), "cell_phone_slimming_page");
     }
 
     @OnClick(R.id.view_qq_clean)
     public void ViewQQCleanClick() {
         //QQ专清
         ((MainActivity)getActivity()).commitJpushClickTime(7);
-        StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", "home_page", "home_page");
+        StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_qq);
             return;
@@ -303,7 +304,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.iv_permission)
     public void onClick(){
         startActivity(new Intent(getContext(), PermissionActivity.class));
-        StatisticsUtils.trackClick("Triangular_yellow_mark_click", "三角黄标", "home_page", "permission_page");
+        StatisticsUtils.trackClick("Triangular_yellow_mark_click", "三角黄标", AppHolder.getInstance().getSourcePageId(), "permission_page");
     }
 
     @OnClick(R.id.btn_ljql)
@@ -320,7 +321,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mArrowRight.setVisibility(GONE);
             mLayoutRoot.setIntercept(true);
             initWebView();
-            StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", "home_page", "check_garbage_details");
+            StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
 
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
@@ -352,13 +353,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else if (type == TYPE_SCANING) {
             //停止扫描
             mPresenter.setIsFinish(true);
-            StatisticsUtils.trackClick("stop_scanning_click", "\"停止扫描\"点击", "home_page", "home_page");
+            StatisticsUtils.trackClick("stop_scanning_click", "\"停止扫描\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         }
     }
 
     @OnClick(R.id.layout_scan)
     public void mClickLayoutScan() {
-        StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", "home_page", "check_garbage_details");
+        StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
 
         //查看详情
         if (type == TYPE_SCAN_FINISH) {
@@ -369,7 +370,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.line_wx)
     public void mClickWx() {
         ((MainActivity)getActivity()).commitJpushClickTime(5);
-        StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", "home_page", "home_page");
+        StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
@@ -387,7 +388,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickJw() {
         ((MainActivity)getActivity()).commitJpushClickTime(6);
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-        StatisticsUtils.trackClick("Cell_phone_cooling_click", "手机降温点击", "home_page", "home_page");
+        StatisticsUtils.trackClick("Cell_phone_cooling_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     /**
@@ -780,7 +781,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         }
-        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", "home_page"
+        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId()
                 , "home_page_clean_up_page", String.valueOf(position));
 
     }
@@ -794,7 +795,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void clickDownload(View view, String downloadUrl, int position) {
         view.setOnClickListener(v -> {
             //广告埋点
-            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", "home_page"
+            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", AppHolder.getInstance().getSourcePageId()
                     , "home_page_clean_up_page", String.valueOf(position));
 //            mPresenter.startDownload(downloadUrl);
 //            ToastUtils.showShort("已开始下载");

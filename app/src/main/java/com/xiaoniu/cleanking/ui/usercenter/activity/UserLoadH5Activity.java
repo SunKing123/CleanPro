@@ -40,6 +40,7 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.UpdateInfoEntity;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.LoadH5Presenter;
@@ -511,7 +512,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 
         @JavascriptInterface
         public void onTitleClick(String id, String name) {
-            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", "home_page", "information_page", id, name);
+            StatisticsUtils.trackClickH5("content_cate_click", "资讯页分类点击", AppHolder.getInstance().getSourcePageId(), "information_page", id, name);
         }
 
         @JavascriptInterface
