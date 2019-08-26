@@ -21,6 +21,11 @@ public class AppHolder {
      */
     private String sourcePageId = "home_page";
 
+    /**
+     * 保存二级上级页面id
+     */
+    private String otherSourcePageId = "home_page";
+
     public String getSourcePageId() {
         return sourcePageId;
     }
@@ -29,4 +34,11 @@ public class AppHolder {
         this.sourcePageId = sourcePageId;
     }
 
+    public void setOtherSourcePageId(String otherSourcePageId) {
+        this.otherSourcePageId = otherSourcePageId;
+    }
+
+    public String getOtherSourcePageId() {
+        return otherSourcePageId;
+    }
 }

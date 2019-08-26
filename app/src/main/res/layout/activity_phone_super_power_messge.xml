@@ -42,7 +42,7 @@
             android:textSize="16sp" />
 
         <com.suke.widget.SwitchButton
-            android:id="@+id/switch_button"
+            android:id="@+id/s_btn_low_power"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:sb_background="@color/color_EDEDED"
@@ -73,6 +73,7 @@
             android:textSize="16sp" />
 
         <com.suke.widget.SwitchButton
+            android:id="@+id/s_btn_night_power"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:sb_background="@color/color_EDEDED"
@@ -119,6 +120,7 @@
             android:textSize="12sp" />
 
         <com.suke.widget.SwitchButton
+            android:id="@+id/s_btn_error_power"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

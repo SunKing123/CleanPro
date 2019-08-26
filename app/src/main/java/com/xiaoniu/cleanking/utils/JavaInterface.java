@@ -65,6 +65,7 @@ public class JavaInterface {
 
     @JavascriptInterface
     public void toOtherPage(String url) {
+        StatisticsUtils.trackClickUrlH5("banner_share_page", "广告点击", AppHolder.getInstance().getSourcePageId(), "banner_share_page", url);
         if (mActivity instanceof UserLoadH5Activity) {
             mActivity.finish();
         }

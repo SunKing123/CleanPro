@@ -78,6 +78,24 @@ public class StatisticsUtils {
     }
 
     /**
+     * h5的Url 点击埋点
+     *
+     * @param eventCode
+     * @param sourcePage
+     * @param currentPage
+     * @param url
+     */
+    public static void trackClickUrlH5(String eventCode,String eventName, String sourcePage, String currentPage, String url) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("h5_uri", url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+    }
+
+    /**
      * sdk 首页广告
      *
      * @param eventCode   事件code

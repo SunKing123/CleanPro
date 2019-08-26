@@ -79,4 +79,5 @@
     <string name="tool_open_notification">开通通知栏提醒</string>
     <string name="tool_select_app">选中的应用将不被拦截</string>
     <string name="tool_phone_use">手机多用4小时</string>
+    <string name="tool_one_key_saving">一键优化</string>
 </resources>
