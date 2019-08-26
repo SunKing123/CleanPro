@@ -20,9 +20,13 @@ public class NotifyCleanGuideActivity extends BaseActivity {
 
     public static void startNotificationGuideActivity(Context context) {
         if (context != null) {
-            Intent intent = new Intent(context, NotifyCleanGuideActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            if (!NotifyUtils.isNotificationListenerEnabled() || !SPUtil.isCleanNotificationEnable()) {
+                Intent intent = new Intent(context, NotifyCleanGuideActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } else {
+                NotifyCleanDetailActivity.startNotificationCleanActivity(context);
+            }
         }
     }
 

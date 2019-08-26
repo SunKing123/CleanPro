@@ -183,7 +183,6 @@ public class NotifyCleanManager {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (!mServiceSuccess) {
                     requestRebindService(ContextUtils.getContext());
                 }

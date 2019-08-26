@@ -81,4 +81,7 @@
     <string name="tool_phone_use">手机多用4小时</string>
     <string name="notification_clean_count"><![CDATA[<font color="#ff801b">%1$d</font>条垃圾通知]]></string>
     <string name="tool_one_key_saving">一键优化</string>
+
+    <string name="notify_no_clean_tips">%s 通知将不会被拦截</string>
+    <string name="notify_yes_clean_tips">%s 通知将会被拦截</string>
 </resources>

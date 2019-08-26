@@ -13,13 +13,11 @@ import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
-import java.util.List;
-
 public class NotifyCleanAdapter extends CommonRecyclerAdapter<NotificationInfo> {
 
 
-    public NotifyCleanAdapter(Context context, List<NotificationInfo> datas) {
-        super(context, datas, R.layout.item_clean_notification);
+    public NotifyCleanAdapter(Context context) {
+        super(context, null, R.layout.item_clean_notification);
     }
 
     @Override

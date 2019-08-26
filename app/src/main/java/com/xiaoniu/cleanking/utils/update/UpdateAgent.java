@@ -460,7 +460,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         public void onStart() {
             if (mBuilder == null) {
                 String title = "下载中 - " + mContext.getString(mContext.getApplicationInfo().labelRes);
-                mBuilder = new NotificationUtils(mContext, true).getNotification(title, "");
+                mBuilder = NotificationUtils.getNotification(title, "");
                 mBuilder.setSound(null);
                 mBuilder.setVibrate(null);
                 mBuilder.setAutoCancel(false);

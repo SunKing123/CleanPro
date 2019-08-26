@@ -1,54 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.xiaoniu.common.widget.xrecyclerview.XRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/set_recyclerView"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/color_F7F8FA"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_F7F8FA">
 
-    <LinearLayout
-        android:id="@+id/ll_notification"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_60dp"
-        android:layout_below="@id/line_title"
-        android:gravity="center_vertical"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dimen_16dp"
-        android:paddingRight="@dimen/dimen_16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/tool_open_notification"
-            android:textColor="@color/color_333333"
-            android:textSize="16sp" />
-
-        <com.suke.widget.SwitchButton
-            android:id="@+id/switch_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:sb_background="@color/color_EDEDED"
-            app:sb_border_width="0.5dp"
-            app:sb_checked="true"
-            app:sb_checked_color="@color/color_06C581"
-            app:sb_show_indicator="false" />
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:textColor="@color/color_666666"
-        android:paddingLeft="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_20dp"
-        android:textSize="12sp"
-        android:text="@string/tool_select_app"
-        android:layout_height="wrap_content"/>
-
-    <view class="android.support.v7.app.AlertController$RecycleListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </view>
-</LinearLayout>
+</com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
