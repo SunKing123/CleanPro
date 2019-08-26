@@ -48,6 +48,7 @@
             app:sb_background="@color/color_EDEDED"
             app:sb_border_width="0.5dp"
             app:sb_checked="true"
+            app:sb_checked_color="@color/color_06C581"
             app:sb_show_indicator="false" />
 
     </LinearLayout>
@@ -76,6 +77,7 @@
             android:layout_height="wrap_content"
             app:sb_background="@color/color_EDEDED"
             app:sb_border_width="0.5dp"
+            app:sb_checked_color="@color/color_06C581"
             app:sb_show_indicator="false" />
 
     </LinearLayout>
@@ -122,6 +124,7 @@
             android:layout_alignParentRight="true"
             app:sb_background="@color/color_EDEDED"
             app:sb_border_width="1dp"
+            app:sb_checked_color="@color/color_06C581"
             app:sb_show_indicator="false" />
 
     </RelativeLayout>
