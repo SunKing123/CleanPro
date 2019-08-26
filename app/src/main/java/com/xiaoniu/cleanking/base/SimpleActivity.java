@@ -12,6 +12,7 @@ import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.utils.LoadingDialog;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -57,9 +58,13 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCollector.addActivity(this, getClass());
         mHandler = new MHandler(SimpleActivity.this);
 
-        setContentView(getLayoutId());
+        int layoutId = getLayoutId();
+        if (layoutId != 0) {
+            setContentView(layoutId);
+        }
         mUnBinder = ButterKnife.bind(this);
         mContext = this;
         onViewCreated();
@@ -105,6 +110,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         cancelLoadingDialog();
         this.mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     @Override
