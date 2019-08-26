@@ -100,10 +100,10 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SHARE_SUCCESS:
-//                    showToast("分享成功");
+                    showToast("分享成功");
                     break;
                 case SHARE_CANCEL:
-//                    showToast("已取消");
+                    showToast("已取消");
                     break;
                 case SHARE_WECHAT:
                     showToast("没有安装微信，请先安装应用");

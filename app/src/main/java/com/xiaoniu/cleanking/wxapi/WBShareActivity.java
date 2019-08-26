@@ -1,6 +1,4 @@
-package com.xiaoniu.common.wxapi;
-
-//import com.umeng.socialize.media.WBShareCallBackActivity;
+package com.xiaoniu.cleanking.wxapi;
 
 import com.umeng.socialize.media.WBShareCallBackActivity;
 
