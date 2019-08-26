@@ -59,7 +59,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityCollector.addActivity(this, getClass());
-        mHandler = new MHandler(SimpleActivity.this);
+        mHandler = new MHandler(this);
 
         int layoutId = getLayoutId();
         if (layoutId != 0) {
