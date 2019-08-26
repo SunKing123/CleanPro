@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanSetActivity;
 import com.xiaoniu.common.base.BaseActivity;
 
 import static android.view.View.VISIBLE;
@@ -62,7 +63,6 @@ public class NotificationBarMessageActivity extends BaseActivity {
         mLlScan = findViewById(R.id.layout_scan);
         mLlCount = findViewById(R.id.layout_count);
         mTvTitle.setText(getString(R.string.tool_notification_clean));
-
     }
 
     @Override
@@ -75,7 +75,7 @@ public class NotificationBarMessageActivity extends BaseActivity {
 
             playStarAnimation();
         });
-        mIvRight.setOnClickListener(v -> startActivity(new Intent(this,NotificationBarMessageSetActivity.class)));
+        mIvRight.setOnClickListener(v -> startActivity(new Intent(this, NotifyCleanSetActivity.class)));
     }
 
     private void playStarAnimation() {

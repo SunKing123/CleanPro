@@ -1,12 +1,21 @@
-package com.xiaoniu.cleanking.ui.main.activity;
+package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.common.base.BaseActivity;
 
-public class NotificationBarMessageSetActivity extends BaseActivity {
+public class NotifyCleanSetActivity extends BaseActivity {
+
+    public static void start(Context context) {
+        if (context != null) {
+            Intent intent = new Intent(context, NotifyCleanSetActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+    }
 
     @Override
     protected int getLayoutResId() {

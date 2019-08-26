@@ -214,11 +214,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.activity.NotificationBarMessageActivity"
+            android:name=".ui.tool.notify.activity.NotifyCleanGuideActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.activity.NotificationBarMessageSetActivity"
+            android:name=".ui.tool.notify.activity.NotifyCleanSetActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
@@ -277,6 +277,18 @@
             </intent-filter>
         </service>
         <service android:name=".ui.usercenter.activity.FloatingImageDisplayService" />
+
+        <activity
+            android:name=".ui.tool.notify.activity.NotifyCleanDetailActivity"
+            android:screenOrientation="portrait" />
+        <service
+            android:name=".ui.tool.notify.service.NotificationCleanService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
     <permission

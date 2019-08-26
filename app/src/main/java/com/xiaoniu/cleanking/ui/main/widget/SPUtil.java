@@ -6,7 +6,9 @@ import android.text.TextUtils;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.ContextUtils;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class SPUtil {
@@ -47,6 +49,9 @@ public class SPUtil {
     public static String IS_First = "is_first";
     public static String IS_CLEAR = "is_clear";
     public static String TOTLE_CLEAR_CATH = "totle_clear_cath";
+    private static final String KEY_ENABLE_CLEAN_NOTIFICATION = "key_enable_clean_notification";
+    private static final String KEY_DISABLE_CLEAN_PACKAGE = "key_disable_clean_package";
+    private static final String KEY_NOTIFY_CLEAN_COUNT = "key_notify_clean_count";
 
     public static void setMyToken(String mytokens) {
         mytoken = mytokens;
@@ -339,6 +344,104 @@ public class SPUtil {
             isInAudit = true;
         }
         return isInAudit;
+    }
+
+    /**
+     * 说明：设置是否开启通知栏清理功能
+     * <br>作者：huyang
+     * <br>添加时间：2019/5/19 13:25
+     */
+    public static void setCleanNotificationEnable(boolean status) {
+        setBoolean(ContextUtils.getContext(), KEY_ENABLE_CLEAN_NOTIFICATION, status);
+    }
+
+    /**
+     * 说明：获取通知栏清理设置页功能开启状态
+     * <br>作者：huyang
+     * <br>添加时间：2019/5/19 13:25
+     */
+    public static boolean isCleanNotificationEnable() {
+        return getBoolean(ContextUtils.getContext(), KEY_ENABLE_CLEAN_NOTIFICATION, true);
+    }
+
+    /**
+     * 说明：获取通知栏清理白名单
+     * <br>作者：huyang
+     * <br>添加时间：2019/5/23 20:27
+     */
+    public static Set<String> getActualWhitelist() {
+        Set<String> defaultWhitelist = getDefaultWhitelist();
+        Set<String> userSetWhitelist = SPUtil.getDisableCleanNotificationPackages(defaultWhitelist);
+        return userSetWhitelist;
+    }
+
+    private static Set<String> getDefaultWhitelist() {
+        Set<String> whitelist = new HashSet<>();
+//        whitelist.add("com.tencent.mm");
+//        whitelist.add("com.tencent.mobileqq");
+//        whitelist.add("com.tencent.wework");
+        whitelist.add("com.xiaoniu.cleanking");
+        return whitelist;
+    }
+
+    /**
+     * 说明：保存用户设置的可展示通知的应用白名单
+     * <br>作者：huyang
+     * <br>添加时间：2019/5/19 13:47
+     */
+    public static void addDisableCleanNotificationPackages(String... pkgs) {
+        if (pkgs == null) {
+            return;
+        } else if (pkgs.length == 0) {
+            ContextUtils.getContext().getSharedPreferences(XML_NAME, Context.MODE_PRIVATE).edit().putStringSet(KEY_DISABLE_CLEAN_PACKAGE, new HashSet<String>()).commit();
+        }
+        Set<String> raw = getDisableCleanNotificationPackages(new HashSet<String>());
+        raw = new HashSet<>(raw);
+        boolean modified = false;
+        for (String pkg : pkgs) {
+            if (!TextUtils.isEmpty(pkg) && raw.add(pkg)) {
+                modified = true;
+            }
+        }
+
+        if (modified) {
+            ContextUtils.getContext().getSharedPreferences(XML_NAME, Context.MODE_PRIVATE).edit().putStringSet(KEY_DISABLE_CLEAN_PACKAGE, raw).commit();
+        }
+    }
+
+    public static void removeDisableCleanNotificationPackage(String pkg) {
+        if (TextUtils.isEmpty(pkg)) {
+            return;
+        }
+        Set<String> raw = getDisableCleanNotificationPackages(new HashSet<String>());
+        if (raw.contains(pkg)) {
+            raw = new HashSet<>(raw);
+            raw.remove(pkg);
+            ContextUtils.getContext().getSharedPreferences(XML_NAME, Context.MODE_PRIVATE).edit().putStringSet(KEY_DISABLE_CLEAN_PACKAGE, raw).commit();
+        }
+    }
+
+    /**
+     * 说明：获取用户设置的可展示通知的应用白名单
+     * <br>作者：huyang
+     * <br>添加时间：2019/5/19 14:03
+     */
+    public static Set<String> getDisableCleanNotificationPackages(Set<String> defaultSet) {
+        return ContextUtils.getContext().getSharedPreferences(XML_NAME, Context.MODE_PRIVATE).getStringSet(KEY_DISABLE_CLEAN_PACKAGE, defaultSet);
+    }
+
+    /**
+     * 获取通知栏清理累计通知数
+     */
+    public static long getNotifyCleanCount() {
+        return getLong(ContextUtils.getContext(), KEY_NOTIFY_CLEAN_COUNT, 0l);
+    }
+
+    public static void addNotifyCleanCount(long newCount) {
+        if (newCount > 0) {
+            long allCount = getNotifyCleanCount() + newCount;
+            setLong(ContextUtils.getContext(), KEY_NOTIFY_CLEAN_COUNT, allCount);
+        }
     }
 }
 

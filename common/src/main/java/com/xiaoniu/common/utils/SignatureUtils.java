@@ -26,9 +26,10 @@ public class SignatureUtils {
     /**
      * 说明：根据包名获取已安装应用的签名
      */
-    public static String getSignature(Context context, String packageName) {
+    public static HashSet<String> getSignature(Context context, String packageName) {
+        HashSet<String> result = new HashSet<String>();
         if (context == null || TextUtils.isEmpty(packageName)) {
-            return "";
+            return result;
         }
         try {
             PackageManager pm = context.getPackageManager();
@@ -37,7 +38,7 @@ public class SignatureUtils {
                 for (int i = 0; i < packageInfo.signatures.length; i++) {
                     String str = parseSignature(packageInfo.signatures[i].toByteArray());
                     if (!TextUtils.isEmpty(str)) {
-                        return str;
+                        result.add(str);
                     }
                 }
             }
@@ -45,7 +46,7 @@ public class SignatureUtils {
             e.printStackTrace();
         }
 
-        return "";
+        return result;
     }
 
     /**

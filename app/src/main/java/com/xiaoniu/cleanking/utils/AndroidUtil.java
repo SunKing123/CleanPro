@@ -221,4 +221,12 @@ public class AndroidUtil {
         return AppApplication.getInstance().getString(R.string.app_num);
     }
 
+    public static boolean isLegalPackageName(String name) {
+        if (TextUtils.isEmpty(name)) {
+            return false;
+        }
+
+        String regex = "[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)+";
+        return name.matches(regex);
+    }
 }

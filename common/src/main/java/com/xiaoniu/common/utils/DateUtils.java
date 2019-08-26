@@ -38,11 +38,26 @@ public class DateUtils {
      */
     private static String before = "刚刚";
 
+    /**
+     * The format used is 2013-07-13 05:07
+     */
+    public static final String PATTERN_YMDHM = "yyyy-MM-dd HH:mm";
+
+    public static final String PATTERN_YMDHM2 = "yyyy/MM/dd HH:mm";
+
+    public static final String PATTERN_YMDHMS = "yyyy-MM-dd HH:mm:ss";
 
     /**
-     * 时间日期格式化到年月日.
+     * The format used is 2013-07-13
      */
-    public static String dateFormatYMD = "yyyy.MM.dd";
+    public static final String PATTERN_YMD = "yyyy-MM-dd";
+
+    /**
+     * The format used is 05:07
+     */
+    public static final String PATTERN_TIME = "HH:mm:ss";
+
+    public static final String PATTERN_FEEDBACK_TIME = "HH:mm";
 
     public static String format(Date date, String format) {
 
