@@ -54,6 +54,7 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
             }
         }
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_super_power_saving;

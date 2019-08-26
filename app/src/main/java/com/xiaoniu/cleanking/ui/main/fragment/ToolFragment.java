@@ -15,7 +15,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerSavingActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -194,7 +194,7 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", "tool_page", "clean_up_toolbox_page");
         }else if (ids == R.id.ll_notification_clear){
             //超强省电
-            startActivity(PhoneSuperPowerSavingActivity.class);
+            startActivity(PhoneSuperPowerActivity.class);
             //TODO 添加埋点
         }
     }
