@@ -290,7 +290,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void ViewQQCleanClick() {
         //QQ专清
         ((MainActivity)getActivity()).commitJpushClickTime(7);
-        StatisticsUtils.trackClick("qq_cleaning_click", "qq专清点击", AppHolder.getInstance().getSourcePageId(), "home_page");
+        StatisticsUtils.trackClick("qq_cleaning_click", "“QQ专清”点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_qq);
             return;
