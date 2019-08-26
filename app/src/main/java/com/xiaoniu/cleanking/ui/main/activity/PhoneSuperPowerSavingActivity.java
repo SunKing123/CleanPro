@@ -132,7 +132,6 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
                 finish();
                 break;
             case R.id.iv_power:
-                startActivity(PhoneSuperSavingNowActivity.class);
                 finish();
                 break;
             case R.id.icon_saving_right:
@@ -142,6 +141,7 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
                 break;
             case R.id.ll_bottom:
                 StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                startActivity(PhoneSuperSavingNowActivity.class);
                 break;
         }
     }
