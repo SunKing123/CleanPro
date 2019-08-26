@@ -103,7 +103,7 @@ public class PowerExpandableListViewAdapter extends BaseExpandableListAdapter {
         GroupViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.group_list, null);
+                    .inflate(R.layout.group_power_list, null);
             holder = new GroupViewHolder();
             holder.mPackageNameTv = convertView.findViewById(R.id.package_name);
             holder.mPackageSizeTv = convertView.findViewById(R.id.package_size);
@@ -154,8 +154,7 @@ public class PowerExpandableListViewAdapter extends BaseExpandableListAdapter {
         FirstJunkInfo info = mJunkGroups.get(groupPosition).mChildren.get(childPosition);
         ChildViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.level1_item_list, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.level1_item_list, null);
             holder = new ChildViewHolder();
             holder.mJunkTypeTv = convertView.findViewById(R.id.text_app_name);
             holder.mLogo = convertView.findViewById(R.id.app_logo);
@@ -173,6 +172,7 @@ public class PowerExpandableListViewAdapter extends BaseExpandableListAdapter {
         //垃圾的LOGO
         holder.mLogo.setImageDrawable(info.getGarbageIcon());
         //垃圾大小
+        holder.mJunkSizeTv.setVisibility(View.GONE);
         holder.mJunkSizeTv.setText(CleanUtil.formatShortFileSize(mContext, info.getTotalSize()));
         //选择框
         holder.mLayoutCheck.setSelected(info.isAllchecked());
