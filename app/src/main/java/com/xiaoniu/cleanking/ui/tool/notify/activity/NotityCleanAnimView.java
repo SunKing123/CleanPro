@@ -221,7 +221,7 @@ public class NotityCleanAnimView extends RelativeLayout {
         mTextCount.setText(mCountEntity.getTotalSize());
         mTextUnit.setText("%");
         mTextSize.setText(mCountEntity.getTotalSize());
-        mTextGb.setText(mCountEntity.getUnit());
+//        mTextGb.setText(mCountEntity.getUnit());
     }
 
     //Step1:上面红色布局和中间1dp的布局动画开始

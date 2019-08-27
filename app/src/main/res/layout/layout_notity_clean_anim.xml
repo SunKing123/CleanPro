@@ -8,7 +8,6 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:expanded="true"
         app:elevation="0dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -107,7 +106,7 @@
         android:layout_height="match_parent"
         android:background="@color/color_FD6F46"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/viewt"
