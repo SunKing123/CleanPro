@@ -46,7 +46,7 @@ public class DisplayImageUtils {
 
     public void displayImage(String str, ImageView imageView) {
         if (this.mLruCache == null) {
-            this.mLruCache = new LruCache<>(100);
+            this.mLruCache = new LruCache<>(50);
         }
         if (TextUtils.isEmpty(str)) {
             imageView.setImageResource(R.drawable.clean_icon_apk);

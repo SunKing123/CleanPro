@@ -13,7 +13,9 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
-import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationUpdateEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationCleanEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationSetEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -31,7 +33,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private TextView mTvNotificationCount;
     private NotifyCleanAdapter mNotifyCleanAdapter;
     private boolean mIsClearNotification;
-    private int mCurrentCleanCount;
     private TextView mTvDelete;
 
     private NotityCleanAnimView mCleanAnimView;
@@ -85,6 +86,10 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
         mTvDelete.setOnClickListener(v -> {
             mIsClearNotification = true;
+            NotifyCleanManager.getInstance().cleanAllNotification();
+            EventBus.getDefault().post(new ResidentUpdateEvent());
+            mNotifyCleanAdapter.clear();
+
             mCleanAnimView.setData(CleanUtil.formatShortFileSize(100), CleanAnimView.page_junk_clean);
             mCleanAnimView.setVisibility(View.VISIBLE);
             //清理动画
@@ -117,18 +122,38 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mNotifyCleanAdapter.setData(notificationList);
         mRecyclerView.setAdapter(mNotifyCleanAdapter);
         mTvNotificationCount.setText(notificationList.size() + "");
+
+        if (notificationList.size() <= 0) {
+            showCleanFinishView();
+        }
     }
 
     @Subscribe
-    public void onEventMainThread(NotificationUpdateEvent event) {
+    public void onEventMainThread(NotificationCleanEvent event) {
         if (!mIsClearNotification && event != null) {
             ArrayList<NotificationInfo> notificationList = NotifyCleanManager.getInstance().getAllNotifications();
             mNotifyCleanAdapter.setData(notificationList);
             mTvNotificationCount.setText(notificationList.size() + "");
-            mCurrentCleanCount = mCurrentCleanCount + event.cleanCount;
             if (notificationList.size() <= 0) {
-                /*todo 清理完成页*/
+                showCleanFinishView();
             }
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(NotificationSetEvent event) {
+        if (event != null && !event.isEnable()) {
+            NotifyCleanManager.getInstance().cleanAllNotification();
+            EventBus.getDefault().post(new ResidentUpdateEvent());
+            mNotifyCleanAdapter.clear();
+            showCleanFinishView();
+        }
+    }
+
+    private void showCleanFinishView() {
+        /*显示完成页*/
+        mCleanAnimView.setVisibility(View.VISIBLE);
+        showBarColor(getResources().getColor(R.color.color_06C581));
+        mCleanAnimView.setViewTrans();
     }
 }

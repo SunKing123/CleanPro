@@ -21,7 +21,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanDetailActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
-import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationUpdateEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationCleanEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.service.NotificationCleanService;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
@@ -73,7 +73,7 @@ public class NotifyCleanManager {
     public void addAllNotification(ArrayList<NotificationInfo> notifications) {
         if (notifications != null && notifications.size() > 0) {
             mNotificationList.addAll(notifications);
-            EventBus.getDefault().post(new NotificationUpdateEvent());
+            EventBus.getDefault().post(new NotificationCleanEvent());
         }
     }
 
@@ -81,7 +81,7 @@ public class NotifyCleanManager {
         if (notification != null) {
             mNotificationList.add(0, notification);
             handleQQMsg(notification);
-            EventBus.getDefault().post(new NotificationUpdateEvent());
+            EventBus.getDefault().post(new NotificationCleanEvent());
         }
     }
 
@@ -131,7 +131,7 @@ public class NotifyCleanManager {
         if (notification != null) {
             mNotificationList.remove(notification);
             SPUtil.addNotifyCleanCount(1);
-            NotificationUpdateEvent event = new NotificationUpdateEvent();
+            NotificationCleanEvent event = new NotificationCleanEvent();
             event.cleanCount = 1;
             EventBus.getDefault().post(event);
             NotificationCleanService.updateReridentView(ContextUtils.getContext());
@@ -150,7 +150,7 @@ public class NotifyCleanManager {
             }
             if (cleanCount > 0) {
                 SPUtil.addNotifyCleanCount(cleanCount);
-                NotificationUpdateEvent event = new NotificationUpdateEvent();
+                NotificationCleanEvent event = new NotificationCleanEvent();
                 event.cleanCount = cleanCount;
                 EventBus.getDefault().post(event);
                 NotificationCleanService.updateReridentView(ContextUtils.getContext());
@@ -158,7 +158,7 @@ public class NotifyCleanManager {
         }
     }
 
-    public void cleanAllNotification(Context context) {
+    public void cleanAllNotification() {
         int count = mNotificationList.size();
         if (count > 0) {
             mNotificationList.clear();
