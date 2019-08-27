@@ -172,7 +172,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                cancelLoadingDialog();
+//                cancelLoadingDialog();
                 if (!isError) {
                     isSuccess = true;
                     //回调成功后的相关操作
@@ -180,6 +180,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         mLayoutNetError.setVisibility(View.GONE);
                     }
                     if (mWebView != null) {
+                        if (SPUtil.isInAudit())
+                            mWebView.setVisibility(View.GONE);
 //                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                     if (recycle_view != null) {
