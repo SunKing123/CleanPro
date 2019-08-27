@@ -54,7 +54,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     private MyHandler mHandler = new MyHandler(this);
 
-    private int num = 31;
+    private int num;
+    private TextView mTvAllNum;
+
     class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
         public MyHandler(Activity con){
@@ -82,6 +84,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     @Override
     protected void initVariable(Intent intent) {
         hideToolBar();
+        num = intent.getIntExtra("processNum", 10);
     }
 
     @Override
@@ -90,6 +93,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mBack = findViewById(R.id.iv_back);
         mBtnCancel = findViewById(R.id.btn_cancel);
         mTvNum = findViewById(R.id.tv_num);
+        mTvAllNum = findViewById(R.id.tvAllNum);
+
         mRlResult = findViewById(R.id.rl_result);
         mLlResultTop = findViewById(R.id.viewt_finish);
         mNestedScrollWebView = findViewById(R.id.web_view);
@@ -99,6 +104,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mLottieAnimationFinishView = findViewById(R.id.view_lottie);
 
         mTvNum.setText(String.valueOf(num));
+        mTvAllNum.setText("/" + String.valueOf(num));
         initWebView();
         showStartAnim();
     }

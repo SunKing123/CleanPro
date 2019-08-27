@@ -98,8 +98,8 @@ public class AppUtils {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
-            int labelRes = packageInfo.applicationInfo.labelRes;
-            return context.getResources().getString(labelRes);
+            ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+            return applicationInfo.loadLabel(packageManager).toString();
         } catch (Exception e) {
             e.printStackTrace();
         }

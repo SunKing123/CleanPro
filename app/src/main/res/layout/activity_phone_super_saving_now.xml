@@ -153,10 +153,11 @@
                         android:textSize="70sp" />
 
                     <TextView
+                        android:id="@+id/tvAllNum"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
-                        android:text="/31"
+                        android:text=""
                         android:paddingBottom="@dimen/dimen_16dp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_16dp" />
