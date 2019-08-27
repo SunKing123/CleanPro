@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -36,7 +36,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
     private NotityCleanAnimView mCleanAnimView;
 
-    private RelativeLayout mTitleBar;
+    private LinearLayout mTitleBar;
     private ImageView mIvBack;
     private ImageView mIvSet;
     public static void startNotificationCleanActivity(Context context) {
@@ -68,7 +68,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mTitleBar = findViewById(R.id.title_bar);
         mRecyclerView = findViewById(R.id.notify_recyclerView);
         mTvDelete = findViewById(R.id.tv_delete);
-        mIvBack = findViewById(R.id.iv_back);
+        mIvBack = findViewById(R.id.iv_back_notity);
         mIvSet = findViewById(R.id.iv_set);
         mHeaderView = mInflater.inflate(R.layout.layout_notification_clean_header, null);
         mTvNotificationCount = mHeaderView.findViewById(R.id.tvNotificationCount);
@@ -76,7 +76,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mRecyclerView.setHeaderView(mHeaderView);
         hideToolBar();
         mCleanAnimView = findViewById(R.id.view_clean_anim);
-
     }
 
     @Override
@@ -94,7 +93,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             showBarColor(getResources().getColor(R.color.color_FD6F46));
             mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         });
-
     }
 
 

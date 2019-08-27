@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.tool.notify.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -47,17 +46,14 @@ public class NotifyCleanGuideActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        mTvClean.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (NotifyUtils.isNotificationListenerEnabled()) {
-                    SPUtil.setCleanNotificationEnable(true);
-                    NotifyCleanDetailActivity.startNotificationCleanActivity(NotifyCleanGuideActivity.this);
-                    finish();
-                } else {
-                    mRequestPermission = true;
-                    NotifyUtils.openNotificationListenerSettings(NotifyCleanGuideActivity.this);
-                }
+        mTvClean.setOnClickListener(v -> {
+            if (NotifyUtils.isNotificationListenerEnabled()) {
+                SPUtil.setCleanNotificationEnable(true);
+                NotifyCleanDetailActivity.startNotificationCleanActivity(NotifyCleanGuideActivity.this);
+                finish();
+            } else {
+                mRequestPermission = true;
+                NotifyUtils.openNotificationListenerSettings(NotifyCleanGuideActivity.this);
             }
         });
     }
