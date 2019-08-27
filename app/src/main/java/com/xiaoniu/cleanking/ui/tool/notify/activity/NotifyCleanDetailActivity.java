@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
@@ -109,6 +111,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         });
 
         mTvDelete.setOnClickListener(v -> {
+            //通知栏清理
+            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.NOTITY);
             mIsClearNotification = true;
             NotifyCleanManager.getInstance().cleanAllNotification();
             EventBus.getDefault().post(new ResidentUpdateEvent());

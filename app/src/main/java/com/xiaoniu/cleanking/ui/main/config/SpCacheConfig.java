@@ -41,4 +41,12 @@ public class SpCacheConfig {
     public static final String CLEAR_NUM = "clean_num";
     //记录是否已保存极光
     public static final String IS_SAVE_JPUSH_ALIAS = "j_push_alias";
+    //埋点上一级页面
+    public static final String ONKEY = "one_key";
+    public static final String PHONE_CLEAN = "phone_clean";
+    public static final String WETCHAT_CLEAN = "wetchat_clean";
+    public static final String QQ_CLEAN = "qq_clean";
+    public static final String PHONE_COOLING = "phone_cooling";
+    public static final String NOTITY = "notity";
+    public static final String SUPER_POWER_SAVING = "super_power_saving";
 }

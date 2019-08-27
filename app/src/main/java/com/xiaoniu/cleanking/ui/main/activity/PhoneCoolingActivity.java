@@ -43,6 +43,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -538,7 +539,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         for (FirstJunkInfo firstJunkInfo : mRunningProcess) {
             CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(), firstJunkInfo.getPid());
         }
-
+        //手机降温
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
         setViewPlay();
     }
 
