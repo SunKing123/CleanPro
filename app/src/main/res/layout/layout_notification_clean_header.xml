@@ -75,8 +75,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="#1a1a1a"
+                    android:textSize="14sp"
+                    android:textColor="#333333"
                     android:ellipsize="end"
                     android:text="通知栏清理已开启"
                     android:lines="1" />
@@ -84,8 +84,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    android:textColor="#999999"
                     android:layout_marginTop="3dp"
                     android:ellipsize="end"
                     android:text="可在通知栏中一键清理垃圾通知"

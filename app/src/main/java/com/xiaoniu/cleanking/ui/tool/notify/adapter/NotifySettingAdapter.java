@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationSettingInfo;
+import com.xiaoniu.cleanking.utils.DisplayImageUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
@@ -29,13 +30,9 @@ public class NotifySettingAdapter extends CommonRecyclerAdapter<NotificationSett
             final ImageView ivSelect = (ImageView) commonHolder.getView(R.id.ivSelect);
 
             tvName.setText(itemData.appName);
-            if (itemData.icon != null) {
-                ivIcon.setImageBitmap(itemData.icon);
-            } else {
-                ivIcon.setImageResource(R.mipmap.icon_clean_image);
-            }
-            ivSelect.setSelected(itemData.selected);
+            DisplayImageUtils.getInstance().displayImage(itemData.pkg, ivIcon);
 
+            ivSelect.setSelected(itemData.selected);
             ivSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

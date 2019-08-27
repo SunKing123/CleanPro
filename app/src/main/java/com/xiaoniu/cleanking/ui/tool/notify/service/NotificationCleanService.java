@@ -29,7 +29,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanDetailActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
-import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationUpdateEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationCleanEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -84,11 +84,16 @@ public class NotificationCleanService extends NotificationListenerService {
         if (intent != null) {
             String action = intent.getAction();
             if (ACTION_CLEAN.equals(action)) {
-                NotifyCleanManager.getInstance().saveLastCleanCount();
-                cleanAllNotifications();
+//                NotifyCleanManager.getInstance().saveLastCleanCount();
+//                cleanAllNotifications();
                 /*显示清理动画*/
                 SystemUtils.collapseStatusBar(this);
-//                AccelerateActivity.start(this, AccelerateActivity.VALUE_TYPE_NOTIFY);
+                String className = SystemUtils.getCurrentTopActivity(this);
+                if (NotifyCleanGuideActivity.class.getName().equals(className)
+                        || NotifyCleanDetailActivity.class.getName().equals(className)) {
+                    return START_NOT_STICKY;
+                }
+                NotifyCleanDetailActivity.startNotificationCleanActivity(this);
             } else if (ACTION_LIST.equals(action)) {
                 SystemUtils.collapseStatusBar(this);
                 String className = SystemUtils.getCurrentTopActivity(this);
@@ -96,10 +101,7 @@ public class NotificationCleanService extends NotificationListenerService {
                         || NotifyCleanDetailActivity.class.getName().equals(className)) {
                     return START_NOT_STICKY;
                 }
-
-//                Intent notifyIntent = new Intent();
-//                notifyIntent.putExtra(HomeUtils.NOTIFY, HomeUtils.NOTIFY_VALUE_OPENHOME_TO_NOTIFY);
-//                HomeUtils.startHomeClearTop(this, notifyIntent);
+                NotifyCleanDetailActivity.startNotificationCleanActivity(this);
             } else if (ACTION_UPDATE_RERIDENT.equals(action)) {
                 int count = NotifyCleanManager.getInstance().getAllNotifications().size();
                 if (count > 0) {
@@ -118,9 +120,9 @@ public class NotificationCleanService extends NotificationListenerService {
     private void cleanAllNotifications() {
         int count = NotifyCleanManager.getInstance().getAllNotifications().size();
         if (count > 0) {
-            NotifyCleanManager.getInstance().cleanAllNotification(this);
+            NotifyCleanManager.getInstance().cleanAllNotification();
             stopForeground(true);
-            NotificationUpdateEvent event = new NotificationUpdateEvent();
+            NotificationCleanEvent event = new NotificationCleanEvent();
             event.cleanCount = count;
             EventBus.getDefault().post(event);
         }

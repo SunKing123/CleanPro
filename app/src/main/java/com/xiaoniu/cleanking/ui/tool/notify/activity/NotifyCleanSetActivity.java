@@ -12,11 +12,12 @@ import com.xiaoniu.cleanking.ui.main.bean.InstalledApp;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifySettingAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationSettingInfo;
+import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationSetEvent;
 import com.xiaoniu.cleanking.utils.PackageUtils;
 import com.xiaoniu.common.base.BaseActivity;
-import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.AsyncTaskUtils;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,6 @@ public class NotifyCleanSetActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         mRecyclerView = findViewById(R.id.set_recyclerView);
         mHeaderView = mInflater.inflate(R.layout.layout_notification_setting_header, mRecyclerView, false);
-        mHeaderView.setVisibility(View.GONE);
         mSwitchButton = (SwitchButton) mHeaderView.findViewById(R.id.switch_button);
         mTvSetDesc = mHeaderView.findViewById(R.id.tvSetDesc);
         mRecyclerView.setHeaderView(mHeaderView);
@@ -83,6 +83,7 @@ public class NotifyCleanSetActivity extends BaseActivity {
                     SPUtil.setCleanNotificationEnable(false);
                     mTvSetDesc.setVisibility(View.GONE);
                     mNotifySettingAdapter.clear();
+                    EventBus.getDefault().post(new NotificationSetEvent(false));
                 }
             }
         });
@@ -92,24 +93,10 @@ public class NotifyCleanSetActivity extends BaseActivity {
     protected void loadData() {
         mNotifySettingAdapter = new NotifySettingAdapter(mContext);
         mRecyclerView.setAdapter(mNotifySettingAdapter);
-        showLoadingDialog();
-        AsyncTaskUtils.background(new Runnable() {
-            @Override
-            public void run() {
-                prepareData();
-                AsyncTaskUtils.uiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        cancelLoadingDialog();
-                        mHeaderView.setVisibility(View.VISIBLE);
-                        if (SPUtil.isCleanNotificationEnable()) {
-                            mNotifySettingAdapter.setData(mAppList);
-                        }
-                    }
-                });
-            }
-        });
-
+        prepareData();
+        if (SPUtil.isCleanNotificationEnable()) {
+            mNotifySettingAdapter.setData(mAppList);
+        }
     }
 
     private void prepareData() {
@@ -130,7 +117,7 @@ public class NotifyCleanSetActivity extends BaseActivity {
 
                 data = new NotificationSettingInfo();
                 data.pkg = next.getKey();
-                data.icon = AppUtils.getAppIcon(this, value.packageName);
+//                data.icon = AppUtils.getAppIcon(this, value.packageName);
                 data.appName = value.appName;
                 data.selected = actualWhitelist.contains(data.pkg);
 
