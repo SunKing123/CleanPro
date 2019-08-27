@@ -233,7 +233,7 @@ public class RoundedImageView extends AppCompatImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         mResource = 0;
-        mDrawable = RoundedDrawable.fromBitmap(bm);
+        mDrawable = RoundedDrawable.fromBitmap(bm, mCornerRadii[0]);
         updateDrawableAttrs();
         super.setImageDrawable(mDrawable);
     }

@@ -92,13 +92,12 @@
     <RelativeLayout
         android:id="@+id/ll_not_nor"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/ll_night"
         android:layout_marginTop="1dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dimen_16dp"
-        android:paddingRight="@dimen/dimen_16dp">
+        android:padding="@dimen/dimen_16dp">
 
         <TextView
             android:id="@+id/tv_title"
@@ -135,15 +134,15 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@id/ll_low_power"
-        android:background="@color/color_EDEDED"
         android:layout_marginLeft="@dimen/dimen_16dp"
-        android:layout_marginRight="@dimen/dimen_16dp" />
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@color/color_EDEDED" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@id/ll_night"
-        android:background="@color/color_EDEDED"
         android:layout_marginLeft="@dimen/dimen_16dp"
-        android:layout_marginRight="@dimen/dimen_16dp" />
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@color/color_EDEDED" />
 </RelativeLayout>

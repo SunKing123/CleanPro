@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,14 +27,20 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
+import com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * 超强省电中...
@@ -58,26 +65,33 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     private int num;
     private TextView mTvAllNum;
+    public List<MultiItemInfo> mSelectedList;
+    private View mLayIconAnim;
+    private RoundedImageView mIvIcon1;
+    private RoundedImageView mIvIcon2;
 
     class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
-        public MyHandler(Activity con){
+
+        public MyHandler(Activity con) {
             this.mActivity = new WeakReference<>(con);
         }
+
         public void handleMessage(android.os.Message msg) {
-            if(msg.what == 1 ){
+            if (msg.what == 1) {
                 showFinishAnim();
-            }else if(msg.what == 2){
-                num --;
+            } else if (msg.what == 2) {
+                num--;
                 mTvNum.setText(String.valueOf(num));
                 if (num > 0) {
-                    sendEmptyMessageDelayed(2, 100);
-                }else {
+                    sendEmptyMessageDelayed(2, 800);
+                } else {
                     sendEmptyMessageDelayed(1, 800);
                 }
             }
         }
     }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_phone_super_saving_now;
@@ -87,6 +101,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     protected void initVariable(Intent intent) {
         hideToolBar();
         num = intent.getIntExtra("processNum", 10);
+        mSelectedList = PhoneSuperPowerDetailActivity.sSelectedList;
+        PhoneSuperPowerDetailActivity.sSelectedList = null;
     }
 
     @Override
@@ -105,10 +121,15 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mFlAnim = findViewById(R.id.fl_anim);
         mLottieAnimationFinishView = findViewById(R.id.view_lottie);
 
+        mLayIconAnim = findViewById(R.id.layIconAnim);
+        mIvIcon1 = findViewById(R.id.ivIcon1);
+        mIvIcon2 = findViewById(R.id.ivIcon2);
+
         mTvNum.setText(String.valueOf(num));
         mTvAllNum.setText("/" + String.valueOf(num));
         initWebView();
         showStartAnim();
+        showIconAnim();
     }
 
     @Override
@@ -121,8 +142,134 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     @Override
     protected void loadData() {
 
-        mHandler.sendEmptyMessageDelayed(1,5000);
+//        mHandler.sendEmptyMessageDelayed(1, 5000);
         mHandler.sendEmptyMessageDelayed(2, 1000);
+    }
+
+    /**
+     * 正在休眠应用减少耗电...
+     */
+    private void showIconAnim() {
+        mLayIconAnim.setVisibility(View.VISIBLE);
+        mLayIconAnim.post(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = getNextImg();
+                if (bitmap != null) {
+                    mIvIcon1.setImageBitmap(bitmap);
+                    playIconAnim1(mIvIcon1);
+                } else {
+                    mIvIcon1.setVisibility(View.GONE);
+                }
+
+                bitmap = getNextImg();
+                if (bitmap != null) {
+                    mIvIcon2.setImageBitmap(bitmap);
+                    playIconAnim2(mIvIcon2);
+                } else {
+                    mIvIcon2.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+
+    private void playIconAnim1(final ImageView ivIcon) {
+        ivIcon.setVisibility(View.VISIBLE);
+        float distance = DisplayUtils.dip2px(40);
+        ValueAnimator anim1 = ValueAnimator.ofFloat(0f, distance);
+        anim1.setDuration(800);
+        ivIcon.setPivotX(0.5f * ivIcon.getMeasuredWidth());
+        ivIcon.setPivotY(0.5f * ivIcon.getMeasuredHeight());
+
+        ivIcon.setTranslationY(0);
+        ivIcon.setScaleX(1);
+        ivIcon.setScaleY(1);
+        ivIcon.setAlpha(1f);
+        anim1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float currentValue = (float) animation.getAnimatedValue();
+                float percent = currentValue / distance;
+                ivIcon.setScaleX(1 - percent);
+                ivIcon.setScaleY(1 - percent);
+
+                if (1 - percent <= 0.5) {
+                    percent = 0.5f;
+                }
+                ivIcon.setAlpha(1 - percent);
+                ivIcon.setTranslationY(-currentValue);
+            }
+        });
+
+        anim1.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Bitmap bitmap = getNextImg();
+                if (bitmap != null) {
+                    ivIcon.setImageBitmap(bitmap);
+                    playIconAnim2(ivIcon);
+                } else {
+                    ivIcon.setVisibility(View.GONE);
+                }
+
+            }
+        });
+        anim1.start();
+    }
+
+    private void playIconAnim2(final ImageView ivIcon) {
+        ivIcon.setVisibility(View.VISIBLE);
+        float distance = DisplayUtils.dip2px(40);
+        ivIcon.setTranslationY(distance);
+        ivIcon.setScaleX(0);
+        ivIcon.setScaleY(0);
+        ivIcon.setAlpha(0.5f);
+
+        ValueAnimator anim2 = ValueAnimator.ofFloat(distance, 0f);
+        anim2.setDuration(800);
+        ivIcon.setPivotX(0.5f * ivIcon.getMeasuredWidth());
+        ivIcon.setPivotY(0.5f * ivIcon.getMeasuredHeight());
+        anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float currentValue = (float) animation.getAnimatedValue();
+                float percent = currentValue / distance;
+                ivIcon.setScaleX(1 - percent);
+                ivIcon.setScaleY(1 - percent);
+                float alpha = 1 - percent;
+                if (alpha <= 0.5) {
+                    alpha = 0.5f;
+                }
+                ivIcon.setAlpha(alpha);
+                ivIcon.setTranslationY(currentValue);
+            }
+        });
+
+        anim2.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                playIconAnim1(ivIcon);
+            }
+        });
+
+        anim2.start();
+    }
+
+    private int mCurImgIndex = 0;
+
+    private Bitmap getNextImg() {
+        if (mSelectedList != null && mCurImgIndex < mSelectedList.size()) {
+            MultiItemInfo itemInfo = mSelectedList.get(mCurImgIndex);
+            if (itemInfo instanceof PowerChildInfo) {
+                mCurImgIndex++;
+                PowerChildInfo childInfo = (PowerChildInfo) itemInfo;
+                return AppUtils.getAppIcon(this, childInfo.packageName);
+            }
+        }
+        return null;
     }
 
     /**
@@ -132,7 +279,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         //获取背景，并将其强转成AnimationDrawable
         AnimationDrawable animationDrawable = (AnimationDrawable) mIvAnimationStartView.getBackground();
         //判断是否在运行
-        if(!animationDrawable.isRunning()){
+        if (!animationDrawable.isRunning()) {
             //开启帧动画
             animationDrawable.start();
         }
@@ -141,7 +288,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     /**
      * 完成动画
      */
-    public void showFinishAnim(){
+    public void showFinishAnim() {
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
 
         mLottieAnimationFinishView.useHardwareAcceleration();
@@ -187,6 +334,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         });
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

@@ -89,9 +89,11 @@ public class RoundedDrawable extends Drawable {
     mBorderPaint.setStrokeWidth(mBorderWidth);
   }
 
-  public static RoundedDrawable fromBitmap(Bitmap bitmap) {
+  public static RoundedDrawable fromBitmap(Bitmap bitmap, float cornerRadius) {
     if (bitmap != null) {
-      return new RoundedDrawable(bitmap);
+      RoundedDrawable drawable = new RoundedDrawable(bitmap);
+      drawable.setCornerRadius(cornerRadius);
+      return drawable;
     } else {
       return null;
     }

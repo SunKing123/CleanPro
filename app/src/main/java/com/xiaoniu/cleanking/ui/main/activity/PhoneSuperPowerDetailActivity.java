@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Intent;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.widget.BattaryView;
 import com.xiaoniu.common.base.BaseActivity;
@@ -52,6 +54,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     private SuperPowerCleanAdapter mPowerCleanAdapter;
     private int mSelectedCount;
 
+    public static List<MultiItemInfo> sSelectedList;
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_phone_super_power_detail;
@@ -120,8 +123,18 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 break;
             case R.id.tv_super_power:
                 StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                sSelectedList = mPowerCleanAdapter.getSelectedData();
+
+                for (int i = 0; i < sSelectedList.size(); i++) {
+                    MultiItemInfo itemInfo = sSelectedList.get(i);
+                    if (itemInfo instanceof PowerChildInfo) {
+                        PowerChildInfo childInfo = (PowerChildInfo) itemInfo;
+                        CleanUtil.killAppProcesses(childInfo.packageName, 0);
+                    }
+                }
+
                 Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
-                intent.putExtra("processNum", mSelectedCount);
+                intent.putExtra("processNum", sSelectedList.size());
                 startActivity(intent);
                 finish();
                 break;
@@ -249,7 +262,13 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mRlResult.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mLlBottom.setVisibility(View.VISIBLE);
-        mBvView.setBattaryPercent(70);
+
+        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+        int battery = 50;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        }
+        mBvView.setBattaryPercent(battery);
         showPowerAnim();
     }
 

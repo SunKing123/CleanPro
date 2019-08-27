@@ -43,7 +43,8 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         if (isFinishing()) {
             return dlg;
         }
-        dlg.setCancelable(false);
+        dlg.setCancelable(true);
+        dlg.setCanceledOnTouchOutside(false);
         dlg.show();
         Window window = dlg.getWindow();
         window.setContentView(R.layout.alite_power_saving_permission_dialog);
