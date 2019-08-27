@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xiaoniu.cleanking">
 
+    <!-- 允许程序扩展或收缩状态栏 -->
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"

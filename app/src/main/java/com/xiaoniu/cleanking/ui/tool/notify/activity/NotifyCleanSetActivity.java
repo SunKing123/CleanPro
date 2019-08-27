@@ -56,9 +56,18 @@ public class NotifyCleanSetActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         mRecyclerView = findViewById(R.id.set_recyclerView);
         mHeaderView = mInflater.inflate(R.layout.layout_notification_setting_header, mRecyclerView, false);
+        mHeaderView.setVisibility(View.GONE);
         mSwitchButton = (SwitchButton) mHeaderView.findViewById(R.id.switch_button);
         mTvSetDesc = mHeaderView.findViewById(R.id.tvSetDesc);
         mRecyclerView.setHeaderView(mHeaderView);
+
+        if (SPUtil.isCleanNotificationEnable()) {
+            mSwitchButton.setChecked(true);
+            mTvSetDesc.setVisibility(View.VISIBLE);
+        } else {
+            mSwitchButton.setChecked(false);
+            mTvSetDesc.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -92,7 +101,10 @@ public class NotifyCleanSetActivity extends BaseActivity {
                     @Override
                     public void run() {
                         cancelLoadingDialog();
-                        mNotifySettingAdapter.setData(mAppList);
+                        mHeaderView.setVisibility(View.VISIBLE);
+                        if (SPUtil.isCleanNotificationEnable()) {
+                            mNotifySettingAdapter.setData(mAppList);
+                        }
                     }
                 });
             }

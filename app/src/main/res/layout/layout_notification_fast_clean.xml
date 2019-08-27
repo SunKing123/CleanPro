@@ -8,10 +8,10 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_width="37dp"
-        android:layout_height="37dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:layout_marginRight="10dp"
-        android:src="@mipmap/icon_round" />
+        android:src="@drawable/icon_notify_fast_clean" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textColor="#333333"
-            android:textSize="15sp" />
+            android:textColor="#FFFD6F46"
+            android:textSize="14sp" />
 
         <LinearLayout
             android:id="@+id/layoutCleanIcon"
@@ -38,40 +38,40 @@
 
             <ImageView
                 android:id="@+id/ivIcon1"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:layout_marginRight="4dp"
                 android:contentDescription="@null"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/ivIcon2"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:layout_marginRight="4dp"
                 android:contentDescription="@null"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/ivIcon3"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:layout_marginRight="4dp"
                 android:contentDescription="@null"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/ivIcon4"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:layout_marginRight="4dp"
                 android:contentDescription="@null"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/ivIcon5"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:layout_marginRight="4dp"
                 android:contentDescription="@null"
                 android:visibility="gone" />

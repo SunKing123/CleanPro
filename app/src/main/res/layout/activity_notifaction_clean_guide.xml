@@ -8,22 +8,20 @@
     <LinearLayout
         android:id="@+id/fl_clean_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="210dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dimen_106dp"
+            android:layout_width="192dp"
+            android:layout_height="270dp"
             android:src="@drawable/icon_notification_logo" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dimen_27dp"
-            android:gravity="center"
             android:text="垃圾通知正在拖慢手机速度"
             android:textColor="@color/white"
             android:textSize="16sp" />

@@ -41,13 +41,12 @@ public class NotificationUtils {
             channel.enableLights(true);//闪光灯
             channel.setLockscreenVisibility(VISIBILITY_SECRET);//锁屏显示通知
             channel.setLightColor(Color.RED);//闪关灯的灯光颜色
-            channel.canShowBadge();//桌面launcher的消息角标
-            channel.enableVibration(false);//是否允许震动
+            channel.setShowBadge(true);//桌面launcher的消息角标
             channel.getAudioAttributes();//获取系统通知响铃声音的配置
             channel.getGroup();//获取通知取到组
             channel.setBypassDnd(true);//设置可绕过  请勿打扰模式
+            channel.enableVibration(false);//是否允许震动
             channel.setVibrationPattern(new long[]{100, 100, 200});//设置震动模式
-            channel.shouldShowLights();//是否会有灯光
             NotificationManager manager = (NotificationManager) ContextUtils.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
             if (manager != null) {
                 manager.createNotificationChannel(channel);
