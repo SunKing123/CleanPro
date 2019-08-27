@@ -13,6 +13,8 @@ import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.statistic.Configuration;
@@ -51,6 +53,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         }
         ARouter.init(application);
         UMConfigure.init(application, "5d230f2f4ca357bdb700106d", AppUtils.getChannelId(), UMConfigure.DEVICE_TYPE_PHONE, "");
+        NotificationUtils.createNotificationChannel();
+        NotifyCleanManager.getInstance().sendRebindServiceMsg();
     }
 
     private static AppComponent mAppComponent;

@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.tool.notify.manager;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -183,7 +182,6 @@ public class NotifyCleanManager {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (!mServiceSuccess) {
                     requestRebindService(ContextUtils.getContext());
                 }
@@ -216,8 +214,6 @@ public class NotifyCleanManager {
         if (context == null) {
             return null;
         }
-
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         int allCount = mNotificationList.size();
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification_fast_clean);
         String cleanCountDesc = context.getString(R.string.notification_clean_count, allCount);
@@ -227,7 +223,6 @@ public class NotifyCleanManager {
             remoteViews.setTextColor(R.id.tvCleanCount, Color.WHITE);
             remoteViews.setTextColor(R.id.tvNotifyDesc, Color.WHITE);
         }
-
 
         ArrayList<NotificationInfo> showNotifyList = new ArrayList();
         for (int i = 0; i < allCount; i++) {
@@ -287,8 +282,8 @@ public class NotifyCleanManager {
 
         NotificationCompat.Builder builder = NotificationUtils.createNotificationBuilder();
         builder.setContent(remoteViews)
-                .setWhen(System.currentTimeMillis());
-//                .setSmallIcon(R.drawable.notificationbar_icon_clean);
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.icon_notify_fast_clean);//不设置图标，通知显示不了
         Notification notification = builder.build();
         return notification;
     }

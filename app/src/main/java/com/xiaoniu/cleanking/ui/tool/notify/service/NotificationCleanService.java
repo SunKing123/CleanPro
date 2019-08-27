@@ -281,9 +281,9 @@ public class NotificationCleanService extends NotificationListenerService {
             }
 
             PendingIntent contentIntent = notification.contentIntent;
-            if (contentIntent == null) {
-                return null;
-            }
+//            if (contentIntent == null) {
+//                return null;
+//            }
 
             String pkgName = sbn.getPackageName();
             ConcurrentHashMap<String, InstalledApp> allInstalledApps = PackageUtils.getInstalledApps();

@@ -12,6 +12,7 @@ public class InstalledApp {
     public static final int APK_SYS = 0;
 
     public int uid;
+
     public String packageName = "";
 
     public String versionName = "";

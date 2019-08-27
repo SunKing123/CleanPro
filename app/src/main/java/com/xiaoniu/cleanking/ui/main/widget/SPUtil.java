@@ -370,16 +370,19 @@ public class SPUtil {
      * <br>添加时间：2019/5/23 20:27
      */
     public static Set<String> getActualWhitelist() {
-        Set<String> defaultWhitelist = getDefaultWhitelist();
-        Set<String> userSetWhitelist = SPUtil.getDisableCleanNotificationPackages(defaultWhitelist);
+        Set<String> userSetWhitelist = SPUtil.getDisableCleanNotificationPackages(null);
+        if (userSetWhitelist == null) {
+            userSetWhitelist = getDefaultWhitelist();
+            SPUtil.addDisableCleanNotificationPackages(userSetWhitelist.toArray(new String[0]));
+        }
         return userSetWhitelist;
     }
 
     private static Set<String> getDefaultWhitelist() {
         Set<String> whitelist = new HashSet<>();
-//        whitelist.add("com.tencent.mm");
-//        whitelist.add("com.tencent.mobileqq");
-//        whitelist.add("com.tencent.wework");
+        whitelist.add("com.tencent.mm");
+        whitelist.add("com.tencent.mobileqq");
+        whitelist.add("com.tencent.wework");
         whitelist.add("com.xiaoniu.cleanking");
         return whitelist;
     }
