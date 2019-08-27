@@ -4,19 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.umeng.commonsdk.debug.E;
-import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -46,7 +41,7 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
      *
      * @param lists 需要移除的缓存
      */
-    public void updateCache(List<AppInfoBean> lists) {
+    public void updateCache(List<AppInfoBean> lists, String type) {
         apps.removeAll(lists);
         Set<String> caches = new HashSet<>();
         for (AppInfoBean appInfoBean : apps) {
@@ -54,7 +49,11 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
         }
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, caches);
+        if ("white_list".equals(type)) {
+            editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, caches);
+        }else {
+            editor.putStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, caches);
+        }
         editor.commit();
 
     }
@@ -69,10 +68,19 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
         return sets;
     }
 
+    /**
+     * 获取缓存软件管理白名单
+     */
+    public Set<String> getSoftCacheWhite() {
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets;
+    }
+
     //扫描已安装的apk信息
-    public void scanData() {
+    public void scanData(String type) {
         try {
-            getApplicaionInfo();
+            getApplicationInfo(type);
         } catch (Exception e) {
 
         }
@@ -89,9 +97,14 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
      * <p>
      * 存储大小对应的是 packname/files;
      */
-    public void getApplicaionInfo() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void getApplicationInfo(String type){
         List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
-        Set<String> caches = getCacheWhite();
+        Set<String> caches;
+        if ("white_list".equals(type)) {
+            caches = getCacheWhite();
+        }else {
+            caches = getSoftCacheWhite();
+        }
         apps.clear();
         for (int i = 0; i < packages.size(); i++) {
             PackageInfo packageInfo = packages.get(i);

@@ -22,6 +22,7 @@ public class SpCacheConfig {
     public static final String CACHES_NAME_WXQQ_CACHE = "caches_name_wxqq_cache";
     //key包名
     public static final String WHITE_LIST_KEY_INSTALL_PACKE_NAME = "white_list_install_packe_name";
+    public static final String WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME = "white_list_soft_install_packe_name";
     public static final String WX_CACHE_SIZE = "wx_cache_size";
     public static final String QQ_CACHE_SIZE = "qq_cache_size";
     //path 路径
@@ -40,4 +41,12 @@ public class SpCacheConfig {
     public static final String CLEAR_NUM = "clean_num";
     //记录是否已保存极光
     public static final String IS_SAVE_JPUSH_ALIAS = "j_push_alias";
+    //埋点上一级页面
+    public static final String ONKEY = "one_key";
+    public static final String PHONE_CLEAN = "phone_clean";
+    public static final String WETCHAT_CLEAN = "wetchat_clean";
+    public static final String QQ_CLEAN = "qq_clean";
+    public static final String PHONE_COOLING = "phone_cooling";
+    public static final String NOTITY = "notity";
+    public static final String SUPER_POWER_SAVING = "super_power_saving";
 }

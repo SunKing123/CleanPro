@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -34,11 +36,16 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
     LinearLayout mLLHead;
 
     private WhiteListSpeedAdapter mAdapter;
+    private String mType;
+
+    @BindView(R.id.tv_title_name)
+    TextView mTvSubTitle;
+    @BindView(R.id.tv_top_title)
+    TextView mTvTopTitle;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
-        mPresenter.scanData();
     }
 
     @Override
@@ -53,6 +60,23 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
 
     @Override
     protected void initView() {
+
+        Intent intent = getIntent();
+        if (intent != null){
+            mType = intent.getStringExtra("type");
+            if ("white_list".equals(mType)){
+                //白名单
+                mTvTopTitle.setText(getString(R.string.text_speed_white_list));
+                mTvSubTitle.setText(getString(R.string.txt_white_list_speed_title));
+            }else {
+                //软件管理白名单
+                mTvTopTitle.setText(getString(R.string.text_soft_package_white_list));
+                mTvSubTitle.setVisibility(View.GONE);
+            }
+            //扫描已安装包的信息
+            mPresenter.scanData(mType);
+        }
+
         mAdapter = new WhiteListSpeedAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
@@ -69,16 +93,16 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
             finish();
         } else if (ids == R.id.ll_add) {
             Intent intent = new Intent(this, WhiteListSpeedAddActivity.class);
+            intent.putExtra("type",mType);
             startActivityForResult(intent, REQUEST_CODE_UPDATE);
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_UPDATE) {
-            mPresenter.scanData();
+            mPresenter.scanData(mType);
             mAdapter.clear();
             mAdapter.modifyList(mPresenter.getData());
             setEmptyView();
@@ -97,11 +121,12 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
             }
         }
         mAdapter.notifyDataSetChanged();
-        mPresenter.updateCache(appselcts);
+        mPresenter.updateCache(appselcts,mType);
         setEmptyView();
     }
 
     private void setEmptyView() {
+        if (mLLEmptyView == null) return;
         if (mAdapter.getLists().size() > 0) {
             mLLEmptyView.setVisibility(View.GONE);
             mLLHead.setVisibility(View.VISIBLE);

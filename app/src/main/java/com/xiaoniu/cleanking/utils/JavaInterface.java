@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -140,14 +141,106 @@ public class JavaInterface {
                 ToastUtils.showShort("分享成功");
                 addShareSuccessRequest();
 
+                String eventWeixinCode;
+                String eventWeixinCircleCode;
+                String eventQZoneCode;
+                String eventQQCode;
+                String eventSinaCode;
+                String sourcePage;
+                String currentPage;
+
+                switch (AppHolder.getInstance().getOtherSourcePageId()) {
+                    case SpCacheConfig.ONKEY:
+                        //一键加速
+                        eventWeixinCode = "once_accelerate_Wechat_friends_click";
+                        eventWeixinCircleCode = "once_accelerate_Circle_of_friends_click ";
+                        eventQZoneCode = "once_accelerate_qq_space_click";
+                        eventQQCode = "once_accelerate_qq_friends_click";
+                        eventSinaCode = "once_accelerate_Weibo_Sharing_click";
+                        sourcePage = "once_accelerate_page";
+                        currentPage = "One_click_acceleration_Clean_up_page";
+                        break;
+                    case SpCacheConfig.PHONE_CLEAN:
+                        //手机清理
+                        eventWeixinCode = "mobile_cleaning_scan_cleaing_Wechat_friends_click";
+                        eventWeixinCircleCode = "mobile_cleaning_scan_cleaing_Circle_of_friends_click ";
+                        eventQZoneCode = "mobile_cleaning_scan_cleaing_qq_space_click";
+                        eventQQCode = "mobile_cleaning_scan_cleaing_qq_friends_click";
+                        eventSinaCode = "mobile_cleaning_scan_cleaing_Weibo_Sharing_click";
+                        sourcePage = "mobile_cleaning_scan_cleaing_page";
+                        currentPage = "mobile_cleaning_scan_clean_up_page";
+                        break;
+                    case SpCacheConfig.PHONE_COOLING:
+                        //手机降温
+                        eventWeixinCode = "detecting_mobile_temperature_Wechat_friends_click";
+                        eventWeixinCircleCode = "detecting_mobile_temperature_Circle_of_friends_click";
+                        eventQZoneCode = "detecting_mobile_temperature_qq_space_click";
+                        eventQQCode = "detecting_mobile_temperature_qq_friends_click";
+                        eventSinaCode = "detecting_mobile_temperature_Weibo_Sharing_click";
+                        sourcePage = "detecting_mobile_temperature_page";
+                        currentPage = "Mobile_Cooling_Completion_Page";
+                        break;
+                    case SpCacheConfig.QQ_CLEAN:
+                        //QQ清理
+                        eventWeixinCode = "qq_cleaning_Wechat_friends_click ";
+                        eventWeixinCircleCode = "qq_cleaning_Circle_of_friends_click";
+                        eventQZoneCode = "qq_cleaning_qq_friends_click";
+                        eventQQCode = " qq_cleaning_qq_space_click";
+                        eventSinaCode = "qq_cleaning_Weibo_Sharing_click";
+                        sourcePage = "qq_cleaning_page";
+                        currentPage = "QQ_Clean_Up_Page";
+                        break;
+                    case SpCacheConfig.WETCHAT_CLEAN:
+                        //微信清理
+                        eventWeixinCode = "wechat_cleaning_Wechat_friends_click";
+                        eventWeixinCircleCode = "wechat_cleaning_Circle_of_friends_click";
+                        eventQZoneCode = "wechat_cleaning_qq_friends_click";
+                        eventQQCode = "wechat_cleaning_qq_space_click";
+                        eventSinaCode = "wechat_cleaning_Weibo_Sharing_click";
+                        sourcePage = "wechat_cleaning_page";
+                        currentPage = "Wechat_Clean_Up_Page";
+                        break;
+                    case SpCacheConfig.NOTITY:
+                        //通知栏清理
+                        eventWeixinCode = "Notice_Bar_Cleaning_Wechat_friends_click ";
+                        eventWeixinCircleCode = "Notice_Bar_Cleaning_Circle_of_friends_click ";
+                        eventQZoneCode = "Notice_Bar_Cleaning_qq_friends_click";
+                        eventQQCode = "Notice_Bar_Cleaning_qq_space_click";
+                        eventSinaCode = "Notice_Bar_Cleaning_Weibo_Sharing_click";
+                        sourcePage = "Notice_Bar_Cleaning_page";
+                        currentPage = "Notice_Bar_Cleaning_Completed_page";
+                        break;
+                    case SpCacheConfig.SUPER_POWER_SAVING:
+                        //超强省电
+                        eventWeixinCode = "Super_Power_Saving_Wechat_friends_click ";
+                        eventWeixinCircleCode = "Super_Power_Saving_Circle_of_friends_click";
+                        eventQZoneCode = "Super_Power_Saving_qq_friends_click";
+                        eventQQCode = "Super_Power_Saving_qq_space_click";
+                        eventSinaCode = "Super_Power_Saving_Weibo_Sharing_click";
+                        sourcePage = "Super_Power_Saving_page";
+                        currentPage = "Super_Power_Saving_Completion_page";
+                        break;
+                    default:
+                        eventWeixinCode = "home_page_clean_up_Wechat_friends_click";
+                        eventWeixinCircleCode = "home_page_clean_up_Circle_of_friends_click";
+                        eventQZoneCode = " home_page_clean_up_qq_space_click";
+                        eventQQCode = "home_page_clean_up_qq_friends_click";
+                        eventSinaCode = "home_page_clean_up_Weibo_Sharing_click";
+                        sourcePage = "home_page";
+                        currentPage = "home_page_clean_up_page";
+                        break;
+                }
+
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick(eventWeixinCode, "\"微信好友\"点击", sourcePage, currentPage);
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick(eventWeixinCircleCode, "\"朋友圈\"点击", sourcePage, currentPage);
                 } else if (share_media == SHARE_MEDIA.QZONE) {
-                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick(eventQZoneCode, "\"QQ空间\"点击", sourcePage, currentPage);
                 } else if (SHARE_MEDIA.QQ == share_media) {
-                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick(eventQQCode, "\"qq好友\"点击", sourcePage, currentPage);
+                } else if (SHARE_MEDIA.SINA == share_media) {
+                    StatisticsUtils.trackClick(eventSinaCode, "\"微博分享\"点击", sourcePage, currentPage);
                 }
             }
 

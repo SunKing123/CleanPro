@@ -162,6 +162,8 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_chat);
                 return;
             }
+            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
+
             ((MainActivity)getActivity()).commitJpushClickTime(5);
             startActivity(WechatCleanHomeActivity.class);
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
@@ -178,6 +180,8 @@ public class ToolFragment extends SimpleFragment {
             startActivity(QQCleanHomeActivity.class);
             StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
+            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+
             ((MainActivity)getActivity()).commitJpushClickTime(2);
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
@@ -185,6 +189,8 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.text_cooling) {
             //手机降温
+            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
+
             ((MainActivity)getActivity()).commitJpushClickTime(6);
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
@@ -195,6 +201,8 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         }else if (ids == R.id.ll_notification_clear){
             //超强省电
+            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
+
             startActivity(PhoneSuperPowerActivity.class);
             StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         }

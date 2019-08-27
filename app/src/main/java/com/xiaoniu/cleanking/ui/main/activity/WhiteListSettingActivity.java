@@ -16,8 +16,6 @@ import butterknife.OnClick;
  */
 public class WhiteListSettingActivity extends BaseActivity {
 
-
-
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -38,17 +36,26 @@ public class WhiteListSettingActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.img_back,R.id.ll_install_package, R.id.ll_speed_list})
+    @OnClick({R.id.img_back,R.id.ll_install_package, R.id.ll_speed_list,R.id.ll_soft_package})
     public void onClickView(View view){
+        Intent intent = null;
      int ids=view.getId();
      if(ids==R.id.img_back){
          finish();
      }else if(ids==R.id.ll_install_package){
          //安装包保护名单
-         startActivity(new Intent(this,WhiteListInstallPackgeManageActivity.class));
+         intent = new Intent(this,WhiteListInstallPackgeManageActivity.class);
+         startActivity(intent);
      }else if(ids==R.id.ll_speed_list){
          //加速白名单
-         startActivity(new Intent(this,WhiteListSpeedManageActivity.class));
+         intent = new Intent(this,WhiteListSpeedManageActivity.class);
+         intent.putExtra("type","white_list");
+         startActivity(intent);
+     }else if(ids==R.id.ll_soft_package){
+         //管理软件白名单
+         intent = new Intent(this,WhiteListSpeedManageActivity.class);
+         intent.putExtra("type","soft_white_list");
+         startActivity(intent);
      }
     }
 }

@@ -251,9 +251,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
+        //一键加速
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+
         ((MainActivity)getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
-        //一键加速
+
         Bundle bundle = new Bundle();
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
         startActivity(PhoneAccessActivity.class, bundle);
@@ -261,11 +264,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_ql)
     public void line_ql() {
+        //手机清理
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
         ((MainActivity)getActivity()).commitJpushClickTime(3);
         StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
 
-        //手机清理
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
+
     }
 
     @OnClick(R.id.view_news)
@@ -289,6 +294,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.view_qq_clean)
     public void ViewQQCleanClick() {
         //QQ专清
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.QQ_CLEAN);
+
         ((MainActivity)getActivity()).commitJpushClickTime(7);
         StatisticsUtils.trackClick("qq_cleaning_click", "“QQ专清”点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
@@ -309,6 +316,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
+
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
             ((MainActivity)getActivity()).commitJpushClickTime(1);
@@ -369,6 +377,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_wx)
     public void mClickWx() {
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
+
         ((MainActivity)getActivity()).commitJpushClickTime(5);
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
@@ -382,6 +392,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickQq() {
         //通知栏清理
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
+        StatisticsUtils.trackClick("Notice_Bar_Cleaning_click", "\"通知栏清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     @OnClick(R.id.line_jw)

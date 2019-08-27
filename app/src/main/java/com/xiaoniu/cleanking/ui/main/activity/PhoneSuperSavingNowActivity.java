@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -140,6 +142,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      * 完成动画
      */
     public void showFinishAnim(){
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
+
         mLottieAnimationFinishView.useHardwareAcceleration();
         mLottieAnimationFinishView.setImageAssetsFolder("images");
         mLottieAnimationFinishView.setAnimation("data_clean_finish.json");

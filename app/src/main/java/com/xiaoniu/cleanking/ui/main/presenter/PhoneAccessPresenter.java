@@ -80,7 +80,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     //获取到可以加速的应用名单Android O以下的获取最忌使用情况
     @SuppressLint("CheckResult")
     public void getAccessListBelow() {
-        mView.showLoadingDialog();
+//        mView.showLoadingDialog();
         Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
             //获取到可以加速的应用名单
             FileQueryUtils mFileQueryUtils = new FileQueryUtils();
@@ -127,7 +127,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     //当前sdk版本高于22时
     @SuppressLint("CheckResult")
     public void getAccessAbove22() {
-        mView.showLoadingDialog();
+//        mView.showLoadingDialog();
         Observable.create((ObservableOnSubscribe<List<ActivityManager.RunningAppProcessInfo>>) e -> {
             //获取到可以加速的应用名单
             List<ActivityManager.RunningAppProcessInfo> listApp = getProcessAbove();

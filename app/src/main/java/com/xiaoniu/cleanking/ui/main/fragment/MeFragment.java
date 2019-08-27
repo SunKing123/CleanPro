@@ -163,19 +163,20 @@ public class MeFragment extends SimpleFragment {
             public void onResult(SHARE_MEDIA share_media) {
                 handler.sendEmptyMessage(SHARE_SUCCESS);
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("Wechat_friends_click", "\"微信好友\"点击", "personal_center_page", "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("Circle_of_friends_click", "\"朋友圈\"点击", "personal_center_page", "Sharing_page");
                 } else if (share_media == SHARE_MEDIA.QZONE) {
-                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("qq_space_click", "\"QQ空间\"点击", "personal_center_page", "Sharing_page");
                 } else if (SHARE_MEDIA.QQ == share_media) {
-                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("qq_friends_click", "\"qq好友\"点击", "personal_center_page", "Sharing_page");
+                } else if (SHARE_MEDIA.SINA == share_media) {
+                    StatisticsUtils.trackClick("Weibo_Sharing_click", "\"微博分享\"点击", "personal_center_page", "Sharing_page");
                 }
             }
 
             @Override
             public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-                System.out.println("----------------------------------" + throwable.getCause());
                 if (share_media == SHARE_MEDIA.WEIXIN || share_media == SHARE_MEDIA.WEIXIN_CIRCLE) {
                     handler.sendEmptyMessage(SHARE_WECHAT);
                 } else if (share_media == SHARE_MEDIA.QQ || share_media == SHARE_MEDIA.QZONE) {

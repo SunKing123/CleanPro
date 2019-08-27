@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -27,7 +28,6 @@ import butterknife.OnClick;
  */
 public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPresenter> implements WhiteListAddAdapter.OnCheckListener {
 
-
     @BindView(R.id.recycle_view)
     RecyclerView mRecyclerView;
 
@@ -38,6 +38,12 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
     ImageButton mCheckBoxAll;
     @BindView(R.id.ll_check_all)
     LinearLayout mCheckAll;
+    @BindView(R.id.tv_sub_title)
+    TextView mTvSubTitle;
+    @BindView(R.id.tv_add_title)
+    TextView mTvAddTitle;
+
+    private String mType;
     /**
      *列表选项的 checkbox关联全选，如果是选择关联的路径 is ture ,else false;  如果为true 不做重复操作
      */
@@ -46,8 +52,6 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
-        //扫描已安装包的信息
-        mPresenter.scanData();
     }
 
     @Override
@@ -62,6 +66,21 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
 
     @Override
     protected void initView() {
+        Intent intent = getIntent();
+        if (intent != null){
+            mType = intent.getStringExtra("type");
+            if ("white_list".equals(mType)){
+                //白名单
+                mTvAddTitle.setText(getString(R.string.text_add_speed_white_list));
+                mTvSubTitle.setText(getString(R.string.txt_white_list_speed_title));
+            }else {
+                //软件管理白名单
+                mTvAddTitle.setText(getString(R.string.text_add_soft_white_list));
+                mTvSubTitle.setVisibility(View.GONE);
+            }
+        //扫描已安装包的信息
+        mPresenter.scanData(mType);
+        }
         mAdapter = new WhiteListAddAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
@@ -111,7 +130,7 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
                     appInfoSelect.add(appInfoBean);
                 }
             }
-            mPresenter.addWhiteList(appInfoSelect);
+            mPresenter.addWhiteList(appInfoSelect,mType);
             Intent intent=new Intent();
             setResult(RESULT_OK, intent);
             finish();

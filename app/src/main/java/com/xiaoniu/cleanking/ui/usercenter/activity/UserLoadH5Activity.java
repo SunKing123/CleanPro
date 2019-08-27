@@ -594,6 +594,24 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             @Override
             public void onResult(SHARE_MEDIA share_media) {
                 handler.sendEmptyMessage(SHARE_SUCCESS);
+                String eventWeixinCode = "home_page_clean_up_Wechat_friends_click";
+                String eventWeixinCircleCode = "home_page_clean_up_Circle_of_friends_click";
+                String eventQZoneCode = " home_page_clean_up_qq_space_click";
+                String eventQQCode = "home_page_clean_up_qq_friends_click";
+                String eventSinaCode = "home_page_clean_up_Weibo_Sharing_click";
+                String sourcePage = "home_page";
+                String currentPage = "home_page_clean_up_page";
+                if (share_media == SHARE_MEDIA.WEIXIN) {
+                    StatisticsUtils.trackClick(eventWeixinCode, "\"微信好友\"点击", sourcePage, currentPage);
+                } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
+                    StatisticsUtils.trackClick(eventWeixinCircleCode, "\"朋友圈\"点击", sourcePage, currentPage);
+                } else if (share_media == SHARE_MEDIA.QZONE) {
+                    StatisticsUtils.trackClick(eventQZoneCode, "\"QQ空间\"点击", sourcePage, currentPage);
+                } else if (SHARE_MEDIA.QQ == share_media) {
+                    StatisticsUtils.trackClick(eventQQCode, "\"qq好友\"点击", sourcePage, currentPage);
+                }  else if (SHARE_MEDIA.SINA == share_media) {
+                    StatisticsUtils.trackClick(eventSinaCode, "\"微博分享\"点击", sourcePage, currentPage);
+                }
             }
 
             @Override
