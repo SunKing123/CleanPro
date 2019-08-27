@@ -2,18 +2,22 @@ package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
 import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,6 +33,10 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private boolean mIsClearNotification;
     private int mCurrentCleanCount;
     private TextView mTvDelete;
+
+    private NotityCleanAnimView mCleanAnimView;
+
+    private RelativeLayout mTitleBar;
     private ImageView mIvBack;
     private ImageView mIvSet;
     public static void startNotificationCleanActivity(Context context) {
@@ -57,41 +65,51 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        mTitleBar = findViewById(R.id.title_bar);
         mRecyclerView = findViewById(R.id.notify_recyclerView);
         mTvDelete = findViewById(R.id.tv_delete);
         mIvBack = findViewById(R.id.iv_back);
         mIvSet = findViewById(R.id.iv_set);
         mHeaderView = mInflater.inflate(R.layout.layout_notification_clean_header, null);
-        mTvNotificationCount = (TextView) mHeaderView.findViewById(R.id.tvNotificationCount);
+        mTvNotificationCount = mHeaderView.findViewById(R.id.tvNotificationCount);
         mHeaderView.findViewById(R.id.lay_notify_clean_tips).setVisibility(View.VISIBLE);
         mRecyclerView.setHeaderView(mHeaderView);
         hideToolBar();
+        mCleanAnimView = findViewById(R.id.view_clean_anim);
+
     }
 
     @Override
     protected void setListener() {
-        mIvBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        mIvBack.setOnClickListener(v -> finish());
+        mIvSet.setOnClickListener(v -> NotifyCleanSetActivity.start(NotifyCleanDetailActivity.this));
+
+        mTvDelete.setOnClickListener(v -> {
+            mIsClearNotification = true;
+            mCleanAnimView.setData(CleanUtil.formatShortFileSize(100), CleanAnimView.page_junk_clean);
+            mCleanAnimView.setVisibility(View.VISIBLE);
+            //清理动画
+            mCleanAnimView.startTopAnim(false);
+            //title bar
+            showBarColor(getResources().getColor(R.color.color_FD6F46));
+            mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         });
 
-        mIvSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NotifyCleanSetActivity.start(NotifyCleanDetailActivity.this);
-            }
-        });
+    }
 
-        mTvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsClearNotification = true;
-                /*todo 清理动画*/
-                ToastUtils.showShort("点击了清理，将要实现");
-            }
-        });
+
+    /**
+     * 状态栏颜色变化
+     *
+     * @param animatedValue
+     */
+    public void showBarColor(int animatedValue) {
+        mTitleBar.setBackgroundColor(animatedValue);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, animatedValue, false);
+        }
     }
 
     @Override

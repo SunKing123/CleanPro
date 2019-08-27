@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/ll_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/dimen_56dp"
+        android:orientation="vertical">
+
+        <com.xiaoniu.common.widget.xrecyclerview.XRecyclerView
+            android:id="@+id/notify_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+        </com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
+        <View
+            android:id="@+id/viewline"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#EDEDED" />
+        <RelativeLayout
+            android:id="@+id/rel_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:visibility="visible">
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/delete_select_bg"
+            android:gravity="center"
+            android:text="@string/tool_one_key_clean"
+            android:textColor="@color/white" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.xiaoniu.cleanking.ui.tool.notify.activity.NotityCleanAnimView
+        android:id="@+id/view_clean_anim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/dimen_56dp"
         android:background="#06C581"
         android:gravity="center_vertical">
 
@@ -36,41 +82,4 @@
             android:src="@mipmap/icon_notification_set" />
     </RelativeLayout>
 
-    <com.xiaoniu.common.widget.xrecyclerview.XRecyclerView
-        android:id="@+id/notify_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        android:layout_weight="1">
-
-    </com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
-
-    <RelativeLayout
-        android:id="@+id/rel_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:visibility="visible">
-
-        <View
-            android:id="@+id/viewline"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#EDEDED" />
-
-        <TextView
-            android:id="@+id/tv_delete"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/delete_select_bg"
-            android:gravity="center"
-            android:text="@string/tool_one_key_clean"
-            android:textColor="@color/white" />
-    </RelativeLayout>
-
-</LinearLayout>
+</FrameLayout>

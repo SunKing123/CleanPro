@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:background="@color/color_06C581"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_clean"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="visible">
+
+        <com.xiaoniu.cleanking.ui.tool.notify.activity.NotityCleanAnimView
+            android:id="@+id/view_clean_anim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/fl_clean_layout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_106dp"
+            android:src="@drawable/icon_notification_logo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_27dp"
+            android:gravity="center"
+            android:text="垃圾通知正在拖慢手机速度"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+    <!--一键加速按钮-->
     <RelativeLayout
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
@@ -13,191 +55,39 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_height="match_parent"
-            style="@style/top_iv_back" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            style="@style/top_tv_title"
-            android:ellipsize="end"
-            android:layout_centerInParent="true"
-            android:lines="1" />
+            style="@style/top_iv_back"
+            android:layout_height="match_parent" />
 
         <ImageView
             android:id="@+id/iv_set"
             android:layout_width="@dimen/dimen_40dp"
             android:layout_height="match_parent"
-            android:paddingRight="@dimen/dimen_16dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:paddingRight="@dimen/dimen_16dp"
             android:src="@mipmap/icon_notification_set" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/top_tv_title"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:lines="1" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/fl_clean_layout"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
-
-    <ImageView
-        android:layout_width="210dp"
-        android:layout_marginTop="@dimen/dimen_106dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon_notification_logo"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:layout_marginTop="@dimen/dimen_27dp"
-        android:text="垃圾通知正在拖慢手机速度"
-        android:textColor="@color/white"/>
-
-    </LinearLayout>
-    <!--一键加速按钮-->
     <TextView
         android:id="@+id/tv_clean"
         android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginBottom="@dimen/dimen_12dp"
+        android:background="@drawable/btn_white_all_bg"
+        android:gravity="center"
         android:text="@string/tool_now_clean"
         android:textColor="@color/color_06C581"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:background="@drawable/btn_white_all_bg"
-        android:layout_height="46dp"/>
+        android:textSize="16sp" />
 
-    <FrameLayout
-        android:id="@+id/fl_clean"
-        android:layout_width="match_parent"
-        android:layout_height="460dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:background="@drawable/bg_big_home">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/view_lottie"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
-            <LinearLayout
-                android:id="@+id/layout_content_clean_finish"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dimen_230dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dimen_80dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/icon_clean_finish" />
-
-                <TextView
-                    android:id="@+id/text_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:text="手机很干净了~"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:visibility="visible" />
-            </LinearLayout>
-
-
-            <ImageView
-                android:id="@+id/icon_outer"
-                android:layout_width="@dimen/dimen_230dp"
-                android:layout_height="230dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dimen_80dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/icon_circle" />
-
-            <ImageView
-                android:id="@+id/icon_inner"
-                android:layout_width="164dp"
-                android:layout_height="164dp"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="110dp"
-                android:src="@mipmap/icon_inner"
-                android:visibility="gone" />
-
-            <RelativeLayout
-                android:id="@+id/layout_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dimen_150dp">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:maxWidth="@dimen/dimen_170dp"
-                    android:text="0.0"
-                    android:textColor="@color/white"
-                    android:textSize="50sp" />
-
-                <TextView
-                    android:id="@+id/text_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
-                    android:layout_marginTop="@dimen/dimen_14dp"
-                    android:layout_toRightOf="@id/text_count"
-                    android:text="MB"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/layout_count"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dimen_4dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/text_scan_trace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="middle"
-                    android:gravity="center"
-                    android:maxWidth="@dimen/dimen_140dp"
-                    android:singleLine="true"
-                    android:text="扫描中"
-                    android:textColor="@color/white" />
-
-                <ImageView
-                    android:id="@+id/view_arrow"
-                    android:layout_width="@dimen/dimen_12dp"
-                    android:layout_height="@dimen/dimen_12dp"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
-                    android:src="@mipmap/arrow_right_white"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </FrameLayout>
-        </RelativeLayout>
+</RelativeLayout>
