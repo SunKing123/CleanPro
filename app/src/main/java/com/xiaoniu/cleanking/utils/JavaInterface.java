@@ -141,14 +141,18 @@ public class JavaInterface {
                 addShareSuccessRequest();
 
                 if (share_media == SHARE_MEDIA.WEIXIN) {
-                    StatisticsUtils.trackClick("Wechat_friends_click", "微信好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("wechat_cleaning_Wechat_friends_click", "\"微信好友\"点击", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
-                    StatisticsUtils.trackClick("Circle_of_friends_click", "朋友圈", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("wechat_cleaning_Circle_of_friends_click", "\"朋友圈\"点击", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (share_media == SHARE_MEDIA.QZONE) {
-                    StatisticsUtils.trackClick("qq_space_click", "QQ空间", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("wechat_cleaning_qq_space_click", "\"QQ空间\"点击", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.QQ == share_media) {
-                    StatisticsUtils.trackClick("qq_friends_click", "QQ好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                    StatisticsUtils.trackClick("wechat_cleaning_qq_friends_click", "\"qq好友\"点击", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                }  else if (SHARE_MEDIA.SINA == share_media) {
+                    StatisticsUtils.trackClick("wechat_cleaning_Weibo_Sharing_click", "\"微博分享\"点击", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 }
+
+
             }
 
             @Override

@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationSettingInfo;
 import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationSetEvent;
 import com.xiaoniu.cleanking.utils.PackageUtils;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,7 +58,7 @@ public class NotifyCleanSetActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         mRecyclerView = findViewById(R.id.set_recyclerView);
         mHeaderView = mInflater.inflate(R.layout.layout_notification_setting_header, mRecyclerView, false);
-        mSwitchButton = (SwitchButton) mHeaderView.findViewById(R.id.switch_button);
+        mSwitchButton = mHeaderView.findViewById(R.id.switch_button);
         mTvSetDesc = mHeaderView.findViewById(R.id.tvSetDesc);
         mRecyclerView.setHeaderView(mHeaderView);
 
@@ -72,21 +73,27 @@ public class NotifyCleanSetActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-        mSwitchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                if (isChecked) {
-                    SPUtil.setCleanNotificationEnable(true);
-                    mTvSetDesc.setVisibility(View.VISIBLE);
-                    mNotifySettingAdapter.setData(mAppList);
-                } else {
-                    SPUtil.setCleanNotificationEnable(false);
-                    mTvSetDesc.setVisibility(View.GONE);
-                    mNotifySettingAdapter.clear();
-                    EventBus.getDefault().post(new NotificationSetEvent(false));
-                }
+        mSwitchButton.setOnCheckedChangeListener((view, isChecked) -> {
+            if (isChecked) {
+                StatisticsUtils.trackClick("Open_Notice_Bar_to_Clean_Up_on_click", "“开启通知栏清理开“点击","Notice_Bar_Cleaning_page", "Notification_Bar_Cleaning_Settings_page");
+                SPUtil.setCleanNotificationEnable(true);
+                mTvSetDesc.setVisibility(View.VISIBLE);
+                mNotifySettingAdapter.setData(mAppList);
+            } else {
+                StatisticsUtils.trackClick("Open_Notice_Bar_to_Clean_Up_off_click", "“开启通知栏清理关“点击","Notice_Bar_Cleaning_page", "Notification_Bar_Cleaning_Settings_page");
+                SPUtil.setCleanNotificationEnable(false);
+                mTvSetDesc.setVisibility(View.GONE);
+                mNotifySettingAdapter.clear();
+                EventBus.getDefault().post(new NotificationSetEvent(false));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //通知栏清理完成浏览
+        StatisticsUtils.trackClick("Notification_Bar_Cleaning_Settings_view_page", "”通知栏清理设置”浏览","Notice_Bar_Cleaning_page", "Notification_Bar_Cleaning_Settings_page");
     }
 
     @Override

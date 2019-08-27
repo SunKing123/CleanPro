@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +41,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private LinearLayout mTitleBar;
     private ImageView mIvBack;
     private ImageView mIvSet;
+    private boolean isCleanFinish = false;
+
     public static void startNotificationCleanActivity(Context context) {
         if (context != null) {
             Intent intent = new Intent(context, NotifyCleanDetailActivity.class);
@@ -80,9 +83,30 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //通知栏清理浏览"
+        StatisticsUtils.trackClick("Notice_Bar_Cleaning_view_page", "\"通知栏清理\"浏览", "home_page", "Notice_Bar_Cleaning_page");
+
+    }
+
+    @Override
     protected void setListener() {
-        mIvBack.setOnClickListener(v -> finish());
-        mIvSet.setOnClickListener(v -> NotifyCleanSetActivity.start(NotifyCleanDetailActivity.this));
+        mIvBack.setOnClickListener(v -> {
+            finish();
+            if (isCleanFinish){
+                //通知栏清理完成返回 点击",
+                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
+            }else {
+                //通知栏清理返回 点击",
+                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
+            }
+        });
+        mIvSet.setOnClickListener(v -> {
+            NotifyCleanSetActivity.start(NotifyCleanDetailActivity.this);
+            //通知栏清理返回 点击",
+            StatisticsUtils.trackClick("Notification_Bar_Cleaning_Settings_click", "\"通知栏清理设置\"点击", "home_page", "Notice_Bar_Cleaning_page");
+        });
 
         mTvDelete.setOnClickListener(v -> {
             mIsClearNotification = true;
@@ -151,9 +175,12 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     }
 
     private void showCleanFinishView() {
+        isCleanFinish = true;
         /*显示完成页*/
         mCleanAnimView.setVisibility(View.VISIBLE);
         showBarColor(getResources().getColor(R.color.color_06C581));
         mCleanAnimView.setViewTrans();
+        //通知栏清理完成浏览
+        StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
     }
 }

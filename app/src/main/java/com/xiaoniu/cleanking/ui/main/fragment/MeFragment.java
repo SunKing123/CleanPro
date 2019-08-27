@@ -170,6 +170,9 @@ public class MeFragment extends SimpleFragment {
                     StatisticsUtils.trackClick("qq_space_click", "QQ空间", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
                 } else if (SHARE_MEDIA.QQ == share_media) {
                     StatisticsUtils.trackClick("qq_friends_click", "QQ好友", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+                } else if (SHARE_MEDIA.SINA == share_media) {
+                    StatisticsUtils.trackClick("Weibo_Sharing_click", "\"微博分享\"点击", AppHolder.getInstance().getSourcePageId(), "Sharing_page");
+
                 }
             }
 

@@ -102,6 +102,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
             switch (msg.what) {
                 case SHARE_SUCCESS:
                     showToast("分享成功");
+
                     break;
                 case SHARE_CANCEL:
                     showToast("已取消");

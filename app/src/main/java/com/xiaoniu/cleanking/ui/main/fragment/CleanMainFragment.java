@@ -382,6 +382,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickQq() {
         //通知栏清理
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
+        StatisticsUtils.trackClick("Notice_Bar_Cleaning_click", "\"通知栏清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     @OnClick(R.id.line_jw)
