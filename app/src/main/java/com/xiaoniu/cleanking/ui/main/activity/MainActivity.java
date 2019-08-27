@@ -44,7 +44,6 @@ import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -59,7 +58,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * main主页面
@@ -137,9 +135,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.getWebUrl();
         initFragments();
         //初始化sdk 正式版的时候设置false，关闭调试
-        JPushInterface.setDebugMode(false);
-        JPushInterface.init(this);
-        JPushInterface.setAlias(this, AndroidUtil.getPhoneNum(), null);
+//        JPushInterface.setDebugMode(false);
+//        JPushInterface.init(this);
+//        JPushInterface.setAlias(this, AndroidUtil.getPhoneNum(), null);
 
 //        ShadowDrawable.setShadowDrawable(mBottomBar, Color.parseColor("#ffffff"),
 //                DeviceUtils.dip2px(6),
