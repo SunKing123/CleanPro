@@ -12,7 +12,6 @@ import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -51,18 +50,37 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
         caches.addAll(sets);
         editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, caches);
         editor.commit();
-
     }
 
+    /**
+     * 更新缓存
+     *
+     * @param lists 需要移除的缓存
+     */
+    public void updateSoftCache(List<AppInfoBean> lists) {
+        Set<String> caches = new HashSet<>();
+        for (AppInfoBean appInfoBean : lists) {
+            caches.add(appInfoBean.packageName);
+        }
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        SharedPreferences.Editor editor = sp.edit();
+        caches.addAll(sets);
+        editor.putStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, caches);
+        editor.commit();
+    }
 
     /**
      * 移除本地apps,添加缓存
      */
-    public void addWhiteList(List<AppInfoBean> lists) {
+    public void addWhiteList(List<AppInfoBean> lists,String type) {
         apps.remove(lists);
-        updateCache(lists);
+        if ("white_list".equals(type)){
+            updateCache(lists);
+        }else {
+            updateSoftCache(lists);
+        }
     }
-
 
     /**
      * 获取缓存白名单
@@ -73,11 +91,19 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
         return sets;
     }
 
+    /**
+     * 获取缓存软件管理白名单
+     */
+    public Set<String> getSoftCacheWhite() {
+        SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets;
+    }
     //扫描已安装的apk信息
-    public void scanData() {
+    public void scanData(String type) {
         try {
             apps.clear();
-            getApplicaionInfo();
+            getApplicationInfo(type);
         } catch (Exception e) {
 
         }
@@ -94,10 +120,14 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
      * <p>
      * 存储大小对应的是 packname/files;
      */
-    public void getApplicaionInfo() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void getApplicationInfo(String type) {
         List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
-
-        Set<String> caches = getCacheWhite();
+        Set<String> caches;
+        if ("white_list".equals(type)) {
+             caches = getCacheWhite();
+        }else {
+            caches = getSoftCacheWhite();
+        }
         for (int i = 0; i < packages.size(); i++) {
             PackageInfo packageInfo = packages.get(i);
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {

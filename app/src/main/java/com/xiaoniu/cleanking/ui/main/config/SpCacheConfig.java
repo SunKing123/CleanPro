@@ -22,6 +22,7 @@ public class SpCacheConfig {
     public static final String CACHES_NAME_WXQQ_CACHE = "caches_name_wxqq_cache";
     //key包名
     public static final String WHITE_LIST_KEY_INSTALL_PACKE_NAME = "white_list_install_packe_name";
+    public static final String WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME = "white_list_soft_install_packe_name";
     public static final String WX_CACHE_SIZE = "wx_cache_size";
     public static final String QQ_CACHE_SIZE = "qq_cache_size";
     //path 路径
