@@ -100,15 +100,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     @Override
     protected void setListener() {
-        mPowerCleanAdapter.setmOnCheckListener(new SuperPowerCleanAdapter.onCheckListener() {
-            @Override
-            public void onCheck(Object info) {
-                mSelectedCount = mPowerCleanAdapter.getSelectedData().size();
-                if (mSelectedCount > 0) {
-                    mTvClean.setText("一键优化 " + mSelectedCount);
-                } else {
-                    mTvClean.setText("一键优化");
-                }
+        mPowerCleanAdapter.setmOnCheckListener(info -> {
+            mSelectedCount = mPowerCleanAdapter.getSelectedData().size();
+            if (mSelectedCount > 0) {
+                mTvClean.setText("一键优化 " + mSelectedCount);
+            } else {
+                mTvClean.setText("一键优化");
             }
         });
 

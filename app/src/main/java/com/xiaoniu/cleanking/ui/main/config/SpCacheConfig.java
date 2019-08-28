@@ -49,4 +49,5 @@ public class SpCacheConfig {
     public static final String PHONE_COOLING = "phone_cooling";
     public static final String NOTITY = "notity";
     public static final String SUPER_POWER_SAVING = "super_power_saving";
+    public static final String BANNER = "banner";
 }

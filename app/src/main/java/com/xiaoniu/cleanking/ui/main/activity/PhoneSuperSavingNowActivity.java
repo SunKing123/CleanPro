@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 
 import java.lang.ref.WeakReference;
@@ -70,6 +71,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private View mLayIconAnim;
     private RoundedImageView mIvIcon1;
     private RoundedImageView mIvIcon2;
+    private boolean isFinish = false;
 
     class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
@@ -322,6 +324,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     }
 
     private void showFinishWebview() {
+        isFinish = true;
+
         mLottieAnimationFinishView.setVisibility(View.GONE);
         mFlAnim.setVisibility(View.GONE);
         mRlResult.setVisibility(View.GONE);
@@ -345,6 +349,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                //省电完成 返回点击
+                if (isFinish)
+                    StatisticsUtils.trackClick("Super_Power_Saving_Completion_Return_click", "\"超强省电完成返回\"点击", "Super_Power_Saving_page", "Super_Power_Saving_Completion_page");
             case R.id.btn_cancel:
                 finish();
                 break;
@@ -369,16 +376,19 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                StatisticsUtils.trackClick("Super_Power_Saving_Completion_view_page", "\"超强省电完成\"浏览", "Super_Power_Saving_page", "Super_Power_Saving_Completion_page");
+
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (!isError) {
+               if (!isError) {
                     if (mLayoutNotNet != null) {
                         mLayoutNotNet.setVisibility(View.GONE);
                     }
                     if (mNestedScrollWebView != null) {
+
 //                        mNestedScrollWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }

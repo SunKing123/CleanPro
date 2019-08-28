@@ -318,6 +318,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
 
+        AppHolder.getInstance().setOtherSourcePageId("");
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
             ((MainActivity)getActivity()).commitJpushClickTime(1);
@@ -368,6 +369,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.layout_scan)
     public void mClickLayoutScan() {
+        AppHolder.getInstance().setOtherSourcePageId("");
         StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
 
         //查看详情
@@ -782,6 +784,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param dataBean
      */
     public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.BANNER);
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
@@ -793,8 +796,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         }
-        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId()
-                , "home_page_clean_up_page", String.valueOf(position));
+        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
 
     }
 

@@ -12,76 +12,6 @@
         android:background="@color/color_06C581"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/line_allnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="350dp"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/line_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/iv_dun"
-                    android:layout_width="47dp"
-                    android:layout_height="54dp"
-                    android:layout_marginRight="@dimen/dimen_15dp"
-                    android:src="@mipmap/icon_dun"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tv_size_show"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="55sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_gb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dimen_10dp"
-                        android:text="MB"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="内"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:visibility="invisible" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/line_access"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dimen_2dp"
-                android:drawablePadding="@dimen/dimen_4dp"
-                android:drawableRight="@mipmap/icon_right_pic"
-                android:text="查看详情"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
-        </LinearLayout>
-
         <!--一键加速按钮-->
         <TextView
             android:id="@+id/tv_speed"
@@ -99,14 +29,20 @@
     </RelativeLayout>
     <!--下雨动画-->
     <include layout="@layout/layout_yu_anim" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical">
     <!--小火箭-->
     <LinearLayout
         android:id="@+id/line_hj"
         android:layout_width="97dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="160dp"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -122,6 +58,79 @@
             android:layout_height="66dp"
             android:layout_gravity="center_horizontal"
             android:src="@mipmap/hj_bottom1" />
+    </LinearLayout>
+
+    <!--具体的缓存数据-->
+    <LinearLayout
+        android:id="@+id/line_allnum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="90dp"
+        android:visibility="visible"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/line_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_dun"
+                android:layout_width="47dp"
+                android:layout_height="54dp"
+                android:layout_marginRight="@dimen/dimen_15dp"
+                android:src="@mipmap/icon_dun"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_size_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="55sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_gb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_10dp"
+                    android:text="MB"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="内"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/line_access"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:drawablePadding="@dimen/dimen_4dp"
+            android:drawableRight="@mipmap/icon_right_pic"
+            android:text="查看详情"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+    </LinearLayout>
     </LinearLayout>
     <!--完成动画-->
     <FrameLayout
