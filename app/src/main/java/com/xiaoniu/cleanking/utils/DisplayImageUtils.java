@@ -84,7 +84,7 @@ public class DisplayImageUtils {
             public void run() {
                 Bitmap drawableToBitamp = drawableToBitamp(getAppIcon(AppApplication.getInstance(), str));
                 if (drawableToBitamp == null) {
-                    drawableToBitamp = BitmapFactory.decodeResource(AppApplication.getInstance().getResources(), R.drawable.clean_icon_apk);
+                    drawableToBitamp = BitmapFactory.decodeResource(AppApplication.getInstance().getResources(), R.mipmap.icon_apk);
                 }
                 setBitmapToLruCache(str, drawableToBitamp);
                 refreshBitmap(str, imageView, drawableToBitamp);
