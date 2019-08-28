@@ -52,7 +52,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Main.Theme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.usercenter.activity.UserLoadH5Activity"
             android:screenOrientation="portrait" />

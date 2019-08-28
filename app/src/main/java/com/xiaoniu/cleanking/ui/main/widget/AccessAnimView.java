@@ -177,7 +177,7 @@ public class AccessAnimView extends RelativeLayout {
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
         anim.setDuration(300);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) line_allnum.getLayoutParams();
+        LinearLayout.LayoutParams rlp = (LinearLayout.LayoutParams) line_allnum.getLayoutParams();
         anim.addUpdateListener(animation -> {
             if (b) {
             int currentValue = (int) animation.getAnimatedValue();
