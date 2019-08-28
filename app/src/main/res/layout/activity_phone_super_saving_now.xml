@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_power_saving_bar_layout"
         android:layout_width="match_parent"
-        app:expanded="false"
+        app:expanded="true"
         android:layout_height="wrap_content"
         app:elevation="0dp">
 
@@ -59,7 +59,7 @@
                         android:id="@+id/tv_gb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dimen_10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="已达最佳状态"
                         android:textColor="@color/white"
                         android:textSize="24sp" />
