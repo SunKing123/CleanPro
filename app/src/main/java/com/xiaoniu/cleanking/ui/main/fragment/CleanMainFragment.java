@@ -317,6 +317,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
 
+        AppHolder.getInstance().setOtherSourcePageId("");
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
             ((MainActivity)getActivity()).commitJpushClickTime(1);
@@ -367,6 +368,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.layout_scan)
     public void mClickLayoutScan() {
+        AppHolder.getInstance().setOtherSourcePageId("");
         StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
 
         //查看详情

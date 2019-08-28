@@ -179,7 +179,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     }
 
     private void showCleanFinishView() {
-
+        isCleanFinish = true;
         /*显示完成页*/
         mCleanAnimView.setVisibility(View.VISIBLE);
         showBarColor(getResources().getColor(R.color.color_06C581));
