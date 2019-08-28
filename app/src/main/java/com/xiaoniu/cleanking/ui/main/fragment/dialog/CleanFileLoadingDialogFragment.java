@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,15 +46,6 @@ public class CleanFileLoadingDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL, R.style.common_dialog_style);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        getDialog().getWindow().setGravity(Gravity.CENTER);
-        int width = (int) (getScreenWidth(getContext()) * 0.30f);
-        int height= (int) (getScreenWidth(getContext()) * 0.26f);
-        getDialog().getWindow().setLayout(width, height);
     }
 
     /**
