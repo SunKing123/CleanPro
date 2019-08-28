@@ -97,7 +97,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             finish();
             if (isCleanFinish){
                 //通知栏清理完成返回 点击",
-                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_Return_click", "\"通知栏清理完成返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
+                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_Return_click", "\"通知栏清理完成返回\"点击", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
             }else {
                 //通知栏清理返回 点击",
                 StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
