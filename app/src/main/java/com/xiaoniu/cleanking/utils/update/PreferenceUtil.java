@@ -51,7 +51,7 @@ public class PreferenceUtil {
      */
     private static boolean getShareNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3)
+        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3000)
             return false;
         return true;
     }

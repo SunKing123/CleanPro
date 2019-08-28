@@ -5,7 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -54,7 +56,8 @@ public class BattaryView extends View {
             }
         }
         mPaint = new Paint();
-        mPaint.setColor(color);
+        RadialGradient lg = new RadialGradient(0,0,300,Color.parseColor("#BDFF80"), Color.parseColor("#4BFF73"), Shader.TileMode.MIRROR);
+        mPaint.setShader(lg);
         mPaint.setAntiAlias(true);
     }
 

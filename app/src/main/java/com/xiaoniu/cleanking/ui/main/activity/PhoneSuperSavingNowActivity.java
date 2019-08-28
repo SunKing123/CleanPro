@@ -79,7 +79,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 1) {
-                showFinishAnim();
+               // showFinishAnim();
+//                showWebView();
             } else if (msg.what == 2) {
                 num--;
                 mTvNum.setText(String.valueOf(num));
@@ -128,8 +129,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mTvNum.setText(String.valueOf(num));
         mTvAllNum.setText("/" + String.valueOf(num));
         initWebView();
-        showStartAnim();
-        showIconAnim();
+//        showStartAnim();
+//        showIconAnim();
+        showWebView();
     }
 
     @Override
@@ -141,7 +143,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     @Override
     protected void loadData() {
-
 //        mHandler.sendEmptyMessageDelayed(1, 5000);
         mHandler.sendEmptyMessageDelayed(2, 800);
     }
@@ -304,22 +305,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                mFlAnim.setVisibility(View.GONE);
-                mRlResult.setVisibility(View.GONE);
-                mAppBarLayout.setExpanded(true);
-                mLlResultTop.setVisibility(View.VISIBLE);
-                mNestedScrollWebView.setVisibility(View.VISIBLE);
-                int startHeight = ScreenUtils.getFullActivityHeight();
-                ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
-                anim.setDuration(500);
-                anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mRlResult.getLayoutParams();
-                anim.addUpdateListener(valueAnimator -> {
-                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
-                    if (mRlResult != null)
-                        mRlResult.setLayoutParams(rlp);
-                });
-                anim.start();
+                showWebView();
             }
 
             @Override
@@ -327,12 +313,31 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
             }
 
-            @Override
+           @Override
             public void onAnimationRepeat(Animator animator) {
 
             }
         });
 
+    }
+
+    private void showWebView() {
+        mFlAnim.setVisibility(View.GONE);
+        mRlResult.setVisibility(View.GONE);
+        mAppBarLayout.setExpanded(true);
+        mLlResultTop.setVisibility(View.VISIBLE);
+        mNestedScrollWebView.setVisibility(View.VISIBLE);
+        int startHeight = ScreenUtils.getFullActivityHeight();
+        ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
+        anim.setDuration(500);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mRlResult.getLayoutParams();
+        anim.addUpdateListener(valueAnimator -> {
+            rlp.topMargin = (int) valueAnimator.getAnimatedValue();
+            if (mRlResult != null)
+                mRlResult.setLayoutParams(rlp);
+        });
+        anim.start();
     }
 
     @Override

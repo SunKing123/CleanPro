@@ -88,6 +88,8 @@ public class StatisticsUtils {
     public static void trackClickUrlH5(String eventCode, String eventName, String sourcePage, String currentPage, String url) {
         JSONObject extension = new JSONObject();
         try {
+            extension.put("source_page", sourcePage);
+            extension.put("current_page", currentPage);
             extension.put("h5_uri", url);
         } catch (Exception e) {
             e.printStackTrace();

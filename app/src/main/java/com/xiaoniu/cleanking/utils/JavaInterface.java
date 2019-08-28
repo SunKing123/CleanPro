@@ -113,7 +113,7 @@ public class JavaInterface {
      */
     @JavascriptInterface
     public void shareLink(String picurl, String linkurl, String title, String content) {
-        StatisticsUtils.trackClick("Sharing_coupons_click", "分享领优惠券", AppHolder.getInstance().getSourcePageId(), "");
+        StatisticsUtils.trackClick("Sharing_coupons_click", "分享领优惠券", AppHolder.getInstance().getSourcePageId(), AppHolder.getInstance().getOtherSourcePageId());
 
         //保存分享次数
         PreferenceUtil.saveShareNum();
@@ -133,14 +133,6 @@ public class JavaInterface {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-
-            }
-
-            @Override
-            public void onResult(SHARE_MEDIA share_media) {
-                ToastUtils.showShort("分享成功");
-                addShareSuccessRequest();
-
                 String eventWeixinCode;
                 String eventWeixinCircleCode;
                 String eventQZoneCode;
@@ -242,6 +234,12 @@ public class JavaInterface {
                 } else if (SHARE_MEDIA.SINA == share_media) {
                     StatisticsUtils.trackClick(eventSinaCode, "\"微博分享\"点击", sourcePage, currentPage);
                 }
+            }
+
+            @Override
+            public void onResult(SHARE_MEDIA share_media) {
+                ToastUtils.showShort("分享成功");
+                addShareSuccessRequest();
             }
 
             @Override

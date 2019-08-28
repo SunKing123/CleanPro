@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="350dp"
             android:visibility="gone"
             android:orientation="vertical">
 
@@ -123,7 +123,6 @@
             android:layout_gravity="center_horizontal"
             android:src="@mipmap/hj_bottom1" />
     </LinearLayout>
-
     <!--完成动画-->
     <FrameLayout
         android:id="@+id/fl_anim"

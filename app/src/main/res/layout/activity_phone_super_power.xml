@@ -54,8 +54,8 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginBottom="@dimen/dimen_12dp"
-        android:background="@drawable/btn_white_line_transparent_bg"
+        android:background="@drawable/btn_white_all_bg"
         android:gravity="center"
         android:text="@string/tool_now_clean"
-        android:textColor="@color/white" />
+        android:textColor="@color/color_06C581" />
 </RelativeLayout>

@@ -89,7 +89,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         super.onResume();
         //通知栏清理浏览"
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_view_page", "\"通知栏清理\"浏览", "home_page", "Notice_Bar_Cleaning_page");
-
     }
 
     @Override
@@ -98,7 +97,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             finish();
             if (isCleanFinish){
                 //通知栏清理完成返回 点击",
-                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
+                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_Return_click", "\"通知栏清理完成返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
             }else {
                 //通知栏清理返回 点击",
                 StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
@@ -127,7 +126,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         });
     }
-
 
     /**
      * 状态栏颜色变化

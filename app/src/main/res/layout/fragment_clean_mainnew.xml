@@ -584,7 +584,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view_b"
                     android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_12dp"
                     android:text="更多推荐"
                     android:visibility="gone" />
 
@@ -594,10 +593,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_bottom_title"
                     android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_8dp"
                     android:layout_marginRight="@dimen/dimen_16dp"
-                    android:layout_marginBottom="@dimen/dimen_14dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <View
                     android:id="@+id/view_click_first_ad"
