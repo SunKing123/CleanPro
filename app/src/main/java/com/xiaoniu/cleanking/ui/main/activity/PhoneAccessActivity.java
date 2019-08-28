@@ -111,12 +111,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @BindView(R.id.n_scroll_view)
     NestedScrollView mNestedScrollView;
 
-    //    PhoneAccessAdapter imageAdapter;
-    private boolean isSuccess = false;
     private boolean isError = false;
-    private boolean isClear = false;
-    PhoneAccessBelowAdapter belowAdapter;
-    boolean canClickDelete = false; //默认不可点击清理，当数字动画播放完毕后可以点击
+    private PhoneAccessBelowAdapter belowAdapter;
+    // 默认不可点击清理，当数字动画播放完毕后可以点击
+    private boolean canClickDelete = false;
 
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
@@ -160,7 +158,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     return;
 
                 isError = true;
-                isSuccess = false;
                 if (mLayoutNetError != null) {
                     mLayoutNetError.setVisibility(View.VISIBLE);
                 }
@@ -174,7 +171,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 super.onPageFinished(view, url);
 //                cancelLoadingDialog();
                 if (!isError) {
-                    isSuccess = true;
                     //回调成功后的相关操作
                     if (mLayoutNetError != null) {
                         mLayoutNetError.setVisibility(View.GONE);

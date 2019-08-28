@@ -179,12 +179,13 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     }
 
     private void showCleanFinishView() {
-        isCleanFinish = true;
+
         /*显示完成页*/
         mCleanAnimView.setVisibility(View.VISIBLE);
         showBarColor(getResources().getColor(R.color.color_06C581));
         mCleanAnimView.setViewTrans();
         //通知栏清理完成浏览
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
+
     }
 }

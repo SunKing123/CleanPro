@@ -176,8 +176,8 @@ public class JavaInterface {
                         //QQ清理
                         eventWeixinCode = "qq_cleaning_Wechat_friends_click ";
                         eventWeixinCircleCode = "qq_cleaning_Circle_of_friends_click";
-                        eventQZoneCode = "qq_cleaning_qq_friends_click";
-                        eventQQCode = " qq_cleaning_qq_space_click";
+                        eventQZoneCode = "qq_cleaning_qq_space_click";
+                        eventQQCode = "qq_cleaning_qq_friends_click";
                         eventSinaCode = "qq_cleaning_Weibo_Sharing_click";
                         sourcePage = "qq_cleaning_page";
                         currentPage = "QQ_Clean_Up_Page";
@@ -186,8 +186,8 @@ public class JavaInterface {
                         //微信清理
                         eventWeixinCode = "wechat_cleaning_Wechat_friends_click";
                         eventWeixinCircleCode = "wechat_cleaning_Circle_of_friends_click";
-                        eventQZoneCode = "wechat_cleaning_qq_friends_click";
-                        eventQQCode = "wechat_cleaning_qq_space_click";
+                        eventQZoneCode = "wechat_cleaning_qq_space_click";
+                        eventQQCode = "wechat_cleaning_qq_friends_click";
                         eventSinaCode = "wechat_cleaning_Weibo_Sharing_click";
                         sourcePage = "wechat_cleaning_page";
                         currentPage = "Wechat_Clean_Up_Page";
@@ -196,8 +196,8 @@ public class JavaInterface {
                         //通知栏清理
                         eventWeixinCode = "Notice_Bar_Cleaning_Wechat_friends_click ";
                         eventWeixinCircleCode = "Notice_Bar_Cleaning_Circle_of_friends_click ";
-                        eventQZoneCode = "Notice_Bar_Cleaning_qq_friends_click";
-                        eventQQCode = "Notice_Bar_Cleaning_qq_space_click";
+                        eventQZoneCode = "Notice_Bar_Cleaning_qq_space_click";
+                        eventQQCode = "Notice_Bar_Cleaning_qq_friends_click";
                         eventSinaCode = "Notice_Bar_Cleaning_Weibo_Sharing_click";
                         sourcePage = "Notice_Bar_Cleaning_page";
                         currentPage = "Notice_Bar_Cleaning_Completed_page";
@@ -212,10 +212,20 @@ public class JavaInterface {
                         sourcePage = "Super_Power_Saving_page";
                         currentPage = "Super_Power_Saving_Completion_page";
                         break;
+                    case SpCacheConfig.BANNER:
+                        //banner
+                        eventWeixinCode = "banner_Wechat_friends_click  ";
+                        eventWeixinCircleCode = "banner_Circle_of_friends_click";
+                        eventQZoneCode = "banner_qq_space_click";
+                        eventQQCode = "banner_qq_friends_click";
+                        eventSinaCode = "banner_Weibo_Sharing_click";
+                        sourcePage = "home_page";
+                        currentPage = "banner_share_page";
+                        break;
                     default:
                         eventWeixinCode = "home_page_clean_up_Wechat_friends_click";
                         eventWeixinCircleCode = "home_page_clean_up_Circle_of_friends_click";
-                        eventQZoneCode = " home_page_clean_up_qq_space_click";
+                        eventQZoneCode = "home_page_clean_up_qq_space_click";
                         eventQQCode = "home_page_clean_up_qq_friends_click";
                         eventSinaCode = "home_page_clean_up_Weibo_Sharing_click";
                         sourcePage = "home_page";

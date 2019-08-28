@@ -174,12 +174,16 @@ public class NotityCleanAnimView extends RelativeLayout {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
 //                showLoadingDialog();
+                if (listener != null){
+                    listener.onClick();
+                }
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 //                cancelLoadingDialog();
+
                 if (!isError) {
                     if (mLayoutNotNet != null) {
                         mLayoutNotNet.setVisibility(View.GONE);
@@ -536,6 +540,7 @@ public class NotityCleanAnimView extends RelativeLayout {
     public void showWebView() {
         mScrollView.setVisibility(VISIBLE);
         mWebView.setVisibility(VISIBLE);
+
     }
 
     public void setAnimTitle(String animTitle){
@@ -554,13 +559,13 @@ public class NotityCleanAnimView extends RelativeLayout {
         iv_dun.setLayoutParams(llp);
     }
 
-    com.xiaoniu.cleanking.ui.main.widget.CleanAnimView.onBackClickListener listener;
+    private onFinishClickListener listener;
 
-    public void setListener(com.xiaoniu.cleanking.ui.main.widget.CleanAnimView.onBackClickListener listener) {
+    public void setListener(onFinishClickListener listener) {
         this.listener = listener;
     }
 
-    public interface onBackClickListener {
+    public interface onFinishClickListener {
         void onClick();
     }
 }

@@ -781,6 +781,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * @param dataBean
      */
     public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.BANNER);
         if (position == 0) {
             mImageFirstAd.setVisibility(VISIBLE);
             ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
@@ -792,8 +793,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
             mTextBottomTitle.setVisibility(GONE);
         }
-        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId()
-                , "home_page_clean_up_page", String.valueOf(position));
+        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
 
     }
 

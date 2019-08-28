@@ -384,21 +384,23 @@
                 </LinearLayout>
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="3">
 
             <LinearLayout
-                android:id="@+id/ll_notification_clear"
-                android:layout_width="0px"
-                android:layout_weight="1"
-                android:layout_marginLeft="@dimen/dimen_11dp"
-                android:layout_height="147dp"
-                android:background="@mipmap/tool_phone_v_bg"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:id="@+id/ll_notification_clear"
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/dimen_11dp"
+                    android:layout_height="147dp"
+                    android:background="@mipmap/tool_phone_v_bg"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="@dimen/dimen_32dp"
@@ -426,6 +428,25 @@
                     android:text="@string/tool_super_power_sub"
                     android:textSize="12dp" />
             </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="147dp"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:background="@mipmap/tool_phone_v_bg"
+                    android:gravity="center"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_weight="1"
+                    android:layout_height="147dp"
+                    android:visibility="invisible"
+                    android:background="@mipmap/tool_phone_v_bg"
+                    android:gravity="center"
+                    android:layout_marginRight="@dimen/dimen_11dp"
+                    android:orientation="vertical"/>
         </LinearLayout>
         </LinearLayout>
     </ScrollView>
