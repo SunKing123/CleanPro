@@ -204,7 +204,7 @@ public class ToolFragment extends SimpleFragment {
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
 
             startActivity(PhoneSuperPowerActivity.class);
-            StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
+            StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", "clean_up_toolbox_page", "clean_up_toolbox_page");
         }
     }
 

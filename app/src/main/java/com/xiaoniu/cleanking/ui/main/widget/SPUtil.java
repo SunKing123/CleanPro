@@ -52,6 +52,7 @@ public class SPUtil {
     private static final String KEY_ENABLE_CLEAN_NOTIFICATION = "key_enable_clean_notification";
     private static final String KEY_DISABLE_CLEAN_PACKAGE = "key_disable_clean_package";
     private static final String KEY_NOTIFY_CLEAN_COUNT = "key_notify_clean_count";
+    private static final String KEY_POWER_CLEAN_TIME = "key_power_clean_time";
 
     public static void setMyToken(String mytokens) {
         mytoken = mytokens;
@@ -444,6 +445,16 @@ public class SPUtil {
         if (newCount > 0) {
             long allCount = getNotifyCleanCount() + newCount;
             setLong(ContextUtils.getContext(), KEY_NOTIFY_CLEAN_COUNT, allCount);
+        }
+    }
+
+    public static long getLastPowerCleanTime() {
+        return getLong(ContextUtils.getContext(), KEY_POWER_CLEAN_TIME, 0l);
+    }
+
+    public static void setLastPowerCleanTime(long time) {
+        if (time > 0) {
+            setLong(ContextUtils.getContext(), KEY_POWER_CLEAN_TIME, time);
         }
     }
 }

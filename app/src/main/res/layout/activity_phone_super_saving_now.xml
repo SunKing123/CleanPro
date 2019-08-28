@@ -111,9 +111,12 @@
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/n_scroll_view"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+
         android:scrollbarStyle="outsideOverlay"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

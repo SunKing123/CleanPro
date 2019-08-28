@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -79,8 +80,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 1) {
-               // showFinishAnim();
-//                showWebView();
+                showFinishAnim();
             } else if (msg.what == 2) {
                 num--;
                 mTvNum.setText(String.valueOf(num));
@@ -101,7 +101,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     @Override
     protected void initVariable(Intent intent) {
         hideToolBar();
-        num = intent.getIntExtra("processNum", 10);
+        num = intent.getIntExtra("processNum", 0);
         mSelectedList = PhoneSuperPowerDetailActivity.sSelectedList;
         PhoneSuperPowerDetailActivity.sSelectedList = null;
     }
@@ -129,9 +129,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mTvNum.setText(String.valueOf(num));
         mTvAllNum.setText("/" + String.valueOf(num));
         initWebView();
-//        showStartAnim();
-//        showIconAnim();
-        showWebView();
     }
 
     @Override
@@ -143,8 +140,13 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     @Override
     protected void loadData() {
-//        mHandler.sendEmptyMessageDelayed(1, 5000);
-        mHandler.sendEmptyMessageDelayed(2, 800);
+        if (num <= 0) {
+            showFinishWebview();
+        } else {
+            showStartAnim();
+            showIconAnim();
+            mHandler.sendEmptyMessageDelayed(2, 800);
+        }
     }
 
     /**
@@ -152,24 +154,21 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      */
     private void showIconAnim() {
         mLayIconAnim.setVisibility(View.VISIBLE);
-        mLayIconAnim.post(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = getNextImg();
-                if (bitmap != null) {
-                    mIvIcon1.setImageBitmap(bitmap);
-                    playIconAnim1(mIvIcon1);
-                } else {
-                    mIvIcon1.setVisibility(View.GONE);
-                }
+        mLayIconAnim.post(() -> {
+            Bitmap bitmap = getNextImg();
+            if (bitmap != null) {
+                mIvIcon1.setImageBitmap(bitmap);
+                playIconAnim1(mIvIcon1);
+            } else {
+                mIvIcon1.setVisibility(View.GONE);
+            }
 
-                bitmap = getNextImg();
-                if (bitmap != null) {
-                    mIvIcon2.setImageBitmap(bitmap);
-                    playIconAnim2(mIvIcon2);
-                } else {
-                    mIvIcon2.setVisibility(View.GONE);
-                }
+            bitmap = getNextImg();
+            if (bitmap != null) {
+                mIvIcon2.setImageBitmap(bitmap);
+                playIconAnim2(mIvIcon2);
+            } else {
+                mIvIcon2.setVisibility(View.GONE);
             }
         });
     }
@@ -290,6 +289,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      * 完成动画
      */
     public void showFinishAnim() {
+        SPUtil.setLastPowerCleanTime(System.currentTimeMillis());
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
 
         mLottieAnimationFinishView.useHardwareAcceleration();
@@ -305,7 +305,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                showWebView();
+                showFinishWebview();
             }
 
             @Override
@@ -313,7 +313,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
             }
 
-           @Override
+            @Override
             public void onAnimationRepeat(Animator animator) {
 
             }
@@ -321,7 +321,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     }
 
-    private void showWebView() {
+    private void showFinishWebview() {
+        mLottieAnimationFinishView.setVisibility(View.GONE);
         mFlAnim.setVisibility(View.GONE);
         mRlResult.setVisibility(View.GONE);
         mAppBarLayout.setExpanded(true);

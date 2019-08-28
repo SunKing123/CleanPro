@@ -206,8 +206,8 @@ public class JavaInterface {
                         //超强省电
                         eventWeixinCode = "Super_Power_Saving_Wechat_friends_click ";
                         eventWeixinCircleCode = "Super_Power_Saving_Circle_of_friends_click";
-                        eventQZoneCode = "Super_Power_Saving_qq_friends_click";
-                        eventQQCode = "Super_Power_Saving_qq_space_click";
+                        eventQZoneCode = "Super_Power_Saving_qq_space_click";
+                        eventQQCode = "Super_Power_Saving_qq_friends_click";
                         eventSinaCode = "Super_Power_Saving_Weibo_Sharing_click";
                         sourcePage = "Super_Power_Saving_page";
                         currentPage = "Super_Power_Saving_Completion_page";

@@ -103,6 +103,7 @@
                 android:background="@color/color_FD6F46"
                 android:descendantFocusability="blocksDescendants"
                 android:minHeight="@dimen/dimen_56dp"
+                android:elevation="0dp"
                 app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
 
