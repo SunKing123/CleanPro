@@ -122,9 +122,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-//        mHandler.sendEmptyMessageDelayed(1, 10 * 60 * 1000);
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
-//        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         //检查是否有补丁
         mPresenter.queryPatch();
         //检测版本更新
@@ -134,14 +132,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取WebUrl
         mPresenter.getWebUrl();
         initFragments();
-        //初始化sdk 正式版的时候设置false，关闭调试
-//        JPushInterface.setDebugMode(false);
-//        JPushInterface.init(this);
-//        JPushInterface.setAlias(this, AndroidUtil.getPhoneNum(), null);
-
-//        ShadowDrawable.setShadowDrawable(mBottomBar, Color.parseColor("#ffffff"),
-//                DeviceUtils.dip2px(6),
-//                Color.parseColor("#1A000000"), DeviceUtils.dip2px(8), 0, 5);
 //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {

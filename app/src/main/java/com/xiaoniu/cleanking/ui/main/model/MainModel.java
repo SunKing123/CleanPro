@@ -16,7 +16,6 @@ import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +70,6 @@ public class MainModel extends BaseModel {
     @SuppressLint("CheckResult")
     public void commitJPushAlias(Common4Subscriber<BaseEntity> commonSubscriber) {
         String rid = JPushInterface.getRegistrationID(AppApplication.getInstance());
-        JPushInterface.setAlias(AppApplication.getInstance(),0, DeviceUtils.getUdid());
         if (rid.isEmpty()) return;
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();

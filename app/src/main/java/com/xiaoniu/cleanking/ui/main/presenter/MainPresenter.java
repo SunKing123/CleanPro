@@ -217,7 +217,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void commitJPushAlias(){
         if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
             return;
-
+        JPushInterface.setAlias(AppApplication.getInstance(),0, DeviceUtils.getUdid());
         mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
