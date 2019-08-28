@@ -25,6 +25,7 @@
                 android:layout_marginTop="@dimen/dimen_56dp"
                 android:background="#06C581"
                 android:gravity="center"
+                android:visibility="gone"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@id/viewt_finish"
                 app:layout_constraintLeft_toLeftOf="parent"

@@ -5,12 +5,22 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/dimen_10dp"
     android:paddingRight="@dimen/dp_10"
-    android:paddingTop="@dimen/dimen_25dp"
+    android:paddingTop="@dimen/dp_10"
     android:paddingBottom="@dimen/dimen_25dp"
     android:background="@drawable/bg_btn_white12">
 
     <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingBottom="16dp"
+        android:src="@mipmap/icon_close_gray"
+        android:layout_gravity="right" />
+
+    <ImageView
         android:id="@+id/image_view"
+        android:layout_marginTop="@dimen/dimen_15dp"
         android:layout_width="260dp"
         android:layout_height="380dp"
         />

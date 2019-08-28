@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
@@ -257,6 +258,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 int tab = Integer.parseInt(tabIndex);
                 if (tab <= 3) {
                     mBottomBar.setCurrentItem(tab);
+                } else {
+                    if (tab == 4) {
+                        mBottomBar.setCurrentItem(CLEAN);
+                        EventBus.getDefault().post(new AutoCleanEvent());
+                    }
                 }
             } catch (Exception e) {
             }

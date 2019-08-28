@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +25,15 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_super_power;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (isUsageAccessAllowed()) {
+            startActivity(PhoneSuperPowerDetailActivity.class);
+            finish();
+        }
     }
 
     @Override
