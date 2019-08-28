@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PowerExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -85,7 +84,7 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        StatisticsUtils.trackClick("Super_Power_Saving_view_page", "超强省电", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+        StatisticsUtils.trackClick("Super_Power_Saving_view_page", "超强省电", "Super_Power_Saving_click", "Super_Power_Saving_page");
     }
 
     @Override
@@ -229,16 +228,16 @@ public class PhoneSuperPowerSavingActivity extends SimpleActivity {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_back:
-                StatisticsUtils.trackClick("Super_Power_Saving_Return_click", "“超强省电返回”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("Super_Power_Saving_Return_click", "“超强省电返回”点击", "Super_Power_Saving_click", "Super_Power_Saving_page");
                 finish();
                 break;
             case R.id.icon_saving_right:
-                StatisticsUtils.trackClick("Super_Power_Saving_Notice_click", "“超强省电通知”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("Super_Power_Saving_Notice_click", "“超强省电通知”点击", "Super_Power_Saving_click", "Super_Power_Saving_page");
                 startActivity(PhoneSuperPowerMessageActivity.class);
                 finish();
                 break;
             case R.id.ll_bottom:
-                StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", "Super_Power_Saving_click", "Super_Power_Saving_page");
                 startActivity(PhoneSuperSavingNowActivity.class);
                 break;
         }

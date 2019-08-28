@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
@@ -122,15 +121,15 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
-                StatisticsUtils.trackClick("Super_Power_Saving_Return_click", "“超强省电返回”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("Super_Power_Saving_Return_click", "“超强省电返回”点击", "home_page", "Super_Power_Saving_page");
                 finish();
                 break;
             case R.id.icon_saving_right:
-                StatisticsUtils.trackClick("Super_Power_Saving_Notice_click", "“超强省电通知”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("Super_Power_Saving_Notice_click", "“超强省电通知”点击", "home_page", "Super_Power_Saving_page");
                 startActivity(new Intent(mContext, PhoneSuperPowerMessageActivity.class));
                 break;
             case R.id.tv_super_power:
-                StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", AppHolder.getInstance().getSourcePageId(), "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", "home_page", "Super_Power_Saving_page");
                 sSelectedList = mPowerCleanAdapter.getSelectedData();
 
                 for (int i = 0; i < sSelectedList.size(); i++) {

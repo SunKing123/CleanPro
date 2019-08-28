@@ -588,19 +588,13 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-
-            }
-
-            @Override
-            public void onResult(SHARE_MEDIA share_media) {
-                handler.sendEmptyMessage(SHARE_SUCCESS);
-                String eventWeixinCode = "home_page_clean_up_Wechat_friends_click";
-                String eventWeixinCircleCode = "home_page_clean_up_Circle_of_friends_click";
-                String eventQZoneCode = " home_page_clean_up_qq_space_click";
-                String eventQQCode = "home_page_clean_up_qq_friends_click";
-                String eventSinaCode = "home_page_clean_up_Weibo_Sharing_click";
+                String eventWeixinCode = "banner_Wechat_friends_click";
+                String eventWeixinCircleCode = "banner_Circle_of_friends_click";
+                String eventQZoneCode = "banner_qq_friends_click";
+                String eventQQCode = "banner_qq_space_click";
+                String eventSinaCode = "banner_Weibo_Sharing_click";
                 String sourcePage = "home_page";
-                String currentPage = "home_page_clean_up_page";
+                String currentPage = "banner_share_page";
                 if (share_media == SHARE_MEDIA.WEIXIN) {
                     StatisticsUtils.trackClick(eventWeixinCode, "\"微信好友\"点击", sourcePage, currentPage);
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
@@ -612,6 +606,11 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                 }  else if (SHARE_MEDIA.SINA == share_media) {
                     StatisticsUtils.trackClick(eventSinaCode, "\"微博分享\"点击", sourcePage, currentPage);
                 }
+            }
+
+            @Override
+            public void onResult(SHARE_MEDIA share_media) {
+                handler.sendEmptyMessage(SHARE_SUCCESS);
             }
 
             @Override

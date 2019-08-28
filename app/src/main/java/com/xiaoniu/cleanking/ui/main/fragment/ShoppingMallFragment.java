@@ -45,7 +45,7 @@ import butterknife.BindView;
 public class ShoppingMallFragment extends SimpleFragment implements MainActivity.OnKeyBackListener {
     @BindView(R.id.web_container)
     RelativeLayout mRootView;
-    private String url = ApiModule.SHOPPING_MALL + "&type=2";
+    private String url = ApiModule.SHOPPING_MALL;
     private boolean isFirst = true;
     private boolean isFirstPause = true;
 

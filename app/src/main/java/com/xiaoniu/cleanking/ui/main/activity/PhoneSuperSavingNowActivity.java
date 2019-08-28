@@ -154,24 +154,21 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      */
     private void showIconAnim() {
         mLayIconAnim.setVisibility(View.VISIBLE);
-        mLayIconAnim.post(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = getNextImg();
-                if (bitmap != null) {
-                    mIvIcon1.setImageBitmap(bitmap);
-                    playIconAnim1(mIvIcon1);
-                } else {
-                    mIvIcon1.setVisibility(View.GONE);
-                }
+        mLayIconAnim.post(() -> {
+            Bitmap bitmap = getNextImg();
+            if (bitmap != null) {
+                mIvIcon1.setImageBitmap(bitmap);
+                playIconAnim1(mIvIcon1);
+            } else {
+                mIvIcon1.setVisibility(View.GONE);
+            }
 
-                bitmap = getNextImg();
-                if (bitmap != null) {
-                    mIvIcon2.setImageBitmap(bitmap);
-                    playIconAnim2(mIvIcon2);
-                } else {
-                    mIvIcon2.setVisibility(View.GONE);
-                }
+            bitmap = getNextImg();
+            if (bitmap != null) {
+                mIvIcon2.setImageBitmap(bitmap);
+                playIconAnim2(mIvIcon2);
+            } else {
+                mIvIcon2.setVisibility(View.GONE);
             }
         });
     }

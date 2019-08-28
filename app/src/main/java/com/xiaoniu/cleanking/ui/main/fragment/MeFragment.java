@@ -156,12 +156,6 @@ public class MeFragment extends SimpleFragment {
         shareAction.setCallback(new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-
-            }
-
-            @Override
-            public void onResult(SHARE_MEDIA share_media) {
-                handler.sendEmptyMessage(SHARE_SUCCESS);
                 if (share_media == SHARE_MEDIA.WEIXIN) {
                     StatisticsUtils.trackClick("Wechat_friends_click", "\"微信好友\"点击", "personal_center_page", "Sharing_page");
                 } else if (SHARE_MEDIA.WEIXIN_CIRCLE == share_media) {
@@ -173,6 +167,12 @@ public class MeFragment extends SimpleFragment {
                 } else if (SHARE_MEDIA.SINA == share_media) {
                     StatisticsUtils.trackClick("Weibo_Sharing_click", "\"微博分享\"点击", "personal_center_page", "Sharing_page");
                 }
+            }
+
+            @Override
+            public void onResult(SHARE_MEDIA share_media) {
+                handler.sendEmptyMessage(SHARE_SUCCESS);
+
             }
 
             @Override
