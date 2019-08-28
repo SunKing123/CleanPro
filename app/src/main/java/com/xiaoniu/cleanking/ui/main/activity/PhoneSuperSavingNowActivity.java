@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -100,7 +101,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     @Override
     protected void initVariable(Intent intent) {
         hideToolBar();
-        num = intent.getIntExtra("processNum", 10);
+        num = intent.getIntExtra("processNum", 0);
         mSelectedList = PhoneSuperPowerDetailActivity.sSelectedList;
         PhoneSuperPowerDetailActivity.sSelectedList = null;
     }
@@ -128,8 +129,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mTvNum.setText(String.valueOf(num));
         mTvAllNum.setText("/" + String.valueOf(num));
         initWebView();
-        showStartAnim();
-        showIconAnim();
     }
 
     @Override
@@ -141,9 +140,13 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     @Override
     protected void loadData() {
-
-//        mHandler.sendEmptyMessageDelayed(1, 5000);
-        mHandler.sendEmptyMessageDelayed(2, 800);
+        if (num <= 0) {
+            showFinishWebview();
+        } else {
+            showStartAnim();
+            showIconAnim();
+            mHandler.sendEmptyMessageDelayed(2, 800);
+        }
     }
 
     /**
@@ -289,6 +292,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      * 完成动画
      */
     public void showFinishAnim() {
+        SPUtil.setLastPowerCleanTime(System.currentTimeMillis());
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
 
         mLottieAnimationFinishView.useHardwareAcceleration();
@@ -304,22 +308,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                mFlAnim.setVisibility(View.GONE);
-                mRlResult.setVisibility(View.GONE);
-                mAppBarLayout.setExpanded(true);
-                mLlResultTop.setVisibility(View.VISIBLE);
-                mNestedScrollWebView.setVisibility(View.VISIBLE);
-                int startHeight = ScreenUtils.getFullActivityHeight();
-                ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
-                anim.setDuration(500);
-                anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mRlResult.getLayoutParams();
-                anim.addUpdateListener(valueAnimator -> {
-                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
-                    if (mRlResult != null)
-                        mRlResult.setLayoutParams(rlp);
-                });
-                anim.start();
+                showFinishWebview();
             }
 
             @Override
@@ -333,6 +322,26 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             }
         });
 
+    }
+
+    private void showFinishWebview() {
+        mLottieAnimationFinishView.setVisibility(View.GONE);
+        mFlAnim.setVisibility(View.GONE);
+        mRlResult.setVisibility(View.GONE);
+        mAppBarLayout.setExpanded(true);
+        mLlResultTop.setVisibility(View.VISIBLE);
+        mNestedScrollWebView.setVisibility(View.VISIBLE);
+        int startHeight = ScreenUtils.getFullActivityHeight();
+        ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
+        anim.setDuration(500);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mRlResult.getLayoutParams();
+        anim.addUpdateListener(valueAnimator -> {
+            rlp.topMargin = (int) valueAnimator.getAnimatedValue();
+            if (mRlResult != null)
+                mRlResult.setLayoutParams(rlp);
+        });
+        anim.start();
     }
 
     @Override

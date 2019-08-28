@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.widget.BattaryView;
@@ -67,6 +68,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     @Override
     protected void initVariable(Intent intent) {
         mPowerCleanAdapter = new SuperPowerCleanAdapter(PhoneSuperPowerDetailActivity.this);
+        PhoneSuperPowerDetailActivity.sSelectedList = null;
     }
 
     @Override
@@ -264,7 +266,14 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
      * 显示超省电应用信息
      */
     private void showListAppInfo() {
-        if (mRlResult == null) return;
+        long lastTime = SPUtil.getLastPowerCleanTime();
+        long curTime = System.currentTimeMillis();
+        if (curTime - lastTime < 3 * 60 * 1000) {
+            Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         mRlResult.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mLlBottom.setVisibility(View.VISIBLE);
