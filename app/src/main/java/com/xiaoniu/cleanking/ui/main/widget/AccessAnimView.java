@@ -392,7 +392,7 @@ public class AccessAnimView extends RelativeLayout {
      */
     public ObjectAnimator createStartFadeAnimator() {
 
-        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + 600, (-1)* DisplayUtils.dip2px(290));
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + (1)* DisplayUtils.dip2px(990),line_hj.getTranslationY());
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
         animator.setDuration(700);

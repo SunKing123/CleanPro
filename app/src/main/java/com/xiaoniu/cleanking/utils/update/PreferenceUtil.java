@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.utils.update;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;

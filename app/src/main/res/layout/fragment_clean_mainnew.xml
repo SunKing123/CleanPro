@@ -594,7 +594,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_bottom_title"
                     android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_12dp"
+                    android:layout_marginTop="@dimen/dimen_8dp"
                     android:layout_marginRight="@dimen/dimen_16dp"
                     android:layout_marginBottom="@dimen/dimen_14dp"
                     android:visibility="gone" />
