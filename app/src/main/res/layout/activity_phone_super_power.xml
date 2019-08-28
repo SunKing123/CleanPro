@@ -2,52 +2,60 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/color_06C581"
     android:layout_height="match_parent"
+    android:background="@color/color_06C581"
     android:gravity="center_horizontal"
     tools:context=".ui.main.activity.PhoneSuperPowerActivity">
 
-    <ImageView
-        android:id="@+id/iv_power"
-        android:layout_width="225dp"
-        android:layout_height="260dp"
-        android:layout_marginTop="86dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/icon_super_power"/>
-
-    <TextView
-        android:id="@+id/tv_title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:layout_marginTop="@dimen/dimen_20dp"
-        android:text="@string/tool_phone_use"
-        android:layout_below="@id/iv_power"
-        android:gravity="center"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tv_subtitle"
-        android:layout_width="260dp"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/white"
-        android:layout_below="@id/tv_title"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:text="大量耗电行为偷偷发生在后台，一键休眠 后台应用，避免耗电！"/>
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dimen_56dp">
+
+        <ImageView
+            android:id="@+id/iv_power"
+            android:layout_width="225dp"
+            android:layout_height="260dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/icon_super_power" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_power"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:gravity="center"
+            android:text="@string/tool_phone_use"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:gravity="center"
+            android:text="大量耗电行为偷偷发生在后台，一键休眠 后台应用，避免耗电！"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_clean"
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/dimen_12dp"
+        android:layout_height="@dimen/dimen_46dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:text="@string/tool_now_clean"
+        android:layout_marginBottom="@dimen/dimen_12dp"
         android:background="@drawable/btn_white_line_transparent_bg"
-        android:layout_alignParentBottom="true"
-        android:layout_height="@dimen/dimen_46dp"/>
+        android:gravity="center"
+        android:text="@string/tool_now_clean"
+        android:textColor="@color/white" />
 </RelativeLayout>
