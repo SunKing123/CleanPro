@@ -36,6 +36,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -55,6 +56,9 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     private int mSelectedCount;
 
     public static List<MultiItemInfo> sSelectedList;
+    private TextView tvHour;
+    private TextView tvMini;
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_phone_super_power_detail;
@@ -82,6 +86,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mHeaderView = mInflater.inflate(R.layout.layout_power_clean_header, mRecyclerView, false);
         mBvView = mHeaderView.findViewById(R.id.bv_view);
         mPowerLottieAnimationView = mHeaderView.findViewById(R.id.view_lottie_super_saving_power);
+        tvHour = mHeaderView.findViewById(R.id.tvHour);
+        tvMini = mHeaderView.findViewById(R.id.tvMini);
 
         mRecyclerView.setHeaderView(mHeaderView);
         mRecyclerView.setAdapter(mPowerCleanAdapter);
@@ -270,6 +276,11 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         }
         mBvView.setBattaryPercent(battery);
         showPowerAnim();
+
+        int hour = 1 + new Random().nextInt(3);
+        tvHour.setText(hour + "");
+        int mini = 1 + new Random().nextInt(59);
+        tvMini.setText(mini + "");
     }
 
     /**

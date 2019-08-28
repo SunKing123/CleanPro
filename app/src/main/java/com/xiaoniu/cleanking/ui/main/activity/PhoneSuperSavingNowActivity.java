@@ -143,7 +143,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     protected void loadData() {
 
 //        mHandler.sendEmptyMessageDelayed(1, 5000);
-        mHandler.sendEmptyMessageDelayed(2, 1000);
+        mHandler.sendEmptyMessageDelayed(2, 800);
     }
 
     /**
