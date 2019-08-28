@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -78,6 +79,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mIvSet = findViewById(R.id.iv_set);
         mHeaderView = mInflater.inflate(R.layout.layout_notification_clean_header, null);
         mTvNotificationCount = mHeaderView.findViewById(R.id.tvNotificationCount);
+        mTvNotificationCount.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
         mHeaderView.findViewById(R.id.lay_notify_clean_tips).setVisibility(View.VISIBLE);
         mRecyclerView.setHeaderView(mHeaderView);
         hideToolBar();
@@ -123,8 +125,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             //清理动画
             mCleanAnimView.startTopAnim(false);
             //title bar
-            showBarColor(getResources().getColor(R.color.color_FD6F46));
-            mCleanAnimView.setOnColorChangeListener(this::showBarColor);
+            showBarColor(getResources().getColor(R.color.color_06C581));
+//            mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         });
     }
 

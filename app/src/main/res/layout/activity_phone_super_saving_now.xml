@@ -174,16 +174,16 @@
 
                 <ImageView
                     android:id="@+id/view_lottie_super_saving_sleep"
-                    android:layout_width="@dimen/dimen_160dp"
-                    android:layout_height="@dimen/dimen_160dp"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dimen_50dp"
                     android:background="@drawable/super_power_top"/>
 
                 <FrameLayout
                     android:id="@+id/layIconAnim"
-                    android:layout_width="@dimen/dimen_160dp"
-                    android:layout_height="@dimen/dimen_160dp"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
                     android:layout_centerHorizontal="true"
                     android:visibility="gone"
                     android:layout_marginTop="@dimen/dimen_50dp">

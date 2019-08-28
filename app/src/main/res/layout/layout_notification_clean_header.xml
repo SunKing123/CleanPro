@@ -63,7 +63,7 @@
                 android:id="@+id/ivIcon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@mipmap/icon_round"
+                android:src="@mipmap/icon_notify_clean_tips"
                 android:layout_marginRight="12dp" />
 
             <LinearLayout

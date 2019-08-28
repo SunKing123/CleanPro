@@ -429,9 +429,9 @@ public class NotityCleanAnimView extends RelativeLayout {
     /**
      * 第一阶段  红色
      */
-    private static final int FirstLevel = 0xffFD6F46;
+    private static final int FirstLevel = 0xff06C581;
 
-    private static final int SecondLevel = 0xffF1D53B;
+    private static final int SecondLevel = 0xff06C581;
     /**
      * 第三阶段 绿色
      */
@@ -450,7 +450,7 @@ public class NotityCleanAnimView extends RelativeLayout {
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
             mTextCount.setText(String.format("%s", Math.round(animatedValue)));
-            mTextUnit.setText(unit);
+//            mTextUnit.setText(unit);
         });
 
         valueAnimator.addListener(new Animator.AnimatorListener() {

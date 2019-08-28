@@ -26,8 +26,8 @@
 
                 <ImageView
                     android:id="@+id/iv_dun"
-                    android:layout_width="47dp"
-                    android:layout_height="54dp"
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
                     android:layout_marginRight="@dimen/dimen_15dp"
                     android:src="@mipmap/icon_dun" />
 
@@ -44,7 +44,6 @@
                     android:id="@+id/layout_right_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
                     android:orientation="vertical"
                     android:visibility="visible">
 
@@ -52,7 +51,6 @@
                         android:id="@+id/tv_gb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dimen_10dp"
                         android:text="通知栏很干净"
                         android:textColor="@color/white"
                         android:textSize="24sp" />
@@ -62,6 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="快去体验其他炫酷功能"
+                        android:layout_marginTop="3dp"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -104,7 +103,7 @@
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_FD6F46"
+        android:background="@color/color_06C581"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -186,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:layout_toRightOf="@id/text_count"
-                    android:text="MB"
+                    android:text="%"
                     android:textColor="@color/white" />
             </RelativeLayout>
 
@@ -205,7 +204,7 @@
                     android:id="@+id/text_scan_trace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="文件清理中"
+                    android:text="通知栏清理中"
                     android:textColor="@color/white" />
             </LinearLayout>
         </RelativeLayout>

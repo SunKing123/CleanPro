@@ -1,14 +1,22 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
+import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.utils.DisplayImageUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 import com.xiaoniu.common.widget.xrecyclerview.GroupRecyclerAdapter;
@@ -60,9 +68,26 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
             ivSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setChildSelected(itemInfo);
-                    if (mOnCheckListener != null)
-                        mOnCheckListener.onCheck(itemData);
+                    if (itemInfo.selected == 1) {//取消不弹窗
+                        setChildSelected(itemInfo);
+                        if (mOnCheckListener != null)
+                            mOnCheckListener.onCheck(itemData);
+                        return;
+                    }
+                    alertBanLiveDialog(mContext, itemInfo.appName, new ImageListPresenter.ClickListener() {
+                        @Override
+                        public void clickOKBtn() {
+                            setChildSelected(itemInfo);
+                            if (mOnCheckListener != null)
+                                mOnCheckListener.onCheck(itemData);
+                        }
+
+                        @Override
+                        public void cancelBtn() {
+
+                        }
+                    });
+
                 }
             });
         }
@@ -73,6 +98,45 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
         return new CommonViewHolder(itemView);
     }
 
+
+    public AlertDialog alertBanLiveDialog(Context context, String appName, final ImageListPresenter.ClickListener okListener) {
+        final AlertDialog dlg = new AlertDialog.Builder(context).create();
+        if (((Activity) context).isFinishing()) {
+            return dlg;
+        }
+        dlg.show();
+        Window window = dlg.getWindow();
+        window.setContentView(R.layout.alite_redp_send_dialog);
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        //这里设置居中
+        lp.gravity = Gravity.BOTTOM;
+        window.setAttributes(lp);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
+
+        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
+        TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
+        TextView content = (TextView) window.findViewById(R.id.content);
+        tipTxt.setText("休眠 " + appName + " 减少耗电");
+        content.setText("该应用可能正在后天工作");
+        btnOk.setText("是");
+        btnCancle.setText("否");
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                okListener.clickOKBtn();
+            }
+        });
+        btnCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                okListener.cancelBtn();
+            }
+        });
+        return dlg;
+    }
 
     public static class PowerMultiItemTypeSupport implements MultiItemTypeSupport<MultiItemInfo> {
 
