@@ -13,7 +13,6 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.leon.channel.helper.ChannelReaderUtil;
 
@@ -150,7 +149,6 @@ public class AppUtils {
     public static String getChannelId() {
         String channel = "";
         try {
-            Log.i("123", "getChannelId" + ContextUtils.getContext());
             channel = ChannelReaderUtil.getChannel(ContextUtils.getContext());
         } catch (Exception e) {
         }

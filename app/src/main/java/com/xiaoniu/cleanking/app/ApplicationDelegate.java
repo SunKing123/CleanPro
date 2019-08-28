@@ -32,7 +32,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     @Override
     public void onCreate(Application application) {
-        initNiuData();
+        initNiuData(application);
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
         PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "");
@@ -67,9 +67,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         mAppComponent.inject(application);
     }
 
-    public void initNiuData() {
+    public void initNiuData(Application application) {
         //测试环境
-        NiuDataAPI.init(AppApplication.getInstance(), new Configuration().serverUrl(AppConstants.BIGDATA_MD)
+        NiuDataAPI.init(application, new Configuration().serverUrl(AppConstants.BIGDATA_MD)
                 //.debugOn() //切换到sdk默认的测试环境地址
                 .logOpen()//打开sdk日志信息
                 .channel(AppUtils.getChannelId())

@@ -192,17 +192,17 @@
                         android:id="@+id/ivIcon1"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:riv_corner_radius="20dp"
+                        app:riv_corner_radius="40dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/icon_apk" />
+                        android:scaleType="fitXY" />
 
                     <com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView
                         android:id="@+id/ivIcon2"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:riv_corner_radius="20dp"
+                        app:riv_corner_radius="40dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/icon_camera" />
+                        android:scaleType="fitXY" />
 
                 </FrameLayout>
 

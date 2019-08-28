@@ -108,7 +108,7 @@ public class BattaryView extends View {
         int h1 = imgH / 11;//电池凸点的高度
         int w1 = imgW / 3;//电池凸点的宽度
         //绘制背景
-        mPaint.setColor(Color.argb(77, 0, 0, 0));
+        mPaint.setColor(Color.argb(77, 255, 255, 255));
         canvas.drawRoundRect(rectF.left,h1 + getPaddingTop(),rectF.right,getHeight() - getPaddingBottom(),round,round,mPaint);
         canvas.drawRect(getPaddingLeft() + w1,getPaddingTop(),rectF.right - w1,h1 + getPaddingTop(),mPaint);
         //绘制有电部分
