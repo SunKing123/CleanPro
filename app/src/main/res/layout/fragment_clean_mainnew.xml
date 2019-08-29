@@ -637,7 +637,7 @@
                         android:visibility="visible" />
 
                     <ImageView
-                        android:id="@+id/view_news"
+                        android:id="@+id/view_qq_clean"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/text_more_function"
@@ -645,13 +645,13 @@
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/image_main_news" />
+                        android:src="@mipmap/image_main_qq_clean" />
 
                     <ImageView
                         android:id="@+id/view_phone_thin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/view_news"
+                        android:layout_below="@+id/view_qq_clean"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
@@ -659,7 +659,7 @@
                         android:src="@mipmap/image_main_thin" />
 
                     <ImageView
-                        android:id="@+id/view_qq_clean"
+                        android:id="@+id/view_news"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/view_phone_thin"
@@ -668,7 +668,7 @@
                         android:layout_marginBottom="@dimen/dimen_16dp"
                         android:layout_marginRight="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/image_main_qq_clean" />
+                        android:src="@mipmap/image_main_news" />
 
                 </RelativeLayout>
             </RelativeLayout>

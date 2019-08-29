@@ -96,9 +96,14 @@ public class JavaInterface {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_webview, null);
 
             ImageView imageView = view.findViewById(R.id.image_view);
-
+            ImageView ivClose = view.findViewById(R.id.ivClose);
             ImageUtil.display(url, imageView);
-
+            ivClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
             dialog.setContentView(view);
             if (dialog.isShowing()) {
                 return;

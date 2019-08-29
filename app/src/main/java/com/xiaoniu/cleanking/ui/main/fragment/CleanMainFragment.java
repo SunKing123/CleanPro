@@ -43,6 +43,7 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
@@ -853,5 +854,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     public FrameLayout getmFlAnim() {
         return mFlAnim;
+    }
+
+    @Subscribe
+    public void pushAutoClean(AutoCleanEvent autoCleanEvent) {
+        if (mButtonCleanNow != null && type == TYPE_SCAN_FINISH) {
+            mButtonCleanNow.performClick();
+        }
     }
 }

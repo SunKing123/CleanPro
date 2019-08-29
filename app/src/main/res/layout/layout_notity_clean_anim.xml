@@ -19,7 +19,7 @@
                 android:id="@+id/viewt_finish"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="@dimen/dimen_56dp"
+                android:layout_marginTop="@dimen/dimen_48dp"
                 android:background="#06C581"
                 android:gravity="center"
                 android:orientation="horizontal">

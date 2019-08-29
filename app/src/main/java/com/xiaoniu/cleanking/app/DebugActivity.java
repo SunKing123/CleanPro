@@ -46,7 +46,7 @@ public class DebugActivity extends BaseActivity {
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
-        String nativeParams = "&" + SchemeConstant.EXTRA_MAIN_INDEX + "=0";
+        String nativeParams = "&" + SchemeConstant.EXTRA_MAIN_INDEX + "=4";
         String scheme = nativeHeader + nativeName + nativeParams;
         SchemeProxy.openScheme(this, scheme);
     }
