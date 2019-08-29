@@ -98,4 +98,86 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_JPUSH_ALIAS,false);
     }
 
+    /**
+     * 保存是否开启锁屏新闻
+     * @param isOpen
+     * @return
+     */
+    public static boolean saveScreenTag(boolean isOpen){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_SREEN_TAG, isOpen).commit();
+        return true;
+    }
+
+    /**
+     * 是否开启锁屏新闻
+     * @return true 开启 false 关闭
+     */
+    public static boolean getScreenTag(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_SREEN_TAG,false);
+    }
+    /**
+     * 保存是否开启低电量提醒
+     * @param isOpen
+     * @return
+     */
+    public static boolean saveLower(boolean isOpen){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_LOWER, isOpen).commit();
+        return true;
+    }
+
+    /**
+     * 是否开启锁屏新闻
+     * @return true 开启 false 关闭
+     */
+    public static boolean getLower(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_LOWER,false);
+    }
+
+    /**
+     * 保存是否开启夜间省电提醒
+     * @param isOpen
+     * @return
+     */
+    public static boolean saveNightPower(boolean isOpen){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_NIGHT_POWER, isOpen).commit();
+        return true;
+    }
+
+    /**
+     * 是否开启锁屏新闻
+     * @return true 开启 false 关闭
+     */
+    public static boolean getNightPower(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_NIGHT_POWER,false);
+    }
+    /**
+     * 保存是否开启异常耗电提醒
+     * @param isOpen
+     * @return
+     */
+    public static boolean saveErrorPower(boolean isOpen){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_ERROR_POWER, isOpen).commit();
+        return true;
+    }
+
+    /**
+     * 是否开启异常耗电提醒
+     * @return true 开启 false 关闭
+     */
+    public static boolean getErrorPower(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_ERROR_POWER,false);
+    }
+
 }

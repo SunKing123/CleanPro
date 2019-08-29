@@ -41,6 +41,14 @@ public class SpCacheConfig {
     public static final String CLEAR_NUM = "clean_num";
     //记录是否已保存极光
     public static final String IS_SAVE_JPUSH_ALIAS = "j_push_alias";
+    //记录是否锁屏新闻
+    public static final String IS_SAVE_SREEN_TAG = "screen_tag";
+    //保存低电量提醒
+    public static final String IS_SAVE_LOWER = "low_power";
+    //夜间省电
+    public static final String IS_SAVE_NIGHT_POWER = "night_power";
+    //异常耗电提醒
+    public static final  String IS_SAVE_ERROR_POWER = "error_power";
     //埋点上一级页面
     public static final String ONKEY = "one_key";
     public static final String PHONE_CLEAN = "phone_clean";
