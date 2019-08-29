@@ -241,6 +241,11 @@
             android:name=".ui.tool.notify.activity.NotifyCleanSetActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.main.activity.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
         <!-- 微信分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"

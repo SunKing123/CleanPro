@@ -244,7 +244,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         tv_delete.setOnClickListener(v -> {
             //开始清理
-            startClean(true);
+            startClean(false);
            });
 
         mTvSpeed.setOnClickListener(view -> {
