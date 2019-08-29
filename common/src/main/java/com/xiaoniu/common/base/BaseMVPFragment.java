@@ -32,19 +32,6 @@ public abstract class BaseMVPFragment<V extends BaseView, T extends BasePresente
     }
 
     @Override
-    protected void loadData() {
-
-    }
-
-    @Override
-    protected void lazyLoadData() {
-        super.lazyLoadData();
-        if (mPresenter != null) {
-            mPresenter.onStart();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mPresenter != null) {

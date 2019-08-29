@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,11 +35,11 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
-import com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.widget.roundedimageview.RoundedImageView;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 
 import java.lang.ref.WeakReference;
@@ -268,7 +269,11 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             if (itemInfo instanceof PowerChildInfo) {
                 mCurImgIndex++;
                 PowerChildInfo childInfo = (PowerChildInfo) itemInfo;
-                return AppUtils.getAppIcon(this, childInfo.packageName);
+                Bitmap icon = AppUtils.getAppIcon(this, childInfo.packageName);
+                if (icon == null) {
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.clean_icon_apk);
+                }
+                return icon;
             }
         }
         return null;

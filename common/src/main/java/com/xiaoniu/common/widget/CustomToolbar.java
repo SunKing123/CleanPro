@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 
-import com.xiaoniu.common.utils.DisplayUtils;
-
 public class CustomToolbar extends Toolbar {
     public CustomToolbar(Context context) {
         super(context);
@@ -20,9 +18,9 @@ public class CustomToolbar extends Toolbar {
         super(context, attrs, defStyleAttr);
     }
 
-    @Override
-    protected LayoutParams generateDefaultLayoutParams() {
-        LayoutParams params = new LayoutParams(DisplayUtils.dip2px(45), LayoutParams.WRAP_CONTENT);
-        return params;
-    }
+//    @Override
+//    public LayoutParams generateDefaultLayoutParams() {
+//        LayoutParams params = new LayoutParams(DisplayUtils.dip2px(35), LayoutParams.WRAP_CONTENT);
+//        return params;
+//    }
 }

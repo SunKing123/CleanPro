@@ -280,7 +280,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 return;
             dialog = new Dialog(mActivity, R.style.dialog_2_button);
 
-            //dialog.setTitle("应用更新");
+            //dialog.setLeftTitle("应用更新");
             dialog.setCanceledOnTouchOutside(true);
 
             View inflate = View.inflate(mActivity, R.layout.activity_update_dialog, null);

@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.xiaoniu.cleanking.widget.roundedimageview;
+package com.xiaoniu.common.widget.roundedimageview;
 
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;

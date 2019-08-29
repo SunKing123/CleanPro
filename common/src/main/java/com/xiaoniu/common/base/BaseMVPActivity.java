@@ -21,12 +21,7 @@ public abstract class BaseMVPActivity<V extends BaseView, T extends BasePresente
         if (mPresenter != null) {
             mPresenter.onCreate(savedInstanceState);
             mPresenter.attachView((V) this);
-            mPresenter.onStart();
         }
-    }
-
-    @Override
-    protected void loadData() {
     }
 
     @Override

@@ -12,12 +12,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.Postcard;
@@ -41,7 +41,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     public Context mContext;
     public LayoutInflater mInflater;
     private Toolbar mToolBar;
-    private TextView mTvTitle;
+    private TextView mTvCenterTitle;
     private FrameLayout mLayBody;
     private View mContentView;
     private View mEmptyView;
@@ -50,6 +50,9 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     private long mLastClickTime = 0;//记录上次启动activity的时间
     private String mLastClassName = "";//记录上次启动activity的类名
     protected LoadingDialog mLoadingDialog;
+    private TextView mTvLeftTitle;
+    private ImageView mBtnLeft;
+    private LinearLayout mLayRightBtn;
 
     /* 子类使用的时候无需再次调用onCreate(),如需要加载其他方法可重写该方法 */
     @Override
@@ -87,7 +90,11 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     private void initToolBar() {
         mToolBar = (Toolbar) findViewById(R.id.toolBar);
-        mTvTitle = (TextView) findViewById(R.id.tvTitle);
+        mTvCenterTitle = (TextView) findViewById(R.id.tvCenterTitle);
+        mTvLeftTitle = (TextView) findViewById(R.id.tvLeftTitle);
+        mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
+        mLayRightBtn = (LinearLayout) findViewById(R.id.layRightBtn);
+
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         setLeftButton(R.drawable.common_icon_back_arrow_white, new View.OnClickListener() {
@@ -147,23 +154,23 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     /**
-     * 设置标题
+     * 设置中间标题
      */
-    public void setTitle(String title) {
-        mTvTitle.setText(title);
+    public void setCenterTitle(String title) {
+        mTvCenterTitle.setText(title);
     }
 
     /**
-     * 获取标题
+     * 设置左边标题
      */
-    public TextView getTitleView() {
-        return mTvTitle;
+    public void setLeftTitle(String title) {
+        mTvLeftTitle.setText(title);
     }
 
     /*设置导航条左边的按钮，一般是返回按钮*/
     public void setLeftButton(int iconResId, final View.OnClickListener onClickListener) {
-        mToolBar.setNavigationIcon(iconResId);
-        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+        mBtnLeft.setImageResource(iconResId);
+        mBtnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClick(v);
@@ -172,37 +179,21 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     /*设置导航条右边的按钮*/
-    public void addRightButton(final int iconResId, final Toolbar.OnMenuItemClickListener OnMenuItemClickListener) {
-        mToolBar.post(new Runnable() {
+    public ImageView addRightButton(final int iconResId, final View.OnClickListener onClickListener) {
+        ImageView rightBtn = (ImageView) mInflater.inflate(R.layout.common_layout_right_btn, mLayRightBtn, false);
+        mLayRightBtn.addView(rightBtn);
+        rightBtn.setImageResource(iconResId);
+        rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                mToolBar.inflateMenu(R.menu.common_menu_tool_bar_item);//设置右上角的填充菜单
-                Menu menu = mToolBar.getMenu();
-                MenuItem item = menu.getItem(menu.size() - 1);
-                item.setIcon(iconResId);
-                mToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        OnMenuItemClickListener.onMenuItemClick(item);
-                        return true;
-                    }
-                });
+            public void onClick(View v) {
+                onClickListener.onClick(v);
             }
         });
-
+        return rightBtn;
     }
 
     public void addRightButton(final View btnView) {
-        mToolBar.post(new Runnable() {
-            @Override
-            public void run() {
-                mToolBar.inflateMenu(R.menu.common_menu_tool_bar_item);//设置右上角的填充菜单
-                Menu menu = mToolBar.getMenu();
-                MenuItem item = menu.getItem(menu.size() - 1);
-                item.setActionView(btnView);
-            }
-        });
-
+        mLayRightBtn.addView(btnView);
     }
 
     /***

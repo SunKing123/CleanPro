@@ -3,5 +3,7 @@
     <item
         android:id="@+id/rightBtn"
         android:title=""
-        toolBar:showAsAction="always" />
+        toolBar:showAsAction="always">
+
+    </item>
 </menu>

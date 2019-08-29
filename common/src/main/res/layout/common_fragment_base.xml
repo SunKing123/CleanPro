@@ -2,27 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#000000"
-        android:visibility="visible">
+        android:layout_height="56dp"
+        android:background="#06C581"
+        android:padding="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left">
+
+            <ImageView
+                android:id="@+id/btnLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/common_icon_back_arrow_white" />
+
+            <TextView
+                android:id="@+id/tvLeftTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="42dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvCenterTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:alpha="1"
-            android:background="@null"
-            android:clickable="true"
             android:gravity="center"
             android:text=""
             android:textColor="#ffffff"
             android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/layRightBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:orientation="horizontal"></LinearLayout>
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout

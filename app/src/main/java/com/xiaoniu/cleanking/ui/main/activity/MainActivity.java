@@ -24,7 +24,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -374,7 +373,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onCreate(savedInstanceState);
         //注册订阅者
         EventBus.getDefault().register(this);
-        AppConfig.showDebugWindow(this);
+//        AppConfig.showDebugWindow(this);
     }
 
     @Override

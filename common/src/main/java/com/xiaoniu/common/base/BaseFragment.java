@@ -19,6 +19,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.Postcard;
@@ -41,7 +43,11 @@ public abstract class BaseFragment extends RxFragment {
     private boolean mViewCreated = false;//标示View 是否已经创建
     private boolean mIsLoaded = false;//是否已经惰加载过数据
     private Toolbar mToolBar;
-    private TextView mTvTitle;
+    private TextView mTvCenterTitle;
+    private TextView mTvLeftTitle;
+    private ImageView mBtnLeft;
+    private LinearLayout mLayRightBtn;
+
     private View mContentView;
     private View mEmptyView;
     private View mErrorView;
@@ -69,9 +75,9 @@ public abstract class BaseFragment extends RxFragment {
         View rootView = inflater.inflate(R.layout.common_fragment_base, container, false);
         // 内容区
         mLayBody = (FrameLayout) rootView.findViewById(R.id.layBody);
-        //ToolBar
-        mTvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
-        mToolBar = (Toolbar) rootView.findViewById(R.id.toolBar);
+
+        //ToolBar相关
+        initToolBar(rootView);
 
         int resId = getLayoutResId();
         try {
@@ -90,6 +96,14 @@ public abstract class BaseFragment extends RxFragment {
         return rootView;
     }
 
+    private void initToolBar(View rootView) {
+        mToolBar = (Toolbar) rootView.findViewById(R.id.toolBar);
+        mTvCenterTitle = (TextView) rootView.findViewById(R.id.tvCenterTitle);
+        mTvLeftTitle = (TextView) rootView.findViewById(R.id.tvLeftTitle);
+        mBtnLeft = (ImageView) rootView.findViewById(R.id.btnLeft);
+        mLayRightBtn = (LinearLayout) rootView.findViewById(R.id.layRightBtn);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -102,19 +116,31 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadData();
-        if (getUserVisibleHint() && !mIsLoaded) {
-            mIsLoaded = true;
-            lazyLoadData(); //用于第一个fragment
+        if (mSupportLazy) {
+            if (getUserVisibleHint() && !mIsLoaded) {
+                mIsLoaded = true;
+                loadData(); //用于第一个fragment
+            }
+        } else {
+            loadData();
         }
+    }
+
+    /*是否支持惰加载*/
+    private boolean mSupportLazy = true;
+
+    protected void setSupportLazy(boolean supportLazy) {
+        mSupportLazy = supportLazy;
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden && mViewCreated && !mIsLoaded) {
-            mIsLoaded = true;
-            lazyLoadData();
+        if (mSupportLazy) {
+            if (!hidden && mViewCreated && !mIsLoaded) {
+                mIsLoaded = true;
+                loadData();
+            }
         }
     }
 
@@ -125,9 +151,9 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && mViewCreated && !mIsLoaded) {
+        if (mSupportLazy && isVisibleToUser && mViewCreated && !mIsLoaded) {
             mIsLoaded = true;
-            lazyLoadData();
+            loadData();
         }
     }
 
@@ -140,9 +166,6 @@ public abstract class BaseFragment extends RxFragment {
     protected abstract void setListener();
 
     protected abstract void loadData();//和lazyLoadData选择性使用
-
-    protected void lazyLoadData() {
-    }
 
     /************************************************
      * **********       ToolBar相关设置***************
@@ -169,15 +192,15 @@ public abstract class BaseFragment extends RxFragment {
     /**
      * 设置标题
      */
-    public void setTitle(String title) {
-        mTvTitle.setText(title);
+    public void setCenterTitle(String title) {
+        mTvCenterTitle.setText(title);
     }
 
     /**
-     * 获取标题
+     * 设置左边标题
      */
-    public TextView getTitleView() {
-        return mTvTitle;
+    public void setLeftTitle(String title) {
+        mTvLeftTitle.setText(title);
     }
 
     /*设置导航条左边的按钮，一般是返回按钮*/

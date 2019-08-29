@@ -36,7 +36,7 @@ public class NotifyCleanGuideActivity extends BaseActivity {
 
     @Override
     protected void initVariable(Intent intent) {
-        setTitle("通知栏清理");
+        setLeftTitle("通知栏清理");
     }
 
     @Override
