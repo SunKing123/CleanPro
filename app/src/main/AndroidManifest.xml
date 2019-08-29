@@ -23,9 +23,9 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".ui.TestActivity"
+            android:name=".ui.main.activity.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +51,7 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/Main.Theme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.usercenter.activity.UserLoadH5Activity"
