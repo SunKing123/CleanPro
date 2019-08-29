@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter;
+import com.xiaoniu.cleanking.ui.main.adapter.ImageShowAdapter.onCheckListener;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -117,23 +118,19 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                 });
 
                 String pageName = "";
-                if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
-                    pageName = "file_cleaning_page";
+                if (AppManager.getAppManager().preActivityName() != null && AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                        pageName = "file_cleaning_page";
                 }
                 StatisticsUtils.trackClick("picture_cleaning_clean_click", "图片清理-删除", pageName, "picture_cleaning_page");
-
             }
         });
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String pageName = "";
-                if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
-                    pageName = "file_cleaning_page";
-                }
-                StatisticsUtils.trackClick("picture_cleaning_back_click", "图片清理返回", pageName, "picture_cleaning_page");
-                finish();
+        iv_back.setOnClickListener(v -> {
+            String pageName = "";
+            if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                pageName = "file_cleaning_page";
             }
+            StatisticsUtils.trackClick("picture_cleaning_back_click", "图片清理返回", pageName, "picture_cleaning_page");
+            finish();
         });
 
     }
@@ -176,7 +173,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         recycle_view.setAdapter(imageAdapter);
         line_none.setVisibility(listImages.size() == 0 ? View.VISIBLE : View.GONE);
         recycle_view.setVisibility(listImages.size() == 0 ? View.GONE : View.VISIBLE);
-        imageAdapter.setmOnCheckListener(new ImageShowAdapter.onCheckListener() {
+        imageAdapter.setmOnCheckListener(new onCheckListener() {
             @Override
             public void onCheck(List<FileEntity> listFile, int pos) {
                 int selectCount = 0;
