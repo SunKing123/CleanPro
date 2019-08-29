@@ -3,9 +3,11 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Intent;
 import android.view.View;
 
+import com.suke.widget.SwitchButton;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import butterknife.OnClick;
 
@@ -16,6 +18,7 @@ import butterknife.OnClick;
  */
 public class WhiteListSettingActivity extends BaseActivity {
 
+    private SwitchButton mSbtnScreenTag;
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -33,7 +36,9 @@ public class WhiteListSettingActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        mSbtnScreenTag = findViewById(R.id.s_btn_screen_tag);
+        mSbtnScreenTag.setChecked(PreferenceUtil.getScreenTag());
+        mSbtnScreenTag.setOnCheckedChangeListener((view, isChecked) -> PreferenceUtil.saveScreenTag(isChecked));
     }
 
     @OnClick({R.id.img_back,R.id.ll_install_package, R.id.ll_speed_list,R.id.ll_soft_package})
