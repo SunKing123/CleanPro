@@ -3,9 +3,11 @@ package com.xiaoniu.cleanking.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.ToastUtils;
 
 public class TestActivity extends BaseActivity {
     @Override
@@ -15,7 +17,21 @@ public class TestActivity extends BaseActivity {
 
     @Override
     protected void initVariable(Intent intent) {
-        setTitle("超强省电");
+        setLeftTitle("超强省电");
+
+        addRightButton(R.drawable.cc_icon_none_file, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showShort("haha");
+            }
+        });
+
+        addRightButton(R.drawable.cc_icon_none_file, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showShort("haha");
+            }
+        });
     }
 
     @Override

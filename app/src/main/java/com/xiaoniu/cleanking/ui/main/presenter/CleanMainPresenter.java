@@ -739,7 +739,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 //        if (dialog != null && dialog.isShowing())
 //            return;
 //        dialog = PromptDialog.builder(mView.getContext())
-//                .setTitle("提示", R.color.color_111111, R.dimen.dimen_18sp)
+//                .setLeftTitle("提示", R.color.color_111111, R.dimen.dimen_18sp)
 //                .setMessage(stringRes, R.color.color_262626, R.dimen.dimen_15sp)
 //                .setMessagePadding(R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp)
 //                .setMessageGravity(Gravity.CENTER)

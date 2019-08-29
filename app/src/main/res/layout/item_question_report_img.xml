@@ -10,7 +10,7 @@
         android:layout_width="@dimen/dimen_60dp"
         android:layout_height="@dimen/dimen_60dp">
 
-        <com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView
+        <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
             android:id="@+id/img"
             android:layout_width="@dimen/dimen_44dp"
             android:layout_height="@dimen/dimen_44dp"

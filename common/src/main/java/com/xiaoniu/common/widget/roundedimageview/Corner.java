@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.xiaoniu.cleanking.widget.roundedimageview;
+package com.xiaoniu.common.widget.roundedimageview;
 
 import android.support.annotation.IntDef;
 

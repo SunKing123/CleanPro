@@ -192,19 +192,23 @@
                     android:visibility="gone"
                     android:layout_marginTop="@dimen/dimen_50dp">
 
-                    <com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView
+                    <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
                         android:id="@+id/ivIcon1"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:riv_corner_radius="40dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:riv_corner_radius="25dp"
+                        app:riv_border_width="5dp"
+                        app:riv_border_color="#06C581"
                         android:layout_gravity="center"
                         android:scaleType="fitXY" />
 
-                    <com.xiaoniu.cleanking.widget.roundedimageview.RoundedImageView
+                    <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
                         android:id="@+id/ivIcon2"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:riv_corner_radius="40dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:riv_corner_radius="25dp"
+                        app:riv_border_width="5dp"
+                        app:riv_border_color="#06C581"
                         android:layout_gravity="center"
                         android:scaleType="fitXY" />
 

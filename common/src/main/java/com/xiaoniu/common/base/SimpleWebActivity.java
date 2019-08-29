@@ -61,7 +61,7 @@ public class SimpleWebActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         mWebView = (WebView) findViewById(R.id.webView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        setTitle(title);
+        setLeftTitle(title);
         setLeftButton(R.drawable.back_white, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +166,7 @@ public class SimpleWebActivity extends BaseActivity {
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 if (TextUtils.isEmpty(SimpleWebActivity.this.title)) {
-                    setTitle(title);
+                    setLeftTitle(title);
                 }
             }
 

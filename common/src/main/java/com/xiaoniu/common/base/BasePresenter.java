@@ -21,8 +21,6 @@ public abstract class BasePresenter<V extends BaseView> {
     protected void onCreate(Bundle savedInstanceState) {
     }
 
-    protected void onStart() {
-    }
 
     protected void onDestroy() {
     }
