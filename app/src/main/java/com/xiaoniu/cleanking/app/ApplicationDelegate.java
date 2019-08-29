@@ -35,7 +35,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initNiuData(application);
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
-        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "");
+        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
         Bugly.init(application, "bdd6fe23ab", false);
 
         UMShareAPI.get(application);
