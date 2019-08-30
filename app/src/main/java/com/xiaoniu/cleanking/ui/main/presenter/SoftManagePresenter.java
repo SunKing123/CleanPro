@@ -54,7 +54,6 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
 
     //扫描已安装的apk信息
     public void scanData() {
-
         apps.clear();
         getApplicaionInfo();
 
@@ -85,9 +84,9 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                Set<String> whitePkgs =  sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<String>());
+                Set<String> whitePkgs =  sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
 
-                if (packageInfo.packageName.equals("com.xiaoniu.cleanking") || whitePkgs.contains(packageInfo.packageName)){
+                if (packageInfo.packageName.equals("com.xiaoniu.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))){
                     continue;
                 }
                 apps.add(appInfoBean);

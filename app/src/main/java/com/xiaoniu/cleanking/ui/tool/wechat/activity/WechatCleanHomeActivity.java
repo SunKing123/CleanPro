@@ -223,6 +223,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     public void getScanResult() {
         setScanStatus(false);
 
+        if (tvWxgabageSize == null) return;
         CleanWxEasyInfo wxprogramInfo = WxQqUtil.f;  //微信小程序
         CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
         CleanWxEasyInfo gabageFileInfo = WxQqUtil.d;  //垃圾文件   不含聊天记录建议清理

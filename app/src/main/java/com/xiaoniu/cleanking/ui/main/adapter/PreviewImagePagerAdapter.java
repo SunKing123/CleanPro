@@ -54,14 +54,16 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         PhotoView photoView = new PhotoView(container.getContext());
         photoView.setMinimumScale(0.5f);
-        FileEntity image = mDataList.get(position);
-        if (null != image) {
-            loadArtworkImage(photoView,image.getPath(),0,0);
+        if (mDataList.size() > 0) {
+            FileEntity image = mDataList.get(position);
+            if (null != image) {
+                loadArtworkImage(photoView, image.getPath(), 0, 0);
 
+            }
+            photoView.setOnOutsidePhotoTapListener(this);
+            photoView.setOnPhotoTapListener(this);
+            container.addView(photoView);
         }
-        photoView.setOnOutsidePhotoTapListener(this);
-        photoView.setOnPhotoTapListener(this);
-        container.addView(photoView);
         return photoView;
     }
 

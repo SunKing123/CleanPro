@@ -594,6 +594,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     }
 
     public void startFinishAnimator(ImageView iconInner, ImageView iconOuter) {
+        if (mView == null) return;
         mView.getLottieView().setVisibility(View.GONE);
         LottieAnimationView finishAnimator = mView.getFinishAnimator();
         mView.getmFlAnim().setVisibility(VISIBLE);
@@ -631,6 +632,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
+        if (mView == null) return;
         View cleanFinish = mView.getCleanFinish();
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);

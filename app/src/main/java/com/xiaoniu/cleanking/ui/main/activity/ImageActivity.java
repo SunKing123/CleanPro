@@ -67,66 +67,61 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
         getImageList();
-        cb_checkall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!recycle_view.isComputingLayout()) {
-                    cb_checkall.setSelected(!cb_checkall.isSelected());
-                    tv_delete.setSelected(cb_checkall.isSelected());
-                    imageAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
-                    cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-                    tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-                    compulateDeleteSize();
-                    if(cb_checkall.isSelected()){
-                        String pageName = "";
-                        if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
-                            pageName = "file_cleaning_page";
-                        }
-                        StatisticsUtils.trackClick("picture_cleaning_all_election_click", "全选-按钮", pageName, "picture_cleaning_page");
-
+        cb_checkall.setOnClickListener(v -> {
+            if (!recycle_view.isComputingLayout()) {
+                cb_checkall.setSelected(!cb_checkall.isSelected());
+                tv_delete.setSelected(cb_checkall.isSelected());
+                imageAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+                tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+                compulateDeleteSize();
+                if(cb_checkall.isSelected()){
+                    String pageName = "";
+                    if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                        pageName = "file_cleaning_page";
                     }
+                    StatisticsUtils.trackClick("picture_cleaning_all_election_click", "全选-按钮", pageName, "picture_cleaning_page");
+
                 }
             }
         });
         //删除图片
-        tv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!tv_delete.isSelected())
-                    return;
-                List<FileEntity> listF = new ArrayList<>();
-                List<FileEntity> listData = imageAdapter.getListImage();
-                for (int i = 0; i < listData.size(); i++) {
-                    if (listData.get(i).getIsSelect())
-                        listF.add(imageAdapter.getListImage().get(i));
-                }
-
-
-                mPresenter.alertBanLiveDialog(ImageActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
-                    @Override
-                    public void clickOKBtn() {
-                        //删除本地文件
-                        mPresenter.delFile(listF);
-                        //数据库删除选中的文件
-                        mPresenter.deleteFromDatabase(listF, imageAdapter);
-                    }
-
-                    @Override
-                    public void cancelBtn() {
-
-                    }
-                });
-
-                String pageName = "";
-                if (AppManager.getAppManager().preActivityName() != null && AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
-                        pageName = "file_cleaning_page";
-                }
-                StatisticsUtils.trackClick("picture_cleaning_clean_click", "图片清理-删除", pageName, "picture_cleaning_page");
+        tv_delete.setOnClickListener(v -> {
+            if (!tv_delete.isSelected())
+                return;
+            List<FileEntity> listF = new ArrayList<>();
+            List<FileEntity> listData = imageAdapter.getListImage();
+            for (int i = 0; i < listData.size(); i++) {
+                if (listData.get(i).getIsSelect())
+                    listF.add(imageAdapter.getListImage().get(i));
             }
+
+
+            mPresenter.alertBanLiveDialog(ImageActivity.this, listF.size(), new ImageListPresenter.ClickListener() {
+                @Override
+                public void clickOKBtn() {
+                    //删除本地文件
+                    mPresenter.delFile(listF);
+                    //数据库删除选中的文件
+                    mPresenter.deleteFromDatabase(listF, imageAdapter);
+                }
+
+                @Override
+                public void cancelBtn() {
+
+                }
+            });
+
+            String pageName = "";
+            if (AppManager.getAppManager().preActivityName() != null && AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+                    pageName = "file_cleaning_page";
+            }
+            StatisticsUtils.trackClick("picture_cleaning_clean_click", "图片清理-删除", pageName, "picture_cleaning_page");
         });
         iv_back.setOnClickListener(v -> {
             String pageName = "";
-            if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
+
+            if (AppManager.getAppManager().preActivityName() != null && AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
                 pageName = "file_cleaning_page";
             }
             StatisticsUtils.trackClick("picture_cleaning_back_click", "图片清理返回", pageName, "picture_cleaning_page");

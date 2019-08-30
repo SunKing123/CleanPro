@@ -368,6 +368,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void setCleanSize(long totalSizes, boolean canPlayAnim) {
+        if (acceview == null) return;
         String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描

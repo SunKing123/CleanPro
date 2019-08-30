@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -232,6 +231,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         Bundle bundle = new Bundle();
         intent1.putExtras(bundle);
         setResult(205, intent1);
+        if (mImageArrayList == null) return;
         CleanAllFileScanUtil.clean_image_list =mImageArrayList;
     }
     @Override
