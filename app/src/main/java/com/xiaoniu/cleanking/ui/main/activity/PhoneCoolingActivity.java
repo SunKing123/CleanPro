@@ -244,6 +244,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      */
     private void initAnimator(int phoneTemperature) {
 
+        if (mLayoutAnimCool == null) return;
         ValueAnimator colorAnim = ObjectAnimator.ofInt(mLayoutAnimCool, "backgroundColor", ThirdLevel, FirstLevel);
         ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLayoutTitleBar, "backgroundColor", ThirdLevel, FirstLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());

@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -98,39 +99,37 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
     /**
      * 读取手机中所有图片信息
      */
+    @SuppressLint("CheckResult")
     public void getPhotos(Activity mActivity) {
-        Observable.create(new ObservableOnSubscribe<List<FileEntity>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<FileEntity>> e) throws Exception {
-                List<FileEntity> mediaBeen = new ArrayList<>();
-                Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                String[] projImage = {MediaStore.Images.Media._ID
-                        , MediaStore.Images.Media.DATA
-                        , MediaStore.Images.Media.SIZE
-                        , MediaStore.Images.Media.DISPLAY_NAME};
-                Cursor mCursor = null;
-                try {
-                    mCursor = mActivity.getContentResolver().query(mImageUri,
-                            projImage,
-                            MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
-                            new String[]{"image/jpeg", "image/png"},
-                            MediaStore.Images.Media.DATE_MODIFIED + " desc");
-                } catch (Throwable t) {}
+        Observable.create((ObservableOnSubscribe<List<FileEntity>>) e -> {
+            List<FileEntity> mediaBeen = new ArrayList<>();
+            Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            String[] projImage = {MediaStore.Images.Media._ID
+                    , MediaStore.Images.Media.DATA
+                    , MediaStore.Images.Media.SIZE
+                    , MediaStore.Images.Media.DISPLAY_NAME};
+            Cursor mCursor = null;
+            try {
+                mCursor = mActivity.getContentResolver().query(mImageUri,
+                        projImage,
+                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
+                        new String[]{"image/jpeg", "image/png"},
+                        MediaStore.Images.Media.DATE_MODIFIED + " desc");
+            } catch (Throwable t) {}
 
-                if (mCursor != null) {
-                    while (mCursor.moveToNext()) {
-                        // 获取图片的路径
-                        String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                        int size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE)) ;
-                        String displayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
-                        //用于展示相册初始化界面
-                        mediaBeen.add(new FileEntity(size + "", path));
-                    }
-                    mCursor.close();
+            if (mCursor != null) {
+                while (mCursor.moveToNext()) {
+                    // 获取图片的路径
+                    String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    int size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE)) ;
+                    String displayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                    //用于展示相册初始化界面
+                    mediaBeen.add(new FileEntity(size + "", path));
                 }
-
-                e.onNext(mediaBeen);
+                mCursor.close();
             }
+
+            e.onNext(mediaBeen);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<FileEntity>>() {

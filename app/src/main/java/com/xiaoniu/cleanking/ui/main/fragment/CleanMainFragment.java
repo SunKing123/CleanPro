@@ -222,6 +222,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
         //请求广告接口
         mPresenter.requestBottomAd();
+        if (mIvNews == null) return;
         //状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(getActivity(), AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {

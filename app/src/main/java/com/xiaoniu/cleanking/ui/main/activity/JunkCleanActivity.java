@@ -125,8 +125,10 @@ public class JunkCleanActivity extends SimpleActivity {
 
         mAdapter.setData(mJunkGroups);
 
-        for (int i = 0; i < mJunkGroups.size(); i++) {
-            listView.expandGroup(i);
+        if (mJunkGroups == null) {
+            for (int i = 0; i < mJunkGroups.size(); i++) {
+                    listView.expandGroup(i);
+            }
         }
         countEntity = CleanUtil.formatShortFileSize(getTotalSize());
         mTextClean.setText("清理" + countEntity.getResultSize());
