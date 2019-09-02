@@ -235,6 +235,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     public void startScan() {
         new Handler().postDelayed(() -> {
+            if (mButtonCleanNow == null) return;
             mPresenter.startScan();
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
             type = TYPE_SCANING;

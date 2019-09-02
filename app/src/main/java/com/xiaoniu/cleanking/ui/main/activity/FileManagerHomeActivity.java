@@ -80,7 +80,11 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         //查询手机存储使用率
         mPresenter.getSpaceUse(tv_spaceinfos, circleProgressView);
         //监听进度条进度
-        circleProgressView.setOnAnimProgressListener(progress -> tv_percent_num.setText("" + progress));
+        circleProgressView.setOnAnimProgressListener(progress -> {
+                    if (tv_percent_num != null)
+                        tv_percent_num.setText("" + progress);
+                }
+        );
 
         iv_back.setOnClickListener(v -> {
             finish();
@@ -100,7 +104,7 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         }
         if (imageSize > 0) {
             tvImageSize.setText(CleanAllFileScanUtil.byte2FitSize(imageSize));
-        }else {
+        } else {
             tvImageSize.setText("");
         }
         viewImagearea.setOnClickListener(v -> {
@@ -176,18 +180,18 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
 
         if (null != tvVideoSize && videoSize > 0) {
             tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
-        }else if(null!=tvVideoSize){
+        } else if (null != tvVideoSize) {
             tvVideoSize.setText("");
         }
 
         if (null != tvMusicSize && musicSize > 0) {
             tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
-        }else if(null!=tvMusicSize){
+        } else if (null != tvMusicSize) {
             tvMusicSize.setText("");
         }
         if (null != tvApkSize && apkSize > 0) {
             tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
-        }else if(null!=tvApkSize){
+        } else if (null != tvApkSize) {
             tvApkSize.setText("");
         }
 
