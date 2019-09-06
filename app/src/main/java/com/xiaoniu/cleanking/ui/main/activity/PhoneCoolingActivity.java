@@ -684,6 +684,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 bundle.putString("num","");
                 bundle.putString("unit","");
                 startActivity(CleanFinish2Activity.class,bundle);
+                finish();
 //                //保存清理完成次数
 //                PreferenceUtil.saveCleanNum();
 //                mLayoutCoolView.setVisibility(GONE);
