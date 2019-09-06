@@ -679,26 +679,31 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                //保存清理完成次数
-                PreferenceUtil.saveCleanNum();
-                mLayoutCoolView.setVisibility(GONE);
-                mAppCoolingBarlayout.setExpanded(true);
-                mNestedScrollView.setVisibility(VISIBLE);
-                mRlAnim.setVisibility(GONE);
-                mFlAnim.setVisibility(View.GONE);
-                int bottom = mLayoutTitleBar.getBottom();
-                mLayoutCleanFinish.setVisibility(GONE);
-                int startHeight = ScreenUtils.getFullActivityHeight();
-                ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
-                anim.setDuration(500);
-                anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
-                anim.addUpdateListener(valueAnimator -> {
-                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
-                    if (mLayoutCleanFinish != null)
-                        mLayoutCleanFinish.setLayoutParams(rlp);
-                });
-                anim.start();
+                Bundle bundle = new Bundle();
+                bundle.putString("title",getString(R.string.tool_phone_temperature_low));
+                bundle.putString("num","");
+                bundle.putString("unit","");
+                startActivity(CleanFinish2Activity.class,bundle);
+//                //保存清理完成次数
+//                PreferenceUtil.saveCleanNum();
+//                mLayoutCoolView.setVisibility(GONE);
+//                mAppCoolingBarlayout.setExpanded(true);
+//                mNestedScrollView.setVisibility(VISIBLE);
+//                mRlAnim.setVisibility(GONE);
+//                mFlAnim.setVisibility(View.GONE);
+//                int bottom = mLayoutTitleBar.getBottom();
+//                mLayoutCleanFinish.setVisibility(GONE);
+//                int startHeight = ScreenUtils.getFullActivityHeight();
+//                ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
+//                anim.setDuration(500);
+//                anim.setInterpolator(new AccelerateDecelerateInterpolator());
+//                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
+//                anim.addUpdateListener(valueAnimator -> {
+//                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
+//                    if (mLayoutCleanFinish != null)
+//                        mLayoutCleanFinish.setLayoutParams(rlp);
+//                });
+//                anim.start();
             }
 
             @Override
