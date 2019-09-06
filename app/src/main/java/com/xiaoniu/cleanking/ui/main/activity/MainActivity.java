@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
-    private ShoppingMallFragment upQuotaFragment;
+    private NewsFragment upQuotaFragment;
     private static final long DEFAULT_REFRESH_TIME = 10*60*1000L;
 
     /**
@@ -295,7 +296,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
-        upQuotaFragment = ShoppingMallFragment.getIntance(url);
+        upQuotaFragment = NewsFragment.getNewsFragment("");
         mFragments.add(mainFragment);
 
         mFragments.add(toolFragment);

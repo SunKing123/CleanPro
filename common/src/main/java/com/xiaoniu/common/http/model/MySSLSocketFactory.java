@@ -22,10 +22,10 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by baozhong 2016/02/01
- * <p>
+ *
  * new InputStream[]{new Buffer()
- * .writeUtf8(CER_12306)
- * .inputStream()}
+ .writeUtf8(CER_12306)
+ .inputStream()}
  */
 public class MySSLSocketFactory {
     public static SSLSocketFactory getSslSocketFactory(InputStream[] certificates, InputStream bksFile, String password) {

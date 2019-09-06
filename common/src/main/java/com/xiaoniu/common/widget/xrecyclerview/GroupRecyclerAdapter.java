@@ -13,9 +13,9 @@ public abstract class GroupRecyclerAdapter extends CommonRecyclerAdapter<MultiIt
         super(context, multiTypeSupport);
     }
 
-    public void setData(List<MultiItemInfo> datas) {
+    public void setData(List<? extends MultiItemInfo> datas) {
         if (datas != null) {
-            mOriginDatas = datas;
+            mOriginDatas = (List<MultiItemInfo>) datas;
             mDatas.clear();
             mDatas.addAll(datas);
             initData();

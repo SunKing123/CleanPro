@@ -31,6 +31,8 @@ import com.xiaoniu.common.widget.LoadingDialog;
 
 import java.util.List;
 
+import cn.jzvd.Jzvd;
+
 /**
  * Created by wangbaozhong 2017/05/01
  * 主要功能包括：支持ViewPager惰加载,重新定义生命周期（模板模式），
@@ -55,6 +57,8 @@ public abstract class BaseFragment extends RxFragment {
     private long lastClickTime;//记录上次点击启动activity的时间
     private String lastClassName = "";//记录上次启动activity的类名
     private LoadingDialog mLoadingDialog;
+    private boolean mVisibleToUser = false;
+    private boolean mSupportLazy = false; //默认不支持惰加载
 
     @Override
     public void onAttach(Context context) {
@@ -117,25 +121,46 @@ public abstract class BaseFragment extends RxFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (mSupportLazy) {
-            if (getUserVisibleHint() && !mIsLoaded) {
+            if (mVisibleToUser && !mIsLoaded) {
                 mIsLoaded = true;
                 loadData(); //用于第一个fragment
             }
         } else {
+            mIsLoaded = true;
             loadData();
         }
     }
 
-    /*是否支持惰加载*/
-    private boolean mSupportLazy = true;
-
-    protected void setSupportLazy(boolean supportLazy) {
-        mSupportLazy = supportLazy;
+    /**
+     * 该方法会先于onCreate和onCreateView 执行,适合ViewPager切换情况
+     * 且每次都在Fragment可见或不可见时调用一次，所以需要判断是否创建View
+     * 该方案与onHiddenChanged方案同时只有一个生效，不会有冲突
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        mVisibleToUser = isVisibleToUser;
+        if (isVisibleToUser) {
+            onVisibleToUser();
+        }else {
+            Jzvd.releaseAllVideos();
+        }
+        if (mSupportLazy && isVisibleToUser && mViewCreated && !mIsLoaded) {
+            mIsLoaded = true;
+            loadData();
+        }
     }
 
+    /**
+     * 适合自己控制Fragment显示隐藏情况，要想实现懒加载，必须先hide所有Fragment，然后再show需要的显示的fragment，
+     * 如果使用该方案实现懒加载，必须按要求实现逻辑，否则loadData方法不会调用
+     */
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        if (!hidden) {
+            onVisibleToUser();
+        }
         if (mSupportLazy) {
             if (!hidden && mViewCreated && !mIsLoaded) {
                 mIsLoaded = true;
@@ -144,18 +169,14 @@ public abstract class BaseFragment extends RxFragment {
         }
     }
 
-    /**
-     * 该方法会先于onCreate和onCreateView 执行,
-     * 且每次都在Fragment可见或不可见时调用一次，所以需要判断是否创建View
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (mSupportLazy && isVisibleToUser && mViewCreated && !mIsLoaded) {
-            mIsLoaded = true;
-            loadData();
-        }
+    /*每次Fragment可见都会调用*/
+    protected void onVisibleToUser() {
     }
+
+    protected void setSupportLazy(boolean supportLazy) {
+        mSupportLazy = supportLazy;
+    }
+
 
     protected abstract int getLayoutResId();
 

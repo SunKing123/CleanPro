@@ -1,7 +1,7 @@
 package com.xiaoniu.common.base;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
@@ -33,13 +33,14 @@ public class SimpleWebActivity extends BaseActivity {
     public String url;
     public String title;
 
-    public static void startActivity(Activity context, String url, String title) {
+    public static void startActivity(Context context, String url, String title) {
         if (context != null) {
             Intent intent = new Intent(context, SimpleWebActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(KEY_URL, url);
             bundle.putString(KEY_TITLE, title);
             intent.putExtras(bundle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
     }
@@ -62,7 +63,7 @@ public class SimpleWebActivity extends BaseActivity {
         mWebView = (WebView) findViewById(R.id.webView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         setLeftTitle(title);
-        setLeftButton(R.drawable.back_white, new View.OnClickListener() {
+        setLeftButton(R.drawable.common_icon_back_arrow_white, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

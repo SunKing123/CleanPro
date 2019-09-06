@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
 import com.tencent.tinker.entry.DefaultApplicationLike;
 import com.tencent.tinker.lib.tinker.Tinker;
@@ -16,6 +15,7 @@ import com.xiaoniu.common.hotfix.log.MyLogImp;
 import com.xiaoniu.common.hotfix.utils.ApplicationContext;
 import com.xiaoniu.common.hotfix.utils.TinkerManager;
 import com.xiaoniu.common.http.EHttp;
+import com.xiaoniu.common.http.RequestParamInterceptor;
 import com.xiaoniu.common.http.model.CommonResult;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.ManifestParser;
@@ -51,7 +51,6 @@ public class CleanApplicationLike extends DefaultApplicationLike {
         //you must install multiDex whatever tinker is installed!
         sInstance = this;
         ContextUtils.init(base);
-        Log.i("123", "onBaseContextAttached" + getApplication());
         MultiDex.install(base);
         ApplicationContext.application = getApplication();
         ApplicationContext.context = getApplication();
@@ -80,7 +79,6 @@ public class CleanApplicationLike extends DefaultApplicationLike {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("123", "onCreate" + getApplication());
         mAppDelegateList = new ManifestParser(getApplication()).parse();
         for (IApplicationDelegate delegate : mAppDelegateList) {
             delegate.onCreate(getApplication());
@@ -92,6 +90,7 @@ public class CleanApplicationLike extends DefaultApplicationLike {
         //全局设置，所有请求起作用
         EHttp.Builder builder = new EHttp.Builder();
         builder.apiResult(CommonResult.class);
+        builder.addInterceptor(new RequestParamInterceptor());
         EHttp.init(builder);
     }
 

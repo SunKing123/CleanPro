@@ -1,0 +1,14 @@
+<com.xiaoniu.common.widget.pullrefreshlayout.PullRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pullRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.xiaoniu.common.widget.xrecyclerview.XRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
+
+</com.xiaoniu.common.widget.pullrefreshlayout.PullRefreshLayout>

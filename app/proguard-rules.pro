@@ -107,7 +107,6 @@
 
 
 -keep class com.xiaoniu.cleanking.ui.main.bean.**{ *; }  #Bean类不参与混淆
-
 #########Okhttputils混淆
 #okhttputils
 -dontwarn com.zhy.http.**

@@ -43,7 +43,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by baozhong 2018/03/23
+ * Created by wangbaozhong 2018/03/23
  */
 public class EHttp {
     public static final String TAG = "EHttp";
@@ -123,7 +123,11 @@ public class EHttp {
     }
 
     public static <R> Disposable get(Object tag, String url, HttpCallback<R> callback) {
-        return get(url, null, callback);
+        return get(tag, url, null, callback);
+    }
+
+    public static <T> T create(Class<?> apiService) {
+        return (T) EHttp.getInstance().getRetrofit().create(apiService);
     }
 
     public static <R> Disposable get(Object tag, String url, HttpRequest request, HttpCallback<R> callback) {

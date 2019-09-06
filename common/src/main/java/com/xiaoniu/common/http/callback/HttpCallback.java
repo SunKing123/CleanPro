@@ -11,7 +11,7 @@ public abstract class HttpCallback<T> {
 
     public abstract void onFailure(Throwable e);
 
-    public abstract void onSuccess(T rusult);
+    public abstract void onSuccess(T result);
 
     public void onUpProgress(long bytesWritten, long totalSize) {
     }

@@ -29,7 +29,7 @@ public abstract class ApiCallback<T> extends HttpCallback<T> {
 
     public ApiCallback(Class<? extends ApiResult> resultType) {
         if (resultType != null) {
-            this.resultType = resultType; //配置自定义的ApiResult或其他任意类型
+            this.resultType = resultType; //配置自定义的ApiResult
         }
         dataType = TypeUtil.getSuperclassTypeParameter(this);
         dataRawType = TypeUtil.getRawType(dataType);

@@ -180,9 +180,16 @@ public abstract class CommonRecyclerAdapter<Model> extends
         void onBindItemMenuView(View menuView, Model itemData, int position);
     }
 
-    public void setData(List<Model> datas) {
+    public void setData(List<? extends Model> datas) {
         if (datas != null && datas.size() > 0) {
             mDatas.clear();
+            mDatas.addAll(datas);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addData(List<? extends Model> datas) {
+        if (datas != null && datas.size() > 0) {
             mDatas.addAll(datas);
             notifyDataSetChanged();
         }

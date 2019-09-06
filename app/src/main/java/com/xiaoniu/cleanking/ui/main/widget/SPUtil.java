@@ -457,5 +457,14 @@ public class SPUtil {
             setLong(ContextUtils.getContext(), KEY_POWER_CLEAN_TIME, time);
         }
     }
+
+    public static String getLastNewsID(String newType) {
+        return getString(ContextUtils.getContext(), newType, "");
+    }
+
+    /*保存最后一条资讯的key，防止加载更多时数据重复*/
+    public static void setLastNewsID(String newType, String newsId) {
+        setString(ContextUtils.getContext(), newType, newsId);
+    }
 }
 

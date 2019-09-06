@@ -95,4 +95,5 @@ dependencies {
 
     api project(path: ':takephoto_library')
     api project(':imagepicker')
+    api project(':videoplayer')
 }
