@@ -49,7 +49,7 @@ public class PreferenceUtil {
      * 保存分享次数  超过3次永久不能分享
      * @return
      */
-    private static boolean getShareNum(){
+    public static boolean getShareNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3)
             return false;
@@ -72,7 +72,7 @@ public class PreferenceUtil {
      * 保存清理次数  清理20次后，永久显示资讯页面
      * @return
      */
-    private static boolean getClearNum(){
+    public static boolean getClearNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         if (sharedPreferences.getInt(SpCacheConfig.CLEAR_NUM,0) > 20)
             return false;

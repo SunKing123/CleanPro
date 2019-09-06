@@ -121,6 +121,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     private boolean isClick = false;
     private boolean isDoubleBack = false;
     private AlertDialog mAlertDialog = null;
+    private String strNum;
+    private String strUnit;
 
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
@@ -254,17 +256,23 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                if (viewt == null || line_title == null) return;
-                setStatusBar(R.color.color_06C581);
-                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-                //动画结束时
-                setCleanedView(0);
-                mWebView.setVisibility(View.VISIBLE);
-                rel_bottom.setVisibility(View.GONE);
-                mAppBarLayout.setExpanded(true);
-                icon_more.setVisibility(View.INVISIBLE);
-                acceview.setVisibility(View.GONE);
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                bundle.putString("num", strNum);
+                bundle.putString("unit", strUnit);
+                startActivity(CleanFinish2Activity.class, bundle);
+                finish();
+//                if (viewt == null || line_title == null) return;
+//                setStatusBar(R.color.color_06C581);
+//                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+//                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
+//                //动画结束时
+//                setCleanedView(0);
+//                mWebView.setVisibility(View.VISIBLE);
+//                rel_bottom.setVisibility(View.GONE);
+//                mAppBarLayout.setExpanded(true);
+//                icon_more.setVisibility(View.INVISIBLE);
+//                acceview.setVisibility(View.GONE);
             }
 
             @Override
@@ -408,11 +416,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            strNum = String.valueOf(sizeMb);
+            strUnit = "MB";
             if (canPlayAnim)
                 mPresenter.setNumAnim(mTvSpeed,mRlAnimBg,tv_size,tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 1);
             acceview.setData(sizeMb, "MB");
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            strNum = String.valueOf(sizeMb);
+            strUnit = "GB";
             sizeMb *= 1024;
             if (canPlayAnim)
                 mPresenter.setNumAnim(mTvSpeed,mRlAnimBg,tv_size,tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 2);

@@ -246,6 +246,10 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".ui.main.activity.CleanFinish2Activity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
         <!-- 微信分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
