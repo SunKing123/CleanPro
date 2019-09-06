@@ -59,6 +59,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.jzvd.Jzvd;
 
 /**
  * main主页面
@@ -393,6 +394,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (Jzvd.backPress()) {
+                return true;
+            }
             if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof ShoppingMallFragment) {
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
@@ -467,4 +471,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void commitJpushClickTime(int type){
         mPresenter.commitJpushClickTime(type);
     }
+
+    @Override
+    protected void onPause() {
+        //停止所有视频播放
+        Jzvd.releaseAllVideos();
+        super.onPause();
+    }
+
 }
