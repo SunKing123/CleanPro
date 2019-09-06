@@ -195,12 +195,6 @@
         </activity>
 
         <!-- Required SDK核心功能 -->
-        <service
-            android:name="cn.jpush.android.service.DownloadService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <!-- Required SDK核心功能 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
 
         <!--小牛数据埋点-->
@@ -214,6 +208,10 @@
         <service
             android:name=".hotfix.service.HotFixResultService"
             android:exported="false" />
+
+        <activity
+            android:name=".base.SimpleWebActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
