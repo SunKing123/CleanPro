@@ -32,7 +32,7 @@
                 android:id="@+id/tvLeftTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="42dp"
+                android:layout_marginLeft="52dp"
                 android:gravity="center"
                 android:text=""
                 android:textColor="#ffffff"
