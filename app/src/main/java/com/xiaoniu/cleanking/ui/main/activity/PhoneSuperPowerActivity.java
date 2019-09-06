@@ -22,6 +22,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
 
     private TextView mTvClean;
     private boolean isClick = false;
+    private boolean isDoubleBack = false;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_super_power;
@@ -93,8 +94,10 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 startActivity(PhoneSuperPowerDetailActivity.class);
+            }else {
+                if (isDoubleBack) finish();
+                isDoubleBack = true;
             }
-            finish();
         }
         isClick = false;
     }

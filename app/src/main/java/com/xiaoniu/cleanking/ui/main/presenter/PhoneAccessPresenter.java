@@ -367,7 +367,6 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         TextView tv_goto = window.findViewById(R.id.tv_goto);
         tv_goto.setOnClickListener(v -> {
             isFromClick = true;
-            dlg.dismiss();
             okListener.clickOKBtn();
         });
         dlg.setOnDismissListener(dialog -> {

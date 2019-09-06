@@ -44,7 +44,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"

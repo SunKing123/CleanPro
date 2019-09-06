@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -116,6 +118,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     // 默认不可点击清理，当数字动画播放完毕后可以点击
     private boolean canClickDelete = false;
 
+    private boolean isClick = false;
+    private boolean isDoubleBack = false;
+    private AlertDialog mAlertDialog = null;
+
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
     }
@@ -207,35 +213,25 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             mTvTitleName.setText(title);
             acceview.setTitleName(title);
         }
-        if (Build.VERSION.SDK_INT >= 26) {
-            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
-            long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (lastCheckTime == 0) {
-                mPresenter.getAccessAbove22();
-            } else if (timeTemp < 3 * 60 * 1000) {
-                setCleanedView(0);
-            } else if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
-                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                cacheSize = (long) (cacheSize * 0.5);
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
-                mPresenter.getAccessAbove22();
-            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
-                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                cacheSize = (long) (cacheSize * 0.3);
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
-                mPresenter.getAccessAbove22();
-            } else {
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                mPresenter.getAccessAbove22();
-            }
-//            if (lastCheckTime == 0 || timeTemp > 20 * 1000)
-//                mPresenter.getAccessAbove22();
-//            else
-//                setCleanedView(0);
+
+        if (!isUsageAccessAllowed()) {
+            mAlertDialog = mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
+                @Override
+                public void clickOKBtn() {
+                    isClick = true;
+                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void cancelBtn() {
+
+                }
+            });
         } else {
-            mPresenter.getAccessListBelow();
+            startCleanAnim();
         }
+
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         iv_back.setOnClickListener(v -> {
             finish();
@@ -276,9 +272,37 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setStatusBarNum(colorRes);
             }
         });
+    }
 
+    private void startCleanAnim() {
+        if (mAlertDialog != null) mAlertDialog.cancel();
         //小飞机飞入动画
         acceview.planFlyInAnimator();
+        if (Build.VERSION.SDK_INT >= 26) {
+            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+            long timeTemp = System.currentTimeMillis() - lastCheckTime;
+            if (lastCheckTime == 0) {
+                mPresenter.getAccessAbove22();
+            } else if (timeTemp < 3 * 60 * 1000) {
+                setCleanedView(0);
+            } else if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
+                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                cacheSize = (long) (cacheSize * 0.5);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
+                mPresenter.getAccessAbove22();
+            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
+                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                cacheSize = (long) (cacheSize * 0.3);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
+                mPresenter.getAccessAbove22();
+            } else {
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                mPresenter.getAccessAbove22();
+            }
+        } else {
+            mPresenter.getAccessListBelow();
+        }
     }
 
     /**
@@ -328,6 +352,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             return;
         }
         NiuDataAPI.onPageStart("once_accelerate_view_page", "一键清理页面浏览");
+        if (isClick) {
+            if (isUsageAccessAllowed()) {
+                startCleanAnim();
+            }else {
+                if (isDoubleBack) finish();
+                isDoubleBack = true;
+            }
+        }
+        isClick = false;
     }
 
     @Override
@@ -571,4 +604,19 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
+    public boolean isUsageAccessAllowed() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            try {
+                AppOpsManager manager = ((AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE));
+                if (manager == null) return false;
+                int mode = manager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), this.getPackageName());
+                return mode == AppOpsManager.MODE_ALLOWED;
+            } catch (Throwable ignored) {
+            }
+            return false;
+        }
+        return true;
+    }
+
 }

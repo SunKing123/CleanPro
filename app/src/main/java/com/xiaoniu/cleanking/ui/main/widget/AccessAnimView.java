@@ -508,6 +508,7 @@ public class AccessAnimView extends RelativeLayout {
      * 显示lottie动画 火箭从底部飞入
      */
     public void planFlyInAnimator() {
+        line_hj.setVisibility(VISIBLE);
         //小飞机 上升动画
         createStartFadeAnimator();
         mAnimationCloudView.useHardwareAcceleration();
