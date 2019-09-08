@@ -539,6 +539,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         colorAnim.setDuration(1000);
         colorAnim.setStartDelay(4000);
         colorAnim.addUpdateListener(animation -> {
+            if (mView == null) return;
             int animatedValue = (int) animation.getAnimatedValue();
             if (mView.getViewShow()) {
                 //只有首页显示的时候会显示状态栏变化
