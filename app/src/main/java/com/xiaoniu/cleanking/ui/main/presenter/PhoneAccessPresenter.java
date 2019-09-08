@@ -119,6 +119,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
+                    if (mView == null) return;
                     mView.cancelLoadingDialog();
                     mView.getAccessListBelow(strings);
                 });
