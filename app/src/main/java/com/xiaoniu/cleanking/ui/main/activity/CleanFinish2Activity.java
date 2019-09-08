@@ -72,22 +72,28 @@ public class CleanFinish2Activity extends BaseActivity {
                 mTitle = getString(R.string.app_name);
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 //一键加速
-                mTvSize.setText("");
-                mTvGb.setText("已达到最佳状态");
-                mTvGb.setTextSize(20);
-                mTvQl.setText("快去体验其他功能");
+                if (TextUtils.isEmpty(num)) {
+                    mTvSize.setText("");
+                    mTvGb.setText("已达到最佳状态");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他功能");
+                }
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
                 //超强省电
-                mTvSize.setText("");
-                mTvGb.setText("已达到最佳状态");
-                mTvGb.setTextSize(20);
-                mTvQl.setText("快去体验其他功能");
+                if (TextUtils.isEmpty(num)) {
+                    mTvSize.setText("");
+                    mTvGb.setText("已达到最佳状态");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他功能");
+                }
             } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
                 //微信专情
-                mTvSize.setText("");
-                mTvGb.setText("手机很干净");
-                mTvGb.setTextSize(20);
-                mTvQl.setText("快去体验其他功能");
+                if (TextUtils.isEmpty(num)) {
+                    mTvSize.setText("");
+                    mTvGb.setText("手机很干净");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他功能");
+                }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
                 //QQ专清
                 mTvSize.setText("");
@@ -96,10 +102,12 @@ public class CleanFinish2Activity extends BaseActivity {
                 mTvQl.setText("快去体验其他功能");
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
                 //通知栏清理
-                mTvSize.setText("");
-                mTvGb.setText("通知栏很干净");
-                mTvGb.setTextSize(20);
-                mTvQl.setText("快去体验其他炫酷功能");
+                if (TextUtils.isEmpty(num)) {
+                    mTvSize.setText("");
+                    mTvGb.setText("通知栏很干净");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他炫酷功能");
+                }
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
                 //手机降温
                 mTvSize.setText("");
