@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
@@ -69,6 +70,13 @@ public class CleanAnimView extends RelativeLayout {
     TextView mTvAnimTitle;
     FrameLayout mFlAnim;
     NestedScrollView mScrollView;
+
+    private AnimationEnd mAnimationEnd;
+
+    public void setAnimationEnd(AnimationEnd mAnimationEnd) {
+        this.mAnimationEnd = mAnimationEnd;
+    }
+
     /**
      * 一键清理页面
      */
@@ -499,29 +507,28 @@ public class CleanAnimView extends RelativeLayout {
 
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
-        mTvAnimTitle.setVisibility(GONE);
-        mLayoutRoot.setVisibility(GONE);
-        int bottom = mLineTitle.getBottom();
-        mLayoutCleanFinish.setVisibility(VISIBLE);
         showWebView();
-        int startHeight = DeviceUtils.getScreenHeight();
-        ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
-        anim.setDuration(500);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
-        anim.addUpdateListener(animation -> {
-            int currentValue = (int) animation.getAnimatedValue();
-            rlp.topMargin = currentValue;
-            mLayoutCleanFinish.setLayoutParams(rlp);
-        });
-        anim.start();
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-
-            }
-        });
+//        mTvAnimTitle.setVisibility(GONE);
+//        mLayoutRoot.setVisibility(GONE);
+//        int bottom = mLineTitle.getBottom();
+//        mLayoutCleanFinish.setVisibility(VISIBLE);
+//        int startHeight = DeviceUtils.getScreenHeight();
+//        ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
+//        anim.setDuration(500);
+//        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+//        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
+//        anim.addUpdateListener(animation -> {
+//            int currentValue = (int) animation.getAnimatedValue();
+//            rlp.topMargin = currentValue;
+//            mLayoutCleanFinish.setLayoutParams(rlp);
+//        });
+//        anim.start();
+//        anim.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                super.onAnimationEnd(animation);
+//            }
+//        });
 
         if (currentPage == page_file_clean) {
             NiuDataAPI.onPageStart("mobile_clean_up_page_view", "手机清理页浏览");
@@ -531,8 +538,10 @@ public class CleanAnimView extends RelativeLayout {
     }
 
     public void showWebView() {
-        mScrollView.setVisibility(VISIBLE);
-        mWebView.setVisibility(VISIBLE);
+        if (mAnimationEnd != null)
+            mAnimationEnd.onAnimationEnd();
+//        mScrollView.setVisibility(VISIBLE);
+//        mWebView.setVisibility(VISIBLE);
     }
 
     public void setAnimTitle(String animTitle){

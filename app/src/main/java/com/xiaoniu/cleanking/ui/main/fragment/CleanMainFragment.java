@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -475,9 +476,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Subscribe
     public void cleanFinish(HomeCleanEvent homeCleanEvent) {
         if (homeCleanEvent.isNowClean()) {
-            if (mLayoutRoot == null) return;
-            mNestedScrollView.setVisibility(VISIBLE);
-            mLayoutRoot.setVisibility(GONE);
+//            if (mLayoutRoot == null) return;
+//            mNestedScrollView.setVisibility(VISIBLE);
+//            mLayoutRoot.setVisibility(GONE);
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.app_name));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(CleanFinish2Activity.class, bundle);
         }
         //清理完成
         restoreLayout();

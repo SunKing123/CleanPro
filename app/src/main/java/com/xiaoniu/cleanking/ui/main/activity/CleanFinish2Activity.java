@@ -70,9 +70,25 @@ public class CleanFinish2Activity extends BaseActivity {
             mTvGb.setText(unit);
             if (TextUtils.isEmpty(mTitle))
                 mTitle = getString(R.string.app_name);
-            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            if (getString(R.string.app_name).contains(mTitle)) {
+                //悟空清理
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                    mTvSize.setText("");
+                    mTvGb.setText("已达到最佳状态");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他功能");
+                }
+            }else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 //一键加速
-                if (TextUtils.isEmpty(num)) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                    mTvSize.setText("");
+                    mTvGb.setText("已达到最佳状态");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他功能");
+                }
+            }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
+                //一键加速
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
@@ -80,7 +96,7 @@ public class CleanFinish2Activity extends BaseActivity {
                 }
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
                 //超强省电
-                if (TextUtils.isEmpty(num)) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
@@ -88,7 +104,7 @@ public class CleanFinish2Activity extends BaseActivity {
                 }
             } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
                 //微信专情
-                if (TextUtils.isEmpty(num)) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("手机很干净");
                     mTvGb.setTextSize(20);
@@ -96,13 +112,15 @@ public class CleanFinish2Activity extends BaseActivity {
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
                 //QQ专清
-                mTvSize.setText("");
-                mTvGb.setText("手机很干净");
-                mTvGb.setTextSize(20);
-                mTvQl.setText("快去体验其他功能");
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                    mTvSize.setText("");
+                    mTvGb.setText("手机很干净");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快去体验其他功能");
+                }
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
                 //通知栏清理
-                if (TextUtils.isEmpty(num)) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("通知栏很干净");
                     mTvGb.setTextSize(20);

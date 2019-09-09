@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -109,6 +111,14 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
 
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         mCleanAnimView.setListener(() ->  finish());
+        mCleanAnimView.setAnimationEnd(() -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_phone_clean));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(CleanFinish2Activity.class, bundle);
+            finish();
+        });
     }
 
     private void initAdapter() {
