@@ -32,6 +32,7 @@ import com.xiaoniu.cleanking.widget.BattaryView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
@@ -62,6 +63,9 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     public static List<MultiItemInfo> sSelectedList;
     private TextView tvHour;
     private TextView tvMini;
+    private LinearLayout mLlTime;
+    private LinearLayout mLlPowerLow;
+    private TextView mTvAfterUpdate;
 
     @Override
     protected int getLayoutResId() {
@@ -93,6 +97,9 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mPowerLottieAnimationView = mHeaderView.findViewById(R.id.view_lottie_super_saving_power);
         tvHour = mHeaderView.findViewById(R.id.tvHour);
         tvMini = mHeaderView.findViewById(R.id.tvMini);
+        mLlPowerLow = mHeaderView.findViewById(R.id.ll_power_low);
+        mLlTime = mHeaderView.findViewById(R.id.ll_time);
+        mTvAfterUpdate = mHeaderView.findViewById(R.id.tv_after_update);
 
         mRecyclerView.setHeaderView(mHeaderView);
         mRecyclerView.setAdapter(mPowerCleanAdapter);
@@ -117,9 +124,13 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             int power = (batteryLevel * 100 / batteryScale);
             //显示电量
             if (power < 10){
-
+                mTvAfterUpdate.setVisibility(View.GONE);
+                mLlTime.setVisibility(View.GONE);
+                mLlPowerLow.setVisibility(View.VISIBLE);
             }else {
-
+                mTvAfterUpdate.setVisibility(View.VISIBLE);
+                mLlTime.setVisibility(View.VISIBLE);
+                mLlPowerLow.setVisibility(View.GONE);
             }
             mBvView.setBattaryPercent(power);
         }
@@ -301,13 +312,13 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mRlResult.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mLlBottom.setVisibility(View.VISIBLE);
-
-        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-        int battery = 50;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        }
-//        mBvView.setBattaryPercent(battery);
+//
+//        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+//        int battery = 50;
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//            battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+//        }
+////        mBvView.setBattaryPercent(battery);
         showPowerAnim();
 
         int hour = 1 + new Random().nextInt(3);

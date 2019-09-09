@@ -928,7 +928,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mHandler.sendEmptyMessageDelayed(1,1000);
+                mHandler.sendEmptyMessageDelayed(1,500);
             }
 
             @Override
