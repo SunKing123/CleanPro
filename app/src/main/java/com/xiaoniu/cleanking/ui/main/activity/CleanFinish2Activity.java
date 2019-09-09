@@ -39,6 +39,7 @@ public class CleanFinish2Activity extends BaseActivity {
     private TextView mTvSize;
     private TextView mTvGb;
     private TextView mTvQl;
+    private TextView mTopSubTitle;
 
     @Override
     protected int getLayoutResId() {
@@ -57,6 +58,7 @@ public class CleanFinish2Activity extends BaseActivity {
         mTvGb = findViewById(R.id.tv_clear_finish_gb_title);
         mLlTopTitle = findViewById(R.id.ll_top_title);
         mAppBarLayout = findViewById(R.id.appbar_layout);
+        mTopSubTitle = findViewById(R.id.tv_top_sub_title);
         mTvQl = findViewById(R.id.tv_ql);
 
         Intent intent = getIntent();
@@ -134,7 +136,7 @@ public class CleanFinish2Activity extends BaseActivity {
                 mTvGb.setTextSize(20);
                 mTvQl.setText("60s后达到最佳降温效果");
             }
-
+            mTopSubTitle.setText(mTitle);
         }
         if (!PreferenceUtil.getClearNum() || !PreferenceUtil.getShareNum())
             showNews();

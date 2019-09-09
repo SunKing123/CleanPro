@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -12,6 +13,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -73,6 +76,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
@@ -160,8 +164,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     public static HashMap<Integer, JunkGroup> mJunkGroups;
     private CountEntity mCountEntity = new CountEntity();
-    private List<ImageView> mTopViews;
-    private Handler mHandler;
 
     /**
      * 首页是否显示
@@ -198,6 +200,21 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 之前清理完成时间
      */
     private long preCleanTime;
+    private MyHandler mHandler = new MyHandler(getActivity());
+
+    class MyHandler extends Handler {
+        WeakReference<Activity> mActivity;
+
+        public MyHandler(Activity con) {
+            this.mActivity = new WeakReference<>(con);
+        }
+
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == 1) {
+                mLottieHomeView.playAnimation();
+            }
+        }
+    }
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -235,8 +252,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             mIvNews.setVisibility(VISIBLE);
         }
-
-        showHomeLottieView();
     }
 
     public void startScan() {
@@ -251,7 +266,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
-        ((MainActivity)getActivity()).commitJpushClickTime(4);
+        ((MainActivity) getActivity()).commitJpushClickTime(4);
         StatisticsUtils.trackClick("file_clean_click", "\"文件清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
 
         //文件管理
@@ -263,7 +278,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //一键加速
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
 
-        ((MainActivity)getActivity()).commitJpushClickTime(2);
+        ((MainActivity) getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
 
         Bundle bundle = new Bundle();
@@ -275,7 +290,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void line_ql() {
         //手机清理
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
-        ((MainActivity)getActivity()).commitJpushClickTime(3);
+        ((MainActivity) getActivity()).commitJpushClickTime(3);
         StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
 
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
@@ -306,7 +321,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //QQ专清
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.QQ_CLEAN);
 
-        ((MainActivity)getActivity()).commitJpushClickTime(7);
+        ((MainActivity) getActivity()).commitJpushClickTime(7);
         StatisticsUtils.trackClick("qq_cleaning_click", "“QQ专清”点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_qq);
@@ -318,8 +333,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             QQUtil.fileList.clear();
         startActivity(QQCleanHomeActivity.class);
     }
+
     @OnClick(R.id.iv_permission)
-    public void onClick(){
+    public void onClick() {
         startActivity(new Intent(getContext(), PermissionActivity.class));
         StatisticsUtils.trackClick("Triangular_yellow_mark_click", "三角黄标", AppHolder.getInstance().getSourcePageId(), "permission_page");
     }
@@ -330,7 +346,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         AppHolder.getInstance().setOtherSourcePageId("");
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
-            ((MainActivity)getActivity()).commitJpushClickTime(1);
+            ((MainActivity) getActivity()).commitJpushClickTime(1);
             mScrollView.scrollTo(mScrollView.getScrollX(), 0);
             //扫描完成点击清理
             mPresenter.showTransAnim(mLayoutCleanTop);
@@ -341,7 +357,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mLayoutRoot.setIntercept(true);
             initWebView();
             StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
-
+            showHomeLottieView(false);
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
             mButtonCleanNow.setText("再次扫描");
@@ -380,7 +396,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickLayoutScan() {
         AppHolder.getInstance().setOtherSourcePageId("");
         StatisticsUtils.trackClick("view_spam_details_page_click", "\"查看垃圾详情\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
-
+        showHomeLottieView(false);
         //查看详情
         if (type == TYPE_SCAN_FINISH) {
             startActivity(RouteConstants.JUNK_CLEAN_ACTIVITY);
@@ -391,7 +407,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickWx() {
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
-        ((MainActivity)getActivity()).commitJpushClickTime(5);
+        ((MainActivity) getActivity()).commitJpushClickTime(5);
         StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
@@ -409,7 +425,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_jw)
     public void mClickJw() {
-        ((MainActivity)getActivity()).commitJpushClickTime(6);
+        ((MainActivity) getActivity()).commitJpushClickTime(6);
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         StatisticsUtils.trackClick("Cell_phone_cooling_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
@@ -508,8 +524,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     /**
      * 恢复布局
      */
-
     private void restoreLayout() {
+        showHomeLottieView(true);
         //设置可以点击
         mLayoutRoot.setIntercept(false);
         mIconInner.setVisibility(GONE);
@@ -596,6 +612,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void endScanAnimation() {
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
+
+        showHomeLottieView(true);
     }
 
     /**
@@ -879,13 +897,29 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
 
     /**
-     * 净值时动画
+     * 静止时动画
+     *
+     * @param isMove true转动 false 停止
      */
-    private void showHomeLottieView() {
+    private void showHomeLottieView(boolean isMove) {
+        Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_anim);
+        if (rotate == null) {
+            mIconOuter.setAnimation(rotate);
+        }
+
         mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");
         mLottieHomeView.setImageAssetsFolder("images");
-        mLottieHomeView.playAnimation();
+        if (isMove) {
+            mIconOuter.startAnimation(rotate);
+            mLottieHomeView.playAnimation();
+            mLottieHomeView.setVisibility(VISIBLE);
+        } else {
+            mHandler.removeCallbacksAndMessages(null);
+            mIconOuter.clearAnimation();
+            mLottieHomeView.cancelAnimation();
+            mLottieHomeView.setVisibility(GONE);
+        }
         mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -894,7 +928,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mLottieHomeView.playAnimation();
+                mHandler.sendEmptyMessageDelayed(1,1000);
             }
 
             @Override

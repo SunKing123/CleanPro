@@ -47,8 +47,7 @@
                     android:layout_height="match_parent" />
 
                 <TextView
-                    android:id="@+id/tv_qltitl"
-                    android:text="手机清理"
+                    android:id="@+id/tv_top_sub_title"
                     android:layout_gravity="center_vertical"
                     style="@style/top_tv_title" />
             </LinearLayout>
@@ -87,7 +86,7 @@
                     android:id="@+id/tv_clear_finish_gb_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
+                    android:layout_marginBottom="@dimen/dimen_5dp"
                     android:text="GB"
                     android:textColor="@color/white"
                     android:textSize="14sp" />

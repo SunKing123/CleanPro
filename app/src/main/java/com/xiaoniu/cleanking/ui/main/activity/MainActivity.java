@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -16,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -48,6 +50,9 @@ import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.ykun.live_library.KeepAliveManager;
+import com.ykun.live_library.config.ForegroundNotification;
+import com.ykun.live_library.config.ForegroundNotificationClickListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,6 +65,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
+
+import static com.ykun.live_library.config.RunMode.HIGH_POWER_CONSUMPTION;
 
 /**
  * main主页面
@@ -195,6 +202,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
+
+        start();
     }
 
     private void checkReadPermission() {
@@ -478,5 +487,22 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         Jzvd.releaseAllVideos();
         super.onPause();
     }
-
+    public void start() {
+        //启动保活服务
+        KeepAliveManager.toKeepAlive(
+                getApplication()
+                , HIGH_POWER_CONSUMPTION,
+                "进程保活",
+                "Process: System",
+                R.mipmap.applogo,
+                new ForegroundNotification(
+                        //定义前台服务的通知点击事件
+                        new ForegroundNotificationClickListener() {
+                            @Override
+                            public void foregroundNotificationClick(Context context, Intent intent) {
+                                Log.d("JOB-->", " foregroundNotificationClick");
+                            }
+                        })
+        );
+    }
 }

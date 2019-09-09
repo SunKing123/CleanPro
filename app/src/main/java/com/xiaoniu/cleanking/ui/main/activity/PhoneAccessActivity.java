@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -267,12 +268,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_one_key_speed));
-                bundle.putString("num", strNum);
-                bundle.putString("unit", strUnit);
-                startActivity(CleanFinish2Activity.class, bundle);
-                finish();
+                showCleanFinishUI();
             }
 
             @Override
@@ -280,6 +276,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setStatusBarNum(colorRes);
             }
         });
+        acceview.setAnimationEnd(() -> showCleanFinishUI());
+    }
+
+    private void showCleanFinishUI() {
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.tool_one_key_speed));
+        bundle.putString("num", strNum);
+        bundle.putString("unit", strUnit);
+        startActivity(CleanFinish2Activity.class, bundle);
+        finish();
     }
 
     private void startCleanAnim() {
@@ -292,7 +298,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             if (lastCheckTime == 0) {
                 mPresenter.getAccessAbove22();
             } else if (timeTemp < 3 * 60 * 1000) {
-                setCleanedView(0);
+                acceview.setListInfoSize(0);
+//                setCleanedView(0);
             } else if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
                 long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 cacheSize = (long) (cacheSize * 0.5);
@@ -341,7 +348,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         computeTotalSizeDeleteClick(junkTemp);
 
         if (total == 0)
-            setCleanedView(total);
+            acceview.setListInfoSize(0);
+//            setCleanedView(total);
         if (Build.VERSION.SDK_INT >= 26) {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
@@ -383,9 +391,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo.size() == 0) {
-            setCleanedView(0);
-        } else {
+        if (listInfo == null) return;
+        acceview.setListInfoSize(listInfo.size());
+        if (listInfo.size() != 0) {
             computeTotalSize(listInfo);
             setAdapter(listInfo);
         }

@@ -10,6 +10,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -61,6 +64,18 @@ public class AccessAnimView extends RelativeLayout {
     LottieAnimationView mAnimationView;
     ValueAnimator mValueAnimator;
     LottieAnimationView mAnimationCloudView;
+
+    private int mListInfoSize = -1;
+
+    private AnimationEnd mAnimationEnd;
+
+    public void setAnimationEnd(AnimationEnd mAnimationEnd) {
+        this.mAnimationEnd = mAnimationEnd;
+    }
+
+    public void setListInfoSize(int mListInfoSize) {
+        this.mListInfoSize = mListInfoSize;
+    }
 
     public void setListener(onAnimEndListener listener) {
         this.listener = listener;
@@ -406,12 +421,19 @@ public class AccessAnimView extends RelativeLayout {
             public void onAnimationEnd(Animator animator) {
                 animator.cancel();
                 iv_bot.setVisibility(VISIBLE);
-                line_allnum.setVisibility(VISIBLE);
                 iv_bot.setImageResource(R.drawable.anim_hj);
                 AnimationDrawable animationDrawable = (AnimationDrawable) iv_bot.getDrawable();
                 if (!animationDrawable.isRunning()) {
                     animationDrawable.start();
                 }
+                if (mListInfoSize == 0){
+                    if (mAnimationEnd != null)
+                        mAnimationEnd.onAnimationEnd();
+                    return;
+                }
+
+                line_allnum.setVisibility(VISIBLE);
+
             }
 
             @Override
@@ -426,6 +448,7 @@ public class AccessAnimView extends RelativeLayout {
         });
         return animator;
     }
+
 
     //下雨动画
     public ObjectAnimator setYuAnim(View viewY, long delay) {
@@ -526,6 +549,7 @@ public class AccessAnimView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+
                 startFinishAnimator();
             }
         });
