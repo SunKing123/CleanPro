@@ -449,7 +449,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
-                            android:text="手机清理"
+                            android:text="@string/tool_phone_clean"
                             android:textColor="#666666"
                             android:textSize="13sp" />
 

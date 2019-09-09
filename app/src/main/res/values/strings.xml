@@ -89,4 +89,7 @@
 
     <string name="notify_no_clean_tips">%s 通知将不会被拦截</string>
     <string name="notify_yes_clean_tips">%s 通知将会被拦截</string>
+    <string name="app_name_premis">悟空清理   \u2605\u2605\u2605</string>
+    <string name="tool_phone_clean">手机清理</string>
+    <string name="tool_news">新闻热点</string>
 </resources>

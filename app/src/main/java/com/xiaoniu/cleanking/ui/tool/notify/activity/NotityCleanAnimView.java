@@ -10,6 +10,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -34,7 +35,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
@@ -83,6 +86,11 @@ public class NotityCleanAnimView extends RelativeLayout {
     public static final int page_file_wxclean = 2;
 
     private int currentPage = 0;
+    private AnimationEnd mAnimationEnd;
+
+    public void setAnimationEnd(AnimationEnd mAnimationEnd) {
+        this.mAnimationEnd = mAnimationEnd;
+    }
 
     /**
      * 第二阶段
@@ -415,7 +423,9 @@ public class NotityCleanAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                setViewTrans();
+               if (mAnimationEnd != null)
+                   mAnimationEnd.onAnimationEnd();
+//                setViewTrans();
             }
 
             @Override

@@ -49,4 +49,8 @@ public class RouteConstants {
      */
     public static final String NEWS_LOAD_ACTIVITY = "/main/NewsLoadActivity";
 
+    /**
+     * 无障碍提示界面
+     */
+    public static final String ACTIVITY_ASM_GUIDE = "/main/ASMGuideActivity";
 }

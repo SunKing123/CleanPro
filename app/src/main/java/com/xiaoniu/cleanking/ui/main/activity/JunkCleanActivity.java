@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -135,6 +136,14 @@ public class JunkCleanActivity extends SimpleActivity {
 
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         mCleanAnimView.setListener(() -> finish());
+        mCleanAnimView.setAnimationEnd(() -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.app_name));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(CleanFinish2Activity.class, bundle);
+            finish();
+        });
     }
 
     @Override

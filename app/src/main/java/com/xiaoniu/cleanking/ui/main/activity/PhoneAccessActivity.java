@@ -223,6 +223,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     isClick = true;
                     Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                     startActivity(intent);
+                    //TODO 显示引导 待优化
+                    startActivity( new Intent(PhoneAccessActivity.this,ASMGuideActivity.class));
                 }
 
                 @Override

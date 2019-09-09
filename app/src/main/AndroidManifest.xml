@@ -16,22 +16,28 @@
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/applogo"
-        android:label="@string/app_name"
+        android:label="@string/app_name_premis"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup">
+        tools:replace="android:label">
         <activity
             android:name=".ui.main.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher">
+        </activity>
+        <activity-alias
+            android:name="splash"
+            android:label="@string/app_name"
+            android:targetActivity=".ui.main.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
         <activity
             android:name=".scheme.ui.DispatcherActivity"
             android:screenOrientation="portrait"
@@ -250,6 +256,16 @@
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.ASMGuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+
+        <activity android:name=".ui.main.activity.NewsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+
         <!-- 微信分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -332,6 +348,7 @@
         <activity
             android:name=".ui.main.activity.PhoneSuperPowerDetailActivity"
             android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

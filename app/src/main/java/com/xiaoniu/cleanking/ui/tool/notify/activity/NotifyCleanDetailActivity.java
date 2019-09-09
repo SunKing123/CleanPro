@@ -10,9 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.commonsdk.debug.I;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
@@ -84,6 +87,19 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mRecyclerView.setHeaderView(mHeaderView);
         hideToolBar();
         mCleanAnimView = findViewById(R.id.view_clean_anim);
+        mCleanAnimView.setAnimationEnd(new AnimationEnd() {
+            @Override
+            public void onAnimationEnd() {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                Intent intent = new Intent(NotifyCleanDetailActivity.this, CleanFinish2Activity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -181,11 +197,18 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private void showCleanFinishView() {
         isCleanFinish = true;
         /*显示完成页*/
-        mCleanAnimView.setVisibility(View.VISIBLE);
+//        mCleanAnimView.setVisibility(View.VISIBLE);
         showBarColor(getResources().getColor(R.color.color_06C581));
-        mCleanAnimView.setViewTrans();
+//        mCleanAnimView.setViewTrans();
         //通知栏清理完成浏览
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
-
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.tool_notification_clean));
+        bundle.putString("num", "");
+        bundle.putString("unit", "");
+        Intent intent = new Intent(NotifyCleanDetailActivity.this, CleanFinish2Activity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 }
