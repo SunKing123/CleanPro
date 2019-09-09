@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -164,9 +166,15 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
-                Intent intent=new Intent(WechatCleanHomeActivity.this,WechatCleanedResultActivity.class);
-                intent.putExtra("title","微信专清");
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(CleanFinish2Activity.class, bundle);
+                finish();
+//                Intent intent=new Intent(WechatCleanHomeActivity.this,WechatCleanedResultActivity.class);
+//                intent.putExtra("title","微信专清");
+//                startActivity(intent);
             } else {
                 if (!tvDelete.isSelected()) return;
                 mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
