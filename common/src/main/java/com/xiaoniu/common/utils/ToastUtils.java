@@ -57,7 +57,7 @@ public class ToastUtils {
             public void run() {
                 try {
                     Toast toast = Toast.makeText(ContextUtils.getContext(), content, duration);
-                    toast.setGravity(gravity, 0, 0);
+//                    toast.setGravity(gravity, 0, 0);
                     toast.show();
                 } catch (Throwable e) {
                     e.printStackTrace();

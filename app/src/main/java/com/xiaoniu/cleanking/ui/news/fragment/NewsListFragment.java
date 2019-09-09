@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.news.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -14,6 +15,8 @@ import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
 import com.xiaoniu.common.http.request.HttpRequest;
+import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.common.widget.pullrefreshlayout.PullRefreshLayout;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
@@ -27,6 +30,7 @@ public class NewsListFragment extends BaseFragment {
     private XRecyclerView mRecyclerView;
     private PullRefreshLayout mPullRefreshLayout;
     private NewsListAdapter mNewsAdapter;
+    private LinearLayout mLlNoNet;
     private NewsType mType;
 
     private String newsBaseUrl = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
@@ -58,7 +62,8 @@ public class NewsListFragment extends BaseFragment {
 
     @Override
     protected void initViews(View contentView, Bundle savedInstanceState) {
-        mPullRefreshLayout = (PullRefreshLayout) contentView.findViewById(R.id.pullRefreshLayout);
+        mPullRefreshLayout = contentView.findViewById(R.id.pullRefreshLayout);
+        mLlNoNet = contentView.findViewById(R.id.layout_not_net);
         mRecyclerView = contentView.findViewById(R.id.recyclerView);
         mRecyclerView.setAdapter(mNewsAdapter);
     }
@@ -79,12 +84,17 @@ public class NewsListFragment extends BaseFragment {
             }
         });
 
-        mRecyclerView.setOnLoadListener(new XRecyclerView.OnLoadListener() {
-            @Override
-            public void onLoad(XRecyclerView recyclerView) {
-                mIsRefresh = false;
-                startLoadData();
-            }
+        mRecyclerView.setOnLoadListener(recyclerView -> {
+            mIsRefresh = false;
+            startLoadData();
+        });
+
+        mLlNoNet.setOnClickListener(v -> {
+            if (!NetworkUtils.isNetConnected())
+                ToastUtils.showShort(getString(R.string.tool_no_net_hint));
+
+            mIsRefresh = true;
+            startLoadData();
         });
     }
 
@@ -94,6 +104,12 @@ public class NewsListFragment extends BaseFragment {
     }
 
     private void startLoadData() {
+        if (!NetworkUtils.isNetConnected()) {
+            mPullRefreshLayout.finishRefresh();
+            mLlNoNet.setVisibility(View.VISIBLE);
+            return;
+        }
+
         if (mType != null) {
             if (mType == NewsType.VIDEO) {
                 loadVideoData();
@@ -118,6 +134,8 @@ public class NewsListFragment extends BaseFragment {
             @Override
             public void onSuccess(NewsListInfo result) {
                 if (result != null && result.data != null && result.data.size() > 0) {
+                    if (mLlNoNet.getVisibility() == View.VISIBLE)
+                        mLlNoNet.setVisibility(View.GONE);
                     SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result.data);
@@ -173,6 +191,8 @@ public class NewsListFragment extends BaseFragment {
             @Override
             public void onSuccess(ArrayList<VideoItemInfo> result) {
                 if (result != null && result.size() > 0) {
+                    if (mLlNoNet.getVisibility() == View.VISIBLE)
+                        mLlNoNet.setVisibility(View.GONE);
                     SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result);
