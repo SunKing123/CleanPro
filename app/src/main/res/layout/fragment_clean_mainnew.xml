@@ -214,8 +214,12 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/dimen_20dp">
+                        android:layout_height="match_parent">
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/view_lottie_home"
+                            android:layout_width="match_parent"
+                            android:layout_height="390dp"/>
 
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/view_lottie"
@@ -263,7 +267,7 @@
                             android:layout_width="@dimen/dimen_230dp"
                             android:layout_height="230dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/dimen_80dp"
+                            android:layout_marginTop="85dp"
                             android:scaleType="fitXY"
                             android:src="@mipmap/icon_circle" />
 
@@ -272,7 +276,7 @@
                             android:layout_width="@dimen/dimen_230dp"
                             android:layout_height="@dimen/dimen_230dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/dimen_80dp"
+                            android:layout_marginTop="85dp"
                             android:background="@drawable/icon_bg_circle"
                             android:visibility="visible" />
 
@@ -281,7 +285,7 @@
                             android:layout_width="@dimen/dimen_230dp"
                             android:layout_height="@dimen/dimen_230dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/dimen_80dp"
+                            android:layout_marginTop="85dp"
                             android:background="@drawable/icon_bg_circle"
                             android:visibility="visible" />
 

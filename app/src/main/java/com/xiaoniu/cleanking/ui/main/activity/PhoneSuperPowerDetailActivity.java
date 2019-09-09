@@ -5,7 +5,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,6 +57,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     private SuperPowerCleanAdapter mPowerCleanAdapter;
     private int mSelectedCount;
+    private int mPowerSavingTime;
 
     public static List<MultiItemInfo> sSelectedList;
     private TextView tvHour;
@@ -96,7 +100,30 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         showStartAnim();
         mHandler.sendEmptyMessageDelayed(1, 5000);
         mHandler.sendEmptyMessageDelayed(2, 1000);
+
+        IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        //注册接收器以获取电量信息
+        registerReceiver(broadcastReceiver,intentFilter);
+
     }
+
+    private BroadcastReceiver broadcastReceiver= new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //获取当前电量，如未获取具体数值，则默认为0
+            int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            //获取最大电量，如未获取到具体数值，则默认为100
+            int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+            int power = (batteryLevel * 100 / batteryScale);
+            //显示电量
+            if (power < 10){
+
+            }else {
+
+            }
+            mBvView.setBattaryPercent(power);
+        }
+    };
 
     @Override
     protected void setListener() {
@@ -196,6 +223,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         } else {
             mTvClean.setText("一键优化");
         }
+        mPowerSavingTime = mSelectedCount * 5;
     }
 
     private HashSet<String> getDefaultHoldApp() {
@@ -279,7 +307,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-        mBvView.setBattaryPercent(battery);
+//        mBvView.setBattaryPercent(battery);
         showPowerAnim();
 
         int hour = 1 + new Random().nextInt(3);

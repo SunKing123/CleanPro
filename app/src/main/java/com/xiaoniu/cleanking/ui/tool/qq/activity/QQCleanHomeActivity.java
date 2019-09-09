@@ -208,7 +208,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
             if (totalSize == 0) {
                 Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_notification_clean));
+                bundle.putString("title", getString(R.string.tool_qq_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
                 startActivity( CleanFinish2Activity.class,bundle);

@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -19,8 +17,6 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
-
-import java.lang.ref.WeakReference;
 
 public class PhoneSuperPowerActivity extends SimpleActivity {
 

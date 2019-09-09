@@ -92,4 +92,6 @@
     <string name="app_name_premis">悟空清理   \u2605\u2605\u2605</string>
     <string name="tool_phone_clean">手机清理</string>
     <string name="tool_news">新闻热点</string>
+    <string name="tool_power_hint">点击优化，请尽快充电噢</string>
+    <string name="tool_get_premis">授权失败</string>
 </resources>

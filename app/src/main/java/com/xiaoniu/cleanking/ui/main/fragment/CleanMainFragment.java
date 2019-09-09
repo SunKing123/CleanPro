@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -148,6 +149,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LottieAnimationView mFinishAnimator;
     @BindView(R.id.view_lottie_star)
     LottieAnimationView mLottieStarView;
+    @BindView(R.id.view_lottie_home)
+    LottieAnimationView mLottieHomeView;
     @BindView(R.id.view_news)
     ImageView mIvNews;
     @BindView(R.id.fl_anim)
@@ -233,6 +236,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mIvNews.setVisibility(VISIBLE);
         }
 
+        showHomeLottieView();
     }
 
     public void startScan() {
@@ -494,6 +498,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //保存清理次数
         PreferenceUtil.saveCleanNum();
         preCleanTime = System.currentTimeMillis();
+        showBottomTab();
     }
 
     public FrameLayout getCleanTopLayout() {
@@ -871,5 +876,36 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (mButtonCleanNow != null && type == TYPE_SCAN_FINISH) {
             mButtonCleanNow.performClick();
         }
+    }
+
+    /**
+     * 净值时动画
+     */
+    private void showHomeLottieView() {
+        mLottieHomeView.useHardwareAcceleration();
+        mLottieHomeView.setAnimation("data_home.json");
+        mLottieHomeView.setImageAssetsFolder("images");
+        mLottieHomeView.playAnimation();
+        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLottieHomeView.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 }

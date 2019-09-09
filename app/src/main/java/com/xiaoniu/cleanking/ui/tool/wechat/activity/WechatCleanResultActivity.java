@@ -1,12 +1,15 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -19,6 +22,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
     @BindView(R.id.acceview)
     CleanAnimView mCleanAnimView;
 
+    String mTitle;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_wxclean_result;
@@ -30,6 +34,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
         CountEntity countEntity = CleanUtil.formatShortFileSize(getIntent().getExtras().getLong("data",0));
         startCleanAnim(countEntity);
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
+
     }
 
     /**
@@ -40,15 +45,24 @@ public class WechatCleanResultActivity extends SimpleActivity {
     public void startCleanAnim(CountEntity countEntity) {
         String title =  getIntent().getExtras().getString("title", "");
         if (!TextUtils.isEmpty(title)) {
-            mCleanAnimView.setTitle(title);
+            mTitle = getString(R.string.tool_qq_clear);
         } else {
-            mCleanAnimView.setTitle("微信清理");
+            mTitle = getString(R.string.tool_chat_clear_n);
         }
+        mCleanAnimView.setTitle(mTitle);
         mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DisplayUtils.dip2px(49), DisplayUtils.dip2px(49));
         mCleanAnimView.setData(countEntity, CleanAnimView.page_file_wxclean);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);
         mCleanAnimView.setListener(() -> finish());
+        mCleanAnimView.setAnimationEnd(() -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", mTitle);
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity( CleanFinish2Activity.class,bundle);
+            finish();
+        });
     }
 
     /**

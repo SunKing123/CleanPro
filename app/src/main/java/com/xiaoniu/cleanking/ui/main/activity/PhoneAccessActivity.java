@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -19,12 +21,15 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -53,6 +58,7 @@ import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.KeyboardUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
@@ -221,10 +227,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 @Override
                 public void clickOKBtn() {
                     isClick = true;
+                    new Handler().postDelayed(() -> {
+                        //TODO 显示引导 待优化
+                        startActivity( new Intent(PhoneAccessActivity.this,ASMGuideActivity.class));
+                    }, 0);
+                    //开启权限
                     Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                     startActivity(intent);
-                    //TODO 显示引导 待优化
-                    startActivity( new Intent(PhoneAccessActivity.this,ASMGuideActivity.class));
                 }
 
                 @Override
@@ -245,7 +254,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         tv_delete.setOnClickListener(v -> {
             //开始清理
             startClean(false);
-           });
+        });
 
         mTvSpeed.setOnClickListener(view -> {
             //开始清理
@@ -264,17 +273,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 bundle.putString("unit", strUnit);
                 startActivity(CleanFinish2Activity.class, bundle);
                 finish();
-//                if (viewt == null || line_title == null) return;
-//                setStatusBar(R.color.color_06C581);
-//                line_title.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-//                viewt.setBackgroundColor(getResources().getColor(R.color.color_06C581));
-//                //动画结束时
-//                setCleanedView(0);
-//                mWebView.setVisibility(View.VISIBLE);
-//                rel_bottom.setVisibility(View.GONE);
-//                mAppBarLayout.setExpanded(true);
-//                icon_more.setVisibility(View.INVISIBLE);
-//                acceview.setVisibility(View.GONE);
             }
 
             @Override
@@ -317,6 +315,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     /**
      * 开始清理
+     *
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     private void startClean(boolean b) {
@@ -342,7 +341,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         computeTotalSizeDeleteClick(junkTemp);
 
         if (total == 0)
-           setCleanedView(total);
+            setCleanedView(total);
         if (Build.VERSION.SDK_INT >= 26) {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
@@ -365,7 +364,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 startCleanAnim();
-            }else {
+            } else {
+                ToastUtils.showShort(getString(R.string.tool_get_premis));
                 if (isDoubleBack) finish();
                 isDoubleBack = true;
             }
@@ -421,7 +421,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed,mRlAnimBg,tv_size,tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 1);
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 1);
             acceview.setData(sizeMb, "MB");
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
@@ -429,7 +429,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strUnit = "GB";
             sizeMb *= 1024;
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed,mRlAnimBg,tv_size,tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 2);
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 2);
             acceview.setData(sizeMb, "GB");
         }
     }
@@ -454,15 +454,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         } else {
             ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
-            if(listInfo.size()<15){
+            if (listInfo.size() < 15) {
                 for (ActivityManager.RunningAppProcessInfo info : listInfo) {
                     FirstJunkInfo mInfo = new FirstJunkInfo();
                     mInfo.setAppPackageName(info.processName);
                     mInfo.setAppName(info.processName);
                     aboveListInfo.add(mInfo);
                 }
-            }else{
-                for (int i=0;i<15;i++) {
+            } else {
+                for (int i = 0; i < 15; i++) {
                     FirstJunkInfo mInfo = new FirstJunkInfo();
                     mInfo.setAppPackageName(listInfo.get(i).processName);
                     mInfo.setAppName(listInfo.get(i).processName);

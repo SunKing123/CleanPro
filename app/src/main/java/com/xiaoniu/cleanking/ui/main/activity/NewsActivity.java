@@ -12,6 +12,7 @@ import com.xiaoniu.common.base.BaseActivity;
  */
 public class NewsActivity extends BaseActivity {
 
+    NewsFragment newsFragment;
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_news_layout;
@@ -24,8 +25,10 @@ public class NewsActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        setCenterTitle(getString(R.string.tool_news));
-        replaceFragment(R.id.fragment_container, NewsFragment.getNewsFragment("white"), false);
+        hideToolBar();
+        newsFragment = NewsFragment.getNewsFragment("");
+        newsFragment.showIvBack(true);
+        replaceFragment(R.id.fragment_container, newsFragment, false);
     }
 
     @Override

@@ -102,7 +102,7 @@ public class CleanFinish2Activity extends BaseActivity {
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
                 }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle)||getString(R.string.tool_chat_clear_n).contains(mTitle)) {
                 //微信专情
                 if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
@@ -153,7 +153,7 @@ public class CleanFinish2Activity extends BaseActivity {
                         return;
                     if (mNewsFragment == null) return;
                     //展开状态
-                    moveNavigation(false);
+                    mNewsFragment.moveNavigation(false);
                     hideBackImg(true);
                     mNewsFragment.getIvBack().setVisibility(View.VISIBLE);
                     isAnimShow = false;
@@ -163,7 +163,7 @@ public class CleanFinish2Activity extends BaseActivity {
                     //折叠状态
                     if (mNewsFragment == null) return;
                     mNewsFragment.getIvBack().setVisibility(View.VISIBLE);
-                    moveNavigation(true);
+                    mNewsFragment.moveNavigation(true);
                     hideBackImg(false);
                     mLlTopTitle.setVisibility(View.INVISIBLE);
                     isAnimShow = true;
@@ -209,37 +209,7 @@ public class CleanFinish2Activity extends BaseActivity {
         });
     }
 
-    private void moveNavigation(boolean hide) {
-        ObjectAnimator animator;
-        if (hide) {
-            animator = ObjectAnimator.ofFloat(mNewsFragment.getTabIndicator(), "translationX", 0, 110);
-        } else {
-            animator = ObjectAnimator.ofFloat(mNewsFragment.getTabIndicator(), "translationX", 110, 0);
-        }
-        animator.setDuration(300);
-        animator.start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
 
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animator.cancel();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-    }
 
     @Override
     protected void loadData() {

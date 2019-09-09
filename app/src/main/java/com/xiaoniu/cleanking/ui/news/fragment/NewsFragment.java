@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.news.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -34,6 +36,7 @@ public class NewsFragment extends BaseFragment {
     private ImageView mIvBack;
     private String mType = "white";
     private FrameLayout mFLTopNav;
+    private boolean isShowBack = false;
 
     /**
      * @param type 白色样式、绿色样式
@@ -47,12 +50,12 @@ public class NewsFragment extends BaseFragment {
         return fragment;
     }
 
-    public ViewPagerIndicator getTabIndicator() {
-        return mTabIndicator;
-    }
-
     public ImageView getIvBack() {
         return mIvBack;
+    }
+
+    public void showIvBack(boolean show){
+        isShowBack = show;
     }
     @Override
     protected int getLayoutResId() {
@@ -67,13 +70,49 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
+    public void moveNavigation(boolean hide) {
+        ObjectAnimator animator;
+        if (hide) {
+            animator = ObjectAnimator.ofFloat(mTabIndicator, "translationX", 0, 110);
+        } else {
+            animator = ObjectAnimator.ofFloat(mTabIndicator, "translationX", 110, 0);
+        }
+        animator.setDuration(300);
+        animator.start();
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animator.cancel();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
     @Override
     protected void initViews(View contentView, Bundle savedInstanceState) {
         mIvBack = contentView.findViewById(R.id.iv_back);
-        mViewPager = (ViewPager) contentView.findViewById(R.id.newsViewPager);
+        mViewPager = contentView.findViewById(R.id.newsViewPager);
         mViewPager.setOffscreenPageLimit(5);
-        mTabIndicator = (ViewPagerIndicator) contentView.findViewById(R.id.newsTabIndicator);
+        mTabIndicator = contentView.findViewById(R.id.newsTabIndicator);
         mFLTopNav = contentView.findViewById(R.id.fl_top_nav);
+        if (isShowBack) {
+            mIvBack.setVisibility(View.VISIBLE);
+            moveNavigation(true);
+        }
     }
 
     @Override
@@ -149,6 +188,5 @@ public class NewsFragment extends BaseFragment {
             }
         });
     }
-
 
 }

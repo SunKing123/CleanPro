@@ -22,4 +22,5 @@
 -ignorewarning
 -keep class com.xiaoniu.common.hotfix.CleanApplicationLike
 -keep class com.xiaoniu.common.base.** { *; }
+-keep class com.xiaoniu.common.http.** { *; }
 -keep public class * extends com.xiaoniu.common.base.IApplicationDelegate
