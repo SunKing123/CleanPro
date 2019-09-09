@@ -81,6 +81,8 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
     @Override
     public void initView() {
 
+        if (listData == null || QQUtil.audioList == null)
+            return;
         listData = QQUtil.audioList;
 
         if (listData.size() == 0) {
