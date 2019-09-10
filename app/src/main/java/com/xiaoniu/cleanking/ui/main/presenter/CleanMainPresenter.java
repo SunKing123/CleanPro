@@ -378,7 +378,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         outerY.setDuration(500);
         scanY.setDuration(500);
         innerY.setDuration(500);
-        innerAlpha.setDuration(500);
+        innerAlpha.setDuration(1000);
         countY.setDuration(500);
 
         //第一阶段倒转
@@ -389,7 +389,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             @Override
             public void onAnimationStart(Animator animation) {
                 iconInner.setVisibility(VISIBLE);
-                new Handler().postDelayed(rotationFistStep::start, 300);
+                new Handler().postDelayed(rotationFistStep::start, 500);
             }
 
             @Override
