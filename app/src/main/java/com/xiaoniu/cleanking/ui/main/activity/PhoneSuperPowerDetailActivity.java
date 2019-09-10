@@ -63,6 +63,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     public static List<MultiItemInfo> sSelectedList;
     private TextView tvHour;
     private TextView tvMini;
+    private TextView tvUnitHour;
     private LinearLayout mLlTime;
     private LinearLayout mLlPowerLow;
     private TextView mTvAfterUpdate;
@@ -97,6 +98,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mPowerLottieAnimationView = mHeaderView.findViewById(R.id.view_lottie_super_saving_power);
         tvHour = mHeaderView.findViewById(R.id.tvHour);
         tvMini = mHeaderView.findViewById(R.id.tvMini);
+        tvUnitHour = mHeaderView.findViewById(R.id.tv_unit_hour);
         mLlPowerLow = mHeaderView.findViewById(R.id.ll_power_low);
         mLlTime = mHeaderView.findViewById(R.id.ll_time);
         mTvAfterUpdate = mHeaderView.findViewById(R.id.tv_after_update);
@@ -128,9 +130,21 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 mLlTime.setVisibility(View.GONE);
                 mLlPowerLow.setVisibility(View.VISIBLE);
             }else {
+                if (mPowerSavingTime < 60) {
+                    tvMini.setText(mPowerSavingTime + "");
+                    tvHour.setVisibility(View.GONE);
+                    tvUnitHour.setVisibility(View.GONE);
+                }else {
+
+                }
                 mTvAfterUpdate.setVisibility(View.VISIBLE);
                 mLlTime.setVisibility(View.VISIBLE);
                 mLlPowerLow.setVisibility(View.GONE);
+
+                int hour = 1 + new Random().nextInt(3);
+                tvHour.setText(hour + "");
+                int mini = 1 + new Random().nextInt(59);
+                tvMini.setText(mini + "");
             }
             mBvView.setBattaryPercent(power);
         }
@@ -312,19 +326,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mRlResult.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mLlBottom.setVisibility(View.VISIBLE);
-//
-//        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-//        int battery = 50;
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//            battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-//        }
-////        mBvView.setBattaryPercent(battery);
         showPowerAnim();
-
-        int hour = 1 + new Random().nextInt(3);
-        tvHour.setText(hour + "");
-        int mini = 1 + new Random().nextInt(59);
-        tvMini.setText(mini + "");
     }
 
     /**
