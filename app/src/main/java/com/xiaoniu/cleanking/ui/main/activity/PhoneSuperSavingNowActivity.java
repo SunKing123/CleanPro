@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.umeng.commonsdk.debug.I;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
@@ -150,7 +151,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     @Override
     protected void loadData() {
         if (num <= 0) {
-            showFinishWebview();
+            showCleanFinishUI();
         } else {
             showStartAnim();
             showIconAnim();
@@ -318,7 +319,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                showFinishWebview();
+                showCleanFinishUI();
+//                showFinishWebview();
             }
 
             @Override
@@ -332,6 +334,17 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             }
         });
 
+    }
+
+    private void showCleanFinishUI() {
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.tool_super_power_saving));
+        bundle.putString("num", "");
+        bundle.putString("unit", "");
+        Intent intent = new Intent(PhoneSuperSavingNowActivity.this, CleanFinish2Activity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     private void showFinishWebview() {
@@ -399,7 +412,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                         mLayoutNotNet.setVisibility(View.GONE);
                     }
                     if (mNestedScrollWebView != null) {
-
 //                        mNestedScrollWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
                     }
                 }

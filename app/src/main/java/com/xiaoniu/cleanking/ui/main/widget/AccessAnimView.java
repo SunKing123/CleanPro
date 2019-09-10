@@ -426,7 +426,7 @@ public class AccessAnimView extends RelativeLayout {
                 if (!animationDrawable.isRunning()) {
                     animationDrawable.start();
                 }
-                if (mListInfoSize == 0){
+                if (mListInfoSize == 0|| !PreferenceUtil.getCleanTime()){
                     if (mAnimationEnd != null)
                         mAnimationEnd.onAnimationEnd();
                     return;

@@ -263,7 +263,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                showCleanFinishUI();
+                showCleanFinishUI(strNum,strUnit);
             }
 
             @Override
@@ -271,14 +271,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setStatusBarNum(colorRes);
             }
         });
-        acceview.setAnimationEnd(() -> showCleanFinishUI());
+        acceview.setAnimationEnd(() -> showCleanFinishUI(strNum,strUnit));
     }
 
-    private void showCleanFinishUI() {
+    private void showCleanFinishUI(String num, String unit) {
+        //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+        PreferenceUtil.saveCleanTime();
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_one_key_speed));
-        bundle.putString("num", strNum);
-        bundle.putString("unit", strUnit);
+        bundle.putString("num", num);
+        bundle.putString("unit", unit);
         startActivity(CleanFinish2Activity.class, bundle);
         finish();
     }
@@ -443,8 +445,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
-                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                    startActivity(intent);
+                    //开启权限
+                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                    startActivity(PhonePremisActivity.class);
                 }
 
                 @Override
@@ -472,19 +475,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
 
             long total = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L);
-//            long oneG = (1024 * 1024 * 1024) / aboveListInfo.size();
             long un = 80886656;
             if (total == 0) {
                 un = 80886656;
             } else {
                 un = total / aboveListInfo.size();
-//                if (aboveListInfo.size() < 10 && aboveListInfo.size() > 0) {
-//                    un = 80886656;
-//                } else if (aboveListInfo.size() < 20 && aboveListInfo.size() >= 10) {
-//                    un = 40886656;
-//                } else {
-//                    un = 20886656;
-//                }
             }
             setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);
             computeTotalSize(aboveListInfo);
@@ -535,10 +530,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     selectCount++;
                 }
             }
-//                cb_checkall.setBackgroundResource(selectCount == listFile.size() ? R.drawable.icon_select : R.drawable.icon_unselect);
             tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
             tv_delete.setSelected(selectCount == 0 ? false : true);
-//                compulateDeleteSize();
         });
 
         AnimationItem animationItem = new AnimationItem("Slide from bottom", R.anim.layout_animation_from_bottom);
