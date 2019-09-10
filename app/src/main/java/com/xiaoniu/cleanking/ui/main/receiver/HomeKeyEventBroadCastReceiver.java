@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.xiaoniu.cleanking.ui.usercenter.service.FloatingImageDisplayService;
-import com.xiaoniu.cleanking.ui.usercenter.service.FloatingPremisDisplayService;
 
 /**
  * Home键是一个系统的按钮，我们无法通过onKeyDown进行拦截，它是拦截不
@@ -24,11 +23,9 @@ public class HomeKeyEventBroadCastReceiver extends BroadcastReceiver {
             if (reason != null) {
                 if (reason.equals(SYSTEM_HOME_KEY)) {
                     // home key处理点
-                    context.stopService(new Intent(context, FloatingPremisDisplayService.class));
                     context.stopService(new Intent(context, FloatingImageDisplayService.class));
                 } else if (reason.equals(SYSTEM_RECENT_APPS)) {
                     // long home key处理点
-                    context.stopService(new Intent(context, FloatingPremisDisplayService.class));
                     context.stopService(new Intent(context, FloatingImageDisplayService.class));
                 }
             }

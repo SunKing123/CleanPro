@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -48,8 +47,6 @@ import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
-import com.xiaoniu.cleanking.ui.usercenter.service.FloatingPremisDisplayService;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -136,7 +133,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         isFromProtect = fromProtect;
     }
 
-    boolean isFromProtect = false; //如果点击右上角的加速保护名单在返回，onResume不执行代码
+    private boolean isFromProtect = false; //如果点击右上角的加速保护名单在返回，onResume不执行代码
 
     public void setCanClickDelete(boolean canClickDelete) {
         this.canClickDelete = canClickDelete;
@@ -230,15 +227,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 public void clickOKBtn() {
                     isClick = true;
                     //开启权限
-                    if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PhoneAccessActivity.this)) {
-                        Toast.makeText(PhoneAccessActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
-                    } else {
-                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                        startActivity(intent);
-                        startService(new Intent(PhoneAccessActivity.this, FloatingPremisDisplayService.class));
-                    }
-
+                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    startActivity(intent);
+                    startActivity(PhonePremisActivity.class);
                 }
 
                 @Override
@@ -364,8 +355,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     protected void onResume() {
-        register(this);
-        stopService(new Intent(PhoneAccessActivity.this, FloatingPremisDisplayService.class));
         super.onResume();
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
@@ -576,7 +565,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unRegisterScreenActionReceiver(this);
         NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
@@ -645,34 +633,5 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         return true;
     }
-
-    private boolean isRegisterReceiver = false;
-    private HomeKeyEventBroadCastReceiver homeKeyEventBroadCastReceiver = new HomeKeyEventBroadCastReceiver();
-    /**
-     * 广播注册
-     *
-     * @param mContext 上下文对象
-     */
-    public void register(Context mContext) {
-        if (!isRegisterReceiver) {
-            isRegisterReceiver = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            mContext.registerReceiver(homeKeyEventBroadCastReceiver, filter);
-        }
-    }
-
-    /**
-     * 广播注销
-     *
-     * @param mContext 上下文对象
-     */
-    public void unRegisterScreenActionReceiver(Context mContext) {
-        if (isRegisterReceiver) {
-            isRegisterReceiver = false;
-            mContext.unregisterReceiver(homeKeyEventBroadCastReceiver);
-        }
-    }
-
 }
 

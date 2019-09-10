@@ -18,7 +18,7 @@
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/applogo"
-        android:label="@string/app_name_premis"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
@@ -328,7 +328,6 @@
         </service>
 
         <service android:name=".ui.usercenter.service.FloatingImageDisplayService" />
-        <service android:name=".ui.usercenter.service.FloatingPremisDisplayService" />
 
         <activity
             android:name=".ui.tool.notify.activity.NotifyCleanDetailActivity"
@@ -347,6 +346,10 @@
         <activity
             android:name=".ui.main.activity.PhoneSuperPowerDetailActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.main.activity.PhonePremisActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
 
     </application>
 
