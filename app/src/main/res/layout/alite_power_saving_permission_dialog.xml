@@ -41,10 +41,17 @@
             android:layout_width="234dp"
             android:layout_marginTop="@dimen/dimen_23dp"
             android:layout_marginBottom="@dimen/dimen_15dp"
-            android:layout_height="53dp"
+            android:layout_height="38dp"
             android:layout_gravity="center_horizontal"
             android:background="@mipmap/icon_setting"
             />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_exit"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:src="@mipmap/icon_premis_close"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

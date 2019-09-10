@@ -72,12 +72,17 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        window.findViewById(R.id.iv_exit).setOnClickListener(v -> finish());
         TextView tv_goto = window.findViewById(R.id.tv_goto);
         tv_goto.setOnClickListener(v -> {
             isClick = true;
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             startActivity(intent);
             startService(new Intent(PhoneSuperPowerActivity.this, FloatingPremisDisplayService.class));
+        });
+
+        dlg.setOnDismissListener(dialog -> {
+            finish();
         });
         return dlg;
     }
