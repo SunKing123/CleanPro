@@ -364,7 +364,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         //这里设置居中
         lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#60FFFFFF")));
         TextView tv_goto = window.findViewById(R.id.tv_goto);
         tv_goto.setOnClickListener(v -> {
             isFromClick = true;

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
+    android:background="@color/transparent"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,42 +12,47 @@
         android:background="@drawable/dialog_corner_bg"
         android:orientation="vertical">
 
-   <ImageView
-       android:layout_width="117dp"
-       android:layout_height="105dp"
-       android:layout_gravity="center_horizontal"
-       android:layout_marginTop="@dimen/dimen_34dp"
-       android:src="@mipmap/hjper_icon"
-       />
+        <ImageView
+            android:layout_width="117dp"
+            android:layout_height="105dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_34dp"
+            android:src="@mipmap/hjper_icon" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="您是最新的系统，需要开启权限"
-            android:textSize="15sp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dimen_36dp"
             android:layout_marginBottom="@dimen/dimen_16dp"
-            android:layout_gravity="center_horizontal"
+            android:text="系统需要开启权限"
             android:textColor="#06C581"
-            />
+            android:textSize="15sp" />
+
         <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/dimen_20dp"
             android:layout_marginRight="@dimen/dimen_20dp"
-            android:layout_height="wrap_content"
-            android:text="小火箭加速，垃圾清理，高温提醒等功能均受限制，需要手动开启权限。"
-            android:textSize="14sp"
-            android:layout_gravity="center_horizontal"
+            android:text="手机加速，垃圾清理，高温提醒等功能均受限制，需要手动开启权限。"
             android:textColor="#666666"
-            />
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_goto"
             android:layout_width="234dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dimen_23dp"
             android:layout_marginBottom="@dimen/dimen_15dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@mipmap/icon_setting"
-            />
+            android:background="@mipmap/icon_setting" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:src="@mipmap/icon_premis_close"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

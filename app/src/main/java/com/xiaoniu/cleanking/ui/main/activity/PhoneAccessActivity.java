@@ -230,7 +230,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 public void clickOKBtn() {
                     isClick = true;
                     //开启权限
-
                     if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PhoneAccessActivity.this)) {
                         Toast.makeText(PhoneAccessActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
                         startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
@@ -304,7 +303,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 mPresenter.getAccessAbove22();
             } else if (timeTemp < 3 * 60 * 1000) {
                 acceview.setListInfoSize(0);
-//                setCleanedView(0);
             } else if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
                 long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 cacheSize = (long) (cacheSize * 0.5);
@@ -354,7 +352,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         if (total == 0)
             acceview.setListInfoSize(0);
-//            setCleanedView(total);
         if (Build.VERSION.SDK_INT >= 26) {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
