@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.ui.usercenter.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -11,11 +13,9 @@ import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
+import com.xiaoniu.cleanking.ui.usercenter.service.FloatingImageDisplayService;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -41,6 +41,7 @@ public class PermissionActivity extends SimpleActivity {
 
     @Override
     public void initView() {
+        register(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
@@ -52,53 +53,44 @@ public class PermissionActivity extends SimpleActivity {
                 finish();
             }
         });
-        line_permiht.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
-                    Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
-                } else {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                    startActivity(intent);
-                    FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_htyx1, R.mipmap.icon_htyx2};
-                    FloatingImageDisplayService.imageWidth = new int[]{275, 275};
-                    FloatingImageDisplayService.imageHeight = new int[]{186, 186};
+        line_permiht.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
+                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+            } else {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                startActivity(intent);
+                FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_htyx1, R.mipmap.icon_htyx2};
+                FloatingImageDisplayService.imageWidth = new int[]{275, 275};
+                FloatingImageDisplayService.imageHeight = new int[]{186, 186};
 
-                    startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
-                }
+                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
             }
         });
-        line_xfc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
-                    Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
-                } else {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                    startActivity(intent);
-                    FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_per2, R.mipmap.icon_per3, R.mipmap.icon_per4};
-                    FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275};
-                    FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206};
-                    startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
-                }
+        line_xfc.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
+                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+            } else {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                startActivity(intent);
+                FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_per2, R.mipmap.icon_per3, R.mipmap.icon_per4};
+                FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275};
+                FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206};
+                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
             }
         });
-        line_dingwei.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
-                    Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
-                } else {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                    startActivity(intent);
-                    FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_ht1, R.mipmap.icon_ht2, R.mipmap.icon_ht3, R.mipmap.icon_ht4};
-                    FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275, 275};
-                    FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206, 186};
-                    startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
-                }
+        line_dingwei.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
+                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+            } else {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                startActivity(intent);
+                FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_ht1, R.mipmap.icon_ht2, R.mipmap.icon_ht3, R.mipmap.icon_ht4};
+                FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275, 275};
+                FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206, 186};
+                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
             }
         });
 
@@ -113,5 +105,34 @@ public class PermissionActivity extends SimpleActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unRegisterScreenActionReceiver(this);
     }
+    private boolean isRegisterReceiver = false;
+    private HomeKeyEventBroadCastReceiver homeKeyEventBroadCastReceiver = new HomeKeyEventBroadCastReceiver();
+    /**
+     * 广播注册
+     *
+     * @param mContext 上下文对象
+     */
+    public void register(Context mContext) {
+        if (!isRegisterReceiver) {
+            isRegisterReceiver = true;
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            mContext.registerReceiver(homeKeyEventBroadCastReceiver, filter);
+        }
+    }
+
+    /**
+     * 广播注销
+     *
+     * @param mContext 上下文对象
+     */
+    public void unRegisterScreenActionReceiver(Context mContext) {
+        if (isRegisterReceiver) {
+            isRegisterReceiver = false;
+            mContext.unregisterReceiver(homeKeyEventBroadCastReceiver);
+        }
+    }
+
 }

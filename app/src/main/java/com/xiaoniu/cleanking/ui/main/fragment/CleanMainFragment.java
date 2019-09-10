@@ -212,6 +212,15 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 1) {
                 mLottieHomeView.playAnimation();
+            }else if (msg.what == 2){
+                //清理完成
+                restoreLayout();
+                //清理完成后通知 文件数据库同步(陈浪)
+                EventBus.getDefault().post(new ScanFileEvent());
+                //保存清理次数
+                PreferenceUtil.saveCleanNum();
+                preCleanTime = System.currentTimeMillis();
+                showBottomTab();
             }
         }
     }
@@ -507,14 +516,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("unit", "");
             startActivity(CleanFinish2Activity.class, bundle);
         }
-        //清理完成
-        restoreLayout();
-        //清理完成后通知 文件数据库同步(陈浪)
-        EventBus.getDefault().post(new ScanFileEvent());
-        //保存清理次数
-        PreferenceUtil.saveCleanNum();
-        preCleanTime = System.currentTimeMillis();
-        showBottomTab();
+        mHandler.sendEmptyMessageDelayed(2,1000);
     }
 
     public FrameLayout getCleanTopLayout() {
@@ -928,7 +930,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mHandler.sendEmptyMessageDelayed(1,500);
+                mHandler.sendEmptyMessageDelayed(1,1500);
             }
 
             @Override

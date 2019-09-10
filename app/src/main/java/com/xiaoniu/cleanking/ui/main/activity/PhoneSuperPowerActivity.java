@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -17,6 +18,11 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
+import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.ui.usercenter.service.FloatingImageDisplayService;
+import com.xiaoniu.cleanking.ui.usercenter.service.FloatingPremisDisplayService;
+import com.xiaoniu.common.utils.ToastUtils;
 
 public class PhoneSuperPowerActivity extends SimpleActivity {
 
@@ -71,8 +77,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
             isClick = true;
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             startActivity(intent);
-            //TODO 显示引导 待优化
-            startActivity( new Intent(this,ASMGuideActivity.class));
+            startService(new Intent(PhoneSuperPowerActivity.this, FloatingPremisDisplayService.class));
         });
         return dlg;
     }
@@ -93,15 +98,52 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
 
     @Override
     protected void onResume() {
+        register(this);
+        stopService(new Intent(PhoneSuperPowerActivity.this, FloatingPremisDisplayService.class));
         super.onResume();
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 startActivity(PhoneSuperPowerDetailActivity.class);
             }else {
+                ToastUtils.showShort(getString(R.string.tool_get_premis));
                 if (isDoubleBack) finish();
                 isDoubleBack = true;
             }
         }
         isClick = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        unRegisterScreenActionReceiver(this);
+        super.onDestroy();
+    }
+
+    private boolean isRegisterReceiver = false;
+    private HomeKeyEventBroadCastReceiver homeKeyEventBroadCastReceiver = new HomeKeyEventBroadCastReceiver();
+    /**
+     * 广播注册
+     *
+     * @param mContext 上下文对象
+     */
+    public void register(Context mContext) {
+        if (!isRegisterReceiver) {
+            isRegisterReceiver = true;
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            mContext.registerReceiver(homeKeyEventBroadCastReceiver, filter);
+        }
+    }
+
+    /**
+     * 广播注销
+     *
+     * @param mContext 上下文对象
+     */
+    public void unRegisterScreenActionReceiver(Context mContext) {
+        if (isRegisterReceiver) {
+            isRegisterReceiver = false;
+            mContext.unregisterReceiver(homeKeyEventBroadCastReceiver);
+        }
     }
 }

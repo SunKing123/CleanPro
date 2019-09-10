@@ -6,11 +6,12 @@ import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,19 +22,17 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
@@ -45,10 +44,12 @@ import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
+import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.ui.usercenter.service.FloatingPremisDisplayService;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -228,13 +229,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 @Override
                 public void clickOKBtn() {
                     isClick = true;
-                    new Handler().postDelayed(() -> {
-                        //TODO 显示引导 待优化
-                        startActivity( new Intent(PhoneAccessActivity.this,ASMGuideActivity.class));
-                    }, 0);
                     //开启权限
-                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                    startActivity(intent);
+
+                    if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PhoneAccessActivity.this)) {
+                        Toast.makeText(PhoneAccessActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+                    } else {
+                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                        startActivity(intent);
+                        startService(new Intent(PhoneAccessActivity.this, FloatingPremisDisplayService.class));
+                    }
+
                 }
 
                 @Override
@@ -362,6 +367,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     protected void onResume() {
+        register(this);
+        stopService(new Intent(PhoneAccessActivity.this, FloatingPremisDisplayService.class));
         super.onResume();
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
@@ -572,6 +579,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unRegisterScreenActionReceiver(this);
         NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
@@ -641,4 +649,33 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         return true;
     }
 
+    private boolean isRegisterReceiver = false;
+    private HomeKeyEventBroadCastReceiver homeKeyEventBroadCastReceiver = new HomeKeyEventBroadCastReceiver();
+    /**
+     * 广播注册
+     *
+     * @param mContext 上下文对象
+     */
+    public void register(Context mContext) {
+        if (!isRegisterReceiver) {
+            isRegisterReceiver = true;
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            mContext.registerReceiver(homeKeyEventBroadCastReceiver, filter);
+        }
+    }
+
+    /**
+     * 广播注销
+     *
+     * @param mContext 上下文对象
+     */
+    public void unRegisterScreenActionReceiver(Context mContext) {
+        if (isRegisterReceiver) {
+            isRegisterReceiver = false;
+            mContext.unregisterReceiver(homeKeyEventBroadCastReceiver);
+        }
+    }
+
 }
+

@@ -259,11 +259,6 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.main.activity.ASMGuideActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/transparent_activity" />
-
         <activity android:name=".ui.main.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/transparent_activity" />
@@ -331,7 +326,9 @@
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
         </service>
-        <service android:name=".ui.usercenter.activity.FloatingImageDisplayService" />
+
+        <service android:name=".ui.usercenter.service.FloatingImageDisplayService" />
+        <service android:name=".ui.usercenter.service.FloatingPremisDisplayService" />
 
         <activity
             android:name=".ui.tool.notify.activity.NotifyCleanDetailActivity"

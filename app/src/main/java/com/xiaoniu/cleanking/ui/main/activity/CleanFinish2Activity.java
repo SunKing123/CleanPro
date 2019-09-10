@@ -18,6 +18,8 @@ import com.xiaoniu.cleanking.ui.main.interfac.AppBarStateChangeListener;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.util.Random;
 
@@ -40,6 +42,7 @@ public class CleanFinish2Activity extends BaseActivity {
     private TextView mTvGb;
     private TextView mTvQl;
     private TextView mTopSubTitle;
+    private LinearLayout mLlNoNet;
 
     @Override
     protected int getLayoutResId() {
@@ -60,6 +63,7 @@ public class CleanFinish2Activity extends BaseActivity {
         mAppBarLayout = findViewById(R.id.appbar_layout);
         mTopSubTitle = findViewById(R.id.tv_top_sub_title);
         mTvQl = findViewById(R.id.tv_ql);
+//        mLlNoNet = findViewById(R.id.layout_not_net);
 
         Intent intent = getIntent();
         //保存清理完成次数
@@ -138,12 +142,18 @@ public class CleanFinish2Activity extends BaseActivity {
             }
             mTopSubTitle.setText(mTitle);
         }
+        showUI();
+    }
+
+    private void showUI(){
+        if (!NetworkUtils.isNetConnected()) {
+            showErrorView();
+        }
         if (!PreferenceUtil.getClearNum() || !PreferenceUtil.getShareNum())
             showNews();
         else
             showWeb();
     }
-
     @Override
     protected void setListener() {
         mIvBack.setOnClickListener(v -> finish());
@@ -172,6 +182,7 @@ public class CleanFinish2Activity extends BaseActivity {
                 }
             }
         });
+//        mLlNoNet.setOnClickListener(v -> showUI());
     }
 
     private void hideBackImg(boolean hide) {

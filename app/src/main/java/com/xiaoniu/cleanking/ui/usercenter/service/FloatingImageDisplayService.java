@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.usercenter.activity;
+package com.xiaoniu.cleanking.ui.usercenter.service;
 
 import android.app.Service;
 import android.content.Context;
