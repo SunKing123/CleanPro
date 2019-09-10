@@ -43,6 +43,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
@@ -271,7 +272,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 setStatusBarNum(colorRes);
             }
         });
-        acceview.setAnimationEnd(() -> showCleanFinishUI(strNum,strUnit));
+        acceview.setAnimationEnd(() -> {
+            if(!PreferenceUtil.getCleanTime()){
+                strNum = "";
+                strUnit = "";
+            }
+            showCleanFinishUI(strNum,strUnit);
+        });
+
     }
 
     private void showCleanFinishUI(String num, String unit) {
@@ -349,7 +357,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
         }
-
 
         StatisticsUtils.trackClick("cleaning_click", "清理点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
 
