@@ -63,7 +63,7 @@ public class CleanFinish2Activity extends BaseActivity {
         mAppBarLayout = findViewById(R.id.appbar_layout);
         mTopSubTitle = findViewById(R.id.tv_top_sub_title);
         mTvQl = findViewById(R.id.tv_ql);
-//        mLlNoNet = findViewById(R.id.layout_not_net);
+        mLlNoNet = findViewById(R.id.layout_not_net);
 
         Intent intent = getIntent();
         //保存清理完成次数
@@ -88,9 +88,9 @@ public class CleanFinish2Activity extends BaseActivity {
                 //一键加速
                 if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
-                    mTvGb.setText("已达到最佳状态");
+                    mTvGb.setText("已加速");
                     mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他功能");
+                    mTvQl.setText("快试试其他功能吧！");
                 }
             }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
                 //一键加速
@@ -147,7 +147,8 @@ public class CleanFinish2Activity extends BaseActivity {
 
     private void showUI(){
         if (!NetworkUtils.isNetConnected()) {
-            showErrorView();
+            ToastUtils.showShort(getString(R.string.tool_no_net_hint));
+            mLlNoNet.setVisibility(View.VISIBLE);
         }
         if (!PreferenceUtil.getClearNum() || !PreferenceUtil.getShareNum())
             showNews();
@@ -182,7 +183,7 @@ public class CleanFinish2Activity extends BaseActivity {
                 }
             }
         });
-//        mLlNoNet.setOnClickListener(v -> showUI());
+        mLlNoNet.setOnClickListener(v -> showUI());
     }
 
     private void hideBackImg(boolean hide) {
