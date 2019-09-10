@@ -375,11 +375,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(iconInner, "alpha", 0, 1);
 
-        outerY.setDuration(800);
-        scanY.setDuration(800);
-        innerY.setDuration(800);
-        innerAlpha.setDuration(800);
-        countY.setDuration(800);
+        outerY.setDuration(500);
+        scanY.setDuration(500);
+        innerY.setDuration(500);
+        innerAlpha.setDuration(500);
+        countY.setDuration(500);
 
         //第一阶段倒转
         ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(iconInner, "rotation", 0, -35f);
@@ -389,7 +389,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             @Override
             public void onAnimationStart(Animator animation) {
                 iconInner.setVisibility(VISIBLE);
-                new Handler().postDelayed(rotationFistStep::start, 400);
+                new Handler().postDelayed(rotationFistStep::start, 300);
             }
 
             @Override
@@ -432,7 +432,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         rotation4.setInterpolator(new LinearInterpolator());
         rotation3.setInterpolator(new LinearInterpolator());
 
-        new Handler().postDelayed(() -> mView.showLottieView(), 500);
+        new Handler().postDelayed(() -> mView.showLottieView(), 200);
 
         rotation.addListener(new Animator.AnimatorListener() {
             @Override
