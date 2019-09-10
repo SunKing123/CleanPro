@@ -26,22 +26,18 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.KeyboardUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -55,7 +51,6 @@ import io.reactivex.schedulers.Schedulers;
 public class JunkCleanActivity extends SimpleActivity {
 
     private DockingExpandableListViewAdapter mAdapter;
-
     @BindView(R.id.tv_title)
     TextView mTextTitle;
     @BindView(R.id.icon_more)
@@ -65,9 +60,7 @@ public class JunkCleanActivity extends SimpleActivity {
 
     @BindView(R.id.view_clean_anim)
     CleanAnimView mCleanAnimView;
-
     private CountEntity countEntity;
-
     private HashMap<Integer, JunkGroup> mJunkGroups;
 
     @Override
@@ -309,7 +302,6 @@ public class JunkCleanActivity extends SimpleActivity {
             }
         }
     }
-
 
     /**
      * 获取缓存白名单

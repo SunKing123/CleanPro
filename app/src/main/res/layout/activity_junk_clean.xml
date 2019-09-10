@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/layout_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_56dp"
@@ -35,7 +35,15 @@
             android:text="个人信息"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_18sp" />
+
     </RelativeLayout>
+
+    <include
+        layout="@layout/content_junk_clean"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dimen_56dp"
+        android:layout_below="@+id/layout_title_bar" />
 
     <com.xiaoniu.cleanking.ui.main.widget.CleanAnimView
         android:id="@+id/view_clean_anim"
@@ -43,10 +51,4 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <include
-        layout="@layout/content_junk_clean"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/layout_title_bar" />
-
-</RelativeLayout>
+</FrameLayout>
