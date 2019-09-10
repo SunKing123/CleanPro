@@ -375,11 +375,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(iconInner, "alpha", 0, 1);
 
-        outerY.setDuration(1000);
-        scanY.setDuration(1000);
-        innerY.setDuration(1000);
-        innerAlpha.setDuration(1000);
-        countY.setDuration(1000);
+        outerY.setDuration(800);
+        scanY.setDuration(800);
+        innerY.setDuration(800);
+        innerAlpha.setDuration(800);
+        countY.setDuration(800);
 
         //第一阶段倒转
         ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(iconInner, "rotation", 0, -35f);
@@ -422,8 +422,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
-        rotation.setDuration(1200);
-        rotation2.setDuration(1100);
+        rotation.setDuration(900);
+        rotation2.setDuration(800);
 
         rotation3.setDuration(200);
         rotation3.setRepeatCount(-1);
@@ -432,7 +432,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         rotation4.setInterpolator(new LinearInterpolator());
         rotation3.setInterpolator(new LinearInterpolator());
 
-        new Handler().postDelayed(() -> mView.showLottieView(), 700);
+        new Handler().postDelayed(() -> mView.showLottieView(), 500);
 
         rotation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -491,7 +491,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             countEntity = new CountEntity();
         }
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(5000);
+        valueAnimator.setDuration(2000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
@@ -515,7 +515,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                 if (animatorSet != null) {
                     //清理完成
                     animatorSet.end();
-//                    setViewTrans();
                     startFinishAnimator(iconInner,iconOuter);
                 }
                 if (animatorSet2 != null) {
@@ -536,8 +535,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());
-        colorAnim.setDuration(1000);
-        colorAnim.setStartDelay(4000);
+        colorAnim.setDuration(1600);
+        colorAnim.setStartDelay(500);
         colorAnim.addUpdateListener(animation -> {
             if (mView == null) return;
             int animatedValue = (int) animation.getAnimatedValue();
@@ -708,6 +707,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         });
     }
 
+    @SuppressLint("CheckResult")
     public void checkPermission() {
         String permissionsHint = "需要打开文件读写权限";
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,

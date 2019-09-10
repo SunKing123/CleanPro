@@ -277,15 +277,15 @@ public class CleanAnimView extends RelativeLayout {
         outerY.setDuration(time);
         scanY.setDuration(time);
         innerY.setDuration(time);
-        innerAlpha.setDuration(1000);
+        innerAlpha.setDuration(800);
         countY.setDuration(time);
-        outerAlpha.setDuration(1000);
-        scanAlpha.setDuration(1000);
-        countAlpha.setDuration(1000);
+        outerAlpha.setDuration(800);
+        scanAlpha.setDuration(800);
+        countAlpha.setDuration(800);
 
         //第一阶段倒转
         ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(mIconInner, "rotation", 0, -35f);
-        rotationFistStep.setDuration(600);
+        rotationFistStep.setDuration(500);
 
         innerAlpha.addListener(new Animator.AnimatorListener() {
             @Override
@@ -334,12 +334,10 @@ public class CleanAnimView extends RelativeLayout {
      */
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-//        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325,-35,325,-35,325,-35);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
 
         rotation.setDuration(500);
-//        rotation2.setDuration(1000);
 
         rotation3.setDuration(300);
         rotation3.setRepeatCount(ValueAnimator.INFINITE);
@@ -375,10 +373,6 @@ public class CleanAnimView extends RelativeLayout {
 
             }
         });
-
-//        rotation.setInterpolator(new AccelerateInterpolator());
-//        rotation2.setInterpolator(new AccelerateInterpolator());
-
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(rotation, rotation4);
 
@@ -450,7 +444,7 @@ public class CleanAnimView extends RelativeLayout {
      */
     public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(5000);
+        valueAnimator.setDuration(2000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
@@ -485,12 +479,12 @@ public class CleanAnimView extends RelativeLayout {
         });
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
-        colorAnim1.setDuration(1000);
-        colorAnim1.setStartDelay(4000);
+        colorAnim1.setDuration(500);
+        colorAnim1.setStartDelay(1000);
         ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLineTitle, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim2.setDuration(1000);
-        colorAnim2.setStartDelay(4000);
+        colorAnim2.setDuration(500);
+        colorAnim2.setStartDelay(1000);
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
@@ -508,27 +502,6 @@ public class CleanAnimView extends RelativeLayout {
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
         showWebView();
-//        mTvAnimTitle.setVisibility(GONE);
-//        mLayoutRoot.setVisibility(GONE);
-//        int bottom = mLineTitle.getBottom();
-//        mLayoutCleanFinish.setVisibility(VISIBLE);
-//        int startHeight = DeviceUtils.getScreenHeight();
-//        ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
-//        anim.setDuration(500);
-//        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-//        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
-//        anim.addUpdateListener(animation -> {
-//            int currentValue = (int) animation.getAnimatedValue();
-//            rlp.topMargin = currentValue;
-//            mLayoutCleanFinish.setLayoutParams(rlp);
-//        });
-//        anim.start();
-//        anim.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//            }
-//        });
 
         if (currentPage == page_file_clean) {
             NiuDataAPI.onPageStart("mobile_clean_up_page_view", "手机清理页浏览");
@@ -540,8 +513,6 @@ public class CleanAnimView extends RelativeLayout {
     public void showWebView() {
         if (mAnimationEnd != null)
             mAnimationEnd.onAnimationEnd();
-//        mScrollView.setVisibility(VISIBLE);
-//        mWebView.setVisibility(VISIBLE);
     }
 
     public void setAnimTitle(String animTitle){
