@@ -284,7 +284,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     private void showCleanFinishUI(String num, String unit) {
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
-        PreferenceUtil.saveCleanTime();
+        if (PreferenceUtil.getCleanTime()) {
+            PreferenceUtil.saveCleanTime();
+        }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_one_key_speed));
         bundle.putString("num", num);
