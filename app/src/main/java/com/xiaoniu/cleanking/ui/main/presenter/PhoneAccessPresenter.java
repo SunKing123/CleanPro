@@ -77,7 +77,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     }
 
 
-    //获取到可以加速的应用名单Android O以下的获取最忌使用情况
+    //获取到可以加速的应用名单Android O以下的获取最近使用情况
     @SuppressLint("CheckResult")
     public void getAccessListBelow() {
 //        mView.showLoadingDialog();

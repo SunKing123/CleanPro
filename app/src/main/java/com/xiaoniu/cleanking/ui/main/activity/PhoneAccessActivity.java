@@ -394,6 +394,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null) return;
+
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo){
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())){
+                listInfo.remove(firstJunkInfo);
+            }
+        }
         acceview.setListInfoSize(listInfo.size());
         if (listInfo.size() != 0) {
             computeTotalSize(listInfo);
@@ -467,17 +474,23 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
             if (listInfo.size() < 15) {
                 for (ActivityManager.RunningAppProcessInfo info : listInfo) {
-                    FirstJunkInfo mInfo = new FirstJunkInfo();
-                    mInfo.setAppPackageName(info.processName);
-                    mInfo.setAppName(info.processName);
-                    aboveListInfo.add(mInfo);
+                    //悟空清理app加入默认白名单
+                    if (!SpCacheConfig.APP_ID.equals(info.processName)) {
+                        FirstJunkInfo mInfo = new FirstJunkInfo();
+                        mInfo.setAppPackageName(info.processName);
+                        mInfo.setAppName(info.processName);
+                        aboveListInfo.add(mInfo);
+                    }
                 }
             } else {
                 for (int i = 0; i < 15; i++) {
-                    FirstJunkInfo mInfo = new FirstJunkInfo();
-                    mInfo.setAppPackageName(listInfo.get(i).processName);
-                    mInfo.setAppName(listInfo.get(i).processName);
-                    aboveListInfo.add(mInfo);
+                    //悟空清理app加入默认白名单
+                    if (!SpCacheConfig.APP_ID.equals(listInfo.get(i).processName)) {
+                        FirstJunkInfo mInfo = new FirstJunkInfo();
+                        mInfo.setAppPackageName(listInfo.get(i).processName);
+                        mInfo.setAppName(listInfo.get(i).processName);
+                        aboveListInfo.add(mInfo);
+                    }
                 }
             }
 

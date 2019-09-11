@@ -60,4 +60,5 @@ public class SpCacheConfig {
     public static final String NOTITY = "notity";
     public static final String SUPER_POWER_SAVING = "super_power_saving";
     public static final String BANNER = "banner";
+    public static final String APP_ID = "com.xiaoniu.cleanking";
 }
