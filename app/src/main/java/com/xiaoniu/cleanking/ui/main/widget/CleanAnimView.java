@@ -444,7 +444,7 @@ public class CleanAnimView extends RelativeLayout {
      */
     public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(1000);
+        valueAnimator.setDuration(3000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();

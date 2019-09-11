@@ -328,13 +328,10 @@ public class CleanedAnimView extends RelativeLayout {
      */
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-//        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325,-35,325,-35,325,-35);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
 
         rotation.setDuration(500);
-//        rotation2.setDuration(1000);
-
         rotation3.setDuration(300);
         rotation3.setRepeatCount(ValueAnimator.INFINITE);
         rotation3.setInterpolator(new LinearInterpolator());
@@ -342,7 +339,6 @@ public class CleanedAnimView extends RelativeLayout {
         rotation4.setDuration(200);
         rotation4.setRepeatCount(ValueAnimator.INFINITE);
         rotation4.setInterpolator(new LinearInterpolator());
-
 
         animatorStep2 = new AnimatorSet();
         animatorStep2.playTogether(rotation3);
@@ -369,10 +365,6 @@ public class CleanedAnimView extends RelativeLayout {
 
             }
         });
-
-//        rotation.setInterpolator(new AccelerateInterpolator());
-//        rotation2.setInterpolator(new AccelerateInterpolator());
-
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(rotation, rotation4);
 
@@ -443,7 +435,7 @@ public class CleanedAnimView extends RelativeLayout {
      */
     public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(5000);
+        valueAnimator.setDuration(3000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
@@ -480,7 +472,7 @@ public class CleanedAnimView extends RelativeLayout {
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(1000);
-        colorAnim1.setStartDelay(4000);
+        colorAnim1.setStartDelay(100);
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
