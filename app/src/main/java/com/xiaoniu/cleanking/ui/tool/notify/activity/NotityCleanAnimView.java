@@ -445,7 +445,7 @@ public class NotityCleanAnimView extends RelativeLayout {
      */
     public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(5000);
+        valueAnimator.setDuration(3000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
@@ -480,11 +480,11 @@ public class NotityCleanAnimView extends RelativeLayout {
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(mLayoutRoot, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(1000);
-        colorAnim1.setStartDelay(4000);
+        colorAnim1.setStartDelay(100);
         ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLineTitle, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim2.setEvaluator(new ArgbEvaluator());
         colorAnim2.setDuration(1000);
-        colorAnim2.setStartDelay(4000);
+        colorAnim2.setStartDelay(100);
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
