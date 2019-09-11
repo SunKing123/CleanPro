@@ -87,18 +87,15 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mRecyclerView.setHeaderView(mHeaderView);
         hideToolBar();
         mCleanAnimView = findViewById(R.id.view_clean_anim);
-        mCleanAnimView.setAnimationEnd(new AnimationEnd() {
-            @Override
-            public void onAnimationEnd() {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_notification_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                Intent intent = new Intent(NotifyCleanDetailActivity.this, CleanFinish2Activity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
-            }
+        mCleanAnimView.setAnimationEnd(() -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_notification_clean));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            Intent intent = new Intent(NotifyCleanDetailActivity.this, CleanFinish2Activity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -196,9 +193,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private void showCleanFinishView() {
         isCleanFinish = true;
         /*显示完成页*/
-//        mCleanAnimView.setVisibility(View.VISIBLE);
         showBarColor(getResources().getColor(R.color.color_06C581));
-//        mCleanAnimView.setViewTrans();
         //通知栏清理完成浏览
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
         Bundle bundle = new Bundle();

@@ -124,6 +124,7 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
 

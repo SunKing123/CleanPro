@@ -150,10 +150,11 @@ public class CleanFinish2Activity extends BaseActivity {
             ToastUtils.showShort(getString(R.string.tool_no_net_hint));
             mLlNoNet.setVisibility(View.VISIBLE);
         }
-        if (!PreferenceUtil.getClearNum() || !PreferenceUtil.getShareNum())
-            showNews();
-        else
-            showWeb();
+        showNews();
+//        if (!PreferenceUtil.getClearNum() || !PreferenceUtil.getShareNum())
+//            showNews();
+//        else
+//            showWeb();
     }
     @Override
     protected void setListener() {

@@ -35,7 +35,6 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -83,7 +82,6 @@ public class NotityCleanAnimView extends RelativeLayout {
      * 手机清理页面
      */
     public static final int page_file_clean = 1;
-    public static final int page_file_wxclean = 2;
 
     private int currentPage = 0;
     private AnimationEnd mAnimationEnd;
@@ -233,7 +231,6 @@ public class NotityCleanAnimView extends RelativeLayout {
         mTextCount.setText(mCountEntity.getTotalSize());
         mTextUnit.setText("%");
         mTextSize.setText(mCountEntity.getTotalSize());
-//        mTextGb.setText(mCountEntity.getUnit());
     }
 
     //Step1:上面红色布局和中间1dp的布局动画开始
@@ -341,22 +338,16 @@ public class NotityCleanAnimView extends RelativeLayout {
      */
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-//        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325,-35,325,-35,325,-35);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
         ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
 
         rotation.setDuration(500);
-//        rotation2.setDuration(1000);
-
         rotation3.setDuration(300);
         rotation3.setRepeatCount(ValueAnimator.INFINITE);
         rotation3.setInterpolator(new LinearInterpolator());
-
         rotation4.setDuration(200);
         rotation4.setRepeatCount(ValueAnimator.INFINITE);
         rotation4.setInterpolator(new LinearInterpolator());
-
-
         animatorStep2 = new AnimatorSet();
         animatorStep2.playTogether(rotation3);
 
@@ -382,13 +373,8 @@ public class NotityCleanAnimView extends RelativeLayout {
 
             }
         });
-
-//        rotation.setInterpolator(new AccelerateInterpolator());
-//        rotation2.setInterpolator(new AccelerateInterpolator());
-
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(rotation, rotation4);
-
         animatorSet.start();
     }
 
@@ -464,7 +450,6 @@ public class NotityCleanAnimView extends RelativeLayout {
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
             mTextCount.setText(String.format("%s", Math.round(animatedValue)));
-//            mTextUnit.setText(unit);
         });
 
         valueAnimator.addListener(new Animator.AnimatorListener() {
