@@ -491,7 +491,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             countEntity = new CountEntity();
         }
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(1000);
+        valueAnimator.setDuration(3000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
