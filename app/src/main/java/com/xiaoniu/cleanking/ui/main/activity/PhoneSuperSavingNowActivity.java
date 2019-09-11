@@ -79,6 +79,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private RoundedImageView mIvIcon1;
     private RoundedImageView mIvIcon2;
     private boolean isFinish = false;
+    private int mTime = 800;
 
     class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
@@ -94,9 +95,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 num--;
                 mTvNum.setText(String.valueOf(num));
                 if (num > 0) {
-                    sendEmptyMessageDelayed(2, 800);
+                    sendEmptyMessageDelayed(2, mTime);
                 } else {
-                    sendEmptyMessageDelayed(1, 800);
+                    sendEmptyMessageDelayed(1, mTime);
                 }
             }
         }
@@ -112,6 +113,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         hideToolBar();
         num = intent.getIntExtra("processNum", 0);
         mSelectedList = PhoneSuperPowerDetailActivity.sSelectedList;
+        if (mSelectedList == null){
+            mTime = 3000 / mSelectedList.size();
+        }
         PhoneSuperPowerDetailActivity.sSelectedList = null;
     }
 
@@ -155,7 +159,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         } else {
             showStartAnim();
             showIconAnim();
-            mHandler.sendEmptyMessageDelayed(2, 800);
+            mHandler.sendEmptyMessageDelayed(2, mTime);
         }
     }
 
@@ -188,7 +192,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         ivIcon.setVisibility(View.VISIBLE);
         float distance = DisplayUtils.dip2px(40);
         ValueAnimator anim1 = ValueAnimator.ofFloat(0f, distance);
-        anim1.setDuration(800);
+        anim1.setDuration(mTime);
         ivIcon.setPivotX(0.5f * ivIcon.getMeasuredWidth());
         ivIcon.setPivotY(0.5f * ivIcon.getMeasuredHeight());
 
@@ -196,20 +200,17 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         ivIcon.setScaleX(1);
         ivIcon.setScaleY(1);
         ivIcon.setAlpha(1f);
-        anim1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currentValue = (float) animation.getAnimatedValue();
-                float percent = currentValue / distance;
-                ivIcon.setScaleX(1 - percent);
-                ivIcon.setScaleY(1 - percent);
+        anim1.addUpdateListener(animation -> {
+            float currentValue = (float) animation.getAnimatedValue();
+            float percent = currentValue / distance;
+            ivIcon.setScaleX(1 - percent);
+            ivIcon.setScaleY(1 - percent);
 
-                if (1 - percent <= 0.5) {
-                    percent = 0.5f;
-                }
-                ivIcon.setAlpha(1 - percent);
-                ivIcon.setTranslationY(-currentValue);
+            if (1 - percent <= 0.5) {
+                percent = 0.5f;
             }
+            ivIcon.setAlpha(1 - percent);
+            ivIcon.setTranslationY(-currentValue);
         });
 
         anim1.addListener(new AnimatorListenerAdapter() {
@@ -238,23 +239,20 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         ivIcon.setAlpha(0.5f);
 
         ValueAnimator anim2 = ValueAnimator.ofFloat(distance, 0f);
-        anim2.setDuration(800);
+        anim2.setDuration(mTime);
         ivIcon.setPivotX(0.5f * ivIcon.getMeasuredWidth());
         ivIcon.setPivotY(0.5f * ivIcon.getMeasuredHeight());
-        anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currentValue = (float) animation.getAnimatedValue();
-                float percent = currentValue / distance;
-                ivIcon.setScaleX(1 - percent);
-                ivIcon.setScaleY(1 - percent);
-                float alpha = 1 - percent;
-                if (alpha <= 0.5) {
-                    alpha = 0.5f;
-                }
-                ivIcon.setAlpha(alpha);
-                ivIcon.setTranslationY(currentValue);
+        anim2.addUpdateListener(animation -> {
+            float currentValue = (float) animation.getAnimatedValue();
+            float percent = currentValue / distance;
+            ivIcon.setScaleX(1 - percent);
+            ivIcon.setScaleY(1 - percent);
+            float alpha = 1 - percent;
+            if (alpha <= 0.5) {
+                alpha = 0.5f;
             }
+            ivIcon.setAlpha(alpha);
+            ivIcon.setTranslationY(currentValue);
         });
 
         anim2.addListener(new AnimatorListenerAdapter() {
@@ -306,6 +304,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         SPUtil.setLastPowerCleanTime(System.currentTimeMillis());
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
 
+        if (mIvAnimationStartView != null)
+            mIvAnimationStartView.setVisibility(View.INVISIBLE);
+
         mLottieAnimationFinishView.useHardwareAcceleration();
         mLottieAnimationFinishView.setImageAssetsFolder("images");
         mLottieAnimationFinishView.setAnimation("data_clean_finish.json");
@@ -320,7 +321,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             @Override
             public void onAnimationEnd(Animator animator) {
                 showCleanFinishUI();
-//                showFinishWebview();
             }
 
             @Override

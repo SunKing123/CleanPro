@@ -169,8 +169,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void initView() {
         mAppCoolingBarlayout.setExpanded(false);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
@@ -232,7 +231,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mProgressBar.setProgress(phoneTemperature);
         initAnimator(phoneTemperature);
     }
-
     private static final int FirstLevel = 0xffFD6F46;
     private static final int SecondLevel = 0xffF1D53B;
     private static final int ThirdLevel = 0xff06C581;
@@ -243,16 +241,15 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * @param phoneTemperature
      */
     private void initAnimator(int phoneTemperature) {
-
         if (mLayoutAnimCool == null) return;
         ValueAnimator colorAnim = ObjectAnimator.ofInt(mLayoutAnimCool, "backgroundColor", ThirdLevel, FirstLevel);
         ValueAnimator colorAnim2 = ObjectAnimator.ofInt(mLayoutTitleBar, "backgroundColor", ThirdLevel, FirstLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());
         colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim.setDuration(1000);
-        colorAnim2.setDuration(1000);
-        colorAnim.setStartDelay(2000);
-        colorAnim2.setStartDelay(2000);
+        colorAnim.setDuration(800);
+        colorAnim2.setDuration(800);
+        colorAnim.setStartDelay(1500);
+        colorAnim2.setStartDelay(1500);
         colorAnim.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
             showBarColor(animatedValue);
@@ -292,7 +289,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         } else {
             animatorSetTimer.play(numberAnimator);
         }
-
         animatorSetTimer.start();
     }
 
@@ -375,12 +371,12 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         colorAnim.setEvaluator(new ArgbEvaluator());
         colorAnim2.setEvaluator(new ArgbEvaluator());
         colorAnim3.setEvaluator(new ArgbEvaluator());
-        colorAnim.setDuration(1000);
-        colorAnim2.setDuration(1000);
-        colorAnim3.setDuration(1000);
-        colorAnim.setStartDelay(3000);
-        colorAnim2.setStartDelay(3000);
-        colorAnim3.setStartDelay(3000);
+        colorAnim.setDuration(800);
+        colorAnim2.setDuration(800);
+        colorAnim3.setDuration(800);
+        colorAnim.setStartDelay(1500);
+        colorAnim2.setStartDelay(1500);
+        colorAnim3.setStartDelay(1500);
         colorAnim.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
             if (isDestroyed()) {
@@ -394,7 +390,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
         if (isOverload) {
-            animatorSetTimer.playTogether(anim, colorAnim, colorAnim2,colorAnim3);
+            animatorSetTimer.playTogether(anim, colorAnim, colorAnim2, colorAnim3);
         } else {
             animatorSetTimer.play(anim);
         }
@@ -408,12 +404,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 startAnimation();
-
-                new Handler().postDelayed(() -> setViewFinishTrans(), 3500);
+                new Handler().postDelayed(() -> setViewFinishTrans(), 2500);
             }
         });
     }
 
+    /**
+     * 下雪
+     */
     private void startAnimation() {
         if (!isDestroyed()) {
             mLottieAnimationView.useHardwareAcceleration();
@@ -433,7 +431,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             return;
         }
         mTvCooling.setVisibility(GONE);
-        //TODO 添加清理完成动画
         startFinishAnimator();
     }
 
@@ -443,7 +440,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mWebView.addJavascriptInterface(new JavaInterface(this,mWebView), "cleanPage");
+        mWebView.addJavascriptInterface(new JavaInterface(this, mWebView), "cleanPage");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -577,6 +574,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         super.onPause();
         NiuDataAPI.onPageEnd("Cell_phone_cooling_view_page", "手机降温浏览");
     }
+
     /**
      * 硬件信息
      *
@@ -680,10 +678,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             @Override
             public void onAnimationEnd(Animator animation) {
                 Bundle bundle = new Bundle();
-                bundle.putString("title",getString(R.string.tool_phone_temperature_low));
-                bundle.putString("num","");
-                bundle.putString("unit","");
-                startActivity(CleanFinish2Activity.class,bundle);
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(CleanFinish2Activity.class, bundle);
                 finish();
 //                //保存清理完成次数
 //                PreferenceUtil.saveCleanNum();

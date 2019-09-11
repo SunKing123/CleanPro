@@ -211,7 +211,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 1) {
-                mLottieHomeView.playAnimation();
+                if (mLottieHomeView != null)
+                    mLottieHomeView.playAnimation();
             }else if (msg.what == 2){
                 //清理完成
                 restoreLayout();
@@ -309,9 +310,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.view_news)
     public void ViewNewsClick() {
         //新闻点击
-//        Bundle bundle = new Bundle();
-//        bundle.putString(Constant.URL, SHOPPING_MALL);
-//        startActivity(RouteConstants.NEWS_LOAD_ACTIVITY, bundle);
         StatisticsUtils.trackClick("Headline_News_Re'dian_click", "头条新闻热点", AppHolder.getInstance().getSourcePageId(), "information_page");
         startActivity(NewsActivity.class);
     }
@@ -507,9 +505,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Subscribe
     public void cleanFinish(HomeCleanEvent homeCleanEvent) {
         if (homeCleanEvent.isNowClean()) {
-//            if (mLayoutRoot == null) return;
-//            mNestedScrollView.setVisibility(VISIBLE);
-//            mLayoutRoot.setVisibility(GONE);
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.app_name));
             bundle.putString("num", "");
@@ -527,6 +522,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 恢复布局
      */
     private void restoreLayout() {
+        if (mLayoutRoot == null) return;
         showHomeLottieView(true);
         //设置可以点击
         mLayoutRoot.setIntercept(false);
@@ -566,13 +562,10 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mButtonCleanNow.setVisibility(VISIBLE);
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
-
         setColorChange(false);
-
         //播放lottie动画
         mLottieStarView.setVisibility(VISIBLE);
         playStarAnimation();
-
         mPresenter.showOuterViewRotation(mIconOuter);
     }
 
@@ -614,7 +607,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void endScanAnimation() {
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
-
         showHomeLottieView(true);
     }
 
@@ -626,7 +618,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data.json");
         mAnimationView.playAnimation();
-
     }
 
     public LottieAnimationView getLottieView() {
@@ -740,14 +731,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-
             }
         });
     }
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-
         mWebView.loadUrl(ApiModule.Base_H5_Host);
     }
 
@@ -844,10 +833,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void clickDownload(View view, String downloadUrl, int position) {
         view.setOnClickListener(v -> {
             //广告埋点
-            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", AppHolder.getInstance().getSourcePageId()
-                    , "home_page_clean_up_page", String.valueOf(position));
-//            mPresenter.startDownload(downloadUrl);
-//            ToastUtils.showShort("已开始下载");
+            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
             Bundle bundle = new Bundle();
             bundle.putString(Constant.URL, downloadUrl);
             bundle.putBoolean(Constant.NoTitle, false);
@@ -908,7 +894,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (rotate == null) {
             mIconOuter.setAnimation(rotate);
         }
-
         mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");
         mLottieHomeView.setImageAssetsFolder("images");
