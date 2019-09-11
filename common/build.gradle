@@ -86,7 +86,7 @@ dependencies {
     api 'com.alibaba:arouter-api:1.4.1'
     annotationProcessor 'com.alibaba:arouter-compiler:latest.release'
 
-    api ('com.xiaoniu.statistic:NiuData:1.1.5.1'){changing = true}
+    api ('com.xiaoniu.statistic:NiuData:1.2.0.2'){changing = true}
     api 'com.jaredrummler:android-processes:1.1.1'
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
     api 'com.airbnb.android:lottie:2.7.0'
