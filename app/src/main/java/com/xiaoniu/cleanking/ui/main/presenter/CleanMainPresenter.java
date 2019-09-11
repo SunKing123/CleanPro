@@ -491,7 +491,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             countEntity = new CountEntity();
         }
         ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
-        valueAnimator.setDuration(2000);
+        valueAnimator.setDuration(1000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
             float animatedValue = (float) animation.getAnimatedValue();
@@ -535,8 +535,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());
-        colorAnim.setDuration(1600);
-        colorAnim.setStartDelay(500);
+        colorAnim.setDuration(1000);
+        colorAnim.setStartDelay(100);
         colorAnim.addUpdateListener(animation -> {
             if (mView == null) return;
             int animatedValue = (int) animation.getAnimatedValue();
