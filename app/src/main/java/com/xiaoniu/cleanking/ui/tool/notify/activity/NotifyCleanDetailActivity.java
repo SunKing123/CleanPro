@@ -141,7 +141,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             mCleanAnimView.startTopAnim(false);
             //title bar
             showBarColor(getResources().getColor(R.color.color_06C581));
-//            mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         });
     }
 

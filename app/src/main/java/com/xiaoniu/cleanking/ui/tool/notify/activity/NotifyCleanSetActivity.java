@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.suke.widget.SwitchButton;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.InstalledApp;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifySettingAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationSettingInfo;
@@ -128,10 +129,12 @@ public class NotifyCleanSetActivity extends BaseActivity {
                 data.appName = value.appName;
                 data.selected = actualWhitelist.contains(data.pkg);
 
-                if (data.selected) {
-                    whitelist.add(data);
-                } else {
-                    blackList.add(data);
+                if (!SpCacheConfig.APP_ID.equals(value.packageName)) {
+                    if (data.selected) {
+                        whitelist.add(data);
+                    } else {
+                        blackList.add(data);
+                    }
                 }
             }
 
