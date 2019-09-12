@@ -119,13 +119,10 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         LinearLayout.LayoutParams llp = (LinearLayout.LayoutParams) tvGab.getLayoutParams();
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int currentValue = (int) animation.getAnimatedValue();
-                llp.height = currentValue;
-                tvGab.setLayoutParams(llp);
-            }
+        anim.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            llp.height = currentValue;
+            tvGab.setLayoutParams(llp);
         });
         anim.start();
         anim.addListener(new AnimatorListenerAdapter() {
@@ -147,23 +144,20 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
     public void scanWxGabage() {
         PrefsCleanUtil.getInstance().init(mView, "xnpre", Context.MODE_APPEND);
 
-        Observable.create(new ObservableOnSubscribe<Long>() {
-            @Override
-            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
-                f = new WxQqUtil();
-                f.startScanWxGarbage(c, new WxQqUtil.a() {
-                    @Override
-                    public void changeHomeNum() {
-                        e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
-                    }
+        Observable.create((ObservableOnSubscribe<Long>) emitter -> {
+            f = new WxQqUtil();
+            f.startScanWxGarbage(c, new WxQqUtil.a() {
+                @Override
+                public void changeHomeNum() {
+                    e = WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() + WxQqUtil.e.getTotalSize();
+                }
 
-                    @Override
-                    public void wxEasyScanFinish() {
-                        emitter.onNext(10L);
-                        emitter.onComplete();
-                    }
-                });
-            }
+                @Override
+                public void wxEasyScanFinish() {
+                    emitter.onNext(10L);
+                    emitter.onComplete();
+                }
+            });
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程
@@ -183,21 +177,14 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
 
                     @Override
                     public void onComplete() {
-                        mView.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mView.getScanResult();
-                            }
-                        });
+                        mView.runOnUiThread(() -> mView.getScanResult());
                     }
                 });
 
 
-        AsyncTaskUtils.background(new Runnable() {
-            public void run() {
-                SystemClock.sleep(200);
-                b();
-            }
+        AsyncTaskUtils.background(() -> {
+            SystemClock.sleep(200);
+            b();
         });
 
 
@@ -232,9 +219,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
         CleanWxEasyInfo gabageFileInfo = WxQqUtil.d;  //垃圾文件   不含聊天记录建议清理
         CleanWxEasyInfo wxCircleInfo = WxQqUtil.g;  //朋友圈缓存
-
         CleanWxEasyInfo wxprogramInfo = WxQqUtil.f;  //微信小程序
-
         List<CleanWxItemInfo> listTemp = new ArrayList<>();
         if (isTopSelect) {
             listTemp.addAll(getAllSelectList(headCacheInfo));
@@ -244,39 +229,26 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         if (isBottomSelect) {
             listTemp.addAll(getAllSelectList(wxprogramInfo));
         }
-        //测试代码**************************************
-//        List<CleanWxItemInfo> listTempTest = new ArrayList<>();
-//        long tempSize = 0;
-//        for (int i = 0; i < listTemp.size(); i++) {
-//            if (i < 10){
-//                tempSize += listTemp.get(i).getFileSize();
-//                listTempTest.add(listTemp.get(i));
-//            }
-//        }
-//        String sst = CleanAllFileScanUtil.byte2FitSizeOne(tempSize);
         Log.e("fddf", "删除大小：" + listTemp);
         delFile(listTemp);
     }
 
     public void delFile(List<CleanWxItemInfo> list) {
         List<CleanWxItemInfo> files = list;
-        Observable.create(new ObservableOnSubscribe<Long>() {
-            @Override
-            public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
+        Observable.create((ObservableOnSubscribe<Long>) emitter -> {
 
-                for (CleanWxItemInfo appInfoBean : files) {
-                    File file = appInfoBean.getFile();
-                    Log.e("删除路劲:", "" + file.getAbsolutePath());
-                    if (null != file) {
-                        file.delete();
-                    }
+            for (CleanWxItemInfo appInfoBean : files) {
+                File file = appInfoBean.getFile();
+                Log.e("删除路劲:", "" + file.getAbsolutePath());
+                if (null != file) {
+                    file.delete();
                 }
-                long sizes = 0;
-                for (CleanWxItemInfo cleanWxItemInfo : files)
-                    sizes += cleanWxItemInfo.getFileSize();
-                emitter.onNext(sizes);
-                emitter.onComplete();
             }
+            long sizes = 0;
+            for (CleanWxItemInfo cleanWxItemInfo : files)
+                sizes += cleanWxItemInfo.getFileSize();
+            emitter.onNext(sizes);
+            emitter.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())//回调在主线程
                 .subscribeOn(Schedulers.io())//执行在io线程

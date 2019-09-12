@@ -214,7 +214,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     public void showColorChange() {
         mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         mScanTranlateColor.setEvaluator(new ArgbEvaluator());
-        mScanTranlateColor.setDuration(500);
+        mScanTranlateColor.setDuration(1000);
         mScanTranlateColor.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
             if (mView == null)
@@ -252,7 +252,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     public void showTransAnim(FrameLayout mLayoutCleanTop) {
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(mLayoutCleanTop.getMeasuredHeight(), ScreenUtils.getFullActivityHeight());
-        valueAnimator.setDuration(1500);
+        valueAnimator.setDuration(500);
         valueAnimator.setRepeatCount(0);
         valueAnimator.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
@@ -737,45 +737,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param stringRes  内容
      */
     PromptDialog dialog;
-
-//    public void showPermissionDialog(String stringRes) {
-//        if (dialog != null && dialog.isShowing())
-//            return;
-//        dialog = PromptDialog.builder(mView.getContext())
-//                .setLeftTitle("提示", R.color.color_111111, R.dimen.dimen_18sp)
-//                .setMessage(stringRes, R.color.color_262626, R.dimen.dimen_15sp)
-//                .setMessagePadding(R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp, R.dimen.dimen_16dp)
-//                .setMessageGravity(Gravity.CENTER)
-//                .setNegativeBtnStyle(R.dimen.dimen_16sp, R.color.color_FF2F31, R.color.white)
-//                .setNegativeButton("去设置", (dialog1, which) -> {
-//                    dialog1.dismiss();
-//                    if (!TextUtils.isEmpty(stringRes) && stringRes.contains("悬浮窗权限")) {
-//                        try {
-//                            mView.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + mView.getActivity().getPackageName())));
-//                        } catch (Exception e) {
-//                        }
-//                    } else {
-//                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                        intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
-//                            mView.setIsGotoSetting(true);
-//                            mView.getActivity().startActivity(intent);
-//                        }
-//                    }
-////                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
-//
-//
-//                })
-//                .setPositiveBtnStyle(R.dimen.dimen_16sp, R.color.color_AEB0B3, R.color.white)
-//                .setPositiveButton("退出", (dialog12, which) -> {
-//                    mView.getActivity().finish();
-//                    dialog12.dismiss();
-//                })
-//                .create();
-//        dialog.showShort();
-//    }
-
     AlertDialog dlg;
 
     public void showPermissionDialog(Context context) {
@@ -815,12 +776,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
                 }
             }
         });
-        btnCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                mView.getActivity().finish();
-            }
+        btnCancle.setOnClickListener(v -> {
+            dlg.dismiss();
+            mView.getActivity().finish();
         });
     }
 

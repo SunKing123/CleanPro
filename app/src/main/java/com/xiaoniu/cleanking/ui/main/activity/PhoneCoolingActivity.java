@@ -194,13 +194,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mTextTemperatureNumber.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
 
         initAdapter();
-
         mPresenter.getRunningProcess();
-
         mPresenter.getHardwareInfo(false);
-
         initCoolAnimation(phoneTemperature);
-
         initWebView();
 
         //降温
@@ -404,7 +400,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 startAnimation();
-                new Handler().postDelayed(() -> setViewFinishTrans(), 2500);
+                new Handler().postDelayed(() -> setViewFinishTrans(), 3500);
             }
         });
     }
@@ -420,7 +416,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             mLottieAnimationView.playAnimation();
         }
     }
-
 
     /**
      * 清理动画播放完成
@@ -683,26 +678,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 bundle.putString("unit", "");
                 startActivity(CleanFinish2Activity.class, bundle);
                 finish();
-//                //保存清理完成次数
-//                PreferenceUtil.saveCleanNum();
-//                mLayoutCoolView.setVisibility(GONE);
-//                mAppCoolingBarlayout.setExpanded(true);
-//                mNestedScrollView.setVisibility(VISIBLE);
-//                mRlAnim.setVisibility(GONE);
-//                mFlAnim.setVisibility(View.GONE);
-//                int bottom = mLayoutTitleBar.getBottom();
-//                mLayoutCleanFinish.setVisibility(GONE);
-//                int startHeight = ScreenUtils.getFullActivityHeight();
-//                ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
-//                anim.setDuration(500);
-//                anim.setInterpolator(new AccelerateDecelerateInterpolator());
-//                RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCleanFinish.getLayoutParams();
-//                anim.addUpdateListener(valueAnimator -> {
-//                    rlp.topMargin = (int) valueAnimator.getAnimatedValue();
-//                    if (mLayoutCleanFinish != null)
-//                        mLayoutCleanFinish.setLayoutParams(rlp);
-//                });
-//                anim.start();
             }
 
             @Override

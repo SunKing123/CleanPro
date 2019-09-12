@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -107,11 +106,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     LinearLayout lineSmed;
     ObjectAnimator objectAnimatorScanIng;
 
-    //微信文件请求编码
-    private static final int REQUEST_CODE_WX_FILE = 0x3301;
-    //微信语音请求编码
-    private static final int REQUEST_CODE_WX_AUDIO = 0x3302;
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_wxclean_home;
@@ -121,7 +115,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
-
 
     @Override
     public void initView() {
@@ -172,15 +165,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 bundle.putString("unit", "");
                 startActivity(CleanFinish2Activity.class, bundle);
                 finish();
-//                Intent intent=new Intent(WechatCleanHomeActivity.this,WechatCleanedResultActivity.class);
-//                intent.putExtra("title","微信专清");
-//                startActivity(intent);
             } else {
                 if (!tvDelete.isSelected()) return;
                 mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
                 StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
             }
-
         } else if (ids == R.id.tv_select) {
             tvSelect.setSelected(tvSelect.isSelected() ? false : true);
             getSelectCacheSize();
@@ -206,7 +195,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             startActivity(new Intent(this, WXCleanImgActivity.class));
             StatisticsUtils.trackClick("Chat_pictures_click", "聊天图片点击", "home_page", "wechat_cleaning_page");
         }
-
     }
 
     @Override
@@ -226,7 +214,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         NiuDataAPI.onPageEnd("wechat_ceaning_view_page", "微信清理页面浏览");
     }
 
-
     //获取扫描结果
     public void getScanResult() {
         setScanStatus(false);
@@ -240,15 +227,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         tvWxprogram.setText("已选" + CleanAllFileScanUtil.byte2FitSizeOne(wxprogramInfo.getTotalSize()));
         getSelectCacheSize();
 
-
-        Log.e("asdfg", "图片：" + WxQqUtil.h.getTotalSize() + "：数量：" + WxQqUtil.h.getTotalNum());
-        Log.e("asdfg", "视频：" + WxQqUtil.i.getTotalSize() + "：数量：" + WxQqUtil.i.getTotalNum());
-        Log.e("asdfg", "语音：" + WxQqUtil.k.getTotalSize() + "：数量：" + WxQqUtil.k.getTotalNum());
-        Log.e("asdfg", "文件：" + WxQqUtil.n.getTotalSize() + "：数量：" + WxQqUtil.n.getTotalNum());
-
-        Log.e("asdfg", "拍摄及保存的图片：" + WxQqUtil.l.getTotalSize() + "：数量：" + WxQqUtil.l.getTotalNum());
-        Log.e("asdfg", "拍摄以及保存的视频：" + WxQqUtil.m.getTotalSize() + "：数量：" + WxQqUtil.m.getTotalNum());
-        Log.e("asdfg", "收藏的表情：" + WxQqUtil.j.getTotalSize() + "：数量：" + WxQqUtil.j.getTotalNum());
         tvAudSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(mPresenter.getAudioSize()));
         tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(WxQqUtil.n.getTotalSize()));
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
@@ -361,8 +339,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         } else if (fileCleanSizeEvent.type == WxQqCleanEvent.WX_CLEAN_FILE) {
             tvFileSize.setText(CleanAllFileScanUtil.byte2FitSizeOne(fileCleanSizeEvent.cleanSize));
         }
-
-
     }
 
     @Override
@@ -373,6 +349,5 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
     @Override
     public void netError() {
-
     }
 }

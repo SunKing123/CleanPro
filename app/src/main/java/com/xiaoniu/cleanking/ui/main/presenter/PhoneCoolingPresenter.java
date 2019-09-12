@@ -96,8 +96,7 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
         }
         // Are we charging / is charged?
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-                status == BatteryManager.BATTERY_STATUS_FULL;
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
         mHardwareInfo.setCharge(isCharging);
         //蓝牙
         BluetoothAdapter blueadapter = BluetoothAdapter.getDefaultAdapter();

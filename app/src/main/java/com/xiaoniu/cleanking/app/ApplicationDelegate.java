@@ -70,8 +70,10 @@ public class ApplicationDelegate implements IApplicationDelegate {
     public void initNiuData(Application application) {
         //测试环境
         NiuDataAPI.init(application, new Configuration().serverUrl(AppConstants.BIGDATA_MD)
-                //.debugOn() //切换到sdk默认的测试环境地址
-                .logOpen()//打开sdk日志信息
+                //切换到sdk默认的测试环境地址
+                .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
+                //打开sdk日志信息
+                .logOpen()
                 .channel(AppUtils.getChannelId())
         );
     }

@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 //如果没有选中头条，开始10分钟记时
                 if (position == 2){
                     isSelectTop = true;
+                    hideBadgeView();
                 }else {
                     if (isSelectTop) {
                         isSelectTop = false;
@@ -240,7 +241,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 break;
         }
     }
-
 
     /**
      * 接收外部跳转参数

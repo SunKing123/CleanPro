@@ -84,7 +84,6 @@ public class JunkCleanActivity extends SimpleActivity {
             //title bar
             showBarColor(getResources().getColor(R.color.color_FD6F46));
             clearAll();
-
             StatisticsUtils.trackClick("view_spam_details_clean_click", "'清理'点击", "home_page", "");
         });
 
@@ -152,7 +151,6 @@ public class JunkCleanActivity extends SimpleActivity {
     @SuppressLint("CheckResult")
     private void clearAll() {
         Observable.create(e -> {
-
             long total = 0;
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();

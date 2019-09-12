@@ -287,10 +287,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void text_acce() {
         //一键加速
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-
         ((MainActivity) getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("once_accelerate_click", "\"一键加速\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
-
         Bundle bundle = new Bundle();
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
         startActivity(PhoneAccessActivity.class, bundle);
@@ -302,9 +300,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
         ((MainActivity) getActivity()).commitJpushClickTime(3);
         StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
-
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
-
     }
 
     @OnClick(R.id.view_news)
