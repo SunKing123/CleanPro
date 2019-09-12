@@ -157,7 +157,7 @@ public class AccessAnimView extends RelativeLayout {
         this.sizeMb = sizeMb;
         this.strGb = strGb;
         tv_size.setText(sizeMb + "");
-        tv_gb.setText("MB");
+        tv_gb.setText(strGb);
     }
 
     public void setTitleName(String name){
