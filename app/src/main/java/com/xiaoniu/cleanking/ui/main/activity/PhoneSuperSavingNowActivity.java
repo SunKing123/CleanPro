@@ -4,19 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -31,7 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.umeng.commonsdk.debug.I;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
@@ -81,7 +75,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private boolean isFinish = false;
     private int mTime = 800;
 
-    class MyHandler extends Handler {
+    private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
 
         public MyHandler(Activity con) {
@@ -186,7 +180,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             }
         });
     }
-
 
     private void playIconAnim1(final ImageView ivIcon) {
         ivIcon.setVisibility(View.VISIBLE);

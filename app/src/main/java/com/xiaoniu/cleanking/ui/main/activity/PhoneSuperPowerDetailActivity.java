@@ -32,7 +32,6 @@ import com.xiaoniu.cleanking.widget.BattaryView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
@@ -113,7 +112,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
         registerReceiver(broadcastReceiver,intentFilter);
-
     }
 
     private BroadcastReceiver broadcastReceiver= new BroadcastReceiver() {
@@ -289,9 +287,9 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     }
 
     private int num = 0;
-    MyHandler mHandler = new MyHandler(this);
+    private MyHandler mHandler = new MyHandler(this);
 
-    class MyHandler extends Handler {
+    private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
 
         public MyHandler(Activity con) {

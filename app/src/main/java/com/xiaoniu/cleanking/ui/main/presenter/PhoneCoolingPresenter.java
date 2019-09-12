@@ -9,8 +9,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
@@ -44,7 +42,6 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
     private final FileQueryUtils mFileQueryUtils;
     private final HardwareInfo mHardwareInfo;
     private final RxAppCompatActivity mRxActivity;
-    private Sensor mTempSensor;
     private Intent batteryStatus;
 
     @Inject
@@ -55,8 +52,6 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
         batteryStatus = AppApplication.getInstance().registerReceiver(null, iFilter);
         mHardwareInfo = new HardwareInfo();
     }
-
-    SensorManager mSmanager;
 
     /**
      * 获取手机温度
@@ -120,8 +115,7 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
      * @return
      */
     public boolean isGPSOPen() {
-        LocationManager locationManager
-                = (LocationManager) AppApplication.getInstance().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) AppApplication.getInstance().getSystemService(Context.LOCATION_SERVICE);
         // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
@@ -205,8 +199,4 @@ public class PhoneCoolingPresenter extends RxPresenter<PhoneCoolingActivity, Pho
 
         return arrayList;
     }
-
-
-
-
 }

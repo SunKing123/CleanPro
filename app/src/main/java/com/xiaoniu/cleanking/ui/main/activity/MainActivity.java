@@ -105,11 +105,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Inject
     NoClearSPHelper mSPHelper;
+
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
-    MyHandler mHandler = new MyHandler(this);
-
-    class MyHandler extends Handler{
+    private MyHandler mHandler = new MyHandler(this);
+    private class MyHandler extends Handler{
         WeakReference<Activity> mActivity;
         public MyHandler(Activity con){
             this.mActivity = new WeakReference<>(con);
@@ -398,7 +398,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    long firstTime;
+    private long firstTime;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -456,7 +456,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Subscribe
     public void onEventScan(ScanFileEvent scanFileEvent) {
         mPresenter.saveCacheFiles();
-
     }
 
     @Override

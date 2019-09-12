@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<FirstJunkInfo> listImage;
-
-
-
+    private ArrayList<FirstJunkInfo> listImage;
+    private onCheckListener mOnCheckListener;
 
     public void deleteData(List<FirstJunkInfo> tempList) {
-        listImage.removeAll(tempList);
-        Log.e("gfd", "删除后：" + listImage.size());
+        if (listImage != null)
+            listImage.removeAll(tempList);
         notifyDataSetChanged();
     }
 
@@ -31,13 +28,8 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
         return listImage;
     }
 
-    Activity mActivity;
-    onCheckListener mOnCheckListener;
-
-
     public PhoneAccessBelowAdapter(Activity mActivity, ArrayList<FirstJunkInfo> listImage) {
         super();
-        this.mActivity = mActivity;
         this.listImage = listImage;
     }
 
@@ -70,7 +62,6 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
         return listImage.size();
     }
 
-
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_photo_filelist_pic;
         public TextView tv_select;
@@ -85,7 +76,6 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
             tv_name = itemView.findViewById(R.id.tv_name);
         }
     }
-
 
     public interface onCheckListener {
         void onCheck(List<FirstJunkInfo> listFile, int pos);

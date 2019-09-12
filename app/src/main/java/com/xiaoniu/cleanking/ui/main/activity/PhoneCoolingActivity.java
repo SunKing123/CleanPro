@@ -159,7 +159,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     /**
      * 数字增加动画
      */
-    ValueAnimator numberAnimator;
+    private ValueAnimator numberAnimator;
 
     @Override
     protected int getLayoutId() {
@@ -183,7 +183,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             mTextTemperatureTips.setText("手机温度较高");
             mBgTitle.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
             mLayoutCoolView.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
-//            mLayoutTitleBar.setBackgroundColor(mContext.getResources().getColor(R.color.color_FD6F46));
             mImageTitle.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
             mLayoutCoolBottom.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_bg_hot));
             isOverload = true;
@@ -228,7 +227,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         initAnimator(phoneTemperature);
     }
     private static final int FirstLevel = 0xffFD6F46;
-    private static final int SecondLevel = 0xffF1D53B;
     private static final int ThirdLevel = 0xff06C581;
 
     /**
@@ -691,5 +689,4 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             }
         });
     }
-
 }

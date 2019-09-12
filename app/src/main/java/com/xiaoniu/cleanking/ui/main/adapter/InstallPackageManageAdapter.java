@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
@@ -25,7 +24,6 @@ import java.util.List;
  * Created by lang.chen on 2019/7/2
  */
 public class InstallPackageManageAdapter extends RecyclerView.Adapter {
-
 
     private List<AppInfoBean> mLists = new ArrayList<>();
 
@@ -86,7 +84,6 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
         }
     }
 
-
     public void clear() {
         mLists.clear();
     }
@@ -111,10 +108,10 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
         return mLists.size();
     }
 
-
     public interface  OnCheckListener{
         void onCheck(String id,boolean  isChecked);
     }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mImgIcon;

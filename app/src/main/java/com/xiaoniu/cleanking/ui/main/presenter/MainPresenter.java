@@ -286,7 +286,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
     }
 
-
     //音乐文件
     private Set<String> cachesMusicFiles = new HashSet<>();
     //apk文件
@@ -294,21 +293,17 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     //视频文件
     private Set<String> cachesVideo = new HashSet<>();
 
-
     /**
      * 文件缓存
      */
     public void saveCacheFiles() {
 
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                final String path = Environment.getExternalStorageDirectory().getPath();
-                //scanMusicFile(path);
-                scanAllFile(path);
-                queryAllMusic();
-                emitter.onNext("");
-            }
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
+            final String path = Environment.getExternalStorageDirectory().getPath();
+            //scanMusicFile(path);
+            scanAllFile(path);
+            queryAllMusic();
+            emitter.onNext("");
         })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -341,7 +336,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     }
 
-
     private void scanAllFile(String path) {
         File file = new File(path);
         if (file.isDirectory()) {
@@ -362,7 +356,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         }
     }
-
 
     private void queryAllMusic() {
         Cursor cursor = mActivity.getContentResolver().query(
@@ -399,7 +392,4 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 }
         }
     }
-
-
-
 }
