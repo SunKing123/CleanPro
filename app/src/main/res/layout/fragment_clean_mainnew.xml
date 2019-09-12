@@ -590,7 +590,7 @@
                     android:layout_marginLeft="@dimen/dimen_16dp"
                     android:text="更多推荐"
                     android:visibility="gone" />
-
+<!--分享图片-->
                 <ImageView
                     android:id="@+id/image_ad_bottom_first"
                     android:layout_width="match_parent"
@@ -638,7 +638,7 @@
                         android:layout_marginTop="@dimen/dimen_16dp"
                         android:text="更多推荐"
                         android:visibility="visible" />
-
+<!--QQ专清-->
                     <ImageView
                         android:id="@+id/view_qq_clean"
                         android:layout_width="match_parent"
@@ -649,7 +649,7 @@
                         android:layout_marginRight="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/image_main_qq_clean" />
-
+<!--软件管理-->
                     <ImageView
                         android:id="@+id/view_phone_thin"
                         android:layout_width="match_parent"
@@ -660,7 +660,7 @@
                         android:layout_marginRight="@dimen/dimen_16dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/image_main_thin" />
-
+<!--新闻热点-->
                     <ImageView
                         android:id="@+id/view_news"
                         android:layout_width="match_parent"
