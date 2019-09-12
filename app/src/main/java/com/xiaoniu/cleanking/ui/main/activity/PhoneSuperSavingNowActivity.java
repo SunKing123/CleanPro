@@ -68,7 +68,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     private int num;
     private TextView mTvAllNum;
-    public List<MultiItemInfo> mSelectedList;
+    private List<MultiItemInfo> mSelectedList;
     private View mLayIconAnim;
     private RoundedImageView mIvIcon1;
     private RoundedImageView mIvIcon2;

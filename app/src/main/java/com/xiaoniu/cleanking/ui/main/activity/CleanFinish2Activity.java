@@ -66,8 +66,6 @@ public class CleanFinish2Activity extends BaseActivity {
         mLlNoNet = findViewById(R.id.layout_not_net);
 
         Intent intent = getIntent();
-        //保存清理完成次数
-        PreferenceUtil.saveCleanNum();
         if (intent != null) {
             mTitle = intent.getStringExtra("title");
             String num = intent.getStringExtra("num");
@@ -151,10 +149,6 @@ public class CleanFinish2Activity extends BaseActivity {
             mLlNoNet.setVisibility(View.VISIBLE);
         }
         showNews();
-//        if (!PreferenceUtil.getClearNum() || !PreferenceUtil.getShareNum())
-//            showNews();
-//        else
-//            showWeb();
     }
     @Override
     protected void setListener() {
@@ -223,8 +217,6 @@ public class CleanFinish2Activity extends BaseActivity {
             }
         });
     }
-
-
 
     @Override
     protected void loadData() {

@@ -41,6 +41,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 超强省电 正在分析中...
+ */
 public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.OnClickListener {
 
     private XRecyclerView mRecyclerView;
@@ -109,9 +112,16 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mHandler.sendEmptyMessageDelayed(1, 5000);
         mHandler.sendEmptyMessageDelayed(2, 1000);
 
+        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+        int battery = 50;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        }
+        changePower(10);
+
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
-        registerReceiver(broadcastReceiver,intentFilter);
+//        registerReceiver(broadcastReceiver,intentFilter);
     }
 
     private BroadcastReceiver broadcastReceiver= new BroadcastReceiver() {
@@ -122,31 +132,39 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             //获取最大电量，如未获取到具体数值，则默认为100
             int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
             int power = (batteryLevel * 100 / batteryScale);
-            //显示电量
-            if (power < 10){
-                mTvAfterUpdate.setVisibility(View.GONE);
-                mLlTime.setVisibility(View.GONE);
-                mLlPowerLow.setVisibility(View.VISIBLE);
-            }else {
-                if (mPowerSavingTime < 60) {
-                    tvMini.setText(mPowerSavingTime + "");
-                    tvHour.setVisibility(View.GONE);
-                    tvUnitHour.setVisibility(View.GONE);
-                }else {
-
-                }
-                mTvAfterUpdate.setVisibility(View.VISIBLE);
-                mLlTime.setVisibility(View.VISIBLE);
-                mLlPowerLow.setVisibility(View.GONE);
-
-                int hour = 1 + new Random().nextInt(3);
-                tvHour.setText(hour + "");
-                int mini = 1 + new Random().nextInt(59);
-                tvMini.setText(mini + "");
-            }
-            mBvView.setBattaryPercent(power);
+            changePower(power);
         }
     };
+
+    /**
+     * 更新显示电量
+     * @param power
+     */
+    private void changePower(int power) {
+        //显示电量
+        if (power < 10){
+            mTvAfterUpdate.setVisibility(View.GONE);
+            mLlTime.setVisibility(View.GONE);
+            mLlPowerLow.setVisibility(View.VISIBLE);
+        }else {
+            if (mPowerSavingTime < 60) {
+                tvMini.setText(mPowerSavingTime + "");
+                tvHour.setVisibility(View.GONE);
+                tvUnitHour.setVisibility(View.GONE);
+            }else if(mPowerSavingTime < 120){
+
+            }
+            mTvAfterUpdate.setVisibility(View.VISIBLE);
+            mLlTime.setVisibility(View.VISIBLE);
+            mLlPowerLow.setVisibility(View.GONE);
+
+            int hour = 1 + new Random().nextInt(3);
+            tvHour.setText(hour + "");
+            int mini = 1 + new Random().nextInt(59);
+            tvMini.setText(mini + "");
+        }
+        mBvView.setBattaryPercent(power);
+    }
 
     @Override
     protected void setListener() {
@@ -358,7 +376,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             }
         });
     }
-
 
     /**
      * 电池动画

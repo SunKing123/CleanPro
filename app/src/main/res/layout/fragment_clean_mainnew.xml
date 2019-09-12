@@ -642,7 +642,7 @@
                     <ImageView
                         android:id="@+id/view_qq_clean"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="116dp"
                         android:layout_below="@+id/text_more_function"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
@@ -653,7 +653,7 @@
                     <ImageView
                         android:id="@+id/view_phone_thin"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="116dp"
                         android:layout_below="@+id/view_qq_clean"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
@@ -664,7 +664,7 @@
                     <ImageView
                         android:id="@+id/view_news"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="116dp"
                         android:layout_below="@+id/view_phone_thin"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="@dimen/dimen_12dp"
@@ -681,6 +681,7 @@
             android:id="@+id/fl_anim"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dimen_60dp"
             android:visibility="gone">
 
             <com.airbnb.lottie.LottieAnimationView

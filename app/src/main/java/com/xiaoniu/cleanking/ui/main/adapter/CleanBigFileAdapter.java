@@ -80,7 +80,6 @@ public class CleanBigFileAdapter extends RecyclerView.Adapter<CleanBigFileAdapte
             }else {
                 showConfirmDialog(infoEntity);
             }
-
         });
     }
 

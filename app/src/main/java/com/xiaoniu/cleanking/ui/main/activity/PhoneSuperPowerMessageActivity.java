@@ -12,7 +12,7 @@ import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
- * 超强省电通知
+ * 超强省电通知 设置
  */
 public class PhoneSuperPowerMessageActivity extends BaseActivity implements View.OnClickListener {
 

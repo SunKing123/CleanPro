@@ -24,11 +24,9 @@ import butterknife.OnClick;
  */
 public class QQCleanVideoActivity extends BaseActivity {
 
-
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
 
-    //
     private List<Fragment> mFragments = new ArrayList<>();
     private CommonFragmentPageAdapter mAdapter;
 
@@ -61,8 +59,7 @@ public class QQCleanVideoActivity extends BaseActivity {
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.img_back) {
-            StatisticsUtils.trackClick("qq_video_return_click","\"qq视频返回\"点击"
-                    ,"qq_cleaning_page","qq_video_cleaning_page");
+            StatisticsUtils.trackClick("qq_video_return_click","\"qq视频返回\"点击","qq_cleaning_page","qq_video_cleaning_page");
             finish();
         }
     }
@@ -70,8 +67,7 @@ public class QQCleanVideoActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        StatisticsUtils.trackClick("qq_video_return_click","\"qq视频返回\"点击"
-                ,"qq_cleaning_page","qq_video_cleaning_page");
+        StatisticsUtils.trackClick("qq_video_return_click","\"qq视频返回\"点击","qq_cleaning_page","qq_video_cleaning_page");
     }
 
     @Override

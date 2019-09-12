@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
@@ -17,6 +16,9 @@ import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
+/**
+ * 头条资讯适配器
+ */
 public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
@@ -29,31 +31,26 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         if (viewType == 0) {//视频
             VideoItemInfo itemInfo = (VideoItemInfo) itemData;
             JzvdStd jzvdStd = commonHolder.getView(R.id.videoplayer);
-            jzvdStd.setUp(itemInfo.url.toString(), itemInfo.title.toString(), Jzvd.SCREEN_NORMAL);
+            jzvdStd.setUp(itemInfo.url, itemInfo.title, Jzvd.SCREEN_NORMAL);
             jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageUtil.display(itemInfo.coverImage.toString(), jzvdStd.thumbImageView);
+            ImageUtil.display(itemInfo.coverImage, jzvdStd.thumbImageView);
         } else {
             final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
             ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
             ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
             ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
             if (viewType == 1) {//一张图
-                ImageUtil.display(itemInfo.miniimg.get(0).src, ((ImageView) commonHolder.getView(R.id.ivPic1)));
+                ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
             } else if (viewType == 2) {//两张图
-                ImageUtil.display(itemInfo.miniimg.get(0).src, ((ImageView) commonHolder.getView(R.id.ivPic1)));
-                ImageUtil.display(itemInfo.miniimg.get(1).src, ((ImageView) commonHolder.getView(R.id.ivPic2)));
+                ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
+                ImageUtil.display(itemInfo.miniimg.get(1).src, (commonHolder.getView(R.id.ivPic2)));
             } else if (viewType == 3) {//三张图
-                ImageUtil.display(itemInfo.miniimg.get(0).src, ((ImageView) commonHolder.getView(R.id.ivPic1)));
-                ImageUtil.display(itemInfo.miniimg.get(1).src, ((ImageView) commonHolder.getView(R.id.ivPic2)));
-                ImageUtil.display(itemInfo.miniimg.get(2).src, ((ImageView) commonHolder.getView(R.id.ivPic3)));
+                ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
+                ImageUtil.display(itemInfo.miniimg.get(1).src, (commonHolder.getView(R.id.ivPic2)));
+                ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
             }
 
-            commonHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
-                }
-            });
+            commonHolder.itemView.setOnClickListener(v -> SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name)));
         }
     }
 

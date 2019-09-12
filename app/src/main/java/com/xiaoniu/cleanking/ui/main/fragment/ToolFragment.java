@@ -84,7 +84,6 @@ public class ToolFragment extends SimpleFragment {
     @Override
     protected void initView() {
         mToolCircleProgress.startAnimProgress(34, 13700);
-        setData();
         //监听进度条进度
         mToolCircleProgress.setOnAnimProgressListener(progress -> {
             if (mTvToolPercentNum != null)
@@ -202,7 +201,6 @@ public class ToolFragment extends SimpleFragment {
         }else if (ids == R.id.ll_notification_clear){
             //超强省电
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
-
             startActivity(PhoneSuperPowerActivity.class);
             StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         }

@@ -94,16 +94,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      */
     @SuppressLint("CheckResult")
     public void startScan() {
-
         total = 0;
-
         mJunkGroups = new HashMap<>();
         mJunkResults = new HashMap<>();
-
         mFileQueryUtils = new FileQueryUtils();
-
         showColorChange();
-
         //文件加载进度回调
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
             private boolean isFirst = true;
@@ -250,7 +245,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     }
 
     public void showTransAnim(FrameLayout mLayoutCleanTop) {
-
         ValueAnimator valueAnimator = ValueAnimator.ofInt(mLayoutCleanTop.getMeasuredHeight(), ScreenUtils.getFullActivityHeight());
         valueAnimator.setDuration(500);
         valueAnimator.setRepeatCount(0);
@@ -384,7 +378,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         //第一阶段倒转
         ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(iconInner, "rotation", 0, -35f);
         rotationFistStep.setDuration(600);
-
         innerAlpha.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -408,7 +401,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             }
         });
-
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(outerY, innerY, innerAlpha, scanY, countY);
         animatorSet.start();
@@ -424,7 +416,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         rotation.setDuration(900);
         rotation2.setDuration(800);
-
         rotation3.setDuration(200);
         rotation3.setRepeatCount(-1);
         rotation4.setRepeatCount(-1);
@@ -442,9 +433,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
-//                animatorStep2.start();
-
                 startClean(iconInner,iconOuter,rotation4, rotation3, countEntity);
 
 
@@ -463,7 +451,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
         rotation.setInterpolator(new AccelerateInterpolator());
         rotation2.setInterpolator(new AccelerateInterpolator());
-
         AnimatorSet animatorStep2 = new AnimatorSet();
         animatorStep2.playSequentially(rotation, rotation3);
 
@@ -532,7 +519,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
             }
         });
-
         ValueAnimator colorAnim = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim.setEvaluator(new ArgbEvaluator());
         colorAnim.setDuration(1000);
@@ -630,7 +616,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         });
     }
 
-    //数字动画播放完后火箭上移，布局高度缩小
+    //布局高度缩小
     public void setViewTrans() {
         if (mView == null) return;
         View cleanFinish = mView.getCleanFinish();
@@ -736,12 +722,9 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      *
      * @param stringRes  内容
      */
-    PromptDialog dialog;
-    AlertDialog dlg;
+    private AlertDialog dlg;
 
     public void showPermissionDialog(Context context) {
-        if (dialog != null && dialog.isShowing())
-            return;
         dlg = new AlertDialog.Builder(context).create();
         if (((Activity) context).isFinishing()) {
             return;
@@ -763,17 +746,14 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         btnOk.setText("去设置");
         tipTxt.setText("提示!");
         content.setText("清理功能无法使用，请先开启文件读写权限。");
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
-                    mView.setIsGotoSetting(true);
-                    mView.getActivity().startActivity(intent);
-                }
+        btnOk.setOnClickListener(v -> {
+            dlg.dismiss();
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
+                mView.setIsGotoSetting(true);
+                mView.getActivity().startActivity(intent);
             }
         });
         btnCancle.setOnClickListener(v -> {
