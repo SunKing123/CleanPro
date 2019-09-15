@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +8,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
-
+import com.geek.push.GeekPush;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -32,19 +31,14 @@ import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
-
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
-import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -217,7 +211,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void commitJPushAlias(){
         if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
             return;
-        JPushInterface.setAlias(AppApplication.getInstance(),0, DeviceUtils.getUdid());
+        GeekPush.bindAlias(DeviceUtils.getUdid());
         mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {

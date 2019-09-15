@@ -1,14 +1,17 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
-
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.geek.push.GeekPush;
+import com.geek.push.core.PushConstants;
+import com.geek.push.jpush.JPushNotificationManager;
 import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -19,8 +22,6 @@ import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.NiuDataAPI;
-
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by admin on 2017/6/8.
@@ -43,9 +44,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initInjector(application);
 
         //初始化sdk
-        JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试
-        JPushInterface.init(application);
-
+        initGeekPush(application);
         if (BuildConfig.DEBUG) {
             UMConfigure.setLogEnabled(true);
             ARouter.openLog();     // Print log
@@ -65,6 +64,17 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .apiModule(new ApiModule(application))
                 .build();
         mAppComponent.inject(application);
+    }
+
+    private void initGeekPush(Application application) {
+        GeekPush.setDebug(true);
+
+        GeekPush.init(application, ((platformCode, platformName) -> {
+            boolean result = (platformCode == PushConstants.PLATFORMCODE_JPUSH);
+            return result;
+        }));
+        GeekPush.register();
+        JPushNotificationManager.customPushNotification(application,1, R.layout.layout_notivition,R.id.image,R.id.title,R.id.text, R.mipmap.applogo, R.mipmap.applogo);
     }
 
     public void initNiuData(Application application) {

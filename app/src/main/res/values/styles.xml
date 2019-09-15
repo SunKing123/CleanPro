@@ -163,5 +163,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
+    <style name="NotificationText" parent="android:TextAppearance.StatusBar.EventContent" />
+    <style name="NotificationTitle" parent="android:TextAppearance.StatusBar.EventContent.Title" />
 
 </resources>

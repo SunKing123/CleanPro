@@ -3,6 +3,74 @@
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true"></application>
+        android:supportsRtl="true">
+
+        <!-- ############################################geek push sdk start################################################-->
+        <!--极光推送静态注册-->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="geek_push" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="819597e28ecddae10e2297ad" />
+
+        <!--###########################厂商平台key开始#############################-->
+        <!-- 小米开始-->
+        <meta-data
+            android:name="XIAOMI_APPKEY"
+            android:value="MI-5951800646420" />
+        <meta-data
+            android:name="XIAOMI_APPID"
+            android:value="MI-2882303761518006420" />
+        <!-- 小米结束-->
+
+        <!-- huawei start-->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="100798549"></meta-data>
+        <!-- huawei end-->
+
+        <!--meizu start-->
+        <meta-data
+            android:name="MEIZU_APPKEY"
+            android:value="MZ-7ca27725fb1a49879c34e2e392fff047" />
+        <meta-data
+            android:name="MEIZU_APPID"
+            android:value="MZ-120651" />
+        <!--meizhu end-->
+
+        <!--oppo start-->
+        <meta-data
+            android:name="OPPO_APPKEY"
+            android:value="OP-您的应用对应的OPPO的APPKEY" />
+        <meta-data
+            android:name="OPPO_APPID"
+            android:value="OP-您的应用对应的OPPO的APPID" />
+        <meta-data
+            android:name="OPPO_APPSECRET"
+            android:value="OP-您的应用对应的OPPO的APPSECRET" />
+        <!--oppo end-->
+
+        <!--vivo start-->
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="您的应用对应的VIVO的APPKEY" />
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="您的应用对应的VIVO的APPID" />
+        <!--vivo end-->
+        <!--###########################厂商平台key结束################################-->
+
+        <!--添加支持push-getui库-->
+        <!--<meta-data-->
+        <!--android:name="Geek_GeTui_105"-->
+        <!--android:value="com.geek.push.getui.GeTuiPushClient"/>-->
+
+        <!--添加支持push-jpush库-->
+        <meta-data
+            android:name="Geek_JPush_106"
+            android:value="com.geek.push.jpush.JPushClient" />
+        <!--########################################################geek push sdk end###################################################-->
+    </application>
 
 </manifest>
