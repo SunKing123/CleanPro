@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -133,8 +134,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        StatisticsUtils.trackClick("cell_phone_slimming_return_click","\"手机瘦身返回\"点击"
-                ,"clean_up_toolbox_page","cell_phone_slimming_page");
+        StatisticsUtils.trackClick("cell_phone_slimming_return_click","\"手机瘦身返回\"点击"  ,"clean_up_toolbox_page","cell_phone_slimming_page");
     }
 
 
@@ -200,6 +200,10 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
             }
         });
     }
-
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == event.KEYCODE_BACK)
+            StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
+        return super.onKeyDown(keyCode, event);
+    }
 }

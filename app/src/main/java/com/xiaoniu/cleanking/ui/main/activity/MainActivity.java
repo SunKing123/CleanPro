@@ -213,11 +213,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             System.out.println("");
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
-                        REQUEST_STORAGE_PERMISSION);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, REQUEST_STORAGE_PERMISSION);
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS},
-                        REQUEST_STORAGE_PERMISSION);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, REQUEST_STORAGE_PERMISSION);
             }
         }
     }
@@ -384,7 +382,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onCreate(savedInstanceState);
         //注册订阅者
         EventBus.getDefault().register(this);
-//        AppConfig.showDebugWindow(this);
     }
 
     @Override
@@ -432,6 +429,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
             }
         }
+        StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
 
@@ -496,12 +494,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 R.mipmap.applogo,
                 new ForegroundNotification(
                         //定义前台服务的通知点击事件
-                        new ForegroundNotificationClickListener() {
-                            @Override
-                            public void foregroundNotificationClick(Context context, Intent intent) {
-                                Log.d("JOB-->", " foregroundNotificationClick");
-                            }
-                        })
+                        (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
         );
     }
 }

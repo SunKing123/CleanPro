@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -64,7 +65,7 @@ public class NewsFragment extends BaseFragment {
 
     @Override
     protected void initVariable(Bundle arguments) {
-        mFragments = new ArrayList<Fragment>();
+        mFragments = new ArrayList<>();
         if (arguments != null) {
             mType = arguments.getString(KEY_TYPE);
         }
@@ -184,9 +185,15 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onTabChange(View tabView, int position, float selectPercent) {
-
             }
         });
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            mTabIndicator.setCurrentTab(0);
+        }
+    }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/small_window_layout"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/half_hide_small_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/c_buoycircle_icon_normal" />
+
+
+    <ImageView
+        android:id="@+id/small_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/c_buoycircle_icon_normal" />
+
+</LinearLayout>

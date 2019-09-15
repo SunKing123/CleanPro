@@ -13,6 +13,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,7 +61,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     private SuperPowerCleanAdapter mPowerCleanAdapter;
     private int mSelectedCount;
-    private int mPowerSavingTime;
+    private int mPowerSavingTime = 1 + new Random().nextInt(59);
 
     public static List<MultiItemInfo> sSelectedList;
     private TextView tvHour;
@@ -117,7 +118,9 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-        changePower(10);
+
+        Log.v("rg","" + battery);
+        changePower(50);
 
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
@@ -142,21 +145,21 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
      */
     private void changePower(int power) {
         //显示电量
-        if (power < 10){
+        if (power < 11){
             mTvAfterUpdate.setVisibility(View.GONE);
             mLlTime.setVisibility(View.GONE);
             mLlPowerLow.setVisibility(View.VISIBLE);
         }else {
             if (mPowerSavingTime < 60) {
-                tvMini.setText(mPowerSavingTime + "");
+                tvMini.setText(String.valueOf(mPowerSavingTime));
                 tvHour.setVisibility(View.GONE);
                 tvUnitHour.setVisibility(View.GONE);
             } else {
                 mTvAfterUpdate.setVisibility(View.VISIBLE);
                 mLlTime.setVisibility(View.VISIBLE);
                 mLlPowerLow.setVisibility(View.GONE);
-                tvHour.setText(String.valueOf((int) Math.floor(power / 60)));
-                tvMini.setText(String.valueOf(power % 60));
+                tvHour.setText(String.valueOf((int) Math.floor(mPowerSavingTime / 60)));
+                tvMini.setText(String.valueOf(mPowerSavingTime % 60));
             }
         }
         mBvView.setBattaryPercent(power);

@@ -93,7 +93,7 @@ dependencies {
     api 'com.just.agentweb:agentweb:4.0.3-beta' // (必选)
     api 'se.emilsjolander:stickylistheaders:2.5.2'
 
-    api project(path: ':takephoto_library')
-    api project(':imagepicker')
-    api project(':videoplayer')
+    api project(path: ':otherlib:takephoto_library')
+    api project(':otherlib:imagepicker')
+    api project(':otherlib:videoplayer')
 }

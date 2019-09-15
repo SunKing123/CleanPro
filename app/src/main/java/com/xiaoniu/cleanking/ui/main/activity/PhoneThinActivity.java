@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +23,8 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneThinPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -236,5 +239,11 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                 finish();
             });
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == event.KEYCODE_BACK)
+            StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
+        return super.onKeyDown(keyCode, event);
     }
 }
