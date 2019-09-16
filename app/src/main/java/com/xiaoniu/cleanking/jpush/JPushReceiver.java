@@ -8,11 +8,8 @@ import com.geek.push.entity.PushMsg;
 import com.geek.push.log.LogUtils;
 import com.geek.push.receiver.BasePushReceiver;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
-
+import com.xiaoniu.common.utils.StatisticsUtils;
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class JPushReceiver extends BasePushReceiver {
     public static final String LOG_LINE = "-------%s-------";
@@ -23,22 +20,14 @@ public class JPushReceiver extends BasePushReceiver {
     public void onReceiveNotificationClick(Context context, PushMsg msg) {
         LogUtils.i(TAG, "onReceiveNotificationClick: " + msg.toString());
         EventBus.getDefault().post(new PushEvent("NotificationClick", msg));
-        String extras = msg.getExtraMsg();
-        String url = null;
-        //TODO 需要核实一下
         if (msg.getKeyValue() != null && !msg.getKeyValue().isEmpty()) {
-            url = msg.getKeyValue().toString();
-        }
-        if (!TextUtils.isEmpty(extras)) {
-            try {
-                JSONObject extraJson = new JSONObject(extras);
-                url = extraJson.getString("url");
-               
-            } catch (JSONException e) {
+            for (String key : msg.getKeyValue().keySet()) {
+                String url = msg.getKeyValue().get("url");
+                if (!TextUtils.isEmpty(url)) {
+                    StatisticsUtils.trackClickJPush("", "\"推送消息点击\"时", "", "",url,msg.getNotifyId(),msg.getTitle());
+                    SchemeProxy.openScheme(context, url);
+                }
             }
-        }
-        if (!TextUtils.isEmpty(url)) {
-            SchemeProxy.openScheme(context, url);
         }
     }
 

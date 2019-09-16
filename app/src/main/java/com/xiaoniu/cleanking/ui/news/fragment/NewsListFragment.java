@@ -103,7 +103,7 @@ public class NewsListFragment extends BaseFragment {
         mPullRefreshLayout.autoRefresh(0);
     }
 
-    private void startLoadData() {
+    public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
             mPullRefreshLayout.finishRefresh();
             mLlNoNet.setVisibility(View.VISIBLE);
@@ -204,6 +204,4 @@ public class NewsListFragment extends BaseFragment {
             }
         });
     }
-
-
 }

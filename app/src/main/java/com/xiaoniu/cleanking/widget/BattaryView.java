@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -9,10 +10,8 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.xiaoniu.cleanking.R;
 
 
@@ -87,7 +86,6 @@ public class BattaryView extends View {
         setMeasuredDimension(width, height);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -97,14 +95,10 @@ public class BattaryView extends View {
         int imgH = getHeight() - getPaddingTop() - getPaddingBottom();
         int imgW = (getWidth() < getHeight() / 2) ? (getWidth() - getPaddingLeft() - getPaddingRight()) : getHeight() / 2;
         //根据电量百分比得到的矩形,top和bottom先占位，等一下再重新赋值，也可以new RectF()里面空参，四个属性挨个设置
-        RectF rectF = new RectF(
-                (float) getPaddingLeft(),
-                0,
-                (float) getPaddingLeft() + imgW,
-                0);
+        @SuppressLint("DrawAllocation")
+        RectF rectF = new RectF((float) getPaddingLeft(), 0, (float) getPaddingLeft() + imgW, 0);
         float spaceTop = (getHeight() - imgH) / 2 + getPaddingTop();
-        rectF.top = spaceTop + (1.0f - battaryPercent * 1.0f / 100) * imgH;
-        rectF.bottom = getHeight() - spaceTop;
+
         //上面这三行其实有电多余，由于刚开始是想设置at most时的状况的，后来发现太麻烦，急着用就先这样了。
 
         int layerId = canvas.saveLayer(0, 0, canvas.getWidth(), canvas.getHeight(), null, Canvas.ALL_SAVE_FLAG);
@@ -112,20 +106,23 @@ public class BattaryView extends View {
         int w1 = imgW / 3;//电池凸点的宽度
         //绘制背景
         mPaint.setColor(Color.argb(77, 255, 255, 255));
+        rectF.top = spaceTop + (1.0f - battaryPercent * 1.0f / 100) * imgH;
+        rectF.bottom = getHeight() - spaceTop;
 
-        rectF.top = h1 + getPaddingTop();
-        rectF.bottom = getHeight() - getPaddingBottom();
-        canvas.drawRoundRect(rectF,round,round,mPaint);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            canvas.drawRoundRect(rectF.left,h1 + getPaddingTop(),rectF.right,getHeight() - getPaddingBottom(),round,round,mPaint);
+        }
         canvas.drawRect(getPaddingLeft() + w1,getPaddingTop(),rectF.right - w1,h1 + getPaddingTop(),mPaint);
         //绘制有电部分
         canvas.save();
         canvas.clipRect(rectF);
         mPaint.setColor(color);
-        canvas.drawRoundRect(rectF, round, round, mPaint);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            canvas.drawRoundRect(rectF.left, getPaddingTop() + h1, rectF.right, rectF.bottom, round, round, mPaint);
+        }
+
         canvas.drawRect(rectF.left + w1, rectF.top, rectF.right - w1, getPaddingTop() + h1 + h1 / 10, mPaint);
         canvas.restore();
         canvas.restoreToCount(layerId);
-
     }
-
 }

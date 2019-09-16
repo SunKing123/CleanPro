@@ -32,11 +32,11 @@
     <TextView
         android:background="@drawable/notivittion_btn_bg"
         android:layout_width="60dp"
+        android:layout_height="26dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:text="查看"
         android:textColor="@color/white"
         android:gravity="center"
-        android:layout_margin="@dimen/dimen_12dp"
-        android:layout_height="26dp"/>
+        android:layout_margin="@dimen/dimen_12dp"/>
 </RelativeLayout>

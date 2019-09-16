@@ -33,7 +33,7 @@ public class NewsFragment extends BaseFragment {
     private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.VIDEO, NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
     private ViewPager mViewPager;
     private ViewPagerIndicator mTabIndicator;
-    private ArrayList<Fragment> mFragments;
+    private ArrayList<NewsListFragment> mFragments;
     private ImageView mIvBack;
     private String mType = "white";
     private FrameLayout mFLTopNav;
@@ -194,6 +194,7 @@ public class NewsFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (!hidden){
             mTabIndicator.setCurrentTab(0);
+            mFragments.get(0).startLoadData();
         }
     }
 }
