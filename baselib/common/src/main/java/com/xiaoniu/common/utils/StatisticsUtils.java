@@ -178,7 +178,7 @@ public class StatisticsUtils {
             push_type = "clean_up_immediately";
         }else if (url.contains("main.activity.PhoneAccessActivity")){
             //  一键加速页面
-            push_type = "mobile phone_boost";
+            push_type = "mobile_phone_boost";
         }else if (url.contains("main.activity.CleanBigFileActivity")){
             //  手机清理页面
             push_type = "mobile_phone _cleaning";
@@ -204,6 +204,67 @@ public class StatisticsUtils {
             extension.put("push_title", title);
             extension.put("push_type", push_type);
             extension.put("target_page_id", url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+    }
+
+    /**
+     * 资讯埋点
+     * @param eventCode
+     * @param eventName
+     * @param sourcePage
+     * @param currentPage
+     * @param id
+     */
+    public static void trackClickNewsTab(String eventCode, String eventName, String sourcePage, String currentPage, int id) {
+        String push_type = "";
+        if (id == 0){
+            //头条
+            push_type = "headlines";
+        }else  if (id == 1){
+            //视频
+            push_type = "video";
+        }else  if (id == 2){
+            //  社会
+            push_type = "society";
+        }else  if (id == 3){
+            //  国内
+            push_type = "domestic";
+        }else  if (id == 4){
+            //  国际
+            push_type = "lnternational";
+        }else  if (id == 5){
+            //  娱乐
+            push_type = "entertainment";
+        }
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("content_cate_id", String.valueOf(id));
+            extension.put("content_cate_name", push_type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+    }
+
+    /**
+     *  资讯内 item 埋点
+     * @param eventCode
+     * @param eventName
+     * @param sourcePage
+     * @param currentPage
+     * @param newsName
+     * @param newsId
+     * @param position
+     */
+    public static void trackClickNewsItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName,int newsId, int position) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("content_id", String.valueOf(newsId));
+            extension.put("content_title", newsName);
+            extension.put("position_id", String.valueOf(position));
         } catch (Exception e) {
             e.printStackTrace();
         }

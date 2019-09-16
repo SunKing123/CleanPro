@@ -6,8 +6,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.viewpagerindicator.IScrollBar;
 import com.xiaoniu.common.widget.viewpagerindicator.IndicatorAdapter;
 import com.xiaoniu.common.widget.viewpagerindicator.LineScrollBar;
@@ -185,6 +189,8 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onTabChange(View tabView, int position, float selectPercent) {
+                StatisticsUtils.trackClickNewsTab("click", "“分类”点击时", "selected_page", "information_page",position);
+                mFragments.get(position).getNewsAdapter().setType(mNewTypes[position]);
             }
         });
     }
@@ -195,6 +201,7 @@ public class NewsFragment extends BaseFragment {
         if (!hidden){
             mTabIndicator.setCurrentTab(0);
             mFragments.get(0).startLoadData();
+            StatisticsUtils.trackClickNewsTab("click", "“分类”点击时", "selected_page", "information_page",0);
         }
     }
 }

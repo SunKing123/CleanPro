@@ -38,6 +38,10 @@ public class NewsListFragment extends BaseFragment {
     private static final int PAGE_NUM = 20;//每一页数据
     private boolean mIsRefresh = true;
 
+    public NewsListAdapter getNewsAdapter() {
+        return mNewsAdapter;
+    }
+
     public static NewsListFragment getInstance(NewsType type) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(KEY_TYPE, type);
@@ -56,6 +60,7 @@ public class NewsListFragment extends BaseFragment {
         mNewsAdapter = new NewsListAdapter(getContext());
         if (arguments != null) {
             mType = (NewsType) arguments.getSerializable(KEY_TYPE);
+
         }
         setSupportLazy(true);
     }
@@ -66,6 +71,7 @@ public class NewsListFragment extends BaseFragment {
         mLlNoNet = contentView.findViewById(R.id.layout_not_net);
         mRecyclerView = contentView.findViewById(R.id.recyclerView);
         mRecyclerView.setAdapter(mNewsAdapter);
+
     }
 
     @Override

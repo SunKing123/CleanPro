@@ -7,9 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.common.base.SimpleWebActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
@@ -23,7 +25,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
     }
-
+    private NewsType mType;
     @Override
     public void convert(RecyclerView.ViewHolder holder, Object itemData, int position) {
         CommonViewHolder commonHolder = (CommonViewHolder) holder;
@@ -50,13 +52,26 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
             }
 
-            commonHolder.itemView.setOnClickListener(v -> SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name)));
+            commonHolder.itemView.setOnClickListener(v -> {
+
+                SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
+                //埋点
+                if (mType == null || position > 10)
+                    return;
+                StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page",mType.getName(),mType.getIndex(),position);
+
+                    }
+            );
         }
     }
 
     @Override
     public RecyclerView.ViewHolder attachToViewHolder(int viewType, View itemView) {
         return new CommonViewHolder(itemView);
+    }
+
+    public void setType(NewsType type) {
+        mType = type;
     }
 
     public static class NewsItemTypeSupport implements MultiItemTypeSupport<Object> {
