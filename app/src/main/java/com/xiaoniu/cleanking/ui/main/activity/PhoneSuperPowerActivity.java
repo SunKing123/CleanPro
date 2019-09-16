@@ -24,7 +24,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     private TextView mTvClean;
     private boolean isClick = false;
     private boolean isDoubleBack = false;
-
+    private AlertDialog mAlertDialog = null;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_super_power;
@@ -52,17 +52,17 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         });
     }
 
-    public AlertDialog showPermissionDialog() {
-        final AlertDialog dlg = new AlertDialog.Builder(this).create();
+    public void showPermissionDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
         if (isFinishing()) {
-            return dlg;
+            return;
         }
-        dlg.setCancelable(true);
-        dlg.setCanceledOnTouchOutside(false);
-        dlg.show();
-        Window window = dlg.getWindow();
+        mAlertDialog.setCancelable(true);
+        mAlertDialog.setCanceledOnTouchOutside(false);
+        mAlertDialog.show();
+        Window window = mAlertDialog.getWindow();
         window.setContentView(R.layout.alite_power_saving_permission_dialog);
-        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        WindowManager.LayoutParams lp = mAlertDialog.getWindow().getAttributes();
         //这里设置居中
         lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
@@ -77,10 +77,9 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
             startActivity(PhonePremisActivity.class);
         });
 
-        dlg.setOnDismissListener(dialog -> {
+        mAlertDialog.setOnDismissListener(dialog -> {
             finish();
         });
-        return dlg;
     }
 
     public  boolean isUsageAccessAllowed() {
@@ -102,6 +101,8 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         super.onResume();
         if (isClick) {
             if (isUsageAccessAllowed()) {
+                if (mAlertDialog != null)
+                    mAlertDialog.cancel();
                 startActivity(PhoneSuperPowerDetailActivity.class);
             }else {
                 ToastUtils.showShort(getString(R.string.tool_get_premis));

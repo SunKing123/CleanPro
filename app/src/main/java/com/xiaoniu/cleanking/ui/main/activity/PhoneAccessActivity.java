@@ -375,6 +375,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         NiuDataAPI.onPageStart("once_accelerate_view_page", "一键清理页面浏览");
         if (isClick) {
             if (isUsageAccessAllowed()) {
+                if (mAlertDialog != null)
+                    mAlertDialog.cancel();
                 startCleanAnim();
             } else {
                 ToastUtils.showShort(getString(R.string.tool_get_premis));
