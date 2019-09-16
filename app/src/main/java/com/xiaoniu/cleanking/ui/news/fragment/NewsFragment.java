@@ -189,6 +189,7 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onTabChange(View tabView, int position, float selectPercent) {
+                Log.d("test", "onTabChange: ");
                 StatisticsUtils.trackClickNewsTab("click", "“分类”点击时", "selected_page", "information_page",position);
                 if (mFragments.get(position).getNewsAdapter() == null) return;
                 mFragments.get(position).getNewsAdapter().setType(mNewTypes[position]);
@@ -201,7 +202,6 @@ public class NewsFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (!hidden){
             StatisticsUtils.trackClick("information_page_view_page", "信息页面浏览", "selected_page", "information_page");
-
             mTabIndicator.setCurrentTab(0);
             mFragments.get(0).startLoadData();
             StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击时", "selected_page", "information_page",0);

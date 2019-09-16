@@ -247,9 +247,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         iv_back.setOnClickListener(v -> {
-            StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
-            if (!keyBack())
+            if (!keyBack(true)) {
+                StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
                 finish();
+            }
         });
 
         tv_delete.setOnClickListener(v -> {
@@ -364,14 +365,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
         }
-
         StatisticsUtils.trackClick("cleaning_click", "清理点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        StatisticsUtils.trackClick("one_click_acceleration_page_view_page", "一键加速页浏览", "selected_page", "information_page");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
             isFromProtect = false;
@@ -628,19 +628,27 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-           return keyBack();
-//            if (mWebView.getVisibility() == View.VISIBLE && mWebView.canGoBack()) {
-//                mWebView.goBack();
-//                return true;
-//            }
+           if(keyBack(false))
+               return true;
+           else
+               StatisticsUtils.trackClick("system_return_back", "”手机返回“点击", "home_page", "one_click_acceleration_page");
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private boolean keyBack() {
+    /**
+     * 返回事件
+     * @param isClick  true是点击的返回按钮 false是手机返回键
+     * @return
+     */
+    private boolean keyBack(boolean isClick) {
         if (isShowListInfo){
             isShowListInfo = false;
             acceview.setVisibility(View.VISIBLE);
+            if (isClick)
+                StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "accelerate_access_to_details_page");
+            else
+                StatisticsUtils.trackClick("system_return_back", "”手机返回“点击", "home_page", "one_click_acceleration_page");
             return true;
         }
         return false;
