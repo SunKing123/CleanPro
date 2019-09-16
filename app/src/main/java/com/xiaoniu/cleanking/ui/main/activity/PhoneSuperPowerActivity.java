@@ -33,10 +33,6 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isUsageAccessAllowed()) {
-            startActivity(PhoneSuperPowerDetailActivity.class);
-            finish();
-        }
     }
 
     @Override
@@ -104,10 +100,18 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
                 if (mAlertDialog != null)
                     mAlertDialog.cancel();
                 startActivity(PhoneSuperPowerDetailActivity.class);
+                finish();
             }else {
                 ToastUtils.showShort(getString(R.string.tool_get_premis));
                 if (isDoubleBack) finish();
                 isDoubleBack = true;
+            }
+        }else {
+            if (isUsageAccessAllowed()) {
+                if (mAlertDialog != null)
+                    mAlertDialog.cancel();
+                startActivity(PhoneSuperPowerDetailActivity.class);
+                finish();
             }
         }
         isClick = false;

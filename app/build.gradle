@@ -25,35 +25,6 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
-//        jackOptions {
-//            enabled true
-//        }
-        manifestPlaceholders = [
-                JPUSH_PKGNAME   : applicationId,
-                JPUSH_APPKEY    : "5940583db540b22151acae60", //JPush上注册的包名对应的appkey.
-                JPUSH_CHANNEL   : "developer-default", //暂时填写默认值即可
-
-                HUAWEI_APPID    : "100029963",
-                XIAOMI_APPKEY   : "MI-5241758937311", // ⼩⽶平台注册的appkey
-                XIAOMI_APPID    : "MI-2882303761517589311", // ⼩⽶平台注册的appid
-                MEIZU_APPKEY    : "MZ-1319521180634776a323d302cba9ba82", // 魅族平台注册的 appkey
-                MEIZU_APPID     : "MZ-111240", // 魅族平台注册的 appid
-
-                GETUI_APP_ID    : "D9cNgEgOC69KFshbLS4s",
-                GETUI_APP_KEY   : "kES2hIyBOZ62a4wQfLPSu6",
-                GETUI_APP_SECRET: "TzoAsGz2Xv9ZbZNTR9eOtA",
-
-                XIAOMI_APP_ID   : "2882303761517750948",
-                XIAOMI_APP_KEY  : "5931775068948",
-
-                MEIZU_APP_ID    : "116004",
-                MEIZU_APP_KEY   : "279a8681254344b385ff0750d9b03c60",
-
-                HUAWEI_APP_ID   : "100238893",
-
-                OPPO_APP_KEY    : "1pb7gJg3D44Ggg0Okcwc88CSS",
-                OPPO_APP_SECRET : "bB01fF468da095Ed4908387bc5d81dac"
-        ]
 
     }
 

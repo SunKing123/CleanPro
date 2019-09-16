@@ -129,6 +129,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     private AlertDialog mAlertDialog = null;
     private String strNum;
     private String strUnit;
+    private boolean isShowListInfo = false;
 
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
@@ -214,6 +215,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
+        StatisticsUtils.trackClick("one_click_acceleration_page_view_page ", "一键加速页浏览", "", "one_click_acceleration_page");
+
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -244,8 +247,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         iv_back.setOnClickListener(v -> {
-            finish();
             StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "返回按钮", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
+            if (!keyBack())
+                finish();
         });
 
         tv_delete.setOnClickListener(v -> {
@@ -258,6 +262,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             startClean(false);
         });
         mLineAccess.setOnClickListener(view -> {
+            isShowListInfo = true;
             acceview.setVisibility(View.GONE);
         });
         icon_more.setOnClickListener(v -> mPresenter.showPopupWindow(icon_more));
@@ -623,12 +628,22 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mWebView.getVisibility() == View.VISIBLE && mWebView.canGoBack()) {
-                mWebView.goBack();
-                return true;
-            }
+           return keyBack();
+//            if (mWebView.getVisibility() == View.VISIBLE && mWebView.canGoBack()) {
+//                mWebView.goBack();
+//                return true;
+//            }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean keyBack() {
+        if (isShowListInfo){
+            isShowListInfo = false;
+            acceview.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
     }
 
     @Override

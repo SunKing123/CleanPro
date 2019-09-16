@@ -111,8 +111,10 @@ public class NewsListFragment extends BaseFragment {
 
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
-            mPullRefreshLayout.finishRefresh();
-            mLlNoNet.setVisibility(View.VISIBLE);
+            if (mPullRefreshLayout != null)
+                mPullRefreshLayout.finishRefresh();
+            if (mLlNoNet != null)
+                mLlNoNet.setVisibility(View.VISIBLE);
             return;
         }
 
