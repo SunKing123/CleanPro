@@ -54,10 +54,10 @@
         <!--vivo start-->
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="您的应用对应的VIVO的APPKEY" />
+            android:value="031981ca-ef35-4cd3-a24d-6e46183de8f7" />
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="您的应用对应的VIVO的APPID" />
+            android:value="15374" />
         <!--vivo end-->
         <!--###########################厂商平台key结束################################-->
 
