@@ -511,3 +511,53 @@
 -keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(...);
 }
+
+
+#########################geek push混淆开始########################
+#极客
+-dontwarn com.geek.push.**
+-keep class com.geek.push.**{*;}
+
+#极光推送
+-dontoptimize
+-dontpreverify
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+-keep class * extends cn.jpush.android.helpers.JPushMessageReceiver { *; }
+
+-dontwarn cn.jpush.android.**
+-keep class cn.jpush.android.** { *; }
+
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
+
+#小米
+-dontwarn com.xiaomi.push.**
+-keep class com.xiaomi.push.**{*;}
+
+#华为
+-keep class com.huawei.hms.**{*;}
+-dontwarn com.huawei.**
+-keep public class * extends android.app.Activity
+-keep interface com.huawei.android.hms.agent.common.INoProguard {*;}
+-keep class * extends com.huawei.android.hms.agent.common.INoProguard {*;}
+
+#OPPO
+-dontwarn com.coloros.mcsdk.**
+-keep class com.coloros.mcsdk.** { *; }
+
+#VIVO
+-dontwarn com.vivo.push.**
+-keep class com.vivo.push.**{*; }
+-keep class com.vivo.vms.**{*; }
+
+#MEIZU
+-dontwarn com.meizu.cloud.**
+-keep class com.meizu.cloud.** { *; }
+
+# gson sdk 混淆开始
+-dontwarn com.google.gson.**
+-keep public class com.google.gson.**{*;}
+# gson sdk 混淆结束
+#########################geek push混淆开始########################

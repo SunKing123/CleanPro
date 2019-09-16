@@ -166,7 +166,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                     tvHour.setVisibility(View.GONE);
                     tvUnitHour.setVisibility(View.GONE);
                 }
-                tvMini.setText(String.valueOf(mPowerSavingTime % 60));
+                if(mPowerSavingTime % 60 == 0){
+                    int mini = 1 + new Random().nextInt(59);
+                    tvMini.setText(String.valueOf(mini));
+                }else {
+                    tvMini.setText(String.valueOf(mPowerSavingTime % 60));
+                }
             }
         }
         mBvView.setBattaryPercent(power);

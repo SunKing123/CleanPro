@@ -67,7 +67,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
     private void initGeekPush(Application application) {
-        GeekPush.setDebug(true);
+        GeekPush.setDebug(false);
 
         GeekPush.init(application, ((platformCode, platformName) -> {
             boolean result = (platformCode == PushConstants.PLATFORMCODE_JPUSH);
