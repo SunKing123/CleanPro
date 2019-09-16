@@ -124,7 +124,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
-//        registerReceiver(broadcastReceiver,intentFilter);
+        registerReceiver(broadcastReceiver,intentFilter);
     }
 
     private BroadcastReceiver broadcastReceiver= new BroadcastReceiver() {
@@ -150,7 +150,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             mLlTime.setVisibility(View.GONE);
             mLlPowerLow.setVisibility(View.VISIBLE);
         }else {
-            if (mPowerSavingTime < 60) {
+            if (mPowerSavingTime < 10) {
                 tvMini.setText(String.valueOf(mPowerSavingTime));
                 tvHour.setVisibility(View.GONE);
                 tvUnitHour.setVisibility(View.GONE);

@@ -187,7 +187,7 @@ public class StatisticsUtils {
             push_type = "file_cleanup";
         }else if (url.contains("tool.wechat.activity.WechatCleanHomeActivity")){
             //  微信专清页面
-            push_type = "";
+            push_type = "wechat_cleaning";
         }else if (url.contains("tool.qq.activity.QQCleanHomeActivity")){
             //  QQ专清页面
             push_type = "QQ_cleaning";

@@ -114,6 +114,7 @@ public class SchemeUtils {
             intent.putExtras(extras);
         }
         if (ActivityUtils.queryActivityIntent(context, intent)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (requestCode >= 0) {
                 if (fragment != null) {
                     fragment.startActivityForResult(intent, requestCode);
