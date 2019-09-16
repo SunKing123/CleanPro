@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
@@ -25,7 +26,9 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
     }
+
     private NewsType mType;
+
     @Override
     public void convert(RecyclerView.ViewHolder holder, Object itemData, int position) {
         CommonViewHolder commonHolder = (CommonViewHolder) holder;
@@ -53,13 +56,11 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             }
 
             commonHolder.itemView.setOnClickListener(v -> {
-
-                SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
-                //埋点
-                if (mType == null || position > 10)
-                    return;
-                StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page",mType.getName(),mType.getIndex(),position);
-
+                        SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
+                        //埋点
+                        if (mType == null || position > 10)
+                            return;
+                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.topic, itemInfo.rowkey, position);
                     }
             );
         }

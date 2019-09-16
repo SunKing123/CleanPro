@@ -259,10 +259,10 @@ public class StatisticsUtils {
      * @param newsId
      * @param position
      */
-    public static void trackClickNewsItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName,int newsId, int position) {
+    public static void trackClickNewsItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName,String newsId, int position) {
         JSONObject extension = new JSONObject();
         try {
-            extension.put("content_id", String.valueOf(newsId));
+            extension.put("content_id", newsId);
             extension.put("content_title", newsName);
             extension.put("position_id", String.valueOf(position));
         } catch (Exception e) {

@@ -51,7 +51,7 @@ public class PreferenceUtil {
      */
     public static boolean getShareNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > 3)
+        if (sharedPreferences.getInt(SpCacheConfig.SHARE_NUM,0) > -1)
             return false;
         return true;
     }
@@ -74,7 +74,7 @@ public class PreferenceUtil {
      */
     public static boolean getClearNum(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getInt(SpCacheConfig.CLEAR_NUM,0) > 20)
+        if (sharedPreferences.getInt(SpCacheConfig.CLEAR_NUM,0) > -1)
             return false;
         return true;
     }

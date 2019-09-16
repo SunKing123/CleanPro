@@ -190,6 +190,7 @@ public class NewsFragment extends BaseFragment {
             @Override
             public void onTabChange(View tabView, int position, float selectPercent) {
                 StatisticsUtils.trackClickNewsTab("click", "“分类”点击时", "selected_page", "information_page",position);
+                if (mFragments.get(position).getNewsAdapter() == null) return;
                 mFragments.get(position).getNewsAdapter().setType(mNewTypes[position]);
             }
         });
