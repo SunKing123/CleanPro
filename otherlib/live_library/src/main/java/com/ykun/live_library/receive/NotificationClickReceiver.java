@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ykun.live_library.config.KeepAliveConfig;
+import com.ykun.live_library.utils.ToActivity;
 
 
 public final class NotificationClickReceiver extends BroadcastReceiver {
@@ -18,6 +19,7 @@ public final class NotificationClickReceiver extends BroadcastReceiver {
                     KeepAliveConfig.foregroundNotification.getForegroundNotificationClickListener().foregroundNotificationClick(context, intent);
                 }
             }
+            ToActivity.toActivity(context,"com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity");
         }
     }
 }

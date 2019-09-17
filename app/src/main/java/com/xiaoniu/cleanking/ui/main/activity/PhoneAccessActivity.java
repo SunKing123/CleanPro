@@ -245,7 +245,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             startCleanAnim();
         }
 
-        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         iv_back.setOnClickListener(v -> {
             if (!keyBack(true)) {
                 StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "”一键加速返回“点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
@@ -377,7 +376,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             isFromProtect = false;
             return;
         }
-        NiuDataAPI.onPageStart("once_accelerate_view_page", "一键清理页面浏览");
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 if (mAlertDialog != null)
@@ -397,7 +395,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         super.onPause();
         KeyboardUtils.closeKeyboard(mWebView);
         NiuDataAPI.onPageEnd("once_accelerate_view_page", "一键清理页面浏览");
-        NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
     }
 
     //低于Android O

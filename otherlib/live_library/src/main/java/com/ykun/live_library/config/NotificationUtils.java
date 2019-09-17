@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.widget.RemoteViews;
 
 import com.ykun.live_library.R;
 
@@ -62,13 +63,16 @@ public class NotificationUtils extends ContextWrapper {
         if (icon == 0) {
             icon = R.drawable.ic_launcher;
         }
-
-        return new Notification.Builder(mContext, id)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setSmallIcon(icon)
+        Notification.Builder builder = new Notification.Builder(mContext, id)
+                .setContentTitle("")
+                .setContentText("")
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
+        //添加自定义视图  activity_notification
+        RemoteViews mRemoteViews = new RemoteViews(getPackageName(),R.layout.live_notification);
+        builder.setContent(mRemoteViews);
+        return builder;
     }
 
     public NotificationCompat.Builder getNotification_25(String title, String content, int icon, Intent intent) {
@@ -77,7 +81,7 @@ public class NotificationUtils extends ContextWrapper {
         return new NotificationCompat.Builder(mContext, id)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(icon)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setVibrate(new long[]{0})
                 .setContentIntent(pendingIntent);

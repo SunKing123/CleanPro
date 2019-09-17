@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.Random;
 
@@ -250,7 +251,14 @@ public class CleanFinish2Activity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
+        super.onResume();
+    }
+
+    @Override
     protected void onPause() {
+        NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         Jzvd.releaseAllVideos();
         super.onPause();
     }
