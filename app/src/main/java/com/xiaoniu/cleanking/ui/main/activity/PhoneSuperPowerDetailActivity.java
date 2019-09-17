@@ -70,6 +70,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     private LinearLayout mLlTime;
     private LinearLayout mLlPowerLow;
     private TextView mTvAfterUpdate;
+    private int mBatteryPower = 50;
 
     @Override
     protected int getLayoutResId() {
@@ -114,14 +115,11 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mHandler.sendEmptyMessageDelayed(2, 1000);
 
         BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-        int battery = 50;
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            battery = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+            mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-
-        Log.v("rg","" + battery);
-        changePower(50);
-
+        changePower(mBatteryPower);
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
         registerReceiver(broadcastReceiver,intentFilter);
@@ -134,8 +132,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             //获取最大电量，如未获取到具体数值，则默认为100
             int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-            int power = (batteryLevel * 100 / batteryScale);
-            changePower(power);
+            mBatteryPower = (batteryLevel * 100 / batteryScale);
+            changePower(mBatteryPower);
         }
     };
 
@@ -150,7 +148,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             mLlTime.setVisibility(View.GONE);
             mLlPowerLow.setVisibility(View.VISIBLE);
         }else {
-            if (mPowerSavingTime < 10) {
+            if (mBatteryPower < 10) {
                 tvMini.setText(String.valueOf(mPowerSavingTime));
                 tvHour.setVisibility(View.GONE);
                 tvUnitHour.setVisibility(View.GONE);
@@ -256,6 +254,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 } else {
                     childInfo.selected = 1;
                     mSelectedCount++;
+                    if (childInfo.packageName.equals(""))
                     killGroupInfo.addItemInfo(childInfo);
                 }
             }
@@ -276,6 +275,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             mTvClean.setText("一键优化");
         }
         mPowerSavingTime = mSelectedCount * 5;
+
+        changePower(mBatteryPower);
     }
 
     private HashSet<String> getDefaultHoldApp() {
@@ -283,7 +284,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         whitelist.add("com.tencent.mm");
         whitelist.add("com.tencent.mobileqq");
         whitelist.add("com.tencent.wework");
-        whitelist.add("com.xiaoniu.cleanking");
+//        whitelist.add("com.xiaoniu.cleanking");
         return whitelist;
     }
 

@@ -746,6 +746,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }
 
         if (!hidden) {
+            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
@@ -754,12 +755,9 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             }
         } else {
             isShow = false;
-        }
-        if (!hidden) {
-            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
+
     }
 
     /**
@@ -817,7 +815,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             mTextBottomTitle.setVisibility(GONE);
         }
         StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
-
     }
 
     /**
