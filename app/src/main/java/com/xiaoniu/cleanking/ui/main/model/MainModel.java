@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.model;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
+
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -63,7 +65,7 @@ public class MainModel extends BaseModel {
     @SuppressLint("CheckResult")
     public void commitJPushAlias(Common4Subscriber<BaseEntity> commonSubscriber) {
         String rid = GeekPush.getRid();
-        if (rid.isEmpty()) return;
+        if (TextUtils.isEmpty(rid)) return;
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("registrationId", rid);

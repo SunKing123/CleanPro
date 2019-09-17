@@ -19,7 +19,7 @@ public class PushConfigCache {
     }
 
     public static String getRid(Context context) {
-        return getSharedPreferences(context).getString(KEY_RID, null);
+        return getSharedPreferences(context).getString(KEY_RID, "");
     }
 
     public static void delRid(Context context) {
@@ -31,7 +31,7 @@ public class PushConfigCache {
     }
 
     public static String getPlatform(Context context) {
-        return getSharedPreferences(context).getString(KEY_PLATFORM, null);
+        return getSharedPreferences(context).getString(KEY_PLATFORM, "");
     }
 
     private static SharedPreferences getSharedPreferences(Context context) {

@@ -308,7 +308,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
                     @Override
                     public void onNext(String value) {
-                        //
                         SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putStringSet(SpCacheConfig.CACHES_KEY_MUSCI, cachesMusicFiles);
