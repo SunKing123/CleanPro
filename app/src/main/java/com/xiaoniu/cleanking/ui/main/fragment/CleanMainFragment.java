@@ -854,7 +854,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onPause() {
         super.onPause();
         NiuDataAPI.onPageEnd("check_garbage_view_page", "\"清理垃圾\"浏览");
-
     }
 
     /**

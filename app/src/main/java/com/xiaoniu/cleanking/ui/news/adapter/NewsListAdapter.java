@@ -58,9 +58,9 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             commonHolder.itemView.setOnClickListener(v -> {
                         SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
                         //埋点
-                        if (mType == null || position > 10)
+                        if (position > 11)
                             return;
-                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.topic, itemInfo.rowkey, position);
+                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.topic, itemInfo.rowkey, position + 1);
                     }
             );
         }

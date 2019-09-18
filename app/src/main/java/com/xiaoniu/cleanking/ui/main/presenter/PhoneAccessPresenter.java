@@ -23,6 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Process;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -69,13 +71,10 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     @Inject
     NoClearSPHelper mSPHelper;
 
-    private boolean isFromClickClearBtn = true;
-
     @Inject
     public PhoneAccessPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
     }
-
 
     //获取到可以加速的应用名单Android O以下的获取最近使用情况
     @SuppressLint("CheckResult")
@@ -261,8 +260,10 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         anim.addUpdateListener(animation -> {
             if (tv_size == null) return;
             int currentValue = (int) animation.getAnimatedValue();
+            Log.d("niani", "setNumAnim:" + currentValue);
             tv_size.setText(currentValue + "");
             tv_size_show.setText(currentValue + "");
+            tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
             if (currentValue == endNum) {
                 tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                 tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
@@ -291,6 +292,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 super.onAnimationEnd(animation);
                 mView.setCanClickDelete(true);
                 mTvSpeed.setVisibility(View.VISIBLE);
+                mView.showCleanButton();
             }
         });
 //        anim.start();
@@ -386,7 +388,6 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         NetworkInfo info = connectivity.getActiveNetworkInfo();
         return info != null && info.isConnected();
     }
-
 
     public interface ClickListener {
         void clickOKBtn();

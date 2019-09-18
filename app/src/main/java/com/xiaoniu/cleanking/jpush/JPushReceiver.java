@@ -24,7 +24,7 @@ public class JPushReceiver extends BasePushReceiver {
             for (String key : msg.getKeyValue().keySet()) {
                 String url = msg.getKeyValue().get("url");
                 if (!TextUtils.isEmpty(url)) {
-                    StatisticsUtils.trackClickJPush("", "\"推送消息点击\"时", "", "",url,msg.getNotifyId(),msg.getTitle());
+                    StatisticsUtils.trackClickJPush("push_info_click", "\"推送消息点击\"时", "", "",url,msg.getNotifyId(),msg.getTitle());
                     SchemeProxy.openScheme(context, url);
                 }
             }
@@ -35,6 +35,7 @@ public class JPushReceiver extends BasePushReceiver {
     @Override
     public void onReceiveMessage(Context context, PushMsg msg) {
         LogUtils.i(TAG, "onReceiveMessage: " + msg.toString());
+        StatisticsUtils.trackClickJShow("push_info_show", "推送消息曝光", "", "","custom",msg.getNotifyId(),msg.getTitle());
         EventBus.getDefault().post(new PushEvent("ReceiveMessage", msg));
     }
 

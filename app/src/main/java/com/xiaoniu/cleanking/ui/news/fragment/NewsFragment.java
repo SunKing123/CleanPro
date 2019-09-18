@@ -29,6 +29,7 @@ import com.xiaoniu.common.widget.viewpagerindicator.IScrollBar;
 import com.xiaoniu.common.widget.viewpagerindicator.IndicatorAdapter;
 import com.xiaoniu.common.widget.viewpagerindicator.LineScrollBar;
 import com.xiaoniu.common.widget.viewpagerindicator.ViewPagerIndicator;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 
@@ -189,10 +190,23 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onTabChange(View tabView, int position, float selectPercent) {
-                Log.d("test", "onTabChange: ");
-                StatisticsUtils.trackClickNewsTab("click", "“分类”点击时", "selected_page", "information_page",position);
-                if (mFragments.get(position).getNewsAdapter() == null) return;
-                mFragments.get(position).getNewsAdapter().setType(mNewTypes[position]);
+            }
+        });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
     }
@@ -201,10 +215,10 @@ public class NewsFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden){
-            StatisticsUtils.trackClick("information_page_view_page", "信息页面浏览", "selected_page", "information_page");
             mTabIndicator.setCurrentTab(0);
             mFragments.get(0).startLoadData();
-            StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击时", "selected_page", "information_page",0);
+            NiuDataAPI.onPageStart("information_page_view_page", "信息页面浏览");
+            StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page",0);
         }
     }
 }

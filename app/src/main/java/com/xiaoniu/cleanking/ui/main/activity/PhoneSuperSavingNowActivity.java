@@ -107,7 +107,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         hideToolBar();
         num = intent.getIntExtra("processNum", 0);
         mSelectedList = PhoneSuperPowerDetailActivity.sSelectedList;
-        if (mSelectedList != null){
+        if (mSelectedList != null && mSelectedList.size() > 0){
             mTime = 3000 / mSelectedList.size();
         }
         PhoneSuperPowerDetailActivity.sSelectedList = null;

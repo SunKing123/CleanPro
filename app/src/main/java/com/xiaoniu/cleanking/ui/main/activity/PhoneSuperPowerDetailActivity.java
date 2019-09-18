@@ -61,7 +61,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     private SuperPowerCleanAdapter mPowerCleanAdapter;
     private int mSelectedCount;
-    private int mPowerSavingTime = 1 + new Random().nextInt(59);
+    private int mPowerSavingTime = 5;
 
     public static List<MultiItemInfo> sSelectedList;
     private TextView tvHour;
@@ -148,7 +148,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             mLlTime.setVisibility(View.GONE);
             mLlPowerLow.setVisibility(View.VISIBLE);
         }else {
-            if (mBatteryPower < 10) {
+            if (mBatteryPower < 60) {
                 tvMini.setText(String.valueOf(mPowerSavingTime));
                 tvHour.setVisibility(View.GONE);
                 tvUnitHour.setVisibility(View.GONE);
@@ -164,11 +164,14 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                     tvHour.setVisibility(View.GONE);
                     tvUnitHour.setVisibility(View.GONE);
                 }
-                if(mPowerSavingTime % 60 == 0){
-                    int mini = 1 + new Random().nextInt(59);
+                int minute = mPowerSavingTime % 60;
+                int mini = 1 + new Random().nextInt(59);
+                if(minute == 0){
                     tvMini.setText(String.valueOf(mini));
+                }else if (minute > 60){
+                    tvMini.setText(String.valueOf(1 + new Random().nextInt(59)));
                 }else {
-                    tvMini.setText(String.valueOf(mPowerSavingTime % 60));
+                    tvMini.setText(String.valueOf(minute));
                 }
             }
         }
@@ -254,7 +257,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 } else {
                     childInfo.selected = 1;
                     mSelectedCount++;
-                    if (childInfo.packageName.equals(""))
                     killGroupInfo.addItemInfo(childInfo);
                 }
             }

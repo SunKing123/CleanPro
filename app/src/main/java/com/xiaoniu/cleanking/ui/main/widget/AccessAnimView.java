@@ -264,6 +264,7 @@ public class AccessAnimView extends RelativeLayout {
         anim.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
             tv_size.setText(currentValue + "");
+            tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
             Log.e("asdf", "时间：" + animation.getAnimatedFraction());
             Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
             if (canPlaying && animation.getAnimatedFraction() > 0.933) {
@@ -276,6 +277,7 @@ public class AccessAnimView extends RelativeLayout {
                 tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                 tv_gb.setText(type == 1 ? "MB" : "GB");
             }
+
         });
 //        anim.start();
 
@@ -401,7 +403,6 @@ public class AccessAnimView extends RelativeLayout {
         return animator;
     }
 
-
     /**
      * @return 火箭向上飞进
      */
@@ -448,7 +449,6 @@ public class AccessAnimView extends RelativeLayout {
         });
         return animator;
     }
-
 
     //下雨动画
     public ObjectAnimator setYuAnim(View viewY, long delay) {

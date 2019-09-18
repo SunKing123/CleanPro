@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.xiaoniu.common.R;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * Created by wangbaozhong on 2017/5/25.
@@ -60,6 +61,7 @@ public class SimpleWebActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        StatisticsUtils.trackClick("information_page_view_page", "信息页面浏览", "selected_page", "information_page");
         mWebView = (WebView) findViewById(R.id.webView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         setLeftTitle(title);

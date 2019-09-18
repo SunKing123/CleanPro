@@ -10,15 +10,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanFinishWebFragment;
 import com.xiaoniu.cleanking.ui.main.interfac.AppBarStateChangeListener;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -44,7 +47,6 @@ public class CleanFinish2Activity extends BaseActivity {
     private TextView mTvQl;
     private TextView mTopSubTitle;
     private LinearLayout mLlNoNet;
-
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_finish_layout;
@@ -153,7 +155,11 @@ public class CleanFinish2Activity extends BaseActivity {
     }
     @Override
     protected void setListener() {
-        mIvBack.setOnClickListener(v -> finish());
+        mIvBack.setOnClickListener(v -> {
+            if (getString(R.string.tool_one_key_speed).contains(mTitle))
+                StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
+            finish();
+        });
         mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
@@ -244,7 +250,9 @@ public class CleanFinish2Activity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (Jzvd.backPress()) {
+        if (getString(R.string.tool_one_key_speed).contains(mTitle))
+            StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
+            if (Jzvd.backPress()) {
             return;
         }
         super.onBackPressed();
@@ -252,13 +260,21 @@ public class CleanFinish2Activity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            NiuDataAPI.onPageStart("one_click_acceleration_clean_up_view_page", "一键加速清理完成页浏览");
+        }else {
+            NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
+        }
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            NiuDataAPI.onPageEnd("one_click_acceleration_clean_up_view_page", "一键加速清理完成页浏览");
+        }else {
+            NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
+        }
         Jzvd.releaseAllVideos();
         super.onPause();
     }

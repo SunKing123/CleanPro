@@ -215,8 +215,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-        StatisticsUtils.trackClick("one_click_acceleration_page_view_page ", "一键加速页浏览", "", "one_click_acceleration_page");
-
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -246,9 +244,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
 
         iv_back.setOnClickListener(v -> {
-            if (!keyBack(true)) {
-                StatisticsUtils.trackClick("One_click_Accelerated_Return_click", "”一键加速返回“点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
+            if (!keyBack()) {
+                if (mTvSpeed.getVisibility() == View.GONE) {
+                    StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "one_click_acceleration_page");
+                }else {
+                    StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "clean_up_ immediately_page");
+                }
                 finish();
+            }else {
+                StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "accelerate_access_to_details_page");
             }
         });
 
@@ -262,6 +266,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             startClean(false);
         });
         mLineAccess.setOnClickListener(view -> {
+            StatisticsUtils.trackClick("view_details_click", "\"查看详情\"点击", "home_page", "clean_up_ immediately_page");
+            NiuDataAPI.onPageStart("accelerate_access_to_details_view_page", "加速查看详情页浏览");
             isShowListInfo = true;
             acceview.setVisibility(View.GONE);
         });
@@ -287,6 +293,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     }
 
+    /**
+     * 一键加速
+     */
+    public void showCleanButton(){
+        NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
+    }
     private void showCleanFinishUI(String num, String unit) {
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (PreferenceUtil.getCleanTime()) {
@@ -370,7 +382,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        StatisticsUtils.trackClick("one_click_acceleration_page_view_page", "一键加速页浏览", "selected_page", "information_page");
+        NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
+        NiuDataAPI.onPageStart("one_click_acceleration_page", "一键加速页浏览");
         mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
             isFromProtect = false;
@@ -394,7 +407,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     protected void onPause() {
         super.onPause();
         KeyboardUtils.closeKeyboard(mWebView);
+        NiuDataAPI.onPageEnd("clean_up_immediately_view_page", "立即一键加速浏览页");
         NiuDataAPI.onPageEnd("once_accelerate_view_page", "一键清理页面浏览");
+        NiuDataAPI.onPageEnd("accelerate_access_to_details_view_page", "加速查看详情页浏览");
     }
 
     //低于Android O
@@ -584,7 +599,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
+        NiuDataAPI.onPageEnd("one_click_acceleration_view_page", "一键加速页浏览");
     }
 
     public void setHasCleaned(long sized) {
@@ -625,27 +640,25 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-           if(keyBack(false))
-               return true;
-           else
-               StatisticsUtils.trackClick("system_return_back", "”手机返回“点击", "home_page", "one_click_acceleration_page");
+            if (isShowListInfo)
+                StatisticsUtils.trackClick("system_return_back", "”手机返回“点击", "home_page", "accelerate_access_to_details_page");
+            else
+                StatisticsUtils.trackClick("system_return_back", "”手机返回“点击", "home_page", "clean_up_immediately_page");
+
+            if (keyBack())
+                return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
     /**
      * 返回事件
-     * @param isClick  true是点击的返回按钮 false是手机返回键
-     * @return
+     * @return  true 显示详情列表 false 显示动画
      */
-    private boolean keyBack(boolean isClick) {
+    private boolean keyBack() {
         if (isShowListInfo){
             isShowListInfo = false;
             acceview.setVisibility(View.VISIBLE);
-            if (isClick)
-                StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "accelerate_access_to_details_page");
-            else
-                StatisticsUtils.trackClick("system_return_back", "”手机返回“点击", "home_page", "one_click_acceleration_page");
             return true;
         }
         return false;

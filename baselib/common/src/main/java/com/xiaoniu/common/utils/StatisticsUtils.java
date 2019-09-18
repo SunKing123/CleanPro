@@ -211,6 +211,25 @@ public class StatisticsUtils {
     }
 
     /**
+     * 极光推送 曝光点击埋点
+     *
+     * @param eventCode
+     * @param sourcePage
+     * @param currentPage
+     */
+    public static void trackClickJShow(String eventCode, String eventName, String sourcePage, String currentPage,String push_type,int id,String title) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("push_id", String.valueOf(id));
+            extension.put("push_title", title);
+            extension.put("push_type", push_type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+    }
+
+    /**
      * 资讯埋点
      * @param eventCode
      * @param eventName
