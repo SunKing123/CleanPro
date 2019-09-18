@@ -207,6 +207,7 @@ public class StatisticsUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         trackClick(eventCode, eventName, sourcePage, currentPage, extension);
     }
 
@@ -217,16 +218,45 @@ public class StatisticsUtils {
      * @param sourcePage
      * @param currentPage
      */
-    public static void trackClickJShow(String eventCode, String eventName, String sourcePage, String currentPage,String push_type,int id,String title) {
+    public static void trackClickJShow(String eventCode, String eventName, String sourcePage, String currentPage, String url,int id,String title) {
+        String push_type = "";
+        if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
+            //立即清理页面
+            push_type = "clean_up_immediately";
+        }else if (url.contains("main.activity.PhoneAccessActivity")){
+            //  一键加速页面
+            push_type = "mobile_phone_boost";
+        }else if (url.contains("main.activity.CleanBigFileActivity")){
+            //  手机清理页面
+            push_type = "mobile_phone _cleaning";
+        }else if (url.contains("main.activity.FileManagerHomeActivity")){
+            //  文件清理页面
+            push_type = "file_cleanup";
+        }else if (url.contains("tool.wechat.activity.WechatCleanHomeActivity")){
+            //  微信专清页面
+            push_type = "wechat_cleaning";
+        }else if (url.contains("tool.qq.activity.QQCleanHomeActivity")){
+            //  QQ专清页面
+            push_type = "QQ_cleaning";
+        }else if (url.contains("main.activity.PhoneCoolingActivity")){
+            // 手机降温页面
+            push_type = "cooling";
+        }else if (url.contains("main.activity.PhoneSuperPowerActivity")){
+            // 超强省电页面
+            push_type = "power_saving";
+        }
         JSONObject extension = new JSONObject();
         try {
             extension.put("push_id", String.valueOf(id));
             extension.put("push_title", title);
             extension.put("push_type", push_type);
+            extension.put("target_page_id", url);
+            extension.put("source_page", sourcePage);
+            extension.put("current_page", currentPage);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+        NiuDataAPI.trackEvent(eventCode, eventName, extension);
     }
 
     /**

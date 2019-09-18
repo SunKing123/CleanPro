@@ -9,7 +9,7 @@
         android:id="@+id/fl_clean_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -24,6 +24,7 @@
             android:layout_marginTop="@dimen/dimen_27dp"
             android:text="垃圾通知正在拖慢手机速度"
             android:textColor="@color/white"
+            android:layout_marginBottom="200dp"
             android:textSize="16sp" />
 
     </LinearLayout>

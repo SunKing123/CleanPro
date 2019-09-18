@@ -9,6 +9,8 @@ import com.geek.push.log.LogUtils;
 import com.geek.push.receiver.BasePushReceiver;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
+
 import org.greenrobot.eventbus.EventBus;
 
 public class JPushReceiver extends BasePushReceiver {
@@ -19,7 +21,6 @@ public class JPushReceiver extends BasePushReceiver {
     @Override
     public void onReceiveNotificationClick(Context context, PushMsg msg) {
         LogUtils.i(TAG, "onReceiveNotificationClick: " + msg.toString());
-        EventBus.getDefault().post(new PushEvent("NotificationClick", msg));
         if (msg.getKeyValue() != null && !msg.getKeyValue().isEmpty()) {
             for (String key : msg.getKeyValue().keySet()) {
                 String url = msg.getKeyValue().get("url");
@@ -35,8 +36,16 @@ public class JPushReceiver extends BasePushReceiver {
     @Override
     public void onReceiveMessage(Context context, PushMsg msg) {
         LogUtils.i(TAG, "onReceiveMessage: " + msg.toString());
-        StatisticsUtils.trackClickJShow("push_info_show", "推送消息曝光", "", "","custom",msg.getNotifyId(),msg.getTitle());
-        EventBus.getDefault().post(new PushEvent("ReceiveMessage", msg));
+        EventBus.getDefault().post(new PushEvent("NotificationClick", msg));
+        if (msg.getKeyValue() != null && !msg.getKeyValue().isEmpty()) {
+            for (String key : msg.getKeyValue().keySet()) {
+                String url = msg.getKeyValue().get("url");
+                if (!TextUtils.isEmpty(url)) {
+
+                    StatisticsUtils.trackClickJShow("push_info_show", "推送消息曝光", "", "",url,msg.getNotifyId(),msg.getTitle());
+                }
+            }
+        }
     }
 
     //    接收到操作返回事件（添加tag，alias，检查tag等）

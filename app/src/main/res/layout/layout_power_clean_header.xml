@@ -47,7 +47,7 @@
            android:layout_height="wrap_content"
            android:layout_marginTop="@dimen/dimen_46dp"
            android:layout_toRightOf="@id/bv_view"
-           android:text="优化后"
+           android:text="点击优化"
            android:textColor="@color/white"
            android:textSize="14sp" />
        <TextView
