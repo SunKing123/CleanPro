@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
+import android.util.Log;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
@@ -21,7 +23,10 @@ import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.statistic.Configuration;
+import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.json.JSONObject;
 
 /**
  * Created by admin on 2017/6/8.
@@ -79,13 +84,24 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     public void initNiuData(Application application) {
         //测试环境
-        NiuDataAPI.init(application, new Configuration().serverUrl(AppConstants.BIGDATA_MD)
+        NiuDataAPI.init(application, new Configuration()
                 //切换到sdk默认的测试环境地址
                 .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
+                .serverUrl(AppConstants.BIGDATA_MD)
+                .setHeartbeatUrl(AppConstants.BIGDATA_MD)
                 //打开sdk日志信息
                 .logOpen()
+                .setHeartbeatInterval(5000)
                 .channel(AppUtils.getChannelId())
         );
+
+        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
+            @Override
+            public void onHeartbeatStart(JSONObject eventProperties) {
+                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
+                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
+            }
+        });
     }
 
     public static AppComponent getAppComponent() {

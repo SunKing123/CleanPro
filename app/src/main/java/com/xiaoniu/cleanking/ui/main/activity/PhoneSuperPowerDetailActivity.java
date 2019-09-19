@@ -257,7 +257,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 } else {
                     childInfo.selected = 1;
                     mSelectedCount++;
-                    killGroupInfo.addItemInfo(childInfo);
+                    if (!childInfo.packageName.equals("com.xiaoniu.cleanking"))
+                        killGroupInfo.addItemInfo(childInfo);
                 }
             }
         }
