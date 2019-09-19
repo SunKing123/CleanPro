@@ -1,1 +1,1 @@
-include ':app', ':otherlib:imagepicker', ':otherlib:takephoto_library', ':baselib:common', ':otherlib:videoplayer', ':otherlib:live_library', ':push:push-core', ':push:push-jpush', ':push:push-getui'
+include ':app', ':otherlib:imagepicker', ':otherlib:takephoto_library', ':baselib:common', ':otherlib:videoplayer', ':otherlib:live_library'

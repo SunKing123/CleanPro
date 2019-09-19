@@ -93,4 +93,6 @@ dependencies {
     api project(path: ':otherlib:takephoto_library')
     api project(':otherlib:imagepicker')
     api project(':otherlib:videoplayer')
+    api files('libs\\push-core.aar')
+    api files('libs\\push-jpush.aar')
 }

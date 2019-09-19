@@ -332,6 +332,72 @@
             </intent-filter>
         </receiver>
 
+        <!--极光推送静态注册-->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="geek_push" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="819597e28ecddae10e2297ad" />
+        <!--###########################厂商平台key开始#############################-->
+        <!-- 小米开始-->
+        <meta-data
+            android:name="XIAOMI_APPKEY"
+            android:value="MI-5531807057088" />
+        <meta-data
+            android:name="XIAOMI_APPID"
+            android:value="MI-2882303761518070088" />
+        <!-- 小米结束-->
+
+        <!-- huawei start-->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="100946605"/>
+        <!-- huawei end-->
+
+        <!--meizu start-->
+        <meta-data
+            android:name="MEIZU_APPKEY"
+            android:value="MZ-704651545da347cc8194d1aec4763002" />
+        <meta-data
+            android:name="MEIZU_APPID"
+            android:value="MZ-124077" />
+        <!--meizhu end-->
+
+        <!--oppo start-->
+        <meta-data
+            android:name="OPPO_APPKEY"
+            android:value="OP-9ff701f1ab004d92ae02fc11a514edd5" />
+        <meta-data
+            android:name="OPPO_APPID"
+            android:value="OP-30143914" />
+        <meta-data
+            android:name="OPPO_APPSECRET"
+            android:value="OP-1cbb7b63c94540179bbbeb7b35e9bf9b" />
+        <!--oppo end-->
+
+        <!--vivo start-->
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="031981ca-ef35-4cd3-a24d-6e46183de8f7" />
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="15374" />
+        <!--vivo end-->
+        <!--###########################厂商平台key结束################################-->
+
+        <!--添加支持push-getui库-->
+        <!--<meta-data-->
+        <!--android:name="Geek_GeTui_105"-->
+        <!--android:value="com.geek.push.getui.GeTuiPushClient"/>-->
+
+        <!--添加支持push-jpush库-->
+        <meta-data
+            android:name="Geek_JPush_106"
+            android:value="com.geek.push.jpush.JPushClient" />
+        <!--########################################################geek push sdk end###################################################-->
+
+
     </application>
 
 </manifest>
