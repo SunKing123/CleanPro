@@ -51,6 +51,7 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final  String IS_SAVE_CLEAN_TIME = "clean_time";
+    public static final  String IS_SAVE_WeCLEAN_TIME = "Weclean_time";
     //埋点上一级页面
     public static final String ONKEY = "one_key";
     public static final String PHONE_CLEAN = "phone_clean";

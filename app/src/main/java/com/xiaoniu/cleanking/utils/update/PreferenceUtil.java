@@ -202,4 +202,27 @@ public class PreferenceUtil {
             return true;
         return false;
     }
+
+    /**
+     * 保存微信专清清理时间
+     * @return
+     */
+    public static boolean saveWeChatCleanTime(){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_WeCLEAN_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次微信专清间隔至少3分钟
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getWeChatCleanTime(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_WeCLEAN_TIME,0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
 }

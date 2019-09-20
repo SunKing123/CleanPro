@@ -416,7 +416,18 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }
-        startActivity(WechatCleanHomeActivity.class);
+        if (PreferenceUtil.getWeChatCleanTime()) {
+            // 每次清理间隔 至少3秒
+            startActivity(WechatCleanHomeActivity.class);
+            //保存上次清理时间
+            PreferenceUtil.saveWeChatCleanTime();
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_chat_clear));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity( CleanFinish2Activity.class,bundle);
+        }
     }
 
     @OnClick(R.id.line_super_power_saving)
