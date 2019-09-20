@@ -93,6 +93,10 @@ dependencies {
     api project(path: ':otherlib:takephoto_library')
     api project(':otherlib:imagepicker')
     api project(':otherlib:videoplayer')
+    //推送
     api files('libs\\push-core.aar')
     api files('libs\\push-jpush.aar')
+
+    api files('libs\\GDTSDK.union.4.90.960.aar')
+
 }
