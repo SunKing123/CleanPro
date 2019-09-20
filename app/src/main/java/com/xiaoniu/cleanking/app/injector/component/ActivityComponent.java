@@ -17,7 +17,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneThinResultActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.SplashActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
@@ -47,7 +47,7 @@ public interface ActivityComponent {
 
     void inject(UserLoadH5Activity userLoadH5Activity);
 
-    void inject(SplashActivity splashActivity);
+    void inject(SplashADActivity splashADActivity);
 
     void inject(FileManagerHomeActivity fileManagerHomeActivity);
 

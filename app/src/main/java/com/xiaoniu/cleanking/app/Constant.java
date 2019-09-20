@@ -212,5 +212,31 @@ public class Constant {
     /** 微信视频清理key*/
     public static final String WX_CACHE_SIZE_VIDEO="wx_cache_size_video";
 
+    /**
+     * 各厂商ROM 版本KEY
+     */
+    public static final String ROM_HUAWEI = "ro.build.version.emui";
+    public static final String ROM_XIAOMI = "ro.miui.ui.version.name";
+    public static final String ROM_OPPO = "ro.build.version.opporom";
+    public static final String ROM_VIVO = "ro.vivo.rom.version";
+    public static final String ROM_MEIZU = "ro.build.display.id";
+    public static final String ROM_LESHI = "ro.letv.release.version";
+    public static final String ROM_SANXING = "ro.build.version.samsung";
+
+    public static final int PERMISSION_FLOAT = 1;
+    public static final int PERMISSION_LOCK_SHOW = 2;
+    public static final int PERMISSION_SYSTEM_SETTING = 3;
+    public static final int PERMISSION_STARTUP = 4;
+    public static final int PERMISSION_NOTIFY = 5;
+    public static final int PERMISSION_ACTIVITY = 6;
+
+    public static final int HUAWEI = 1;
+    public static final int XIAOMI = 2;
+    public static final int OPPO = 3;
+    public static final int VIVO = 4;
+    public static final int MEIZU = 5;
+    public static final int SANXING = 6;
+    public static final int LESHI = 7;
+
 }
 

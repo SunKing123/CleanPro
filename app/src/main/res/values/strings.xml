@@ -95,4 +95,5 @@
     <string name="tool_power_hint">请尽快充电哦！</string>
     <string name="tool_get_premis">授权失败</string>
     <string name="tool_no_net_hint">网络连接失败，请稍后重试</string>
+    <string name="click_to_skip">跳过</string>
 </resources>

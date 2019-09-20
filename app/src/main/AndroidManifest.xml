@@ -25,14 +25,14 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
         <activity
-            android:name=".ui.main.activity.SplashActivity"
+            android:name=".ui.main.activity.SplashADActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher">
         </activity>
         <activity-alias
             android:name="splash"
             android:label="@string/app_name"
-            android:targetActivity=".ui.main.activity.SplashActivity">
+            android:targetActivity=".ui.main.activity.SplashADActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
