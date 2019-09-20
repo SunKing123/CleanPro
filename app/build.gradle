@@ -129,8 +129,6 @@ dependencies {
 
     implementation project(':baselib:common')
     implementation project(':otherlib:live_library')
-//    implementation project(path: ':push:push-core')
-//    implementation project(path: ':push:push-jpush')
 
 }
 
