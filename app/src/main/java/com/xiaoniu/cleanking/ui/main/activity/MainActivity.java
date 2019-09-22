@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,6 +48,8 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
+import com.xiaoniu.cleanking.ui.notifition.AlarmTimer;
+import com.xiaoniu.cleanking.ui.notifition.GlobalValues;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -82,6 +85,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private FragmentManager mManager = getSupportFragmentManager();
     private NewsFragment upQuotaFragment;
     private static final long DEFAULT_REFRESH_TIME = 10*60*1000L;
+    /**
+     * 定时扫面手机时间 1小时
+     */
+    private static final long SCAN_LOOP_TIME =  60 * 1000;
 
     /**
      * 借款页
@@ -206,6 +213,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.commitJPushAlias();
 
         start();
+
+        //开启定时扫面缓存
+        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }
 
     private void checkReadPermission() {
