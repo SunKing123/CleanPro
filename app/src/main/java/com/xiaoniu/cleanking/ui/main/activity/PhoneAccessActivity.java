@@ -458,17 +458,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
-            if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 1);
             acceview.setData(sizeMb, "MB");
+            if (canPlayAnim)
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
             strNum = String.valueOf(sizeMb);
             strUnit = "GB";
             sizeMb *= 1024;
-            if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, viewt, line_title, 0, sizeMb, 2);
             acceview.setData(sizeMb, "GB");
+            if (canPlayAnim)
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
         }
     }
 

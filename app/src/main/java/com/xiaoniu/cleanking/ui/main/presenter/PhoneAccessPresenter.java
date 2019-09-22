@@ -260,7 +260,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         anim.addUpdateListener(animation -> {
             if (tv_size == null) return;
             int currentValue = (int) animation.getAnimatedValue();
-            Log.d("niani", "setNumAnim:" + currentValue);
+            Log.d("niani", "setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));
             tv_size.setText(currentValue + "");
             tv_size_show.setText(currentValue + "");
             tv_gb.setText(currentValue < 1024 ? "MB" : "GB");

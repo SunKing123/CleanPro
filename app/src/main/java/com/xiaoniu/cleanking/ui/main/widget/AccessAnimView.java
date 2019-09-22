@@ -81,6 +81,10 @@ public class AccessAnimView extends RelativeLayout {
         this.listener = listener;
     }
 
+    public TextView getTv_gb() {
+        return tv_gb;
+    }
+
     //倒计时图片
     public AccessAnimView(Context context) {
         super(context);
@@ -157,7 +161,7 @@ public class AccessAnimView extends RelativeLayout {
         this.sizeMb = sizeMb;
         this.strGb = strGb;
         tv_size.setText(sizeMb + "");
-        tv_gb.setText(strGb);
+        tv_gb.setText("MB");
     }
 
     public void setTitleName(String name){
