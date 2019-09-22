@@ -61,7 +61,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     private SuperPowerCleanAdapter mPowerCleanAdapter;
     private int mSelectedCount;
-    private int mPowerSavingTime = 5;
 
     public static List<MultiItemInfo> sSelectedList;
     private TextView tvHour;
@@ -119,7 +118,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-        changePower(mBatteryPower);
+        changePower();
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
         registerReceiver(broadcastReceiver,intentFilter);
@@ -133,49 +132,43 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             //获取最大电量，如未获取到具体数值，则默认为100
             int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
             mBatteryPower = (batteryLevel * 100 / batteryScale);
-            changePower(mBatteryPower);
+            changePower();
         }
     };
 
     /**
      * 更新显示电量
-     * @param power
      */
-    private void changePower(int power) {
+    private void changePower() {
         //显示电量
-        if (power < 11){
-            mTvAfterUpdate.setVisibility(View.GONE);
-            mLlTime.setVisibility(View.GONE);
-            mLlPowerLow.setVisibility(View.VISIBLE);
-        }else {
-            if (mBatteryPower < 60) {
-                tvMini.setText(String.valueOf(mPowerSavingTime));
-                tvHour.setVisibility(View.GONE);
-                tvUnitHour.setVisibility(View.GONE);
-            } else {
-                mTvAfterUpdate.setVisibility(View.VISIBLE);
-                mLlTime.setVisibility(View.VISIBLE);
-                mLlPowerLow.setVisibility(View.GONE);
-                int hour = (int) Math.floor(mPowerSavingTime / 60);
-                if (hour > 0) {
-                    tvHour.setVisibility(View.VISIBLE);
-                    tvHour.setText(String.valueOf(hour));
-                }else {
-                    tvHour.setVisibility(View.GONE);
-                    tvUnitHour.setVisibility(View.GONE);
-                }
-                int minute = mPowerSavingTime % 60;
-                int mini = 1 + new Random().nextInt(59);
-                if(minute == 0){
-                    tvMini.setText(String.valueOf(mini));
-                }else if (minute > 60){
-                    tvMini.setText(String.valueOf(1 + new Random().nextInt(59)));
-                }else {
-                    tvMini.setText(String.valueOf(minute));
-                }
-            }
+        if (mBatteryPower < 21){
+            tvMini.setText(String.valueOf(getSavingPower(5,15)));
+        }else if (mBatteryPower > 20 && mBatteryPower < 51) {
+            showPower(30,90);
+        }else if (mBatteryPower >50 && mBatteryPower < 71) {
+            showPower(40,120);
+        }else if (mBatteryPower < 70 && mBatteryPower < 101) {
+            showPower(50,150);
         }
-        mBvView.setBattaryPercent(power);
+        mBvView.setBattaryPercent(mBatteryPower);
+    }
+
+    private void showPower(int startNum, int endNum) {
+        int time = getSavingPower(startNum,endNum);
+        int hour = (int) Math.floor(time / 60);
+        if (hour > 0) {
+            tvHour.setVisibility(View.VISIBLE);
+            tvHour.setText(String.valueOf(hour));
+        }else {
+            tvHour.setVisibility(View.GONE);
+            tvUnitHour.setVisibility(View.GONE);
+        }
+        tvMini.setText(String.valueOf(getSavingPower(1,59)));
+    }
+
+    private int getSavingPower(int startNum, int endNum) {
+        //产生随机数
+        return new Random().nextInt(endNum - startNum + 1) + startNum;
     }
 
     @Override
@@ -277,9 +270,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         } else {
             mTvClean.setText("一键优化");
         }
-        mPowerSavingTime = mSelectedCount * 5;
-
-        changePower(mBatteryPower);
     }
 
     private HashSet<String> getDefaultHoldApp() {

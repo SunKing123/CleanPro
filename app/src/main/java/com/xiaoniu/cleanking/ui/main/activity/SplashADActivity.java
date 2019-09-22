@@ -52,7 +52,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
      * 给出的延时逻辑是从拉取广告开始算开屏最少持续多久，仅供参考，开发者可自定义延时逻辑，如果开发者采用demo
      * 中给出的延时逻辑，也建议开发者考虑自定义minSplashTimeWhenNoAD的值（单位ms）
      **/
-    private int minSplashTimeWhenNoAD = 2000;
+    private int minSplashTimeWhenNoAD = 3000;
     /**
      * 记录拉取广告的时间
      */
@@ -62,7 +62,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_splash_ad);
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -74,7 +74,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
             checkAndRequestPermission();
         } else {
             // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-            fetchSplashAD(this, container, skipView, PositionId.SPLASH_POS_ID, getPosId(), this, 0);
+            fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
         }
     }
 
@@ -112,7 +112,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-            fetchSplashAD(this, container, skipView, PositionId.SPLASH_POS_ID, getPosId(), this, 0);
+            fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -155,8 +155,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
      * @param adListener      广告状态监听器
      * @param fetchDelay      拉取广告的超时时长：取值范围[3000, 5000]，设为0表示使用广点通SDK默认的超时时长。
      */
-    private void fetchSplashAD(Activity activity, ViewGroup adContainer, View skipContainer,
-                               String appId, String posId, SplashADListener adListener, int fetchDelay) {
+    private void fetchSplashAD(Activity activity, ViewGroup adContainer, View skipContainer, String appId, String posId, SplashADListener adListener, int fetchDelay) {
         fetchSplashADTime = System.currentTimeMillis();
         splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
         splashAD.fetchAndShowIn(adContainer);
@@ -169,8 +168,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
 
     @Override
     public void onADClicked() {
-        Log.i("AD_DEMO", "SplashADClicked clickUrl: "
-                + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
+        Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
     /**
@@ -182,6 +180,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
     @Override
     public void onADTick(long millisUntilFinished) {
         Log.i("AD_DEMO", "SplashADTick " + millisUntilFinished + "ms");
+        skipView.setVisibility(View.VISIBLE);
         skipView.setText(String.format(SKIP_TEXT, Math.round(millisUntilFinished / 1000f)));
     }
 
@@ -198,27 +197,20 @@ public class SplashADActivity extends Activity implements SplashADListener {
 
     @Override
     public void onNoAD(AdError error) {
-        Log.i(
-                "AD_DEMO",
-                String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(),
-                        error.getErrorMsg()));
+        Log.i("AD_DEMO",String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(),error.getErrorMsg()));
         /**
          * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
          * 给出的延时逻辑是从拉取广告开始算开屏最少持续多久，仅供参考，开发者可自定义延时逻辑，如果开发者采用demo
          * 中给出的延时逻辑，也建议开发者考虑自定义minSplashTimeWhenNoAD的值
          **/
         long alreadyDelayMills = System.currentTimeMillis() - fetchSplashADTime;//从拉广告开始到onNoAD已经消耗了多少时间
-        long shouldDelayMills = alreadyDelayMills > minSplashTimeWhenNoAD ? 0 : minSplashTimeWhenNoAD
-                - alreadyDelayMills;//为防止加载广告失败后立刻跳离开屏可能造成的视觉上类似于"闪退"的情况，根据设置的minSplashTimeWhenNoAD
+        long shouldDelayMills = alreadyDelayMills > minSplashTimeWhenNoAD ? 0 : minSplashTimeWhenNoAD - alreadyDelayMills;//为防止加载广告失败后立刻跳离开屏可能造成的视觉上类似于"闪退"的情况，根据设置的minSplashTimeWhenNoAD
         // 计算出还需要延时多久
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (needStartDemoList) {
-                   startActivity(new Intent(SplashADActivity.this, MainActivity.class));
-                }
-                finish();
+        handler.postDelayed(() -> {
+            if (needStartDemoList) {
+               startActivity(new Intent(SplashADActivity.this, MainActivity.class));
             }
+            finish();
         }, shouldDelayMills);
     }
 
