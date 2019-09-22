@@ -448,7 +448,10 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     public void onADClicked(NativeExpressADView nativeExpressADView) {
-
+        if (mContainer != null && mContainer.getChildCount() > 0) {
+            mContainer.removeAllViews();
+            mContainer.setVisibility(View.GONE);
+        }
     }
 
     @Override
