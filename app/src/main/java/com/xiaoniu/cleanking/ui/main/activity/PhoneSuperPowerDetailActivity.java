@@ -66,6 +66,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     private TextView tvHour;
     private TextView tvMini;
     private TextView tvUnitHour;
+    private TextView tvMiniUnit;
     private LinearLayout mLlTime;
     private LinearLayout mLlPowerLow;
     private TextView mTvAfterUpdate;
@@ -101,6 +102,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mPowerLottieAnimationView = mHeaderView.findViewById(R.id.view_lottie_super_saving_power);
         tvHour = mHeaderView.findViewById(R.id.tvHour);
         tvMini = mHeaderView.findViewById(R.id.tvMini);
+        tvMiniUnit = mHeaderView.findViewById(R.id.tv_mini_unit);
         tvUnitHour = mHeaderView.findViewById(R.id.tv_unit_hour);
         mLlPowerLow = mHeaderView.findViewById(R.id.ll_power_low);
         mLlTime = mHeaderView.findViewById(R.id.ll_time);
@@ -138,37 +140,62 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     /**
      * 更新显示电量
+     * 当手机电量1%~10%，延长时间显示5~15分钟随机数
+     * 当手机电池电量20%~50%时，延长时间显示30~90分钟随机数
+     * 当手机电池电量50%~70%时，延长待机时间显示40~120分钟随机数
+     * 当手机电池电量70%~100%时，延长待机时间显示50~150分钟随机数
      */
     private void changePower() {
         //显示电量
         if (mBatteryPower < 21){
             tvMini.setText(String.valueOf(getSavingPower(5,15)));
-        }else if (mBatteryPower > 20 && mBatteryPower < 51) {
+        }else if (mBatteryPower < 51) {
             showPower(30,90);
-        }else if (mBatteryPower >50 && mBatteryPower < 71) {
+        }else if (mBatteryPower < 71) {
             showPower(40,120);
-        }else if (mBatteryPower < 70 && mBatteryPower < 101) {
+        }else if (mBatteryPower < 101) {
             showPower(50,150);
         }
         mBvView.setBattaryPercent(mBatteryPower);
     }
 
-    private void showPower(int startNum, int endNum) {
-        int time = getSavingPower(startNum,endNum);
+    /**
+     * 显示省点时间
+     * @param minNum  随机数最小值
+     * @param maxNum    随机数最大值
+     */
+    private void showPower(int minNum, int maxNum) {
+        int time = getSavingPower(minNum,maxNum);
         int hour = (int) Math.floor(time / 60);
+        //大于60分钟，显示小时、分钟
         if (hour > 0) {
+            int mini = time % 60;
             tvHour.setVisibility(View.VISIBLE);
+            tvUnitHour.setVisibility(View.VISIBLE);
             tvHour.setText(String.valueOf(hour));
+            if (mini == 0){
+                tvMiniUnit.setVisibility(View.GONE);
+                tvMini.setVisibility(View.GONE);
+            }else {
+                tvMini.setText(String.valueOf(time % 60));
+            }
         }else {
+            // 小于60，只显示分钟
             tvHour.setVisibility(View.GONE);
             tvUnitHour.setVisibility(View.GONE);
+            tvMini.setText(String.valueOf(time));
         }
-        tvMini.setText(String.valueOf(getSavingPower(1,59)));
     }
 
-    private int getSavingPower(int startNum, int endNum) {
+    /**
+     * 去两个值之间的随机数
+     * @param minNum   最小值
+     * @param maxNum   最大值
+     * @return
+     */
+    private int getSavingPower(int minNum, int maxNum) {
         //产生随机数
-        return new Random().nextInt(endNum - startNum + 1) + startNum;
+        return new Random().nextInt(maxNum - minNum + 1) + minNum;
     }
 
     @Override
