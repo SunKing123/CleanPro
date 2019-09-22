@@ -141,20 +141,20 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     /**
      * 更新显示电量
      * 当手机电量1%~10%，延长时间显示5~15分钟随机数
-     * 当手机电池电量20%~50%时，延长时间显示30~90分钟随机数
-     * 当手机电池电量50%~70%时，延长待机时间显示40~120分钟随机数
-     * 当手机电池电量70%~100%时，延长待机时间显示50~150分钟随机数
+     * 当手机电池电量20%~50%时，延长时间显示10~45分钟随机数
+     * 当手机电池电量50%~70%时，延长待机时间显示20~55分钟随机数
+     * 当手机电池电量70%~100%时，延长待机时间显示30~60分钟随机数
      */
     private void changePower() {
         //显示电量
         if (mBatteryPower < 21){
             tvMini.setText(String.valueOf(getSavingPower(5,15)));
         }else if (mBatteryPower < 51) {
-            showPower(30,90);
+            showPower(0,45);
         }else if (mBatteryPower < 71) {
-            showPower(40,120);
+            showPower(20,55);
         }else if (mBatteryPower < 101) {
-            showPower(50,150);
+            showPower(30,60);
         }
         mBvView.setBattaryPercent(mBatteryPower);
     }
