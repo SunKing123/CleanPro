@@ -27,6 +27,9 @@ public class AppVersion extends BaseEntity {
         public String changeLog;
         public String code;
         public String downloadUrl;
+        /**
+         * 是否需要强制更新      值为1 强制更新
+         */
         public String changeProperties;
         public String md5;
         public String popup;

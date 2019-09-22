@@ -71,6 +71,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(AppVersion updateInfoEntity) {
+
                 setAppVersion(updateInfoEntity);
             }
 
@@ -373,14 +374,11 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     public void setAppVersion(AppVersion result) {
         if (result != null && result.getData() != null) {
-            //根据版本号判断是否需要更新
             if (TextUtils.equals("1", result.getData().popup))
                 if (mUpdateAgent == null) {
-                    mUpdateAgent = new UpdateAgent(mActivity, result, new OnCancelListener() {
-                        @Override
-                        public void onCancel() {
-                        }
-                    });
+                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {});
+                    mUpdateAgent.check();
+                } else {
                     mUpdateAgent.check();
                 }
         }

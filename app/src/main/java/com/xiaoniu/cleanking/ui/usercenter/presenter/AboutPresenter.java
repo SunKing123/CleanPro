@@ -83,11 +83,7 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
         if (result != null && result.getData() != null) {
             if (TextUtils.equals("1", result.getData().popup))
                 if (mUpdateAgent == null) {
-                    mUpdateAgent = new UpdateAgent(mActivity, result, new OnCancelListener() {
-                        @Override
-                        public void onCancel() {
-                        }
-                    });
+                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {});
                     mUpdateAgent.check();
                 } else {
                     mUpdateAgent.check();

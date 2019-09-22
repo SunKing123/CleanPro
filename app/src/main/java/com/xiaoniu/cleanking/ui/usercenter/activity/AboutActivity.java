@@ -59,28 +59,20 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         } else {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
         }
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        iv_back.setOnClickListener(v -> finish());
         tv_version.setText("当前版本 V" + AppUtils.getVersionName(this, this.getPackageName()));
         //检测版本更新
         mPresenter.queryAppVersion(1, () -> {
         });
-        line_version.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
-                if (tv_newversion.getVisibility() == View.VISIBLE) {
-                    mPresenter.queryAppVersion(2, () -> {
-                    });
-                } else {
-                    ToastUtils.showShort("当前已是最新版本");
-                }
-
+        line_version.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
+            if (tv_newversion.getVisibility() == View.VISIBLE) {
+                mPresenter.queryAppVersion(2, () -> {
+                });
+            } else {
+                ToastUtils.showShort("当前已是最新版本");
             }
+
         });
 
         line_xy.setOnClickListener(new View.OnClickListener() {

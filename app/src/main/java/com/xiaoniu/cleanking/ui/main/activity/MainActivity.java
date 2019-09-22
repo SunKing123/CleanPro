@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 定时扫面手机时间 1小时
      */
-    private static final long SCAN_LOOP_TIME =  60 * 1000;
+    private static final long SCAN_LOOP_TIME =  3 * 1000;
 
     /**
      * 借款页

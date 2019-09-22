@@ -55,7 +55,7 @@ public class MainModel extends BaseModel {
         Map<String, Object> map = new HashMap<>();
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.getWebUrl(body).compose(RxUtil.<WebUrlEntity>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+        mService.getWebUrl(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     /**
