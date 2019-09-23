@@ -199,10 +199,11 @@ public class ToolFragment extends SimpleFragment {
             startActivity(intent);
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         }else if (ids == R.id.ll_notification_clear){
-            //超强省电
-            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
-            startActivity(PhoneSuperPowerActivity.class);
-            StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
+            //手机清理
+            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
+            //((MainActivity) getActivity()).commitJpushClickTime(3);
+            StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
+            startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
         }
     }
 

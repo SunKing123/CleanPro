@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -123,8 +124,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     LottieAnimationView mAnimationView;
     @BindView(R.id.text_acce)
     LinearLayout mTextAcce;
-    @BindView(R.id.line_ql)
-    LinearLayout mLineQl;
+    @BindView(R.id.line_shd)
+    LinearLayout mLineShd;
     @BindView(R.id.text_wjgl)
     LinearLayout mTextWjgl;
     @BindView(R.id.iv_dun)
@@ -294,13 +295,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         startActivity(PhoneAccessActivity.class, bundle);
     }
 
-    @OnClick(R.id.line_ql)
-    public void line_ql() {
-        //手机清理
-        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
+    @OnClick(R.id.line_shd)
+    public void line_shd() {
+        //超强省电
         ((MainActivity) getActivity()).commitJpushClickTime(3);
-        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
-        startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
+        startActivity(PhoneSuperPowerActivity.class);
+        StatisticsUtils.trackClick("Super_Power_Saving_click", "\"超强省电\"点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
     }
 
     @OnClick(R.id.view_news)
@@ -345,7 +346,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
-
         AppHolder.getInstance().setOtherSourcePageId("");
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {

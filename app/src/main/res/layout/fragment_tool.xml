@@ -407,14 +407,14 @@
                     android:layout_height="@dimen/dimen_32dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/dimen_20dp"
-                    android:src="@mipmap/icon_power" />
+                    android:src="@mipmap/icon_sjql" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/dimen_16dp"
-                    android:text="@string/tool_super_power_saving"
+                    android:text="手机清理"
                     android:textColor="@color/color_333333"
                     android:textSize="13sp" />
 
@@ -425,7 +425,7 @@
                     android:layout_marginBottom="@dimen/dimen_20dp"
                     android:layout_marginTop="@dimen/dimen_4dp"
                     android:textColor="#999999"
-                    android:text="@string/tool_super_power_sub"
+                    android:text="深度扫描文件"
                     android:textSize="12dp" />
             </LinearLayout>
 
