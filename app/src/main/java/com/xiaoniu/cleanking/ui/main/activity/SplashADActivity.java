@@ -16,21 +16,15 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
-import com.qq.e.comm.constants.LoadAdParams;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 这是demo工程的入口Activity，在这里会首次调用广点通的SDK。
@@ -52,7 +46,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
      * 给出的延时逻辑是从拉取广告开始算开屏最少持续多久，仅供参考，开发者可自定义延时逻辑，如果开发者采用demo
      * 中给出的延时逻辑，也建议开发者考虑自定义minSplashTimeWhenNoAD的值（单位ms）
      **/
-    private int minSplashTimeWhenNoAD = 3000;
+    private int minSplashTimeWhenNoAD = 4000;
     /**
      * 记录拉取广告的时间
      */

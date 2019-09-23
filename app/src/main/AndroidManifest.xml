@@ -271,6 +271,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!-- 常驻通知栏 -->
+        <service android:name=".ui.notifition.NotificationService"/>
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- Since JCore2.0.0 Required SDK核心功能 -->

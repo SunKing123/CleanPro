@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#00000000"
+    android:background="#FFFFFF"
     android:orientation="horizontal"
     tools:ignore="ResourceName">
 
@@ -16,24 +16,22 @@
         android:layout_marginRight="@dimen/dimen_16dp"
         android:background="@mipmap/applogo" />
 
-    <View android:layout_width="1dp"
+    <TextView android:layout_width="1dp"
         android:background="@color/color_DEDEDE"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:layout_marginBottom="@dimen/dimen_16dp"
-        android:layout_height="match_parent" />
+        android:layout_height="18dp" />
 
     <LinearLayout
         android:id="@+id/ll_1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/btn_download1"
             style="@style/notification_img"
-            android:background="@mipmap/applogo" />
+            android:background="@mipmap/icon_notifi_clean_nor" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,18 +43,22 @@
 
     </LinearLayout>
 
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
     <LinearLayout
         android:id="@+id/ll_2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/btn_download2"
             style="@style/notification_img"
-            android:background="@mipmap/applogo" />
+            android:background="@mipmap/icon_notifi_one_key_no" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,18 +69,22 @@
             android:textColor="#000" />
     </LinearLayout>
 
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
     <LinearLayout
         android:id="@+id/ll_3"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/btn_download3"
             style="@style/notification_img"
-            android:background="@mipmap/applogo" />
+            android:background="@mipmap/icon_notifi_temperature_nor" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,18 +96,22 @@
 
     </LinearLayout>
 
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
     <LinearLayout
         android:id="@+id/ll_4"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/btn_download4"
             style="@style/notification_img"
-            android:background="@mipmap/applogo" />
+            android:background="@mipmap/icon_notifi_power_no" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,6 +123,10 @@
 
     </LinearLayout>
 
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -123,7 +137,7 @@
         <ImageView
             android:id="@+id/btn_download5"
             style="@style/notification_img"
-            android:background="@mipmap/applogo" />
+            android:background="@mipmap/icon_notifi_notification_nor" />
 
         <TextView
             android:layout_width="wrap_content"

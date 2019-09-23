@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.AlarmTimer;
 import com.xiaoniu.cleanking.ui.notifition.GlobalValues;
+import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -213,6 +214,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.commitJPushAlias();
 
         start();
+
+        //开启常驻通知栏服务
+        startService(new Intent(this, NotificationService.class));
 
         //开启定时扫面缓存
         AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
