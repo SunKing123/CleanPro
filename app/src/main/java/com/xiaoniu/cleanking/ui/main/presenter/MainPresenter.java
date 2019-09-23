@@ -68,7 +68,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void queryAppVersion(final OnCancelListener onCancelListener) {
         mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
 
-
             @Override
             public void getData(AppVersion updateInfoEntity) {
 
