@@ -17,6 +17,7 @@
 package com.xiaoniu.cleanking.utils.update;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -288,10 +289,10 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 //            dialog.setView(inflate, (int) (25 * density), (int) (15 * density), (int) (25 * density), 0);
             this.dialog.setContentView(inflate, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            update_content = (TextView) inflate.findViewById(R.id.update_content);
-            update_id_ok = (TextView) inflate.findViewById(R.id.update_id_ok);
-            update_id_cancel = (ImageView) inflate.findViewById(R.id.update_id_cancel);
-            update_version_num = (TextView) inflate.findViewById(R.id.update_version_num);
+            update_content = inflate.findViewById(R.id.update_content);
+            update_id_ok = inflate.findViewById(R.id.update_id_ok);
+            update_id_cancel = inflate.findViewById(R.id.update_id_cancel);
+            update_version_num = inflate.findViewById(R.id.update_version_num);
             //设置title
             //update_title.setText("当前版本:" + mInfo.getOldVersionNumber() + ",最新版本:" + mInfo.getVersionNumber());
             //设置内容
@@ -300,19 +301,9 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
             update_version_num.setText("V " + mInfo.getData().versionNumber);
             //设置点击监听
             //升级
-            update_id_ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    requestPermission(agent);
-                }
-            });
+            update_id_ok.setOnClickListener(v -> requestPermission(agent));
             //取消
-            update_id_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
+            update_id_cancel.setOnClickListener(v -> dialog.dismiss());
             if (mForce) {
                 //弹窗无法关闭
                 dialog.setCancelable(false);
@@ -320,12 +311,9 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
             }
             this.dialog.show();
 
-            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    if (!mForce)
-                        agent.getCancelListener().onCancel();
-                }
+            dialog.setOnDismissListener(dialog -> {
+                if (!mForce)
+                    agent.getCancelListener().onCancel();
             });
         }
 
@@ -343,21 +331,18 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      *
      * @param agent
      */
+    @SuppressLint("CheckResult")
     private void requestPermission(IUpdateAgent agent) {
         String permissionsHint = "需要打开文件读写权限";
-        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        new RxPermissions(mActivity).request(permissions).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    //开始更新
-                    agent.update();
-                } else {
-                    if (hasPermissionDeniedForever(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ToastUtils.showShort(permissionsHint);
-                        mPrompter.dismiss();
-                    }
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        new RxPermissions(mActivity).request(permissions).subscribe(aBoolean -> {
+            if (aBoolean) {
+                //开始更新
+                agent.update();
+            } else {
+                if (hasPermissionDeniedForever(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    ToastUtils.showShort(permissionsHint);
+                    mPrompter.dismiss();
                 }
             }
         });
@@ -403,8 +388,8 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 View inflate = View.inflate(mContext, R.layout.custom_download_dialog, null);
 
                 dialog.setContentView(inflate, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                pgBar = (ProgressBar) inflate.findViewById(R.id.jjdxm_update_progress_bar);
-                tvPg = (TextView) inflate.findViewById(R.id.jjdxm_update_progress_text);
+                pgBar = inflate.findViewById(R.id.jjdxm_update_progress_bar);
+                tvPg = inflate.findViewById(R.id.jjdxm_update_progress_text);
                 dialog.setCancelable(false);
                 dialog.show();
                 mDialog = dialog;
