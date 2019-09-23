@@ -21,7 +21,7 @@
         android:layout_height="18dp" />
 
     <LinearLayout
-        android:id="@+id/ll_1"
+        android:id="@+id/ll_clean"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="2"
@@ -29,7 +29,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/btn_download1"
+            android:id="@+id/iv_clean"
             style="@style/notification_img"
             android:background="@mipmap/icon_notifi_clean_nor" />
 
@@ -48,7 +48,7 @@
         android:layout_height="18dp" />
 
     <LinearLayout
-        android:id="@+id/ll_2"
+        android:id="@+id/ll_speed"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="2"
@@ -56,7 +56,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/btn_download2"
+            android:id="@+id/iv_speed"
             style="@style/notification_img"
             android:background="@mipmap/icon_notifi_one_key_no" />
 
@@ -74,7 +74,7 @@
         android:layout_height="18dp" />
 
     <LinearLayout
-        android:id="@+id/ll_3"
+        android:id="@+id/ll_temperature"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="2"
@@ -82,7 +82,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/btn_download3"
+            android:id="@+id/iv_temperature"
             style="@style/notification_img"
             android:background="@mipmap/icon_notifi_temperature_nor" />
 
@@ -101,7 +101,7 @@
         android:layout_height="18dp" />
 
     <LinearLayout
-        android:id="@+id/ll_4"
+        android:id="@+id/ll_power"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="2"
@@ -109,7 +109,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/btn_download4"
+            android:id="@+id/iv_power"
             style="@style/notification_img"
             android:background="@mipmap/icon_notifi_power_no" />
 
@@ -128,6 +128,7 @@
         android:layout_height="18dp" />
 
     <LinearLayout
+        android:id="@+id/ll_notification"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -135,7 +136,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/btn_download5"
+            android:id="@+id/iv_notification"
             style="@style/notification_img"
             android:background="@mipmap/icon_notifi_notification_nor" />
 

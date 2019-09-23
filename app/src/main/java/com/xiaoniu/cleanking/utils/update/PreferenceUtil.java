@@ -225,4 +225,24 @@ public class PreferenceUtil {
             return true;
         return false;
     }
+
+    /**
+     * 保存已进入APP
+     * @return
+     */
+    public static boolean saveFirstOpemApp(){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_FIRST_OPEN_APP, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否是首次进入应用
+     * @return
+     */
+    public static boolean isFirstOpenApp(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_APP,false);
+    }
 }

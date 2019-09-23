@@ -52,6 +52,7 @@ public class SpCacheConfig {
     //清理间隔时间
     public static final  String IS_SAVE_CLEAN_TIME = "clean_time";
     public static final  String IS_SAVE_WeCLEAN_TIME = "Weclean_time";
+    public static final  String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
     //埋点上一级页面
     public static final String ONKEY = "one_key";
     public static final String PHONE_CLEAN = "phone_clean";
