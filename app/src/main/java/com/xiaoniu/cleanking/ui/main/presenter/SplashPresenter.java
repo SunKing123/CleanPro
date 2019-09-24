@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
-import com.xiaoniu.cleanking.base.BaseView;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
@@ -14,7 +13,7 @@ import javax.inject.Inject;
 /**
  * Created by tie on 2017/5/15.
  */
-public class SplashPresenter extends RxPresenter<BaseView, MainModel> {
+public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
     private final RxAppCompatActivity mActivity;
     @Inject
@@ -33,28 +32,28 @@ public class SplashPresenter extends RxPresenter<BaseView, MainModel> {
 
     //过审
     public void getAuditSwitch() {
-//        mModel.queryAuditSwitch(new Common4Subscriber<AuditSwitch>() {
-//
-//
-//            @Override
-//            public void getData(AuditSwitch auditSwitch) {
-//                mView.getAuditSwitch(auditSwitch);
-//            }
-//
-//            @Override
-//            public void showExtraOp(String code, String message) {
-//                mView.getAuditSwitch(null);
-//            }
-//
-//            @Override
-//            public void showExtraOp(String message) {
-//                mView.getAuditSwitch(null);
-//            }
-//
-//            @Override
-//            public void netConnectError() {
-//                mView.getAuditSwitch(null);
-//            }
-//        });
+        mModel.queryAuditSwitch(new Common4Subscriber<AuditSwitch>() {
+
+
+            @Override
+            public void getData(AuditSwitch auditSwitch) {
+                mView.getAuditSwitch(auditSwitch);
+            }
+
+            @Override
+            public void showExtraOp(String code, String message) {
+                mView.getAuditSwitch(null);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+                mView.getAuditSwitch(null);
+            }
+
+            @Override
+            public void netConnectError() {
+                mView.getAuditSwitch(null);
+            }
+        });
     }
 }

@@ -150,7 +150,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         if (mBatteryPower < 21){
             tvMini.setText(String.valueOf(getSavingPower(5,15)));
         }else if (mBatteryPower < 51) {
-            showPower(0,45);
+            showPower(10,45);
         }else if (mBatteryPower < 71) {
             showPower(20,55);
         }else if (mBatteryPower < 101) {

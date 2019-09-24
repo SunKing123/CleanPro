@@ -22,18 +22,36 @@ import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 这是demo工程的入口Activity，在这里会首次调用广点通的SDK。
  *
  * 在调用SDK之前，如果您的App的targetSDKVersion >= 23，那么建议动态申请相关权限。
  */
-public class SplashADActivity extends Activity implements SplashADListener {
-
+public class SplashADActivity extends BaseActivity<SplashPresenter> implements SplashADListener {
+    @Inject
+    NoClearSPHelper mSPHelper;
     private SplashAD splashAD;
     private ViewGroup container;
     private TextView skipView;
@@ -53,26 +71,66 @@ public class SplashADActivity extends Activity implements SplashADListener {
      */
     private long fetchSplashADTime = 0;
     private Handler handler = new Handler(Looper.getMainLooper());
-
+    private Disposable mSubscription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_ad);
-        container = this.findViewById(R.id.splash_container);
-        skipView = findViewById(R.id.skip_view);
-        boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
-        needStartDemoList = getIntent().getBooleanExtra("need_start_demo_list", true);
-        if (!needLogo) {
-            findViewById(R.id.app_logo).setVisibility(View.GONE);
-        }
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkAndRequestPermission();
-        } else {
-            // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-            fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
-        }
     }
 
+    /**
+     * 延迟跳转
+     */
+    public void skip() {
+        this.mSubscription = Observable.timer(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            mPresenter.getAuditSwitch();
+            if (PreferenceUtil.isNoFirstOpenApp()) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    checkAndRequestPermission();
+                } else {
+                    // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                    fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
+                }
+            }
+        });
+    }
+
+    public void getAuditSwitch(AuditSwitch auditSwitch) {
+        if (auditSwitch == null) {
+            //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
+            SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
+        }else{
+            SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
+        }
+        if (!PreferenceUtil.isNoFirstOpenApp()) {
+            PreferenceUtil.saveFirstOpenApp();
+            jumpActivity();
+        }
+    }
+    public void jumpActivity() {
+        final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+        if (isFirst) {
+            startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
+        } else {
+            startActivity(new Intent(SplashADActivity.this, MainActivity.class));
+        }
+        finish();
+    }
+    /**
+     * 埋点事件
+     */
+    private void initNiuData() {
+        if (!mSPHelper.isUploadImei()) {
+            //有没有传过imei
+            String imei = DeviceUtils.getIMEI();
+            if (TextUtils.isEmpty(imei)) {
+                NiuDataAPI.setIMEI("");
+                mSPHelper.setUploadImeiStatus(false);
+            } else {
+                NiuDataAPI.setIMEI(imei);
+                mSPHelper.setUploadImeiStatus(true);
+            }
+        }
+    }
     private String getPosId() {
         String posId = getIntent().getStringExtra("pos_id");
         return TextUtils.isEmpty(posId) ? PositionId.SPLASH_POS_ID : posId;
@@ -203,7 +261,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
         // 计算出还需要延时多久
         handler.postDelayed(() -> {
             if (needStartDemoList) {
-               startActivity(new Intent(SplashADActivity.this, MainActivity.class));
+                jumpActivity();
             }
             finish();
         }, shouldDelayMills);
@@ -216,7 +274,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
     private void next() {
         if (canJump) {
             if (needStartDemoList) {
-                startActivity(new Intent(SplashADActivity.this, MainActivity.class));
+               jumpActivity();
             }
             this.finish();
         } else {
@@ -231,6 +289,25 @@ public class SplashADActivity extends Activity implements SplashADListener {
     }
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.activity_splash_ad;
+    }
+
+    @Override
+    protected void initView() {
+        container = this.findViewById(R.id.splash_container);
+        skipView = findViewById(R.id.skip_view);
+        boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
+        needStartDemoList = getIntent().getBooleanExtra("need_start_demo_list", true);
+        if (!needLogo) {
+            findViewById(R.id.app_logo).setVisibility(View.GONE);
+        }
+
+        initNiuData();
+        skip();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (canJump) {
@@ -240,9 +317,18 @@ public class SplashADActivity extends Activity implements SplashADListener {
     }
 
     @Override
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
     protected void onDestroy() {
-        super.onDestroy();
+        if (null != this.mSubscription) {
+            this.mSubscription.dispose();
+            this.mSubscription = null;
+        }
         handler.removeCallbacksAndMessages(null);
+        super.onDestroy();
     }
 
     /** 开屏页一定要禁止用户对返回按钮的控制，否则将可能导致用户手动退出了App而广告无法正常曝光和计费 */
@@ -254,4 +340,8 @@ public class SplashADActivity extends Activity implements SplashADListener {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void netError() {
+
+    }
 }
