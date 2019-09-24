@@ -52,10 +52,12 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
@@ -286,6 +288,25 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        event.setFlag(3);
+        EventBus.getDefault().post(event);
+
+        NotificationEvent event1 = new NotificationEvent();
+        event1.setType("notification");
+        event1.setFlag(3);
+        EventBus.getDefault().post(event1);
+
+        NotificationEvent event2 = new NotificationEvent();
+        event2.setType("power");
+        event2.setFlag(2);
+        EventBus.getDefault().post(event2);
+
+        NotificationEvent event3 = new NotificationEvent();
+        event3.setType("cooling");
+        event3.setFlag(2);
+        EventBus.getDefault().post(event3);
         //一键加速
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         ((MainActivity) getActivity()).commitJpushClickTime(2);

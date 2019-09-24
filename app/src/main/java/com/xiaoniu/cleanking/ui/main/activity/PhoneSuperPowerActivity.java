@@ -17,7 +17,10 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.common.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class PhoneSuperPowerActivity extends SimpleActivity {
 
@@ -95,6 +98,10 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NotificationEvent event = new NotificationEvent();
+        event.setType("power");
+        EventBus.getDefault().post(event);
+
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 if (mAlertDialog != null)

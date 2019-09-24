@@ -23,6 +23,7 @@ import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
     private SplashAD splashAD;
     private ViewGroup container;
     private TextView skipView;
-    private static final String SKIP_TEXT = "点击跳过 %d";
+    private static final String SKIP_TEXT = "跳过 %d";
 
     public boolean canJump = false;
     private boolean needStartDemoList = true;
@@ -46,7 +47,7 @@ public class SplashADActivity extends Activity implements SplashADListener {
      * 给出的延时逻辑是从拉取广告开始算开屏最少持续多久，仅供参考，开发者可自定义延时逻辑，如果开发者采用demo
      * 中给出的延时逻辑，也建议开发者考虑自定义minSplashTimeWhenNoAD的值（单位ms）
      **/
-    private int minSplashTimeWhenNoAD = 4000;
+    private int minSplashTimeWhenNoAD = 2000;
     /**
      * 记录拉取广告的时间
      */

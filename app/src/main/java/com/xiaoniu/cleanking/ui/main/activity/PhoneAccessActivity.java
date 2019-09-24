@@ -43,6 +43,8 @@ import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
+import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
@@ -60,6 +62,8 @@ import com.xiaoniu.common.utils.KeyboardUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -215,6 +219,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
+        //清理完成
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        EventBus.getDefault().post(event);
+
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -384,7 +393,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         super.onResume();
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
         NiuDataAPI.onPageStart("one_click_acceleration_page", "一键加速页浏览");
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
+        NotificationEvent event = new NotificationEvent();
+        event.setType("speed");
+        EventBus.getDefault().post(event);
+//        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
             isFromProtect = false;
             return;

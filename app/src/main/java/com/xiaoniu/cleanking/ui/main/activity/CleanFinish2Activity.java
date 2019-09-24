@@ -80,6 +80,7 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+
         mIvBack = findViewById(R.id.iv_back_clear_finish);
         mTvSize = findViewById(R.id.tv_size);
         mTvGb = findViewById(R.id.tv_clear_finish_gb_title);
@@ -89,6 +90,9 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
         mTvQl = findViewById(R.id.tv_ql);
         mLlNoNet = findViewById(R.id.layout_not_net);
         mContainer = findViewById(R.id.container);
+
+        //加载广告
+        refreshAd();
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -166,8 +170,7 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             mTopSubTitle.setText(mTitle);
         }
         showUI();
-        //加载广告
-        refreshAd();
+
     }
 
     private void showUI(){

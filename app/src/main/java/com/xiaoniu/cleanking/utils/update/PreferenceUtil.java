@@ -230,10 +230,10 @@ public class PreferenceUtil {
      * 保存已进入APP
      * @return
      */
-    public static boolean saveFirstOpemApp(){
-        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+    public static boolean saveFirstOpenApp(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(SpCacheConfig.IS_SAVE_FIRST_OPEN_APP, System.currentTimeMillis()).commit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_APP, true).commit();
         return true;
     }
 

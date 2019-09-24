@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.common.base.BaseActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 通知栏清理
@@ -61,6 +64,10 @@ public class NotifyCleanGuideActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NotificationEvent event = new NotificationEvent();
+        event.setType("notification");
+        EventBus.getDefault().post(event);
+
         if (mRequestPermission) {
             mRequestPermission = false;
             if (NotifyUtils.isNotificationListenerEnabled()) {

@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -56,6 +57,8 @@ import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -203,6 +206,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mTextNumberCool.setText("成功降温" + tem + "°C");
 
         new Handler().postDelayed(() -> initBottomLayout(), 1000);
+
     }
 
     private void initBottomLayout() {
@@ -555,6 +559,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        NotificationEvent event = new NotificationEvent();
+        event.setType("cooling");
+        EventBus.getDefault().post(event);
+
         NiuDataAPI.onPageStart("Cell_phone_cooling_view_page", "手机降温浏览");
         if (mRunningProcess != null) {
             showProcess(mRunningProcess);

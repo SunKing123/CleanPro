@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
@@ -255,6 +256,10 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("cell_phone_clean_click_view","手机清理页面浏览");
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        EventBus.getDefault().post(event);
+
     }
 
     @Override
