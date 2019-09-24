@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
+import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -25,6 +26,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.FileUtils;
@@ -161,11 +163,20 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_chat);
                 return;
             }
+            StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
             ((MainActivity)getActivity()).commitJpushClickTime(5);
-            startActivity(WechatCleanHomeActivity.class);
-            StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
+            if (PreferenceUtil.getWeChatCleanTime()) {
+                // 每次清理间隔 至少3秒
+                startActivity(WechatCleanHomeActivity.class);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity( CleanFinish2Activity.class,bundle);
+            }
         } else if (ids == R.id.rl_qq) {
             if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
