@@ -55,10 +55,8 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.statistic.NiuDataAPI;
 import com.ykun.live_library.KeepAliveManager;
 import com.ykun.live_library.config.ForegroundNotification;
-import com.ykun.live_library.config.ForegroundNotificationClickListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -118,6 +116,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
+    private CleanMainFragment mainFragment;
     private MyHandler mHandler = new MyHandler(this);
     private class MyHandler extends Handler{
         WeakReference<Activity> mActivity;
@@ -145,8 +144,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //检查是否有补丁
         mPresenter.queryPatch();
         //检测版本更新
-        mPresenter.queryAppVersion(() -> {
-        });
+        mPresenter.queryAppVersion(() -> {});
 
         //获取WebUrl
         mPresenter.getWebUrl();
@@ -221,6 +219,24 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //开启定时扫面缓存
         AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
+
+        Intent intent = getIntent();
+        if (intent != null){
+            startFromNotificationToClean(intent);
+        }
+    }
+
+    /**
+     * 通知栏点击进入首页开始清理
+     * @param intent
+     */
+    private void startFromNotificationToClean(Intent intent) {
+        String home = intent.getStringExtra("home");
+        if (!TextUtils.isEmpty(home)){
+            if (mainFragment != null){
+                mainFragment.startCleanNow();
+            }
+        }
     }
 
     private void checkReadPermission() {
@@ -262,7 +278,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @param intent
      */
     private void changeTab(Bundle intent) {
-
         String type = intent.getString("type");
 
         if ("shangcheng".equals(type)) {
@@ -296,9 +311,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onNewIntent(Intent intent) {
         if (intent.getExtras() != null) {
+            startFromNotificationToClean(intent);
             changeTab(intent.getExtras());
         }
-
         super.onNewIntent(intent);
     }
 
@@ -316,7 +331,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
 
         MeFragment mineFragment = MeFragment.getIntance();
-        CleanMainFragment mainFragment = new CleanMainFragment();
+        mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();

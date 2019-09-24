@@ -72,9 +72,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private long fetchSplashADTime = 0;
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter.getSwitchInfoList();
     }
 
     /**

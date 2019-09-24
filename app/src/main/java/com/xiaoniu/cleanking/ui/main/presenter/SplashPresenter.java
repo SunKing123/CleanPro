@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -19,21 +20,40 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
     @Inject
     NoClearSPHelper mSPHelper;
 
-    private int tryCount = 0;
-    private int maxTryCount = 3;
-
     @Inject
     public SplashPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
     }
 
-    public void setFirstStart() {
+    public void getSwitchInfoList(){
+        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(SwitchInfoList switchInfoList) {
+
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
     }
 
-    //过审
+    /**
+     * 过审
+     */
     public void getAuditSwitch() {
         mModel.queryAuditSwitch(new Common4Subscriber<AuditSwitch>() {
-
 
             @Override
             public void getData(AuditSwitch auditSwitch) {
