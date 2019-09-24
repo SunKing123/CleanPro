@@ -120,7 +120,7 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
                     mTvQl.setText("快试试其他功能吧！");
                 }
             }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
-                //一键加速
+                //手机清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
@@ -139,9 +139,9 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
                 //微信专情
                 if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
-                    mTvGb.setText("手机很干净");
+                    mTvGb.setText("已清理");
                     mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他功能");
+                    mTvQl.setText("快试试其他功能吧！");
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
                 //QQ专清
