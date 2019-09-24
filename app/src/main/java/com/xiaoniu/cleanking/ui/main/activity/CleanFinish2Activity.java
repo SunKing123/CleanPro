@@ -90,11 +90,13 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
         mTvQl = findViewById(R.id.tv_ql);
         mLlNoNet = findViewById(R.id.layout_not_net);
         mContainer = findViewById(R.id.container);
+        Intent intent = getIntent();
+        changeUI(intent);
+    }
 
+    private void changeUI(Intent intent) {
         //加载广告
         refreshAd();
-
-        Intent intent = getIntent();
         if (intent != null) {
             mTitle = intent.getStringExtra("title");
             String num = intent.getStringExtra("num");
@@ -170,7 +172,13 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             mTopSubTitle.setText(mTitle);
         }
         showUI();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mAppBarLayout.setExpanded(true);
+        changeUI(intent);
     }
 
     private void showUI(){

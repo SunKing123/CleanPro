@@ -187,7 +187,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
-            fetchSplashAD(this, container, skipView, PositionId.SPLASH_POS_ID, getPosId(), this, 0);
+            fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
