@@ -288,25 +288,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
-        NotificationEvent event = new NotificationEvent();
-        event.setType("clean");
-        event.setFlag(3);
-        EventBus.getDefault().post(event);
 
-        NotificationEvent event1 = new NotificationEvent();
-        event1.setType("notification");
-        event1.setFlag(3);
-        EventBus.getDefault().post(event1);
-
-        NotificationEvent event2 = new NotificationEvent();
-        event2.setType("power");
-        event2.setFlag(2);
-        EventBus.getDefault().post(event2);
-
-        NotificationEvent event3 = new NotificationEvent();
-        event3.setType("cooling");
-        event3.setFlag(2);
-        EventBus.getDefault().post(event3);
         //一键加速
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         ((MainActivity) getActivity()).commitJpushClickTime(2);
@@ -369,6 +351,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 通知栏点击开始清理
      */
     public void startCleanNow(){
+        if (!"立即清理".equals(mButtonCleanNow.getText().toString()))
+            return;
         ((MainActivity) getActivity()).commitJpushClickTime(1);
         mScrollView.scrollTo(mScrollView.getScrollX(), 0);
         //扫描完成点击清理

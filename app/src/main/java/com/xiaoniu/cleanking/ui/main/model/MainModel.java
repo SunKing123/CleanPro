@@ -116,6 +116,8 @@ public class MainModel extends BaseModel {
     public void getSwitchInfoList(Common4Subscriber<SwitchInfoList> commonSubscriber){
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
+        map.put("channel", AppUtils.getChannelId());
+        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getSwitchInfoList(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);

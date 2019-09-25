@@ -219,30 +219,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //开启定时扫面缓存
         AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
-
-        Intent intent = getIntent();
-        if (intent != null){
-            startFromNotificationToClean(intent);
-        }
-    }
-
-    /**
-     * 通知栏点击进入首页开始清理
-     * @param intent
-     */
-    private void startFromNotificationToClean(Intent intent) {
-        String home = intent.getStringExtra("home");
-        if (!TextUtils.isEmpty(home)){
-            if (mainFragment != null){
-                mainFragment.startCleanNow();
-            }
-        }
     }
 
     private void checkReadPermission() {
-        if (ContextCompat.checkSelfPermission(mContext,
-                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
-            System.out.println("");
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
+            System.out.println();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, REQUEST_STORAGE_PERMISSION);
@@ -279,6 +260,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      */
     private void changeTab(Bundle intent) {
         String type = intent.getString("type");
+        String home = intent.getString("home");
 
         if ("shangcheng".equals(type)) {
             mBottomBar.setCurrentItem(TOOL);
@@ -306,12 +288,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             } catch (Exception e) {
             }
         }
+
+        if ("clean".equals(home)){
+            if (mainFragment != null){
+                mainFragment.startCleanNow();
+            }
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         if (intent.getExtras() != null) {
-            startFromNotificationToClean(intent);
             changeTab(intent.getExtras());
         }
         super.onNewIntent(intent);

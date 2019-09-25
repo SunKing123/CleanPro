@@ -13,7 +13,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -120,7 +119,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-        changePower();
+        changePower(true);
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
         registerReceiver(broadcastReceiver,intentFilter);
@@ -134,29 +133,36 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             //获取最大电量，如未获取到具体数值，则默认为100
             int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
             mBatteryPower = (batteryLevel * 100 / batteryScale);
-            changePower();
+            changePower(false);
         }
     };
 
     /**
      * 更新显示电量
-     * 当手机电量1%~10%，延长时间显示5~15分钟随机数
+     * 当手机电量1%~10%，延长时间显示“点击优化，请尽快充电哦！”
+     * 当手机电量10%~20%，延长时间显示10~30分钟随机数
      * 当手机电池电量20%~50%时，延长时间显示10~45分钟随机数
      * 当手机电池电量50%~70%时，延长待机时间显示20~55分钟随机数
      * 当手机电池电量70%~100%时，延长待机时间显示30~60分钟随机数
      */
-    private void changePower() {
-        //显示电量
-        if (mBatteryPower < 21){
-            tvMini.setText(String.valueOf(getSavingPower(5,15)));
-        }else if (mBatteryPower < 51) {
-            showPower(10,45);
-        }else if (mBatteryPower < 71) {
-            showPower(20,55);
-        }else if (mBatteryPower < 101) {
-            showPower(30,60);
-        }
+    private void changePower(boolean change) {
         mBvView.setBattaryPercent(mBatteryPower);
+        if (change) {
+            //显示电量
+            if (mBatteryPower < 11) {
+                mTvAfterUpdate.setVisibility(View.GONE);
+                mLlTime.setVisibility(View.GONE);
+                mLlPowerLow.setVisibility(View.VISIBLE);
+            } else if (mBatteryPower < 21) {
+                tvMini.setText(String.valueOf(getSavingPower(10, 30)));
+            } else if (mBatteryPower < 51) {
+                showPower(10, 45);
+            } else if (mBatteryPower < 71) {
+                showPower(20, 55);
+            } else if (mBatteryPower < 101) {
+                showPower(30, 60);
+            }
+        }
     }
 
     /**

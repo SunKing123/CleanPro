@@ -3,11 +3,9 @@ package com.ykun.live_library.receive;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.ykun.live_library.config.KeepAliveConfig;
 import com.ykun.live_library.utils.ToActivity;
-
 
 public final class NotificationClickReceiver extends BroadcastReceiver {
     public final static String CLICK_NOTIFICATION = "CLICK_NOTIFICATION";
@@ -21,9 +19,7 @@ public final class NotificationClickReceiver extends BroadcastReceiver {
                     KeepAliveConfig.foregroundNotification.getForegroundNotificationClickListener().foregroundNotificationClick(context, intent);
                 }
             }
-            ToActivity.toActivity(context,"com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity");
-        } else if ("com.clean.notification".equals(action)) {
-            Toast.makeText(context, "click notification", Toast.LENGTH_SHORT).show();
+            ToActivity.toActivity(context, "com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity");
         }
     }
 }

@@ -70,12 +70,15 @@ public class NotificationService extends Service {
             mBuilder.setChannelId("1");
         }
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("home","");
+        intent.putExtra("home","home");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         contentView.setOnClickPendingIntent(R.id.iv_app_icon, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-        intent = new Intent(context, MainActivity.class);
-        intent.putExtra("home","clean");
-        contentView.setOnClickPendingIntent(R.id.ll_clean, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Intent intentClean = new Intent(context, MainActivity.class);
+        intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intentClean.putExtra("home","clean");
+        contentView.setOnClickPendingIntent(R.id.ll_clean, PendingIntent.getActivity(context, REQUEST_CODE, intentClean, PendingIntent.FLAG_UPDATE_CURRENT));
+
         contentView.setOnClickPendingIntent(R.id.ll_speed, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, PhoneAccessActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
         contentView.setOnClickPendingIntent(R.id.ll_temperature, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, PhoneCoolingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
         contentView.setOnClickPendingIntent(R.id.ll_power, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, PhoneSuperPowerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));

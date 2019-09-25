@@ -1,5 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
@@ -34,7 +39,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
-
+                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
             }
 
             @Override
