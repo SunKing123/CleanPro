@@ -23,12 +23,14 @@ import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.ads.nativ.NativeExpressMediaListener;
+import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanFinishWebFragment;
 import com.xiaoniu.cleanking.ui.main.interfac.AppBarStateChangeListener;
@@ -90,11 +92,26 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
         mTvQl = findViewById(R.id.tv_ql);
         mLlNoNet = findViewById(R.id.layout_not_net);
         mContainer = findViewById(R.id.container);
-
-        //加载广告
-        refreshAd();
-
         Intent intent = getIntent();
+        changeUI(intent);
+    }
+
+    private void changeUI(Intent intent) {
+        if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()){
+            if (AppHolder.getInstance().getSwitchInfoList() != null){
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()){
+                    if (PositionId.FINISH_ID.equals(switchInfoList.getId())){
+                        if (switchInfoList.isIsOpen()){
+                            //加载广告
+                            refreshAd();
+                        }
+                    }
+                }
+            }
+        }else {
+            PreferenceUtil.saveFirstOpenCLeanFinishApp();
+        }
+
         if (intent != null) {
             mTitle = intent.getStringExtra("title");
             String num = intent.getStringExtra("num");
@@ -170,7 +187,13 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             mTopSubTitle.setText(mTitle);
         }
         showUI();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mAppBarLayout.setExpanded(true);
+        changeUI(intent);
     }
 
     private void showUI(){

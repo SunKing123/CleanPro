@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.base;
 
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+
 /**
  * 保存埋点来源
  */
@@ -43,5 +45,15 @@ public class AppHolder {
 
     public String getOtherSourcePageId() {
         return otherSourcePageId;
+    }
+
+    private SwitchInfoList switchInfoList;
+
+    public void setSwitchInfoList(SwitchInfoList switchInfoList) {
+        this.switchInfoList = switchInfoList;
+    }
+
+    public SwitchInfoList getSwitchInfoList() {
+        return switchInfoList;
     }
 }

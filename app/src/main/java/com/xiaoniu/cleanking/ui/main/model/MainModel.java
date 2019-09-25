@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -46,8 +47,7 @@ public class MainModel extends BaseModel {
         map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity))
-                .subscribeWith(commonSubscriber);
+        mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {
@@ -71,8 +71,7 @@ public class MainModel extends BaseModel {
         map.put("registrationId", rid);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.commitJPushAlias(body).compose(RxUtil.rxSchedulerHelper(mActivity))
-                .subscribeWith(commonSubscriber);
+        mService.commitJPushAlias(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     /**
@@ -85,8 +84,7 @@ public class MainModel extends BaseModel {
         map.put("type", type);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.commitJPushClickTime(body).compose(RxUtil.rxSchedulerHelper(mActivity))
-                .subscribeWith(commonSubscriber);
+        mService.commitJPushClickTime(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
     /**
      * 热修复补丁查询
@@ -98,9 +96,7 @@ public class MainModel extends BaseModel {
         String baseVersionName = maps.get("baseVersionName");
         String clientType = maps.get("clientType");
         String patchVersion = maps.get("patchVersion");
-
-        mService.queryPatch(baseVersionName, clientType, patchVersion).compose(RxUtil.<Patch>rxSchedulerHelper(mActivity))
-                .subscribeWith(commonSubscriber);
+        mService.queryPatch(baseVersionName, clientType, patchVersion).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     public void queryAuditSwitch(Common4Subscriber<AuditSwitch> commonSubscriber) {
@@ -110,8 +106,21 @@ public class MainModel extends BaseModel {
         map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.queryAuditSwitch(body).compose(RxUtil.<AuditSwitch>rxSchedulerHelper(mActivity))
-                .subscribeWith(commonSubscriber);
+        mService.queryAuditSwitch(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+    /**
+     * 广告开关
+     * @param commonSubscriber
+     */
+    public void getSwitchInfoList(Common4Subscriber<SwitchInfoList> commonSubscriber){
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("channel", AppUtils.getChannelId());
+        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.getSwitchInfoList(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
 }

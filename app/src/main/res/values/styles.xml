@@ -13,6 +13,12 @@
         <!--防止跳转Main时，清除栈导致的短暂白屏或黑屏-->
         <item name="android:windowDisablePreview">true</item>
     </style>
+    <!--主页面-->
+    <style name="Main.Theme1" parent="@style/AppTheme">
+        <!--防止跳转Main时，清除栈导致的短暂白屏或黑屏-->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
     <!--全屏主题-->
     <style name="Theme.FullScreen" parent="@style/AppTheme">
         <item name="android:windowNoTitle">true</item>
@@ -153,8 +159,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/dimen_10dp</item>
-        <item name="android:src">@mipmap/icon_left_arrow_white</item>
-    </style>
+    <item name="android:src">@mipmap/icon_left_arrow_white</item>
+</style>
     <!--顶部导航 标题-->
     <style name="top_tv_title">
         <item name="android:layout_width">wrap_content</item>

@@ -55,10 +55,8 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.statistic.NiuDataAPI;
 import com.ykun.live_library.KeepAliveManager;
 import com.ykun.live_library.config.ForegroundNotification;
-import com.ykun.live_library.config.ForegroundNotificationClickListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -118,6 +116,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
+    private CleanMainFragment mainFragment;
     private MyHandler mHandler = new MyHandler(this);
     private class MyHandler extends Handler{
         WeakReference<Activity> mActivity;
@@ -145,8 +144,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //检查是否有补丁
         mPresenter.queryPatch();
         //检测版本更新
-        mPresenter.queryAppVersion(() -> {
-        });
+        mPresenter.queryAppVersion(() -> {});
 
         //获取WebUrl
         mPresenter.getWebUrl();
@@ -224,9 +222,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void checkReadPermission() {
-        if (ContextCompat.checkSelfPermission(mContext,
-                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
-            System.out.println("");
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
+            System.out.println();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, REQUEST_STORAGE_PERMISSION);
@@ -262,8 +259,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @param intent
      */
     private void changeTab(Bundle intent) {
-
         String type = intent.getString("type");
+        String home = intent.getString("home");
 
         if ("shangcheng".equals(type)) {
             mBottomBar.setCurrentItem(TOOL);
@@ -291,6 +288,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             } catch (Exception e) {
             }
         }
+
+        if ("clean".equals(home)){
+            if (mainFragment != null){
+                mainFragment.startCleanNow();
+            }
+        }
     }
 
     @Override
@@ -298,7 +301,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (intent.getExtras() != null) {
             changeTab(intent.getExtras());
         }
-
         super.onNewIntent(intent);
     }
 
@@ -316,7 +318,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
 
         MeFragment mineFragment = MeFragment.getIntance();
-        CleanMainFragment mainFragment = new CleanMainFragment();
+        mainFragment = new CleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();

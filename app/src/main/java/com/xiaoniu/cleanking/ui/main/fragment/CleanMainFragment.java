@@ -288,25 +288,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
-        NotificationEvent event = new NotificationEvent();
-        event.setType("clean");
-        event.setFlag(3);
-        EventBus.getDefault().post(event);
 
-        NotificationEvent event1 = new NotificationEvent();
-        event1.setType("notification");
-        event1.setFlag(3);
-        EventBus.getDefault().post(event1);
-
-        NotificationEvent event2 = new NotificationEvent();
-        event2.setType("power");
-        event2.setFlag(2);
-        EventBus.getDefault().post(event2);
-
-        NotificationEvent event3 = new NotificationEvent();
-        event3.setType("cooling");
-        event3.setFlag(2);
-        EventBus.getDefault().post(event3);
         //一键加速
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         ((MainActivity) getActivity()).commitJpushClickTime(2);
@@ -365,23 +347,32 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         StatisticsUtils.trackClick("Triangular_yellow_mark_click", "三角黄标", AppHolder.getInstance().getSourcePageId(), "permission_page");
     }
 
+    /**
+     * 通知栏点击开始清理
+     */
+    public void startCleanNow(){
+        if (!"立即清理".equals(mButtonCleanNow.getText().toString()))
+            return;
+        ((MainActivity) getActivity()).commitJpushClickTime(1);
+        mScrollView.scrollTo(mScrollView.getScrollX(), 0);
+        //扫描完成点击清理
+        mPresenter.showTransAnim(mLayoutCleanTop);
+        mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
+        mButtonCleanNow.setVisibility(GONE);
+        mTextScanTrace.setText("垃圾清理中...");
+        mArrowRight.setVisibility(GONE);
+        mLayoutRoot.setIntercept(true);
+        initWebView();
+        StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
+        showHomeLottieView(false);
+    }
+
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
         AppHolder.getInstance().setOtherSourcePageId("");
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
-            ((MainActivity) getActivity()).commitJpushClickTime(1);
-            mScrollView.scrollTo(mScrollView.getScrollX(), 0);
-            //扫描完成点击清理
-            mPresenter.showTransAnim(mLayoutCleanTop);
-            mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
-            mButtonCleanNow.setVisibility(GONE);
-            mTextScanTrace.setText("垃圾清理中...");
-            mArrowRight.setVisibility(GONE);
-            mLayoutRoot.setIntercept(true);
-            initWebView();
-            StatisticsUtils.trackClick("cleaning_page_click", "\"立即清理\"点击", AppHolder.getInstance().getSourcePageId(), "check_garbage_details");
-            showHomeLottieView(false);
+           startCleanNow();
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
             mButtonCleanNow.setText("再次扫描");

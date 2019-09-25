@@ -260,15 +260,17 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         anim.addUpdateListener(animation -> {
             if (tv_size == null) return;
             int currentValue = (int) animation.getAnimatedValue();
-            Log.d("niani", "setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));
             tv_size.setText(currentValue + "");
             tv_size_show.setText(currentValue + "");
-            tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
             if (currentValue == endNum) {
                 tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                 tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
-                tv_gb.setText(type == 1 ? "MB" : "GB");
+                if (endNum > 1024)
+                    tv_gb.setText("GB");
+                else
+                    tv_gb.setText("MB");
             }
+            Log.d("currentValue", type + "  type = " + tv_gb.getText().toString() + "  setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));
         });
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());

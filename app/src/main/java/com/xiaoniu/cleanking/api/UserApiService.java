@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
@@ -40,6 +41,14 @@ public interface UserApiService {
      */
     @POST("/auditSwitch/query")
     Flowable<AuditSwitch> queryAuditSwitch(@Body RequestBody body);
+
+    /**
+     * 广告开关
+     *
+     * @return
+     */
+    @POST("/switcherNew/getSwitchInfoList")
+    Flowable<SwitchInfoList> getSwitchInfoList(@Body RequestBody body);
 
     /**
      * 分享成功增加领券接口
