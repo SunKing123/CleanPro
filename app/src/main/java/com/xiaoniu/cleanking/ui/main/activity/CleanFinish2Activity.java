@@ -310,8 +310,30 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     protected void onResume() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            NiuDataAPI.onPageStart("one_click_acceleration_clean_up_view_page", "一键加速清理完成页浏览");
+        if (getString(R.string.app_name).contains(mTitle)) {
+            //悟空清理
+            NiuDataAPI.onPageStart("clean_success_page_view_page", "加速结果出现时");
+        }else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            //一键加速
+            NiuDataAPI.onPageStart("boost_success_page_view_page", "加速结果出现时");
+        }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
+            //手机清理
+            NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理结果出现时");
+        } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
+            //超强省电
+            NiuDataAPI.onPageStart("powersave_success_page_view_page", "省电结果出现时");
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)||getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            //微信专情
+            NiuDataAPI.onPageStart("wxclean_success_page_view_page", "微信清理结果页出现时");
+        } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
+            //QQ专清
+            NiuDataAPI.onPageStart("wxclean_success_page_view_page", "微信清理结果页出现时");
+        } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
+            //通知栏清理
+            NiuDataAPI.onPageStart("notification_clean_success_page_view_page", "通知栏清理结果页出现时");
+        } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
+            //手机降温
+            NiuDataAPI.onPageStart("cooling_success_page_view_page", "降温结果页出现时");
         }else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
@@ -320,12 +342,34 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     protected void onPause() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            NiuDataAPI.onPageEnd("one_click_acceleration_clean_up_view_page", "一键加速清理完成页浏览");
+        Jzvd.releaseAllVideos();
+        if (getString(R.string.app_name).contains(mTitle)) {
+            //悟空清理
+            NiuDataAPI.onPageEnd("clean_success_page_view_page", "加速结果出现时");
+        }else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            //一键加速
+            NiuDataAPI.onPageEnd("boost_success_page_view_page", "加速结果出现时");
+        }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
+            //手机清理
+            NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理结果出现时");
+        } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
+            //超强省电
+            NiuDataAPI.onPageEnd("powersave_success_page_view_page", "省电结果出现时");
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)||getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            //微信专情
+            NiuDataAPI.onPageEnd("wxclean_success_page_view_page", "微信清理结果页出现时");
+        } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
+            //QQ专清
+            NiuDataAPI.onPageEnd("wxclean_success_page_view_page", "微信清理结果页出现时");
+        } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
+            //通知栏清理
+            NiuDataAPI.onPageEnd("notification_clean_success_page_view_page", "通知栏清理结果页出现时");
+        } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
+            //手机降温
+            NiuDataAPI.onPageEnd("cooling_success_page_view_page", "降温结果页出现时");
         }else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
-        Jzvd.releaseAllVideos();
         super.onPause();
     }
     @Override
