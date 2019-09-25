@@ -44,6 +44,7 @@ public class MainModel extends BaseModel {
         Map<String, Object> map = new HashMap<>();
         map.put("os", "android");
         map.put("platform", "1");
+        map.put("versionCode", AppUtils.getVersionCode(mActivity, mActivity.getPackageName()));
         map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
