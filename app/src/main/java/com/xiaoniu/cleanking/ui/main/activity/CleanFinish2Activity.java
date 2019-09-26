@@ -103,7 +103,7 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             if (AppHolder.getInstance().getSwitchInfoList() != null){
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()){
                     if (PositionId.FINISH_ID.equals(switchInfoList.getId())){
-                        if (!switchInfoList.isIsOpen()){
+                        if (switchInfoList.isIsOpen()){
                             //加载广告
                             refreshAd();
                         }
