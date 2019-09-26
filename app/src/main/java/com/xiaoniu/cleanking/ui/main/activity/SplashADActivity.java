@@ -35,7 +35,10 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -236,7 +239,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 }
             }
         }
-
     }
 
     @Override
@@ -246,6 +248,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onADClicked() {
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1",PositionId.SPLASH_ID,"优量汇","splash_page","splash_page");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -265,6 +268,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
+        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.SPLASH_ID,"优量汇","splash_page","splash_page","success");
+        StatisticsUtils.customAD("ad_show","广告展示曝光","1",PositionId.SPLASH_ID,"优量汇","splash_page","splash_page");
     }
 
     @Override
@@ -275,6 +280,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onNoAD(AdError error) {
+        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.SPLASH_ID,"优量汇","splash_page","splash_page","fail");
         Log.i("AD_DEMO", String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(), error.getErrorMsg()));
         /**
          * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
@@ -330,6 +336,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         initNiuData();
         skip();
+
+        skipView.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "splash_page", "splash_page");
+        });
     }
 
     @Override
