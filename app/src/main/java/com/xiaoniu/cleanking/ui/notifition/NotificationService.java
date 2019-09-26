@@ -21,6 +21,8 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
+import com.xiaoniu.statistic.NiuDataAPI;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -46,6 +48,7 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        NiuDataAPI.onPageStart("toggle_page_view_page","常驻通知栏成功创建");
         EventBus.getDefault().register(this);
         context = this;
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -91,6 +94,7 @@ public class NotificationService extends Service {
         notification = mBuilder.build();
         // 发送到手机的通知栏
         notificationManager.notify(NOTIFICATION_ID, notification);
+        NiuDataAPI.onPageEnd("toggle_page_view_page","常驻通知栏成功创建");
     }
 
     @Subscribe
