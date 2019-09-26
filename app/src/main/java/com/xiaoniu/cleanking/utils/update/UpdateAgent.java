@@ -33,6 +33,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.update.listener.IDownloadAgent;
 import com.xiaoniu.cleanking.utils.update.listener.IUpdateAgent;
@@ -58,13 +60,13 @@ import io.reactivex.functions.Consumer;
 
 public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
-    private static boolean mForce;
+    private boolean mForce;
     private final Activity mActivity;
     private Context mContext;
     private File mTmpFile;
     private File mApkFile;
 
-    private static AppVersion mInfo;
+    private AppVersion mInfo;
     private UpdateError mError = null;
 
     //private IUpdateChecker mChecker = new DefaultUpdateChecker();
@@ -74,7 +76,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
     private OnFailureListener mOnFailureListener;
 
     private OnDownloadListener mOnDownloadListener;
-    private OnDownloadListener mOnNotificationDownloadListener;
+    //private OnDownloadListener mOnNotificationDownloadListener;
 
     private OnCancelListener mOnCancelListener;
 
@@ -103,8 +105,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         mOnDownloadListener = new DefaultDialogDownloadListener(activity);
         //是否强更
         mForce = "1".equals(updateInfo.getData().changeProperties);
-
-        mOnNotificationDownloadListener = new DefaultNotificationDownloadListener(mContext, 1);
+        //mOnNotificationDownloadListener = new DefaultNotificationDownloadListener(mContext, 1);
 
     }
 
@@ -144,13 +145,15 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     @Override
     public void onStart() {
-        if (mForce) {
-            //强更弹出下载对话框
-            mOnDownloadListener.onStart();
-        } else {
-            //不抢更弹出notification
-            mOnNotificationDownloadListener.onStart();
-        }
+//        if (mForce) {
+//            //强更弹出下载对话框
+//            mOnDownloadListener.onStart();
+//        } else {
+//            //不抢更弹出notification
+//            mOnNotificationDownloadListener.onStart();
+//        }
+        LogUtils.e("下载开始----");
+        mOnDownloadListener.onStart();
     }
 
     /**
@@ -160,11 +163,12 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     @Override
     public void onProgress(int progress) {
-        if (mForce) {
-            mOnDownloadListener.onProgress(progress);
-        } else {
-            mOnNotificationDownloadListener.onProgress(progress);
-        }
+//        if (mForce) {
+//            mOnDownloadListener.onProgress(progress);
+//        } else {
+//            mOnNotificationDownloadListener.onProgress(progress);
+//        }
+        mOnDownloadListener.onProgress(progress);
     }
 
     /**
@@ -172,11 +176,12 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      */
     @Override
     public void onFinish() {
-        if (mForce) {
-            mOnDownloadListener.onFinish();
-        } else {
-            mOnNotificationDownloadListener.onFinish();
-        }
+//        if (mForce) {
+//            mOnDownloadListener.onFinish();
+//        } else {
+//            mOnNotificationDownloadListener.onFinish();
+//        }
+        mOnDownloadListener.onFinish();
         if (mError != null) {
             mOnFailureListener.onFailure(mError);
         } else {
@@ -368,13 +373,12 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      * 下载进度条对话框回调
      */
     private static class DefaultDialogDownloadListener implements OnDownloadListener {
-        private Context mContext;
-        private Dialog mDialog;
-        private ProgressBar pgBar;
-        private TextView tvPg;
+        private Activity mActivity;
+        private UpgradingDialog mDialog;
 
-        public DefaultDialogDownloadListener(Context context) {
-            mContext = context;
+        public DefaultDialogDownloadListener(Activity activity) {
+            mActivity = activity;
+            LogUtils.e("DefaultDialogDownloadListener --下载开始----"+mActivity);
         }
 
         /**
@@ -382,17 +386,13 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
          */
         @Override
         public void onStart() {
-            if (mContext instanceof Activity && !((Activity) mContext).isFinishing()) {
-                Dialog dialog = new Dialog(mContext, R.style.dialog_2_button);
-
-                View inflate = View.inflate(mContext, R.layout.custom_download_dialog, null);
-
-                dialog.setContentView(inflate, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                pgBar = inflate.findViewById(R.id.jjdxm_update_progress_bar);
-                tvPg = inflate.findViewById(R.id.jjdxm_update_progress_text);
-                dialog.setCancelable(false);
-                dialog.show();
-                mDialog = dialog;
+            if (mActivity != null && !mActivity.isFinishing()) {
+                LogUtils.e("onStart --下载开始有弹窗----");
+                mDialog = new UpgradingDialog(mActivity);
+                mDialog.setCancelable(false);
+                mDialog.show();
+            }else {
+                LogUtils.e("onStart --下载开始无弹窗----");
             }
         }
 
@@ -404,8 +404,12 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         @Override
         public void onProgress(int i) {
             if (mDialog != null) {
-                pgBar.setProgress(i);
-                tvPg.setText(i + "%");
+                if (mDialog.getPgBar() != null){
+                    mDialog.getPgBar().setProgress(i);
+                }
+                if (mDialog.getTvPg() != null){
+                    mDialog.getTvPg().setText(i + "%");
+                }
             }
         }
 
@@ -415,15 +419,6 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         @Override
         public void onFinish() {
             if (mDialog != null) {
-                if (mContext == null) {
-                    return;
-                }
-                if (!(mContext instanceof Activity)) {
-                    return;
-                }
-                if (((Activity) mContext).isDestroyed()) {
-                    return;
-                }
                 mDialog.dismiss();
                 mDialog = null;
             }

@@ -95,13 +95,16 @@ public class UpdateDownloader extends AsyncTask<Void, Integer, Long> {
             }
         } catch (UpdateError e) {
             mAgent.setError(e);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            mAgent.setError(new UpdateError(UpdateError.DOWNLOAD_DISK_IO));
-        } catch (IOException e) {
+        }
+//        catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            mAgent.setError(new UpdateError(UpdateError.DOWNLOAD_DISK_IO));
+//        }
+        catch (IOException e) {
             e.printStackTrace();
             mAgent.setError(new UpdateError(UpdateError.DOWNLOAD_NETWORK_IO));
-        } finally {
+        }
+        finally {
             if (mConnection != null) {
                 mConnection.disconnect();
             }
@@ -158,7 +161,7 @@ public class UpdateDownloader extends AsyncTask<Void, Integer, Long> {
     private HttpURLConnection create(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Accept", "application/*");
-        connection.setConnectTimeout(10000);
+        connection.setConnectTimeout(20000);
         return connection;
     }
 
