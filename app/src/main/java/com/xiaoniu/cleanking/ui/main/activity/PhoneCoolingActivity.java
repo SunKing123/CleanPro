@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -171,6 +172,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @Override
     protected void initView() {
+        Intent intent = getIntent();
+        if (intent != null){
+            String notification = intent.getStringExtra("NotificationService");
+            if ("clean".equals(notification)){
+                StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
+            }
+        }
+
         mAppCoolingBarlayout.setExpanded(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);

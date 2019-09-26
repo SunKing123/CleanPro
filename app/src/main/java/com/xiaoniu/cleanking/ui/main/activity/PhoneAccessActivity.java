@@ -218,6 +218,17 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null){
+            String notification = intent.getExtras().getString("NotificationService");
+            if ("clean".equals(notification)){
+                StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
+            }
+        }
+    }
+
+    @Override
     public void initView() {
         //清理完成
         NotificationEvent event = new NotificationEvent();
@@ -231,14 +242,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             mTvTitleName.setText(title);
             acceview.setTitleName(title);
         }
-
         Intent intent = getIntent();
-        if (intent != null){
-            String notifition = intent.getStringExtra("NotificationService");
-            if ("clean".equals(notifition)){
-                Toast.makeText(this,"NotificationService",Toast.LENGTH_SHORT).show();
-            }
-        }
+        addClick(intent);
 
         if (!isUsageAccessAllowed()) {
             mAlertDialog = mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
@@ -308,6 +313,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             showCleanFinishUI(strNum,strUnit);
         });
 
+    }
+
+    private void addClick(Intent intent) {
+        if (intent != null){
+            String notifition = intent.getStringExtra("NotificationService");
+            if ("clean".equals(notifition)){
+                Toast.makeText(this,"NotificationService",Toast.LENGTH_SHORT).show();
+                StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
+            }
+        }
     }
 
     /**

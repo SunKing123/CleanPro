@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,6 +46,15 @@ public class NotifyCleanGuideActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+
+        Intent intent = getIntent();
+        if (intent != null){
+            String notification = intent.getStringExtra("NotificationService");
+            if ("clean".equals(notification)){
+                StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
+            }
+        }
+
         mTvClean = findViewById(R.id.tv_clean);
     }
 

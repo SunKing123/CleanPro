@@ -289,7 +289,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         }
 
-        if ("home".equals(home)){
+        if ("clean".equals(home)){
+            StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
             if (mainFragment != null){
                 mainFragment.startCleanNow();
             }
