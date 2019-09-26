@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -88,6 +89,7 @@ public class NotificationService extends Service {
         //加速
         Intent phoneAccessIntent = new Intent(context, PhoneAccessActivity.class);
         phoneAccessIntent.putExtra("NotificationService","clean");
+        phoneAccessIntent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
         contentView.setOnClickPendingIntent(R.id.ll_speed, PendingIntent.getActivity(context, REQUEST_CODE, phoneAccessIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         //降温
