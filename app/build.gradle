@@ -130,6 +130,10 @@ dependencies {
     implementation project(':baselib:common')
     implementation project(':otherlib:live_library')
     implementation project(':otherlib:asmhelp')
+
+    //推送
+    implementation files('libs\\push-core.aar')
+    implementation files('libs\\push-jpush.aar')
 }
 
 

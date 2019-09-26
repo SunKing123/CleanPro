@@ -35,8 +35,8 @@ public class StatisticsUtils {
     public static void trackClick(String eventCode, String eventName, String sourcePage, String currentPage, JSONObject extension) {
         JSONObject j = new JSONObject();
         try {
-            j.put("source_page", sourcePage);
-            j.put("current_page", currentPage);
+            j.put("source_page_id", sourcePage);
+            j.put("current_page_id", currentPage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,8 +88,8 @@ public class StatisticsUtils {
     public static void trackClickUrlH5(String eventCode, String eventName, String sourcePage, String currentPage, String url) {
         JSONObject extension = new JSONObject();
         try {
-            extension.put("source_page", sourcePage);
-            extension.put("current_page", currentPage);
+            extension.put("source_page_id", sourcePage);
+            extension.put("current_page_id", currentPage);
             extension.put("h5_uri", url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,8 +135,8 @@ public class StatisticsUtils {
     public static void onPageEnd(String eventCode, String eventName, String sourcePage, String currentPage) {
         JSONObject j = new JSONObject();
         try {
-            j.put("source_page", sourcePage);
-            j.put("current_page", currentPage);
+            j.put("source_page_id", sourcePage);
+            j.put("current_page_id", currentPage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -153,62 +153,14 @@ public class StatisticsUtils {
     public static void onPageEndH5(String eventCode, String eventName, String sourcePage, String currentPage) {
         JSONObject j = new JSONObject();
         try {
-            j.put("source_page", sourcePage);
-            j.put("current_page", currentPage);
+            j.put("source_page_id", sourcePage);
+            j.put("current_page_id", currentPage);
             //h5要设置对应的页面类型
             j.put("page_type", "h5");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         NiuDataAPI.onPageEnd(eventCode, eventName, j);
-    }
-
-    /**
-     * 极光推送 点击埋点
-     *
-     * @param eventCode
-     * @param sourcePage
-     * @param currentPage
-     * @param url
-     */
-    public static void trackClickJPush(String eventCode, String eventName, String sourcePage, String currentPage, String url,int id,String title) {
-        String push_type = "";
-        if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
-            //立即清理页面
-            push_type = "clean_up_immediately";
-        }else if (url.contains("main.activity.PhoneAccessActivity")){
-            //  一键加速页面
-            push_type = "mobile_phone_boost";
-        }else if (url.contains("main.activity.CleanBigFileActivity")){
-            //  手机清理页面
-            push_type = "mobile_phone _cleaning";
-        }else if (url.contains("main.activity.FileManagerHomeActivity")){
-            //  文件清理页面
-            push_type = "file_cleanup";
-        }else if (url.contains("tool.wechat.activity.WechatCleanHomeActivity")){
-            //  微信专清页面
-            push_type = "wechat_cleaning";
-        }else if (url.contains("tool.qq.activity.QQCleanHomeActivity")){
-            //  QQ专清页面
-            push_type = "QQ_cleaning";
-        }else if (url.contains("main.activity.PhoneCoolingActivity")){
-            // 手机降温页面
-            push_type = "cooling";
-        }else if (url.contains("main.activity.PhoneSuperPowerActivity")){
-            // 超强省电页面
-            push_type = "power_saving";
-        }
-        JSONObject extension = new JSONObject();
-        try {
-            extension.put("push_id", String.valueOf(id));
-            extension.put("push_title", title);
-            extension.put("push_type", push_type);
-            extension.put("target_page_id", url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
     }
 
     /**
@@ -251,8 +203,8 @@ public class StatisticsUtils {
             extension.put("push_title", title);
             extension.put("push_type", push_type);
             extension.put("target_page_id", url);
-            extension.put("source_page", sourcePage);
-            extension.put("current_page", currentPage);
+            extension.put("source_page_id", sourcePage);
+            extension.put("current_page_id", currentPage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -327,14 +279,14 @@ public class StatisticsUtils {
      * @param ad_position_id
      * @param ad_id
      * @param ad_agency
-     * @param source_page
-     * @param current_page
+     * @param source_page_id
+     * @param current_page_id
      */
-    public static void customAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page, String current_page) {
+    public static void customAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id) {
         JSONObject extension = new JSONObject();
         try {
-            extension.put("source_page", source_page);
-            extension.put("current_page", current_page);
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
             extension.put("ad_title","");
@@ -353,14 +305,14 @@ public class StatisticsUtils {
      * @param ad_id
      * @param ad_agency
      * @param ad_request_status
-     * @param source_page
-     * @param current_page
+     * @param source_page_id
+     * @param current_page_id
      */
-    public static void customADRequest(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency,String ad_request_status, String source_page, String current_page) {
+    public static void customADRequest(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency,String ad_request_status, String source_page_id, String current_page_id) {
         JSONObject extension = new JSONObject();
         try {
-            extension.put("source_page", source_page);
-            extension.put("current_page", current_page);
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
             extension.put("ad_title","");
@@ -380,14 +332,14 @@ public class StatisticsUtils {
      * @param ad_position_id
      * @param ad_id
      * @param ad_agency
-     * @param source_page
-     * @param current_page
+     * @param source_page_id
+     * @param current_page_id
      */
-    public static void clickAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page, String current_page) {
+    public static void clickAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id) {
         JSONObject extension = new JSONObject();
         try {
-            extension.put("source_page", source_page);
-            extension.put("current_page", current_page);
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
             extension.put("ad_title","");
@@ -396,20 +348,6 @@ public class StatisticsUtils {
             e.printStackTrace();
         }
         NiuDataAPI.trackEvent(event_code, event_name, extension);
-    }
-
-    /**
-     * 浏览
-     */
-    public static void onNiuDataPageEnd(String eventCode,String eventName,String sourcePage,String currentPage){
-        JSONObject extension = new JSONObject();
-        try {
-            extension.put("source_page_id", sourcePage);
-            extension.put("current_page_id", currentPage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        NiuDataAPI.onPageEnd(eventName, eventCode, extension);
     }
 
 }

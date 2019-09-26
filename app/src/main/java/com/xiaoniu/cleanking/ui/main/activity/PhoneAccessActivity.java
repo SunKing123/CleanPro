@@ -319,6 +319,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (intent != null){
             String notifition = intent.getStringExtra("NotificationService");
             if ("clean".equals(notifition)){
+                AppHolder.getInstance().setCleanFinishSourcePageId("toggle_boost_click");
                 StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
             }
         }

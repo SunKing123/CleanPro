@@ -288,6 +288,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.text_acce)
     public void text_acce() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("boost_click");
         //一键加速
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         ((MainActivity) getActivity()).commitJpushClickTime(2);
@@ -300,6 +301,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.line_shd)
     public void line_shd() {
         //超强省电
+        AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
         ((MainActivity) getActivity()).commitJpushClickTime(3);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         startActivity(PhoneSuperPowerActivity.class);
@@ -350,6 +352,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 开始清理
      */
     public void startCleanNow(){
+        AppHolder.getInstance().setCleanFinishSourcePageId("clean_click");
         if (!"立即清理".equals(mButtonCleanNow.getText().toString()))
             return;
         ((MainActivity) getActivity()).commitJpushClickTime(1);
@@ -419,6 +422,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_wx)
     public void mClickWx() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
         ((MainActivity) getActivity()).commitJpushClickTime(5);
@@ -441,6 +445,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         //通知栏清理
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -448,6 +453,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @OnClick(R.id.line_jw)
     public void mClickJw() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("cooling_click");
         ((MainActivity) getActivity()).commitJpushClickTime(6);
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -858,7 +864,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageStart("check_garbage_view_page", "\"清理垃圾\"浏览");
+        NiuDataAPI.onPageStart("check_garbage_view_page", "清理垃圾浏览");
         if (isGotoSetting) {
             mPresenter.checkPermission();
             isGotoSetting = false;
@@ -875,7 +881,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onPause() {
         super.onPause();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageEnd("check_garbage_view_page", "\"清理垃圾\"浏览");
+        NiuDataAPI.onPageEnd("check_garbage_view_page", "清理垃圾浏览");
     }
 
     /**
