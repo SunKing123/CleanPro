@@ -319,7 +319,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (intent != null){
             String notifition = intent.getStringExtra("NotificationService");
             if ("clean".equals(notifition)){
-                Toast.makeText(this,"NotificationService",Toast.LENGTH_SHORT).show();
                 StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
             }
         }
@@ -381,7 +380,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     private void startClean(boolean b) {
-        if (!canClickDelete || mTvSpeed == null) return;
+        if (!canClickDelete || mTvSpeed == null || acceview == null) return;
         mTvSpeed.setVisibility(View.GONE);
         mLineAccess.setCompoundDrawables(null, null, null, null);
         mLineAccess.setText(getString(R.string.tool_speed_now));

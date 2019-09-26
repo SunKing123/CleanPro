@@ -337,6 +337,7 @@ public class StatisticsUtils {
             extension.put("current_page", current_page);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
+            extension.put("ad_title","");
             extension.put("ad_agency", ad_agency);
         } catch (Exception e) {
             e.printStackTrace();
@@ -362,6 +363,7 @@ public class StatisticsUtils {
             extension.put("current_page", current_page);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
+            extension.put("ad_title","");
             extension.put("ad_agency", ad_agency);
             extension.put("ad_request_status", ad_request_status);
 
@@ -388,10 +390,26 @@ public class StatisticsUtils {
             extension.put("current_page", current_page);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
+            extension.put("ad_title","");
             extension.put("ad_agency", ad_agency);
         } catch (Exception e) {
             e.printStackTrace();
         }
         NiuDataAPI.trackEvent(event_code, event_name, extension);
     }
+
+    /**
+     * 浏览
+     */
+    public static void onNiuDataPageEnd(String eventCode,String eventName,String sourcePage,String currentPage){
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", sourcePage);
+            extension.put("current_page_id", currentPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.onPageEnd(eventName, eventCode, extension);
+    }
+
 }
