@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -100,7 +101,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         isLoaded = Tinker.with(mActivity).isTinkerLoaded();
         isInstalled = Tinker.with(mActivity).isTinkerInstalled();
         final String currentVersionName = AppUtils.getVersionName(mActivity, mActivity.getPackageName());
-        final String channel = AppUtils.getChannelId();
+        final String channel = ChannelUtil.getChannel();
         if (isLoaded) {
             TinkerLoadResult loadResult = Tinker.with(mActivity).getTinkerLoadResultIfPresent();
             Map<String, String> config = loadResult.packageConfig;
