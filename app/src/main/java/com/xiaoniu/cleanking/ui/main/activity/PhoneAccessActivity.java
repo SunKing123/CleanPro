@@ -426,7 +426,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
+        if (listInfo == null || acceview == null) return;
 
         //悟空清理app加入默认白名单
         for (FirstJunkInfo firstJunkInfo : listInfo){
