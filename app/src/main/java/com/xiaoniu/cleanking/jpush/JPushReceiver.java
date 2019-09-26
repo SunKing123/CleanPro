@@ -7,6 +7,7 @@ import com.geek.push.entity.PushCommand;
 import com.geek.push.entity.PushMsg;
 import com.geek.push.receiver.BasePushReceiver;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,7 +21,7 @@ public class JPushReceiver extends BasePushReceiver {
             for (String key : msg.getKeyValue().keySet()) {
                 String url = msg.getKeyValue().get("url");
                 if (!TextUtils.isEmpty(url)) {
-                    StatisticsUtils.trackClickJPush("push_info_click", "推送消息点击", "", "notification_page",url,msg.getNotifyId(),msg.getTitle());
+                    NiuDataAPIUtil.trackClickJPush("push_info_click", "推送消息点击", "", "notification_page",url,msg.getNotifyId(),msg.getTitle());
                     SchemeProxy.openScheme(context, url);
                 }
             }

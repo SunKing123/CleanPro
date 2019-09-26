@@ -56,4 +56,14 @@ public class AppHolder {
     public SwitchInfoList getSwitchInfoList() {
         return switchInfoList;
     }
+
+    private String cleanFinishSourcePageId;
+
+    public String getCleanFinishSourcePageId() {
+        return cleanFinishSourcePageId;
+    }
+
+    public void setCleanFinishSourcePageId(String cleanFinishSourcePageId) {
+        this.cleanFinishSourcePageId = cleanFinishSourcePageId;
+    }
 }

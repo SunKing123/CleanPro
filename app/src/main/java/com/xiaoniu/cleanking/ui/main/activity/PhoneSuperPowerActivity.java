@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -46,6 +47,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         if (intent != null){
             String notification = intent.getStringExtra("NotificationService");
             if ("clean".equals(notification)){
+                AppHolder.getInstance().setCleanFinishSourcePageId("toggle_powersave_click");
                 StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
             }
         }
