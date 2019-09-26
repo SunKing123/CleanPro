@@ -248,7 +248,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onADClicked() {
-        StatisticsUtils.trackClick("ad_click", "广告点击", "splash_page", "splash_page");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1",PositionId.SPLASH_ID,"优量汇","splash_page","splash_page");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -268,6 +268,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
+        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.SPLASH_ID,"优量汇","splash_page","splash_page","success");
         StatisticsUtils.customAD("ad_show","广告展示曝光","1",PositionId.SPLASH_ID,"优量汇","splash_page","splash_page");
     }
 
@@ -279,6 +280,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onNoAD(AdError error) {
+        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.SPLASH_ID,"优量汇","splash_page","splash_page","fail");
         Log.i("AD_DEMO", String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(), error.getErrorMsg()));
         /**
          * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo

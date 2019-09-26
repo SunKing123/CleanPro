@@ -505,12 +505,12 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     public void onRenderFail(NativeExpressADView nativeExpressADView) {
-
+        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.CLEAN_FINISH_ID,"优量汇","success_page","success_page","fail");
     }
 
     @Override
     public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-
+        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.CLEAN_FINISH_ID,"优量汇","success_page","success_page","success");
     }
 
     @Override

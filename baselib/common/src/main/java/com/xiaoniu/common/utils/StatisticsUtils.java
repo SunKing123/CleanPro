@@ -345,6 +345,33 @@ public class StatisticsUtils {
     }
 
     /**
+     * 广告请求
+     * @param event_code
+     * @param event_name
+     * @param ad_position_id
+     * @param ad_id
+     * @param ad_agency
+     * @param ad_request_status
+     * @param source_page
+     * @param current_page
+     */
+    public static void customADRequest(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency,String ad_request_status, String source_page, String current_page) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page", source_page);
+            extension.put("current_page", current_page);
+            extension.put("ad_position_id", ad_position_id);
+            extension.put("ad_id", ad_id);
+            extension.put("ad_agency", ad_agency);
+            extension.put("ad_request_status", ad_request_status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
+
+    /**
      * 广告点击
      * @param event_code
      * @param event_name
