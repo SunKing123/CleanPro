@@ -858,7 +858,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageStart("check_garbage_view_page", "\"清理垃圾\"浏览");
+        NiuDataAPI.onPageStart("check_garbage_view_page", "清理垃圾浏览");
         if (isGotoSetting) {
             mPresenter.checkPermission();
             isGotoSetting = false;
@@ -875,7 +875,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void onPause() {
         super.onPause();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageEnd("check_garbage_view_page", "\"清理垃圾\"浏览");
+        NiuDataAPI.onPageEnd("check_garbage_view_page", "清理垃圾浏览");
     }
 
     /**
