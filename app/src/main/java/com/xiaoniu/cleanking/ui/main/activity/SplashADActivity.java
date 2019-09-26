@@ -80,11 +80,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private Disposable mSubscription;
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_splash_ad;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter.getSwitchInfoList();
@@ -228,13 +223,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         fetchSplashADTime = System.currentTimeMillis();
 
         //后台控制是否显示开关
-        if (AppHolder.getInstance() == null || AppHolder.getInstance().getSwitchInfoList() == null || AppHolder.getInstance().getSwitchInfoList().getData() == null) {
+        if (AppHolder.getInstance() == null || AppHolder.getInstance().getSwitchInfoList() == null || AppHolder.getInstance().getSwitchInfoList().getData() == null)
             jumpActivity();
-        }else {
+        if (AppHolder.getInstance() != null && AppHolder.getInstance().getSwitchInfoList() != null && AppHolder.getInstance().getSwitchInfoList().getData() != null){
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.SPLASH_ID.equals(switchInfoList.getId())) {
                     if (switchInfoList.isIsOpen()) {
-                        //广告
                         splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
                         splashAD.fetchAndShowIn(adContainer);
                         return;
@@ -323,6 +317,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     protected void onPause() {
         super.onPause();
         canJump = false;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_splash_ad;
     }
 
     @Override

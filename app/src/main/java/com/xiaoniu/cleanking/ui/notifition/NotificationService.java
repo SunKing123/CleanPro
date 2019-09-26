@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -72,20 +73,38 @@ public class NotificationService extends Service {
             notificationManager.createNotificationChannel(notificationChannel);
             mBuilder.setChannelId("1");
         }
+        //logo
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("home","home");
+        intent.putExtra("NotificationService","home");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         contentView.setOnClickPendingIntent(R.id.iv_app_icon, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
 
+        //清理
         Intent intentClean = new Intent(context, MainActivity.class);
         intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intentClean.putExtra("home","clean");
+        intentClean.putExtra("NotificationService","clean");
         contentView.setOnClickPendingIntent(R.id.ll_clean, PendingIntent.getActivity(context, REQUEST_CODE, intentClean, PendingIntent.FLAG_UPDATE_CURRENT));
 
-        contentView.setOnClickPendingIntent(R.id.ll_speed, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, PhoneAccessActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
-        contentView.setOnClickPendingIntent(R.id.ll_temperature, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, PhoneCoolingActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
-        contentView.setOnClickPendingIntent(R.id.ll_power, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, PhoneSuperPowerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
-        contentView.setOnClickPendingIntent(R.id.ll_notification, PendingIntent.getActivity(context, REQUEST_CODE, new Intent(context, NotifyCleanGuideActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
+        //加速
+        Intent phoneAccessIntent = new Intent(context, PhoneAccessActivity.class);
+        phoneAccessIntent.putExtra("NotificationService","clean");
+        contentView.setOnClickPendingIntent(R.id.ll_speed, PendingIntent.getActivity(context, REQUEST_CODE, phoneAccessIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        //降温
+        Intent phoneCoolingIntent = new Intent(context, PhoneCoolingActivity.class);
+        phoneCoolingIntent.putExtra("NotificationService","clean");
+        contentView.setOnClickPendingIntent(R.id.ll_temperature, PendingIntent.getActivity(context, REQUEST_CODE, phoneCoolingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        //省电
+        Intent phoneSuperPowerIntent = new Intent(context, PhoneSuperPowerActivity.class);
+        phoneSuperPowerIntent.putExtra("NotificationService","clean");
+        contentView.setOnClickPendingIntent(R.id.ll_power, PendingIntent.getActivity(context, REQUEST_CODE, phoneSuperPowerIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        //通知栏清理
+        Intent notifyCleanGuideIntent = new Intent(context, NotifyCleanGuideActivity.class);
+        notifyCleanGuideIntent.putExtra("NotificationService","clean");
+        contentView.setOnClickPendingIntent(R.id.ll_notification, PendingIntent.getActivity(context, REQUEST_CODE, notifyCleanGuideIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
         mBuilder.setContent(contentView);
         mBuilder.setSmallIcon(R.mipmap.applogo);
         mBuilder.setOngoing(true);

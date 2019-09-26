@@ -232,6 +232,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             acceview.setTitleName(title);
         }
 
+        Intent intent = getIntent();
+        if (intent != null){
+            String notifition = intent.getStringExtra("NotificationService");
+            if ("clean".equals(notifition)){
+                Toast.makeText(this,"NotificationService",Toast.LENGTH_SHORT).show();
+            }
+        }
+
         if (!isUsageAccessAllowed()) {
             mAlertDialog = mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
                 @Override
@@ -472,6 +480,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strUnit = "MB";
             if (canPlayAnim)
                 mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
+            else
+                acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
         } else if (str_totalSize.endsWith("GB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
@@ -480,6 +490,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             sizeMb *= 1024;
             if (canPlayAnim)
                 mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
+            else
+                acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
         }
     }

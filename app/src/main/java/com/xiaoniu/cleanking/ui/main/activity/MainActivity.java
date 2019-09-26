@@ -260,7 +260,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      */
     private void changeTab(Bundle intent) {
         String type = intent.getString("type");
-        String home = intent.getString("home");
+        String home = intent.getString("NotificationService");
 
         if ("shangcheng".equals(type)) {
             mBottomBar.setCurrentItem(TOOL);
@@ -289,7 +289,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         }
 
-        if ("clean".equals(home)){
+        if ("home".equals(home)){
             if (mainFragment != null){
                 mainFragment.startCleanNow();
             }
