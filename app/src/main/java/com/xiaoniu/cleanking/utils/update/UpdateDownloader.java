@@ -96,10 +96,10 @@ public class UpdateDownloader extends AsyncTask<Void, Integer, Long> {
         } catch (UpdateError e) {
             mAgent.setError(e);
         }
-//        catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            mAgent.setError(new UpdateError(UpdateError.DOWNLOAD_DISK_IO));
-//        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            mAgent.setError(new UpdateError(UpdateError.DOWNLOAD_DISK_IO));
+        }
         catch (IOException e) {
             e.printStackTrace();
             mAgent.setError(new UpdateError(UpdateError.DOWNLOAD_NETWORK_IO));

@@ -148,6 +148,11 @@ public class UpdateUtil {
                 .getAbsolutePath()
                 + File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context) + ".apk";*/
         File apk = new File(context.getExternalCacheDir(), "xiaoniu_v" + getAppVersionName(context) + ".apk");
+        try {
+            return UpdateUtil.isExistDir(apk.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return apk.getAbsolutePath();
     }
 
@@ -162,8 +167,34 @@ public class UpdateUtil {
                 .getAbsolutePath()
                 + File.separator + "flashloan" + File.separator + "xiaoniu_v" + getAppVersionName(context);*/
         File apk = new File(context.getExternalCacheDir(), File.separator + "clean_download" + File.separator + "xiaoniu_v" + getAppVersionName(context));
+        try {
+            return UpdateUtil.isExistDir(apk.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return apk.getAbsolutePath();
     }
+
+    /**
+     * @param filePath
+     * @return
+     * @throws IOException 判断下载目录是否存在
+     */
+    private static String isExistDir(String filePath) throws IOException {
+        // 下载位置
+        File dir = new File(filePath).getParentFile();
+        if (!dir.exists()) {//判断文件目录是否存在
+            dir.mkdirs();
+        }
+        File file = null;
+        file = new File(filePath);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        return filePath;
+    }
+
 
     public static File makeFile(Context context) {
         File file = new File(context.getExternalCacheDir(), File.separator + "clean_download");
