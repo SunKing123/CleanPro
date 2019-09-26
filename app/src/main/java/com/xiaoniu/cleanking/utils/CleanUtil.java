@@ -24,23 +24,23 @@ public class CleanUtil {
 
         float result = number;
         int suffix = R.string.byte_short;
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.kilo_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.mega_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.giga_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.tera_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.peta_byte_short;
             result = result / 1024;
         }
@@ -65,23 +65,23 @@ public class CleanUtil {
 
         float result = number;
         int suffix = R.string.byte_short;
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.kilo_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.mega_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.giga_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.tera_byte_short;
             result = result / 1024;
         }
-        if (result > 900) {
+        if (result >= 1024) {
             suffix = R.string.peta_byte_short;
             result = result / 1024;
         }
