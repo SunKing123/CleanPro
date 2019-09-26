@@ -42,6 +42,8 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Random;
 
@@ -101,7 +103,7 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             if (AppHolder.getInstance().getSwitchInfoList() != null){
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()){
                     if (PositionId.FINISH_ID.equals(switchInfoList.getId())){
-                        if (switchInfoList.isIsOpen()){
+                        if (!switchInfoList.isIsOpen()){
                             //加载广告
                             refreshAd();
                         }
@@ -513,11 +515,13 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     public void onADExposure(NativeExpressADView nativeExpressADView) {
-
+        StatisticsUtils.customAD("ad_show","广告展示曝光", "1", PositionId.CLEAN_FINISH_ID,"优量汇","success_page","success_page");
     }
 
     @Override
     public void onADClicked(NativeExpressADView nativeExpressADView) {
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1",PositionId.CLEAN_FINISH_ID,"优量汇","success_page","success_page");
+
         if (mContainer != null && mContainer.getChildCount() > 0) {
             mContainer.removeAllViews();
             mContainer.setVisibility(View.GONE);

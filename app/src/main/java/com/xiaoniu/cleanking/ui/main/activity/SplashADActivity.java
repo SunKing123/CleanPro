@@ -35,7 +35,10 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +228,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
             if (PositionId.SPLASH_ID.equals(switchInfoList.getId())) {
-                if (switchInfoList.isIsOpen()) {
+                if (!switchInfoList.isIsOpen()) {
+                    //广告
                     splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
                     splashAD.fetchAndShowIn(adContainer);
                     return;
@@ -244,6 +248,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onADClicked() {
+        StatisticsUtils.trackClick("ad_click", "广告点击", "splash_page", "splash_page");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -263,6 +268,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
+        StatisticsUtils.customAD("ad_show","广告展示曝光","1",PositionId.SPLASH_ID,"优量汇","splash_page","splash_page");
     }
 
     @Override
@@ -328,6 +334,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         initNiuData();
         skip();
+
+        skipView.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "splash_page", "splash_page");
+        });
     }
 
     @Override
