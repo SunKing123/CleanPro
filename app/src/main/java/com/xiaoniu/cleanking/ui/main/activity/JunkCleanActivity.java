@@ -292,7 +292,7 @@ public class JunkCleanActivity extends SimpleActivity {
             if (getString(R.string.process_clean).equals(value.mName)) {
                 for (FirstJunkInfo info : value.mChildren) {
                     //进程
-                    if (!isCacheWhite(info.getAppPackageName()) && "com.xiaoniu.cleanking".equals(info.getAppPackageName())) {
+                    if (!isCacheWhite(info.getAppPackageName()) && !"com.xiaoniu.cleanking".equals(info.getAppPackageName())) {
                         processList.add(info);
                     }
                 }

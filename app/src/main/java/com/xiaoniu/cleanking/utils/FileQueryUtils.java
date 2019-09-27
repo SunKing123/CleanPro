@@ -213,7 +213,8 @@ public class FileQueryUtils {
             if (firstJunkInfo.getSubGarbages() == null || firstJunkInfo.getSubGarbages().size() <= 0) {
                 continue;
             }
-            list.add(firstJunkInfo);
+            if (!"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName()))
+                list.add(firstJunkInfo);
 
             if (index > (float)total * 3 / 4 && !isScanFile && list.size() > 0) {
                 if(mScanFileListener != null) {
@@ -325,7 +326,8 @@ public class FileQueryUtils {
             for (Object obj : hashMap.keySet()) {
                 FirstJunkInfo onelevelGarbageInfo4 = (FirstJunkInfo) hashMap.get(obj);
                 if (onelevelGarbageInfo4.getTotalSize() != 0) {
-                    arrayList.add(onelevelGarbageInfo4);
+                    if (!"com.xiaoniu.cleanking".equals(onelevelGarbageInfo4.getAppPackageName()))
+                        arrayList.add(onelevelGarbageInfo4);
                 }
             }
             return arrayList;
@@ -667,7 +669,8 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                    arrayList.add(onelevelGarbageInfo);
+                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName))
+                                        arrayList.add(onelevelGarbageInfo);
                                 }
 //                                else {
 //                                    onelevelGarbageInfo.setAppGarbageName(string.substring(string.lastIndexOf("/") + 1));
