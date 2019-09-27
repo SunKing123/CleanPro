@@ -252,7 +252,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
      */
     boolean canPlaying = true;
 
-    public void setNumAnim(View mTvSpeed,View view,TextView tv_size, TextView tv_size_show, TextView tv_gb, View viewt, View view_top, int startNum, int endNum, int type) {
+    public void setNumAnim(View mTvSpeed,View view,TextView tv_size, TextView tv_size_show, TextView tv_gb,TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -265,11 +265,15 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             if (currentValue == endNum) {
                 tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
                 tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
-                if (endNum > 1024)
-                    tv_gb.setText("GB");
-                else
-                    tv_gb.setText("MB");
+                switch (type){
+                    case 1:
+                    case 2:
+                        tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
+                        tv_gb1.setText(currentValue < 1024 ? "MB" : "GB");
+                        break;
+                }
             }
+
             Log.d("currentValue", type + "  type = " + tv_gb.getText().toString() + "  setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));
         });
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);

@@ -266,7 +266,8 @@ public class AccessAnimView extends RelativeLayout {
         anim.addUpdateListener(animation -> {
             int currentValue = (int) animation.getAnimatedValue();
             tv_size.setText(currentValue + "");
-            tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
+//            tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
+            tv_gb.setText("MB");
             Log.e("asdf", "时间：" + animation.getAnimatedFraction());
             Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
             if (canPlaying && animation.getAnimatedFraction() > 0.933) {
