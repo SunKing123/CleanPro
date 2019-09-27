@@ -21,7 +21,7 @@ import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
-import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -56,7 +56,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(application);
-        UMConfigure.init(application, "5d230f2f4ca357bdb700106d", AppUtils.getChannelId(), UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.init(application, "5d230f2f4ca357bdb700106d", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
     }
@@ -92,7 +92,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 //打开sdk日志信息
                 .logOpen()
                 .setHeartbeatInterval(5000)
-                .channel(AppUtils.getChannelId())
+                .channel(ChannelUtil.getChannel())
         );
 
         NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {

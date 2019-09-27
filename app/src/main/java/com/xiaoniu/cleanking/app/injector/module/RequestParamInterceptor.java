@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.app.injector.module;
 
 import com.google.gson.Gson;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
@@ -76,7 +77,7 @@ public class RequestParamInterceptor implements Interceptor {
         Map<String, Object> mapHeader = new HashMap<>();
         mapHeader.put("Ip", "172.16.88.23");
         mapHeader.put("appVersion", AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
-        mapHeader.put("channel", AppUtils.getChannelId());
+        mapHeader.put("channel", ChannelUtil.getChannel());
         mapHeader.put("deviceId", DeviceUtils.getUdid());
         mapHeader.put("gtId", "");
 
