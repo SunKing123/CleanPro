@@ -124,6 +124,35 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:visibility="visible"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="开启通知栏权限"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_15sp" />
+
+        <com.suke.widget.SwitchButton
+            android:id="@+id/s_notification_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:sb_background="@color/color_EDEDED"
+            app:sb_border_width="0.5dp"
+            app:sb_checked_color="@color/color_06C581"
+            app:sb_show_indicator="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_56dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:visibility="gone"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">

@@ -7,6 +7,8 @@ import com.suke.widget.SwitchButton;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import butterknife.OnClick;
@@ -19,6 +21,7 @@ import butterknife.OnClick;
 public class WhiteListSettingActivity extends BaseActivity {
 
     private SwitchButton mSbtnScreenTag;
+    private SwitchButton mSbtnNotificationTag;
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -37,8 +40,26 @@ public class WhiteListSettingActivity extends BaseActivity {
     @Override
     protected void initView() {
         mSbtnScreenTag = findViewById(R.id.s_btn_screen_tag);
+        mSbtnNotificationTag = findViewById(R.id.s_notification_tag);
         mSbtnScreenTag.setChecked(PreferenceUtil.getScreenTag());
         mSbtnScreenTag.setOnCheckedChangeListener((view, isChecked) -> PreferenceUtil.saveScreenTag(isChecked));
+
+        mSbtnNotificationTag.setOnCheckedChangeListener((view, isChecked) -> {
+            if (isChecked) {
+                if (!NotificationsUtils.isNotificationEnabled(this))
+                    NotificationsUtils.showDialogGetNotificationPremission(WhiteListSettingActivity.this);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSbtnNotificationTag.setChecked(NotificationsUtils.isNotificationEnabled(this));
+        if (mSbtnNotificationTag.isChecked()){
+            //开启常驻通知栏服务
+            startService(new Intent(this, NotificationService.class));
+        }
     }
 
     @OnClick({R.id.img_back,R.id.ll_install_package, R.id.ll_speed_list,R.id.ll_soft_package})
