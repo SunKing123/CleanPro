@@ -49,8 +49,6 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
-import com.xiaoniu.cleanking.ui.notifition.AlarmTimer;
-import com.xiaoniu.cleanking.ui.notifition.GlobalValues;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
@@ -288,7 +286,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
 
         if ("clean".equals(home)){
-            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_clean_click");
+            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_noti_clean_click");
             StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
             if (mainFragment != null){
                 mainFragment.startCleanNow();
@@ -510,6 +508,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         Jzvd.releaseAllVideos();
         super.onPause();
     }
+
     public void start() {
         //启动保活服务
         KeepAliveManager.toKeepAlive(

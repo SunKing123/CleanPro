@@ -352,7 +352,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 开始清理
      */
     public void startCleanNow(){
-        AppHolder.getInstance().setCleanFinishSourcePageId("clean_click");
         if (!"立即清理".equals(mButtonCleanNow.getText().toString()))
             return;
         ((MainActivity) getActivity()).commitJpushClickTime(1);
@@ -374,6 +373,12 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         AppHolder.getInstance().setOtherSourcePageId("");
         mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
+            if (AppHolder.getInstance().isPush()){
+                AppHolder.getInstance().setPush(false);
+                AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
+            }else {
+                AppHolder.getInstance().setCleanFinishSourcePageId("clean_click");
+            }
            startCleanNow();
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击

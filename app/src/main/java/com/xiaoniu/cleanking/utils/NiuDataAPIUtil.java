@@ -33,10 +33,10 @@ public class NiuDataAPIUtil {
      * @param url
      */
     public static void trackClickJPush(String eventCode, String eventName, String sourcePage, String currentPage, String url,int id,String title) {
-        AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
         String push_type = "";
         if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
             //立即清理页面
+            AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
             push_type = "clean_up_immediately";
         }else if (url.contains("main.activity.PhoneAccessActivity")){
             //  一键加速页面
@@ -73,6 +73,5 @@ public class NiuDataAPIUtil {
         }
         NiuDataAPI.trackClick(eventCode, eventName, extension);
     }
-
 
 }

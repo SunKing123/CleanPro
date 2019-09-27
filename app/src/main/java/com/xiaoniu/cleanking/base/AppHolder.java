@@ -58,6 +58,15 @@ public class AppHolder {
     }
 
     private String cleanFinishSourcePageId;
+    private boolean isPush = false;
+
+    public boolean isPush() {
+        return isPush;
+    }
+
+    public void setPush(boolean push) {
+        isPush = push;
+    }
 
     public String getCleanFinishSourcePageId() {
         return cleanFinishSourcePageId;

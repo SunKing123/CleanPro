@@ -6,6 +6,7 @@ import com.geek.push.GeekPush;
 import com.geek.push.entity.PushCommand;
 import com.geek.push.entity.PushMsg;
 import com.geek.push.receiver.BasePushReceiver;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -21,6 +22,8 @@ public class JPushReceiver extends BasePushReceiver {
             for (String key : msg.getKeyValue().keySet()) {
                 String url = msg.getKeyValue().get("url");
                 if (!TextUtils.isEmpty(url)) {
+                    AppHolder.getInstance().setPush(true);
+                    AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
                     NiuDataAPIUtil.trackClickJPush("push_info_click", "推送消息点击", "", "notification_page",url,msg.getNotifyId(),msg.getTitle());
                     SchemeProxy.openScheme(context, url);
                 }
