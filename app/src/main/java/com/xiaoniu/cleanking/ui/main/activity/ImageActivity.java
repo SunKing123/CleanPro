@@ -191,6 +191,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 205) {
             List<FileEntity> listTemp = new ArrayList<>();
+            if (CleanAllFileScanUtil.clean_image_list == null)
+                return;
             listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
             imageAdapter.setListImage(listTemp);
 

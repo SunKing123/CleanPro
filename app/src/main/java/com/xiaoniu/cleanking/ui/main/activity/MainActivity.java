@@ -286,6 +286,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
 
         if ("clean".equals(home)){
+            //默认选中主页
+            mBottomBar.setCurrentItem(0);
             AppHolder.getInstance().setCleanFinishSourcePageId("toggle_noti_clean_click");
             StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
             if (mainFragment != null){
