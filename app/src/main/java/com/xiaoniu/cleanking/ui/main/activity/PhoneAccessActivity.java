@@ -494,7 +494,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show,tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
             else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
@@ -504,7 +504,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strUnit = "GB";
             sizeMb *= 1024;
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb,acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
             else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
