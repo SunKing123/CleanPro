@@ -416,7 +416,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 super.onReceivedError(view, request, error);
                 isError = true;
                 if (mLayoutNotNet != null) {
-                    mLayoutNotNet.setVisibility(View.VISIBLE);
+//                    mLayoutNotNet.setVisibility(View.VISIBLE);
                 }
                 if (mNestedScrollWebView != null) {
                     mNestedScrollWebView.setVisibility(View.GONE);
