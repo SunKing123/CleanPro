@@ -80,7 +80,7 @@ dependencies {
     api 'com.tencent.bugly:crashreport:3.0.0'
     api 'com.tencent.bugly:nativecrashreport:3.7.1' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
     // sdk版本分发布版 1.x.x 和 测试版 1.x.x-alpha
-    api ('com.xiaoniu.statistic:NiuData:1.2.1-alpha2'){changing = true}
+    api ('com.xiaoniu.statistic:NiuData:1.2.1'){changing = true}
 
     api 'com.alibaba:arouter-api:1.4.1'
     annotationProcessor 'com.alibaba:arouter-compiler:latest.release'
