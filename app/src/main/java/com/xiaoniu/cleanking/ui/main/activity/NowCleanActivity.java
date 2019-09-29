@@ -8,7 +8,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.common.base.BaseActivity;
 
 /**
- * 1.2.1 版本清理
+ * 1.2.1 版本更新 建议清理页面
  */
 public class NowCleanActivity extends BaseActivity {
 
@@ -24,13 +24,23 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        setLeftTitle("建议清理");
+        //开始扫描
+        startScan();
+    }
+
+    /**
+     * 开始扫描
+     */
+    private void startScan() {
+        setCenterTitle("扫描中");
+
     }
 
     @Override
     protected void setListener() {
         mBtnLeft.setOnClickListener(v -> {
-            Toast.makeText(this,"点击 click",Toast.LENGTH_SHORT).show();
+            // TODO 添加埋点，弹出待确认提示框
+
             finish();
         });
 
@@ -38,6 +48,14 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+
+    }
+
+    /**
+     * 扫描完成
+     */
+    public void scanFinish(){
+        setLeftTitle("建议清理");
 
     }
 }
