@@ -347,7 +347,7 @@ public class StatisticsUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        NiuDataAPI.trackEvent(event_code, event_name, extension);
+        NiuDataAPI.trackClick(event_code, event_name, extension);
     }
 
 }

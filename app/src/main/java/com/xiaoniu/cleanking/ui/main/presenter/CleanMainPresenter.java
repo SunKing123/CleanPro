@@ -695,6 +695,8 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
 
     @SuppressLint("CheckResult")
     public void checkPermission() {
+        if (mView == null)
+            return;
         String permissionsHint = "需要打开文件读写权限";
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -703,8 +705,12 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             public void accept(Boolean aBoolean) throws Exception {
                 if (aBoolean) {
                     //开始
+                    if (mView == null)
+                        return;
                     mView.startScan();
                 } else {
+                    if (mView == null)
+                        return;
                     if (hasPermissionDeniedForever(mView.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         //永久拒绝权限
                         showPermissionDialog(mView.getContext());

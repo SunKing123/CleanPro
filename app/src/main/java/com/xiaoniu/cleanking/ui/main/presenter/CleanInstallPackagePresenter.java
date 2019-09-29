@@ -186,9 +186,9 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
         List<AppInfoBean> appInfoAll = apps;
         List<AppInfoBean> lists = new ArrayList<>();
         for (AppInfoBean appInfoBean : appInfoAll) {
-            if (type == 0 && appInfoBean.isInstall == true) {
+            if (type == 0 && appInfoBean.isInstall == true && !"com.xiaoniu.cleanking".equals(appInfoBean.packageName)) {
                 lists.add(appInfoBean);
-            } else if (type == 1 && appInfoBean.isInstall == false) {
+            } else if (type == 1 && appInfoBean.isInstall == false && !"com.xiaoniu.cleanking".equals(appInfoBean.packageName)) {
                 lists.add(appInfoBean);
             }
         }

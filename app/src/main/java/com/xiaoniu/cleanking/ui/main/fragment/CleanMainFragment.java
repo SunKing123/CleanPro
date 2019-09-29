@@ -293,9 +293,19 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         ((MainActivity) getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
-        Bundle bundle = new Bundle();
-        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
-        startActivity(PhoneAccessActivity.class, bundle);
+        //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+        if (PreferenceUtil.getCleanTime()) {
+            PreferenceUtil.saveCleanTime();
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_one_key_speed));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(CleanFinish2Activity.class, bundle);
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+            startActivity(PhoneAccessActivity.class, bundle);
+        }
     }
 
     @OnClick(R.id.line_shd)
