@@ -51,7 +51,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     private String mLastClassName = "";//记录上次启动activity的类名
     protected LoadingDialog mLoadingDialog;
     private TextView mTvLeftTitle;
-    private ImageView mBtnLeft;
+    protected ImageView mBtnLeft;
     private LinearLayout mLayRightBtn;
 
     /* 子类使用的时候无需再次调用onCreate(),如需要加载其他方法可重写该方法 */
