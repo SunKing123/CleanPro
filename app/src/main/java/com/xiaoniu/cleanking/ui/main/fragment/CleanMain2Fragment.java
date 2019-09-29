@@ -3,24 +3,16 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,13 +28,13 @@ import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
@@ -52,12 +44,10 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
-import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
@@ -67,9 +57,7 @@ import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ImageUtil;
-import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -81,16 +69,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.xiaoniu.cleanking.app.injector.module.ApiModule.SHOPPING_MALL;
 
-public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
+public class CleanMain2Fragment extends BaseFragment<CleanMainPresenter> {
 
     @BindView(R.id.text_count)
     AppCompatTextView mTextCount;
@@ -120,38 +106,20 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     ImageView mArrowRight;
     @BindView(R.id.layout_scroll)
     ScrollView mScrollView;
-    @BindView(R.id.home_nested_scroll_view)
-    NestedScrollView mNestedScrollView;
     @BindView(R.id.view_lottie)
     LottieAnimationView mAnimationView;
-    @BindView(R.id.text_acce)
-    LinearLayout mTextAcce;
-    @BindView(R.id.line_shd)
-    LinearLayout mLineShd;
-    @BindView(R.id.text_wjgl)
-    LinearLayout mTextWjgl;
-    @BindView(R.id.iv_dun)
-    ImageView mIvDun;
     @BindView(R.id.tv_size)
     TextView mTvSize;
     @BindView(R.id.tv_gb)
     TextView mTvGb;
-    @BindView(R.id.web_view)
-    NestedScrollWebView mWebView;
     @BindView(R.id.layout_content_clean_finish)
     LinearLayout mLaoutContentFinish;
     @BindView(R.id.image_ad_bottom_first)
     ImageView mImageFirstAd;
     @BindView(R.id.image_ad_bottom_second)
     ImageView mImageSecondAd;
-    @BindView(R.id.layout_not_net)
-    LinearLayout mLayoutNotNet;
     @BindView(R.id.text_bottom_title)
     TextView mTextBottomTitle;
-    @BindView(R.id.view_click_first_ad)
-    View mFirstViewAdClick;
-    @BindView(R.id.view_click_second_ad)
-    View mSecondViewAdClick;
     @BindView(R.id.animation_clean_finish)
     LottieAnimationView mFinishAnimator;
     @BindView(R.id.view_lottie_star)
@@ -216,7 +184,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             if (msg.what == 1) {
                 if (mLottieHomeView != null)
                     mLottieHomeView.playAnimation();
-            }else if (msg.what == 2){
+            } else if (msg.what == 2) {
                 //清理完成
                 restoreLayout();
                 //清理完成后通知 文件数据库同步(陈浪)
@@ -247,7 +215,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_clean_mainnew;
+        return R.layout.fragment_clean_mainnew_2;
     }
 
     @Override
@@ -265,16 +233,17 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             mIvNews.setVisibility(VISIBLE);
         }
+        mButtonCleanNow.setText("立即清理");
     }
 
     public void startScan() {
-        new Handler().postDelayed(() -> {
-            if (mButtonCleanNow == null) return;
-            mPresenter.startScan();
-            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
-            type = TYPE_SCANING;
-            mButtonCleanNow.setText("停止扫描");
-        }, 500);
+//        new Handler().postDelayed(() -> {
+//            if (mButtonCleanNow == null) return;
+//            mPresenter.startScan();
+//            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+//            type = TYPE_SCANING;
+//            mButtonCleanNow.setText("停止扫描");
+//        }, 500);
     }
 
     @OnClick(R.id.text_wjgl)
@@ -301,7 +270,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("num", "");
             bundle.putString("unit", "");
             startActivity(CleanFinish2Activity.class, bundle);
-        }else {
+        } else {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
             startActivity(PhoneAccessActivity.class, bundle);
@@ -361,35 +330,36 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
     /**
      * 开始清理
      */
-    public void startCleanNow(){
+    public void startCleanNow() {
         if (!"立即清理".equals(mButtonCleanNow.getText().toString()))
             return;
         ((MainActivity) getActivity()).commitJpushClickTime(1);
-        mScrollView.scrollTo(mScrollView.getScrollX(), 0);
-        //扫描完成点击清理
-        mPresenter.showTransAnim(mLayoutCleanTop);
-        mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
-        mButtonCleanNow.setVisibility(GONE);
-        mTextScanTrace.setText("垃圾清理中...");
-        mArrowRight.setVisibility(GONE);
-        mLayoutRoot.setIntercept(true);
-        initWebView();
+//        mScrollView.scrollTo(mScrollView.getScrollX(), 0);
+//        //扫描完成点击清理
+//        mPresenter.showTransAnim(mLayoutCleanTop);
+//        mPresenter.startCleanAnimation(mIconInner, mIconOuter, mLayoutScan, mLayoutCount, mCountEntity);
+//        mButtonCleanNow.setVisibility(GONE);
+//        mTextScanTrace.setText("垃圾清理中...");
+//        mArrowRight.setVisibility(GONE);
+//        mLayoutRoot.setIntercept(true);
         StatisticsUtils.trackClick("clean_click", "用户在首页点击【立即清理】按钮", "home_page", "home_page");
-        showHomeLottieView(false);
+//        showHomeLottieView(false);
     }
 
     @OnClick(R.id.btn_ljql)
     public void btnLjql() {
         AppHolder.getInstance().setOtherSourcePageId("");
-        mLottieStarView.setVisibility(GONE);
+        startActivity(NowCleanActivity.class);
+
+//        mLottieStarView.setVisibility(GONE);
         if (type == TYPE_SCAN_FINISH) {
-            if (AppHolder.getInstance().isPush()){
+            if (AppHolder.getInstance().isPush()) {
                 AppHolder.getInstance().setPush(false);
                 AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
-            }else {
+            } else {
                 AppHolder.getInstance().setCleanFinishSourcePageId("clean_click");
             }
-           startCleanNow();
+            startCleanNow();
         } else if (type == TYPE_CLEAN_FINISH) {
             //清理完成点击
             mButtonCleanNow.setText("再次扫描");
@@ -408,13 +378,13 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
                 cleanFinishSign();
             } else {
                 //未扫描， 去扫描
-                mCircleOuter.setVisibility(VISIBLE);
-                mCircleOuter2.setVisibility(VISIBLE);
-                mPresenter.startScan();
-                mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
-                type = TYPE_SCANING;
-                mButtonCleanNow.setText("停止扫描");
-                mTextScanTrace.setText("扫描中");
+//                mCircleOuter.setVisibility(VISIBLE);
+//                mCircleOuter2.setVisibility(VISIBLE);
+//                mPresenter.startScan();
+//                mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+//                type = TYPE_SCANING;
+//                mButtonCleanNow.setText("停止扫描");
+//                mTextScanTrace.setText("扫描中");
             }
 
         } else if (type == TYPE_SCANING) {
@@ -454,7 +424,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("title", getString(R.string.tool_chat_clear));
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity( CleanFinish2Activity.class,bundle);
+            startActivity(CleanFinish2Activity.class, bundle);
         }
     }
 
@@ -487,7 +457,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         if (mCountEntity != null && mTvSize != null) {
             mTvSize.setText(mCountEntity.getTotalSize());
             mTvGb.setText(mCountEntity.getUnit());
-
             if (mCountEntity.getNumber() > 0) {
                 //扫描到垃圾
                 mLayoutCleanTop.setBackgroundResource(R.drawable.bg_home_scan_finish);
@@ -548,7 +517,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("unit", "");
             startActivity(CleanFinish2Activity.class, bundle);
         }
-        mHandler.sendEmptyMessageDelayed(2,1000);
+        mHandler.sendEmptyMessageDelayed(2, 1000);
     }
 
     public FrameLayout getCleanTopLayout() {
@@ -564,20 +533,20 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         //设置可以点击
         mLayoutRoot.setIntercept(false);
         mIconInner.setVisibility(GONE);
-        mIconOuter.setVisibility(VISIBLE);
-        mLayoutScan.setVisibility(VISIBLE);
-        mLayoutCount.setVisibility(VISIBLE);
-        mAnimationView.setVisibility(VISIBLE);
+//        mIconOuter.setVisibility(VISIBLE);
+//        mLayoutScan.setVisibility(VISIBLE);
+//        mLayoutCount.setVisibility(VISIBLE);
+//        mAnimationView.setVisibility(VISIBLE);
         mFlAnim.setVisibility(View.INVISIBLE);
         //设置背景的高度
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLayoutCleanTop.getLayoutParams();
         layoutParams.height = DisplayUtils.dip2px(460);
         mLayoutCleanTop.setLayoutParams(layoutParams);
         //移动的页面view还原
-        mIconOuter.setTranslationY(0);
-        mIconInner.setTranslationY(0);
-        mLayoutScan.setTranslationY(0);
-        mLayoutCount.setTranslationY(0);
+//        mIconOuter.setTranslationY(0);
+//        mIconInner.setTranslationY(0);
+//        mLayoutScan.setTranslationY(0);
+//        mLayoutCount.setTranslationY(0);
 
         cleanFinishSign();
 
@@ -601,7 +570,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         type = TYPE_CLEAN_FINISH;
         setColorChange(false);
         //播放lottie动画
-        mLottieStarView.setVisibility(VISIBLE);
+//        mLottieStarView.setVisibility(VISIBLE);
         playStarAnimation();
         mPresenter.showOuterViewRotation(mIconOuter);
     }
@@ -651,23 +620,14 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * 显示lottie动画
      */
     public void showLottieView() {
-        mAnimationView.useHardwareAcceleration();
-        mAnimationView.setImageAssetsFolder("images");
-        mAnimationView.setAnimation("data.json");
-        mAnimationView.playAnimation();
+//        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.setImageAssetsFolder("images");
+//        mAnimationView.setAnimation("data.json");
+//        mAnimationView.playAnimation();
     }
 
     public LottieAnimationView getLottieView() {
         return mAnimationView;
-    }
-
-    /**
-     * 清理完成后的页面
-     *
-     * @return
-     */
-    public View getCleanFinish() {
-        return mNestedScrollView;
     }
 
     public RelativeLayout getCleanTextLayout() {
@@ -678,34 +638,26 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         return mLayoutScan;
     }
 
-    @OnClick(R.id.iv_back)
-    public void onViewClicked() {
-        showBottomTab();
-        if (mLayoutRoot == null) return;
-        mNestedScrollView.setVisibility(GONE);
-        mLayoutRoot.setVisibility(VISIBLE);
-        playStarAnimation();
-    }
+//    @OnClick(R.id.iv_back)
+//    public void onViewClicked() {
+//        showBottomTab();
+//        if (mLayoutRoot == null) return;
+//        mLayoutRoot.setVisibility(VISIBLE);
+//        playStarAnimation();
+//    }
 
     private long firstTime;
 
     public void onKeyBack() {
         if (mLayoutRoot == null) return;
-        if (mNestedScrollView.getVisibility() == VISIBLE) {
-            mNestedScrollView.setVisibility(GONE);
-            mLayoutRoot.setVisibility(VISIBLE);
-            showBottomTab();
-            playStarAnimation();
+        long currentTimeMillis = System.currentTimeMillis();
+        if (currentTimeMillis - firstTime > 1500) {
+            Toast.makeText(getActivity(), "再按一次退出程序",
+                    Toast.LENGTH_SHORT).show();
+            firstTime = currentTimeMillis;
         } else {
-            long currentTimeMillis = System.currentTimeMillis();
-            if (currentTimeMillis - firstTime > 1500) {
-                Toast.makeText(getActivity(), "再按一次退出程序",
-                        Toast.LENGTH_SHORT).show();
-                firstTime = currentTimeMillis;
-            } else {
-                SPUtil.setInt(getContext(), "turnask", 0);
-                AppManager.getAppManager().AppExit(getContext(), false);
-            }
+            SPUtil.setInt(getContext(), "turnask", 0);
+            AppManager.getAppManager().AppExit(getContext(), false);
         }
     }
 
@@ -720,61 +672,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, false);
         }
-    }
-
-    boolean isError = false;
-
-    public void initWebView() {
-        WebSettings settings = mWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
-        settings.setTextZoom(100);
-        mWebView.addJavascriptInterface(new JavaInterface(getActivity(), mWebView), "cleanPage");
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                if (mLayoutNotNet == null) return;
-                if (!isError) {
-                    if (mLayoutNotNet != null) {
-                        mLayoutNotNet.setVisibility(View.GONE);
-                    }
-                    if (mWebView != null) {
-                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    }
-                }
-                isError = false;
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                isError = true;
-                if (mLayoutNotNet != null) {
-                    mLayoutNotNet.setVisibility(VISIBLE);
-                }
-                if (mWebView != null) {
-                    mWebView.setVisibility(GONE);
-                }
-            }
-        });
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-        });
-    }
-
-    @OnClick(R.id.layout_not_net)
-    public void onTvRefreshClicked() {
-        mWebView.loadUrl(ApiModule.Base_H5_Host);
     }
 
     @Override
@@ -934,8 +831,8 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         mLottieHomeView.setImageAssetsFolder("images");
         if (isMove) {
             mIconOuter.startAnimation(rotate);
-            mLottieHomeView.playAnimation();
-            mLottieHomeView.setVisibility(VISIBLE);
+//            mLottieHomeView.playAnimation();
+//            mLottieHomeView.setVisibility(VISIBLE);
         } else {
             mHandler.removeCallbacksAndMessages(null);
             mIconOuter.clearAnimation();
@@ -950,7 +847,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mHandler.sendEmptyMessageDelayed(1,1500);
+                mHandler.sendEmptyMessageDelayed(1, 1500);
             }
 
             @Override

@@ -2,8 +2,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -38,9 +36,8 @@ import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
-import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.CleanMain2Fragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
@@ -115,7 +112,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
-    private CleanMainFragment mainFragment;
+    private CleanMain2Fragment mainFragment;
     private MyHandler mHandler = new MyHandler(this);
     private class MyHandler extends Handler{
         WeakReference<Activity> mActivity;
@@ -326,7 +323,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
 
         MeFragment mineFragment = MeFragment.getIntance();
-        mainFragment = new CleanMainFragment();
+        mainFragment = new CleanMain2Fragment();
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
@@ -433,8 +430,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            } else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof CleanMainFragment) {
-                CleanMainFragment fragment = (CleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
+            } else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof CleanMain2Fragment) {
+                CleanMain2Fragment fragment = (CleanMain2Fragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
             } else {
