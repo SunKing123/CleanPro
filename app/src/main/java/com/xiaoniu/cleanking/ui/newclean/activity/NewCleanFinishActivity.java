@@ -166,8 +166,8 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快试试其他功能吧！");
                 }
-            }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
-                //手机清理
+            }else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+                //建议清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
