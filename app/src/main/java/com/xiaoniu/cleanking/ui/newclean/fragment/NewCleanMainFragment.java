@@ -72,7 +72,6 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("num", "");
             bundle.putString("unit", "");
             startActivity(NewCleanFinishActivity.class, bundle);
-            getActivity().finish();
         }
     }
 
