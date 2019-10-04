@@ -149,6 +149,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @SuppressLint("CheckResult")
     private void clearAll() {
+        if (mJunkGroups == null|| mJunkGroups.size() < 1) {
+            cleanFinish();
+            return;
+        }
         Observable.create(e -> {
             long total = 0;
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {

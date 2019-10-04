@@ -5,15 +5,18 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
@@ -49,7 +52,6 @@ import com.xiaoniu.common.http.request.HttpRequest;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.json.JSONException;
@@ -77,7 +79,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsType mType = NewsType.TOUTIAO;
     private static final int PAGE_NUM = 20;//每一页数据
     private boolean mIsRefresh = true;
@@ -88,42 +89,47 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     private ImageView mIvFileClean;
     private ImageView mIvCooling;
 
-
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_finish_layout;
     }
 
     @Override
-    protected void initVariable(Intent intent) {
-
-    }
+    protected void initVariable(Intent intent) {}
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        mNewsAdapter = new NewsListAdapter(this);
         mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setAdapter(mNewsAdapter);
-        View view = getLayoutInflater().inflate(R.layout.layout_finish_head, null);
-        mRecyclerView.setHeaderView(view);
-        mTvSize = view.findViewById(R.id.tv_size);
-        mTvGb = view.findViewById(R.id.tv_clear_finish_gb_title);
-        mTvQl = view.findViewById(R.id.tv_ql);
-        mContainer = view.findViewById(R.id.container);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
 
-        mIvSpeedClean = view.findViewById(R.id.iv_speed_clean);
-        mIvPowerClean = view.findViewById(R.id.iv_power_clean);
-        mIvNotificationClean = view.findViewById(R.id.iv_notification_clean);
-        mIvWechatClean = view.findViewById(R.id.iv_wechat_clean);
-        mIvFileClean = view.findViewById(R.id.iv_file_clean);
-        mIvCooling = view.findViewById(R.id.iv_cooling);
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
+
+        mNewsAdapter = new NewsListAdapter(this);
+        View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content),false);
+        View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content),false);
+        mRecyclerView.addHeaderView(header);
+        mRecyclerView.addHeaderView(headerTool);
+        mRecyclerView.setLimitNumberToCallLoadMore(1);
+        mRecyclerView.setAdapter(mNewsAdapter);
+        mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
+
+        mTvSize = header.findViewById(R.id.tv_size);
+        mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
+        mTvQl = header.findViewById(R.id.tv_ql);
+        mContainer = header.findViewById(R.id.container);
+
+        mIvSpeedClean = headerTool.findViewById(R.id.iv_speed_clean);
+        mIvPowerClean = headerTool.findViewById(R.id.iv_power_clean);
+        mIvNotificationClean = headerTool.findViewById(R.id.iv_notification_clean);
+        mIvWechatClean = headerTool.findViewById(R.id.iv_wechat_clean);
+        mIvFileClean = headerTool.findViewById(R.id.iv_file_clean);
+        mIvCooling = headerTool.findViewById(R.id.iv_cooling);
 
         Intent intent = getIntent();
         changeUI(intent);
-
-        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
-        mSwipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimaryDark);
     }
 
     private void changeUI(Intent intent) {
@@ -341,27 +347,31 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mIvFileClean.setOnClickListener(this);
         mIvCooling.setOnClickListener(this);
 
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
-            mIsRefresh = true;
-            startLoadData();
-        });
-
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle))
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             finish();
         });
 
-        mRecyclerView.setOnLoadListener(recyclerView -> {
-            mIsRefresh = false;
-            startLoadData();
+        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                mIsRefresh = true;
+                startLoadData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                mIsRefresh = false;
+                startLoadData();
+            }
         });
 
     }
 
     @Override
     protected void loadData() {
-        mIsRefresh = true;
+        mIsRefresh = false;
         startLoadData();
     }
 
@@ -635,6 +645,10 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         if (nativeExpressADView != null) {
             nativeExpressADView.destroy();
         }
+        if(mRecyclerView != null){
+            mRecyclerView.destroy(); // this will totally release XR's memory
+            mRecyclerView = null;
+        }
     }
 
     public static int getVideoPlayPolicy(int autoPlayPolicy, Context context){
@@ -653,7 +667,13 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
-            mSwipeRefreshLayout.setRefreshing(false);
+            if (mIsRefresh) {
+                if(mRecyclerView != null)
+                    mRecyclerView.refreshComplete();
+            } else {
+                if(mRecyclerView != null)
+                    mRecyclerView.loadMoreComplete();
+            }
             return;
         }
 
@@ -680,7 +700,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
             @Override
             public void onSuccess(NewsListInfo result) {
-                mRecyclerView.onLoadSucess(true);
                 if (result != null && result.data != null && result.data.size() > 0) {
                     SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
                     if (mIsRefresh) {
@@ -693,11 +712,12 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
             @Override
             public void onComplete() {
-                mSwipeRefreshLayout.setRefreshing(false);
                 if (mIsRefresh) {
-                    mRecyclerView.setAutoLoadingEnabled(true);
+                    if(mRecyclerView != null)
+                        mRecyclerView.refreshComplete();
                 } else {
-                    mRecyclerView.onLoadSucess(true);
+                    if(mRecyclerView != null)
+                        mRecyclerView.loadMoreComplete();
                 }
             }
         });
@@ -723,8 +743,11 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             @Override
             public void onComplete() {
                 if (mIsRefresh) {
+                    if(mRecyclerView != null)
+                        mRecyclerView.refreshComplete();
                 } else {
-                    mRecyclerView.onLoadSucess(true);
+                    if(mRecyclerView != null)
+                        mRecyclerView.loadMoreComplete();
                 }
             }
 
@@ -739,7 +762,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                     SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result);
-                        mRecyclerView.setAutoLoadingEnabled(true);
                     } else {
                         mNewsAdapter.addData(result);
                     }
@@ -747,5 +769,4 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             }
         });
     }
-
 }

@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dimen_16dp"
+    android:paddingLeft="@dimen/dimen_5dp"
     android:paddingTop="@dimen/dimen_16dp"
-    android:paddingRight="@dimen/dimen_16dp">
+    android:paddingRight="@dimen/dimen_5dp">
 
     <LinearLayout
         android:layout_width="match_parent"

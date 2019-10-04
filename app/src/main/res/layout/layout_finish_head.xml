@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_app_bar_title"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@color/white"
-    android:orientation="vertical"
-    app:layout_scrollFlags="scroll|enterAlways">
-
+    android:layout_height="wrap_content"
+    android:background="@color/color_background"
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -67,75 +63,81 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true" />
 
-    <!--一键加速-->
-    <ImageView
-        android:id="@+id/iv_speed_clean"
-        android:layout_width="match_parent"
-        android:layout_height="116dp"
-        android:layout_below="@+id/text_more_function"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/image_main_news" />
-    <!--超强省电-->
-    <ImageView
-        android:id="@+id/iv_power_clean"
-        android:layout_width="match_parent"
-        android:layout_height="116dp"
-        android:layout_below="@+id/view_qq_clean"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/image_main_thin" />
-    <!--通知栏清理-->
-    <ImageView
-        android:id="@+id/iv_notification_clean"
-        android:layout_width="match_parent"
-        android:layout_height="116dp"
-        android:layout_below="@+id/view_phone_thin"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/image_main_news" />
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:orientation="vertical"
+       android:visibility="gone"
+       android:layout_height="wrap_content">
+       <!--一键加速-->
+       <ImageView
+           android:id="@+id/iv_speed_clean"
+           android:layout_width="match_parent"
+           android:layout_height="116dp"
+           android:layout_below="@+id/text_more_function"
+           android:layout_marginLeft="16dp"
+           android:layout_marginTop="@dimen/dimen_12dp"
+           android:layout_marginRight="@dimen/dimen_16dp"
+           android:scaleType="centerCrop"
+           android:src="@mipmap/image_main_news" />
+       <!--超强省电-->
+       <ImageView
+           android:id="@+id/iv_power_clean"
+           android:layout_width="match_parent"
+           android:layout_height="116dp"
+           android:layout_below="@+id/view_qq_clean"
+           android:layout_marginLeft="16dp"
+           android:layout_marginTop="@dimen/dimen_12dp"
+           android:layout_marginRight="@dimen/dimen_16dp"
+           android:scaleType="centerCrop"
+           android:src="@mipmap/image_main_thin" />
+       <!--通知栏清理-->
+       <ImageView
+           android:id="@+id/iv_notification_clean"
+           android:layout_width="match_parent"
+           android:layout_height="116dp"
+           android:layout_below="@+id/view_phone_thin"
+           android:layout_marginLeft="16dp"
+           android:layout_marginTop="@dimen/dimen_12dp"
+           android:layout_marginRight="@dimen/dimen_16dp"
+           android:scaleType="centerCrop"
+           android:src="@mipmap/image_main_news" />
 
-    <!--微信专清-->
-    <ImageView
-        android:id="@+id/iv_wechat_clean"
-        android:layout_width="match_parent"
-        android:layout_height="116dp"
-        android:layout_below="@+id/text_more_function"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/image_main_thin" />
+       <!--微信专清-->
+       <ImageView
+           android:id="@+id/iv_wechat_clean"
+           android:layout_width="match_parent"
+           android:layout_height="116dp"
+           android:layout_below="@+id/text_more_function"
+           android:layout_marginLeft="16dp"
+           android:layout_marginTop="@dimen/dimen_12dp"
+           android:layout_marginRight="@dimen/dimen_16dp"
+           android:scaleType="centerCrop"
+           android:src="@mipmap/image_main_thin" />
 
-    <!--文件清理-->
-    <ImageView
-        android:id="@+id/iv_file_clean"
-        android:layout_width="match_parent"
-        android:layout_height="116dp"
-        android:layout_below="@+id/text_more_function"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/image_main_news" />
+       <!--文件清理-->
+       <ImageView
+           android:id="@+id/iv_file_clean"
+           android:layout_width="match_parent"
+           android:layout_height="116dp"
+           android:layout_below="@+id/text_more_function"
+           android:layout_marginLeft="16dp"
+           android:layout_marginTop="@dimen/dimen_12dp"
+           android:layout_marginRight="@dimen/dimen_16dp"
+           android:scaleType="centerCrop"
+           android:src="@mipmap/image_main_news" />
 
-    <!--手机降温-->
-    <ImageView
-        android:id="@+id/iv_cooling"
-        android:layout_width="match_parent"
-        android:layout_height="116dp"
-        android:layout_below="@+id/text_more_function"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:scaleType="centerCrop"
-        android:layout_marginBottom="@dimen/dimen_16dp"
-        android:src="@mipmap/image_main_news" />
+       <!--手机降温-->
+       <ImageView
+           android:id="@+id/iv_cooling"
+           android:layout_width="match_parent"
+           android:layout_height="116dp"
+           android:layout_below="@+id/text_more_function"
+           android:layout_marginLeft="16dp"
+           android:layout_marginTop="@dimen/dimen_12dp"
+           android:layout_marginRight="@dimen/dimen_16dp"
+           android:scaleType="centerCrop"
+           android:layout_marginBottom="@dimen/dimen_16dp"
+           android:src="@mipmap/image_main_news" />
+   </LinearLayout>
 
 </LinearLayout>

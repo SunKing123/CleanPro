@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+/**
+ * TODO 定时扫描手机 更新常驻通知栏状态
+ */
 public class AlarmReceiver extends BroadcastReceiver {
     private Toast mToast;
     private Context mContext;

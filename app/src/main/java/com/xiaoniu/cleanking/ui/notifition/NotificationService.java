@@ -118,6 +118,10 @@ public class NotificationService extends Service {
         NiuDataAPI.onPageEnd("toggle_page_view_page","常驻通知栏成功创建");
     }
 
+    /**
+     * 更新图标的颜色 EventBus
+     * @param notificationEvent
+     */
     @Subscribe
     public void cleanFinish(NotificationEvent notificationEvent) {
         Log.d("cleanFinish", "cleanFinish: " + notificationEvent);

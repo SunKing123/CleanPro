@@ -2,20 +2,10 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="match_parent">
-    <com.xiaoniu.common.widget.pullrefreshlayout.PullRefreshLayout
-        android:id="@+id/pullRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <com.xiaoniu.common.widget.xrecyclerview.XRecyclerView
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
-
-    </com.xiaoniu.common.widget.pullrefreshlayout.PullRefreshLayout>
-
+            android:layout_height="match_parent"/>
     <LinearLayout
         android:id="@+id/layout_not_net"
         android:layout_width="match_parent"
