@@ -86,7 +86,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     }
                     mView.getActivity().runOnUiThread(() -> {
                         if (!mScanTranlateColor.isRunning()) {
-                            mScanTranlateColor.start();
+//                            mScanTranlateColor.start();
                         }
                     });
                 }
@@ -185,6 +185,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         mScanTranlateColor.setEvaluator(new ArgbEvaluator());
         mScanTranlateColor.setDuration(1000);
+        if (!mScanTranlateColor.isRunning()) {
+            mScanTranlateColor.start();
+        }
         mScanTranlateColor.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
             if (mView == null)
@@ -205,6 +208,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             public void onAnimationEnd(Animator animation) {
                 Log.v("onAnimationEnd","onAnimationEnd ");
                 mView.setColorChange(true);
+                mScanTranlateColor.cancel();
             }
 
             @Override

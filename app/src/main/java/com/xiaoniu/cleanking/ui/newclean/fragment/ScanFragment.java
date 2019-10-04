@@ -266,30 +266,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
         showHomeLottieView(true);
-
         ((NowCleanActivity)getActivity()).scanFinish();
-    }
-
-    /**
-     * 显示lottie动画
-     */
-    public void showLottieView() {
-        mAnimationView.useHardwareAcceleration();
-        mAnimationView.setImageAssetsFolder("images");
-        mAnimationView.setAnimation("data.json");
-        mAnimationView.playAnimation();
-    }
-
-    public LottieAnimationView getLottieView() {
-        return mAnimationView;
-    }
-
-    public RelativeLayout getCleanTextLayout() {
-        return mLayoutCount;
-    }
-
-    public LinearLayout getScanLayout() {
-        return mLayoutScan;
     }
 
     /**
@@ -298,7 +275,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * @param animatedValue
      */
     public void showBarColor(int animatedValue) {
-        if (((NowCleanActivity)getActivity()).getToolBar() == null)
+        if (getActivity()== null)
             return;
         ((NowCleanActivity)getActivity()).getToolBar().setBackgroundColor(animatedValue);
         mLayoutCleanTop.setBackgroundColor(animatedValue);
