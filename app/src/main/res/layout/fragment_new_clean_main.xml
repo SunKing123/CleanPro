@@ -129,27 +129,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <FrameLayout
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
-                android:layout_height="330dp"
+                android:layout_height="300dp"
                 android:layout_marginBottom="@dimen/dimen_18dp"
                 android:background="@drawable/bg_big_home">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="120dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_60dp"
+                    android:layout_gravity="center"
                     android:src="@mipmap/icon_home_logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="90dp"
                     android:text="@string/tool_home_hint"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
@@ -175,7 +175,7 @@
                     android:text="悟空清理"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
-
+            </FrameLayout>
                 <TextView
                     android:id="@+id/tv_now_clean"
                     android:layout_width="150dp"
@@ -183,15 +183,12 @@
                     android:layout_gravity="bottom|center_horizontal"
                     android:layout_marginLeft="@dimen/dimen_60dp"
                     android:layout_marginRight="@dimen/dimen_60dp"
-                    android:layout_marginBottom="@dimen/dimen_32dp"
                     android:background="@drawable/btn_white_bg_green_line"
                     android:gravity="center"
                     android:text="@string/tool_home_clean"
                     android:textColor="#06C581"
                     android:textSize="16sp" />
-
             </FrameLayout>
-
             <LinearLayout
                 android:id="@+id/layout_middle_item"
                 android:layout_width="match_parent"

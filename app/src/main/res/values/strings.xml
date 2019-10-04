@@ -98,6 +98,6 @@
     <string name="click_to_skip">跳过</string>
     <string name="tool_suggest_clean">建议清理</string>
     <string name="tool_home_hint">手机存在大量垃圾，建议立即清理</string>
-    <string name="tool_home_clean">垃圾清理</string>
+    <string name="tool_home_clean">立即清理</string>
 
 </resources>
