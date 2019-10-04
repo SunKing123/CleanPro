@@ -39,7 +39,6 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
@@ -52,12 +51,11 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
-import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
@@ -81,14 +79,12 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.xiaoniu.cleanking.app.injector.module.ApiModule.SHOPPING_MALL;
 
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
@@ -300,7 +296,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity(CleanFinish2Activity.class, bundle);
+            startActivity(NewCleanFinishActivity.class, bundle);
         }else {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
@@ -454,7 +450,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("title", getString(R.string.tool_chat_clear));
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity( CleanFinish2Activity.class,bundle);
+            startActivity(NewCleanFinishActivity.class,bundle);
         }
     }
 
@@ -546,7 +542,7 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
             bundle.putString("title", getString(R.string.app_name));
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity(CleanFinish2Activity.class, bundle);
+            startActivity(NewCleanFinishActivity.class, bundle);
         }
         mHandler.sendEmptyMessageDelayed(2,1000);
     }

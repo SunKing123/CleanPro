@@ -14,10 +14,9 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -175,7 +174,7 @@ public class ToolFragment extends SimpleFragment {
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                startActivity( CleanFinish2Activity.class,bundle);
+                startActivity( NewCleanFinishActivity.class,bundle);
             }
         } else if (ids == R.id.rl_qq) {
             if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {

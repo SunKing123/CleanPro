@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
@@ -199,7 +199,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         bundle.putString("title",getString(R.string.tool_notification_clean));
         bundle.putString("num", "");
         bundle.putString("unit","");
-        Intent intent = new Intent(this,CleanFinish2Activity.class);
+        Intent intent = new Intent(this, NewCleanFinishActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();

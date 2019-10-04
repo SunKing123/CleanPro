@@ -120,7 +120,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         holder.mPackageNameTv.setText(group.mName);
         holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
         holder.mCheckButton.setSelected(group.isChecked);
-        holder.mIconArrow.setImageDrawable(group.isExpand ? mContext.getResources().getDrawable(R.mipmap.arrow_up) : mContext.getResources().getDrawable(R.mipmap.arrow_down));
+        holder.mIconArrow.setImageDrawable(!group.isExpand ? mContext.getResources().getDrawable(R.mipmap.arrow_up) : mContext.getResources().getDrawable(R.mipmap.arrow_down));
         holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
         holder.mCheckButton.setOnClickListener(v -> {
             group.isChecked = !group.isChecked;

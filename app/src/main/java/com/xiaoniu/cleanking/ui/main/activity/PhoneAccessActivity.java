@@ -6,12 +6,10 @@ import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -31,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
@@ -44,12 +41,10 @@ import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
-import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -340,7 +335,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         bundle.putString("title", getString(R.string.tool_one_key_speed));
         bundle.putString("num", num);
         bundle.putString("unit", unit);
-        startActivity(CleanFinish2Activity.class, bundle);
+        startActivity(NewCleanFinishActivity.class, bundle);
         finish();
     }
 

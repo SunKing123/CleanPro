@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.KeyboardUtils;
@@ -133,7 +134,7 @@ public class JunkCleanActivity extends SimpleActivity {
             bundle.putString("title", getString(R.string.app_name));
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity(CleanFinish2Activity.class, bundle);
+            startActivity(NewCleanFinishActivity.class, bundle);
             finish();
         });
     }

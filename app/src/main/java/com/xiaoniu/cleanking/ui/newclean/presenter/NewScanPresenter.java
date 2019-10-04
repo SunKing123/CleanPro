@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.main.presenter;
+package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -39,16 +39,14 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
-import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
-import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
+import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -69,7 +67,7 @@ import io.reactivex.functions.Consumer;
 
 import static android.view.View.VISIBLE;
 
-public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMainModel> {
+public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     private ValueAnimator mScanTranlateColor;
 
@@ -77,7 +75,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     NoClearSPHelper mSPHelper;
 
     @Inject
-    public CleanMainPresenter() {
+    public NewScanPresenter() {
     }
 
     private HashMap<Integer, JunkGroup> mJunkGroups = null;
@@ -665,31 +663,6 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         }
     }
 
-    /**
-     * 底部广告接口
-     */
-    public void requestBottomAd() {
-        mModel.getBottomAd(new CommonSubscriber<ImageAdEntity>() {
-            @Override
-            public void getData(ImageAdEntity imageAdEntity) {
-                if (imageAdEntity == null) return;
-                ArrayList<ImageAdEntity.DataBean> dataList = imageAdEntity.getData();
-                if (dataList != null && dataList.size() > 0) {
-                    mView.showFirstAd(dataList.get(0), 0);
-                }
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });
-    }
 
     @SuppressLint("CheckResult")
     public void checkPermission() {

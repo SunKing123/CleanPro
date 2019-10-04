@@ -64,4 +64,7 @@ public class SpCacheConfig {
     public static final String SUPER_POWER_SAVING = "super_power_saving";
     public static final String BANNER = "banner";
     public static final String APP_ID = "com.xiaoniu.cleanking";
+
+    public static final String NEWS_BASEURL = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
+    public static final String VIDEO_BASEURL = "http://clsystem-mclean-dev-default.fqt188.com/video/query";
 }

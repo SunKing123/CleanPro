@@ -235,7 +235,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.activity.CleanFinish2Activity"
+            android:name=".ui.newclean.activity.NewCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -262,7 +262,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/transparent_activity" />
 
-        <activity android:name=".ui.main.activity.NowCleanActivity"
+        <activity android:name=".ui.newclean.activity.NowCleanActivity"
             android:screenOrientation="portrait" />
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->

@@ -277,6 +277,35 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     /**
+     * 通过ARouter跳转界面
+     *
+     * @param path 跳转地址
+     **/
+    public void startActivity(String path) {
+        ARouter.getInstance().build(path).navigation();
+    }
+
+
+    /**
+     * 通过Class跳转界面
+     **/
+    public void startActivity(Class<?> cls) {
+        startActivity(cls, null);
+    }
+
+    /**
+     * 含有Bundle通过Class跳转界面
+     **/
+    public void startActivity(Class<?> cls, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(this, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+    }
+
+    /**
      * 含有flags通过ARouter跳转界面
      *
      * @param path   跳转地址

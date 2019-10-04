@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
-import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.common.base.SimpleWebActivity;
@@ -26,8 +25,6 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
     }
-
-    private NewsType mType;
 
     @Override
     public void convert(RecyclerView.ViewHolder holder, Object itemData, int position) {
@@ -69,10 +66,6 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     @Override
     public RecyclerView.ViewHolder attachToViewHolder(int viewType, View itemView) {
         return new CommonViewHolder(itemView);
-    }
-
-    public void setType(NewsType type) {
-        mType = type;
     }
 
     public static class NewsItemTypeSupport implements MultiItemTypeSupport<Object> {

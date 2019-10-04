@@ -125,7 +125,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <FrameLayout
@@ -135,14 +135,14 @@
                 <FrameLayout
                     android:id="@+id/layout_clean_top"
                     android:layout_width="match_parent"
-                    android:layout_height="260dp"
+                    android:layout_height="300dp"
                     android:layout_marginBottom="@dimen/dimen_18dp"
                     android:background="@drawable/bg_big_home">
 
                     <ImageView
-                        android:layout_width="180dp"
+                        android:layout_width="wrap_content"
                         android:layout_gravity="center"
-                        android:background="@color/white"
+                        android:src="@mipmap/icon_super_power_saving_top_bg"
                         android:layout_height="120dp"/>
 
                     <TextView
@@ -150,7 +150,7 @@
                         android:text="发现大量隐藏垃圾"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_20dp"
-                        android:layout_marginTop="@dimen/dimen_80dp"
+                        android:layout_marginTop="90dp"
                         android:layout_gravity="center"
                         android:layout_height="wrap_content"/>
 
@@ -330,7 +330,7 @@
                     android:textSize="20sp" />
                 </FrameLayout>
                 <TextView
-                    android:id="@+id/btn_ljql"
+                    android:id="@+id/tv_now_clean"
                     android:layout_width="120dp"
                     android:layout_height="36dp"
                     android:layout_gravity="bottom|center_horizontal"
@@ -342,27 +342,6 @@
                     android:textColor="#06C581"
                     android:textSize="15sp" />
             </FrameLayout>
-            <!-- 后台可控的推荐图片1 点击显示网页-->
-            <ImageView
-                android:id="@+id/image_ad_bottom_first"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_bottom_title"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginRight="@dimen/dimen_16dp"
-                android:visibility="visible" />
-            <!-- 后天可控的推荐图片2 点击显示网页 -->
-
-            <ImageView
-                android:id="@+id/image_ad_bottom_second"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/image_ad_bottom_first"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginRight="@dimen/dimen_16dp"
-                android:layout_marginBottom="@dimen/dimen_14dp"
-                android:visibility="gone" />
-
 
             <LinearLayout
                 android:id="@+id/layout_middle_item"

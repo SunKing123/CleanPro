@@ -32,6 +32,7 @@ import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
@@ -334,7 +335,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         bundle.putString("title", getString(R.string.tool_super_power_saving));
         bundle.putString("num", "");
         bundle.putString("unit", "");
-        Intent intent = new Intent(PhoneSuperSavingNowActivity.this, CleanFinish2Activity.class);
+        Intent intent = new Intent(PhoneSuperSavingNowActivity.this, NewCleanFinishActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
