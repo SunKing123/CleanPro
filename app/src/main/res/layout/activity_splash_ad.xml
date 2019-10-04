@@ -47,7 +47,7 @@
         app:roundProgressColor="@color/color_4690FD"
         app:progressStr="跳过"
         app:roundWidth="1dp"
-        app:textProgressColor="@color/black"
+        app:textProgressColor="@color/white"
         app:textProgressSize="9sp"/>
     <!-- 本示例省略了自定义的倒计时，和跳过按钮放在一起实现了。开发者也可以实现自己的倒计时View，方法是在onADTick回调中获得广告剩余的展示时间，并自由决定倒计时View的样式，SDK对倒计时的View没有要求。 -->
 
