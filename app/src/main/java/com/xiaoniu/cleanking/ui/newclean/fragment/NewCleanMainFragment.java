@@ -64,7 +64,16 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
-        startActivity(NowCleanActivity.class);
+        if(PreferenceUtil.getNowCleanTime()){
+            startActivity(NowCleanActivity.class);
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_suggest_clean));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(NewCleanFinishActivity.class, bundle);
+            getActivity().finish();
+        }
     }
 
 

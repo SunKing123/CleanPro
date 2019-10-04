@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.HashMap;
@@ -137,6 +138,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * 清理完成
      */
     public void cleanFinish(){
+        if (PreferenceUtil.getNowCleanTime()){
+            PreferenceUtil.saveNowCleanTime();
+        }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_suggest_clean));
         bundle.putString("num", mCountEntity.getTotalSize());

@@ -181,7 +181,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 保存清理时间
+     * 保存一键加速清理时间
      * @return
      */
     public static boolean saveCleanTime(){
@@ -192,7 +192,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 是否距离上次清理间隔至少3分钟
+     * 是否距离上次一键加速清理间隔至少3分钟
      * @return true 3分钟以上 false 小于3分钟
      */
     public static boolean getCleanTime(){
@@ -264,4 +264,28 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP,false);
     }
+
+    /**
+     * 保存立即清理清理时间
+     * @return
+     */
+    public static boolean saveNowCleanTime(){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次立即清理清理间隔至少3分钟
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getNowCleanTime(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME,0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
 }

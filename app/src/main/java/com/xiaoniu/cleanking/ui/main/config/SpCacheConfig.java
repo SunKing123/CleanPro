@@ -51,6 +51,7 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final  String IS_SAVE_CLEAN_TIME = "clean_time";
+    public static final  String IS_SAVE_NOW_CLEAN_TIME = "now_clean_time";
     public static final  String IS_SAVE_WeCLEAN_TIME = "Weclean_time";
     public static final  String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
     public static final  String IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP = "first_open_clean_finish_app";
