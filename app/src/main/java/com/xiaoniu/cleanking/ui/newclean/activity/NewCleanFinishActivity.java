@@ -1,78 +1,94 @@
-package com.xiaoniu.cleanking.ui.main.activity;
+package com.xiaoniu.cleanking.ui.newclean.activity;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.ads.nativ.NativeExpressMediaListener;
-import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.fragment.CleanFinishWebFragment;
-import com.xiaoniu.cleanking.ui.main.interfac.AppBarStateChangeListener;
-import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.http.EHttp;
+import com.xiaoniu.common.http.callback.ApiCallback;
+import com.xiaoniu.common.http.request.HttpRequest;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import cn.jzvd.Jzvd;
 
-import static android.view.View.GONE;
-
 /**
- * 清理完成 显示咨询
+ * 1.2.0 版本以后清理完成 显示咨询
  */
-public class CleanFinish2Activity extends BaseActivity implements NativeExpressAD.NativeExpressADListener {
+public class NewCleanFinishActivity extends BaseActivity implements NativeExpressAD.NativeExpressADListener, View.OnClickListener {
 
-    private static final String TAG = "CleanFinish2Activity";
-    private NewsFragment mNewsFragment;
-    private LinearLayout mLlTopTitle;
-    private AppBarLayout mAppBarLayout;
-    private ImageView mIvBack;
-    private boolean isAnimShow = false;
+    private static final String TAG = "NewCleanFinishActivity";
     private String mTitle;
     private TextView mTvSize;
     private TextView mTvGb;
     private TextView mTvQl;
-    private TextView mTopSubTitle;
-    private LinearLayout mLlNoNet;
-
     private ViewGroup mContainer;
     private NativeExpressADView nativeExpressADView;
     private NativeExpressAD nativeExpressAD;
+
+    private XRecyclerView mRecyclerView;
+    private NewsListAdapter mNewsAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private NewsType mType = NewsType.TOUTIAO;
+    private static final int PAGE_NUM = 20;//每一页数据
+    private boolean mIsRefresh = true;
+    private ImageView mIvSpeedClean;
+    private ImageView mIvPowerClean;
+    private ImageView mIvNotificationClean;
+    private ImageView mIvWechatClean;
+    private ImageView mIvFileClean;
+    private ImageView mIvCooling;
+
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_finish_layout;
@@ -85,18 +101,29 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        mNewsAdapter = new NewsListAdapter(this);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setAdapter(mNewsAdapter);
+        View view = getLayoutInflater().inflate(R.layout.layout_finish_head, null);
+        mRecyclerView.setHeaderView(view);
+        mTvSize = view.findViewById(R.id.tv_size);
+        mTvGb = view.findViewById(R.id.tv_clear_finish_gb_title);
+        mTvQl = view.findViewById(R.id.tv_ql);
+        mContainer = view.findViewById(R.id.container);
 
-        mIvBack = findViewById(R.id.iv_back_clear_finish);
-        mTvSize = findViewById(R.id.tv_size);
-        mTvGb = findViewById(R.id.tv_clear_finish_gb_title);
-        mLlTopTitle = findViewById(R.id.ll_top_title);
-        mAppBarLayout = findViewById(R.id.appbar_layout);
-        mTopSubTitle = findViewById(R.id.tv_top_sub_title);
-        mTvQl = findViewById(R.id.tv_ql);
-        mLlNoNet = findViewById(R.id.layout_not_net);
-        mContainer = findViewById(R.id.container);
+        mIvSpeedClean = view.findViewById(R.id.iv_speed_clean);
+        mIvPowerClean = view.findViewById(R.id.iv_power_clean);
+        mIvNotificationClean = view.findViewById(R.id.iv_notification_clean);
+        mIvWechatClean = view.findViewById(R.id.iv_wechat_clean);
+        mIvFileClean = view.findViewById(R.id.iv_file_clean);
+        mIvCooling = view.findViewById(R.id.iv_cooling);
+
         Intent intent = getIntent();
         changeUI(intent);
+
+        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimaryDark);
     }
 
     private void changeUI(Intent intent) {
@@ -187,112 +214,155 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
                 mTvGb.setTextSize(20);
                 mTvQl.setText("60s后达到最佳降温效果");
             }
-            mTopSubTitle.setText(mTitle);
+            setLeftTitle(mTitle);
         }
-        showUI();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        mAppBarLayout.setExpanded(true);
         changeUI(intent);
     }
 
-    private void showUI(){
-        if (!NetworkUtils.isNetConnected()) {
-            ToastUtils.showShort(getString(R.string.tool_no_net_hint));
-            mLlNoNet.setVisibility(View.VISIBLE);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_speed_clean:
+                speedClean();
+                break;
+            case R.id.iv_power_clean:
+                powerClean();
+                break;
+            case R.id.iv_notification_clean:
+                notificationClean();
+                break;
+            case R.id.iv_wechat_clean:
+                wechatClean();
+                break;
+            case R.id.iv_file_clean:
+                fileClean();
+                break;
+            case R.id.iv_cooling:
+                coolingClean();
+                break;
         }
-        showNews();
+        finish();
     }
+
+    /**
+     * 一键加速
+     */
+    public void speedClean(){
+        AppHolder.getInstance().setCleanFinishSourcePageId("boost_click");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+        StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+        //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+        if (PreferenceUtil.getCleanTime()) {
+            PreferenceUtil.saveCleanTime();
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_one_key_speed));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(NewCleanFinishActivity.class, bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+            startActivity(PhoneAccessActivity.class, bundle);
+        }
+    }
+
+    /**
+     * 超强省电
+     */
+    public void powerClean(){
+        AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
+        startActivity(PhoneSuperPowerActivity.class);
+        StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
+    }
+
+    /**
+     * 通知栏清理
+     */
+    public void notificationClean(){
+        AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
+        //通知栏清理
+        NotifyCleanManager.startNotificationCleanActivity(this, 0);
+        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+    }
+
+    /**
+     * 微信专清
+     */
+    public void wechatClean(){
+        AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
+
+        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat);
+            return;
+        }
+        if (PreferenceUtil.getWeChatCleanTime()) {
+            // 每次清理间隔 至少3秒
+            startActivity(WechatCleanHomeActivity.class);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_chat_clear));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
+    }
+
+    /**
+     * 文件清理
+     */
+    public void fileClean(){
+        StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
+        startActivity(FileManagerHomeActivity.class);
+    }
+
+    /**
+     * 手机降温
+     */
+    public void coolingClean(){
+        AppHolder.getInstance().setCleanFinishSourcePageId("cooling_click");
+        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+    }
+
     @Override
     protected void setListener() {
-        mIvBack.setOnClickListener(v -> {
+        mIvSpeedClean.setOnClickListener(this);
+        mIvPowerClean.setOnClickListener(this);
+        mIvNotificationClean.setOnClickListener(this);
+        mIvWechatClean.setOnClickListener(this);
+        mIvFileClean.setOnClickListener(this);
+        mIvCooling.setOnClickListener(this);
+
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            mIsRefresh = true;
+            startLoadData();
+        });
+
+        mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle))
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             finish();
         });
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-            @Override
-            public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if (state == State.EXPANDED) {
-                    if (!isAnimShow)
-                        return;
-                    if (mNewsFragment == null) return;
-                    //展开状态
-                    mNewsFragment.moveNavigation(false);
-                    hideBackImg(true);
-                    mNewsFragment.getIvBack().setVisibility(View.VISIBLE);
-                    isAnimShow = false;
-                } else if (state == State.COLLAPSED) {
-                    if (isAnimShow)
-                        return;
-                    //折叠状态
-                    if (mNewsFragment == null) return;
-                    mNewsFragment.getIvBack().setVisibility(View.VISIBLE);
-                    mNewsFragment.moveNavigation(true);
-                    hideBackImg(false);
-                    mLlTopTitle.setVisibility(View.INVISIBLE);
-                    isAnimShow = true;
-                }
-            }
+
+        mRecyclerView.setOnLoadListener(recyclerView -> {
+            mIsRefresh = false;
+            startLoadData();
         });
-        mLlNoNet.setOnClickListener(v -> showUI());
-    }
 
-    private void hideBackImg(boolean hide) {
-        ObjectAnimator animator;
-        if (hide) {
-            animator = ObjectAnimator.ofFloat(mNewsFragment.getIvBack(), "alpha", 1, 0);
-            animator.setDuration(200);
-        } else {
-            animator = ObjectAnimator.ofFloat(mNewsFragment.getIvBack(), "alpha", 0, 1);
-            animator.setDuration(500);
-        }
-
-        animator.start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animator.cancel();
-                if (hide) {
-                    mLlTopTitle.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
     }
 
     @Override
     protected void loadData() {
-
-    }
-
-    private void showNews() {
-        hideToolBar();
-        mNewsFragment = NewsFragment.getNewsFragment("white");
-        replaceFragment(R.id.fragment_container, mNewsFragment, false);
-    }
-
-    private void showWeb() {
-        setLeftTitle(mTitle);
-        mLlTopTitle.setVisibility(GONE);
-        replaceFragment(R.id.fragment_container, CleanFinishWebFragment.getInstance(), false);
+        mIsRefresh = true;
+        startLoadData();
     }
 
     @Override
@@ -375,9 +445,10 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
         }
         super.onPause();
     }
+
     @Override
     public void onADLoaded(List<NativeExpressADView> adList) {
-// 释放前一个展示的NativeExpressADView的资源
+        // 释放前一个展示的NativeExpressADView的资源
         if (nativeExpressADView != null) {
             nativeExpressADView.destroy();
         }
@@ -466,6 +537,7 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             Log.i(TAG, "onVideoPageClose");
         }
     };
+
     private void refreshAd() {
         try {
             /**
@@ -502,7 +574,6 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
         int h = -2;
         return new ADSize(w, h);
     }
-
 
     @Override
     public void onRenderFail(NativeExpressADView nativeExpressADView) {
@@ -578,6 +649,103 @@ public class CleanFinish2Activity extends BaseActivity implements NativeExpressA
             return VideoOption.VideoPlayPolicy.MANUAL;
         }
         return VideoOption.VideoPlayPolicy.UNKNOWN;
+    }
+
+    public void startLoadData() {
+        if (!NetworkUtils.isNetConnected()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        if (mType != null) {
+            if (mType == NewsType.VIDEO) {
+                loadVideoData();
+            } else {
+                loadNewsData();
+            }
+        }
+    }
+
+    private void loadNewsData() {
+        String type = mType.getValue();
+        String lastId = SPUtil.getLastNewsID(mType.getName());
+        if (mIsRefresh) {
+            lastId = "";
+        }
+        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
+        EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
+            @Override
+            public void onFailure(Throwable e) {
+            }
+
+            @Override
+            public void onSuccess(NewsListInfo result) {
+                mRecyclerView.onLoadSucess(true);
+                if (result != null && result.data != null && result.data.size() > 0) {
+                    SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
+                    if (mIsRefresh) {
+                        mNewsAdapter.setData(result.data);
+                    } else {
+                        mNewsAdapter.addData(result.data);
+                    }
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (mIsRefresh) {
+                    mRecyclerView.setAutoLoadingEnabled(true);
+                } else {
+                    mRecyclerView.onLoadSucess(true);
+                }
+            }
+        });
+    }
+
+    private void loadVideoData() {
+        //请求参数设置：比如一个json字符串
+        JSONObject jsonObject = new JSONObject();
+        try {
+            String lastId = SPUtil.getLastNewsID(mType.getName());
+            jsonObject.put("pageSize", PAGE_NUM);
+            jsonObject.put("lastId", lastId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        HttpRequest request = new HttpRequest.Builder()
+                .addBodyParams(jsonObject.toString())
+                .build();
+
+        EHttp.post(this, SpCacheConfig.VIDEO_BASEURL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
+
+            @Override
+            public void onComplete() {
+                if (mIsRefresh) {
+                } else {
+                    mRecyclerView.onLoadSucess(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                Log.i("123", e.toString());
+            }
+
+            @Override
+            public void onSuccess(ArrayList<VideoItemInfo> result) {
+                if (result != null && result.size() > 0) {
+                    SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
+                    if (mIsRefresh) {
+                        mNewsAdapter.setData(result);
+                        mRecyclerView.setAutoLoadingEnabled(true);
+                    } else {
+                        mNewsAdapter.addData(result);
+                    }
+                }
+            }
+        });
     }
 
 }
