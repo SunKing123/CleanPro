@@ -64,6 +64,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @Override
     protected void initView() {
+        ((NowCleanActivity)getActivity()).getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), false);
+        }
         mHeadView = getLayoutInflater().inflate(R.layout.layout_head_now_clean, null);
 
         TextView tvSize = mHeadView.findViewById(R.id.tv_size);

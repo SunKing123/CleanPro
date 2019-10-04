@@ -156,6 +156,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     public void startScan() {
+        ((NowCleanActivity)getActivity()).setCountEntity(null);
+        ((NowCleanActivity)getActivity()).setJunkGroups(null);
         new Handler().postDelayed(() -> {
             mPresenter.startScan();
             mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
@@ -257,10 +259,15 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     }
 
+    /**
+     * 扫描动画结束
+     */
     public void endScanAnimation() {
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
         showHomeLottieView(true);
+
+        ((NowCleanActivity)getActivity()).scanFinish();
     }
 
     /**
@@ -277,36 +284,12 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         return mAnimationView;
     }
 
-    /**
-     * 清理完成后的页面
-     *
-     * @return
-     */
-    public View getCleanFinish() {
-        return null;
-    }
-
     public RelativeLayout getCleanTextLayout() {
         return mLayoutCount;
     }
 
     public LinearLayout getScanLayout() {
         return mLayoutScan;
-    }
-
-    private long firstTime;
-
-    public void onKeyBack() {
-            long currentTimeMillis = System.currentTimeMillis();
-            if (currentTimeMillis - firstTime > 1500) {
-                Toast.makeText(getActivity(), "再按一次退出程序",
-                        Toast.LENGTH_SHORT).show();
-                firstTime = currentTimeMillis;
-            } else {
-                SPUtil.setInt(getContext(), "turnask", 0);
-                AppManager.getAppManager().AppExit(getContext(), false);
-            }
-
     }
 
     /**
@@ -366,10 +349,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     public void setColorChange(boolean b) {
         mChangeFinish = b;
-        if (b){
-            ((NowCleanActivity)getActivity()).scanFinish();
-        }
-
     }
 
     /**

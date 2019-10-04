@@ -127,9 +127,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mIvWechatClean = headerTool.findViewById(R.id.iv_wechat_clean);
         mIvFileClean = headerTool.findViewById(R.id.iv_file_clean);
         mIvCooling = headerTool.findViewById(R.id.iv_cooling);
-
-        Intent intent = getIntent();
-        changeUI(intent);
     }
 
     private void changeUI(Intent intent) {
@@ -371,6 +368,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     @Override
     protected void loadData() {
+        Intent intent = getIntent();
+        changeUI(intent);
+
         mIsRefresh = false;
         startLoadData();
     }
