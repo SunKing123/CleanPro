@@ -13,16 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -93,10 +90,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     private int type = 0;
 
     /**
-     * 未扫描
-     */
-    private static final int TYPE_NOT_SCAN = 0;
-    /**
      * 扫描完成
      */
     private static final int TYPE_SCAN_FINISH = 1;
@@ -113,10 +106,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     private boolean mChangeFinish;
 
-    /**
-     * 之前清理完成时间
-     */
-    private long preCleanTime;
     private MyHandler mHandler = new MyHandler(getActivity());
 
     class MyHandler extends Handler {
@@ -328,24 +317,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         mChangeFinish = b;
     }
 
-    /**
-     * 获取总量显示的view
-     *
-     * @return
-     */
-    public AppCompatTextView getTextCountView() {
-        return mTextCount;
-    }
-
-    /**
-     * 获取总量显示的view
-     *
-     * @return
-     */
-    public TextView getTextUnitView() {
-        return mTextUnit;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -372,20 +343,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         if (mLottieHomeView != null)
             mLottieHomeView.cancelAnimation();
     }
-
-    /**
-     * 获取结束的lottieView
-     *
-     * @return
-     */
-    public LottieAnimationView getFinishAnimator() {
-        return null;
-    }
-
-    public FrameLayout getmFlAnim() {
-        return null;
-    }
-
 
     /**
      * 静止时动画
