@@ -229,10 +229,15 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         showTool();
     }
 
+    /**
+     * 是否显示推荐功能项
+     */
     private void showTool() {
         if(!PreferenceUtil.getWeChatCleanTime()){
+            // 微信清理间隔时间至少3分钟 否则隐藏功能项
             mIvWeChatClean.setVisibility(View.GONE);
         }else if (!PreferenceUtil.getCleanTime()){
+            // 一键加速间隔时间至少3分钟  否则隐藏功能项
             mIvSpeedClean.setVisibility(View.GONE);
         }
     }
@@ -247,21 +252,27 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_speed_clean:
+                //一键加速
                 speedClean();
                 break;
             case R.id.iv_power_clean:
+                //超强省电
                 powerClean();
                 break;
             case R.id.iv_notification_clean:
+                //通知栏清理
                 notificationClean();
                 break;
             case R.id.iv_wechat_clean:
-                wechatClean();
+                //微信专清
+                weChatClean();
                 break;
             case R.id.iv_file_clean:
+                //文件清理
                 fileClean();
                 break;
             case R.id.iv_cooling:
+                //手机降温
                 coolingClean();
                 break;
         }
@@ -303,7 +314,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 微信专清
      */
-    public void wechatClean(){
+    public void weChatClean(){
         AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
