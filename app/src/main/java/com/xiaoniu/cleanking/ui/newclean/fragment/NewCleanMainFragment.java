@@ -33,6 +33,9 @@ import com.xiaoniu.common.utils.ToastUtils;
 
 import butterknife.OnClick;
 
+/**
+ * 1.2.1 新版本主页
+ */
 public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     private long firstTime;
@@ -96,8 +99,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
         ((MainActivity) getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
-        if (PreferenceUtil.getCleanTime()) {
-            PreferenceUtil.saveCleanTime();
+        if (!PreferenceUtil.getCleanTime()) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             bundle.putString("num", "");
@@ -136,7 +138,6 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.view_phone_thin)
     public void ViewPhoneThinClick() {
-
         Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_soft_manager));
         startActivity(intent);
