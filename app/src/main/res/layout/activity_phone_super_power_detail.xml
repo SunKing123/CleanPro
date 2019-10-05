@@ -50,9 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            android:background="@color/color_F7F8FA">
-
-        </com.xiaoniu.common.widget.xrecyclerview.XRecyclerView>
+            android:background="@color/color_F7F8FA"/>
 
         <RelativeLayout
             android:id="@+id/rl_result"

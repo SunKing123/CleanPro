@@ -232,7 +232,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     private void showTool() {
         if(!PreferenceUtil.getWeChatCleanTime()){
             mIvWeChatClean.setVisibility(View.GONE);
-        }else if (PreferenceUtil.getCleanTime()){
+        }else if (!PreferenceUtil.getCleanTime()){
             mIvSpeedClean.setVisibility(View.GONE);
         }
     }

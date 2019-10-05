@@ -150,10 +150,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     }
 
     private void startClean(){
+        ((NowCleanActivity)getActivity()).setClean(true);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.setData(mCountEntity);
         //清理动画
-        mCleanAnimView.startTopAnim(false);
+        mCleanAnimView.startCleanAnim(false);
         clearAll();
     }
 

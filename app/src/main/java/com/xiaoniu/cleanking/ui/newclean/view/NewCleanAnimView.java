@@ -103,7 +103,7 @@ public class NewCleanAnimView extends RelativeLayout {
     }
 
     //Step1:上面红色布局和中间1dp的布局动画开始
-    public void startTopAnim(boolean isNeedTranslation) {
+    public void startCleanAnim(boolean isNeedTranslation) {
         startMiddleAnim(isNeedTranslation);
     }
 

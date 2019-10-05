@@ -70,9 +70,9 @@ public class ImageListPresenter extends RxPresenter<ImageActivity, MainModel> {
     }
 
     public interface ClickListener {
-        public void clickOKBtn();
+        void clickOKBtn();
 
-        public void cancelBtn();
+        void cancelBtn();
     }
 
     public AlertDialog alertBanLiveDialog(Context context, int deleteNum, final ClickListener okListener) {
