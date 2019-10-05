@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -48,7 +47,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
             String notification = intent.getStringExtra("NotificationService");
             if ("clean".equals(notification)){
                 AppHolder.getInstance().setCleanFinishSourcePageId("toggle_powersave_click");
-                StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
+                StatisticsUtils.trackClick("toggle_powersave_click", "常驻通知栏点击通知清理", "", "toggle_page");
             }
         }
         mTvClean = findViewById(R.id.tv_clean);

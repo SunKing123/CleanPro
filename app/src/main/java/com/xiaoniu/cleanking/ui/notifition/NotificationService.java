@@ -9,13 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RemoteViews;
+
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
@@ -77,6 +76,7 @@ public class NotificationService extends Service {
         //logo
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("NotificationService","home");
+        intent.putExtra("notificationType","home");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         contentView.setOnClickPendingIntent(R.id.iv_app_icon, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
 

@@ -89,6 +89,8 @@ public class NowCleanActivity extends BaseActivity {
         mBtnLeft.setOnClickListener(v -> {
             // TODO 添加埋点，弹出待确认提示框
             if (isScan) {
+                //TODO 停止清理
+
                 AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "确认退出", "继续清理", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
@@ -98,11 +100,13 @@ public class NowCleanActivity extends BaseActivity {
                     @Override
                     public void cancelBtn() {
                         //TODO 继续清理
-                        ToastUtils.showShort("继续清理更新中...");
+                        ToastUtils.showShort("继续扫描更新中...");
                     }
                 });
             }else {
                 if (isClean) {
+                    //TODO 停止清理
+
                     AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "确认退出", "继续清理", new ClickListener() {
                         @Override
                         public void clickOKBtn() {

@@ -254,7 +254,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void changeTab(Bundle intent) {
         String type = intent.getString("type");
         String home = intent.getString("NotificationService");
-
+        String notificationType = intent.getString("NotificationType");
         if ("shangcheng".equals(type)) {
             mBottomBar.setCurrentItem(TOOL);
         } else if ("shenghuo".equals(type)) {
@@ -285,8 +285,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if ("clean".equals(home)){
             //默认选中主页
             mBottomBar.setCurrentItem(0);
-            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_noti_clean_click");
-            StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
+            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_home_click");
+            StatisticsUtils.trackClick("toggle_home_click", "常驻通知栏点击通知清理", "", "toggle_page");
+            if (mainFragment != null){
+                mainFragment.startCleanNow();
+            }
+        }
+
+        if ("home".equals(notificationType)){
+            //默认选中主页
+            mBottomBar.setCurrentItem(0);
+            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_clean_click");
+            StatisticsUtils.trackClick("toggle_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
             if (mainFragment != null){
                 mainFragment.startCleanNow();
             }
