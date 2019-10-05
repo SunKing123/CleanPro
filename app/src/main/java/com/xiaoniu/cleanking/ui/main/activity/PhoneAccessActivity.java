@@ -225,11 +225,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-        //清理完成
-        NotificationEvent event = new NotificationEvent();
-        event.setType("clean");
-        EventBus.getDefault().post(event);
-
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -327,6 +322,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
     }
     private void showCleanFinishUI(String num, String unit) {
+        //清理完成 更新通知栏一键清理icon颜色状态
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        EventBus.getDefault().post(event);
+
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
