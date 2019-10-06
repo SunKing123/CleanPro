@@ -210,5 +210,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * 停止清理
      */
     public void stopClean() {
+
     }
 }

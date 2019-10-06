@@ -112,10 +112,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * 停止扫描
      */
     public void stopScan() {
-        mCircleOuter2.setVisibility(GONE);
-        mCircleOuter.setVisibility(GONE);
-        showHomeLottieView(true);
-        mPresenter.setIsFinish(true);
+//        mPresenter.setIsFinish(true);
+//        mCircleOuter2.setVisibility(GONE);
+//        mCircleOuter.setVisibility(GONE);
+//        showHomeLottieView(true);
+
     }
 
     class MyHandler extends Handler {
@@ -130,6 +131,15 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                 if (mLottieHomeView != null)
                     mLottieHomeView.playAnimation();
             }
+            if (msg.what == 2){
+                mPresenter.setIsFinish(false);
+                ((NowCleanActivity)getActivity()).setCountEntity(null);
+                ((NowCleanActivity)getActivity()).setJunkGroups(null);
+
+                mPresenter.startScan();
+                mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+                type = TYPE_SCANING;
+            }
         }
     }
 
@@ -139,10 +149,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     @Override
-    public void netError() {
-
-    }
-
+    public void netError() {}
 
     @Override
     protected int getLayoutId() {
@@ -155,16 +162,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     public void startScan() {
-        mPresenter.setIsFinish(false);
-        ((NowCleanActivity)getActivity()).setCountEntity(null);
-        ((NowCleanActivity)getActivity()).setJunkGroups(null);
-        new Handler().postDelayed(() -> {
-            mPresenter.startScan();
-            mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
-            type = TYPE_SCANING;
-            //TODO 正在扫描
-
-        }, 500);
+        mHandler.sendEmptyMessageDelayed(2,500);
     }
 
     /**
