@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -77,7 +79,6 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
             startActivity(NewCleanFinishActivity.class, bundle);
         }
     }
-
 
     /**
      * 文件管理
@@ -231,4 +232,15 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
+            }
+        }
+    }
 }

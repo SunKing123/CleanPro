@@ -2,11 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -90,7 +88,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     private ImageView mIvWeChatClean;
     private ImageView mIvFileClean;
     private ImageView mIvCooling;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected int getLayoutResId() {
@@ -102,16 +99,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        //设置加载默认图标
-        mSwipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        // 为下拉刷新，设置一组颜色
-        mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN);
-        //设置触发刷新的距离
-        mSwipeRefreshLayout.setDistanceToTriggerSync(200);
-        //设置可以刷新
-        mSwipeRefreshLayout.setRefreshing(true);
-
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -120,7 +107,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
 
-        mRecyclerView.setPullRefreshEnabled(false);
         mNewsAdapter = new NewsListAdapter(this);
         View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content),false);
         View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content),false);
@@ -381,13 +367,12 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             finish();
         });
 
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
-            mIsRefresh = true;
-            startLoadData();
-        });
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
-            public void onRefresh() {}
+            public void onRefresh() {
+                mIsRefresh = true;
+                startLoadData();
+            }
 
             @Override
             public void onLoadMore() {
