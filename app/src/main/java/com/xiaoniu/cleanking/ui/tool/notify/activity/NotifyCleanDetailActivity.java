@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationSetEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -195,6 +196,10 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         //通知栏清理完成浏览
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
 
+        //保存通知栏清理完成时间
+        if(PreferenceUtil.getNotificationCleanTime()){
+            PreferenceUtil.saveNotificationCleanTime();
+        }
         Bundle bundle = new Bundle();
         bundle.putString("title",getString(R.string.tool_notification_clean));
         bundle.putString("num", "");

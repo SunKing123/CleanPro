@@ -331,6 +331,10 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     }
 
     private void showCleanFinishUI() {
+        //保存超强省电 省电完成时间
+        if (PreferenceUtil.getPowerCleanTime()) {
+            PreferenceUtil.savePowerCleanTime();
+        }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_super_power_saving));
         bundle.putString("num", "");
