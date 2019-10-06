@@ -121,8 +121,18 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
         ((MainActivity) getActivity()).commitJpushClickTime(3);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
-        startActivity(PhoneSuperPowerActivity.class);
         StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
+       if (PreferenceUtil.getPowerCleanTime()){
+           PreferenceUtil.savePowerCleanTime();
+           startActivity(PhoneSuperPowerActivity.class);
+       }else {
+           Bundle bundle = new Bundle();
+           bundle.putString("title", getString(R.string.tool_super_power_saving));
+           bundle.putString("num", "");
+           bundle.putString("unit", "");
+           startActivity(NewCleanFinishActivity.class, bundle);
+       }
+
     }
 
     /**
@@ -204,10 +214,18 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
-        AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         //通知栏清理
-        NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
+        AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+        if (PreferenceUtil.getNotificationCleanTime()){
+            NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_notification_clean));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
     }
 
     /**
