@@ -12,7 +12,6 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.common.base.BaseActivity;
-import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,6 +26,8 @@ public class NowCleanActivity extends BaseActivity {
     private HashMap<Integer, JunkGroup> mJunkGroups;
     private boolean isScan = false;
     private boolean isClean = false;
+    private ScanFragment mScanFragment;
+    private CleanFragment mCleanFragment;
 
     public void setClean(boolean clean) {
         isClean = clean;
@@ -71,7 +72,8 @@ public class NowCleanActivity extends BaseActivity {
     private void startScan() {
         isScan = true;
         setCenterTitle("扫描中");
-        replaceFragment(R.id.fl_content, ScanFragment.newInstance(), false);
+        mScanFragment = ScanFragment.newInstance();
+        replaceFragment(R.id.fl_content, mScanFragment, false);
     }
 
     /**
@@ -81,7 +83,8 @@ public class NowCleanActivity extends BaseActivity {
         isScan = false;
         setCenterTitle("");
         setLeftTitle("建议清理");
-        replaceFragment(R.id.fl_content, CleanFragment.newInstance(), false);
+        mCleanFragment = CleanFragment.newInstance();
+        replaceFragment(R.id.fl_content, mCleanFragment, false);
     }
 
     @Override
@@ -90,7 +93,8 @@ public class NowCleanActivity extends BaseActivity {
             // TODO 添加埋点，弹出待确认提示框
             if (isScan) {
                 //TODO 停止清理
-
+                if (mScanFragment != null)
+                    mScanFragment.stopScan();
                 AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "确认退出", "继续清理", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
@@ -100,13 +104,15 @@ public class NowCleanActivity extends BaseActivity {
                     @Override
                     public void cancelBtn() {
                         //TODO 继续清理
-                        ToastUtils.showShort("继续扫描更新中...");
+                        if (mScanFragment != null)
+                            mScanFragment.startScan();
                     }
                 });
             }else {
                 if (isClean) {
                     //TODO 停止清理
-
+                    if (mCleanFragment != null)
+                        mCleanFragment.stopClean();
                     AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "确认退出", "继续清理", new ClickListener() {
                         @Override
                         public void clickOKBtn() {
@@ -116,7 +122,8 @@ public class NowCleanActivity extends BaseActivity {
                         @Override
                         public void cancelBtn() {
                             //TODO 继续清理
-                            ToastUtils.showShort("继续清理更新中...");
+                            if (mCleanFragment != null)
+                                mCleanFragment.starClean();
                         }
                     });
                 }else {

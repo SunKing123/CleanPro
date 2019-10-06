@@ -3,14 +3,13 @@
     android:id="@+id/ll_app_bar_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color_background"
+    android:background="@color/color_06C581"
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:gravity="center"
-        android:background="@color/color_06C581"
         android:orientation="horizontal">
 
         <ImageView

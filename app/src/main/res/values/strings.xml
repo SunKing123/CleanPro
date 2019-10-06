@@ -11,8 +11,10 @@
     <string name="press_exit_again">再按一次退出程序</string>
     <string name="text_clean">清理</string>
     <string name="text_cool">立即降温</string>
-    <string name="process_clean">内存垃圾</string>
+    <string name="process_clean">内存清理</string>
     <string name="apk_clean">无用安装包</string>
+    <string name="uninstall_clean">卸载残留</string>
+    <string name="ad_clean">广告垃圾</string>
     <string name="tmp_clean">临时文件</string>
     <string name="log_clean">日志文件</string>
     <string name="cache_clean">缓存垃圾</string>

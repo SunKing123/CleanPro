@@ -206,4 +206,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         return size;
     }
 
+    /**
+     * 停止清理
+     */
+    public void stopClean() {
+    }
 }

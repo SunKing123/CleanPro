@@ -108,6 +108,16 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     private MyHandler mHandler = new MyHandler(getActivity());
 
+    /**
+     * 停止扫描
+     */
+    public void stopScan() {
+        mCircleOuter2.setVisibility(GONE);
+        mCircleOuter.setVisibility(GONE);
+        showHomeLottieView(true);
+        mPresenter.setIsFinish(true);
+    }
+
     class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
 
@@ -145,6 +155,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     public void startScan() {
+        mPresenter.setIsFinish(false);
         ((NowCleanActivity)getActivity()).setCountEntity(null);
         ((NowCleanActivity)getActivity()).setJunkGroups(null);
         new Handler().postDelayed(() -> {

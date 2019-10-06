@@ -131,41 +131,73 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
+                //卸载残留
+                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
+                if (uninstallGroup == null) {
+                    uninstallGroup = new JunkGroup();
+                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
+                    uninstallGroup.isChecked = true;
+                    uninstallGroup.isExpand = true;
+                    uninstallGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
+                    uninstallGroup.mSize += 0;
+                }
+
+                //缓存垃圾
+                JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
+                if (cacheGroup == null) {
+                    cacheGroup = new JunkGroup();
+                    cacheGroup.mName = ContextUtils.getContext().getString(R.string.cache_clean);
+                    cacheGroup.isChecked = true;
+                    cacheGroup.isExpand = true;
+                    cacheGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
+                    cacheGroup.mSize += 0;
+                }
+
+                //内存清理
+                JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
+                if (processGroup == null) {
+                    processGroup = new JunkGroup();
+                    processGroup.mName = ContextUtils.getContext().getString(R.string.process_clean);
+                    processGroup.isChecked = true;
+                    processGroup.isExpand = true;
+                    processGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
+                    processGroup.mSize += 0;
+                }
+
+                //无用安装包
+                JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
+                if (apkGroup == null) {
+                    apkGroup = new JunkGroup();
+                    apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
+                    apkGroup.isChecked = true;
+                    apkGroup.isExpand = true;
+                    apkGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
+                    apkGroup.mSize += 0;
+                }
+                //广告垃圾
+                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_AD);
+                if (adGroup == null) {
+                    adGroup = new JunkGroup();
+                    adGroup.mName = ContextUtils.getContext().getString(R.string.ad_clean);
+                    adGroup.isChecked = true;
+                    adGroup.isExpand = true;
+                    adGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_AD, adGroup);
+                    adGroup.mSize += 0;
+                }
+
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
-                        JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
-                        if (cacheGroup == null) {
-                            cacheGroup = new JunkGroup();
-                            cacheGroup.mName = ContextUtils.getContext().getString(R.string.cache_clean);
-                            cacheGroup.isChecked = true;
-                            cacheGroup.isExpand = true;
-                            cacheGroup.mChildren = new ArrayList<>();
-                            mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
-                        }
                         cacheGroup.mChildren.add(info);
                         cacheGroup.mSize += info.getTotalSize();
                     } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
-                        JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
-                        if (processGroup == null) {
-                            processGroup = new JunkGroup();
-                            processGroup.mName = ContextUtils.getContext().getString(R.string.process_clean);
-                            processGroup.isChecked = true;
-                            processGroup.isExpand = true;
-                            processGroup.mChildren = new ArrayList<>();
-                            mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
-                        }
                         processGroup.mChildren.add(info);
                         processGroup.mSize += info.getTotalSize();
                     } else if ("TYPE_APK".equals(info.getGarbageType())) {
-                        JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
-                        if (apkGroup == null) {
-                            apkGroup = new JunkGroup();
-                            apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
-                            apkGroup.isChecked = true;
-                            apkGroup.isExpand = true;
-                            apkGroup.mChildren = new ArrayList<>();
-                            mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
-                        }
                         apkGroup.mChildren.add(info);
                         apkGroup.mSize += info.getTotalSize();
                     }
