@@ -95,7 +95,8 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     }
 
     @Override
-    protected void initVariable(Intent intent) {}
+    protected void initVariable(Intent intent) {
+    }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
@@ -108,8 +109,8 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
 
         mNewsAdapter = new NewsListAdapter(this);
-        View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content),false);
-        View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content),false);
+        View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content), false);
+        View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content), false);
         mRecyclerView.addHeaderView(header);
         mRecyclerView.addHeaderView(headerTool);
         mRecyclerView.setLimitNumberToCallLoadMore(1);
@@ -130,18 +131,18 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     }
 
     private void changeUI(Intent intent) {
-        if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()){
-            if (AppHolder.getInstance().getSwitchInfoList() != null){
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()){
-                    if (PositionId.FINISH_ID.equals(switchInfoList.getId())){
-                        if (switchInfoList.isIsOpen()){
+        if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.FINISH_ID.equals(switchInfoList.getId())) {
+                        if (switchInfoList.isIsOpen()) {
                             //加载广告
                             refreshAd();
                         }
                     }
                 }
             }
-        }else {
+        } else {
             PreferenceUtil.saveFirstOpenCLeanFinishApp();
         }
 
@@ -155,24 +156,24 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                 mTitle = getString(R.string.app_name);
             if (getString(R.string.app_name).contains(mTitle)) {
                 //悟空清理
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
                 }
-            }else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 //一键加速
                 mIvSpeedClean.setVisibility(View.GONE);
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已加速");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快试试其他功能吧！");
                 }
-            }else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
                 //建议清理
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
@@ -181,16 +182,16 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
                 //超强省电
                 mIvPowerClean.setVisibility(View.GONE);
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
                 }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle)||getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
                 //微信专情
                 mIvWeChatClean.setVisibility(View.GONE);
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已清理");
                     mTvGb.setTextSize(20);
@@ -198,7 +199,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
                 //QQ专清
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("手机很干净");
                     mTvGb.setTextSize(20);
@@ -207,7 +208,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
                 //通知栏清理
                 mIvNotificationClean.setVisibility(View.GONE);
-                if (TextUtils.isEmpty(num) || num.equals("0.0")|| num.equals("0")) {
+                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("通知栏很干净");
                     mTvGb.setTextSize(20);
@@ -233,12 +234,25 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
      * 是否显示推荐功能项
      */
     private void showTool() {
-        if(!PreferenceUtil.getWeChatCleanTime()){
+        if (!PreferenceUtil.getWeChatCleanTime()) {
             // 微信清理间隔时间至少3分钟 否则隐藏功能项
             mIvWeChatClean.setVisibility(View.GONE);
-        }else if (!PreferenceUtil.getCleanTime()){
+        }
+        if (!PreferenceUtil.getCleanTime()) {
             // 一键加速间隔时间至少3分钟  否则隐藏功能项
             mIvSpeedClean.setVisibility(View.GONE);
+        }
+        if (!PreferenceUtil.getNotificationCleanTime()) {
+            // 通知栏清理间隔时间至少3分钟 否则隐藏
+            mIvNotificationClean.setVisibility(View.GONE);
+        }
+        if (!PreferenceUtil.getCoolingCleanTime()) {
+            // 手机降温间隔时间至少3分钟 否则隐藏
+            mIvCooling.setVisibility(View.GONE);
+        }
+        if (!PreferenceUtil.getPowerCleanTime()) {
+            // 超强省电间隔时间至少3分钟 否则隐藏
+            mIvPowerClean.setVisibility(View.GONE);
         }
     }
 
@@ -250,7 +264,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_speed_clean:
                 //一键加速
                 speedClean();
@@ -282,7 +296,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 一键加速
      */
-    public void speedClean(){
+    public void speedClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
@@ -294,7 +308,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 超强省电
      */
-    public void powerClean(){
+    public void powerClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         startActivity(PhoneSuperPowerActivity.class);
@@ -304,7 +318,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 通知栏清理
      */
-    public void notificationClean(){
+    public void notificationClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         //通知栏清理
         NotifyCleanManager.startNotificationCleanActivity(this, 0);
@@ -314,7 +328,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 微信专清
      */
-    public void weChatClean(){
+    public void weChatClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
@@ -338,7 +352,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 文件清理
      */
-    public void fileClean(){
+    public void fileClean() {
         StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
         startActivity(FileManagerHomeActivity.class);
     }
@@ -346,7 +360,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     /**
      * 手机降温
      */
-    public void coolingClean(){
+    public void coolingClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("cooling_click");
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -402,7 +416,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     public void onBackPressed() {
         if (getString(R.string.tool_one_key_speed).contains(mTitle))
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
-            if (Jzvd.backPress()) {
+        if (Jzvd.backPress()) {
             return;
         }
         super.onBackPressed();
@@ -413,16 +427,16 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
-        }else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+        } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
             NiuDataAPI.onPageStart("boost_success_page_view_page", "加速结果出现时");
-        }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
+        } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
             NiuDataAPI.onPageStart("powersave_success_page_view_page", "省电结果出现时");
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle)||getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
             NiuDataAPI.onPageStart("wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
@@ -434,7 +448,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
             NiuDataAPI.onPageStart("cooling_success_page_view_page", "降温结果页出现时");
-        }else {
+        } else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
         super.onResume();
@@ -445,29 +459,29 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"clean_success_page","clean_success_page_view_page", "清理结果出现时");
-        }else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
+        } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"boost_success_page","boost_success_page_view_page", "加速结果出现时");
-        }else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_success_page", "boost_success_page_view_page", "加速结果出现时");
+        } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"clean_success_page","clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"powersave_success_page","powersave_success_page_view_page", "省电结果出现时");
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle)||getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "powersave_success_page", "powersave_success_page_view_page", "省电结果出现时");
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"wxclean_success_page","wxclean_success_page_view_page", "微信清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "wxclean_success_page", "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
             //QQ专清
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
             //通知栏清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"notification_clean_success_page","notification_clean_success_page_view_page", "通知栏清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "notification_clean_success_page", "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(),"cooling_success_page","cooling_success_page_view_page", "降温结果页出现时");
-        }else {
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "cooling_success_page", "cooling_success_page_view_page", "降温结果页出现时");
+        } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
         super.onPause();
@@ -496,9 +510,10 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mContainer.addView(mNativeExpressADView);
         mNativeExpressADView.render();
     }
+
     /**
      * 获取播放器实例
-     *
+     * <p>
      * 仅当视频回调{@link NativeExpressMediaListener#onVideoInit(NativeExpressADView)}调用后才会有返回值
      *
      * @param videoPlayer
@@ -570,7 +585,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             /**
              *  如果选择支持视频的模版样式，请使用{@link PositionId#NATIVE_EXPRESS_SUPPORT_VIDEO_POS_ID}
              */
-            mNativeExpressAD = new NativeExpressAD(this, getMyADSize(), PositionId.APPID,  PositionId.CLEAN_FINISH_ID, this); // 这里的Context必须为Activity
+            mNativeExpressAD = new NativeExpressAD(this, getMyADSize(), PositionId.APPID, PositionId.CLEAN_FINISH_ID, this); // 这里的Context必须为Activity
             mNativeExpressAD.setVideoOption(new VideoOption.Builder()
                     .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS) // 设置什么网络环境下可以自动播放视频
                     .setAutoPlayMuted(true) // 设置自动播放视频时，是否静音
@@ -597,29 +612,29 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     }
 
     private ADSize getMyADSize() {
-        int w = ADSize.FULL_WIDTH ;
+        int w = ADSize.FULL_WIDTH;
         int h = -2;
         return new ADSize(w, h);
     }
 
     @Override
     public void onRenderFail(NativeExpressADView nativeExpressADView) {
-        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.CLEAN_FINISH_ID,"优量汇","fail","success_page","success_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "fail", "success_page", "success_page");
     }
 
     @Override
     public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-        StatisticsUtils.customADRequest("ad_request","广告请求", "1", PositionId.CLEAN_FINISH_ID,"优量汇","success","success_page","success_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success", "success_page", "success_page");
     }
 
     @Override
     public void onADExposure(NativeExpressADView nativeExpressADView) {
-        StatisticsUtils.customAD("ad_show","广告展示曝光", "1", PositionId.CLEAN_FINISH_ID,"优量汇","success_page","success_page");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success_page", "success_page");
     }
 
     @Override
     public void onADClicked(NativeExpressADView nativeExpressADView) {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1",PositionId.CLEAN_FINISH_ID,"优量汇","success_page","success_page");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success_page", "success_page");
 
         if (mContainer != null && mContainer.getChildCount() > 0) {
             mContainer.removeAllViews();
@@ -662,21 +677,21 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         if (mNativeExpressADView != null) {
             mNativeExpressADView.destroy();
         }
-        if(mRecyclerView != null){
+        if (mRecyclerView != null) {
             mRecyclerView.destroy(); // this will totally release XR's memory
             mRecyclerView = null;
         }
     }
 
-    public static int getVideoPlayPolicy(int autoPlayPolicy, Context context){
-        if(autoPlayPolicy == VideoOption.AutoPlayPolicy.ALWAYS){
+    public static int getVideoPlayPolicy(int autoPlayPolicy, Context context) {
+        if (autoPlayPolicy == VideoOption.AutoPlayPolicy.ALWAYS) {
             return VideoOption.VideoPlayPolicy.AUTO;
-        }else if(autoPlayPolicy == VideoOption.AutoPlayPolicy.WIFI){
+        } else if (autoPlayPolicy == VideoOption.AutoPlayPolicy.WIFI) {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo wifiNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             return wifiNetworkInfo != null && wifiNetworkInfo.isConnected() ? VideoOption.VideoPlayPolicy.AUTO
                     : VideoOption.VideoPlayPolicy.MANUAL;
-        }else if(autoPlayPolicy == VideoOption.AutoPlayPolicy.NEVER){
+        } else if (autoPlayPolicy == VideoOption.AutoPlayPolicy.NEVER) {
             return VideoOption.VideoPlayPolicy.MANUAL;
         }
         return VideoOption.VideoPlayPolicy.UNKNOWN;
@@ -685,10 +700,10 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
             if (mIsRefresh) {
-                if(mRecyclerView != null)
+                if (mRecyclerView != null)
                     mRecyclerView.refreshComplete();
             } else {
-                if(mRecyclerView != null)
+                if (mRecyclerView != null)
                     mRecyclerView.loadMoreComplete();
             }
             return;
@@ -730,10 +745,10 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             @Override
             public void onComplete() {
                 if (mIsRefresh) {
-                    if(mRecyclerView != null)
+                    if (mRecyclerView != null)
                         mRecyclerView.refreshComplete();
                 } else {
-                    if(mRecyclerView != null)
+                    if (mRecyclerView != null)
                         mRecyclerView.loadMoreComplete();
                 }
             }
@@ -760,10 +775,10 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             @Override
             public void onComplete() {
                 if (mIsRefresh) {
-                    if(mRecyclerView != null)
+                    if (mRecyclerView != null)
                         mRecyclerView.refreshComplete();
                 } else {
-                    if(mRecyclerView != null)
+                    if (mRecyclerView != null)
                         mRecyclerView.loadMoreComplete();
                 }
             }
