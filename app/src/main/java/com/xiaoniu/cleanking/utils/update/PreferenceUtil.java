@@ -334,4 +334,28 @@ public class PreferenceUtil {
             return true;
         return false;
     }
+
+    /**
+     * 保存手机降温时间
+     * @return
+     */
+    public static boolean saveCoolingCleanTime(){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_COOLINF_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次手机降温间隔至少3分钟
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getCoolingCleanTime(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_COOLINF_TIME,0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
 }

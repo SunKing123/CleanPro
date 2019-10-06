@@ -688,6 +688,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (PreferenceUtil.getCoolingCleanTime()){
+                    PreferenceUtil.saveCoolingCleanTime();
+                }
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 bundle.putString("num", "");

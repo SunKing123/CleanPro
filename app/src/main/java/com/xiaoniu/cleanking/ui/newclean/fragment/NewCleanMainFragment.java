@@ -210,11 +210,10 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
 
     /**
-     * 通知清理
+     * 通知栏清理
      */
     @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
-        //通知栏清理
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (PreferenceUtil.getNotificationCleanTime()){
@@ -235,8 +234,17 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickJw() {
         AppHolder.getInstance().setCleanFinishSourcePageId("cooling_click");
         ((MainActivity) getActivity()).commitJpushClickTime(6);
-        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+
+        if (PreferenceUtil.getCoolingCleanTime()){
+            startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
     }
 
     public void onKeyBack() {
