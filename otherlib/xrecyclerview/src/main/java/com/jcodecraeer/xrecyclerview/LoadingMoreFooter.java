@@ -1,6 +1,7 @@
 package com.jcodecraeer.xrecyclerview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -61,6 +62,7 @@ public class LoadingMoreFooter extends LinearLayout {
     }
 
     public void initView(){
+	    setBackgroundColor(Color.parseColor("#F7F8FA"));
         setGravity(Gravity.CENTER);
         setLayoutParams(new RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
