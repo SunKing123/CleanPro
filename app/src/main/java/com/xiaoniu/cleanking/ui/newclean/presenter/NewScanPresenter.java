@@ -131,6 +131,17 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
+                //其他垃圾
+                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_AD);
+                if (adGroup == null) {
+                    adGroup = new JunkGroup();
+                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
+                    adGroup.isChecked = true;
+                    adGroup.isExpand = true;
+                    adGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_AD, adGroup);
+                    adGroup.mSize += 0;
+                }
                 //卸载残留
                 JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
                 if (uninstallGroup == null) {
@@ -177,17 +188,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     apkGroup.mChildren = new ArrayList<>();
                     mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
                     apkGroup.mSize += 0;
-                }
-                //广告垃圾
-                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_AD);
-                if (adGroup == null) {
-                    adGroup = new JunkGroup();
-                    adGroup.mName = ContextUtils.getContext().getString(R.string.ad_clean);
-                    adGroup.isChecked = true;
-                    adGroup.isExpand = true;
-                    adGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_AD, adGroup);
-                    adGroup.mSize += 0;
                 }
 
                 for (FirstJunkInfo info : a) {
