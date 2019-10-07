@@ -105,6 +105,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
 
+        mRecyclerView.setPullRefreshEnabled(false);
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
 
