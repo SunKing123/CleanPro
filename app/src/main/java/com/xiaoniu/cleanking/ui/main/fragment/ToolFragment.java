@@ -190,19 +190,35 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-
             ((MainActivity)getActivity()).commitJpushClickTime(2);
-            Bundle bundle = new Bundle();
-            bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_speed));
-            startActivity(PhoneAccessActivity.class,bundle);
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
+            //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+            if (!PreferenceUtil.getCleanTime()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+                startActivity(PhoneAccessActivity.class, bundle);
+            }
         } else if (ids == R.id.text_cooling) {
             //手机降温
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
-
-            ((MainActivity)getActivity()).commitJpushClickTime(6);
-            startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
+            ((MainActivity)getActivity()).commitJpushClickTime(6);
+            // 添加每次降温时间间隔至少3分钟
+            if (PreferenceUtil.getCoolingCleanTime()){
+                startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+            }else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         } else if (ids == R.id.text_phone_thin) {
             Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
             intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,getString(R.string.tool_phone_thin));
