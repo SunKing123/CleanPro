@@ -207,6 +207,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                 for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                     mJunkResults.put(i++, entry.getValue());
                 }
+                if (mFileQueryUtils.isFinish())
+                    return;
                 mView.scanFinish(mJunkResults);
             }
         });
@@ -258,6 +260,10 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     AnimatorSet cleanScanAnimator;
 
+    public AnimatorSet getCleanScanAnimator() {
+        return cleanScanAnimator;
+    }
+
     /**
      * 开始扫描动画
      *
@@ -303,26 +309,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         cleanScanAnimator = new AnimatorSet();
 
         cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
-        cleanScanAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
         cleanScanAnimator.start();
     }
 

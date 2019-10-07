@@ -169,6 +169,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                 mJunkGroups = junkGroups;
                 ((NowCleanActivity)getActivity()).setJunkGroups(mJunkGroups);
                 mArrowRight.setVisibility(VISIBLE);
+                ((NowCleanActivity)getActivity()).scanFinish();
             } else {
                 //没有扫描到垃圾
                 cleanFinishSign();
@@ -243,6 +244,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     public void stopScan(){
         mPresenter.setIsFinish(true);
+        if (mPresenter.getCleanScanAnimator() != null)
+            mPresenter.getCleanScanAnimator().cancel();
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
         showHomeLottieView(true);
@@ -255,7 +258,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
         showHomeLottieView(true);
-        ((NowCleanActivity) getActivity()).scanFinish();
     }
 
     /**
