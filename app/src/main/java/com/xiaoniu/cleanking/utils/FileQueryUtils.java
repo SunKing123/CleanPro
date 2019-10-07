@@ -81,6 +81,10 @@ public class FileQueryUtils {
         isFinish = finish;
     }
 
+    public boolean isFinish() {
+        return isFinish;
+    }
+
     public void setScanFileListener(ScanFileListener scanFileListener) {
         mScanFileListener = scanFileListener;
     }

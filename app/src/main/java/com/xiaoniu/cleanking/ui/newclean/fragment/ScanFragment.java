@@ -108,17 +108,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     private MyHandler mHandler = new MyHandler(getActivity());
 
-    /**
-     * 停止扫描
-     */
-    public void stopScan() {
-//        mPresenter.setIsFinish(true);
-//        mCircleOuter2.setVisibility(GONE);
-//        mCircleOuter.setVisibility(GONE);
-//        showHomeLottieView(true);
-
-    }
-
     class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
 
@@ -132,7 +121,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                     mLottieHomeView.playAnimation();
             }
             if (msg.what == 2){
-                mPresenter.setIsFinish(false);
                 ((NowCleanActivity)getActivity()).setCountEntity(null);
                 ((NowCleanActivity)getActivity()).setJunkGroups(null);
 
@@ -162,6 +150,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     public void startScan() {
+        mPresenter.setIsFinish(false);
         mHandler.sendEmptyMessageDelayed(2,500);
     }
 
@@ -179,7 +168,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             if (mCountEntity.getNumber() > 0) {
                 mJunkGroups = junkGroups;
                 ((NowCleanActivity)getActivity()).setJunkGroups(mJunkGroups);
-                mTextScanTrace.setVisibility(GONE);
                 mArrowRight.setVisibility(VISIBLE);
             } else {
                 //没有扫描到垃圾
@@ -235,14 +223,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         setColorChange(false);
         //播放lottie动画
         mLottieStarView.setVisibility(VISIBLE);
-        playStarAnimation();
         mPresenter.showOuterViewRotation(mIconOuter);
-    }
-
-    private void playStarAnimation() {
-        mLottieStarView.setImageAssetsFolder("images");
-        mLottieStarView.setAnimation("data_star.json");
-        mLottieStarView.playAnimation();
     }
 
     public void showScanFile(String p0) {
@@ -258,13 +239,23 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     /**
+     * 终止扫描
+     */
+    public void stopScan(){
+        mPresenter.setIsFinish(true);
+        mCircleOuter2.setVisibility(GONE);
+        mCircleOuter.setVisibility(GONE);
+        showHomeLottieView(true);
+    }
+
+    /**
      * 扫描动画结束
      */
     public void endScanAnimation() {
         mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);
         showHomeLottieView(true);
-        ((NowCleanActivity)getActivity()).scanFinish();
+        ((NowCleanActivity) getActivity()).scanFinish();
     }
 
     /**

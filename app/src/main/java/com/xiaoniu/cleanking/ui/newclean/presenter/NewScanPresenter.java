@@ -333,7 +333,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         if (cleanScanAnimator != null) {
             cleanScanAnimator.end();
         }
-        mView.endScanAnimation();
+        if (!mFileQueryUtils.isFinish() && mView != null)
+            mView.endScanAnimation();
     }
 
     public void initAnim(ValueAnimator animator, long time, int repeatMode, int count) {

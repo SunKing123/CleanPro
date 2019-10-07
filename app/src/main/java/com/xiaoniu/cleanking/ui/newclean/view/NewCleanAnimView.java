@@ -118,16 +118,16 @@ public class NewCleanAnimView extends RelativeLayout {
         ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);
         ObjectAnimator innerY = ObjectAnimator.ofFloat(mIconInner, "translationY", mIconInner.getTranslationY(), height);
 
-        ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(mIconInner, "alpha", 0, 1);
-        ObjectAnimator outerAlpha = ObjectAnimator.ofFloat(mIconOuter, "alpha", 0, 1);
-        ObjectAnimator scanAlpha = ObjectAnimator.ofFloat(mLayoutScan, "alpha", 0, 1);
-        ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mLayoutCount, "alpha", 0, 1);
+        ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(mIconInner, "alpha", 1, 1);
+        ObjectAnimator outerAlpha = ObjectAnimator.ofFloat(mIconOuter, "alpha", 1, 1);
+        ObjectAnimator scanAlpha = ObjectAnimator.ofFloat(mLayoutScan, "alpha", 1, 1);
+        ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mLayoutCount, "alpha", 1, 1);
 
         int time;
         if (isNeedTranslation) {
-            time = 1000;
+            time = 0;
         } else {
-            time = 10;
+            time = 0;
         }
         outerY.setDuration(time);
         scanY.setDuration(time);
@@ -180,6 +180,7 @@ public class NewCleanAnimView extends RelativeLayout {
 
     }
 
+    private ObjectAnimator rotation4;
     /**
      * 第二阶段 开始旋转
      *
@@ -190,7 +191,7 @@ public class NewCleanAnimView extends RelativeLayout {
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
         ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
+        rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
 
         rotation.setDuration(500);
 
@@ -292,6 +293,14 @@ public class NewCleanAnimView extends RelativeLayout {
      */
     private static final int ThirdLevel = 0xff06C581;
 
+    private ValueAnimator valueAnimator;
+
+    private boolean isStopClean = false;
+
+    public void setStopClean(boolean stopClean) {
+        isStopClean = stopClean;
+    }
+
     /**
      * 开始加速旋转
      *
@@ -299,7 +308,7 @@ public class NewCleanAnimView extends RelativeLayout {
      * @param countEntity
      */
     public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
-        ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
+        valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(3000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {
@@ -316,11 +325,12 @@ public class NewCleanAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (isStopClean)
+                    return;
                 if (animatorSet != null) {
                     animatorSet.end();
                 }
                 showFinishLottieView();
-
             }
 
             @Override
@@ -348,8 +358,18 @@ public class NewCleanAnimView extends RelativeLayout {
         AnimatorSet animatorSetTimer = new AnimatorSet();
         animatorSetTimer.playTogether(valueAnimator, colorAnim1);
         animatorSetTimer.start();
-
     }
 
+    public void stopClean() {
+        setStopClean(true);
+        if (valueAnimator != null)
+            valueAnimator.cancel();
+        // 终止清理，停止吸收动画
+        if (mAnimationView != null)
+            mAnimationView.cancelAnimation();
+        // 终止清理，停止风扇旋转
+        if (rotation4 != null)
+            rotation4.cancel();
+    }
 }
 

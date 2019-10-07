@@ -131,7 +131,6 @@ public class NowCleanActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
     @Subscribe
