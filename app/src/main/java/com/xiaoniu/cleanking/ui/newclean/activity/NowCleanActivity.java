@@ -97,6 +97,10 @@ public class NowCleanActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 返回事件
+     * @param isLeftBtn  true toolbar返回事件 false 系统返回
+     */
     private void backClick(boolean isLeftBtn) {
         if (isBackClick)
             return;
