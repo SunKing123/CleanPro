@@ -82,6 +82,7 @@ public class NowCleanActivity extends BaseActivity {
      * 扫描完成
      */
     public void scanFinish(){
+
         isScan = false;
         setCenterTitle("");
         setLeftTitle("建议清理");

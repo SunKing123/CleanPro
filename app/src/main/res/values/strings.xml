@@ -101,5 +101,6 @@
     <string name="tool_suggest_clean">建议清理</string>
     <string name="tool_home_hint">手机存在大量垃圾，建议立即清理</string>
     <string name="tool_home_clean">立即清理</string>
+    <string name="tool_phone_already_clean">手机很干净了~</string>
 
 </resources>

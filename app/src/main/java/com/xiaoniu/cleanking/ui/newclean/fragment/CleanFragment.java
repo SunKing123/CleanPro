@@ -56,7 +56,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     }
 
     @Override
-    public void netError() {}
+    public void netError() {
+    }
 
     @Override
     protected int getLayoutId() {
@@ -65,7 +66,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @Override
     protected void initView() {
-        ((NowCleanActivity)getActivity()).getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+        ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), true);
         } else {
@@ -76,11 +77,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         TextView tvSize = mHeadView.findViewById(R.id.tv_size);
         TextView tvUnit = mHeadView.findViewById(R.id.tv_clear_finish_gb_title);
 
-        mCountEntity = ((NowCleanActivity)getActivity()).getCountEntity();
+        mCountEntity = ((NowCleanActivity) getActivity()).getCountEntity();
 
         tvSize.setText(mCountEntity.getTotalSize());
         tvUnit.setText(mCountEntity.getUnit());
-        mJunkGroups = ((NowCleanActivity)getActivity()).getJunkGroups();
+        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 
         mExpandableListView.setGroupIndicator(null);
         mExpandableListView.setChildIndicator(null);
@@ -115,7 +116,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
 
-        mCleanAnimView.setCleanOverListener(() -> ((NowCleanActivity)getActivity()).setClean(false));
+        mCleanAnimView.setCleanOverListener(() -> {
+                    ((NowCleanActivity) getActivity()).setClean(false);
+                }
+        );
     }
 
     /**
@@ -124,9 +128,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * @param animatedValue
      */
     public void showBarColor(int animatedValue) {
-        if (((NowCleanActivity)getActivity()).getToolBar() == null)
+        if (((NowCleanActivity) getActivity()).getToolBar() == null)
             return;
-        ((NowCleanActivity)getActivity()).getToolBar().setBackgroundColor(animatedValue);
+        ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(animatedValue);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, true);
         } else {
@@ -142,8 +146,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     /**
      * 清理完成
      */
-    public void cleanFinish(){
-        if (PreferenceUtil.getNowCleanTime()){
+    public void cleanFinish() {
+        if (PreferenceUtil.getNowCleanTime()) {
             PreferenceUtil.saveNowCleanTime();
         }
         Bundle bundle = new Bundle();
@@ -154,7 +158,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         getActivity().finish();
     }
 
-    private void startClean(){
+    private void startClean() {
         mCleanAnimView.setStopClean(false);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.setData(mCountEntity);
@@ -165,7 +169,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @SuppressLint("CheckResult")
     private void clearAll() {
-        if (mJunkGroups == null|| mJunkGroups.size() < 1) {
+        if (mJunkGroups == null || mJunkGroups.size() < 1) {
             cleanFinish();
             return;
         }
@@ -193,7 +197,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             }
 
             e.onNext(total);
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {});
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
+        });
 
     }
 
