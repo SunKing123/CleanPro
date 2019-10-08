@@ -107,7 +107,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mExpandableListView.setAdapter(mAdapter);
 
         mAdapter.setData(mJunkGroups);
+        for (int i = 0; i < mJunkGroups.size(); i++) {
+            mExpandableListView.expandGroup(i);
 
+        }
         mCleanAnimView.setAnimationEnd(() -> cleanFinish());
 
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
