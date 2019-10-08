@@ -57,6 +57,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
     }
 
     public void startCleanNow() {
@@ -284,21 +285,15 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Subscribe
     public void onEventClean(CleanEvent cleanEvent){
         if (cleanEvent != null){
-            if (cleanEvent.isCleanFinish()){
+            if (cleanEvent.isCleanAminOver()){
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
             }
         }
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 }

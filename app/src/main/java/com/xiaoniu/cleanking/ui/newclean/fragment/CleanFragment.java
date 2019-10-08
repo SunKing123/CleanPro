@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
@@ -23,6 +24,8 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -119,6 +122,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
 
         mCleanAnimView.setCleanOverListener(() -> {
+                    CleanEvent cleanEvent = new CleanEvent();
+                    cleanEvent.setCleanAminOver(true);
+                    EventBus.getDefault().post(cleanEvent);
                     ((NowCleanActivity) getActivity()).setClean(false);
                 }
         );
