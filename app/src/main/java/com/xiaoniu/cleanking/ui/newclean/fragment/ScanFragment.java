@@ -287,7 +287,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }
 
         if (!hidden) {
-            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
@@ -296,7 +295,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             }
         } else {
             isShow = false;
-            NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
 
     }
@@ -322,8 +320,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageStart("check_garbage_view_page", "清理垃圾浏览");
+        NiuDataAPI.onPageStart("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (isGotoSetting) {
             mPresenter.checkPermission();
             isGotoSetting = false;
@@ -339,9 +336,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageEnd("check_garbage_view_page", "清理垃圾浏览");
-
+        NiuDataAPI.onPageEnd("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (mLottieHomeView != null)
             mLottieHomeView.cancelAnimation();
     }
