@@ -57,6 +57,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
     }
 
     public void startCleanNow() {
@@ -290,14 +291,8 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 }
