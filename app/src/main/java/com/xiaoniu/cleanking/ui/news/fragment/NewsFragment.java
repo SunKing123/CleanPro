@@ -1,22 +1,16 @@
 package com.xiaoniu.cleanking.ui.news.fragment;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -41,7 +35,7 @@ public class NewsFragment extends BaseFragment {
     private ArrayList<NewsListFragment> mFragments;
     private ImageView mIvBack;
     private String mType = "white";
-    private FrameLayout mFLTopNav;
+    private LinearLayout mFLTopNav;
     private boolean isShowBack = false;
 
     /**
@@ -76,38 +70,6 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
-    public void moveNavigation(boolean hide) {
-        ObjectAnimator animator;
-        if (hide) {
-            animator = ObjectAnimator.ofFloat(mTabIndicator, "translationX", 0, 110);
-        } else {
-            animator = ObjectAnimator.ofFloat(mTabIndicator, "translationX", 110, 0);
-        }
-        animator.setDuration(300);
-        animator.start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animator.cancel();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-    }
-
     @Override
     protected void initViews(View contentView, Bundle savedInstanceState) {
         mIvBack = contentView.findViewById(R.id.iv_back);
@@ -117,7 +79,6 @@ public class NewsFragment extends BaseFragment {
         mFLTopNav = contentView.findViewById(R.id.fl_top_nav);
         if (isShowBack) {
             mIvBack.setVisibility(View.VISIBLE);
-            moveNavigation(true);
         }
     }
 

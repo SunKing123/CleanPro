@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/fl_top_nav"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -24,7 +24,7 @@
             android:paddingRight="12dp"
             android:paddingBottom="12dp"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

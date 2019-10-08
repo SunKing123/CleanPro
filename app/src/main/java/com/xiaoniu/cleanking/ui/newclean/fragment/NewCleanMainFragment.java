@@ -283,7 +283,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @Subscribe
     public void onEventClean(CleanEvent cleanEvent){
         if (cleanEvent != null){
-            if (cleanEvent.isCleanFinish()){
+            if (cleanEvent.isCleanAminOver()){
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
             }
         }

@@ -1,13 +1,22 @@
 package com.xiaoniu.cleanking.ui.main.event;
 
 public class CleanEvent {
-    private boolean isCleanFinish = false;
+    private boolean isScanFinish = false;
+    private boolean isCleanAminOver = false;
 
-    public boolean isCleanFinish() {
-        return isCleanFinish;
+    public boolean isCleanAminOver() {
+        return isCleanAminOver;
     }
 
-    public void setCleanFinish(boolean cleanFinish) {
-        isCleanFinish = cleanFinish;
+    public void setCleanAminOver(boolean cleanAminOver) {
+        isCleanAminOver = cleanAminOver;
+    }
+
+    public boolean isScanFinish() {
+        return isScanFinish;
+    }
+
+    public void setScanFinish(boolean scanFinish) {
+        isScanFinish = scanFinish;
     }
 }

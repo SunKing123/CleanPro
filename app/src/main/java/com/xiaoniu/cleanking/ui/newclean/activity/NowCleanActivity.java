@@ -7,15 +7,11 @@ import android.os.Bundle;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.newclean.fragment.CleanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.common.base.BaseActivity;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 
@@ -63,8 +59,6 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        //注册订阅者
-        EventBus.getDefault().register(this);
         startScan();
     }
 
@@ -153,20 +147,8 @@ public class NowCleanActivity extends BaseActivity {
         isBackClick = true;
     }
 
-    @Subscribe
-    public void onEventClean(CleanEvent cleanEvent){
-        scanFinish();
-    }
-
     @Override
     protected void loadData() {
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //注册订阅者
-        EventBus.getDefault().unregister(this);
     }
 }
