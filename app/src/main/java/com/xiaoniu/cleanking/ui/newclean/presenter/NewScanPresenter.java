@@ -29,17 +29,21 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.ContextUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
@@ -192,11 +196,15 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
-                        cacheGroup.mChildren.add(info);
-                        cacheGroup.mSize += info.getTotalSize();
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) || !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                            cacheGroup.mChildren.add(info);
+                            cacheGroup.mSize += info.getTotalSize();
+                        }
                     } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
-                        processGroup.mChildren.add(info);
-                        processGroup.mSize += info.getTotalSize();
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) || !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                            processGroup.mChildren.add(info);
+                            processGroup.mSize += info.getTotalSize();
+                        }
                     } else if ("TYPE_APK".equals(info.getGarbageType())) {
                         apkGroup.mChildren.add(info);
                         apkGroup.mSize += info.getTotalSize();

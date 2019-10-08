@@ -24,12 +24,17 @@ public class AlertDialogUtil {
      * @return
      */
     public static AlertDialog alertBanLiveDialog(Context context, String tipTxtStr, String contentStr,String btnOkStr,String btnCancelStr, ClickListener okListener) {
+        return alertBanLiveDialog(context,tipTxtStr,contentStr,btnOkStr,btnCancelStr,okListener,Color.parseColor("#727375"),Color.parseColor("#06C581"));
+    }
+
+    public static AlertDialog alertBanLiveDialog(Context context, String tipTxtStr, String contentStr,String btnOkStr,String btnCancelStr, ClickListener okListener,int leftColor, int rightColor) {
 
         final AlertDialog dlg = new AlertDialog.Builder(context).create();
         if (((Activity) context).isFinishing()) {
             return dlg;
         }
         dlg.show();
+        dlg.setCancelable(false);
         dlg.setCanceledOnTouchOutside(false);
         Window window = dlg.getWindow();
         window.setContentView(R.layout.alite_redp_send_dialog);
@@ -39,8 +44,9 @@ public class AlertDialogUtil {
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView btnOk = window.findViewById(R.id.btnOk);
-
+        btnOk.setTextColor(rightColor);
         TextView btnCancel = window.findViewById(R.id.btnCancle);
+        btnCancel.setTextColor(leftColor);
         TextView tipTxt = window.findViewById(R.id.tipTxt);
         TextView content = window.findViewById(R.id.content);
         tipTxt.setText(tipTxtStr);

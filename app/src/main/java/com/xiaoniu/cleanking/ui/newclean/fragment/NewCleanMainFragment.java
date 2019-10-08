@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
@@ -33,6 +34,7 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -41,6 +43,8 @@ import butterknife.OnClick;
 public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     private long firstTime;
+    @BindView(R.id.tv_clean_type)
+    TextView mTvCleanType;
 
     @Override
     protected int getLayoutId() {
@@ -123,7 +127,6 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
        if (PreferenceUtil.getPowerCleanTime()){
-           PreferenceUtil.savePowerCleanTime();
            startActivity(PhoneSuperPowerActivity.class);
        }else {
            Bundle bundle = new Bundle();
@@ -269,4 +272,8 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
             }
         }
     }
+
+    /**
+     * EventBus 立即清理完成后，更新首页显示文案
+     */
 }

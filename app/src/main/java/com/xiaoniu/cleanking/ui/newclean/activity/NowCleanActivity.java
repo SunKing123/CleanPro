@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.xiaoniu.cleanking.R;
@@ -25,9 +26,10 @@ public class NowCleanActivity extends BaseActivity {
     private CountEntity mCountEntity;
     private HashMap<Integer, JunkGroup> mJunkGroups;
     private boolean isScan = false;
-    private boolean isClean = false;
+    private boolean isClean = true;
     private ScanFragment mScanFragment;
     private CleanFragment mCleanFragment;
+    private boolean isBackClick = false;
 
     public void setClean(boolean clean) {
         isClean = clean;
@@ -90,12 +92,37 @@ public class NowCleanActivity extends BaseActivity {
     @Override
     protected void setListener() {
         mBtnLeft.setOnClickListener(v -> {
-            // TODO 添加埋点，弹出待确认提示框
-            if (isScan) {
-                //TODO 停止清理
-                if (mScanFragment != null)
-                    mScanFragment.stopScan();
-                AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "确认退出", "继续清理", new ClickListener() {
+           backClick();
+        });
+    }
+
+    private void backClick() {
+        if (isBackClick)
+            return;
+        // TODO 添加埋点，弹出待确认提示框
+        if (isScan) {
+            //TODO 停止清理
+            if (mScanFragment != null)
+                mScanFragment.stopScan();
+            AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "确认退出", "继续清理", new ClickListener() {
+                @Override
+                public void clickOKBtn() {
+                    finish();
+                }
+
+                @Override
+                public void cancelBtn() {
+                    isBackClick = false;
+                    if (mScanFragment != null)
+                        mScanFragment.startScan();
+                }
+            },Color.parseColor("#06C581"), Color.parseColor("#727375"));
+        }else {
+            //TODO 停止清理
+            if (isClean) {
+                if (mCleanFragment != null)
+                    mCleanFragment.stopClean();
+                AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "确认退出", "继续清理", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
                         finish();
@@ -103,34 +130,22 @@ public class NowCleanActivity extends BaseActivity {
 
                     @Override
                     public void cancelBtn() {
+                        isBackClick = false;
                         //TODO 继续清理
-                        if (mScanFragment != null)
-                            mScanFragment.startScan();
+                        if (mCleanFragment != null)
+                            mCleanFragment.starClean();
                     }
-                });
+                },Color.parseColor("#06C581"), Color.parseColor("#727375"));
             }else {
-                if (isClean) {
-                    //TODO 停止清理
-                    if (mCleanFragment != null)
-                        mCleanFragment.stopClean();
-                    AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "确认退出", "继续清理", new ClickListener() {
-                        @Override
-                        public void clickOKBtn() {
-                            finish();
-                        }
-
-                        @Override
-                        public void cancelBtn() {
-                            //TODO 继续清理
-                            if (mCleanFragment != null)
-                                mCleanFragment.starClean();
-                        }
-                    });
-                }else {
-                    finish();
-                }
+                finish();
             }
-        });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        backClick();
+        isBackClick = true;
     }
 
     @Subscribe

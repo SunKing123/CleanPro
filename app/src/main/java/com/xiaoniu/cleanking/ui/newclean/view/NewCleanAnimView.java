@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.interfice.CleanOverListener;
 import com.xiaoniu.common.utils.DisplayUtils;
 
 /**
@@ -41,6 +42,11 @@ public class NewCleanAnimView extends RelativeLayout {
     private RelativeLayout mLayoutRoot;
     private TextView mTvAnimTitle;
     private AnimationEnd mAnimationEnd;
+    private CleanOverListener mCleanOverListener;
+
+    public void setCleanOverListener(CleanOverListener mCleanOverListener) {
+        this.mCleanOverListener = mCleanOverListener;
+    }
 
     public void setAnimationEnd(AnimationEnd mAnimationEnd) {
         this.mAnimationEnd = mAnimationEnd;
@@ -330,6 +336,10 @@ public class NewCleanAnimView extends RelativeLayout {
                 if (animatorSet != null) {
                     animatorSet.end();
                 }
+                if (mCleanOverListener != null){
+                    mCleanOverListener.AnimOver();
+                }
+                //更新首页的显示文案
                 showFinishLottieView();
             }
 

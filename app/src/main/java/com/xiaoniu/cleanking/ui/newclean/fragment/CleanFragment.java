@@ -114,6 +114,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mCleanAnimView.setAnimationEnd(() -> cleanFinish());
 
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
+
+        mCleanAnimView.setCleanOverListener(() -> ((NowCleanActivity)getActivity()).setClean(false));
     }
 
     /**
@@ -153,7 +155,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     }
 
     private void startClean(){
-        ((NowCleanActivity)getActivity()).setClean(true);
         mCleanAnimView.setStopClean(false);
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.setData(mCountEntity);
@@ -192,9 +193,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             }
 
             e.onNext(total);
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-
-        });
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {});
 
     }
 
