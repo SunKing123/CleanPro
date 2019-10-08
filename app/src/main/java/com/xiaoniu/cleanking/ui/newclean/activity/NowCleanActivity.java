@@ -93,11 +93,11 @@ public class NowCleanActivity extends BaseActivity {
     @Override
     protected void setListener() {
         mBtnLeft.setOnClickListener(v -> {
-           backClick();
+           backClick(true);
         });
     }
 
-    private void backClick() {
+    private void backClick(boolean isLeftBtn) {
         if (isBackClick)
             return;
         // TODO 添加埋点，弹出待确认提示框
@@ -145,7 +145,7 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        backClick();
+        backClick(false);
         isBackClick = true;
     }
 
