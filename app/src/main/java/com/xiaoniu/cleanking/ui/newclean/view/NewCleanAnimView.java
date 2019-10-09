@@ -303,6 +303,7 @@ public class NewCleanAnimView extends RelativeLayout {
 
     private boolean isStopClean = false;
 
+
     public void setStopClean(boolean stopClean) {
         isStopClean = stopClean;
     }

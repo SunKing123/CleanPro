@@ -54,6 +54,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     @Inject
     NoClearSPHelper mSPHelper;
 
+    //背景颜色是否已变为红色
+    private boolean isChangeRed = false;
+
     @Inject
     public NewScanPresenter() {
     }
@@ -70,8 +73,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
      */
     @SuppressLint("CheckResult")
     public void startScan() {
-
-        showColorChange();
+        if (!isChangeRed)
+            showColorChange();
         total = 0;
         mJunkGroups = new HashMap<>();
         mJunkResults = new HashMap<>();
@@ -232,6 +235,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         }
         mScanTranlateColor.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
+            if (FirstLevel == animatedValue)
+                isChangeRed = true;
+                Log.v("onAnimationEnd","FirstLevel ");
             if (mView == null)
                 return;
             if (mView.getViewShow()) {
