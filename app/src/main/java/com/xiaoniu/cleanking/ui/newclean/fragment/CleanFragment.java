@@ -154,6 +154,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     public void cleanFinish() {
         if (PreferenceUtil.getNowCleanTime()) {
             PreferenceUtil.saveNowCleanTime();
+
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_suggest_clean));

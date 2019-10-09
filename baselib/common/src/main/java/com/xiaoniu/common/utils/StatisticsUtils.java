@@ -264,8 +264,30 @@ public class StatisticsUtils {
         JSONObject extension = new JSONObject();
         try {
             extension.put("content_id", newsId);
-            extension.put("position_title", newsName);
+            extension.put("content_title", newsName);
             extension.put("position_id", String.valueOf(position));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+    }
+
+
+    /**
+     *  推荐 功能 埋点
+     * @param eventCode
+     * @param eventName
+     * @param sourcePage
+     * @param currentPage
+     * @param newsName
+     * @param newsId
+     * @param position
+     */
+    public static void trackFunctionClickItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName, String position) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("position_title", newsName);
+            extension.put("position_id", position);
         } catch (Exception e) {
             e.printStackTrace();
         }

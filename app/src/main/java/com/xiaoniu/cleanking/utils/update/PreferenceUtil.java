@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.utils.update;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -270,9 +271,22 @@ public class PreferenceUtil {
      * @return
      */
     public static boolean saveNowCleanTime(){
+        Constant.APP_IS_LIVE = "1";
         SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+
+    /**
+     * 保存立即清理清理时间
+     * @return
+     */
+    public static boolean saveCustom(String key, long value){
+        SharedPreferences sharedPreferences =  AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(key,value).commit();
         return true;
     }
 

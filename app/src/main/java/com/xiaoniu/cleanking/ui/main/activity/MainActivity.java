@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
@@ -50,6 +51,7 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.ykun.live_library.KeepAliveManager;
 import com.ykun.live_library.config.ForegroundNotification;
@@ -441,6 +443,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     return true;
                 } else {
+
                     //如果审核满足答题条件时自动跳转答题页面，返回则不跳
                     SPUtil.setInt(MainActivity.this, "turnask", 0);
                     SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);

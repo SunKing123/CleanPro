@@ -3,11 +3,13 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -79,13 +81,15 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        if(PreferenceUtil.getNowCleanTime()){
+        if(PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)){
             startActivity(NowCleanActivity.class);
         }else {
+            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_suggest_clean));
             bundle.putString("num", "");
             bundle.putString("unit", "");
+            bundle.putString("home", "");
             startActivity(NewCleanFinishActivity.class, bundle);
         }
     }

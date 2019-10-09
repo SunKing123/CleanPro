@@ -12,6 +12,7 @@ public class Constant {
     public static final String customerPhone = "400-106-7878";
     public static final String server_Phone = "4001067878";
 
+    public static String APP_IS_LIVE = "";
     //用户中心跳转通用H5 Activity字段
     //标题
     public static final String Title = "activity_title";

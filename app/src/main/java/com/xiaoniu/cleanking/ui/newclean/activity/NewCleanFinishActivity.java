@@ -27,8 +27,11 @@ import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -270,32 +273,49 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     @Override
     public void onClick(View v) {
+        String functionName = "";
+        String functionPosition = "";
         switch (v.getId()) {
             case R.id.iv_speed_clean:
                 //一键加速
+                functionName = "一键加速";
+                functionPosition = "1";
                 speedClean();
                 break;
             case R.id.iv_power_clean:
                 //超强省电
+                functionName = "超强省电";
+                functionPosition = "2";
                 powerClean();
                 break;
             case R.id.iv_notification_clean:
                 //通知栏清理
+                functionName = "通知栏清理";
+                functionPosition = "3";
                 notificationClean();
                 break;
             case R.id.iv_wechat_clean:
                 //微信专清
+                functionName = "微信专清";
+                functionPosition = "4";
                 weChatClean();
                 break;
             case R.id.iv_file_clean:
                 //文件清理
+                functionName = "文件清理";
+                functionPosition = "5";
                 fileClean();
                 break;
             case R.id.iv_cooling:
                 //手机降温
+                functionName = "手机降温";
+                functionPosition = "6";
                 coolingClean();
                 break;
         }
+        //推荐清理_推荐功能点击埋点
+        if(getString(R.string.tool_suggest_clean).contains(mTitle))
+        StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : "scanning_result_page", "home_page_clean_up_page", functionName, functionPosition);
         finish();
     }
 
@@ -382,9 +402,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mIvCooling.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
-            if (getString(R.string.tool_one_key_speed).contains(mTitle)){
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
-            }else if(getString(R.string.tool_suggest_clean).contains(mTitle)){
+            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", "scanning_result_page", "home_page_clean_up_page");
             }
             finish();
@@ -423,9 +443,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     @Override
     public void onBackPressed() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)){
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
-        }else if(getString(R.string.tool_suggest_clean).contains(mTitle)){
+        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", "scanning_result_page", "home_page_clean_up_page");
         }
 
@@ -483,7 +503,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_success_page", "boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "home_page_clean_up_page","home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "home_page_clean_up_page", "home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
