@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -81,7 +82,7 @@ public class NotificationService extends Service {
         contentView.setOnClickPendingIntent(R.id.iv_app_icon, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         //清理
-        Intent intentClean = new Intent(context, MainActivity.class);
+        Intent intentClean = new Intent(context, NewCleanFinishActivity.class);
         intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intentClean.putExtra("NotificationService","clean");
         contentView.setOnClickPendingIntent(R.id.ll_clean, PendingIntent.getActivity(context, REQUEST_CODE, intentClean, PendingIntent.FLAG_UPDATE_CURRENT));
