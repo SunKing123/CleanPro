@@ -237,7 +237,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         getActivity().runOnUiThread(() -> {
             if (mTextScanTrace != null) {
                 mTextScanTrace.setText("扫描:  " + p0);
-                cleanFinish();
             }
         });
 
