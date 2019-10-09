@@ -36,7 +36,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 清理
+ * 清理 操作页面
  */
 public class CleanFragment extends BaseFragment<CleanPresenter> {
 
@@ -152,9 +152,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * 清理完成
      */
     public void cleanFinish() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("scanning_result_page");
         if (PreferenceUtil.getNowCleanTime()) {
             PreferenceUtil.saveNowCleanTime();
-
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_suggest_clean));
