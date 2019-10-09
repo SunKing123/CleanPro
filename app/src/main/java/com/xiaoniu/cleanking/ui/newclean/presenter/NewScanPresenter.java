@@ -199,12 +199,12 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) || !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
                             cacheGroup.mChildren.add(info);
                             cacheGroup.mSize += info.getTotalSize();
                         }
                     } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) || !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
                             processGroup.mChildren.add(info);
                             processGroup.mSize += info.getTotalSize();
                         }
