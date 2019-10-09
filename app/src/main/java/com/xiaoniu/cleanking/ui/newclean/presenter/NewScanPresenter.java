@@ -136,27 +136,27 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
                 //其他垃圾
-                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_AD);
-                if (adGroup == null) {
-                    adGroup = new JunkGroup();
-                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
-                    adGroup.isChecked = true;
-                    adGroup.isExpand = true;
-                    adGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_AD, adGroup);
-                    adGroup.mSize += 0;
-                }
+//                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_AD);
+//                if (adGroup == null) {
+//                    adGroup = new JunkGroup();
+//                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
+//                    adGroup.isChecked = true;
+//                    adGroup.isExpand = true;
+//                    adGroup.mChildren = new ArrayList<>();
+//                    mJunkGroups.put(JunkGroup.GROUP_AD, adGroup);
+//                    adGroup.mSize += 0;
+//                }
                 //卸载残留
-                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
-                if (uninstallGroup == null) {
-                    uninstallGroup = new JunkGroup();
-                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
-                    uninstallGroup.isChecked = true;
-                    uninstallGroup.isExpand = true;
-                    uninstallGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
-                    uninstallGroup.mSize += 0;
-                }
+//                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
+//                if (uninstallGroup == null) {
+//                    uninstallGroup = new JunkGroup();
+//                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
+//                    uninstallGroup.isChecked = true;
+//                    uninstallGroup.isExpand = true;
+//                    uninstallGroup.mChildren = new ArrayList<>();
+//                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
+//                    uninstallGroup.mSize += 0;
+//                }
 
                 //缓存垃圾
                 JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
