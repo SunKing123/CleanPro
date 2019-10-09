@@ -303,6 +303,8 @@ public class NewCleanAnimView extends RelativeLayout {
 
     private boolean isStopClean = false;
 
+    //背景颜色是否已变为红色
+    private boolean isChangeRed = false;
 
     public void setStopClean(boolean stopClean) {
         isStopClean = stopClean;
@@ -361,13 +363,18 @@ public class NewCleanAnimView extends RelativeLayout {
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
+            if (FirstLevel == animatedValue)
+                isChangeRed = true;
             if (mOnColorChangeListener != null) {
                 mOnColorChangeListener.onColorChange(animatedValue);
             }
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator, colorAnim1);
+        if (!isChangeRed)
+            animatorSetTimer.playTogether(valueAnimator, colorAnim1);
+        else
+            animatorSetTimer.playTogether(valueAnimator);
         animatorSetTimer.start();
     }
 
