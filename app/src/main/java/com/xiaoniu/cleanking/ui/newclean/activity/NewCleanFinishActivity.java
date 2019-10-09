@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -54,6 +55,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -173,6 +175,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                     mTvQl.setText("快试试其他功能吧！");
                 }
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+                CleanEvent cleanEvent = new CleanEvent();
+                cleanEvent.setCleanAminOver(true);
+                EventBus.getDefault().post(cleanEvent);
                 //建议清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
