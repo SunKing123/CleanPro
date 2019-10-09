@@ -57,7 +57,8 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                         //埋点
                         if (position > 11)
                             return;
-                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.topic, itemInfo.rowkey, position + 1);
+                        //todo sourcePage 定位
+                        StatisticsUtils.trackClickNewsItem("recommendation_function_click", "资讯页新闻点击", "", "home_page_clean_up_page", itemInfo.topic, itemInfo.rowkey, position + 1);
                     }
             );
         }

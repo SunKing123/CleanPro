@@ -264,7 +264,7 @@ public class StatisticsUtils {
         JSONObject extension = new JSONObject();
         try {
             extension.put("content_id", newsId);
-            extension.put("content_title", newsName);
+            extension.put("position_title", newsName);
             extension.put("position_id", String.valueOf(position));
         } catch (Exception e) {
             e.printStackTrace();
