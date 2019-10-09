@@ -418,13 +418,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         content.setText("清理功能无法使用，请先开启文件读写权限。");
         btnOk.setOnClickListener(v -> {
             dlg.dismiss();
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.setData(Uri.parse("package:" + mView.getActivity().getPackageName()));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (intent.resolveActivity(mView.getActivity().getPackageManager()) != null) {
-                mView.setIsGotoSetting(true);
-                mView.getActivity().startActivity(intent);
-            }
+            mView.goSetting();
         });
         btnCancle.setOnClickListener(v -> {
             dlg.dismiss();

@@ -356,13 +356,15 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      */
     public boolean verifyClickTime(Intent intent) {
         boolean flag = true;
-        String curClassName = intent.getComponent().getClassName();
-        long curClickTime = System.currentTimeMillis();
-        if (curClickTime - mLastClickTime <= CLICK_TIME && curClassName.equals(mLastClassName)) {
-            flag = false;
+        if (intent != null && intent.getComponent() != null) {
+            String curClassName = intent.getComponent().getClassName();
+            long curClickTime = System.currentTimeMillis();
+            if (curClickTime - mLastClickTime <= CLICK_TIME && curClassName.equals(mLastClassName)) {
+                flag = false;
+            }
+            mLastClassName = curClassName;
+            mLastClickTime = curClickTime;
         }
-        mLastClassName = curClassName;
-        mLastClickTime = curClickTime;
         return flag;
     }
 
