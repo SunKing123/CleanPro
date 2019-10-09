@@ -78,6 +78,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
+        StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         if(PreferenceUtil.getNowCleanTime()){
             startActivity(NowCleanActivity.class);
         }else {

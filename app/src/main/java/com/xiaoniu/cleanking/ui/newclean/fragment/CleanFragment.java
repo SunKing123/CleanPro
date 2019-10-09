@@ -21,6 +21,8 @@ import com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -139,6 +141,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @OnClick(R.id.layout_junk_clean)
     public void starClean() {
+        //扫描中弹框_确认按钮
+        StatisticsUtils.trackClick( "cleaning_button_click", "用户在扫描结果页点击【清理】按钮", "clean_up_scan_page", "scanning_result_page");
         startClean();
     }
 
@@ -218,5 +222,19 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      */
     public void stopClean() {
         mCleanAnimView.stopClean();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("scanning_result_page_view_page", "用户在扫描结果页浏览");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("scanning_result_page_view_page", "用户在扫描结果页浏览");
     }
 }

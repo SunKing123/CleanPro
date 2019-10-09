@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.animation.Animator;
 import android.app.Activity;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
@@ -20,9 +21,11 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -234,9 +237,25 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         getActivity().runOnUiThread(() -> {
             if (mTextScanTrace != null) {
                 mTextScanTrace.setText("扫描:  " + p0);
+                cleanFinish();
             }
         });
 
+    }
+
+    /**
+     * 扫描文件失败,——清理完成
+     */
+    public void cleanFinish() {
+        if (PreferenceUtil.getNowCleanTime()) {
+            PreferenceUtil.saveNowCleanTime();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.tool_suggest_clean));
+        bundle.putString("num", mCountEntity.getTotalSize());
+        bundle.putString("unit", mCountEntity.getUnit());
+        startActivity(NewCleanFinishActivity.class, bundle);
+        getActivity().finish();
     }
 
     /**
@@ -287,7 +306,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }
 
         if (!hidden) {
-            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
@@ -296,7 +314,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             }
         } else {
             isShow = false;
-            NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
 
     }
@@ -322,8 +339,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageStart("check_garbage_view_page", "清理垃圾浏览");
+        NiuDataAPI.onPageStart("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (isGotoSetting) {
             mPresenter.checkPermission();
             isGotoSetting = false;
@@ -339,9 +355,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        NiuDataAPI.onPageEnd("check_garbage_view_page", "清理垃圾浏览");
-
+        NiuDataAPI.onPageEnd("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (mLottieHomeView != null)
             mLottieHomeView.cancelAnimation();
     }

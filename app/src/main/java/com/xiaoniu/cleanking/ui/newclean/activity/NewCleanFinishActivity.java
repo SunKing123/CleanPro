@@ -66,7 +66,7 @@ import java.util.Random;
 import cn.jzvd.Jzvd;
 
 /**
- * 1.2.0 版本以后清理完成 显示咨询
+ * 1.2.0 版本以后清理完成 显示资讯
  */
 public class NewCleanFinishActivity extends BaseActivity implements NativeExpressAD.NativeExpressADListener, View.OnClickListener {
 

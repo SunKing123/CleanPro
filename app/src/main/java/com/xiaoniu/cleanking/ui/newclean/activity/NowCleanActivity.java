@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.util.HashMap;
 
@@ -97,19 +98,24 @@ public class NowCleanActivity extends BaseActivity {
     private void backClick(boolean isLeftBtn) {
         if (isBackClick)
             return;
-        // TODO 添加埋点，弹出待确认提示框
         if (isScan) {
+            //btn返回或者系统返回（点击事件）
+            StatisticsUtils.trackClick(isLeftBtn ? "return_back_click" : "system_return_back_click", "用户在清理扫描页点击返回", "home_page", "clean_up_scan_page");
             //TODO 停止清理
             if (mScanFragment != null)
                 mScanFragment.stopScan();
             AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "确认退出", "继续清理", new ClickListener() {
                 @Override
                 public void clickOKBtn() {
+                    //扫描中弹框_确认按钮
+                    StatisticsUtils.trackClick( "confirm_exit_click", "用户在清理扫描页点击【确认退出】", "home_page", "clean_up_scan_page");
                     finish();
                 }
 
                 @Override
                 public void cancelBtn() {
+                    //扫描中弹框_继续扫描按钮
+                    StatisticsUtils.trackClick( "continue_cleaning_up_click", "用户在清理扫描页点击【继续清理】", "home_page", "clean_up_scan_page");
                     isBackClick = false;
                     if (mScanFragment != null)
                         mScanFragment.startScan();
@@ -118,16 +124,22 @@ public class NowCleanActivity extends BaseActivity {
         }else {
             //TODO 停止清理
             if (isClean) {
+                //清理页面—btn返回或者系统返回（点击事件）
+                StatisticsUtils.trackClick(isLeftBtn ? "return_back_click" : "system_return_back_click", "用户点击【建议清理】返回", "clean_up_scan_page", "scanning_result_page");
                 if (mCleanFragment != null)
                     mCleanFragment.stopClean();
                 AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "确认退出", "继续清理", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
+                        //扫描中弹框_确认按钮
+                        StatisticsUtils.trackClick( "confirm_exit_click", "用户在扫描结果页点击【确认退出】按钮", "clean_up_scan_page", "scanning_result_page");
                         finish();
                     }
 
                     @Override
                     public void cancelBtn() {
+                        //扫描中弹框_继续扫描按钮
+                        StatisticsUtils.trackClick( "continue_cleaning_up_click", "用户在扫描结果页点击【继续清理】按钮", "clean_up_scan_page", "scanning_result_page");
                         isBackClick = false;
                         //TODO 继续清理
                         if (mCleanFragment != null)
