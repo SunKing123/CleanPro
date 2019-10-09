@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -25,6 +26,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -242,20 +244,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     }
 
-    /**
-     * 扫描文件失败,——清理完成
-     */
-    public void cleanFinish() {
-        if (PreferenceUtil.getNowCleanTime()) {
-            PreferenceUtil.saveNowCleanTime();
-        }
-        Bundle bundle = new Bundle();
-        bundle.putString("title", getString(R.string.tool_suggest_clean));
-        bundle.putString("num", mCountEntity.getTotalSize());
-        bundle.putString("unit", mCountEntity.getUnit());
-        startActivity(NewCleanFinishActivity.class, bundle);
-        getActivity().finish();
-    }
 
     /**
      * 终止扫描
@@ -354,7 +342,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
+        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getSourcePageId(),"clean_up_scan_page","clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (mLottieHomeView != null)
             mLottieHomeView.cancelAnimation();
     }

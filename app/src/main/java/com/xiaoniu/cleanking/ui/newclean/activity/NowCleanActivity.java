@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.newclean.fragment.CleanFragment;
@@ -69,6 +70,7 @@ public class NowCleanActivity extends BaseActivity {
     private void startScan() {
         isScan = true;
         setCenterTitle("扫描中");
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         mScanFragment = ScanFragment.newInstance();
         replaceFragment(R.id.fl_content, mScanFragment, false);
     }
@@ -80,6 +82,7 @@ public class NowCleanActivity extends BaseActivity {
         isScan = false;
         setCenterTitle("");
         setLeftTitle("建议清理");
+        AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
         mCleanFragment = CleanFragment.newInstance();
         replaceFragment(R.id.fl_content, mCleanFragment, false);
     }
