@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -19,6 +20,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -235,6 +237,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("scanning_result_page_view_page", "用户在扫描结果页浏览");
+        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getSourcePageId(),"scanning_result_page","scanning_result_page_view_page", "用户在扫描结果页浏览");
     }
 }

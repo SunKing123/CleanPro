@@ -382,8 +382,11 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mIvCooling.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
-            if (getString(R.string.tool_one_key_speed).contains(mTitle))
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)){
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
+            }else if(getString(R.string.tool_suggest_clean).contains(mTitle)){
+                StatisticsUtils.trackClick("return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", "scanning_result_page", "home_page_clean_up_page");
+            }
             finish();
         });
 
@@ -420,8 +423,12 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     @Override
     public void onBackPressed() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle))
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)){
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
+        }else if(getString(R.string.tool_suggest_clean).contains(mTitle)){
+            StatisticsUtils.trackClick("system_return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", "scanning_result_page", "home_page_clean_up_page");
+        }
+
         if (Jzvd.backPress()) {
             return;
         }
@@ -436,6 +443,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
             NiuDataAPI.onPageStart("boost_success_page_view_page", "加速结果出现时");
+        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            //1.2.1清理完成页面
+            NiuDataAPI.onPageStart("home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
@@ -457,6 +467,8 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         } else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
+
+
         super.onResume();
     }
 
@@ -469,6 +481,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_success_page", "boost_success_page_view_page", "加速结果出现时");
+        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            //1.2.1清理完成页面
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "home_page_clean_up_page","home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
@@ -490,6 +505,8 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
+
+
         super.onPause();
     }
 

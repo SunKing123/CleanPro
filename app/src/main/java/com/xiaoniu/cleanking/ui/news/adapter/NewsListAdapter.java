@@ -7,9 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.utils.ImageUtil;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.base.SimpleWebActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
@@ -57,7 +59,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                         //埋点
                         if (position > 11)
                             return;
-                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.topic, itemInfo.rowkey, position + 1);
+                        StatisticsUtils.trackClickNewsItem("recommendation_function_click", "资讯页新闻点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "home_page_clean_up_page", itemInfo.topic, itemInfo.rowkey, position + 1);
                     }
             );
         }

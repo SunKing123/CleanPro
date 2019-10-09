@@ -86,6 +86,7 @@ public class NowCleanActivity extends BaseActivity {
     private void startScan() {
         isScan = true;
         setCenterTitle("扫描中");
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         mScanFragment = ScanFragment.newInstance();
         replaceFragment(R.id.fl_content, mScanFragment, false);
     }
@@ -97,6 +98,7 @@ public class NowCleanActivity extends BaseActivity {
         isScan = false;
         setCenterTitle("");
         setLeftTitle("建议清理");
+        AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
         mCleanFragment = CleanFragment.newInstance();
         replaceFragment(R.id.fl_content, mCleanFragment, false);
     }
