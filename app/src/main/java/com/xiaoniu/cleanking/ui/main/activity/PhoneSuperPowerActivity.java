@@ -41,15 +41,25 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
-        Intent intent = getIntent();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        addNotification(intent);
+    }
+
+    private void addNotification(Intent intent) {
         if (intent != null){
             String notification = intent.getStringExtra("NotificationService");
             if ("clean".equals(notification)){
                 AppHolder.getInstance().setCleanFinishSourcePageId("toggle_powersave_click");
-                StatisticsUtils.trackClick("toggle_powersave_click", "常驻通知栏点击通知清理", "", "toggle_page");
+                StatisticsUtils.trackClick("toggle_powersave_click", "常驻通知栏点击省电", "", "toggle_page");
             }
         }
+    }
+
+    @Override
+    protected void initView() {
+        Intent intent = getIntent();
+        addNotification(intent);
         mTvClean = findViewById(R.id.tv_clean);
         mTvClean.setOnClickListener(v -> {
             if (!isUsageAccessAllowed()){

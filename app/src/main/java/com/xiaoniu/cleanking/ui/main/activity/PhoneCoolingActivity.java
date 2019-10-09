@@ -177,7 +177,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             String notification = intent.getStringExtra("NotificationService");
             if ("clean".equals(notification)){
                 AppHolder.getInstance().setCleanFinishSourcePageId("toggle_cooling_click");
-                StatisticsUtils.trackClick("toggle_cooling_click", "常驻通知栏点击通知清理", "", "toggle_page");
+                StatisticsUtils.trackClick("toggle_cooling_click", "常驻通知栏点击降温", "", "toggle_page");
             }
         }
 

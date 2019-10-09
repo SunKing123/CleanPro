@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.newclean.fragment.CleanFragment;
@@ -55,12 +56,28 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     protected void initVariable(Intent intent) {
-
+        addClick(intent);
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
         startScan();
+    }
+
+    private void addClick(Intent intent) {
+        if (intent != null){
+            String notification = intent.getStringExtra("NotificationService");
+            if ("clean".equals(notification)){
+                AppHolder.getInstance().setCleanFinishSourcePageId("toggle_clean_click");
+                StatisticsUtils.trackClick("toggle_clean_click", "常驻通知栏点击清理", "", "toggle_page");
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        addClick(intent);
     }
 
     /**
