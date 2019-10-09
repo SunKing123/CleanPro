@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.interfac.OnItemClickListener;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -25,6 +26,12 @@ public class ProcessInfoAdapter extends RecyclerView.Adapter<ProcessInfoAdapter.
     public void setData(List<FirstJunkInfo> list) {
         mList = list;
         notifyDataSetChanged();
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
     }
 
     @NonNull
@@ -44,6 +51,9 @@ public class ProcessInfoAdapter extends RecyclerView.Adapter<ProcessInfoAdapter.
 
             CleanUtil.killAppProcesses(junkInfo.getAppPackageName(),junkInfo.getPid());
             mList.remove(junkInfo);
+            if (mOnItemClickListener != null){
+                mOnItemClickListener.click();
+            }
             notifyDataSetChanged();
         });
 

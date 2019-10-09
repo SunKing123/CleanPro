@@ -59,6 +59,10 @@ public class ProcessInfoActivity extends SimpleActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(processIconAdapter);
         processIconAdapter.setData(list);
+
+        processIconAdapter.setOnItemClickListener(() -> {
+            mTextTitle.setText(list.size() + "个运行的应用");
+        });
     }
 
     @OnClick({R.id.img_back})
