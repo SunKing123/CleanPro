@@ -237,6 +237,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getSourcePageId(),"scanning_result_page","scanning_result_page_view_page", "用户在扫描结果页浏览");
+        NiuDataAPIUtil.onPageEnd("clean_up_scan_page","scanning_result_page","scanning_result_page_view_page", "用户在扫描结果页浏览");
     }
 }
