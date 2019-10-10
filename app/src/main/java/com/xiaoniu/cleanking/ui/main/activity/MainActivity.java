@@ -112,6 +112,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Inject
     NoClearSPHelper mSPHelper;
 
+    //判断重新启动
+    boolean isFirstCreate = false;
+
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
     private NewCleanMainFragment mainFragment;
@@ -139,13 +142,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void initView() {
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
-        //检查是否有补丁
-        mPresenter.queryPatch();
-        //检测版本更新
-        mPresenter.queryAppVersion(() -> {});
-
-        //获取WebUrl
-        mPresenter.getWebUrl();
+        isFirstCreate = true;
         initFragments();
 //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
@@ -214,6 +211,22 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if ( hasFocus && isFirstCreate) {
+            //检查是否有补丁
+            mPresenter.queryPatch();
+            //检测版本更新
+            mPresenter.queryAppVersion(() -> {
+            });
+            //获取WebUrl
+            mPresenter.getWebUrl();
+            isFirstCreate = false;
+        }
+
     }
 
     private void checkReadPermission() {

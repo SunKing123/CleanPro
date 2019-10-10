@@ -316,7 +316,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         //1.21 版本推荐清理_标识sourcePage,其他""
         String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
         StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page", functionName, functionPosition);
-        finish();
+//        finish();
     }
 
     /**
