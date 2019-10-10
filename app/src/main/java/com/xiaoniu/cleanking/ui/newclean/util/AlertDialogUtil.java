@@ -44,9 +44,9 @@ public class AlertDialogUtil {
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView btnOk = window.findViewById(R.id.btnOk);
-        btnOk.setTextColor(rightColor);
+        btnOk.setTextColor(leftColor);
         TextView btnCancel = window.findViewById(R.id.btnCancle);
-        btnCancel.setTextColor(leftColor);
+        btnCancel.setTextColor(rightColor);
         TextView tipTxt = window.findViewById(R.id.tipTxt);
         TextView content = window.findViewById(R.id.content);
         tipTxt.setText(tipTxtStr);

@@ -265,12 +265,15 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             tv_size_show.setText(currentValue + "");
             if (currentValue == endNum) {
                 int max = 1024;
-                int min = 900;
+                int min = 1000;
                 Random random = new Random();
                 //获取区间随机数
                 int s = random.nextInt(max) % (max - min + 1) + min;
-                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue + "") / Double.valueOf(s + ""))));
-                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue + "") / Double.valueOf(s + ""))));
+                String randNum = String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue + "") / Double.valueOf(s + "")));
+                String randNum01 = String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue + "") / Double.valueOf(s + "")));
+                tv_size.setText(type == 1 ? String.valueOf(currentValue) : randNum);
+                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : randNum01);
+
                 switch (type) {
                     case 1:
                     case 2:

@@ -215,14 +215,14 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
         startActivity(QQCleanHomeActivity.class);
     }
 
-    /**
+/*    *//**
      * 权限设置
-     */
+     *//*
     @OnClick(R.id.iv_permission)
     public void onClick() {
         startActivity(new Intent(getContext(), PermissionActivity.class));
         StatisticsUtils.trackClick("Triangular_yellow_mark_click", "三角黄标", AppHolder.getInstance().getSourcePageId(), "permission_page");
-    }
+    }*/
 
     /**
      * 微信专清

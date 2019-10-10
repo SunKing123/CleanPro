@@ -85,7 +85,7 @@ public class NowCleanActivity extends BaseActivity {
      */
     private void startScan() {
         isScan = true;
-        setCenterTitle("扫描中");
+        setLeftTitle("扫描中");
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         mScanFragment = ScanFragment.newInstance();
         replaceFragment(R.id.fl_content, mScanFragment, false);
@@ -96,7 +96,6 @@ public class NowCleanActivity extends BaseActivity {
      */
     public void scanFinish(){
         isScan = false;
-        setCenterTitle("");
         setLeftTitle("建议清理");
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
         mCleanFragment = CleanFragment.newInstance();
@@ -123,21 +122,23 @@ public class NowCleanActivity extends BaseActivity {
             //TODO 停止清理
             if (mScanFragment != null)
                 mScanFragment.stopScan();
-            AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "确认退出", "继续清理", new ClickListener() {
+            AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "清理未完成，大量垃圾会影响手机使用。", "继续清理", "确认退出", new ClickListener() {
                 @Override
                 public void clickOKBtn() {
-                    //扫描中弹框_确认按钮
-                    StatisticsUtils.trackClick( "confirm_exit_click", "用户在清理扫描页点击【确认退出】", "home_page", "clean_up_scan_page");
-                    finish();
-                }
-
-                @Override
-                public void cancelBtn() {
                     //扫描中弹框_继续扫描按钮
                     StatisticsUtils.trackClick( "continue_cleaning_up_click", "用户在清理扫描页点击【继续清理】", "home_page", "clean_up_scan_page");
                     isBackClick = false;
                     if (mScanFragment != null)
                         mScanFragment.startScan();
+                }
+
+                @Override
+                public void cancelBtn() {
+
+                    //扫描中弹框_确认按钮
+                    StatisticsUtils.trackClick( "confirm_exit_click", "用户在清理扫描页点击【确认退出】", "home_page", "clean_up_scan_page");
+                    finish();
+
                 }
             },Color.parseColor("#06C581"), Color.parseColor("#727375"));
         }else {
@@ -147,22 +148,22 @@ public class NowCleanActivity extends BaseActivity {
                 StatisticsUtils.trackClick(isLeftBtn ? "return_back_click" : "system_return_back_click", "用户点击【建议清理】返回", "clean_up_scan_page", "scanning_result_page");
                 if (mCleanFragment != null)
                     mCleanFragment.stopClean();
-                AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "确认退出", "继续清理", new ClickListener() {
+                AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "继续清理", "确认退出", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
-                        //扫描中弹框_确认按钮
-                        StatisticsUtils.trackClick( "confirm_exit_click", "用户在扫描结果页点击【确认退出】按钮", "clean_up_scan_page", "scanning_result_page");
-                        finish();
-                    }
-
-                    @Override
-                    public void cancelBtn() {
                         //扫描中弹框_继续扫描按钮
                         StatisticsUtils.trackClick( "continue_cleaning_up_click", "用户在扫描结果页点击【继续清理】按钮", "clean_up_scan_page", "scanning_result_page");
                         isBackClick = false;
                         //TODO 继续清理
                         if (mCleanFragment != null)
                             mCleanFragment.starClean();
+                    }
+
+                    @Override
+                    public void cancelBtn() {
+                        //扫描中弹框_确认按钮
+                        StatisticsUtils.trackClick( "confirm_exit_click", "用户在扫描结果页点击【确认退出】按钮", "clean_up_scan_page", "scanning_result_page");
+                        finish();
                     }
                 },Color.parseColor("#06C581"), Color.parseColor("#727375"));
             }else {

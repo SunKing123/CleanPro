@@ -129,67 +129,95 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
             <FrameLayout
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_18dp"
                 android:background="@drawable/bg_big_home">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/icon_home_logo" />
-
-                <TextView
-                    android:id="@+id/tv_clean_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="90dp"
-                    android:text="@string/tool_home_hint"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:id="@+id/iv_permission"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="@dimen/dimen_18dp"
-                    android:layout_marginRight="@dimen/dimen_10dp"
-                    android:padding="@dimen/dimen_5dp"
-                    android:src="@mipmap/icon_permission"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:visibility="gone" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_20dp"
                     android:text="悟空清理"
+                    android:gravity="center_vertical"
                     android:textColor="@color/white"
+                    android:minHeight="45dp"
                     android:textSize="20sp" />
-            </FrameLayout>
-                <TextView
-                    android:id="@+id/tv_now_clean"
-                    android:layout_width="150dp"
-                    android:layout_height="38dp"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginLeft="@dimen/dimen_60dp"
-                    android:layout_marginRight="@dimen/dimen_60dp"
-                    android:background="@drawable/btn_white_bg_green_line"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
                     android:gravity="center"
-                    android:text="@string/tool_home_clean"
-                    android:textColor="#06C581"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="65dp"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="20"></TextView>
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="139dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="60"
+                            android:src="@mipmap/icon_home_logo" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="20"></TextView>
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tv_clean_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/tool_home_hint"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+             <!--       <ImageView
+                        android:id="@+id/iv_permission"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="@dimen/dimen_18dp"
+                        android:layout_marginRight="@dimen/dimen_10dp"
+                        android:padding="@dimen/dimen_5dp"
+                        android:src="@mipmap/icon_permission"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        android:textSize="20sp"
+                       />-->
+
+                    <ImageView
+                        android:id="@+id/tv_now_clean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="15dp"
+                        android:src="@drawable/icon_clean_now"
+
+                  />
+                </LinearLayout>
+
+
+
+
             </FrameLayout>
+
+
             <LinearLayout
                 android:id="@+id/layout_middle_item"
                 android:layout_width="match_parent"

@@ -3,11 +3,13 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -153,7 +155,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      */
     public void cleanFinish() {
         AppHolder.getInstance().setCleanFinishSourcePageId("scanning_result_page");
-        if (PreferenceUtil.getNowCleanTime()) {
+        if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             PreferenceUtil.saveNowCleanTime();
         }
         Bundle bundle = new Bundle();

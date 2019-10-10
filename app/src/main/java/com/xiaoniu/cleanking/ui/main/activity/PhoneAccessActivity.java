@@ -333,7 +333,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_one_key_speed));
-        bundle.putString("num", num);
+        bundle.putString("num", tv_size.getText().toString());
         bundle.putString("unit", unit);
         startActivity(NewCleanFinishActivity.class, bundle);
         finish();
@@ -505,6 +505,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             acceview.setData(sizeMb);
         }
     }
+
 
     //Android O以上的
     PackageManager packageManager = AppApplication.getInstance().getPackageManager();
