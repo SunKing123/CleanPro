@@ -52,6 +52,7 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -252,7 +253,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
      */
     boolean canPlaying = true;
 
-    public void setNumAnim(View mTvSpeed,View view,TextView tv_size, TextView tv_size_show, TextView tv_gb,TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
+    public void setNumAnim(View mTvSpeed, View view, TextView tv_size, TextView tv_size_show, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -263,9 +264,14 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             tv_size.setText(currentValue + "");
             tv_size_show.setText(currentValue + "");
             if (currentValue == endNum) {
-                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
-                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(currentValue / 1024)));
-                switch (type){
+                int max = 1024;
+                int min = 900;
+                Random random = new Random();
+                //获取区间随机数
+                int s = random.nextInt(max) % (max - min + 1) + min;
+                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue + "") / Double.valueOf(s + ""))));
+                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue + "") / Double.valueOf(s + ""))));
+                switch (type) {
                     case 1:
                     case 2:
                         tv_gb.setText(currentValue < 1024 ? "MB" : "GB");
@@ -304,7 +310,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 //        anim.start();
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(anim, colorAnim1,colorAnim2);
+        animatorSetTimer.playTogether(anim, colorAnim1, colorAnim2);
         animatorSetTimer.start();
 
     }
