@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +54,17 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     @BindView(R.id.tv_clean_type)
     TextView mTvCleanType;
 
+    @BindView(R.id.line_shd)
+    LinearLayout lineShd;
+    @BindView(R.id.text_wjgl)
+    LinearLayout textWjgl;
+    @BindView(R.id.view_phone_thin)
+    ImageView viewPhoneThin;
+    @BindView(R.id.view_qq_clean)
+    ImageView viewQqClean;
+    @BindView(R.id.view_news)
+    ImageView viewNews;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_new_clean_main;
@@ -75,15 +88,25 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        lineShd.setEnabled(true);
+        textWjgl.setEnabled(true);
+        viewPhoneThin.setEnabled(true);
+        viewQqClean.setEnabled(true);
+        viewNews.setEnabled(true);
+    }
+
     /**
      * 立即清理
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        if(PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)){
+        if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             startActivity(NowCleanActivity.class);
-        }else {
+        } else {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_suggest_clean));
@@ -99,6 +122,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
+        textWjgl.setEnabled(false);
         ((MainActivity) getActivity()).commitJpushClickTime(4);
         StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
         startActivity(FileManagerHomeActivity.class);
@@ -132,19 +156,20 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.line_shd)
     public void line_shd() {
+        lineShd.setEnabled(false);
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
         ((MainActivity) getActivity()).commitJpushClickTime(3);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
-       if (PreferenceUtil.getPowerCleanTime()){
-           startActivity(PhoneSuperPowerActivity.class);
-       }else {
-           Bundle bundle = new Bundle();
-           bundle.putString("title", getString(R.string.tool_super_power_saving));
-           bundle.putString("num", "");
-           bundle.putString("unit", "");
-           startActivity(NewCleanFinishActivity.class, bundle);
-       }
+        if (PreferenceUtil.getPowerCleanTime()) {
+            startActivity(PhoneSuperPowerActivity.class);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_super_power_saving));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
 
     }
 
@@ -153,6 +178,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.view_news)
     public void ViewNewsClick() {
+        viewNews.setEnabled(false);
         StatisticsUtils.trackClick("news_click", "用户在首页点击【头条新闻热点】按钮", "home_page", "home_page");
         startActivity(NewsActivity.class);
     }
@@ -162,6 +188,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.view_phone_thin)
     public void ViewPhoneThinClick() {
+        viewPhoneThin.setEnabled(false);
         Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_soft_manager));
         startActivity(intent);
@@ -173,6 +200,7 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      */
     @OnClick(R.id.view_qq_clean)
     public void ViewQQCleanClick() {
+        viewQqClean.setEnabled(false);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.QQ_CLEAN);
         ((MainActivity) getActivity()).commitJpushClickTime(7);
         StatisticsUtils.trackClick("qqclean_click", "“用户在首页点击【qq专清】按钮", "home_page", "home_page");
@@ -229,9 +257,9 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
     public void mClickQq() {
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (PreferenceUtil.getNotificationCleanTime()){
+        if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
-        }else {
+        } else {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_notification_clean));
             bundle.putString("num", "");
@@ -249,9 +277,9 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
         ((MainActivity) getActivity()).commitJpushClickTime(6);
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
 
-        if (PreferenceUtil.getCoolingCleanTime()){
+        if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-        }else {
+        } else {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_phone_temperature_low));
             bundle.putString("num", "");
@@ -287,9 +315,9 @@ public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
      * EventBus 立即清理完成后，更新首页显示文案
      */
     @Subscribe
-    public void onEventClean(CleanEvent cleanEvent){
-        if (cleanEvent != null){
-            if (cleanEvent.isCleanAminOver()){
+    public void onEventClean(CleanEvent cleanEvent) {
+        if (cleanEvent != null) {
+            if (cleanEvent.isCleanAminOver()) {
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
             }
         }

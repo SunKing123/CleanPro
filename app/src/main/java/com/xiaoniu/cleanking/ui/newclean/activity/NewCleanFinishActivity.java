@@ -313,9 +313,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                 coolingClean();
                 break;
         }
-        //推荐清理_推荐功能点击埋点
-        if(getString(R.string.tool_suggest_clean).contains(mTitle))
-        StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : "scanning_result_page", "home_page_clean_up_page", functionName, functionPosition);
+        //1.21 版本推荐清理_标识sourcePage,其他""
+        String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
+        StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page", functionName, functionPosition);
         finish();
     }
 
@@ -325,7 +325,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     public void speedClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-        StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+//        StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         Bundle bundle = new Bundle();
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
         startActivity(PhoneAccessActivity.class, bundle);
@@ -338,7 +338,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         startActivity(PhoneSuperPowerActivity.class);
-        StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
+//        StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
     }
 
     /**
@@ -348,7 +348,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         //通知栏清理
         NotifyCleanManager.startNotificationCleanActivity(this, 0);
-        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+//        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     /**
@@ -358,7 +358,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
-        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
+//        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
@@ -379,7 +379,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
      * 文件清理
      */
     public void fileClean() {
-        StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
+//        StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
         startActivity(FileManagerHomeActivity.class);
     }
 
@@ -389,7 +389,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     public void coolingClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("cooling_click");
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+//        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     @Override
