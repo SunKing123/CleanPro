@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.jaredrummler.android.processes.AndroidProcesses;
@@ -78,6 +79,10 @@ public class FileQueryUtils {
 
     public void setFinish(boolean finish) {
         isFinish = finish;
+    }
+
+    public boolean isFinish() {
+        return isFinish;
     }
 
     public void setScanFileListener(ScanFileListener scanFileListener) {
@@ -217,6 +222,8 @@ public class FileQueryUtils {
                 list.add(firstJunkInfo);
 
             if (index > (float)total * 3 / 4 && !isScanFile && list.size() > 0) {
+                Log.v("onAnimationEnd","mScanFileListener " + mScanFileListener);
+
                 if(mScanFileListener != null) {
                     mScanFileListener.currentNumber();
                 }

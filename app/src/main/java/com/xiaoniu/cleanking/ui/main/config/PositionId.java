@@ -2,9 +2,9 @@ package com.xiaoniu.cleanking.ui.main.config;
 
 public class PositionId {
 
-    public static final String APPID = "1101152570";
-    //欢迎页面ID
-    public static final String SPLASH_POS_ID = "8863364436303842593";
+    public static final String APPID = "1109899302";
+    //开屏广告页面ID
+    public static final String SPLASH_POS_ID = "9080080415488404";
     //清理完成页面ID
     public static final String CLEAN_FINISH_ID = "4070988415680442";
 

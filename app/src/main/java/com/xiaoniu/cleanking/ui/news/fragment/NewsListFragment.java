@@ -1,10 +1,13 @@
 package com.xiaoniu.cleanking.ui.news.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
@@ -17,8 +20,6 @@ import com.xiaoniu.common.http.callback.ApiCallback;
 import com.xiaoniu.common.http.request.HttpRequest;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.common.widget.pullrefreshlayout.PullRefreshLayout;
-import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 public class NewsListFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
     private XRecyclerView mRecyclerView;
-    private PullRefreshLayout mPullRefreshLayout;
     private NewsListAdapter mNewsAdapter;
     private LinearLayout mLlNoNet;
     private NewsType mType;
@@ -37,10 +37,6 @@ public class NewsListFragment extends BaseFragment {
     private String videoBaseUrl = "http://clsystem-mclean-dev-default.fqt188.com/video/query";
     private static final int PAGE_NUM = 20;//每一页数据
     private boolean mIsRefresh = true;
-
-    public NewsListAdapter getNewsAdapter() {
-        return mNewsAdapter;
-    }
 
     public static NewsListFragment getInstance(NewsType type) {
         Bundle bundle = new Bundle();
@@ -67,32 +63,32 @@ public class NewsListFragment extends BaseFragment {
 
     @Override
     protected void initViews(View contentView, Bundle savedInstanceState) {
-        mPullRefreshLayout = contentView.findViewById(R.id.pullRefreshLayout);
         mLlNoNet = contentView.findViewById(R.id.layout_not_net);
         mRecyclerView = contentView.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLimitNumberToCallLoadMore(2);
         mRecyclerView.setAdapter(mNewsAdapter);
 
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
     }
 
     @Override
     protected void setListener() {
-        mPullRefreshLayout.setLoadMoreEnable(false);
-        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
-            public void onRefresh(PullRefreshLayout pullRefreshLayout) {
+            public void onRefresh() {
                 mIsRefresh = true;
                 startLoadData();
             }
 
             @Override
-            public void onLoadMore(PullRefreshLayout pullRefreshLayout) {
-
+            public void onLoadMore() {
+                mIsRefresh = false;
+                startLoadData();
             }
-        });
-
-        mRecyclerView.setOnLoadListener(recyclerView -> {
-            mIsRefresh = false;
-            startLoadData();
         });
 
         mLlNoNet.setOnClickListener(v -> {
@@ -106,13 +102,11 @@ public class NewsListFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        mPullRefreshLayout.autoRefresh(0);
+        mRecyclerView.refresh();
     }
 
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
-            if (mPullRefreshLayout != null)
-                mPullRefreshLayout.finishRefresh();
             if (mLlNoNet != null)
                 mLlNoNet.setVisibility(View.VISIBLE);
             return;
@@ -156,10 +150,9 @@ public class NewsListFragment extends BaseFragment {
             @Override
             public void onComplete() {
                 if (mIsRefresh) {
-                    mPullRefreshLayout.finishRefresh();
-                    mRecyclerView.setAutoLoadingEnabled(true);
+                    mRecyclerView.refreshComplete();
                 } else {
-                    mRecyclerView.onLoadSucess(true);
+                    mRecyclerView.loadMoreComplete();
                 }
             }
         });
@@ -185,9 +178,9 @@ public class NewsListFragment extends BaseFragment {
             @Override
             public void onComplete() {
                 if (mIsRefresh) {
-                    mPullRefreshLayout.finishRefresh();
+                    mRecyclerView.refreshComplete();
                 } else {
-                    mRecyclerView.onLoadSucess(true);
+                    mRecyclerView.loadMoreComplete();
                 }
             }
 
@@ -204,7 +197,6 @@ public class NewsListFragment extends BaseFragment {
                     SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result);
-                        mRecyclerView.setAutoLoadingEnabled(true);
                     } else {
                         mNewsAdapter.addData(result);
                     }

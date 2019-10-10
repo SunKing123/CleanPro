@@ -2,8 +2,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -36,11 +34,10 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
-import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
@@ -48,11 +45,13 @@ import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.ykun.live_library.KeepAliveManager;
 import com.ykun.live_library.config.ForegroundNotification;
@@ -113,9 +112,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Inject
     NoClearSPHelper mSPHelper;
 
+    //判断重新启动
+    boolean isFirstCreate = false;
+
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
-    private CleanMainFragment mainFragment;
+    private NewCleanMainFragment mainFragment;
     private MyHandler mHandler = new MyHandler(this);
     private class MyHandler extends Handler{
         WeakReference<Activity> mActivity;
@@ -140,13 +142,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void initView() {
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
-        //检查是否有补丁
-        mPresenter.queryPatch();
-        //检测版本更新
-        mPresenter.queryAppVersion(() -> {});
-
-        //获取WebUrl
-        mPresenter.getWebUrl();
+        isFirstCreate = true;
         initFragments();
 //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
@@ -217,6 +213,22 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if ( hasFocus && isFirstCreate) {
+            //检查是否有补丁
+            mPresenter.queryPatch();
+            //检测版本更新
+            mPresenter.queryAppVersion(() -> {
+            });
+            //获取WebUrl
+            mPresenter.getWebUrl();
+            isFirstCreate = false;
+        }
+
+    }
+
     private void checkReadPermission() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
             System.out.println();
@@ -257,7 +269,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void changeTab(Bundle intent) {
         String type = intent.getString("type");
         String home = intent.getString("NotificationService");
-
         if ("shangcheng".equals(type)) {
             mBottomBar.setCurrentItem(TOOL);
         } else if ("shenghuo".equals(type)) {
@@ -285,14 +296,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         }
 
-        if ("clean".equals(home)){
+        if ("home".equals(home)){
             //默认选中主页
             mBottomBar.setCurrentItem(0);
-            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_noti_clean_click");
-            StatisticsUtils.trackClick("toggle_noti_clean_click", "常驻通知栏点击通知清理", "", "toggle_page");
-            if (mainFragment != null){
-                mainFragment.startCleanNow();
-            }
+            AppHolder.getInstance().setCleanFinishSourcePageId("toggle_home_click");
+            StatisticsUtils.trackClick("toggle_home_click", "常驻通知栏点击主页", "", "toggle_page");
         }
     }
 
@@ -326,7 +334,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
 
         MeFragment mineFragment = MeFragment.getIntance();
-        mainFragment = new CleanMainFragment();
+        mainFragment = new NewCleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
@@ -433,8 +441,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            } else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof CleanMainFragment) {
-                CleanMainFragment fragment = (CleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
+            } else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof NewCleanMainFragment) {
+                NewCleanMainFragment fragment = (NewCleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
             } else {
@@ -448,6 +456,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     return true;
                 } else {
+
                     //如果审核满足答题条件时自动跳转答题页面，返回则不跳
                     SPUtil.setInt(MainActivity.this, "turnask", 0);
                     SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);

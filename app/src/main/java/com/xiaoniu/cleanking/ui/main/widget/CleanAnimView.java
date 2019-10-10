@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.widget;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
@@ -38,7 +37,6 @@ import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 

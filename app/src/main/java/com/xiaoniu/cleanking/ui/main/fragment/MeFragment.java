@@ -172,7 +172,6 @@ public class MeFragment extends SimpleFragment {
             @Override
             public void onResult(SHARE_MEDIA share_media) {
                 handler.sendEmptyMessage(SHARE_SUCCESS);
-
             }
 
             @Override

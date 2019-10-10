@@ -9,19 +9,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RemoteViews;
+
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
+import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -63,7 +63,6 @@ public class NotificationService extends Service {
         //如果版本号低于（3.0），那么不显示按钮
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             //TODO
-
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // android 8.0 适配    需要配置 通知渠道NotificationChannel
             NotificationChannel notificationChannel = new NotificationChannel("1", "推送通知", NotificationManager.IMPORTANCE_LOW);
@@ -81,7 +80,7 @@ public class NotificationService extends Service {
         contentView.setOnClickPendingIntent(R.id.iv_app_icon, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         //清理
-        Intent intentClean = new Intent(context, MainActivity.class);
+        Intent intentClean = new Intent(context, NowCleanActivity.class);
         intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intentClean.putExtra("NotificationService","clean");
         contentView.setOnClickPendingIntent(R.id.ll_clean, PendingIntent.getActivity(context, REQUEST_CODE, intentClean, PendingIntent.FLAG_UPDATE_CURRENT));
@@ -118,6 +117,10 @@ public class NotificationService extends Service {
         NiuDataAPI.onPageEnd("toggle_page_view_page","常驻通知栏成功创建");
     }
 
+    /**
+     * 更新图标的颜色 EventBus
+     * @param notificationEvent
+     */
     @Subscribe
     public void cleanFinish(NotificationEvent notificationEvent) {
         Log.d("cleanFinish", "cleanFinish: " + notificationEvent);

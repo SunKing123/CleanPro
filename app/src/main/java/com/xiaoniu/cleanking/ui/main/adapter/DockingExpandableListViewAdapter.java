@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * 一键清理详情的列表Adapter
  */
-public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter {
+public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private final ExpandableListView mListView;
     private HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
@@ -120,7 +120,11 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         holder.mPackageNameTv.setText(group.mName);
         holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
         holder.mCheckButton.setSelected(group.isChecked);
-        holder.mIconArrow.setImageDrawable(group.isExpand ? mContext.getResources().getDrawable(R.mipmap.arrow_up) : mContext.getResources().getDrawable(R.mipmap.arrow_down));
+        if (isExpanded &&  group.mSize > 0){
+            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.arrow_up));
+        }else {
+            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.arrow_down));
+        }
         holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
         holder.mCheckButton.setOnClickListener(v -> {
             group.isChecked = !group.isChecked;

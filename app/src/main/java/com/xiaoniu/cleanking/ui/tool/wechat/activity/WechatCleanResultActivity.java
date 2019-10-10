@@ -7,9 +7,8 @@ import android.view.View;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -60,7 +59,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
             bundle.putString("title", mTitle);
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity( CleanFinish2Activity.class,bundle);
+            startActivity( NewCleanFinishActivity.class,bundle);
             finish();
         });
     }

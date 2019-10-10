@@ -51,7 +51,11 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final  String IS_SAVE_CLEAN_TIME = "clean_time";
-    public static final  String IS_SAVE_WeCLEAN_TIME = "Weclean_time";
+    public static final  String IS_SAVE_NOW_CLEAN_TIME = "now_clean_time";
+    public static final  String IS_SAVE_WeCLEAN_TIME = "weclean_time";
+    public static final  String IS_SAVE_NOTIFICATION_TIME = "notification_time";
+    public static final  String IS_SAVE_POWER_TIME = "power_time";
+    public static final  String IS_SAVE_COOLINF_TIME = "cooling_time";
     public static final  String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
     public static final  String IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP = "first_open_clean_finish_app";
     //埋点上一级页面
@@ -64,4 +68,7 @@ public class SpCacheConfig {
     public static final String SUPER_POWER_SAVING = "super_power_saving";
     public static final String BANNER = "banner";
     public static final String APP_ID = "com.xiaoniu.cleanking";
+
+    public static final String NEWS_BASEURL = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
+    public static final String VIDEO_BASEURL = "http://clsystem-mclean-dev-default.fqt188.com/video/query";
 }

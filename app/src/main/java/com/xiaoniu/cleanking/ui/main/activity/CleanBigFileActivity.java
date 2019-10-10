@@ -26,9 +26,9 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -118,7 +118,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
             bundle.putString("title", getString(R.string.tool_phone_clean));
             bundle.putString("num", "");
             bundle.putString("unit", "");
-            startActivity(CleanFinish2Activity.class, bundle);
+            startActivity(NewCleanFinishActivity.class, bundle);
             finish();
         });
     }

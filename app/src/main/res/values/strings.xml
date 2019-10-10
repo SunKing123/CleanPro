@@ -11,8 +11,10 @@
     <string name="press_exit_again">再按一次退出程序</string>
     <string name="text_clean">清理</string>
     <string name="text_cool">立即降温</string>
-    <string name="process_clean">内存垃圾</string>
+    <string name="process_clean">内存清理</string>
     <string name="apk_clean">无用安装包</string>
+    <string name="uninstall_clean">卸载残留</string>
+    <string name="other_clean">其他垃圾</string>
     <string name="tmp_clean">临时文件</string>
     <string name="log_clean">日志文件</string>
     <string name="cache_clean">缓存垃圾</string>
@@ -43,7 +45,7 @@
     <string name="text_apk_white_ignore">忽略此路径下所有安装包</string>
     <string name="text_add_speed_white_list">添加白名单</string>
     <string name="text_add_soft_white_list">添加管理白名单</string>
-    <string name="text_soft_package_white_list">软件管理白名单</string>
+    <string name="text_soft_package_white_list">加速保护名单</string>
     <string name="text_speed_white_list">加速保护名单</string>
     <string name="text_apk_white_add">此路径已加入保护名单</string>
     <string name="text_close">关闭</string>
@@ -96,4 +98,9 @@
     <string name="tool_get_premis">授权失败</string>
     <string name="tool_no_net_hint">网络连接失败，请稍后重试</string>
     <string name="click_to_skip">跳过</string>
+    <string name="tool_suggest_clean">建议清理</string>
+    <string name="tool_home_hint">手机存在大量垃圾，建议立即清理</string>
+    <string name="tool_home_clean">立即清理</string>
+    <string name="tool_phone_already_clean">手机很干净了~</string>
+
 </resources>

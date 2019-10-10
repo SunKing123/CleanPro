@@ -1,22 +1,16 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
-import com.xiaoniu.cleanking.ui.main.presenter.ImageListPresenter;
+import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
+import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.cleanking.utils.DisplayImageUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 import com.xiaoniu.common.widget.xrecyclerview.GroupRecyclerAdapter;
@@ -49,12 +43,7 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
                 ivIcon.setImageResource(R.drawable.icon_power_hold_group);
                 tvDesc.setText(groupInfo.getChildList().size() + "个必要的应用");
             }
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    expandGroup(groupInfo, position);
-                }
-            });
+            viewHolder.itemView.setOnClickListener(v -> expandGroup(groupInfo, position));
         } else if (itemData instanceof PowerChildInfo) {
             final PowerChildInfo itemInfo = (PowerChildInfo) itemData;
             final TextView tvName = viewHolder.getView(R.id.tvName);
@@ -65,30 +54,27 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
             DisplayImageUtils.getInstance().displayImage(itemInfo.packageName, ivIcon);
 
             ivSelect.setSelected(itemInfo.selected == 1);
-            ivSelect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemInfo.selected == 1) {//取消不弹窗
+            ivSelect.setOnClickListener(v -> {
+                if (itemInfo.selected == 1) {//取消不弹窗
+                    setChildSelected(itemInfo);
+                    if (mOnCheckListener != null)
+                        mOnCheckListener.onCheck(itemData);
+                    return;
+                }
+                AlertDialogUtil.alertBanLiveDialog(mContext, "休眠 " + itemInfo.appName + " 减少耗电","该应用可能正在后天工作" ,"是","否", new ClickListener() {
+                    @Override
+                    public void clickOKBtn() {
                         setChildSelected(itemInfo);
                         if (mOnCheckListener != null)
                             mOnCheckListener.onCheck(itemData);
-                        return;
                     }
-                    alertBanLiveDialog(mContext, itemInfo.appName, new ImageListPresenter.ClickListener() {
-                        @Override
-                        public void clickOKBtn() {
-                            setChildSelected(itemInfo);
-                            if (mOnCheckListener != null)
-                                mOnCheckListener.onCheck(itemData);
-                        }
 
-                        @Override
-                        public void cancelBtn() {
+                    @Override
+                    public void cancelBtn() {
 
-                        }
-                    });
+                    }
+                });
 
-                }
             });
         }
     }
@@ -96,46 +82,6 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
     @Override
     public RecyclerView.ViewHolder attachToViewHolder(int viewType, View itemView) {
         return new CommonViewHolder(itemView);
-    }
-
-
-    public AlertDialog alertBanLiveDialog(Context context, String appName, final ImageListPresenter.ClickListener okListener) {
-        final AlertDialog dlg = new AlertDialog.Builder(context).create();
-        if (((Activity) context).isFinishing()) {
-            return dlg;
-        }
-        dlg.show();
-        Window window = dlg.getWindow();
-        window.setContentView(R.layout.alite_redp_send_dialog);
-        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
-        //这里设置居中
-        lp.gravity = Gravity.BOTTOM;
-        window.setAttributes(lp);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
-
-        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
-        TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
-        TextView content = (TextView) window.findViewById(R.id.content);
-        tipTxt.setText("休眠 " + appName + " 减少耗电");
-        content.setText("该应用可能正在后天工作");
-        btnOk.setText("是");
-        btnCancle.setText("否");
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                okListener.clickOKBtn();
-            }
-        });
-        btnCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                okListener.cancelBtn();
-            }
-        });
-        return dlg;
     }
 
     public static class PowerMultiItemTypeSupport implements MultiItemTypeSupport<MultiItemInfo> {
@@ -169,12 +115,11 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
         }
     }
 
-
     public interface onCheckListener {
-        public void onCheck(Object info);
+        void onCheck(Object info);
     }
 
-    public void setmOnCheckListener(onCheckListener mOnCheckListener) {
+    public void setOnCheckListener(onCheckListener mOnCheckListener) {
         this.mOnCheckListener = mOnCheckListener;
     }
 }

@@ -6,12 +6,10 @@ import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -31,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
@@ -44,12 +41,10 @@ import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
-import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -230,11 +225,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-        //清理完成
-        NotificationEvent event = new NotificationEvent();
-        event.setType("clean");
-        EventBus.getDefault().post(event);
-
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -332,15 +322,20 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
     }
     private void showCleanFinishUI(String num, String unit) {
+        //清理完成 更新通知栏一键清理icon颜色状态
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        EventBus.getDefault().post(event);
+
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_one_key_speed));
-        bundle.putString("num", num);
+        bundle.putString("num", tv_size.getText().toString());
         bundle.putString("unit", unit);
-        startActivity(CleanFinish2Activity.class, bundle);
+        startActivity(NewCleanFinishActivity.class, bundle);
         finish();
     }
 
@@ -510,6 +505,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             acceview.setData(sizeMb);
         }
     }
+
 
     //Android O以上的
     PackageManager packageManager = AppApplication.getInstance().getPackageManager();

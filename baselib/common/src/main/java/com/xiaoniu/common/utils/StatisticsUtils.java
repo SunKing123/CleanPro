@@ -272,6 +272,28 @@ public class StatisticsUtils {
         trackClick(eventCode, eventName, sourcePage, currentPage, extension);
     }
 
+
+    /**
+     *  推荐 功能 埋点
+     * @param eventCode
+     * @param eventName
+     * @param sourcePage
+     * @param currentPage
+     * @param newsName
+     * @param newsId
+     * @param position
+     */
+    public static void trackFunctionClickItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName, String position) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("position_title", newsName);
+            extension.put("position_id", position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        trackClick(eventCode, eventName, sourcePage, currentPage, extension);
+    }
+
     /**
      * 广告曝光
      * @param event_code

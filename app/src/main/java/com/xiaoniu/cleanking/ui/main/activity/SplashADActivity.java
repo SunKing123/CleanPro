@@ -1,13 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import com.qq.e.ads.splash.SplashAD;
@@ -32,6 +32,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -60,7 +61,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     NoClearSPHelper mSPHelper;
     private SplashAD splashAD;
     private ViewGroup container;
-    private TextView skipView;
+    private RoundProgressBar skipView;
     private boolean needStartDemoList = true;
 
     /**
@@ -76,10 +77,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPresenter.getSwitchInfoList();
+    protected int getLayoutId() {
+        return R.layout.activity_splash_ad;
     }
 
     /**
@@ -257,9 +258,31 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      */
     @Override
     public void onADTick(long millisUntilFinished) {
-        Log.i("AD_DEMO", "SplashADTick " + millisUntilFinished + "ms");
-        skipView.setVisibility(View.VISIBLE);
-        skipView.setText(String.format(SKIP_TEXT, Math.round(millisUntilFinished / 1000f)));
+        if (Math.round(millisUntilFinished / 1000f) > 4) {
+            skipView.startAnimation(millisUntilFinished, new LinearInterpolator(), new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            });
+
+            Log.i("AD_DEMO", "SplashADTick " + millisUntilFinished + "ms");
+            skipView.setVisibility(View.VISIBLE);
+        }
+//        skipView.setText(String.format(SKIP_TEXT, Math.round(millisUntilFinished / 1000f)));
     }
 
     @Override
@@ -317,12 +340,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_splash_ad;
-    }
-
-    @Override
     protected void initView() {
+        mPresenter.getSwitchInfoList();
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);

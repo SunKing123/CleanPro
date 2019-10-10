@@ -51,7 +51,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     private String mLastClassName = "";//记录上次启动activity的类名
     protected LoadingDialog mLoadingDialog;
     private TextView mTvLeftTitle;
-    private ImageView mBtnLeft;
+    protected ImageView mBtnLeft;
     private LinearLayout mLayRightBtn;
 
     /* 子类使用的时候无需再次调用onCreate(),如需要加载其他方法可重写该方法 */
@@ -277,6 +277,35 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     /**
+     * 通过ARouter跳转界面
+     *
+     * @param path 跳转地址
+     **/
+    public void startActivity(String path) {
+        ARouter.getInstance().build(path).navigation();
+    }
+
+
+    /**
+     * 通过Class跳转界面
+     **/
+    public void startActivity(Class<?> cls) {
+        startActivity(cls, null);
+    }
+
+    /**
+     * 含有Bundle通过Class跳转界面
+     **/
+    public void startActivity(Class<?> cls, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(this, cls);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+    }
+
+    /**
      * 含有flags通过ARouter跳转界面
      *
      * @param path   跳转地址
@@ -327,13 +356,15 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      */
     public boolean verifyClickTime(Intent intent) {
         boolean flag = true;
-        String curClassName = intent.getComponent().getClassName();
-        long curClickTime = System.currentTimeMillis();
-        if (curClickTime - mLastClickTime <= CLICK_TIME && curClassName.equals(mLastClassName)) {
-            flag = false;
+        if (intent != null && intent.getComponent() != null) {
+            String curClassName = intent.getComponent().getClassName();
+            long curClickTime = System.currentTimeMillis();
+            if (curClickTime - mLastClickTime <= CLICK_TIME && curClassName.equals(mLastClassName)) {
+                flag = false;
+            }
+            mLastClassName = curClassName;
+            mLastClickTime = curClickTime;
         }
-        mLastClassName = curClassName;
-        mLastClickTime = curClickTime;
         return flag;
     }
 

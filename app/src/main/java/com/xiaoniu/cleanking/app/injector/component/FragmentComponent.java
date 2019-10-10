@@ -10,6 +10,9 @@ import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXImgSaveListFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.CleanFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.tool.wechat.fragment.WXFileFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoCameraFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoChatFragment;
@@ -27,6 +30,12 @@ public interface FragmentComponent {
     RxFragment getFragment();
 
     void inject(CleanMainFragment cleanMainFragment);
+
+    void inject(NewCleanMainFragment newCleanMainFragment);
+
+    void inject(ScanFragment scanFragment);
+
+    void inject(CleanFragment cleanFragment);
 
     void inject(ToolFragment toolFragment);
 

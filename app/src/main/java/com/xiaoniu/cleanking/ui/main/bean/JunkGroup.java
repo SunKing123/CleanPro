@@ -12,7 +12,8 @@ public class JunkGroup implements Parcelable {
     public static final int GROUP_PROCESS = 0;
     public static final int GROUP_CACHE = 1;
     public static final int GROUP_APK = 2;
-
+    public static final int GROUP_UNINSTALL = 3;
+    public static final int GROUP_AD = 4;
     public String mName;
     public long mSize;
     public boolean isChecked;

@@ -19,7 +19,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -164,7 +164,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                startActivity(CleanFinish2Activity.class, bundle);
+                startActivity(NewCleanFinishActivity.class, bundle);
                 finish();
             } else {
                 if (!tvDelete.isSelected()) return;

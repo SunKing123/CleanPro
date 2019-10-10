@@ -11,6 +11,5 @@ public class JPushNotificationManager {
         builder.statusBarDrawable = iconTipId;
         builder.layoutIconDrawable = iconShowId;
         JPushInterface.setDefaultPushNotificationBuilder(builder);
-//        JPushInterface.setPushNotificationBuilder(number, builder);
     }
 }

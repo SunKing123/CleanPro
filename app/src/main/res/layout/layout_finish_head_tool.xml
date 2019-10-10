@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_background"
+    android:paddingBottom="@dimen/dimen_16dp"
+    android:orientation="vertical">
+    <!--一键加速-->
+    <ImageView
+        android:id="@+id/iv_speed_clean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_more_function"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_main_one_key" />
+    <!--超强省电-->
+    <ImageView
+        android:id="@+id/iv_power_clean"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_below="@+id/view_qq_clean"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_main_power" />
+    <!--通知栏清理-->
+    <ImageView
+        android:id="@+id/iv_notification_clean"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_below="@+id/view_phone_thin"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_main_notification" />
+
+    <!--微信专清-->
+    <ImageView
+        android:id="@+id/iv_wechat_clean"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_below="@+id/text_more_function"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_main_wechat" />
+
+    <!--文件清理-->
+    <ImageView
+        android:id="@+id/iv_file_clean"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_below="@+id/text_more_function"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_main_file" />
+
+    <!--手机降温-->
+    <ImageView
+        android:id="@+id/iv_cooling"
+        android:layout_width="match_parent"
+        android:layout_height="116dp"
+        android:layout_below="@+id/text_more_function"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_main_cooling" />
+</LinearLayout>

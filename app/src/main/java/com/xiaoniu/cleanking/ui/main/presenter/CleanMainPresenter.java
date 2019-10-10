@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -45,7 +44,6 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.event.HomeCleanEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.CleanMainFragment;
 import com.xiaoniu.cleanking.ui.main.model.CleanMainModel;
-import com.xiaoniu.cleanking.ui.main.widget.PromptDialog;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -619,17 +617,17 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
     //布局高度缩小
     public void setViewTrans() {
         if (mView == null) return;
-        View cleanFinish = mView.getCleanFinish();
+//        View cleanFinish = mView.getCleanFinish();
         int startHeight = DeviceUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
         anim.setDuration(500);
         anim.setInterpolator(new LinearInterpolator());
-        CoordinatorLayout.LayoutParams rlp = (CoordinatorLayout.LayoutParams) cleanFinish.getLayoutParams();
-        anim.addUpdateListener(animation -> {
-            int currentValue = (int) animation.getAnimatedValue();
-            rlp.topMargin = currentValue;
-            cleanFinish.setLayoutParams(rlp);
-        });
+//        CoordinatorLayout.LayoutParams rlp = (CoordinatorLayout.LayoutParams) cleanFinish.getLayoutParams();
+//        anim.addUpdateListener(animation -> {
+//            int currentValue = (int) animation.getAnimatedValue();
+//            rlp.topMargin = currentValue;
+//            cleanFinish.setLayoutParams(rlp);
+//        });
         anim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -743,11 +741,11 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
         lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView btnOk = (TextView) window.findViewById(R.id.btnOk);
+        TextView btnOk = window.findViewById(R.id.btnOk);
 
-        TextView btnCancle = (TextView) window.findViewById(R.id.btnCancle);
-        TextView tipTxt = (TextView) window.findViewById(R.id.tipTxt);
-        TextView content = (TextView) window.findViewById(R.id.content);
+        TextView btnCancle = window.findViewById(R.id.btnCancle);
+        TextView tipTxt = window.findViewById(R.id.tipTxt);
+        TextView content = window.findViewById(R.id.content);
         btnCancle.setText("退出");
         btnOk.setText("去设置");
         tipTxt.setText("提示!");

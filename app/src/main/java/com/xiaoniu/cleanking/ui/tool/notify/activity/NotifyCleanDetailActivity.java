@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.activity.CleanFinish2Activity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationSetEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -195,11 +196,15 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         //通知栏清理完成浏览
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
 
+        //保存通知栏清理完成时间
+        if(PreferenceUtil.getNotificationCleanTime()){
+            PreferenceUtil.saveNotificationCleanTime();
+        }
         Bundle bundle = new Bundle();
         bundle.putString("title",getString(R.string.tool_notification_clean));
         bundle.putString("num", "");
         bundle.putString("unit","");
-        Intent intent = new Intent(this,CleanFinish2Activity.class);
+        Intent intent = new Intent(this, NewCleanFinishActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
