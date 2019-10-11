@@ -407,4 +407,10 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        if (mPresenter != null)
+        mPresenter.stopCleanScanAnimation();
+        super.onDestroy();
+    }
 }
