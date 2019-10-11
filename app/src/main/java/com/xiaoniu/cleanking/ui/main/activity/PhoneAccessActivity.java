@@ -333,7 +333,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_one_key_speed));
-        bundle.putString("num", tv_size.getText().toString());
+        bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
         bundle.putString("unit", unit);
         startActivity(NewCleanFinishActivity.class, bundle);
         finish();
