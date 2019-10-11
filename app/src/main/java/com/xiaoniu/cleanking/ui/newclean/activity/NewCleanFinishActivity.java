@@ -26,7 +26,9 @@ import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -815,7 +817,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
                 .addBodyParams(jsonObject.toString())
                 .build();
 
-        EHttp.post(this, SpCacheConfig.VIDEO_BASEURL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
+        EHttp.post(this, BuildConfig.VIDEO_BASE_URL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
 
             @Override
             public void onComplete() {
