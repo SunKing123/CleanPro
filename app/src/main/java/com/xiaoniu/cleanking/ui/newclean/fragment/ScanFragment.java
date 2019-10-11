@@ -129,8 +129,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                     mLottieHomeView.playAnimation();
             }
             if (msg.what == 2){
-                ((NowCleanActivity)getActivity()).setCountEntity(null);
-                ((NowCleanActivity)getActivity()).setJunkGroups(null);
+                /*((NowCleanActivity)getActivity()).setCountEntity(null);
+                ((NowCleanActivity)getActivity()).setJunkGroups(null);*/
+
+                ((NowCleanActivity)getActivity()).setCountEntity(new CountEntity());
+                ((NowCleanActivity)getActivity()).setJunkGroups(new HashMap());
 
                 mPresenter.startScan();
                 mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
