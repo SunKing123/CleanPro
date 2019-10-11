@@ -8,7 +8,9 @@ import android.widget.LinearLayout;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
@@ -33,8 +35,6 @@ public class NewsListFragment extends BaseFragment {
     private LinearLayout mLlNoNet;
     private NewsType mType;
 
-    private String newsBaseUrl = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
-    private String videoBaseUrl = "http://clsystem-mclean-dev-default.fqt188.com/video/query";
     private static final int PAGE_NUM = 20;//每一页数据
     private boolean mIsRefresh = true;
 
@@ -127,7 +127,7 @@ public class NewsListFragment extends BaseFragment {
         if (mIsRefresh) {
             lastId = "";
         }
-        String url = newsBaseUrl + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
+        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
         EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
             @Override
             public void onFailure(Throwable e) {
@@ -173,7 +173,7 @@ public class NewsListFragment extends BaseFragment {
                 .addBodyParams(jsonObject.toString())
                 .build();
 
-        EHttp.post(this, videoBaseUrl, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
+        EHttp.post(this, BuildConfig.VIDEO_BASE_URL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
 
             @Override
             public void onComplete() {
