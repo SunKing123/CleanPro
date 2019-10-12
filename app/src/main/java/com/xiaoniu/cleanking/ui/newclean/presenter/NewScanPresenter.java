@@ -227,48 +227,53 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
     public void showColorChange() {
-        mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
-        mScanTranlateColor.setEvaluator(new ArgbEvaluator());
-        mScanTranlateColor.setDuration(1000);
-        if (!mScanTranlateColor.isRunning()) {
-            mScanTranlateColor.start();
-        }
-        mScanTranlateColor.addUpdateListener(animation -> {
-            int animatedValue = (int) animation.getAnimatedValue();
-            if (FirstLevel == animatedValue)
-                isChangeRed = true;
+        if(mScanTranlateColor!=null){
+            mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
+            mScanTranlateColor.setEvaluator(new ArgbEvaluator());
+            mScanTranlateColor.setDuration(1000);
+            if (!mScanTranlateColor.isRunning()) {
+                mScanTranlateColor.start();
+            }
+            mScanTranlateColor.addUpdateListener(animation -> {
+                int animatedValue = (int) animation.getAnimatedValue();
+                if (FirstLevel == animatedValue)
+                    isChangeRed = true;
                 Log.v("onAnimationEnd","FirstLevel ");
-            if (mView == null)
-                return;
-            if (mView.getViewShow()) {
-                //只有首页显示的时候会显示状态栏变化
-                mView.showBarColor(animatedValue);
-            }
-        });
+                if (mView == null)
+                    return;
+                if (mView.getViewShow()) {
+                    //只有首页显示的时候会显示状态栏变化
+                    mView.showBarColor(animatedValue);
+                }
+            });
 
-        mScanTranlateColor.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            mScanTranlateColor.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Log.v("onAnimationEnd","onAnimationEnd ");
-                mView.setColorChange(true);
-                mScanTranlateColor.cancel();
-            }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    Log.v("onAnimationEnd","onAnimationEnd ");
+                    mView.setColorChange(true);
+                    if(mScanTranlateColor!=null)
+                    mScanTranlateColor.cancel();
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        });
+                }
+            });
+        }
+
+
 
     }
 

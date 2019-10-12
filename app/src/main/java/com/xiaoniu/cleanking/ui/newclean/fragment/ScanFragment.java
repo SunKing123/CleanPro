@@ -128,16 +128,20 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                 if (mLottieHomeView != null)
                     mLottieHomeView.playAnimation();
             }
-            if (msg.what == 2){
+            if (msg.what == 2) {
                 /*((NowCleanActivity)getActivity()).setCountEntity(null);
                 ((NowCleanActivity)getActivity()).setJunkGroups(null);*/
 
-                ((NowCleanActivity)getActivity()).setCountEntity(new CountEntity());
-                ((NowCleanActivity)getActivity()).setJunkGroups(new HashMap());
+                ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
+                ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
 
-                mPresenter.startScan();
-                mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
-                type = TYPE_SCANING;
+                try {
+                    mPresenter.startScan();
+                    mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+                    type = TYPE_SCANING;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -148,7 +152,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
     @Override
-    public void netError() {}
+    public void netError() {
+    }
 
     @Override
     protected int getLayoutId() {
@@ -162,7 +167,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     public void startScan() {
         mPresenter.setIsFinish(false);
-        mHandler.sendEmptyMessageDelayed(2,500);
+        mHandler.sendEmptyMessageDelayed(2, 500);
     }
 
     /**
@@ -178,9 +183,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         if (mCountEntity != null) {
             if (mCountEntity.getNumber() > 0) {
                 mJunkGroups = junkGroups;
-                ((NowCleanActivity)getActivity()).setJunkGroups(mJunkGroups);
+                ((NowCleanActivity) getActivity()).setJunkGroups(mJunkGroups);
                 mArrowRight.setVisibility(VISIBLE);
-                ((NowCleanActivity)getActivity()).scanFinish();
+                ((NowCleanActivity) getActivity()).scanFinish();
             } else {
                 //没有扫描到垃圾
                 cleanFinishSign();
@@ -210,7 +215,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             return;
         }
         mCountEntity = CleanUtil.formatShortFileSize(total);
-        ((NowCleanActivity)getActivity()).setCountEntity(mCountEntity);
+        ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
         getActivity().runOnUiThread(() -> {
             CountEntity countEntity = CleanUtil.formatShortFileSize(total);
             if (mTextCount == null)
@@ -254,7 +259,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     /**
      * 终止扫描
      */
-    public void stopScan(){
+    public void stopScan() {
         mPresenter.setIsFinish(true);
         if (mPresenter.getCleanScanAnimator() != null)
             mPresenter.getCleanScanAnimator().cancel();
@@ -267,8 +272,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * 扫描动画结束
      */
     public void endScanAnimation() {
-        mCircleOuter2.setVisibility(GONE);
-        mCircleOuter.setVisibility(GONE);
+        if (mCircleOuter2 != null && mCircleOuter != null) {
+            mCircleOuter2.setVisibility(GONE);
+            mCircleOuter.setVisibility(GONE);
+        }
+
         showHomeLottieView(true);
     }
 
@@ -278,9 +286,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * @param animatedValue
      */
     public void showBarColor(int animatedValue) {
-        if (getActivity()== null)
+        if (getActivity() == null)
             return;
-        ((NowCleanActivity)getActivity()).getToolBar().setBackgroundColor(animatedValue);
+        ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(animatedValue);
         mLayoutCleanTop.setBackgroundColor(animatedValue);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, true);
@@ -348,7 +356,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getSourcePageId(),"clean_up_scan_page","clean_up_scan_page_view_page", "用户在清理扫描页浏览");
+        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getSourcePageId(), "clean_up_scan_page", "clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (mLottieHomeView != null)
             mLottieHomeView.cancelAnimation();
     }
@@ -363,6 +371,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         if (rotate == null) {
             mIconOuter.setAnimation(rotate);
         }
+        if(mLottieHomeView==null)
+            return;
         mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");
         mLottieHomeView.setImageAssetsFolder("images");
@@ -384,7 +394,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mHandler.sendEmptyMessageDelayed(1,1500);
+                mHandler.sendEmptyMessageDelayed(1, 1500);
             }
 
             @Override
@@ -400,7 +410,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     }
 
 
-    public void goSetting(){
+    public void goSetting() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + mActivity.getPackageName()));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -413,7 +423,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onDestroy() {
         if (mPresenter != null)
-        mPresenter.stopCleanScanAnimation();
+            mPresenter.stopCleanScanAnimation();
         super.onDestroy();
     }
 }
