@@ -227,7 +227,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
     public void showColorChange() {
-        if(mScanTranlateColor!=null){
+
             mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
             mScanTranlateColor.setEvaluator(new ArgbEvaluator());
             mScanTranlateColor.setDuration(1000);
@@ -271,10 +271,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
                 }
             });
-        }
-
-
-
     }
 
     AnimatorSet cleanScanAnimator;
