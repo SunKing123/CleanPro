@@ -85,7 +85,7 @@ import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-
+@Deprecated
 public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
 
     @BindView(R.id.text_count)

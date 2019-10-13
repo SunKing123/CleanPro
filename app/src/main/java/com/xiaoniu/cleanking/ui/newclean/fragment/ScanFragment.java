@@ -167,7 +167,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     public void startScan() {
         mPresenter.setIsFinish(false);
-        mHandler.sendEmptyMessageDelayed(2, 500);
+        mHandler.sendEmptyMessageDelayed(2, 50);
     }
 
     /**

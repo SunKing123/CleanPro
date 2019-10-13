@@ -251,12 +251,15 @@ public class FileQueryUtils {
         ArrayList arrayList = new ArrayList();
         try {
             HashMap hashMap = new HashMap();
+            //8.0以上
             if(Build.VERSION.SDK_INT >= 26){
                 return getTaskInfo26();
             }
+            //7.0以上
             if (Build.VERSION.SDK_INT >= 24) {
                 return getTaskInfos24(mContext);
             }
+            //4.4以上
             if (Build.VERSION.SDK_INT >= 20) {
                 return getTaskInfos(mContext);
             }
@@ -653,7 +656,7 @@ public class FileQueryUtils {
                                 absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();
                             }
                             if (string.contains(absolutePath) || string.contains("sdcard0") || string.contains("sdcard1")) {
-                                PackageInfo packageArchiveInfo = mPackageManager.getPackageArchiveInfo(string, 1);
+                                PackageInfo packageArchiveInfo = mPackageManager.getPackageArchiveInfo(string, PackageManager.GET_ACTIVITIES);
                                 if (packageArchiveInfo != null) {
                                     ApplicationInfo applicationInfo = packageArchiveInfo.applicationInfo;
                                     applicationInfo.sourceDir = string;

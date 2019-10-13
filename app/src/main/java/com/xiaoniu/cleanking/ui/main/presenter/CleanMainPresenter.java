@@ -68,7 +68,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
 import static android.view.View.VISIBLE;
-
+@Deprecated
 public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMainModel> {
 
     private ValueAnimator mScanTranlateColor;
@@ -146,7 +146,7 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
             //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
-            //获取前两个扫描的结果
+            //获取前两个扫描的结果,作为修改未扫到文件时候的状态
             boolean isScanFile = (runningProcess.size() + apkJunkInfos.size()) > 0;
             //扫描数据文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);

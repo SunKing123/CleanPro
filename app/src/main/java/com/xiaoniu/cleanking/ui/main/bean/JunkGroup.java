@@ -9,11 +9,11 @@ import java.util.ArrayList;
  * Created by mazhuang on 16/1/14.
  */
 public class JunkGroup implements Parcelable {
-    public static final int GROUP_PROCESS = 0;
-    public static final int GROUP_CACHE = 1;
-    public static final int GROUP_APK = 2;
-    public static final int GROUP_UNINSTALL = 3;
-    public static final int GROUP_AD = 4;
+    public static final int GROUP_CACHE = 0;      //缓存垃圾
+    public static final int GROUP_UNINSTALL = 1;  //卸载残留
+    public static final int GROUP_APK = 2;        //安装无用包
+    public static final int GROUP_PROCESS = 3;    //运行内存清理
+    public static final int GROUP_OTHER = 4;      //其他垃圾
     public String mName;
     public long mSize;
     public boolean isChecked;

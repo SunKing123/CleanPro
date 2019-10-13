@@ -62,7 +62,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
     private HashMap<Integer, JunkGroup> mJunkGroups = null;
-    private HashMap<Integer, JunkGroup> mJunkResults = null;
 
     long total = 0;
 
@@ -77,7 +76,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             showColorChange();
         total = 0;
         mJunkGroups = new HashMap<>();
-        mJunkResults = new HashMap<>();
         mFileQueryUtils = new FileQueryUtils();
         //文件加载进度回调
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
@@ -123,43 +121,23 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         });
 
         Observable.create(e -> {
-            //扫描进程
+            //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(runningProcess);
             //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
             //获取前两个扫描的结果
-            boolean isScanFile = (runningProcess.size() + apkJunkInfos.size()) > 0;
-            //扫描数据文件
+            boolean isScanFile =  apkJunkInfos.size() > 0;
+            //扫描缓存文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             e.onNext(androidDataInfo);
+
+            //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
-                //其他垃圾
-//                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_AD);
-//                if (adGroup == null) {
-//                    adGroup = new JunkGroup();
-//                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
-//                    adGroup.isChecked = true;
-//                    adGroup.isExpand = true;
-//                    adGroup.mChildren = new ArrayList<>();
-//                    mJunkGroups.put(JunkGroup.GROUP_AD, adGroup);
-//                    adGroup.mSize += 0;
-//                }
-                //卸载残留
-//                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
-//                if (uninstallGroup == null) {
-//                    uninstallGroup = new JunkGroup();
-//                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
-//                    uninstallGroup.isChecked = true;
-//                    uninstallGroup.isExpand = true;
-//                    uninstallGroup.mChildren = new ArrayList<>();
-//                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
-//                    uninstallGroup.mSize += 0;
-//                }
 
                 //缓存垃圾
                 JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
@@ -171,6 +149,32 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     cacheGroup.mChildren = new ArrayList<>();
                     mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
                     cacheGroup.mSize += 0;
+                }
+
+
+                //卸载残留
+                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
+                if (uninstallGroup == null) {
+                    uninstallGroup = new JunkGroup();
+                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
+                    uninstallGroup.isChecked = true;
+                    uninstallGroup.isExpand = true;
+                    uninstallGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
+                    uninstallGroup.mSize += 0;
+                }
+
+
+                //无用安装包
+                JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
+                if (apkGroup == null) {
+                    apkGroup = new JunkGroup();
+                    apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
+                    apkGroup.isChecked = true;
+                    apkGroup.isExpand = true;
+                    apkGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
+                    apkGroup.mSize += 0;
                 }
 
                 //内存清理
@@ -185,17 +189,20 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     processGroup.mSize += 0;
                 }
 
-                //无用安装包
-                JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
-                if (apkGroup == null) {
-                    apkGroup = new JunkGroup();
-                    apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
-                    apkGroup.isChecked = true;
-                    apkGroup.isExpand = true;
-                    apkGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
-                    apkGroup.mSize += 0;
+
+
+                //其他垃圾
+                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
+                if (adGroup == null) {
+                    adGroup = new JunkGroup();
+                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
+                    adGroup.isChecked = true;
+                    adGroup.isExpand = true;
+                    adGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
+                    adGroup.mSize += 0;
                 }
+
 
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
@@ -214,13 +221,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     }
                 }
             } else {
-                int i = 0;
-                for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
-                    mJunkResults.put(i++, entry.getValue());
-                }
                 if (mFileQueryUtils.isFinish())
                     return;
-                mView.scanFinish(mJunkResults);
+                mView.scanFinish(mJunkGroups);
             }
         });
 
