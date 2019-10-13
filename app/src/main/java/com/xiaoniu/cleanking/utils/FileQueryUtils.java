@@ -147,14 +147,15 @@ public class FileQueryUtils {
     /**
      * 获取Android/data中的垃圾信息
      *
-     * @return
      * @param isScanFile 是否扫描到文件
+     * @return
      */
     public ArrayList<FirstJunkInfo> getAndroidDataInfo(boolean isScanFile) {
         if (isFinish) {
             return new ArrayList<>();
         }
         ArrayList<FirstJunkInfo> list = new ArrayList<>();
+        //内置储存卡
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
         List<PackageInfo> installedList = AppApplication.getInstance().getPackageManager().getInstalledPackages(0);
         int total = 0;
@@ -166,7 +167,7 @@ public class FileQueryUtils {
             if (isFinish) {
                 return list;
             }
-            index ++;
+            index++;
             final File file = new File(rootPath + applicationInfo.packageName + "/cache");
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
@@ -197,21 +198,34 @@ public class FileQueryUtils {
             //files缓存
             if (file2.exists()) {
                 for (final Map.Entry<String, String> entry : this.checkOutAllGarbageFolder(file2).entrySet()) {
+                    if(new File(entry.getKey()).isDirectory()){    //文件路径
+                        final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
+                        if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
+                            continue;
+                        }
+                        listFiles2.setGarbageName(entry.getValue());
+                        listFiles2.setFilecatalog(entry.getKey());
+                        listFiles2.setChecked(true);
+                        listFiles2.setPackageName(applicationInfo.packageName);
+                        listFiles2.setGarbagetype("TYPE_CACHE");
+                        firstJunkInfo.addSecondJunk(listFiles2);
+                        firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
+                        if (mScanFileListener != null) {
+                            mScanFileListener.increaseSize(listFiles2.getGarbageSize());
+                        }
+                    }else if(new File(entry.getKey()).isFile()){//文件路径
+                        File cachefile = new File(entry.getKey());
+                        SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
+                        if (cachefile.exists()) {
+                            secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
+                            secondJunkInfo.setChecked(true);
+                            secondJunkInfo.setPackageName(applicationInfo.packageName);
+                            secondJunkInfo.setGarbagetype("TYPE_CACHE");
+                            firstJunkInfo.addSecondJunk(secondJunkInfo);
+                            firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                        }
+                    }
 
-                    final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
-                    if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
-                        continue;
-                    }
-                    listFiles2.setGarbageName(entry.getValue());
-                    listFiles2.setFilecatalog(entry.getKey());
-                    listFiles2.setChecked(true);
-                    listFiles2.setPackageName(applicationInfo.packageName);
-                    listFiles2.setGarbagetype("TYPE_CACHE");
-                    firstJunkInfo.addSecondJunk(listFiles2);
-                    firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                    if (mScanFileListener != null) {
-                        mScanFileListener.increaseSize(listFiles2.getGarbageSize());
-                    }
                 }
             }
 
@@ -221,10 +235,10 @@ public class FileQueryUtils {
             if (!"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName()))
                 list.add(firstJunkInfo);
 
-            if (index > (float)total * 3 / 4 && !isScanFile && list.size() > 0) {
-                Log.v("onAnimationEnd","mScanFileListener " + mScanFileListener);
+            if (index > (float) total * 3 / 4 && !isScanFile && list.size() > 0) {
+                Log.v("onAnimationEnd", "mScanFileListener " + mScanFileListener);
 
-                if(mScanFileListener != null) {
+                if (mScanFileListener != null) {
                     mScanFileListener.currentNumber();
                 }
             }
@@ -252,7 +266,7 @@ public class FileQueryUtils {
         try {
             HashMap hashMap = new HashMap();
             //8.0以上
-            if(Build.VERSION.SDK_INT >= 26){
+            if (Build.VERSION.SDK_INT >= 26) {
                 return getTaskInfo26();
             }
             //7.0以上
@@ -453,7 +467,7 @@ public class FileQueryUtils {
                 if (indexP >= size) {
                     return arrayList;
                 }
-                indexP ++;
+                indexP++;
                 if (isFinish) {
                     return arrayList;
                 }
@@ -550,14 +564,14 @@ public class FileQueryUtils {
                 if (indexP >= size) {
                     return arrayList2;
                 }
-                indexP ++;
+                indexP++;
                 if (isFinish) {
                     return arrayList2;
                 }
                 AppMemoryInfo appMemoryInfo2 = (AppMemoryInfo) it.next();
                 FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
                 String name = appMemoryInfo2.getName();
-                if(mScanFileListener != null) {
+                if (mScanFileListener != null) {
                     mScanFileListener.scanFile(name);
                 }
                 if (name != null && !name.contains("com.xiaoniu")) {
@@ -598,7 +612,7 @@ public class FileQueryUtils {
         }
     }
 
-    public boolean isSystemApp(Context context,String packageName) {
+    public boolean isSystemApp(Context context, String packageName) {
         PackageManager pm = context.getPackageManager();
 
         if (packageName != null) {
@@ -902,26 +916,88 @@ public class FileQueryUtils {
         File[] listFiles = file.listFiles();
         if (listFiles != null) {
             for (File file2 : listFiles) {
+                String fileName = file2.getName();
                 if (file2.isDirectory()) {
-                    if (file2.getName().toLowerCase().equals("awcn_strategy")) {
-                        map.put(file2.getAbsolutePath(), "缓存");
-                    } else if (file2.getName().toLowerCase().equals("baidu")) {
-                        map.put(file2.getAbsolutePath(), "插件缓存");
-                    } else if (file2.getName().toLowerCase().equals("ad")) {
-                        map.put(file2.getAbsolutePath(), "广告文件");
-                    } else if (file2.getName().toLowerCase().contains("log")) {
-                        map.put(file2.getAbsolutePath(), "日志文件");
-                    } else if (file2.getName().toLowerCase().contains("cache")) {
-                        map.put(file2.getAbsolutePath(), "缓存");
-                    } else if (file2.getName().toLowerCase().contains(".cloud")) {
-                        map.put(file2.getAbsolutePath(), "缓存");
-                    } else if (file2.getName().toLowerCase().contains("update")) {
-                        map.put(file2.getAbsolutePath(), "更新缓存");
-                    } else if (file2.getName().toLowerCase().equals("apps")) {
-                        map.put(file2.getAbsolutePath(), "页面缓存");
-                    } else {
+                    if (fileName.toLowerCase().equals("awcn_strategy")) {
+                        map.put(file2.getAbsolutePath(), "awcn_strategy缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("baidu")) {
+                        map.put(file2.getAbsolutePath(), "baidu插件缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("ad") || fileName.toLowerCase().equals("ads")) {
+                        map.put(file2.getAbsolutePath(), "ad广告文件夹");
+                    } else if (fileName.toLowerCase().contains("log")) {
+                        map.put(file2.getAbsolutePath(), "log日志文件夹");
+                    } else if (fileName.toLowerCase().contains("temp")) {
+                        map.put(file2.getAbsolutePath(), "temp日志文件夹");
+                    } else if (fileName.toLowerCase().contains("tmp")) {
+                        map.put(file2.getAbsolutePath(), "tmp日志文件夹");
+                    } else if (fileName.toLowerCase().contains("crash")) {
+                        map.put(file2.getAbsolutePath(), "crash日志文件夹");
+                    } else if (fileName.toLowerCase().contains("trace")) {
+                        map.put(file2.getAbsolutePath(), "trace日志文件夹");
+                    } else if (fileName.toLowerCase().contains("hprof")) {
+                        map.put(file2.getAbsolutePath(), "hprof日志文件夹");
+                    } else if (fileName.toLowerCase().contains("cache")) {
+                        map.put(file2.getAbsolutePath(), "cache缓存文件夹");
+                    } else if (fileName.toLowerCase().contains("cloud")) {
+                        map.put(file2.getAbsolutePath(), "cloud缓存文件夹");
+                    } else if (fileName.toLowerCase().contains("update")) {
+                        map.put(file2.getAbsolutePath(), "update更新缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("apps")) {
+                        map.put(file2.getAbsolutePath(), "apps页面缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("anr")) {
+                        map.put(file2.getAbsolutePath(), "anr缓存日志");
+                    }
+
+                    else if(fileName.toLowerCase().contains("image")){
+                        map.put(file2.getAbsolutePath(), "图片文件夹");
+                    } else if(fileName.toLowerCase().contains("video")){
+                        map.put(file2.getAbsolutePath(), "视频文件夹");
+                    } else if(fileName.toLowerCase().contains("audio")){
+                        map.put(file2.getAbsolutePath(), "音频文件夹");
+                    }else if(fileName.toLowerCase().contains("splash")){
+                        map.put(file2.getAbsolutePath(), "splash媒体文件夹");
+                    }
+
+                    else if(fileName.toLowerCase().contains("download")){
+                        map.put(file2.getAbsolutePath(), "download文件夹");
+                    }
+                    else {
                         this.checkFiles(map, file2);
                     }
+                } else {
+
+                    String fileLow = fileName.toLowerCase();
+                    /**
+                     * 日志相关文件*/
+                    if (fileLow.endsWith(".log")) {
+                        map.put(file2.getAbsolutePath(), "log日志文件");
+                    } else if (fileLow.endsWith(".tmp") || fileLow.endsWith(".temp")) {
+                        map.put(file2.getAbsolutePath(), "tmp日志文件");
+                    } else if (fileLow.endsWith(".tmp") || fileLow.endsWith(".temp")) {
+                        map.put(file2.getAbsolutePath(), "tmp日志文件");
+                    }else if (fileLow.endsWith(".hprof")) {
+                        map.put(file2.getAbsolutePath(), "hprof日志文件");
+                    } else if (fileLow.endsWith(".trace") ) {
+                        map.put(file2.getAbsolutePath(), "trace日志文件");
+                    }
+
+                    //多媒体相关文件
+                    //bmp,jpg,png,tif,gif,pcx,tga,exif,fpx,svg,psd
+                    if (fileLow.endsWith(".bmp")||fileLow.endsWith(".jpg")||fileLow.endsWith(".tif")||fileLow.endsWith(".gif")||fileLow.endsWith(".pcx")||fileLow.endsWith(".tga")||fileLow.endsWith(".exif")||fileLow.endsWith(".fpx")||fileLow.endsWith(".svg")||fileLow.endsWith(".psd")) {
+                        map.put(file2.getAbsolutePath(), "图片文件");
+                    //cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp
+                    } else if (fileLow.endsWith(".cdr")||fileLow.endsWith(".pcd")||fileLow.endsWith(".dxf")||fileLow.endsWith(".ufo")||fileLow.endsWith(".eps")||fileLow.endsWith(".ai")||fileLow.endsWith(".raw")||fileLow.endsWith(".WMF")||fileLow.endsWith(".webp")) {
+                        map.put(file2.getAbsolutePath(), "图片文件");
+                    //rm，rmvb，mpeg1-4 mov mtv dat wmv avi 3gp amv dmv flv
+                    } else if (fileLow.endsWith(".rm") || fileLow.endsWith(".rmvb") || fileLow.endsWith(".mpeg1-4") || fileLow.endsWith(".mov") || fileLow.endsWith(".mtv") || fileLow.endsWith(".dat") || fileLow.endsWith(".wmv") || fileLow.endsWith(".avi") || fileLow.endsWith(".amv") || fileLow.endsWith(".dmv") || fileLow.endsWith(".flv")) {//amv dmv flv
+                        map.put(file2.getAbsolutePath(), "视频文件");
+                    }else if (fileLow.endsWith(".hprof")) {
+                        map.put(file2.getAbsolutePath(), "hprof日志文件");
+                    } else if (fileLow.endsWith(".trace") ) {
+                        map.put(file2.getAbsolutePath(), "trace日志文件");
+                    }
+
+
                 }
             }
         }
