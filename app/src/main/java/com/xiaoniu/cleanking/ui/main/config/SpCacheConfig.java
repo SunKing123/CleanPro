@@ -13,6 +13,7 @@ public class SpCacheConfig {
     public static final String CACHES_KEY_MUSCI = "key_caches_files_music";
     public static final String CACHES_KEY_APK = "key_caches_files_apk";
     public static final String CACHES_KEY_VIDEO = "key_caches_files_video";
+    public static final String CACHES_KEY_FIRST = "key_caches_files_first";
 
     /**
      * 安装包白名单文件缓存配置
@@ -58,6 +59,9 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_COOLINF_TIME = "cooling_time";
     public static final  String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
     public static final  String IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP = "first_open_clean_finish_app";
+
+    public static final  String IS_SAVE_FIRST_HOME_ICON = "first_home_icon";
+
     //埋点上一级页面
     public static final String ONKEY = "one_key";
     public static final String PHONE_CLEAN = "phone_clean";

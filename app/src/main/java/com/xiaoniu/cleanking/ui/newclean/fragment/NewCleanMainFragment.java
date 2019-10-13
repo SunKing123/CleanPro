@@ -1,9 +1,12 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,13 +30,17 @@ import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
-import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -64,15 +71,73 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     ImageView viewQqClean;
     @BindView(R.id.view_news)
     ImageView viewNews;
+    @BindView(R.id.tv_acc)
+    TextView mAccTv;
+    @BindView(R.id.tv_noti_clear)
+    TextView mNotiClearTv;
+    @BindView(R.id.tv_electricity)
+    TextView mElectricityTv;
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_new_clean_main;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        if (!PreferenceUtil.isFirstForHomeIcon()) {
+            mAccTv.setText(getString(R.string.tool_one_key_speed));
+            mNotiClearTv.setText(getString(R.string.tool_notification_clean));
+            mElectricityTv.setText(getString(R.string.tool_super_power_saving));
+            PreferenceUtil.saveFirstForHomeIcon();
+        } else {
+            mAccTv.setTextColor(Color.RED);
+            mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+            if (!NotifyUtils.isNotificationListenerEnabled()) {
+                mNotiClearTv.setTextColor(Color.RED);
+                mNotiClearTv.setText(R.string.find_harass_notify);
+            }
+            if (AndroidUtil.getElectricityNum(getActivity()) <= 70) {
+                mElectricityTv.setTextColor(Color.RED);
+                mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
+            }
+        }
+    }
+
+    @Subscribe
+    public void onEventMainThread(ResidentUpdateEvent event) {
+        //获取通知条数后改变 通知栏清理 icon和文案状态
+        if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 5) {
+            mNotiClearTv.setTextColor(Color.RED);
+            mNotiClearTv.setText(R.string.find_harass_notify);
+        }
+        //清除所有通知后改变 通知栏清理 icon和文案状态
+        if (event.isAllNotifyClean() && NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
+            mNotiClearTv.setTextColor(Color.GREEN);
+            mNotiClearTv.setText(R.string.finished_clean_notify_hint);
+        }
+    }
+
+    /**
+     * 一键加速完成改变一键加速状态
+     */
+    @Subscribe
+    public void quickenEvent(QuickenEvent event) {
+        mAccTv.setTextColor(Color.GREEN);
+        mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
+    }
+
+    /**
+     * 超强省电一键优化事件
+     *
+     * @param event
+     */
+    @Subscribe
+    public void cleanPowerEvent(CleanPowerEvent event) {
+        mElectricityTv.setTextColor(Color.GREEN);
+        mElectricityTv.setText(getString(R.string.lengthen_time, event.getHour()));
     }
 
     public void startCleanNow() {
@@ -96,6 +161,7 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         viewPhoneThin.setEnabled(true);
         viewQqClean.setEnabled(true);
         viewNews.setEnabled(true);
+        EventBus.getDefault().post(new ResidentUpdateEvent(false));
     }
 
     /**
@@ -215,7 +281,7 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         startActivity(QQCleanHomeActivity.class);
     }
 
-/*    *//**
+    /*    *//**
      * 权限设置
      *//*
     @OnClick(R.id.iv_permission)

@@ -135,7 +135,7 @@ public class NumberUtils {
         }
     }
 
-    public static long string2Long(String str){
+    public static long string2Long(String str) {
         try {
             return Long.parseLong(str);
         } catch (Exception e) {
@@ -269,5 +269,17 @@ public class NumberUtils {
         return totalFeeDecimal.add(
                 totalFeeAfterDecimal).
                 floatValue();
+    }
+
+    /**
+     * 两个整数之间的随机数
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static String mathRandom(int start, int end) {
+        int number = (int) (start + Math.random() * (end - start + 1));
+        return String.valueOf(number);
     }
 }

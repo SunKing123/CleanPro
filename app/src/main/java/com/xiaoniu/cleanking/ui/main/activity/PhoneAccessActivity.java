@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -215,9 +216,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent != null){
+        if (intent != null) {
             String notification = intent.getExtras().getString("NotificationService");
-            if ("clean".equals(notification)){
+            if ("clean".equals(notification)) {
                 StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
             }
         }
@@ -259,11 +260,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             if (!keyBack()) {
                 if (mTvSpeed.getVisibility() == View.GONE) {
                     StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "one_click_acceleration_page");
-                }else {
+                } else {
                     StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "clean_up_ immediately_page");
                 }
                 finish();
-            }else {
+            } else {
                 StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "accelerate_access_to_details_page");
             }
         });
@@ -287,7 +288,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                showCleanFinishUI(strNum,strUnit);
+                showCleanFinishUI(strNum, strUnit);
             }
 
             @Override
@@ -296,19 +297,19 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         });
         acceview.setAnimationEnd(() -> {
-            if(!PreferenceUtil.getCleanTime()){
+            if (!PreferenceUtil.getCleanTime()) {
                 strNum = "";
                 strUnit = "";
             }
-            showCleanFinishUI(strNum,strUnit);
+            showCleanFinishUI(strNum, strUnit);
         });
 
     }
 
     private void addClick(Intent intent) {
-        if (intent != null){
+        if (intent != null) {
             String notifition = intent.getStringExtra("NotificationService");
-            if ("clean".equals(notifition)){
+            if ("clean".equals(notifition)) {
                 AppHolder.getInstance().setCleanFinishSourcePageId("toggle_boost_click");
                 StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
             }
@@ -318,9 +319,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     /**
      * 一键加速
      */
-    public void showCleanButton(){
+    public void showCleanButton() {
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
     }
+
     private void showCleanFinishUI(String num, String unit) {
         //清理完成 更新通知栏一键清理icon颜色状态
         NotificationEvent event = new NotificationEvent();
@@ -404,6 +406,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
         }
         StatisticsUtils.trackClick("cleaning_click", "清理点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
+
+        EventBus.getDefault().post(new QuickenEvent());
     }
 
     @Override
@@ -447,8 +451,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (listInfo == null || acceview == null) return;
 
         //悟空清理app加入默认白名单
-        for (FirstJunkInfo firstJunkInfo : listInfo){
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())){
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                 listInfo.remove(firstJunkInfo);
             }
         }
@@ -489,7 +493,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show,tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
             else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
@@ -499,7 +503,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strUnit = "GB";
             sizeMb *= 1024;
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb,acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
+                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
             else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
@@ -688,10 +692,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     /**
      * 返回事件
-     * @return  true 显示详情列表 false 显示动画
+     *
+     * @return true 显示详情列表 false 显示动画
      */
     private boolean keyBack() {
-        if (isShowListInfo){
+        if (isShowListInfo) {
             isShowListInfo = false;
             acceview.setVisibility(View.VISIBLE);
             return true;

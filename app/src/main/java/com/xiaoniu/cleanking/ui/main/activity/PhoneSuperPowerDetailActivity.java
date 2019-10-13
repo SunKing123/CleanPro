@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.widget.BattaryView;
@@ -34,6 +35,8 @@ import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -78,6 +81,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     @Override
     protected void initVariable(Intent intent) {
+
         mPowerCleanAdapter = new SuperPowerCleanAdapter(PhoneSuperPowerDetailActivity.this);
         PhoneSuperPowerDetailActivity.sSelectedList = null;
     }
@@ -120,12 +124,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
         changePower(true);
-        IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         //注册接收器以获取电量信息
-        registerReceiver(broadcastReceiver,intentFilter);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    private BroadcastReceiver broadcastReceiver= new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //获取当前电量，如未获取具体数值，则默认为0
@@ -167,11 +171,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     /**
      * 显示省点时间
-     * @param minNum  随机数最小值
-     * @param maxNum    随机数最大值
+     *
+     * @param minNum 随机数最小值
+     * @param maxNum 随机数最大值
      */
     private void showPower(int minNum, int maxNum) {
-        int time = getSavingPower(minNum,maxNum);
+        int time = getSavingPower(minNum, maxNum);
         int hour = (int) Math.floor(time / 60);
         //大于60分钟，显示小时、分钟
         if (hour > 0) {
@@ -179,13 +184,13 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             tvHour.setVisibility(View.VISIBLE);
             tvUnitHour.setVisibility(View.VISIBLE);
             tvHour.setText(String.valueOf(hour));
-            if (mini == 0){
+            if (mini == 0) {
                 tvMiniUnit.setVisibility(View.GONE);
                 tvMini.setVisibility(View.GONE);
-            }else {
+            } else {
                 tvMini.setText(String.valueOf(time % 60));
             }
-        }else {
+        } else {
             // 小于60，只显示分钟
             tvHour.setVisibility(View.GONE);
             tvUnitHour.setVisibility(View.GONE);
@@ -195,8 +200,9 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     /**
      * 去两个值之间的随机数
-     * @param minNum   最小值
-     * @param maxNum   最大值
+     *
+     * @param minNum 最小值
+     * @param maxNum 最大值
      * @return
      */
     private int getSavingPower(int minNum, int maxNum) {
@@ -221,6 +227,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
@@ -242,10 +254,11 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                         CleanUtil.killAppProcesses(childInfo.packageName, 0);
                     }
                 }
-
+                EventBus.getDefault().post(new CleanPowerEvent(tvMini.getText().toString()));
                 Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
                 intent.putExtra("processNum", sSelectedList.size());
                 startActivity(intent);
+
                 finish();
                 break;
         }
@@ -446,4 +459,5 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             }
         });
     }
+
 }

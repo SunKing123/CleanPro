@@ -63,7 +63,7 @@ public class NotificationCleanService extends NotificationListenerService {
 
     public static void updateReridentView(Context context) {
         if (context != null) {
-            EventBus.getDefault().post(new ResidentUpdateEvent());
+            EventBus.getDefault().post(new ResidentUpdateEvent(false));
         }
     }
 
@@ -109,10 +109,14 @@ public class NotificationCleanService extends NotificationListenerService {
                     if (notification != null) {
                         startForeground(NOTIFICATION_RERIDENT, notification);
                     }
+
+
                 } else {
                     stopForeground(true);
                 }
             }
+
+
         }
         return START_STICKY;
     }

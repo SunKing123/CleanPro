@@ -9,9 +9,9 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_power_saving_bar_layout"
         android:layout_width="match_parent"
-        app:expanded="false"
         android:layout_height="wrap_content"
-        app:elevation="0dp">
+        app:elevation="0dp"
+        app:expanded="false">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -29,18 +29,18 @@
                     android:id="@+id/bv_view"
                     android:layout_width="53dp"
                     android:layout_height="91dp"
-                    app:color="#4BFF73"
                     android:layout_marginLeft="@dimen/dimen_64dp"
-                    android:layout_marginTop="@dimen/dimen_25dp" />
+                    android:layout_marginTop="@dimen/dimen_25dp"
+                    app:color="#4BFF73" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/view_lottie_super_saving_power"
                     android:layout_width="120dp"
-                    android:layout_alignParentLeft="true"
                     android:layout_height="117dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginLeft="29dp"
-                    android:layout_marginTop="@dimen/dimen_29dp"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_marginTop="@dimen/dimen_29dp" />
 
                 <TextView
                     android:id="@+id/tv_after_update"
@@ -131,9 +131,9 @@
                 android:id="@+id/ed_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:layout_marginBottom="@dimen/dimen_56dp"
-                android:background="@color/color_F7F8FA" />
+                android:background="@color/color_F7F8FA"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_result"
@@ -170,9 +170,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ll_num"
                     android:layout_centerHorizontal="true"
-                    android:textSize="12sp"
                     android:text="正在分析耗电信息..."
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/view_lottie_super_saving"
@@ -189,25 +189,25 @@
     <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        android:gravity="center"
         android:paddingTop="@dimen/dp_10"
         android:paddingBottom="@dimen/dimen_12dp"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_super_power"
             android:layout_width="match_parent"
+            android:layout_height="46dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/btn_white_line_bg"
+            android:gravity="center"
             android:text="@string/tool_one_key_saving"
             android:textColor="@color/white"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:background="@drawable/btn_white_line_bg"
-            android:layout_height="46dp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

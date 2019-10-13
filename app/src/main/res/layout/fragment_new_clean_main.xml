@@ -244,6 +244,7 @@
                         android:src="@mipmap/icon_yjjs" />
 
                     <TextView
+                        android:id="@+id/tv_acc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -332,6 +333,7 @@
                         android:src="@mipmap/icon_home_qq" />
 
                     <TextView
+                        android:id="@+id/tv_noti_clear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -384,6 +386,7 @@
                         android:src="@mipmap/icon_power" />
 
                     <TextView
+                        android:id="@+id/tv_electricity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
