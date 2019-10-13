@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -33,6 +36,8 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import static android.content.Context.BATTERY_SERVICE;
 
 
 /**
@@ -64,7 +69,7 @@ public class AndroidUtil {
     }
 
 
-//调用第三方程序uri版本兼容
+    //调用第三方程序uri版本兼容
     public static void fileUri(Context context, Intent intent, File file, String type) {
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -145,6 +150,7 @@ public class AndroidUtil {
 
     /**
      * 打开文件
+     *
      * @param context
      * @param path
      */
@@ -152,26 +158,25 @@ public class AndroidUtil {
 
         String format = path.substring(path.lastIndexOf(".") + 1);
         try {
-                if (TextUtils.equals("doc", format) || TextUtils.equals("docx", format)) {
-                    context.startActivity(IntentDocumentUtil.getWordFileIntent(path));
-                } else if (TextUtils.equals("xls", format) || TextUtils.equals("xlsx", format)) {
-                    context.startActivity(IntentDocumentUtil.getExcelFileIntent(path));
-                } else if (TextUtils.equals("zip", format) || TextUtils.equals("rar", format)) {
-                    context.startActivity(IntentDocumentUtil.getZipRarFileIntent(path));
-                }else if (TextUtils.equals("pdf", format) || TextUtils.equals("PDF", format)) {
-                    context.startActivity(IntentDocumentUtil.getPdfFileIntent(path));
-                }else if (TextUtils.equals("ppt", format) || TextUtils.equals("PPT", format)) {
-                    context.startActivity(IntentDocumentUtil.getPptFileIntent(path));
-                }else if (TextUtils.equals("txt", format) || TextUtils.equals("text", format)) {
-                    context.startActivity(IntentDocumentUtil.getTextFileIntent(path,false));
-                }
+            if (TextUtils.equals("doc", format) || TextUtils.equals("docx", format)) {
+                context.startActivity(IntentDocumentUtil.getWordFileIntent(path));
+            } else if (TextUtils.equals("xls", format) || TextUtils.equals("xlsx", format)) {
+                context.startActivity(IntentDocumentUtil.getExcelFileIntent(path));
+            } else if (TextUtils.equals("zip", format) || TextUtils.equals("rar", format)) {
+                context.startActivity(IntentDocumentUtil.getZipRarFileIntent(path));
+            } else if (TextUtils.equals("pdf", format) || TextUtils.equals("PDF", format)) {
+                context.startActivity(IntentDocumentUtil.getPdfFileIntent(path));
+            } else if (TextUtils.equals("ppt", format) || TextUtils.equals("PPT", format)) {
+                context.startActivity(IntentDocumentUtil.getPptFileIntent(path));
+            } else if (TextUtils.equals("txt", format) || TextUtils.equals("text", format)) {
+                context.startActivity(IntentDocumentUtil.getTextFileIntent(path, false));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(context, "没有打开相关应用的软件...", Toast.LENGTH_SHORT).show();
         }
 
     }
-
 
 
     /**
@@ -242,5 +247,17 @@ public class AndroidUtil {
         }
         lastClickTime = time;
         return false;
+    }
+
+    /**
+     * 获取手机剩余电量
+     *
+     * @param context
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static int getElectricityNum(Context context) {
+        BatteryManager batteryManager = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
+        return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
     }
 }

@@ -125,7 +125,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.NOTITY);
             mIsClearNotification = true;
             NotifyCleanManager.getInstance().cleanAllNotification();
-            EventBus.getDefault().post(new ResidentUpdateEvent());
+            EventBus.getDefault().post(new ResidentUpdateEvent(true));
             mNotifyCleanAdapter.clear();
 
             mCleanAnimView.setData(CleanUtil.formatShortFileSize(100), CleanAnimView.page_junk_clean);
@@ -181,7 +181,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     public void onEventMainThread(NotificationSetEvent event) {
         if (event != null && !event.isEnable()) {
             NotifyCleanManager.getInstance().cleanAllNotification();
-            EventBus.getDefault().post(new ResidentUpdateEvent());
+            EventBus.getDefault().post(new ResidentUpdateEvent(false));
             mNotifyCleanAdapter.clear();
             showCleanFinishView();
         }
