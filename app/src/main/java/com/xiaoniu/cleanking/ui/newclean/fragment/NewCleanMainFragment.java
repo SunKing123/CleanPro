@@ -27,13 +27,13 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
-import com.xiaoniu.cleanking.ui.main.presenter.CleanMainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
+import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -53,9 +53,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 1.2.1 新版本主页
+ * 1.2.1 新版本清理主页
  */
-public class NewCleanMainFragment extends BaseFragment<CleanMainPresenter> {
+public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
 
     private long firstTime;
     @BindView(R.id.tv_clean_type)
