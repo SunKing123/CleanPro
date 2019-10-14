@@ -397,8 +397,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
 
-
-
     boolean isFromClick = false;
     public AlertDialog showPermissionDialog(Context context, final DialogClickListener okListener) {
         isFromClick = false;
