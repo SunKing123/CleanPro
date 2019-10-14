@@ -366,8 +366,12 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
         ivHua1.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
         ivHua3.setImageResource(isScaning ? R.mipmap.icon_pro : R.mipmap.icon_round);
         if (isScaning) {
-            roundAnim1 = mPresenter.playRoundAnim(ivHua1);
-            roundAnim3 = mPresenter.playRoundAnim(ivHua3);
+            try {
+                roundAnim1 = mPresenter.playRoundAnim(ivHua1);
+                roundAnim3 = mPresenter.playRoundAnim(ivHua3);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         } else {
             roundAnim1.cancel();
             roundAnim3.cancel();

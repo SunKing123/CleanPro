@@ -287,44 +287,49 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
      * @param circleOuter2
      */
     public void startCleanScanAnimation(ImageView iconOuter, View circleOuter, View circleOuter2) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f, 1f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f, 1f);
+        try {
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f, 1f);
+            ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f, 1f);
 
-        ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(circleOuter, "scaleX", 1f, 1.8f);
-        ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(circleOuter, "scaleY", 1f, 1.8f);
-        ObjectAnimator alpha2 = ObjectAnimator.ofFloat(circleOuter, "alpha", 1f, 0.0f);
+            ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(circleOuter, "scaleX", 1f, 1.8f);
+            ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(circleOuter, "scaleY", 1f, 1.8f);
+            ObjectAnimator alpha2 = ObjectAnimator.ofFloat(circleOuter, "alpha", 1f, 0.0f);
 
-        ObjectAnimator scaleX3 = ObjectAnimator.ofFloat(circleOuter2, "scaleX", 1f, 1.6f);
-        ObjectAnimator scaleY3 = ObjectAnimator.ofFloat(circleOuter2, "scaleY", 1f, 1.6f);
-        ObjectAnimator alpha3 = ObjectAnimator.ofFloat(circleOuter2, "alpha", 1f, 0.0f);
-        scaleX.setRepeatMode(ValueAnimator.REVERSE);
-        scaleY.setRepeatMode(ValueAnimator.REVERSE);
-        scaleX.setRepeatCount(-1);
-        scaleY.setRepeatCount(-1);
-        rotation.setRepeatCount(-1);
-        alpha.setRepeatCount(-1);
-        scaleX.setDuration(2000);
-        scaleY.setDuration(2000);
-        rotation.setRepeatMode(ValueAnimator.RESTART);
-        rotation.setDuration(1000);
-        alpha.setDuration(2000);
-        alpha.setRepeatMode(ValueAnimator.REVERSE);
+            ObjectAnimator scaleX3 = ObjectAnimator.ofFloat(circleOuter2, "scaleX", 1f, 1.6f);
+            ObjectAnimator scaleY3 = ObjectAnimator.ofFloat(circleOuter2, "scaleY", 1f, 1.6f);
+            ObjectAnimator alpha3 = ObjectAnimator.ofFloat(circleOuter2, "alpha", 1f, 0.0f);
+            scaleX.setRepeatMode(ValueAnimator.REVERSE);
+            scaleY.setRepeatMode(ValueAnimator.REVERSE);
+            scaleX.setRepeatCount(-1);
+            scaleY.setRepeatCount(-1);
+            rotation.setRepeatCount(-1);
+            alpha.setRepeatCount(-1);
+            scaleX.setDuration(2000);
+            scaleY.setDuration(2000);
+            rotation.setRepeatMode(ValueAnimator.RESTART);
+            rotation.setDuration(1000);
+            alpha.setDuration(2000);
+            alpha.setRepeatMode(ValueAnimator.REVERSE);
 
-        //第一圈
-        initAnim(alpha2, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleY2, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleX2, 2000, ValueAnimator.RESTART, -1);
+            //第一圈
+            initAnim(alpha2, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleY2, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleX2, 2000, ValueAnimator.RESTART, -1);
 
-        initAnim(alpha3, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleY3, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleX3, 2000, ValueAnimator.RESTART, -1);
+            initAnim(alpha3, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleY3, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleX3, 2000, ValueAnimator.RESTART, -1);
 
-        cleanScanAnimator = new AnimatorSet();
+            cleanScanAnimator = new AnimatorSet();
 
-        cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
-        cleanScanAnimator.start();
+            cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
+            cleanScanAnimator.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -449,9 +454,13 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
      * @param iconOuter
      */
     public void showOuterViewRotation(ImageView iconOuter) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        rotation.setRepeatCount(-1);
-        rotation.setRepeatMode(ValueAnimator.RESTART);
-        rotation.setDuration(1500);
+        try {
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            rotation.setRepeatCount(-1);
+            rotation.setRepeatMode(ValueAnimator.RESTART);
+            rotation.setDuration(1500);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

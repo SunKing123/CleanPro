@@ -260,72 +260,77 @@ public class NotityCleanAnimView extends RelativeLayout {
      * 第一阶段控件 下移到中心
      */
     public void startMiddleAnim(boolean isNeedTranslation) {
-        //位移的距离
-        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DisplayUtils.dip2px(150);
-        ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
-        ObjectAnimator scanY = ObjectAnimator.ofFloat(mLayoutScan, "translationY", mLayoutScan.getTranslationY(), height);
-        ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);
-        ObjectAnimator innerY = ObjectAnimator.ofFloat(mIconInner, "translationY", mIconInner.getTranslationY(), height);
+        try {
+            //位移的距离
+            int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - DisplayUtils.dip2px(150);
+            ObjectAnimator outerY = ObjectAnimator.ofFloat(mIconOuter, "translationY", mIconOuter.getTranslationY(), height);
+            ObjectAnimator scanY = ObjectAnimator.ofFloat(mLayoutScan, "translationY", mLayoutScan.getTranslationY(), height);
+            ObjectAnimator countY = ObjectAnimator.ofFloat(mLayoutCount, "translationY", mLayoutCount.getTranslationY(), height);
+            ObjectAnimator innerY = ObjectAnimator.ofFloat(mIconInner, "translationY", mIconInner.getTranslationY(), height);
 
-        ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(mIconInner, "alpha", 0, 1);
-        ObjectAnimator outerAlpha = ObjectAnimator.ofFloat(mIconOuter, "alpha", 0, 1);
-        ObjectAnimator scanAlpha = ObjectAnimator.ofFloat(mLayoutScan, "alpha", 0, 1);
-        ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mLayoutCount, "alpha", 0, 1);
+            ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(mIconInner, "alpha", 0, 1);
+            ObjectAnimator outerAlpha = ObjectAnimator.ofFloat(mIconOuter, "alpha", 0, 1);
+            ObjectAnimator scanAlpha = ObjectAnimator.ofFloat(mLayoutScan, "alpha", 0, 1);
+            ObjectAnimator countAlpha = ObjectAnimator.ofFloat(mLayoutCount, "alpha", 0, 1);
 
-        int time = 0;
-        if (isNeedTranslation) {
-            time = 1000;
-        } else {
-            time = 10;
+            int time = 0;
+            if (isNeedTranslation) {
+                time = 1000;
+            } else {
+                time = 10;
+            }
+            outerY.setDuration(time);
+            scanY.setDuration(time);
+            innerY.setDuration(time);
+            innerAlpha.setDuration(1000);
+            countY.setDuration(time);
+            outerAlpha.setDuration(1000);
+            scanAlpha.setDuration(1000);
+            countAlpha.setDuration(1000);
+
+            //第一阶段倒转
+            ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(mIconInner, "rotation", 0, -35f);
+            rotationFistStep.setDuration(600);
+
+            innerAlpha.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    mIconInner.setVisibility(View.VISIBLE);
+                    mIconOuter.setVisibility(View.VISIBLE);
+                    mLayoutScan.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(rotationFistStep::start, 400);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //第二阶段开始
+                    secondLevel(mIconInner, mIconOuter, mCountEntity);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            if (isNeedTranslation) {
+                animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
+            } else {
+                animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY, innerY, scanY);
+            }
+
+
+            animatorSet.start();
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        outerY.setDuration(time);
-        scanY.setDuration(time);
-        innerY.setDuration(time);
-        innerAlpha.setDuration(1000);
-        countY.setDuration(time);
-        outerAlpha.setDuration(1000);
-        scanAlpha.setDuration(1000);
-        countAlpha.setDuration(1000);
-
-        //第一阶段倒转
-        ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(mIconInner, "rotation", 0, -35f);
-        rotationFistStep.setDuration(600);
-
-        innerAlpha.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mIconInner.setVisibility(View.VISIBLE);
-                mIconOuter.setVisibility(View.VISIBLE);
-                mLayoutScan.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(rotationFistStep::start, 400);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //第二阶段开始
-                secondLevel(mIconInner, mIconOuter, mCountEntity);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        if (isNeedTranslation) {
-            animatorSet.playTogether(outerY, innerY, innerAlpha, outerAlpha, scanAlpha, scanY, countY);
-        } else {
-            animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY, innerY, scanY);
-        }
-
-
-        animatorSet.start();
 
     }
 
@@ -337,45 +342,50 @@ public class NotityCleanAnimView extends RelativeLayout {
      * @param countEntity
      */
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
+        try {
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 325);
 
-        rotation.setDuration(500);
-        rotation3.setDuration(300);
-        rotation3.setRepeatCount(ValueAnimator.INFINITE);
-        rotation3.setInterpolator(new LinearInterpolator());
-        rotation4.setDuration(200);
-        rotation4.setRepeatCount(ValueAnimator.INFINITE);
-        rotation4.setInterpolator(new LinearInterpolator());
-        animatorStep2 = new AnimatorSet();
-        animatorStep2.playTogether(rotation3);
+            rotation.setDuration(500);
+            rotation3.setDuration(300);
+            rotation3.setRepeatCount(ValueAnimator.INFINITE);
+            rotation3.setInterpolator(new LinearInterpolator());
+            rotation4.setDuration(200);
+            rotation4.setRepeatCount(ValueAnimator.INFINITE);
+            rotation4.setInterpolator(new LinearInterpolator());
+            animatorStep2 = new AnimatorSet();
+            animatorStep2.playTogether(rotation3);
 
-        rotation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                //500ms后开始显示回收光点
-                new Handler().postDelayed(() -> showLottieView(), 600);
-            }
+            rotation.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    //500ms后开始显示回收光点
+                    new Handler().postDelayed(() -> showLottieView(), 600);
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                startClean(animatorStep2, countEntity);
-            }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    startClean(animatorStep2, countEntity);
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        });
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(rotation, rotation4);
-        animatorSet.start();
+                }
+            });
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(rotation, rotation4);
+            animatorSet.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
