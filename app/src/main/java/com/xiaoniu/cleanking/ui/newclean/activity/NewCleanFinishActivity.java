@@ -772,6 +772,7 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             lastId = "";
         }
         String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
+        Log.d("XiLei", "url=" + url);
         EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
             @Override
             public void onFailure(Throwable e) {

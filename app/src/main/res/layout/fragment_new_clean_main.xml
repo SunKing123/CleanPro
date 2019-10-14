@@ -136,38 +136,41 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_18dp"
                 android:background="@drawable/bg_big_home">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_20dp"
-                    android:text="悟空清理"
                     android:gravity="center_vertical"
-                    android:textColor="@color/white"
                     android:minHeight="45dp"
+                    android:text="悟空清理"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="65dp"
-                    android:layout_height="wrap_content">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="20"></TextView>
+
                         <ImageView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:minHeight="139dp"
                             android:layout_gravity="center"
                             android:layout_weight="60"
+                            android:minHeight="139dp"
                             android:src="@mipmap/icon_home_logo" />
 
                         <TextView
@@ -187,19 +190,19 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-             <!--       <ImageView
-                        android:id="@+id/iv_permission"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="@dimen/dimen_18dp"
-                        android:layout_marginRight="@dimen/dimen_10dp"
-                        android:padding="@dimen/dimen_5dp"
-                        android:src="@mipmap/icon_permission"
-                        android:textColor="@color/white"
-                        android:visibility="gone"
-                        android:textSize="20sp"
-                       />-->
+                    <!--       <ImageView
+                               android:id="@+id/iv_permission"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_gravity="right"
+                               android:layout_marginTop="@dimen/dimen_18dp"
+                               android:layout_marginRight="@dimen/dimen_10dp"
+                               android:padding="@dimen/dimen_5dp"
+                               android:src="@mipmap/icon_permission"
+                               android:textColor="@color/white"
+                               android:visibility="gone"
+                               android:textSize="20sp"
+                              />-->
 
                     <ImageView
                         android:id="@+id/tv_now_clean"
@@ -209,10 +212,8 @@
                         android:layout_marginBottom="15dp"
                         android:src="@drawable/icon_clean_now"
 
-                  />
+                        />
                 </LinearLayout>
-
-
 
 
             </FrameLayout>
@@ -236,12 +237,27 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/dimen_32dp"
-                        android:layout_height="@dimen/dimen_32dp"
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_yjjs" />
+                        android:layout_marginTop="@dimen/dimen_20dp">
+
+                        <ImageView
+                            android:id="@+id/iv_acc"
+                            android:layout_width="@dimen/dimen_32dp"
+                            android:layout_height="@dimen/dimen_32dp"
+                            android:src="@drawable/icon_yjjs_o" />
+
+                        <ImageView
+                            android:id="@+id/iv_acc_g"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-7dp"
+                            android:layout_toRightOf="@+id/iv_acc"
+                            android:src="@drawable/icon_finish_clean_g"
+                            android:visibility="gone" />
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/tv_acc"
@@ -250,7 +266,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="@string/tool_one_key_speed"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_FFAC01"
                         android:textSize="13sp" />
                 </LinearLayout>
                 <!--手机降温-->
@@ -268,7 +284,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_home_jw" />
+                        android:src="@drawable/icon_home_jw" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -276,7 +292,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="手机降温"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_323232"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -293,7 +309,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_home_wx" />
+                        android:src="@drawable/icon_home_wx" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -301,7 +317,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="微信专清"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_323232"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -325,12 +341,27 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/dimen_32dp"
-                        android:layout_height="@dimen/dimen_32dp"
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_40dp"
-                        android:src="@mipmap/icon_home_qq" />
+                        android:layout_marginTop="@dimen/dimen_40dp">
+
+                        <ImageView
+                            android:id="@+id/iv_noti_clear"
+                            android:layout_width="@dimen/dimen_32dp"
+                            android:layout_height="@dimen/dimen_32dp"
+                            android:src="@drawable/icon_home_qq_o" />
+
+                        <ImageView
+                            android:id="@+id/iv_noti_g"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-7dp"
+                            android:layout_toRightOf="@+id/iv_noti_clear"
+                            android:src="@drawable/icon_finish_clean_g"
+                            android:visibility="gone" />
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/tv_noti_clear"
@@ -339,7 +370,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="@string/tool_notification_clean"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_FFAC01"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -358,7 +389,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_40dp"
-                        android:src="@mipmap/icon_wjql" />
+                        android:src="@drawable/icon_wjql" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -366,7 +397,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="文件清理"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_323232"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -378,12 +409,27 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/dimen_32dp"
-                        android:layout_height="@dimen/dimen_32dp"
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_40dp"
-                        android:src="@mipmap/icon_power" />
+                        android:layout_marginTop="@dimen/dimen_40dp">
+
+                        <ImageView
+                            android:id="@+id/iv_electricity"
+                            android:layout_width="@dimen/dimen_32dp"
+                            android:layout_height="@dimen/dimen_32dp"
+                            android:src="@drawable/icon_power_o" />
+
+                        <ImageView
+                            android:id="@+id/iv_electricity_g"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="-7dp"
+                            android:layout_toRightOf="@+id/iv_electricity"
+                            android:src="@drawable/icon_finish_clean_g"
+                            android:visibility="gone" />
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/tv_electricity"
@@ -392,7 +438,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_12dp"
                         android:text="超强省电"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_FFAC01"
                         android:textSize="13sp" />
 
                 </LinearLayout>

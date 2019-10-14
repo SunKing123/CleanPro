@@ -410,7 +410,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 用于首页清理icon状态变化
+     * 是否第一次进入App(用于首页清理icon状态变化)
      *
      * @return
      */

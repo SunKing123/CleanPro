@@ -104,7 +104,7 @@
     <string name="tool_phone_already_clean">手机很干净了~</string>
 
     <string name="internal_storage_scale">内存占用%s</string>
-    <string name="find_harass_notify">已发现骚扰通知</string>
+    <string name="find_harass_notify">发现骚扰通知</string>
     <string name="power_consumption_num">%s个应用正在耗电</string>
     <string name="finished_clean_notify_hint">开启防骚扰保护</string>
     <string name="lengthen_time">延长待机时间%s分钟</string>
