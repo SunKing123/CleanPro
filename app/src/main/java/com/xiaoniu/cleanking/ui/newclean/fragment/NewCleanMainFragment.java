@@ -1,12 +1,15 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -77,6 +80,19 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     TextView mNotiClearTv;
     @BindView(R.id.tv_electricity)
     TextView mElectricityTv;
+    @BindView(R.id.iv_acc)
+    ImageView mAccIv;
+    @BindView(R.id.iv_noti_clear)
+    ImageView mNotiClearIv;
+    @BindView(R.id.iv_electricity)
+    ImageView mElectricityIv;
+    @BindView(R.id.iv_acc_g)
+    ImageView mAccFinishIv;
+    @BindView(R.id.iv_noti_g)
+    ImageView mNotiClearFinishIv;
+    @BindView(R.id.iv_electricity_g)
+    ImageView mElectricityFinishIv;
+
 
     @Override
     protected int getLayoutId() {
@@ -93,14 +109,17 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
             mElectricityTv.setText(getString(R.string.tool_super_power_saving));
             PreferenceUtil.saveFirstForHomeIcon();
         } else {
-            mAccTv.setTextColor(Color.RED);
+            mAccIv.setImageResource(R.drawable.icon_yjjs_r);
+            mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
             if (!NotifyUtils.isNotificationListenerEnabled()) {
-                mNotiClearTv.setTextColor(Color.RED);
+                mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
+                mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mNotiClearTv.setText(R.string.find_harass_notify);
             }
             if (AndroidUtil.getElectricityNum(getActivity()) <= 70) {
-                mElectricityTv.setTextColor(Color.RED);
+                mElectricityIv.setImageResource(R.drawable.icon_power_r);
+                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
             }
         }
@@ -110,12 +129,15 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     public void onEventMainThread(ResidentUpdateEvent event) {
         //获取通知条数后改变 通知栏清理 icon和文案状态
         if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 5) {
-            mNotiClearTv.setTextColor(Color.RED);
+            mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
+            mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mNotiClearTv.setText(R.string.find_harass_notify);
         }
         //清除所有通知后改变 通知栏清理 icon和文案状态
         if (event.isAllNotifyClean() && NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
-            mNotiClearTv.setTextColor(Color.GREEN);
+            mNotiClearFinishIv.setVisibility(View.VISIBLE);
+            mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
+            mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
             mNotiClearTv.setText(R.string.finished_clean_notify_hint);
         }
     }
@@ -125,18 +147,22 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
      */
     @Subscribe
     public void quickenEvent(QuickenEvent event) {
-        mAccTv.setTextColor(Color.GREEN);
+        mAccFinishIv.setVisibility(View.VISIBLE);
+        mAccIv.setImageResource(R.drawable.icon_yjjs);
+        mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
     }
 
     /**
-     * 超强省电一键优化事件
+     * 超强省电一键优化完成事件
      *
      * @param event
      */
     @Subscribe
     public void cleanPowerEvent(CleanPowerEvent event) {
-        mElectricityTv.setTextColor(Color.GREEN);
+        mElectricityFinishIv.setVisibility(View.VISIBLE);
+        mElectricityIv.setImageResource(R.drawable.icon_power);
+        mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
         mElectricityTv.setText(getString(R.string.lengthen_time, event.getHour()));
     }
 

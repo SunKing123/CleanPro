@@ -96,4 +96,7 @@
     <color name="color_progress_bg">#B3FFFFFF</color>
     <color name="transparent_background">#20000000</color>
     <color name="color_D8D8D8">#D8D8D8</color>
+
+    <color name="color_FFAC01">#FFAC01</color>
+    <color name="color_FF4545">#FF4545</color>
 </resources>
