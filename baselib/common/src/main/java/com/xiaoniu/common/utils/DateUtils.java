@@ -337,6 +337,32 @@ public class DateUtils {
     }
 
 
+    /**
+     * 判断是否间隔三天以上
+     * @param day
+     * @throws ParseException
+     */
+    public static boolean isOverThreeDay(long day)  {
+
+        Calendar pre = Calendar.getInstance();
+        Date predate = new Date(System.currentTimeMillis());
+        pre.setTime(predate);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date(day);
+        cal.setTime(date);
+
+        if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
+            int diffDay = cal.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
+
+            if (diffDay < -3) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
         /**
          * 计算距离当前时间.
          *

@@ -2,6 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -23,8 +26,11 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
@@ -32,6 +38,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.lang.ref.WeakReference;
@@ -80,7 +87,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     ImageView mArrowRight;
     @BindView(R.id.layout_clean_top)
     FrameLayout mLayoutCleanTop;
-
+    private AlertDialog mAlertDialog = null;
+    private boolean isClick = false;
+    private boolean isDoubleBack = false;
     /**
      * 清理的分类列表
      */
@@ -168,6 +177,29 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     public void startScan() {
         mPresenter.setIsFinish(false);
         mHandler.sendEmptyMessageDelayed(2, 50);
+    }
+
+
+    public void storagePermissionOk(){
+        if (!isUsageAccessAllowed()) {
+            mAlertDialog = mPresenter.showPermissionDialog(mActivity,new  NewScanPresenter.DialogClickListener() {
+                @Override
+                public void clickOKBtn() {
+                    isClick = true;
+                    //开启权限
+                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    startActivity(intent);
+                    startActivity(PhonePremisActivity.class);
+                }
+                @Override
+                public void cancelBtn() {
+
+                }
+
+            });
+        } else {
+            startScan();
+        }
     }
 
     /**
@@ -342,9 +374,23 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         super.onResume();
         NiuDataAPI.onPageStart("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (isGotoSetting) {
-            mPresenter.checkPermission();
+              mPresenter.checkPermission();
             isGotoSetting = false;
         }
+
+        if (isClick) {
+            if (isUsageAccessAllowed()) {
+                if (mAlertDialog != null)
+                    mAlertDialog.cancel();
+                mPresenter.checkPermission();
+            } else {
+                ToastUtils.showShort(getString(R.string.tool_get_premis));
+                if (isDoubleBack)
+                    ((NowCleanActivity) getActivity()).finish();
+                isDoubleBack = true;
+            }
+        }
+        isClick = false;
     }
 
     boolean isGotoSetting = false;
@@ -418,6 +464,21 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             setIsGotoSetting(true);
             mActivity.startActivity(intent);
         }
+    }
+
+
+    public boolean isUsageAccessAllowed() {
+        if (Build.VERSION.SDK_INT >= 21) {
+            try {
+                AppOpsManager manager = ((AppOpsManager) mActivity.getSystemService(Context.APP_OPS_SERVICE));
+                if (manager == null) return false;
+                int mode = manager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), mActivity.getPackageName());
+                return mode == AppOpsManager.MODE_ALLOWED;
+            } catch (Throwable ignored) {
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override

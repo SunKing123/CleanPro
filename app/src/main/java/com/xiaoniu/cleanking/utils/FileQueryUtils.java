@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -20,10 +21,12 @@ import android.webkit.MimeTypeMap;
 
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
+import com.tencent.bugly.crashreport.biz.UserInfoBean;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
+import com.xiaoniu.cleanking.ui.main.bean.AppUsageInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
@@ -31,8 +34,10 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.DateUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,12 +69,12 @@ public class FileQueryUtils {
 
     public FileQueryUtils() {
         this.mContext = AppApplication.getInstance();
-        this.mActivityManager = (ActivityManager) AppApplication.getInstance().getSystemService("activity");
+        this.mActivityManager = (ActivityManager) AppApplication.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
         this.mPackageManager = AppApplication.getInstance().getPackageManager();
         mMemoryCacheWhite = getCacheWhite();
         if (this.mPackageManager != null) {
             try {
-                installedAppList = this.mPackageManager.getInstalledApplications(8192);
+                installedAppList = this.mPackageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -145,7 +150,7 @@ public class FileQueryUtils {
     }
 
     /**
-     * 获取Android/data中的垃圾信息
+     * 获取外部存储Android/data中的垃圾信息
      *
      * @param isScanFile 是否扫描到文件
      * @return
@@ -155,8 +160,9 @@ public class FileQueryUtils {
             return new ArrayList<>();
         }
         ArrayList<FirstJunkInfo> list = new ArrayList<>();
-        //内置储存卡
+        //外部存储公共文件路径
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
+        //已经安装的应用信息
         List<PackageInfo> installedList = AppApplication.getInstance().getPackageManager().getInstalledPackages(0);
         int total = 0;
         if (installedList != null) {
@@ -168,8 +174,13 @@ public class FileQueryUtils {
                 return list;
             }
             index++;
+            //packageName 下文件
+            final File mainfile = new File(rootPath + applicationInfo.packageName);
+            //缓存文件
             final File file = new File(rootPath + applicationInfo.packageName + "/cache");
+            //文件夹集合
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
+            //一级目录
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
             firstJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
@@ -180,8 +191,9 @@ public class FileQueryUtils {
             if (mScanFileListener != null) {
                 mScanFileListener.scanFile(applicationInfo.packageName);
             }
-            //cache缓存
-            if (file.exists()) {
+
+       /*     //packageName目录下缓存
+            if (mainfile.exists()) {
                 SecondJunkInfo secondJunkInfo = listFiles(file);
                 if (secondJunkInfo.getFilesCount() > 0 && secondJunkInfo.getGarbageSize() > 0) {
                     secondJunkInfo.setFilecatalog(file.getAbsolutePath());
@@ -194,11 +206,28 @@ public class FileQueryUtils {
                 if (mScanFileListener != null) {
                     mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                 }
-            }
-            //files缓存
-            if (file2.exists()) {
-                for (final Map.Entry<String, String> entry : this.checkOutAllGarbageFolder(file2).entrySet()) {
-                    if(new File(entry.getKey()).isDirectory()){    //文件路径
+            }*/
+            //cache目录下缓存
+    /*        if (file.exists()) {
+                SecondJunkInfo secondJunkInfo = listFiles(file);
+                if (secondJunkInfo.getFilesCount() > 0 && secondJunkInfo.getGarbageSize() > 0) {
+                    secondJunkInfo.setFilecatalog(file.getAbsolutePath());
+                    secondJunkInfo.setChecked(true);
+                    secondJunkInfo.setPackageName(applicationInfo.packageName);
+                    secondJunkInfo.setGarbagetype("TYPE_CACHE");
+                    firstJunkInfo.addSecondJunk(secondJunkInfo);
+                    firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                }
+                if (mScanFileListener != null) {
+                    mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                }
+            }*/
+            //files目录下缓存
+            if (mainfile.exists()) {
+                //路径集合
+                Map<String,String> filePathMap = this.checkOutAllGarbageFolder(mainfile);
+                for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
+                    if(new File(entry.getKey()).isDirectory()){    //文件夹路径
                         final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
                         if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
                             continue;
@@ -362,61 +391,117 @@ public class FileQueryUtils {
 
     @TargetApi(22)
     private ArrayList<FirstJunkInfo> getTaskInfo26() {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) mContext.getSystemService(USAGE_STATS_SERVICE);
-        if (usageStatsManager == null) {
-            return new ArrayList<>();
-        }
-
-        if (isFinish) {
-            return new ArrayList<>();
-        }
-
-        ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
-        List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
-        if (!(lists == null || lists.size() == 0)) {
-
-            if (lists.size() > 30) {
-                lists = lists.subList(0, 30);
+            UsageStatsManager usageStatsManager = (UsageStatsManager) mContext.getSystemService(USAGE_STATS_SERVICE);
+            if (usageStatsManager == null) {
+                return new ArrayList<>();
             }
-            int indexP = 0;
-            double size = lists.size() * NoClearSPHelper.getMemoryShow();
-            for (UsageStats usageStats : lists) {
-                if (indexP >= size) {
-                    return junkList;
+
+            if (isFinish) {
+                return new ArrayList<>();
+            }
+
+            ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
+            List<UsageStats> lists = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
+            if (!(lists == null || lists.size() == 0)) {
+
+                if (lists.size() > 30) {
+                    lists = lists.subList(0, 30);
                 }
-                indexP++;
-                if (isFinish) {
-                    //停止扫描
-                    return junkList;
-                }
-                if (mScanFileListener != null) {
-                    mScanFileListener.scanFile(usageStats.getPackageName());
-                }
-                if (!(usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.xiaoniu"))) {
-                    String packageName = usageStats.getPackageName();
-                    if (!isSystemAppliation(packageName)) {
-                        List<PackageInfo> installedList = getInstalledList();
-                        for (PackageInfo packageInfo : installedList) {
-                            if (TextUtils.equals(packageName.trim(), packageInfo.packageName)) {
-                                FirstJunkInfo junkInfo = new FirstJunkInfo();
-                                junkInfo.setAllchecked(true);
-                                junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
-                                junkInfo.setAppPackageName(packageName);
-                                junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                                long totalSize = (long) ((Math.random() * 52428800) + 52428800);
-                                if (mScanFileListener != null) {
-                                    mScanFileListener.increaseSize(totalSize);
+                int indexP = 0;
+                double size = lists.size() * NoClearSPHelper.getMemoryShow();
+                for (UsageStats usageStats : lists) {
+                    if (indexP >= size) {
+                        return junkList;
+                    }
+                    indexP++;
+                    if (isFinish) {
+                        //停止扫描
+                        return junkList;
+                    }
+                    if (mScanFileListener != null) {
+                        mScanFileListener.scanFile(usageStats.getPackageName());
+                    }
+                    if (!(usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.xiaoniu"))) {
+                        String packageName = usageStats.getPackageName();
+                        if (!isSystemAppliation(packageName)) {
+                            List<PackageInfo> installedList = getInstalledList();
+                            for (PackageInfo packageInfo : installedList) {
+                                if (TextUtils.equals(packageName.trim(), packageInfo.packageName)) {
+                                    FirstJunkInfo junkInfo = new FirstJunkInfo();
+                                    junkInfo.setAllchecked(true);
+                                    junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
+                                    junkInfo.setAppPackageName(packageName);
+                                    junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
+                                    long totalSize = (long) ((Math.random() * 52428800) + 52428800);
+                                    if (mScanFileListener != null) {
+                                        mScanFileListener.increaseSize(totalSize);
+                                    }
+                                    junkInfo.setTotalSize(totalSize);
+                                    junkInfo.setGarbageType("TYPE_PROCESS");
+                                    junkList.add(junkInfo);
                                 }
-                                junkInfo.setTotalSize(totalSize);
-                                junkInfo.setGarbageType("TYPE_PROCESS");
-                                junkList.add(junkInfo);
                             }
                         }
                     }
                 }
             }
+            return junkList;
+
+    }
+
+    long phoneUsageToday = 0;
+    //查看所有应用使用记录（解决8.0以上无法读取进程内存）
+    List<AppUsageInfo> getUsageStatistics() {
+        List<AppUsageInfo> smallInfoList;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            UsageEvents.Event currentEvent;
+            List<UsageEvents.Event> allEvents = new ArrayList<>();
+            HashMap<String, AppUsageInfo> map = new HashMap<String, AppUsageInfo>();
+
+            long currTime = System.currentTimeMillis();
+            long startTime = currTime - 1000 * 3600 * 3; //querying past three hours
+
+            UsageStatsManager mUsageStatsManager = (UsageStatsManager) mContext.getSystemService(Context.USAGE_STATS_SERVICE);
+
+            assert mUsageStatsManager != null;
+            UsageEvents usageEvents = mUsageStatsManager.queryEvents(startTime, currTime);
+
+            //capturing all events in a array to compare with next element
+            while (usageEvents.hasNextEvent()) {
+                currentEvent = new UsageEvents.Event();
+                usageEvents.getNextEvent(currentEvent);
+                if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND || currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
+                    allEvents.add(currentEvent);
+                    String key = currentEvent.getPackageName();
+                    // taking it into a collection to access by package name
+                    if (map.get(key) == null)
+                        map.put(key, new AppUsageInfo(key));
+                }
+            }
+            //iterating through the arraylist
+            for (int i = 0; i < allEvents.size() - 1; i++) {
+                UsageEvents.Event E0 = allEvents.get(i);
+                UsageEvents.Event E1 = allEvents.get(i + 1);
+                //for launchCount of apps in time range
+                if (!E0.getPackageName().equals(E1.getPackageName()) && E1.getEventType() == 1) {
+                    // if true, E1 (launch event of an app) app launched
+                    map.get(E1.getPackageName()).setLaunchCount(map.get(E1.getPackageName()).getLaunchCount()+1);
+                }
+                //for UsageTime of apps in time range
+                if (E0.getEventType() == 1 && E1.getEventType() == 2 && E0.getClassName().equals(E1.getClassName())) {
+                    long diff = E1.getTimeStamp() - E0.getTimeStamp();
+                    phoneUsageToday += diff; //gloabl Long var for total usagetime in the timerange
+                    map.get(E0.getPackageName()).setTimeInForeground( map.get(E0.getPackageName()).getTimeInForeground()+diff);
+                }
+            }
+            //transferred final data into modal class object
+            smallInfoList = new ArrayList<>(map.values());
+            return smallInfoList;
+        }else{
+            return null;
         }
-        return junkList;
+
+
     }
 
     public ArrayList<FirstJunkInfo> getTaskInfos(Context context) {
@@ -522,7 +607,7 @@ public class FileQueryUtils {
         int i2;
         try {
 //            UserUnCheckedData memoryUncheckedList = a.getInstance().getMemoryUncheckedList();
-            ActivityManager activityManager = (ActivityManager) context.getSystemService("activity");
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             List runningServices = activityManager.getRunningServices(Integer.MAX_VALUE);
             int i3 = 0;
             while (i3 < runningServices.size()) {
@@ -665,8 +750,10 @@ public class FileQueryUtils {
                             onelevelGarbageInfo.setTotalSize(j);
                             onelevelGarbageInfo.setGarbageCatalog(string);
                             if (com.xiaoniu.common.utils.FileUtils.isSDCardEnable()) {
+                                //external storage App拓展目录
                                 absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
                             } else {
+                                //internal storage App安装目录
                                 absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();
                             }
                             if (string.contains(absolutePath) || string.contains("sdcard0") || string.contains("sdcard1")) {
@@ -1015,6 +1102,7 @@ public class FileQueryUtils {
         return secondlevelGarbageInfo;
     }
 
+    //递归遍历file下的所有文件
     public void innerListFiles(final SecondJunkInfo secondJunkInfo, File file) {
         final File[] listFiles = file.listFiles();
         if (listFiles == null) {
@@ -1031,11 +1119,65 @@ public class FileQueryUtils {
             file = listFiles[i];
             if (file.isDirectory()) {
                 innerListFiles(secondJunkInfo, file);
-            } else {
-                secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
-                secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
+            } else {   //单个文件
+//                if(checkFile(file)){ //改文件操作超过三天
+                    secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
+                    secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
+//                }
+
             }
         }
+    }
+
+
+    public static String getFilePath(String s2) {
+        try {
+            String s = "225e8C70688fD76Ec5C01A392302320A".toUpperCase();
+            SecretKeySpec secretKeySpec = new SecretKeySpec(s.getBytes("utf-8"), "AES");
+            Cipher instance = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            instance.init(2, secretKeySpec);
+            final byte[] decode = Base64.decode(s2, 0);
+
+            return new String(instance.doFinal(decode), "utf-8");
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
+    /**
+     * 获取缓存白名单
+     */
+    public Set<String> getCacheWhite() {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets;
+    }
+
+    public interface ScanFileListener {
+        void currentNumber();
+
+        void increaseSize(final long p0);
+
+        void reduceSize(final long p0);
+
+        void scanFile(final String p0);
+
+        void totalSize(final int p0);
+    }
+    //盘点是否超过三天
+    public boolean checkFile(File file) {
+        if (!file.exists()) {
+            return false;
+        }
+        try {
+            long time = file.lastModified();
+            return DateUtils.isOverThreeDay(time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+
     }
 
     /**
@@ -1104,41 +1246,5 @@ public class FileQueryUtils {
             System.out.println("删除单个文件失败：" + fileName + "不存在！");
             return false;
         }
-    }
-
-    public static String getFilePath(String s2) {
-        try {
-            String s = "225e8C70688fD76Ec5C01A392302320A".toUpperCase();
-            SecretKeySpec secretKeySpec = new SecretKeySpec(s.getBytes("utf-8"), "AES");
-            Cipher instance = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            instance.init(2, secretKeySpec);
-            final byte[] decode = Base64.decode(s2, 0);
-
-            return new String(instance.doFinal(decode), "utf-8");
-        } catch (Exception e) {
-
-        }
-        return "";
-    }
-
-    /**
-     * 获取缓存白名单
-     */
-    public Set<String> getCacheWhite() {
-        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
-        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
-        return sets;
-    }
-
-    public interface ScanFileListener {
-        void currentNumber();
-
-        void increaseSize(final long p0);
-
-        void reduceSize(final long p0);
-
-        void scanFile(final String p0);
-
-        void totalSize(final int p0);
     }
 }
