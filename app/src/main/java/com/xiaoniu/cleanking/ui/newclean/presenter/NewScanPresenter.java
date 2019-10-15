@@ -232,7 +232,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             mScanTranlateColor.setEvaluator(new ArgbEvaluator());
             mScanTranlateColor.setDuration(1000);
             if (!mScanTranlateColor.isRunning()) {
-                mScanTranlateColor.start();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mScanTranlateColor.start();
+                }
             }
             mScanTranlateColor.addUpdateListener(animation -> {
                 int animatedValue = (int) animation.getAnimatedValue();
