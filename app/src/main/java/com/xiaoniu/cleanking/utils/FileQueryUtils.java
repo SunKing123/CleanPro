@@ -150,7 +150,70 @@ public class FileQueryUtils {
     }
 
     /**
-     * 获取外部存储Android/data中的垃圾信息
+     * 根据/Android/data/私有目录中的垃圾信息获取 ExternalStorage下匹配缓存文件
+     * @param firstJunkInfos
+     * @return
+     */
+    public ArrayList<FirstJunkInfo> getExternalStorageCache(ArrayList<FirstJunkInfo> firstJunkInfos) {
+        HashMap<String, FirstJunkInfo> junkInfoMap = new HashMap<String, FirstJunkInfo>();
+        for (FirstJunkInfo firstJunkInfo : firstJunkInfos) {
+            junkInfoMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
+        }
+
+        //外部存储共有路径（sd路径）
+        String externalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File externalFile = new File(externalPath);
+        File[] listFiles = externalFile.listFiles();
+        if (listFiles != null) {
+            for (File file : listFiles) {
+                if(junkInfoMap.containsKey(file.getName())){ //sd根目录下包含packName
+                    FirstJunkInfo firstJunkInfo = junkInfoMap.get(file.getName());
+                    Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file,file.getName());
+                    for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
+                        if(new File(entry.getKey()).isDirectory()){    //文件夹路径
+                            final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
+                            if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
+                                continue;
+                            }
+                            listFiles2.setGarbageName(entry.getValue());
+                            listFiles2.setFilecatalog(entry.getKey());
+                            listFiles2.setChecked(true);
+                            listFiles2.setPackageName(file.getName());
+                            listFiles2.setGarbagetype("TYPE_CACHE");
+                            firstJunkInfo.addSecondJunk(listFiles2);
+                            firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
+                            if (mScanFileListener != null) {
+                                mScanFileListener.increaseSize(listFiles2.getGarbageSize());
+                            }
+                        }else if(new File(entry.getKey()).isFile()){ //文件路径
+                            File cachefile = new File(entry.getKey());
+                            SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
+                            if (cachefile.exists()) {
+                                secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
+                                secondJunkInfo.setChecked(true);
+                                secondJunkInfo.setPackageName(file.getName());
+                                secondJunkInfo.setGarbagetype("TYPE_CACHE");
+                                secondJunkInfo.setGarbageSize(file.length());
+                                firstJunkInfo.addSecondJunk(secondJunkInfo);
+                                firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                                if (mScanFileListener != null) {
+                                    mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                                }
+                            }
+                        }
+
+                    }
+                } else {
+                    Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file,file.getName());
+                }
+            }
+        }
+        ArrayList<FirstJunkInfo> junnkInfoList = new ArrayList<FirstJunkInfo>(junkInfoMap.values());
+        return  junnkInfoList;
+    }
+
+    /**
+     * 获取外部存储_/Android/data/私有目录中的垃圾信息
      *
      * @param isScanFile 是否扫描到文件
      * @return
@@ -238,15 +301,18 @@ public class FileQueryUtils {
                             secondJunkInfo.setChecked(true);
                             secondJunkInfo.setPackageName(applicationInfo.packageName);
                             secondJunkInfo.setGarbagetype("TYPE_CACHE");
+                            secondJunkInfo.setGarbageSize(cachefile.length());
+
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                            if (mScanFileListener != null) {
+                                mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                            }
                         }
                     }
 
                 }
             }
-
-
 
             //packageName文件
             if (mainfile.exists()) {
@@ -301,7 +367,6 @@ public class FileQueryUtils {
                 }
             }
         }
-
         ArrayList<FirstJunkInfo> appCacheAndAdGarbage = getAppCacheAndAdGarbage(list);
         if (appCacheAndAdGarbage != null) {
             list.addAll(appCacheAndAdGarbage);
@@ -974,118 +1039,7 @@ public class FileQueryUtils {
         return hashMap;
     }
 
-    /**
-     * 筛选file下需要清理的文件夹
-     * @param map
-     * @param file
-     * @param args  需要排除的文件夹名称
-     */
-    private void checkFiles(final Map<String, String> map, final File file,String packageName, String... args) {
-        //当前文件是否为package目录
-        boolean isCurrentPackage = file.getAbsolutePath().endsWith(packageName);
-        File[] listFiles = file.listFiles();
-        if (listFiles != null) {
-            for (File file2 : listFiles) {
-                if(args.length>0){
-                    boolean isSame = false;
-                    for(String x:args){
-                        if(file2.getAbsoluteFile().getAbsolutePath().endsWith(packageName+"/"+x)){
-                            isSame = true;
-                            break;
-                        }
-                    }
-                    //排除args文件
-                    if(isSame)
-                        continue;
-                }
-                String fileName = file2.getName();
-                if (file2.isDirectory()) {
-                    if (fileName.toLowerCase().equals("awcn_strategy")) {
-                        map.put(file2.getAbsolutePath(), "awcn_strategy缓存文件夹");
-                    } else if (fileName.toLowerCase().equals("baidu")) {
-                        map.put(file2.getAbsolutePath(), "baidu插件缓存文件夹");
-                    } else if (fileName.toLowerCase().equals("ad") || fileName.toLowerCase().equals("ads")) {
-                        if(DateUtils.isOverThreeDay(file2.lastModified(),3)){//超过三天
-                            map.put(file2.getAbsolutePath(), "ad广告文件夹");
-                        }
-                    } else if (fileName.toLowerCase().contains("log")) {
-                        map.put(file2.getAbsolutePath(), "log日志文件夹");
-                    } else if (fileName.toLowerCase().contains("temp")) {
-                        map.put(file2.getAbsolutePath(), "temp日志文件夹");
-                    } else if (fileName.toLowerCase().contains("tmp")) {
-                        map.put(file2.getAbsolutePath(), "tmp日志文件夹");
-                    } else if (fileName.toLowerCase().contains("crash")) {
-                        map.put(file2.getAbsolutePath(), "crash日志文件夹");
-                    } else if (fileName.toLowerCase().contains("trace")) {
-                        map.put(file2.getAbsolutePath(), "trace日志文件夹");
-                    } else if (fileName.toLowerCase().contains("hprof")) {
-                        map.put(file2.getAbsolutePath(), "hprof日志文件夹");
-                    } else if (fileName.toLowerCase().contains("cache")) {
-                        map.put(file2.getAbsolutePath(), "cache缓存文件夹");
-                    } else if (fileName.toLowerCase().contains("cloud")) {
-                        map.put(file2.getAbsolutePath(), "cloud缓存文件夹");
-                    } else if (fileName.toLowerCase().contains("update")) {
-                        map.put(file2.getAbsolutePath(), "update更新缓存文件夹");
-                    } else if (fileName.toLowerCase().equals("apps")) {
-                        map.put(file2.getAbsolutePath(), "apps页面缓存文件夹");
-                    } else if (fileName.toLowerCase().equals("anr")) {
-                        map.put(file2.getAbsolutePath(), "anr缓存日志");
-                    }
 
-                    else if( DateUtils.isOverThreeDay(file2.lastModified(),7) && fileName.toLowerCase().contains("image")  ){
-                        map.put(file2.getAbsolutePath(), "图片文件夹");
-                    } else if( DateUtils.isOverThreeDay(file2.lastModified(),7) && fileName.toLowerCase().contains("video") ){
-                        map.put(file2.getAbsolutePath(), "视频文件夹");
-                    } else if(DateUtils.isOverThreeDay(file2.lastModified(),3) && fileName.toLowerCase().contains("audio")  ){
-                        map.put(file2.getAbsolutePath(), "音频文件夹");
-                    }else if(DateUtils.isOverThreeDay(file2.lastModified(),3) && fileName.toLowerCase().contains("splash")){
-                        map.put(file2.getAbsolutePath(), "splash媒体文件夹");
-                    }
-
-                    else if(file2.getAbsolutePath().toLowerCase().endsWith("download")){
-                        if(DateUtils.isOverThreeDay(file2.lastModified(),7)) {
-                            map.put(file2.getAbsolutePath(), "download文件夹");
-                        }
-                    } else {
-                        this.checkFiles(map, file2, packageName);
-                    }
-                } else {
-                    String fileLow = fileName.toLowerCase();
-                    /**
-                     * 日志相关文件*/
-                    if (fileLow.endsWith(".log")) {
-                        map.put(file2.getAbsolutePath(), "log日志文件");
-                    } else if (fileLow.endsWith(".tmp") || fileLow.endsWith(".temp")) {
-                        map.put(file2.getAbsolutePath(), "tmp日志文件");
-                    } else if (fileLow.endsWith(".tmp") || fileLow.endsWith(".temp")) {
-                        map.put(file2.getAbsolutePath(), "tmp日志文件");
-                    }else if (fileLow.endsWith(".hprof")) {
-                        map.put(file2.getAbsolutePath(), "hprof日志文件");
-                    } else if (fileLow.endsWith(".trace") ) {
-                        map.put(file2.getAbsolutePath(), "trace日志文件");
-                    }
-
-                    //多媒体相关文件
-                    //bmp,jpg,png,tif,gif,pcx,tga,exif,fpx,svg,psd
-                    if (fileLow.endsWith(".bmp")||fileLow.endsWith(".jpg")||fileLow.endsWith(".tif")||fileLow.endsWith(".gif")||fileLow.endsWith(".pcx")||fileLow.endsWith(".tga")||fileLow.endsWith(".exif")||fileLow.endsWith(".fpx")||fileLow.endsWith(".svg")||fileLow.endsWith(".psd")) {
-                        map.put(file2.getAbsolutePath(), "图片文件");
-                    //cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp
-                    } else if (fileLow.endsWith(".cdr")||fileLow.endsWith(".pcd")||fileLow.endsWith(".dxf")||fileLow.endsWith(".ufo")||fileLow.endsWith(".eps")||fileLow.endsWith(".ai")||fileLow.endsWith(".raw")||fileLow.endsWith(".WMF")||fileLow.endsWith(".webp")) {
-                        map.put(file2.getAbsolutePath(), "图片文件");
-                    //rm，rmvb，mpeg1-4 mov mtv dat wmv avi 3gp amv dmv flv
-                    } else if (fileLow.endsWith(".rm") || fileLow.endsWith(".rmvb") || fileLow.endsWith(".mpeg1-4") || fileLow.endsWith(".mov") || fileLow.endsWith(".mtv") || fileLow.endsWith(".dat") || fileLow.endsWith(".wmv") || fileLow.endsWith(".avi") || fileLow.endsWith(".amv") || fileLow.endsWith(".dmv") || fileLow.endsWith(".flv")) {//amv dmv flv
-                        map.put(file2.getAbsolutePath(), "视频文件");
-                    }else if (fileLow.endsWith(".hprof")) {
-                        map.put(file2.getAbsolutePath(), "hprof日志文件");
-                    } else if (fileLow.endsWith(".trace") ) {
-                        map.put(file2.getAbsolutePath(), "trace日志文件");
-                    }
-
-
-                }
-            }
-        }
-    }
 
     /**
      * 遍历文件夹
@@ -1114,13 +1068,12 @@ public class FileQueryUtils {
         }
         for (int length = listFiles.length, i = 0; i < length; ++i) {
             file = listFiles[i];
-            if (file.isDirectory()) {
+            if (file.isDirectory()) {//文件夹类型
                 innerListFiles(secondJunkInfo, file);
-            } else {   //单个文件
-//                if(checkFile(file)){ //改文件操作超过三天
-                    secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
-                    secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
-//                }
+            } else {   //文件类型
+                secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
+                secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
+
 
             }
         }
@@ -1229,6 +1182,120 @@ public class FileQueryUtils {
         } else {
             System.out.println("删除单个文件失败：" + fileName + "不存在！");
             return false;
+        }
+    }
+
+
+
+    /**
+     * 筛选file下需要清理的文件夹
+     * @param map
+     * @param file
+     * @param args  需要排除的文件夹名称
+     */
+    private void checkFiles(final Map<String, String> map, final File file,String packageName, String... args) {
+
+        File[] listFiles = file.listFiles();
+        if (listFiles != null) {
+            for (File file2 : listFiles) {
+                if(args.length>0 && !TextUtils.isEmpty(packageName)){//排除指定包下的指定目录
+                    boolean isSame = false;
+                    for(String x:args){
+                        if(file2.getAbsoluteFile().getAbsolutePath().endsWith(packageName+"/"+x)){
+                            isSame = true;
+                            break;
+                        }
+                    }
+                    //排除args文件
+                    if(isSame)
+                        continue;
+                }
+                String fileName = file2.getName();
+                if (file2.isDirectory()) {
+                    if (fileName.toLowerCase().equals("awcn_strategy")) {
+                        map.put(file2.getAbsolutePath(), "awcn_strategy缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("baidu")) {
+                        map.put(file2.getAbsolutePath(), "baidu插件缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("ad") || fileName.toLowerCase().equals("ads")) {
+                        if(DateUtils.isOverThreeDay(file2.lastModified(),3)){//超过三天
+                            map.put(file2.getAbsolutePath(), "ad广告文件夹");
+                        }
+                    } else if (fileName.toLowerCase().contains("log")) {
+                        map.put(file2.getAbsolutePath(), "log日志文件夹");
+                    } else if (fileName.toLowerCase().contains("temp")) {
+                        map.put(file2.getAbsolutePath(), "temp日志文件夹");
+                    } else if (fileName.toLowerCase().contains("tmp")) {
+                        map.put(file2.getAbsolutePath(), "tmp日志文件夹");
+                    } else if (fileName.toLowerCase().contains("crash")) {
+                        map.put(file2.getAbsolutePath(), "crash日志文件夹");
+                    } else if (fileName.toLowerCase().contains("trace")) {
+                        map.put(file2.getAbsolutePath(), "trace日志文件夹");
+                    } else if (fileName.toLowerCase().contains("hprof")) {
+                        map.put(file2.getAbsolutePath(), "hprof日志文件夹");
+                    } else if (fileName.toLowerCase().contains("cache")) {
+                        map.put(file2.getAbsolutePath(), "cache缓存文件夹");
+                    } else if (fileName.toLowerCase().contains("cloud")) {
+                        map.put(file2.getAbsolutePath(), "cloud缓存文件夹");
+                    } else if (fileName.toLowerCase().contains("update")) {
+                        map.put(file2.getAbsolutePath(), "update更新缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("apps")) {
+                        map.put(file2.getAbsolutePath(), "apps页面缓存文件夹");
+                    } else if (fileName.toLowerCase().equals("anr")) {
+                        map.put(file2.getAbsolutePath(), "anr缓存日志");
+                    }
+
+                    else if( DateUtils.isOverThreeDay(file2.lastModified(),7) && fileName.toLowerCase().contains("image")  ){
+                        map.put(file2.getAbsolutePath(), "图片文件夹");
+                    } else if( DateUtils.isOverThreeDay(file2.lastModified(),7) && fileName.toLowerCase().contains("video") ){
+                        map.put(file2.getAbsolutePath(), "视频文件夹");
+                    } else if(DateUtils.isOverThreeDay(file2.lastModified(),3) && fileName.toLowerCase().contains("audio")  ){
+                        map.put(file2.getAbsolutePath(), "音频文件夹");
+                    }else if(DateUtils.isOverThreeDay(file2.lastModified(),3) && fileName.toLowerCase().contains("splash")){
+                        map.put(file2.getAbsolutePath(), "splash媒体文件夹");
+                    }
+
+                    else if(file2.getAbsolutePath().toLowerCase().endsWith("download")){
+                        if(DateUtils.isOverThreeDay(file2.lastModified(),7)) {
+                            map.put(file2.getAbsolutePath(), "download文件夹");
+                        }
+                    } else {
+                        this.checkFiles(map, file2, packageName);
+                    }
+                } else {
+                    String fileLow = fileName.toLowerCase();
+                    /**
+                     * 日志相关文件*/
+                    if (fileLow.endsWith(".log")) {
+                        map.put(file2.getAbsolutePath(), "log日志文件");
+                    } else if (fileLow.endsWith(".tmp") || fileLow.endsWith(".temp")) {
+                        map.put(file2.getAbsolutePath(), "tmp日志文件");
+                    } else if (fileLow.endsWith(".tmp") || fileLow.endsWith(".temp")) {
+                        map.put(file2.getAbsolutePath(), "tmp日志文件");
+                    }else if (fileLow.endsWith(".hprof")) {
+                        map.put(file2.getAbsolutePath(), "hprof日志文件");
+                    } else if (fileLow.endsWith(".trace") ) {
+                        map.put(file2.getAbsolutePath(), "trace日志文件");
+                    }
+
+                    //多媒体相关文件
+                    //bmp,jpg,png,tif,gif,pcx,tga,exif,fpx,svg,psd
+                    if (fileLow.endsWith(".bmp")||fileLow.endsWith(".jpg")||fileLow.endsWith(".tif")||fileLow.endsWith(".gif")||fileLow.endsWith(".pcx")||fileLow.endsWith(".tga")||fileLow.endsWith(".exif")||fileLow.endsWith(".fpx")||fileLow.endsWith(".svg")||fileLow.endsWith(".psd")) {
+                        map.put(file2.getAbsolutePath(), "图片文件");
+                        //cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp
+                    } else if (fileLow.endsWith(".cdr")||fileLow.endsWith(".pcd")||fileLow.endsWith(".dxf")||fileLow.endsWith(".ufo")||fileLow.endsWith(".eps")||fileLow.endsWith(".ai")||fileLow.endsWith(".raw")||fileLow.endsWith(".WMF")||fileLow.endsWith(".webp")) {
+                        map.put(file2.getAbsolutePath(), "图片文件");
+                        //rm，rmvb，mpeg1-4 mov mtv dat wmv avi 3gp amv dmv flv
+                    } else if (fileLow.endsWith(".rm") || fileLow.endsWith(".rmvb") || fileLow.endsWith(".mpeg1-4") || fileLow.endsWith(".mov") || fileLow.endsWith(".mtv") || fileLow.endsWith(".dat") || fileLow.endsWith(".wmv") || fileLow.endsWith(".avi") || fileLow.endsWith(".amv") || fileLow.endsWith(".dmv") || fileLow.endsWith(".flv")) {//amv dmv flv
+                        map.put(file2.getAbsolutePath(), "视频文件");
+                    }else if (fileLow.endsWith(".hprof")) {
+                        map.put(file2.getAbsolutePath(), "hprof日志文件");
+                    } else if (fileLow.endsWith(".trace") ) {
+                        map.put(file2.getAbsolutePath(), "trace日志文件");
+                    }
+
+
+                }
+            }
         }
     }
 }
