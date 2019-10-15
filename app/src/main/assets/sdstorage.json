@@ -1,0 +1,45 @@
+[{
+		"packName": "com.tencent.mm",
+		"appName": "微信",
+		"fileList": [{
+			"folderName": "Tencent",
+			"type": 1
+		}]
+	}, {
+		"packName": "com.kugou.android",
+		"appName": "酷狗音乐",
+		"fileList": [{
+			"folderName": "kugou",
+			"type": 1
+		}]
+	}, {
+		"packName": "com.tencent.mobileqq",
+		"appName": "QQ",
+		"fileList": [{
+			"folderName": "Tencent",
+			"type": 1
+		}]
+	}, {
+		"packName": "com.cubic.autohome",
+		"appName": "汽车之家",
+		"fileList": [{
+			"folderName": "autohomemain",
+			"type": 1
+		}]
+	}, {
+		"packName": "com.moji.mjweather",
+		"appName": "墨迹天气",
+		"fileList": [{
+			"folderName": "moji",
+			"type": 1
+		}]
+	},
+	{
+		"packName": "com.sina.weibo",
+		"appName": "新浪微博",
+		"fileList": [{
+			"folderName": "sina",
+			"type": 1
+		}]
+	}
+]

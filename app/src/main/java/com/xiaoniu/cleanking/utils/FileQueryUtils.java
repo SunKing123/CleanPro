@@ -160,7 +160,7 @@ public class FileQueryUtils {
             junkInfoMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
         }
 
-        //外部存储共有路径（sd路径）
+        //外部存储共有路径（sd根目录）
         String externalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         File externalFile = new File(externalPath);
         File[] listFiles = externalFile.listFiles();
@@ -204,7 +204,8 @@ public class FileQueryUtils {
 
                     }
                 } else {
-                    Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file,file.getName());
+//                    Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file,file.getName());
+
                 }
             }
         }

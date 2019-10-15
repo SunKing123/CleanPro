@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
+import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -83,6 +84,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         return R.layout.activity_splash_ad;
     }
 
+    //初始sd根目录关联关系
+    void initFileRelation(){
+        SPUtil.setString(mContext,"path_data", FileUtils.readJSONFromAsset(mContext,"sdstorage.json"));
+    }
     /**
      * 延迟跳转
      */
@@ -352,6 +357,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         initNiuData();
         skip();
+        initFileRelation();
 
         skipView.setOnClickListener(v -> {
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "splash_page", "splash_page");
