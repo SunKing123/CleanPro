@@ -1,0 +1,74 @@
+package com.xiaoniu.cleanking.app;
+
+import android.app.ActivityManager;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+
+import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+
+import java.util.List;
+
+/**
+ * @author XiLei
+ * @date 2019/10/15.
+ * description：监听Application生命周期
+ */
+public class AppLifecycleObserver implements LifecycleObserver {
+    private Context mContext;
+    private boolean isBack; //isBack = true 记录当前已经进入后台
+
+    public AppLifecycleObserver(Context context) {
+        this.mContext = context;
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    void onEnterForeground() {
+
+        if (isBack && PreferenceUtil.getHomeBackTime()) {
+//            Toast.makeText(mContext, mContext.getString(R.string.foreground_message), Toast.LENGTH_SHORT).show();
+            mContext.startActivity(new Intent(mContext, SplashADHotActivity.class));
+            isBack = false;
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    void onEnterBackground() {
+//        Toast.makeText(mContext, mContext.getString(R.string.background_message), Toast.LENGTH_SHORT).show();
+
+        if (!isAppOnForeground()) {
+            //app 进入后台
+            isBack = true;
+            PreferenceUtil.saveHomeBackTime();
+        }
+    }
+
+    /**
+     * 程序是否在前台运行
+     *
+     * @return
+     */
+    public boolean isAppOnForeground() {
+        ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        String packageName = mContext.getPackageName();
+
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        if (appProcesses == null)
+            return false;
+
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            // The name of the process that this object is associated with.
+            if (appProcess.processName.equals(packageName)
+                    && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

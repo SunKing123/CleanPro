@@ -211,6 +211,7 @@ public class SPUtil {
         }
         return guideSp.getBoolean(key, defValue);
     }
+
     public static void setCalendFirst(Context ctx, String key, boolean value) {
         if (guideSp == null) {
             guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
@@ -252,6 +253,7 @@ public class SPUtil {
         }
         guideSp.edit().putBoolean(key, value).commit();
     }
+
     public static void setFirstIn(Context ctx, String key, boolean value) {
         if (guideSp == null) {
             guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);

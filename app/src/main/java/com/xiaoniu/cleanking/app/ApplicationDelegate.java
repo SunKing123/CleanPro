@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
+import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -27,6 +28,8 @@ import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.json.JSONObject;
+
+import javax.inject.Inject;
 
 /**
  * Created by admin on 2017/6/8.
@@ -69,6 +72,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .apiModule(new ApiModule(application))
                 .build();
         mAppComponent.inject(application);
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver(application));
     }
 
     private void initGeekPush(Application application) {
@@ -79,7 +83,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             return result;
         }));
         GeekPush.register();
-        JPushNotificationManager.customPushNotification(application,1, R.layout.layout_notivition,R.id.image,R.id.title,R.id.text, R.mipmap.applogo, R.mipmap.applogo);
+        JPushNotificationManager.customPushNotification(application, 1, R.layout.layout_notivition, R.id.image, R.id.title, R.id.text, R.mipmap.applogo, R.mipmap.applogo);
     }
 
     public void initNiuData(Application application) {
