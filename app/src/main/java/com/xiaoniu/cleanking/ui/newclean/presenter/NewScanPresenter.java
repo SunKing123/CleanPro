@@ -9,6 +9,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,9 +28,12 @@ import android.widget.TextView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -127,9 +131,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
-            //获取前两个扫描的结果
+
             boolean isScanFile =  apkJunkInfos.size() > 0;
-            //扫描缓存文件
+            //扫描私有路径下缓存文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             e.onNext(androidDataInfo);
 
@@ -375,7 +379,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     //开始
                     if (mView == null)
                         return;
-                    mView.startScan();
+                    mView.storagePermissionOk();
                 } else {
                     if (mView == null)
                         return;
@@ -390,6 +394,49 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             }
         });
     }
+
+
+    boolean isFromClick = false;
+    public AlertDialog showPermissionDialog(Context context, final DialogClickListener okListener) {
+        isFromClick = false;
+        final AlertDialog dlg = new AlertDialog.Builder(context).create();
+        if (((Activity) context).isFinishing()) {
+            return dlg;
+        }
+        dlg.setCancelable(true);
+        dlg.show();
+        Window window = dlg.getWindow();
+        window.setContentView(R.layout.alite_permission_dialog);
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        //这里设置居中
+        lp.gravity = Gravity.CENTER;
+        window.setAttributes(lp);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView tv_goto = window.findViewById(R.id.tv_goto);
+        ImageView ivExit = window.findViewById(R.id.iv_exit);
+        ivExit.setOnClickListener(v -> {
+            dlg.cancel();
+        });
+        tv_goto.setOnClickListener(v -> {
+            isFromClick = true;
+            okListener.clickOKBtn();
+        });
+        dlg.setOnDismissListener(dialog -> {
+            if (!isFromClick)
+                mView.getActivity().finish();
+
+        });
+        return dlg;
+    }
+
+
+    public interface DialogClickListener {
+        void clickOKBtn();
+
+        void cancelBtn();
+
+    }
+
 
     /**
      * 显示权限设置弹窗

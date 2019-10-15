@@ -123,7 +123,6 @@ public class DateUtils {
     }
 
 
-
     // 获取当前月份
     public static int currentMon() {
         Calendar c = Calendar.getInstance();
@@ -281,7 +280,6 @@ public class DateUtils {
     }
 
 
-
     /**
      * 判断是否为同一个月
      *
@@ -307,15 +305,14 @@ public class DateUtils {
     }
 
 
-
-
     /**
      * 判断是否为昨天(效率比较高)
+     *
      * @param day 传入的 时间  "2016-06-28 10:10:30" "2016-06-28" 都可以
      * @return true昨天 false不是
      * @throws ParseException
      */
-    public static boolean isYesterday(long day)  {
+    public static boolean isYesterday(long day) {
 
         Calendar pre = Calendar.getInstance();
         Date predate = new Date(System.currentTimeMillis());
@@ -337,14 +334,41 @@ public class DateUtils {
     }
 
 
-        /**
-         * 计算距离当前时间.
-         *
-         * @param timestamp  当时时间戳.
-         * @param systemTime 服务器时间戳.
-         * @return 若距离当前时间小于1分钟则返回xx秒之前，若距离当前时间小于1小时则返回xx分钟之前，若距离当前时间小于1天则返回xx小时前，
-         * 若时间为今年则返回MM-dd，否则返回yyyy-MM-dd.
-         */
+    /**
+     * 判断是否间隔N天以上
+     *
+     * @param day
+     * @throws ParseException
+     */
+    public static boolean isOverThreeDay(long day, int count) {
+
+        Calendar pre = Calendar.getInstance();
+        Date predate = new Date(System.currentTimeMillis());
+        pre.setTime(predate);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date(day);
+        cal.setTime(date);
+
+        if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
+            int diffDay = cal.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
+
+            if (diffDay < (0 - count)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 计算距离当前时间.
+     *
+     * @param timestamp  当时时间戳.
+     * @param systemTime 服务器时间戳.
+     * @return 若距离当前时间小于1分钟则返回xx秒之前，若距离当前时间小于1小时则返回xx分钟之前，若距离当前时间小于1天则返回xx小时前，
+     * 若时间为今年则返回MM-dd，否则返回yyyy-MM-dd.
+     */
     public static String fromTheCurrentTime(long systemTime, long timestamp) {
         if (timestamp < 100000000000L) {
             timestamp = timestamp * 1000;
@@ -373,7 +397,6 @@ public class DateUtils {
             return timestampToPatternTime(systemTime, "yyyy-MM-dd");
         }
     }
-
 
 
     public static String formatCurrentTime(long systemTime, long timestamp) {

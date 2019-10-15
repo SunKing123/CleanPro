@@ -1,9 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
 public class AppInfoClean {
-    private String appName;
-    private long id;
-    private String packageName;
+     String appName;
+     long id;
+     String packageName;
 
     public String getPackageName() {
         return this.packageName;
