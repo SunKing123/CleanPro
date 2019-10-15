@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onWindowFocusChanged(hasFocus);
         if ( hasFocus && isFirstCreate) {
             //检查是否有补丁
-            mPresenter.queryPatch();
+//            mPresenter.queryPatch();
             //检测版本更新
             mPresenter.queryAppVersion(() -> {
             });
