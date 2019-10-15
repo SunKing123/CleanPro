@@ -1,17 +1,24 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.annotation.SuppressLint;
+import android.app.usage.UsageEvents;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.format.Formatter;
 
+import com.xiaoniu.cleanking.ui.main.bean.AppUsageInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InstalledApp;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.SignatureUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -162,6 +169,63 @@ public class PackageUtils {
         } catch (Throwable ignore) {
         }
         return sSysSignatures;
+    }
+
+
+
+    long phoneUsageToday = 0;
+    //查看所有应用使用记录（解决8.0以上无法读取进程内存）
+    List<AppUsageInfo> getUsageStatistics(Context mContext) {
+        List<AppUsageInfo> smallInfoList;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            UsageEvents.Event currentEvent;
+            List<UsageEvents.Event> allEvents = new ArrayList<>();
+            HashMap<String, AppUsageInfo> map = new HashMap<String, AppUsageInfo>();
+
+            long currTime = System.currentTimeMillis();
+            long startTime = currTime - 1000 * 3600 * 3; //querying past three hours
+
+            UsageStatsManager mUsageStatsManager = (UsageStatsManager) mContext.getSystemService(Context.USAGE_STATS_SERVICE);
+
+            assert mUsageStatsManager != null;
+            UsageEvents usageEvents = mUsageStatsManager.queryEvents(startTime, currTime);
+
+            //capturing all events in a array to compare with next element
+            while (usageEvents.hasNextEvent()) {
+                currentEvent = new UsageEvents.Event();
+                usageEvents.getNextEvent(currentEvent);
+                if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND || currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
+                    allEvents.add(currentEvent);
+                    String key = currentEvent.getPackageName();
+                    // taking it into a collection to access by package name
+                    if (map.get(key) == null)
+                        map.put(key, new AppUsageInfo(key));
+                }
+            }
+            //iterating through the arraylist
+            for (int i = 0; i < allEvents.size() - 1; i++) {
+                UsageEvents.Event E0 = allEvents.get(i);
+                UsageEvents.Event E1 = allEvents.get(i + 1);
+                //for launchCount of apps in time range
+                if (!E0.getPackageName().equals(E1.getPackageName()) && E1.getEventType() == 1) {
+                    // if true, E1 (launch event of an app) app launched
+                    map.get(E1.getPackageName()).setLaunchCount(map.get(E1.getPackageName()).getLaunchCount()+1);
+                }
+                //for UsageTime of apps in time range
+                if (E0.getEventType() == 1 && E1.getEventType() == 2 && E0.getClassName().equals(E1.getClassName())) {
+                    long diff = E1.getTimeStamp() - E0.getTimeStamp();
+                    phoneUsageToday += diff; //gloabl Long var for total usagetime in the timerange
+                    map.get(E0.getPackageName()).setTimeInForeground( map.get(E0.getPackageName()).getTimeInForeground()+diff);
+                }
+            }
+            //transferred final data into modal class object
+            smallInfoList = new ArrayList<>(map.values());
+            return smallInfoList;
+        }else{
+            return null;
+        }
+
+
     }
 
 }

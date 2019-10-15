@@ -160,7 +160,7 @@ public class FileQueryUtils {
             return new ArrayList<>();
         }
         ArrayList<FirstJunkInfo> list = new ArrayList<>();
-        //外部存储公共文件路径
+        //外部存储私有存储父文件
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
         //已经安装的应用信息
         List<PackageInfo> installedList = AppApplication.getInstance().getPackageManager().getInstalledPackages(0);
@@ -174,13 +174,14 @@ public class FileQueryUtils {
                 return list;
             }
             index++;
-            //packageName 下文件
+            //packageName文件下（私有目录）
             final File mainfile = new File(rootPath + applicationInfo.packageName);
-            //缓存文件
+            //缓存文件（私有目录）
             final File file = new File(rootPath + applicationInfo.packageName + "/cache");
-            //文件夹集合
+            //文件夹集合（私有目录）
             final File file2 = new File(rootPath + applicationInfo.packageName + "/files");
-            //一级目录
+
+            //一级目（私有目录）
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
             firstJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
@@ -192,24 +193,10 @@ public class FileQueryUtils {
                 mScanFileListener.scanFile(applicationInfo.packageName);
             }
 
-       /*     //packageName目录下缓存
-            if (mainfile.exists()) {
-                SecondJunkInfo secondJunkInfo = listFiles(file);
-                if (secondJunkInfo.getFilesCount() > 0 && secondJunkInfo.getGarbageSize() > 0) {
-                    secondJunkInfo.setFilecatalog(file.getAbsolutePath());
-                    secondJunkInfo.setChecked(true);
-                    secondJunkInfo.setPackageName(applicationInfo.packageName);
-                    secondJunkInfo.setGarbagetype("TYPE_CACHE");
-                    firstJunkInfo.addSecondJunk(secondJunkInfo);
-                    firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                }
-                if (mScanFileListener != null) {
-                    mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
-                }
-            }*/
+
             //cache目录下缓存
-    /*        if (file.exists()) {
-                SecondJunkInfo secondJunkInfo = listFiles(file);
+            if (file.exists()) {
+                SecondJunkInfo secondJunkInfo = FileUtils.cacheListFiles(file);
                 if (secondJunkInfo.getFilesCount() > 0 && secondJunkInfo.getGarbageSize() > 0) {
                     secondJunkInfo.setFilecatalog(file.getAbsolutePath());
                     secondJunkInfo.setChecked(true);
@@ -221,11 +208,12 @@ public class FileQueryUtils {
                 if (mScanFileListener != null) {
                     mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                 }
-            }*/
+            }
+
             //files目录下缓存
-            if (mainfile.exists()) {
+            if (file2.exists()) {
                 //路径集合
-                Map<String,String> filePathMap = this.checkOutAllGarbageFolder(mainfile);
+                Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file2,applicationInfo.packageName);
                 for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
                     if(new File(entry.getKey()).isDirectory()){    //文件夹路径
                         final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
@@ -242,7 +230,45 @@ public class FileQueryUtils {
                         if (mScanFileListener != null) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
-                    }else if(new File(entry.getKey()).isFile()){//文件路径
+                    }else if(new File(entry.getKey()).isFile()){ //文件路径
+                        File cachefile = new File(entry.getKey());
+                        SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
+                        if (cachefile.exists()) {
+                            secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
+                            secondJunkInfo.setChecked(true);
+                            secondJunkInfo.setPackageName(applicationInfo.packageName);
+                            secondJunkInfo.setGarbagetype("TYPE_CACHE");
+                            firstJunkInfo.addSecondJunk(secondJunkInfo);
+                            firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                        }
+                    }
+
+                }
+            }
+
+
+
+            //packageName文件
+            if (mainfile.exists()) {
+                //路径集合_排除指定路径
+                Map<String, String> filePathMap = this.checkOutAllGarbageFolder(mainfile, applicationInfo.packageName,"cache",  "files");
+                for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
+                    if(new File(entry.getKey()).isDirectory()){    //文件夹路径
+                        final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
+                        if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
+                            continue;
+                        }
+                        listFiles2.setGarbageName(entry.getValue());
+                        listFiles2.setFilecatalog(entry.getKey());
+                        listFiles2.setChecked(true);
+                        listFiles2.setPackageName(applicationInfo.packageName);
+                        listFiles2.setGarbagetype("TYPE_CACHE");
+                        firstJunkInfo.addSecondJunk(listFiles2);
+                        firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
+                        if (mScanFileListener != null) {
+                            mScanFileListener.increaseSize(listFiles2.getGarbageSize());
+                        }
+                    }else if(new File(entry.getKey()).isFile()){ //文件路径
                         File cachefile = new File(entry.getKey());
                         SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                         if (cachefile.exists()) {
@@ -261,9 +287,12 @@ public class FileQueryUtils {
             if (firstJunkInfo.getSubGarbages() == null || firstJunkInfo.getSubGarbages().size() <= 0) {
                 continue;
             }
+            //排除当前应用
             if (!"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName()))
                 list.add(firstJunkInfo);
-
+            /**
+             * 遍历文件3/4以上 && 未扫描出apk文件 && 遍历私有路径下包含垃圾
+             */
             if (index > (float) total * 3 / 4 && !isScanFile && list.size() > 0) {
                 Log.v("onAnimationEnd", "mScanFileListener " + mScanFileListener);
 
@@ -449,60 +478,6 @@ public class FileQueryUtils {
 
     }
 
-    long phoneUsageToday = 0;
-    //查看所有应用使用记录（解决8.0以上无法读取进程内存）
-    List<AppUsageInfo> getUsageStatistics() {
-        List<AppUsageInfo> smallInfoList;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            UsageEvents.Event currentEvent;
-            List<UsageEvents.Event> allEvents = new ArrayList<>();
-            HashMap<String, AppUsageInfo> map = new HashMap<String, AppUsageInfo>();
-
-            long currTime = System.currentTimeMillis();
-            long startTime = currTime - 1000 * 3600 * 3; //querying past three hours
-
-            UsageStatsManager mUsageStatsManager = (UsageStatsManager) mContext.getSystemService(Context.USAGE_STATS_SERVICE);
-
-            assert mUsageStatsManager != null;
-            UsageEvents usageEvents = mUsageStatsManager.queryEvents(startTime, currTime);
-
-            //capturing all events in a array to compare with next element
-            while (usageEvents.hasNextEvent()) {
-                currentEvent = new UsageEvents.Event();
-                usageEvents.getNextEvent(currentEvent);
-                if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND || currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
-                    allEvents.add(currentEvent);
-                    String key = currentEvent.getPackageName();
-                    // taking it into a collection to access by package name
-                    if (map.get(key) == null)
-                        map.put(key, new AppUsageInfo(key));
-                }
-            }
-            //iterating through the arraylist
-            for (int i = 0; i < allEvents.size() - 1; i++) {
-                UsageEvents.Event E0 = allEvents.get(i);
-                UsageEvents.Event E1 = allEvents.get(i + 1);
-                //for launchCount of apps in time range
-                if (!E0.getPackageName().equals(E1.getPackageName()) && E1.getEventType() == 1) {
-                    // if true, E1 (launch event of an app) app launched
-                    map.get(E1.getPackageName()).setLaunchCount(map.get(E1.getPackageName()).getLaunchCount()+1);
-                }
-                //for UsageTime of apps in time range
-                if (E0.getEventType() == 1 && E1.getEventType() == 2 && E0.getClassName().equals(E1.getClassName())) {
-                    long diff = E1.getTimeStamp() - E0.getTimeStamp();
-                    phoneUsageToday += diff; //gloabl Long var for total usagetime in the timerange
-                    map.get(E0.getPackageName()).setTimeInForeground( map.get(E0.getPackageName()).getTimeInForeground()+diff);
-                }
-            }
-            //transferred final data into modal class object
-            smallInfoList = new ArrayList<>(map.values());
-            return smallInfoList;
-        }else{
-            return null;
-        }
-
-
-    }
 
     public ArrayList<FirstJunkInfo> getTaskInfos(Context context) {
         int i2;
@@ -993,16 +968,36 @@ public class FileQueryUtils {
     }
 
 
-    private Map<String, String> checkOutAllGarbageFolder(final File file) {
+    private Map<String, String> checkOutAllGarbageFolder(final File file,String packageName,String... args) {
         final HashMap<String, String> hashMap = new HashMap<String, String>();
-        this.checkFiles(hashMap, file);
+        this.checkFiles(hashMap, file,packageName,args);
         return hashMap;
     }
 
-    private void checkFiles(final Map<String, String> map, final File file) {
+    /**
+     * 筛选file下需要清理的文件夹
+     * @param map
+     * @param file
+     * @param args  需要排除的文件夹名称
+     */
+    private void checkFiles(final Map<String, String> map, final File file,String packageName, String... args) {
+        //当前文件是否为package目录
+        boolean isCurrentPackage = file.getAbsolutePath().endsWith(packageName);
         File[] listFiles = file.listFiles();
         if (listFiles != null) {
             for (File file2 : listFiles) {
+                if(args.length>0){
+                    boolean isSame = false;
+                    for(String x:args){
+                        if(file2.getAbsoluteFile().getAbsolutePath().endsWith(packageName+"/"+x)){
+                            isSame = true;
+                            break;
+                        }
+                    }
+                    //排除args文件
+                    if(isSame)
+                        continue;
+                }
                 String fileName = file2.getName();
                 if (file2.isDirectory()) {
                     if (fileName.toLowerCase().equals("awcn_strategy")) {
@@ -1010,7 +1005,9 @@ public class FileQueryUtils {
                     } else if (fileName.toLowerCase().equals("baidu")) {
                         map.put(file2.getAbsolutePath(), "baidu插件缓存文件夹");
                     } else if (fileName.toLowerCase().equals("ad") || fileName.toLowerCase().equals("ads")) {
-                        map.put(file2.getAbsolutePath(), "ad广告文件夹");
+                        if(DateUtils.isOverThreeDay(file2.lastModified(),3)){//超过三天
+                            map.put(file2.getAbsolutePath(), "ad广告文件夹");
+                        }
                     } else if (fileName.toLowerCase().contains("log")) {
                         map.put(file2.getAbsolutePath(), "log日志文件夹");
                     } else if (fileName.toLowerCase().contains("temp")) {
@@ -1035,24 +1032,24 @@ public class FileQueryUtils {
                         map.put(file2.getAbsolutePath(), "anr缓存日志");
                     }
 
-                    else if(fileName.toLowerCase().contains("image")){
+                    else if( DateUtils.isOverThreeDay(file2.lastModified(),7) && fileName.toLowerCase().contains("image")  ){
                         map.put(file2.getAbsolutePath(), "图片文件夹");
-                    } else if(fileName.toLowerCase().contains("video")){
+                    } else if( DateUtils.isOverThreeDay(file2.lastModified(),7) && fileName.toLowerCase().contains("video") ){
                         map.put(file2.getAbsolutePath(), "视频文件夹");
-                    } else if(fileName.toLowerCase().contains("audio")){
+                    } else if(DateUtils.isOverThreeDay(file2.lastModified(),3) && fileName.toLowerCase().contains("audio")  ){
                         map.put(file2.getAbsolutePath(), "音频文件夹");
-                    }else if(fileName.toLowerCase().contains("splash")){
+                    }else if(DateUtils.isOverThreeDay(file2.lastModified(),3) && fileName.toLowerCase().contains("splash")){
                         map.put(file2.getAbsolutePath(), "splash媒体文件夹");
                     }
 
-                    else if(fileName.toLowerCase().contains("download")){
-                        map.put(file2.getAbsolutePath(), "download文件夹");
-                    }
-                    else {
-                        this.checkFiles(map, file2);
+                    else if(file2.getAbsolutePath().toLowerCase().endsWith("download")){
+                        if(DateUtils.isOverThreeDay(file2.lastModified(),7)) {
+                            map.put(file2.getAbsolutePath(), "download文件夹");
+                        }
+                    } else {
+                        this.checkFiles(map, file2, packageName);
                     }
                 } else {
-
                     String fileLow = fileName.toLowerCase();
                     /**
                      * 日志相关文件*/
@@ -1165,20 +1162,7 @@ public class FileQueryUtils {
 
         void totalSize(final int p0);
     }
-    //盘点是否超过三天
-    public boolean checkFile(File file) {
-        if (!file.exists()) {
-            return false;
-        }
-        try {
-            long time = file.lastModified();
-            return DateUtils.isOverThreeDay(time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
 
-    }
 
     /**
      * 删除目录及目录下的文件
