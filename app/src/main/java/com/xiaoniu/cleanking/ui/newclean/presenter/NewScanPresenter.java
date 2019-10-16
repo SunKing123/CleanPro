@@ -407,6 +407,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
 
 
+
+
     /**
      * 显示权限设置弹窗
      *

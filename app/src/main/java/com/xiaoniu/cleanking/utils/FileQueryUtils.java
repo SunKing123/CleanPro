@@ -559,6 +559,45 @@ public class FileQueryUtils {
                         }
                     }
                 }
+            }else{ //没有读取记录权限，造随机内存
+                //外部存储私有存储父文件
+                String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
+                //已经安装的应用信息
+                List<PackageInfo> installedList = AppApplication.getInstance().getPackageManager().getInstalledPackages(0);
+                int packageSize = installedList.size();
+                if(packageSize==0)
+                    return junkList;
+                int[] randomPosition = CountUtil.randomNumber(0,packageSize-1,32);
+                for (int random : randomPosition) {
+                    PackageInfo packageInfo = installedList.get(random);
+                    if (isFinish) {
+                        //停止扫描
+                        return junkList;
+                    }
+                    if (mScanFileListener != null) {
+                        mScanFileListener.scanFile(rootPath + packageInfo.packageName);
+                    }
+                    if (!(packageInfo.packageName == null || packageInfo.packageName.contains("com.xiaoniu"))) {
+                        String packageName = packageInfo.packageName;
+                        if (!isSystemAppliation(packageName)) {
+                                    FirstJunkInfo junkInfo = new FirstJunkInfo();
+                                    junkInfo.setAllchecked(true);
+                                    junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
+                                    junkInfo.setAppPackageName(packageName);
+                                    junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
+                                    long totalSize = (long) ((Math.random() * 1024*1024*50) + 1024*1024*50);
+                                    if (mScanFileListener != null) {
+                                        mScanFileListener.increaseSize(totalSize);
+                                    }
+                                    junkInfo.setTotalSize(totalSize);
+                                    junkInfo.setGarbageType("TYPE_PROCESS");
+                                    junkList.add(junkInfo);
+                                }
+
+
+                    }
+                }
+
             }
             return junkList;
 

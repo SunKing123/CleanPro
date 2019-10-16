@@ -489,7 +489,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
 
-
         super.onResume();
     }
 
