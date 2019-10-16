@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -34,7 +36,6 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
@@ -51,7 +52,6 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.ykun.live_library.KeepAliveManager;
 import com.ykun.live_library.config.ForegroundNotification;
@@ -82,11 +82,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
     private NewsFragment upQuotaFragment;
-    private static final long DEFAULT_REFRESH_TIME = 10*60*1000L;
+    private static final long DEFAULT_REFRESH_TIME = 10 * 60 * 1000L;
     /**
      * 定时扫面手机时间 1小时
      */
-    private static final long SCAN_LOOP_TIME =  3 * 1000;
+    private static final long SCAN_LOOP_TIME = 3 * 1000;
 
     /**
      * 借款页
@@ -119,21 +119,25 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private boolean isSelectTop = false;
     private NewCleanMainFragment mainFragment;
     private MyHandler mHandler = new MyHandler(this);
-    private class MyHandler extends Handler{
+
+    private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
-        public MyHandler(Activity con){
+
+        public MyHandler(Activity con) {
             this.mActivity = new WeakReference<>(con);
         }
+
         public void handleMessage(android.os.Message msg) {
-            if(msg.what == 1 ){
+            if (msg.what == 1) {
                 if (isSelectTop)
                     return;
-                if (mBottomBarTab != null){
+                if (mBottomBarTab != null) {
                     mBottomBarTab.showBadgeView("...");
                 }
             }
         }
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -173,10 +177,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             public void onTabSelected(int position, int prePosition) {
                 showHideFragment(position, prePosition);
                 //如果没有选中头条，开始10分钟记时
-                if (position == 2){
+                if (position == 2) {
                     isSelectTop = true;
                     hideBadgeView();
-                }else {
+                } else {
                     if (isSelectTop) {
                         isSelectTop = false;
                         //清空所有的消息
@@ -216,7 +220,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if ( hasFocus && isFirstCreate) {
+        if (hasFocus && isFirstCreate) {
             //检查是否有补丁
             mPresenter.queryPatch();
             //检测版本更新
@@ -296,7 +300,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         }
 
-        if ("home".equals(home)){
+        if ("home".equals(home)) {
             //默认选中主页
             mBottomBar.setCurrentItem(0);
             AppHolder.getInstance().setCleanFinishSourcePageId("toggle_home_click");
@@ -323,6 +327,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //开启常驻通知栏服务
         if (NotificationsUtils.isNotificationEnabled(this))
             startService(new Intent(this, NotificationService.class));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -464,7 +473,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
             }
         }
-        StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
+        StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
 
@@ -507,9 +516,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     /**
      * 操作记录(PUSH消息)
+     *
      * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清）
      */
-    public void commitJpushClickTime(int type){
+    public void commitJpushClickTime(int type) {
         mPresenter.commitJpushClickTime(type);
     }
 

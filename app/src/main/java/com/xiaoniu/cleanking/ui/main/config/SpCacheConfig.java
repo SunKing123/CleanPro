@@ -61,6 +61,7 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP = "first_open_clean_finish_app";
 
     public static final  String IS_SAVE_FIRST_HOME_ICON = "first_home_icon";
+    public static final  String IS_HOME_BACK_TIME = "home_back";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";

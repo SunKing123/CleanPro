@@ -18,7 +18,7 @@
         <activity
             android:name=".ui.main.activity.SplashADActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppLauncher"/>
+            android:theme="@style/Theme.AppLauncher" />
 
         <activity
             android:name=".scheme.ui.DispatcherActivity"
@@ -262,9 +262,23 @@
             android:screenOrientation="portrait"
             android:theme="@style/transparent_activity" />
 
-        <activity android:name=".ui.newclean.activity.NowCleanActivity"
+        <activity
+            android:name=".ui.newclean.activity.NowCleanActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.SplashADHotActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
         <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
@@ -379,6 +393,7 @@
     <permission
         android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.utils.update;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -424,5 +425,55 @@ public class PreferenceUtil {
     public static boolean isFirstForHomeIcon() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_KEY_FIRST, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, false);
+    }
+
+    /**
+     * 保存点击home键退居后台时间
+     *
+     * @return
+     */
+    public static boolean saveHomeBackTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_HOME_BACK_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 从后台回到前台的时间是否大于5分钟
+     *
+     * @return true 大于5分钟 false 小于5分钟
+     */
+    public static boolean getHomeBackTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_HOME_BACK_TIME, 0);
+        if (System.currentTimeMillis() - time > 0 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+    /**
+     * 判断6大功能在清理完成页需要展示的数量
+     *
+     * @return
+     */
+    public static int getShowCount(String title) {
+        int count = 0;
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
+            count++;
+        }
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
+            count++;
+        }
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
+            count++;
+        }
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime()) { // 通知栏清理
+            count++;
+        }
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
+            count++;
+        }
+        return count;
     }
 }

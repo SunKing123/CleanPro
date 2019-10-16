@@ -19,6 +19,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -44,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -333,11 +335,18 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("title", getString(R.string.tool_one_key_speed));
-        bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
-        bundle.putString("unit", unit);
-        startActivity(NewCleanFinishActivity.class, bundle);
+        Log.d("XiLei", "size=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)));
+        if (PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_one_key_speed));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_one_key_speed));
+            bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
+            bundle.putString("unit", unit);
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
         finish();
     }
 

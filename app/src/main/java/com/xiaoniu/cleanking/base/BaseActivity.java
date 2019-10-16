@@ -19,6 +19,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivi
     @Inject
     protected T mPresenter;
     public String source_page;
+
     private void initInjector() {
         ActivityComponent activityComponent = DaggerActivityComponent.builder()
                 .appComponent(ApplicationDelegate.getAppComponent())
@@ -26,9 +27,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivi
                 .build();
 
         inject(activityComponent);
-        /**
-         *
-         */
     }
 
     /**
@@ -56,9 +54,5 @@ public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivi
         if (!TextUtils.isEmpty(msg)) {
             ToastUtils.showShort(msg);
         }
-    }
-
-    protected void refresh() {
-
     }
 }

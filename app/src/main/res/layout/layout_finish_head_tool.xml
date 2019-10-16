@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_background"
-    android:paddingBottom="@dimen/dimen_16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dimen_16dp">
     <!--一键加速-->
     <ImageView
         android:id="@+id/iv_speed_clean"

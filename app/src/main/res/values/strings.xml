@@ -108,4 +108,6 @@
     <string name="power_consumption_num">%s个应用正在耗电</string>
     <string name="finished_clean_notify_hint">开启防骚扰保护</string>
     <string name="lengthen_time">延长待机时间%s分钟</string>
+    <string name="optimize_finish">已优化</string>
+
 </resources>
