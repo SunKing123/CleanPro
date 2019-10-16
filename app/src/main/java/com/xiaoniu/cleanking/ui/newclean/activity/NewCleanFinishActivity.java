@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -88,14 +89,14 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     private NewsListAdapter mNewsAdapter;
     private NewsType mType = NewsType.TOUTIAO;
     private static final int PAGE_NUM = 20;//每一页数据
-    private boolean mIsRefresh = true;
+
     private ImageView mIvSpeedClean;
     private ImageView mIvPowerClean;
     private ImageView mIvNotificationClean;
     private ImageView mIvWeChatClean;
     private ImageView mIvFileClean;
     private ImageView mIvCooling;
-
+    private int page_index = 1;
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_finish_layout;
@@ -416,13 +417,11 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                mIsRefresh = true;
-                startLoadData();
+
             }
 
             @Override
             public void onLoadMore() {
-                mIsRefresh = false;
                 startLoadData();
             }
         });
@@ -433,8 +432,6 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     protected void loadData() {
         Intent intent = getIntent();
         changeUI(intent);
-
-        mIsRefresh = false;
         startLoadData();
     }
 
@@ -746,13 +743,10 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
-            if (mIsRefresh) {
-                if (mRecyclerView != null)
-                    mRecyclerView.refreshComplete();
-            } else {
-                if (mRecyclerView != null)
-                    mRecyclerView.loadMoreComplete();
-            }
+
+            if (mRecyclerView != null)
+                mRecyclerView.loadMoreComplete();
+
             return;
         }
 
@@ -766,39 +760,27 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
     }
 
     private void loadNewsData() {
-        String type = mType.getValue();
-        String lastId = SPUtil.getLastNewsID(mType.getName());
-        if (mIsRefresh) {
-            lastId = "";
-        }
-        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
+        String type = mType.getName();
+        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type  + "&page=" + page_index;
         Log.d("XiLei", "url=" + url);
-        EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
+        EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
             public void onFailure(Throwable e) {
             }
 
             @Override
-            public void onSuccess(NewsListInfo result) {
-                if (result != null && result.data != null && result.data.size() > 0) {
-                    SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
-                    if (mIsRefresh) {
-                        mNewsAdapter.setData(result.data);
-                    } else {
-                        mNewsAdapter.addData(result.data);
-                    }
+            public void onSuccess(List<NewsItemInfoRuishi> result) {
+                if (result != null && result.size() > 0) {
+                    page_index ++;
+                    mNewsAdapter.addData(result);
                 }
             }
 
             @Override
             public void onComplete() {
-                if (mIsRefresh) {
-                    if (mRecyclerView != null)
-                        mRecyclerView.refreshComplete();
-                } else {
-                    if (mRecyclerView != null)
-                        mRecyclerView.loadMoreComplete();
-                }
+                if (mRecyclerView != null)
+                    mRecyclerView.loadMoreComplete();
+
             }
         });
     }
@@ -822,13 +804,9 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
 
             @Override
             public void onComplete() {
-                if (mIsRefresh) {
-                    if (mRecyclerView != null)
-                        mRecyclerView.refreshComplete();
-                } else {
-                    if (mRecyclerView != null)
-                        mRecyclerView.loadMoreComplete();
-                }
+                if (mRecyclerView != null)
+                    mRecyclerView.loadMoreComplete();
+
             }
 
             @Override
@@ -840,11 +818,8 @@ public class NewCleanFinishActivity extends BaseActivity implements NativeExpres
             public void onSuccess(ArrayList<VideoItemInfo> result) {
                 if (result != null && result.size() > 0) {
                     SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
-                    if (mIsRefresh) {
-                        mNewsAdapter.setData(result);
-                    } else {
-                        mNewsAdapter.addData(result);
-                    }
+                    mNewsAdapter.addData(result);
+
                 }
             }
         });

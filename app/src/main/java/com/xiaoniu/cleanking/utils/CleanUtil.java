@@ -154,7 +154,14 @@ public class CleanUtil {
                         for (SecondJunkInfo secondlevelGarbageInfo : junks.get(i2).getSubGarbages()) {
                             if (secondlevelGarbageInfo != null) {
                                 try {
-                                    com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(new File(secondlevelGarbageInfo.getFilecatalog()));
+                                    if(secondlevelGarbageInfo.getFilecatalog()!=null){
+                                        File delFile = new File(secondlevelGarbageInfo.getFilecatalog());
+                                        if(delFile!=null&& delFile.exists()){
+                                            com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(delFile);
+                                        }
+                                    }
+
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -162,7 +169,13 @@ public class CleanUtil {
                         }
                     }
                     try {
-                        com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(new File(junks.get(i2).getGarbageCatalog()));
+                        if(junks.get(i2).getGarbageCatalog()!=null){
+                            File delFile = new File(junks.get(i2).getGarbageCatalog());
+                            if (delFile != null && delFile.exists()) {
+                                com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(new File(junks.get(i2).getGarbageCatalog()));
+                            }
+                        }
+
                     } catch (Exception e2) {
                         e2.printStackTrace();
                     }
