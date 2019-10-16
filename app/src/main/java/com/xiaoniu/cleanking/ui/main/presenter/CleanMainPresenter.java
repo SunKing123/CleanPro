@@ -273,64 +273,69 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param circleOuter2
      */
     public void startCleanScanAnimation(ImageView iconOuter, View circleOuter, View circleOuter2) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f, 1f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f, 1f);
+        try {
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconOuter, "scaleY", 1f, 1.3f, 1f);
+            ObjectAnimator alpha = ObjectAnimator.ofFloat(iconOuter, "alpha", 1f, 0.4f, 1f);
 
-        ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(circleOuter, "scaleX", 1f, 1.8f);
-        ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(circleOuter, "scaleY", 1f, 1.8f);
-        ObjectAnimator alpha2 = ObjectAnimator.ofFloat(circleOuter, "alpha", 1f, 0.0f);
+            ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(circleOuter, "scaleX", 1f, 1.8f);
+            ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(circleOuter, "scaleY", 1f, 1.8f);
+            ObjectAnimator alpha2 = ObjectAnimator.ofFloat(circleOuter, "alpha", 1f, 0.0f);
 
-        ObjectAnimator scaleX3 = ObjectAnimator.ofFloat(circleOuter2, "scaleX", 1f, 1.6f);
-        ObjectAnimator scaleY3 = ObjectAnimator.ofFloat(circleOuter2, "scaleY", 1f, 1.6f);
-        ObjectAnimator alpha3 = ObjectAnimator.ofFloat(circleOuter2, "alpha", 1f, 0.0f);
-        scaleX.setRepeatMode(ValueAnimator.REVERSE);
-        scaleY.setRepeatMode(ValueAnimator.REVERSE);
-        scaleX.setRepeatCount(-1);
-        scaleY.setRepeatCount(-1);
-        rotation.setRepeatCount(-1);
-        alpha.setRepeatCount(-1);
-        scaleX.setDuration(2000);
-        scaleY.setDuration(2000);
-        rotation.setRepeatMode(ValueAnimator.RESTART);
-        rotation.setDuration(1000);
-        alpha.setDuration(2000);
-        alpha.setRepeatMode(ValueAnimator.REVERSE);
+            ObjectAnimator scaleX3 = ObjectAnimator.ofFloat(circleOuter2, "scaleX", 1f, 1.6f);
+            ObjectAnimator scaleY3 = ObjectAnimator.ofFloat(circleOuter2, "scaleY", 1f, 1.6f);
+            ObjectAnimator alpha3 = ObjectAnimator.ofFloat(circleOuter2, "alpha", 1f, 0.0f);
+            scaleX.setRepeatMode(ValueAnimator.REVERSE);
+            scaleY.setRepeatMode(ValueAnimator.REVERSE);
+            scaleX.setRepeatCount(-1);
+            scaleY.setRepeatCount(-1);
+            rotation.setRepeatCount(-1);
+            alpha.setRepeatCount(-1);
+            scaleX.setDuration(2000);
+            scaleY.setDuration(2000);
+            rotation.setRepeatMode(ValueAnimator.RESTART);
+            rotation.setDuration(1000);
+            alpha.setDuration(2000);
+            alpha.setRepeatMode(ValueAnimator.REVERSE);
 
-        //第一圈
-        initAnim(alpha2, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleY2, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleX2, 2000, ValueAnimator.RESTART, -1);
+            //第一圈
+            initAnim(alpha2, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleY2, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleX2, 2000, ValueAnimator.RESTART, -1);
 
-        initAnim(alpha3, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleY3, 2000, ValueAnimator.RESTART, -1);
-        initAnim(scaleX3, 2000, ValueAnimator.RESTART, -1);
+            initAnim(alpha3, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleY3, 2000, ValueAnimator.RESTART, -1);
+            initAnim(scaleX3, 2000, ValueAnimator.RESTART, -1);
 
-        cleanScanAnimator = new AnimatorSet();
+            cleanScanAnimator = new AnimatorSet();
 
-        cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
-        cleanScanAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
+            cleanScanAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+                @Override
+                public void onAnimationEnd(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        });
-        cleanScanAnimator.start();
+                }
+            });
+            cleanScanAnimator.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -357,106 +362,111 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param countEntity
      */
     public void startCleanAnimation(ImageView iconInner, ImageView iconOuter, LinearLayout layoutScan, RelativeLayout layoutCount, CountEntity countEntity) {
-        iconInner.setVisibility(VISIBLE);
+        try {
+            iconInner.setVisibility(VISIBLE);
+            int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - iconOuter.getMeasuredHeight();
 
-        int height = ScreenUtils.getScreenHeight(AppApplication.getInstance()) / 2 - iconOuter.getMeasuredHeight();
-        ObjectAnimator outerY = ObjectAnimator.ofFloat(iconOuter, "translationY", iconOuter.getTranslationY(), height);
-        ObjectAnimator scanY = ObjectAnimator.ofFloat(layoutScan, "translationY", layoutScan.getTranslationY(), height);
-        ObjectAnimator countY = ObjectAnimator.ofFloat(layoutCount, "translationY", layoutCount.getTranslationY(), height);
-        ObjectAnimator innerY = ObjectAnimator.ofFloat(iconInner, "translationY", iconInner.getTranslationY(), height);
+            ObjectAnimator outerY = ObjectAnimator.ofFloat(iconOuter, "translationY", iconOuter.getTranslationY(), height);
+            ObjectAnimator scanY = ObjectAnimator.ofFloat(layoutScan, "translationY", layoutScan.getTranslationY(), height);
+            ObjectAnimator countY = ObjectAnimator.ofFloat(layoutCount, "translationY", layoutCount.getTranslationY(), height);
+            ObjectAnimator innerY = ObjectAnimator.ofFloat(iconInner, "translationY", iconInner.getTranslationY(), height);
 
-        ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(iconInner, "alpha", 0, 1);
+            ObjectAnimator innerAlpha = ObjectAnimator.ofFloat(iconInner, "alpha", 0, 1);
 
-        outerY.setDuration(500);
-        scanY.setDuration(500);
-        innerY.setDuration(500);
-        innerAlpha.setDuration(1000);
-        countY.setDuration(500);
+            outerY.setDuration(500);
+            scanY.setDuration(500);
+            innerY.setDuration(500);
+            innerAlpha.setDuration(1000);
+            countY.setDuration(500);
 
-        //第一阶段倒转
-        ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(iconInner, "rotation", 0, -35f);
-        rotationFistStep.setDuration(600);
-        innerAlpha.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                iconInner.setVisibility(VISIBLE);
-                new Handler().postDelayed(rotationFistStep::start, 500);
-            }
+            //第一阶段倒转
+            ObjectAnimator rotationFistStep = ObjectAnimator.ofFloat(iconInner, "rotation", 0, -35f);
+            rotationFistStep.setDuration(600);
+            innerAlpha.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    iconInner.setVisibility(VISIBLE);
+                    new Handler().postDelayed(rotationFistStep::start, 500);
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //第二阶段开始
-                secondLevel(iconInner, iconOuter, countEntity);
-            }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //第二阶段开始
+                    secondLevel(iconInner, iconOuter, countEntity);
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        });
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(outerY, innerY, innerAlpha, scanY, countY);
-        animatorSet.start();
-
-
+                }
+            });
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(outerY, innerY, innerAlpha, scanY, countY);
+            animatorSet.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void secondLevel(ImageView iconInner, ImageView iconOuter, CountEntity countEntity) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360, 0);
-        ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
-        ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
+        try {
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            ObjectAnimator rotation2 = ObjectAnimator.ofFloat(iconInner, "rotation", -35, 0, 360, 0, 360, 0, 360, 0);
+            ObjectAnimator rotation3 = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360, 0, 360, 0, 360, 0, 360);
+            ObjectAnimator rotation4 = ObjectAnimator.ofFloat(iconInner, "rotation", 0, 360);
 
-        rotation.setDuration(900);
-        rotation2.setDuration(800);
-        rotation3.setDuration(200);
-        rotation3.setRepeatCount(-1);
-        rotation4.setRepeatCount(-1);
-        rotation4.setDuration(200);
-        rotation4.setInterpolator(new LinearInterpolator());
-        rotation3.setInterpolator(new LinearInterpolator());
+            rotation.setDuration(900);
+            rotation2.setDuration(800);
+            rotation3.setDuration(200);
+            rotation3.setRepeatCount(-1);
+            rotation4.setRepeatCount(-1);
+            rotation4.setDuration(200);
+            rotation4.setInterpolator(new LinearInterpolator());
+            rotation3.setInterpolator(new LinearInterpolator());
 
-        new Handler().postDelayed(() -> mView.showLottieView(), 200);
+            new Handler().postDelayed(() -> mView.showLottieView(), 200);
 
-        rotation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            rotation.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                startClean(iconInner,iconOuter,rotation4, rotation3, countEntity);
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    startClean(iconInner,iconOuter,rotation4, rotation3, countEntity);
 
 
-            }
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        });
+                }
+            });
 
-        rotation.setInterpolator(new AccelerateInterpolator());
-        rotation2.setInterpolator(new AccelerateInterpolator());
-        AnimatorSet animatorStep2 = new AnimatorSet();
-        animatorStep2.playSequentially(rotation, rotation3);
+            rotation.setInterpolator(new AccelerateInterpolator());
+            rotation2.setInterpolator(new AccelerateInterpolator());
+            AnimatorSet animatorStep2 = new AnimatorSet();
+            animatorStep2.playSequentially(rotation, rotation3);
 
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playSequentially(rotation2, rotation4);
-        animatorSet.start();
-        animatorStep2.start();
-
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playSequentially(rotation2, rotation4);
+            animatorSet.start();
+            animatorStep2.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static final int FirstLevel = 0xffFD6F46;
@@ -801,9 +811,13 @@ public class CleanMainPresenter extends RxPresenter<CleanMainFragment, CleanMain
      * @param iconOuter
      */
     public void showOuterViewRotation(ImageView iconOuter) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
-        rotation.setRepeatCount(-1);
-        rotation.setRepeatMode(ValueAnimator.RESTART);
-        rotation.setDuration(1500);
+        try {
+            ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
+            rotation.setRepeatCount(-1);
+            rotation.setRepeatMode(ValueAnimator.RESTART);
+            rotation.setDuration(1500);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

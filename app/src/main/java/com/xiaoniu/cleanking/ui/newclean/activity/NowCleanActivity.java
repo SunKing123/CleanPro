@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.xiaoniu.cleanking.R;
@@ -14,6 +15,7 @@ import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.HashMap;
 
@@ -61,9 +63,16 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        setStatusBar();
         startScan();
     }
-
+    protected void setStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(com.xiaoniu.common.R.color.color_4690FD), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(this, getResources().getColor(com.xiaoniu.common.R.color.color_FD6F46), false);
+        }
+    }
     private void addClick(Intent intent) {
         if (intent != null){
             String notification = intent.getStringExtra("NotificationService");
@@ -84,6 +93,12 @@ public class NowCleanActivity extends BaseActivity {
      * 开始扫描
      */
     private void startScan() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getToolBar().setBackgroundColor(getResources().getColor(R.color.color_4690FD));
+        } else {
+            getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+        }
+
         isScan = true;
         setLeftTitle("扫描中");
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");

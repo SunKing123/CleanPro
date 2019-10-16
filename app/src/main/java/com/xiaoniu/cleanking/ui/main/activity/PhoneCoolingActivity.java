@@ -326,10 +326,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         ValueAnimator anim = ValueAnimator.ofInt(startHeight - bottom, 0);
         new Handler().postDelayed(() -> {
             if (!isDestroyed()) {
-                ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
-                mBgTitle.setVisibility(VISIBLE);
-                alpha.setDuration(1000);
-                alpha.start();
+                try {
+                    ObjectAnimator alpha = ObjectAnimator.ofFloat(mBgTitle, "alpha", 0, 1);
+                    mBgTitle.setVisibility(VISIBLE);
+                    alpha.setDuration(1000);
+                    alpha.start();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }, 200);
         anim.setDuration(1000);
@@ -360,9 +364,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         int bottom = mBgTitle.getBottom();
         int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(0, startHeight - bottom);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(mLayoutTitleContent, "alpha", 1, 0);
-        alpha.setDuration(200);
-        alpha.start();
+        try {
+            ObjectAnimator alpha = ObjectAnimator.ofFloat(mLayoutTitleContent, "alpha", 1, 0);
+            alpha.setDuration(200);
+            alpha.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCoolView.getLayoutParams();

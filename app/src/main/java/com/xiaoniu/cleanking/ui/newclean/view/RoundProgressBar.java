@@ -209,17 +209,22 @@ public class RoundProgressBar extends View {
             animation = new AnimatorSet();
         }
 
-        ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(this, "progress", 0.1f, progress);
-        progressAnimation.setDuration(animTime);// 动画执行时间
+        try {
+            ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(this, "progress", 0.1f, progress);
+            progressAnimation.setDuration(animTime);// 动画执行时间
 
-        progressAnimation.setInterpolator(mTimeInterpolator == null ? new AccelerateInterpolator() : mTimeInterpolator);
+            progressAnimation.setInterpolator(mTimeInterpolator == null ? new AccelerateInterpolator() : mTimeInterpolator);
 
-        if (null != mAnimatorListener) {
-            progressAnimation.addListener(mAnimatorListener);
+            if (null != mAnimatorListener) {
+                progressAnimation.addListener(mAnimatorListener);
+            }
+
+            animation.playTogether(progressAnimation);
+            animation.start();
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        animation.playTogether(progressAnimation);
-        animation.start();
     }
 
     public void clearAnimation() {

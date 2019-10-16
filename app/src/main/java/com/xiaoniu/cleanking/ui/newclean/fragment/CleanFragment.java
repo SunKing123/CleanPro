@@ -85,9 +85,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         TextView tvUnit = mHeadView.findViewById(R.id.tv_clear_finish_gb_title);
 
         mCountEntity = ((NowCleanActivity) getActivity()).getCountEntity();
-
-        tvSize.setText(mCountEntity.getTotalSize());
-        tvUnit.setText(mCountEntity.getUnit());
+        if (mCountEntity != null){
+            tvSize.setText(mCountEntity.getTotalSize());
+            tvUnit.setText(mCountEntity.getUnit());
+        }
         mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 
         mExpandableListView.setGroupIndicator(null);
@@ -124,8 +125,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
 
         mCleanAnimView.setCleanOverListener(() -> {
-                    ((NowCleanActivity) getActivity()).setClean(false);
-                });
+            if (getActivity() !=null){
+                ((NowCleanActivity) getActivity()).setClean(false);
+            }
+        });
     }
 
     /**

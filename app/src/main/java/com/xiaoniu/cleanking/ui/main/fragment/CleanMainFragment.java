@@ -261,6 +261,11 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         } else {
             mIvNews.setVisibility(VISIBLE);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mLayoutCleanTop.setBackgroundColor(getResources().getColor(R.color.color_4690FD));
+        } else {
+            mLayoutCleanTop.setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+        }
     }
 
     public void startScan() {

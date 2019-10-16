@@ -140,11 +140,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             if (msg.what == 2) {
                 /*((NowCleanActivity)getActivity()).setCountEntity(null);
                 ((NowCleanActivity)getActivity()).setJunkGroups(null);*/
-
-                ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
-                ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
-
                 try {
+                    if (getActivity() != null){
+                        ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
+                        ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
+                    }
                     mPresenter.startScan();
                     mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
                     type = TYPE_SCANING;

@@ -222,7 +222,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus && isFirstCreate) {
             //检查是否有补丁
-            mPresenter.queryPatch();
+//            mPresenter.queryPatch();
             //检测版本更新
             mPresenter.queryAppVersion(() -> {
             });
@@ -531,16 +531,21 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     public void start() {
-        //启动保活服务
-        KeepAliveManager.toKeepAlive(
-                getApplication()
-                , HIGH_POWER_CONSUMPTION,
-                "进程保活",
-                "Process: System",
-                R.mipmap.applogo,
-                new ForegroundNotification(
-                        //定义前台服务的通知点击事件
-                        (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
-        );
+        try {
+            //启动保活服务
+            KeepAliveManager.toKeepAlive(
+                    getApplication()
+                    , HIGH_POWER_CONSUMPTION,
+                    "进程保活",
+                    "Process: System",
+                    R.mipmap.applogo,
+                    new ForegroundNotification(
+                            //定义前台服务的通知点击事件
+                            (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
+            );
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+
     }
 }

@@ -42,21 +42,26 @@ public class KeepAliveManager {
             //优化后的枚举
             RunMode.setShape(runMode);
             KeepAliveConfig.runMode = RunMode.getShape();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //启动定时器，在定时器中启动本地服务和守护进程
-                JobHandlerService.startJob(application);
-            } else {
-                Intent localIntent = new Intent(application, LocalService.class);
-                //启动守护进程
-                Intent guardIntent = new Intent(application, RemoteService.class);
-                if (Build.VERSION.SDK_INT >= 26) {
-                    application.startForegroundService(localIntent);
-                    application.startForegroundService(guardIntent);
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    //启动定时器，在定时器中启动本地服务和守护进程
+                    JobHandlerService.startJob(application);
                 } else {
-                    application.startService(localIntent);
-                    application.startService(guardIntent);
+                    Intent localIntent = new Intent(application, LocalService.class);
+                    //启动守护进程
+                    Intent guardIntent = new Intent(application, RemoteService.class);
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        application.startForegroundService(localIntent);
+                        application.startForegroundService(guardIntent);
+                    } else {
+                        application.startService(localIntent);
+                        application.startService(guardIntent);
+                    }
                 }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
     }
 

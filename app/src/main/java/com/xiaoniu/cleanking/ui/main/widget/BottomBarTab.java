@@ -169,39 +169,6 @@ public class BottomBarTab extends FrameLayout {
 //        mTvTitle.setText("活动");
     }
 
-    private void startActionAnim() {
-        if (mObjectAnimator == null) {
-            mObjectAnimator = ObjectAnimator.ofFloat(mIcon, "rotation", 0, -10, 10, -10, 0);
-            mObjectAnimator.setDuration(450);
-            mObjectAnimator.setStartDelay(1000);
-            mObjectAnimator.setRepeatMode(ValueAnimator.RESTART);
-            mObjectAnimator.setRepeatCount(ValueAnimator.INFINITE);
-            mObjectAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    mIcon.setRotation(0);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                    animation.setStartDelay(1000);
-                    animation.start();
-                }
-            });
-        }
-        mObjectAnimator.start();
-    }
-
     public void setTabPosition(int position, int currentPosition) {
         mTabPosition = position;
         if (position == currentPosition) {
