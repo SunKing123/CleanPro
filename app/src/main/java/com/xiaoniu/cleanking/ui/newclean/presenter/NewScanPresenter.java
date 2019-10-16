@@ -388,7 +388,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     //开始
                     if (mView == null)
                         return;
-                    mView.storagePermissionOk();
+                    mView.startScan();
                 } else {
                     if (mView == null)
                         return;
@@ -405,46 +405,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
 
-    boolean isFromClick = false;
-    public AlertDialog showPermissionDialog(Context context, final DialogClickListener okListener) {
-        isFromClick = false;
-        final AlertDialog dlg = new AlertDialog.Builder(context).create();
-        if (((Activity) context).isFinishing()) {
-            return dlg;
-        }
-        dlg.setCancelable(true);
-        dlg.show();
-        Window window = dlg.getWindow();
-        window.setContentView(R.layout.alite_permission_dialog);
-        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
-        //这里设置居中
-        lp.gravity = Gravity.CENTER;
-        window.setAttributes(lp);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView tv_goto = window.findViewById(R.id.tv_goto);
-        ImageView ivExit = window.findViewById(R.id.iv_exit);
-        ivExit.setOnClickListener(v -> {
-            dlg.cancel();
-        });
-        tv_goto.setOnClickListener(v -> {
-            isFromClick = true;
-            okListener.clickOKBtn();
-        });
-        dlg.setOnDismissListener(dialog -> {
-            if (!isFromClick)
-                mView.getActivity().finish();
-
-        });
-        return dlg;
-    }
-
-
-    public interface DialogClickListener {
-        void clickOKBtn();
-
-        void cancelBtn();
-
-    }
 
 
     /**
