@@ -1,28 +1,43 @@
 package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
+import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.SystemUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * 通知栏清理
+ * 通知栏清理引导页面
  */
 public class NotifyCleanGuideActivity extends BaseActivity {
     private TextView mTvClean;
-    private boolean mRequestPermission;
-
+//    private boolean mRequestPermission;
+    private AlertDialog mAlertDialog;//权限引导弹框
+    private boolean isClick = false;
+    private boolean isDoubleBack = false;
     public static void startNotificationGuideActivity(Context context) {
         if (context != null) {
             if (!NotifyUtils.isNotificationListenerEnabled() || !SPUtil.isCleanNotificationEnable()) {
@@ -64,14 +79,33 @@ public class NotifyCleanGuideActivity extends BaseActivity {
     protected void setListener() {
         mTvClean.setOnClickListener(v -> {
             if (NotifyUtils.isNotificationListenerEnabled()) {
-                SPUtil.setCleanNotificationEnable(true);
-                NotifyCleanDetailActivity.startNotificationCleanActivity(NotifyCleanGuideActivity.this);
-                finish();
+                startNodifyDetail();
             } else {
-                mRequestPermission = true;
-                NotifyUtils.openNotificationListenerSettings(NotifyCleanGuideActivity.this);
+                    mAlertDialog = showPermissionDialog(new ClickListener() {
+                        @Override
+                        public void clickOKBtn() {
+                            isClick = true;
+                            //开启权限
+                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+                            NotifyCleanGuideActivity.this.startActivity(intent);;
+                            NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
+                        }
+                        @Override
+                        public void cancelBtn() {
+
+                        }
+                    });
+
+
             }
         });
+    }
+
+    //进入通知栏详情页
+    public void startNodifyDetail(){
+        SPUtil.setCleanNotificationEnable(true);
+        NotifyCleanDetailActivity.startNotificationCleanActivity(NotifyCleanGuideActivity.this);
+        finish();
     }
 
     @Override
@@ -81,19 +115,60 @@ public class NotifyCleanGuideActivity extends BaseActivity {
         event.setType("notification");
         EventBus.getDefault().post(event);
 
-        if (mRequestPermission) {
-            mRequestPermission = false;
+        if (isClick) {
             if (NotifyUtils.isNotificationListenerEnabled()) {
-                SPUtil.setCleanNotificationEnable(true);
-                NotifyCleanDetailActivity.startNotificationCleanActivity(this);
-                finish();
+                if (mAlertDialog != null)
+                    mAlertDialog.cancel();
+                startNodifyDetail();
+            } else {
+                ToastUtils.showShort(getString(R.string.tool_get_premis));
+                if (isDoubleBack) finish();
+                isDoubleBack = true;
             }
         }
+        isClick = false;
+
     }
 
     @Override
     protected void loadData() {
 
+    }
+
+
+    boolean isFromClick = false;
+    public AlertDialog showPermissionDialog(final ClickListener okListener) {
+        isFromClick = false;
+        final AlertDialog dlg = new AlertDialog.Builder(this).create();
+        if (this.isFinishing()) {
+            return dlg;
+        }
+        dlg.setCancelable(true);
+        dlg.show();
+        Window window = dlg.getWindow();
+        window.setContentView(R.layout.alite_permission_dialog);
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        //这里设置居中
+        lp.gravity = Gravity.CENTER;
+        window.setAttributes(lp);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView tv_goto = window.findViewById(R.id.tv_goto);
+        window.findViewById(R.id.iv_exit).setOnClickListener(v -> dlg.cancel());
+        tv_goto.setOnClickListener(v -> {
+            isFromClick = true;
+            okListener.clickOKBtn();
+        });
+        dlg.setOnDismissListener(dialog -> {
+            if (!isFromClick)
+              NotifyCleanGuideActivity.this.finish();
+        });
+        return dlg;
+    }
+
+    public interface ClickListener {
+        void clickOKBtn();
+
+        void cancelBtn();
     }
 
 }

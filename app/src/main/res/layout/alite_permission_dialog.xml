@@ -35,7 +35,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/dimen_20dp"
             android:layout_marginRight="@dimen/dimen_20dp"
-            android:text="手机加速，垃圾清理，高温提醒等功能均受限制，需要手动开启权限。"
+            android:text="一键加速，通知清理，超强省电等功能均受限制，需要手动开启权限。"
             android:textColor="#666666"
             android:textSize="14sp" />
 

@@ -33,7 +33,6 @@ import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -135,8 +134,11 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             boolean isScanFile =  apkJunkInfos.size() > 0;
             //扫描私有路径下缓存文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
-            e.onNext(androidDataInfo);
 
+            //根据私有路径扫描公用路径
+            ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
+
+            e.onNext(publicDataInfo);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {

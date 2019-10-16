@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import com.tencent.bugly.crashreport.biz.UserInfoBean;
@@ -29,8 +31,10 @@ import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
 import com.xiaoniu.cleanking.ui.main.bean.AppUsageInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.PathData;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -61,7 +65,7 @@ public class FileQueryUtils {
     private ActivityManager mActivityManager;
     private PackageManager mPackageManager;
     private ScanFileListener mScanFileListener;
-
+    HashMap<String,PathData> pathMap ;
     /**
      * 是否终止标识符， 如果停止，结束查询数据
      */
@@ -72,6 +76,7 @@ public class FileQueryUtils {
         this.mActivityManager = (ActivityManager) AppApplication.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
         this.mPackageManager = AppApplication.getInstance().getPackageManager();
         mMemoryCacheWhite = getCacheWhite();
+        pathMap = FilePathUtil.getPathMap(mContext);
         if (this.mPackageManager != null) {
             try {
                 installedAppList = this.mPackageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -79,6 +84,7 @@ public class FileQueryUtils {
                 e.printStackTrace();
             }
         }
+
     }
 
 
@@ -156,7 +162,12 @@ public class FileQueryUtils {
      */
     public ArrayList<FirstJunkInfo> getExternalStorageCache(ArrayList<FirstJunkInfo> firstJunkInfos) {
         HashMap<String, FirstJunkInfo> junkInfoMap = new HashMap<String, FirstJunkInfo>();
+
         for (FirstJunkInfo firstJunkInfo : firstJunkInfos) {
+            if(pathMap.containsKey(firstJunkInfo.getAppPackageName())){
+                //todo 暂时默认一个文件夹扫描
+                firstJunkInfo.setSdPath(pathMap.get(firstJunkInfo.getAppPackageName()).getFileList().get(0).getFolderName());
+            }
             junkInfoMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
         }
 
@@ -166,7 +177,7 @@ public class FileQueryUtils {
         File[] listFiles = externalFile.listFiles();
         if (listFiles != null) {
             for (File file : listFiles) {
-                if(junkInfoMap.containsKey(file.getName())){ //sd根目录下包含packName
+                if(junkInfoMap.containsKey(file.getName()) || checkHasPath(junkInfoMap,file.getName())){ //sd根目录下包含packName||包含外部关联路径
                     FirstJunkInfo firstJunkInfo = junkInfoMap.get(file.getName());
                     Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file,file.getName());
                     for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
@@ -203,14 +214,23 @@ public class FileQueryUtils {
                         }
 
                     }
-                } else {
-//                    Map<String,String> filePathMap = this.checkOutAllGarbageFolder(file,file.getName());
-
                 }
             }
         }
         ArrayList<FirstJunkInfo> junnkInfoList = new ArrayList<FirstJunkInfo>(junkInfoMap.values());
         return  junnkInfoList;
+    }
+
+    //检测是否包含关联路径
+    public boolean checkHasPath(HashMap<String, FirstJunkInfo> hashMap,String fileName){
+        for (final Map.Entry<String, FirstJunkInfo> entry : hashMap.entrySet()) {
+            FirstJunkInfo firstJunkInfo = entry.getValue();
+            if(!TextUtils.isEmpty(firstJunkInfo.getSdPath())&& firstJunkInfo.getSdPath().equals(fileName)){
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -1280,7 +1300,7 @@ public class FileQueryUtils {
 
                     //多媒体相关文件
                     //bmp,jpg,png,tif,gif,pcx,tga,exif,fpx,svg,psd
-                    if (fileLow.endsWith(".bmp")||fileLow.endsWith(".jpg")||fileLow.endsWith(".tif")||fileLow.endsWith(".gif")||fileLow.endsWith(".pcx")||fileLow.endsWith(".tga")||fileLow.endsWith(".exif")||fileLow.endsWith(".fpx")||fileLow.endsWith(".svg")||fileLow.endsWith(".psd")) {
+                    if (fileLow.endsWith(".png")||fileLow.endsWith(".bmp")||fileLow.endsWith(".jpg")||fileLow.endsWith(".tif")||fileLow.endsWith(".gif")||fileLow.endsWith(".pcx")||fileLow.endsWith(".tga")||fileLow.endsWith(".exif")||fileLow.endsWith(".fpx")||fileLow.endsWith(".svg")||fileLow.endsWith(".psd")) {
                         map.put(file2.getAbsolutePath(), "图片文件");
                         //cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp
                     } else if (fileLow.endsWith(".cdr")||fileLow.endsWith(".pcd")||fileLow.endsWith(".dxf")||fileLow.endsWith(".ufo")||fileLow.endsWith(".eps")||fileLow.endsWith(".ai")||fileLow.endsWith(".raw")||fileLow.endsWith(".WMF")||fileLow.endsWith(".webp")) {

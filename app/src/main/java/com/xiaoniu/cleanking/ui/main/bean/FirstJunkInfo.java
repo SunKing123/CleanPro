@@ -30,6 +30,16 @@ public class FirstJunkInfo implements Serializable {
     private int versionCode;
     private boolean isSelect=true;
     private boolean isLock;
+    private String sdPath;
+
+
+    public String getSdPath() {
+        return sdPath;
+    }
+
+    public void setSdPath(String sdPath) {
+        this.sdPath = sdPath;
+    }
 
     public boolean isLock() {
         return isLock;
