@@ -78,6 +78,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
 
+    private String mAdvertId = ""; //冷启动广告id
+
 
     @Override
     protected int getLayoutId() {
@@ -85,9 +87,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     }
 
     //初始sd根目录关联关系
-    void initFileRelation(){
-        SPUtil.setString(mContext,"path_data", FileUtils.readJSONFromAsset(mContext,"sdstorage.json"));
+    void initFileRelation() {
+        SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
     }
+
     /**
      * 延迟跳转
      */
@@ -100,7 +103,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                     checkAndRequestPermission();
                 } else {
                     // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                    fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
+                    fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
                 }
             }
         });
@@ -146,10 +149,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         }
     }
 
-    private String getPosId() {
+    /*private String getPosId() {
         String posId = getIntent().getStringExtra("pos_id");
-        return TextUtils.isEmpty(posId) ? PositionId.SPLASH_POS_ID : posId;
-    }
+        return TextUtils.isEmpty(posId) ? mAdvertId : posId;
+    }*/
 
     /**
      * ----------非常重要----------
@@ -179,7 +182,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-            fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
+            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -201,7 +204,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
-            fetchSplashAD(this, container, skipView, PositionId.APPID, getPosId(), this, 0);
+            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -230,8 +233,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             jumpActivity();
         } else {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.SPLASH_ID.equals(switchInfoList.getId())) {
-                    if (switchInfoList.isIsOpen()) {
+                if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    Log.d("XiLei", "switchInfoList.isOpen()=" + switchInfoList.isOpen());
+                    if (switchInfoList.isOpen()) {
+                        Log.d("XiLei", "posId=" + posId);
                         splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
                         splashAD.fetchAndShowIn(adContainer);
                         return;
@@ -251,7 +256,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onADClicked() {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.SPLASH_POS_ID, "优量汇", "splash_page", "splash_page");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "splash_page", "splash_page");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -293,8 +298,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", PositionId.SPLASH_POS_ID, "优量汇", "success", "splash_page", "splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", PositionId.SPLASH_POS_ID, "优量汇", "splash_page", "splash_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "splash_page", "splash_page");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "splash_page", "splash_page");
     }
 
     @Override
@@ -305,7 +310,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onNoAD(AdError error) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", PositionId.SPLASH_POS_ID, "优量汇", "fail", "splash_page", "splash_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", "splash_page", "splash_page");
         Log.i("AD_DEMO", String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(), error.getErrorMsg()));
         /**
          * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
@@ -356,12 +361,38 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         }
 
         initNiuData();
-        skip();
         initFileRelation();
 
         skipView.setOnClickListener(v -> {
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "splash_page", "splash_page");
         });
+    }
+
+    /**
+     * 拉取广告开关成功
+     *
+     * @return
+     */
+    public void getSwitchInfoListSuccess(SwitchInfoList list) {
+        Log.d("XiLei", "getSwitchInfoListSuccess");
+        Log.d("XiLei", "list.getData()=" + list.getData().size());
+        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+            if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
+                mAdvertId = switchInfoList.getAdvertId();
+            }
+        }
+        skip();
+    }
+
+    /**
+     * 拉取广告开关失败
+     *
+     * @return
+     */
+    public void getSwitchInfoListFail() {
+        Log.d("XiLei", "getSwitchInfoListFail");
+        startActivity(new Intent(SplashADActivity.this, MainActivity.class));
+        finish();
     }
 
     @Override

@@ -12,10 +12,13 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
 import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationCleanEvent;
@@ -106,10 +109,10 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     protected void setListener() {
         mIvBack.setOnClickListener(v -> {
             finish();
-            if (isCleanFinish){
+            if (isCleanFinish) {
                 //通知栏清理完成返回 点击",
                 StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_Return_click", "\"通知栏清理完成返回\"点击", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
-            }else {
+            } else {
                 //通知栏清理返回 点击",
                 StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
             }
@@ -197,16 +200,28 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
 
         //保存通知栏清理完成时间
-        if(PreferenceUtil.getNotificationCleanTime()){
+        if (PreferenceUtil.getNotificationCleanTime()) {
             PreferenceUtil.saveNotificationCleanTime();
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("title",getString(R.string.tool_notification_clean));
-        bundle.putString("num", "");
-        bundle.putString("unit","");
-        Intent intent = new Intent(this, NewCleanFinishActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        boolean isOpen = false;
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                isOpen = switchInfoList.isOpen();
+            }
+        }
+        if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean)) < 3) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_notification_clean));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_notification_clean));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            Intent intent = new Intent(this, NewCleanFinishActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
         finish();
     }
 }

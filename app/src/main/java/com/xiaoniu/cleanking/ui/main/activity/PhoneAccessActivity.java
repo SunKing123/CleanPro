@@ -40,6 +40,8 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
@@ -336,7 +338,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             PreferenceUtil.saveCleanTime();
         }
         Log.d("XiLei", "size=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)));
-        if (PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+        boolean isOpen = false;
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                isOpen = switchInfoList.isOpen();
+            }
+        }
+        if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

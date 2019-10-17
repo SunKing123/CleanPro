@@ -324,6 +324,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
+        mPresenter.getSwitchInfoList();
         //开启常驻通知栏服务
         if (NotificationsUtils.isNotificationEnabled(this))
             startService(new Intent(this, NotificationService.class));

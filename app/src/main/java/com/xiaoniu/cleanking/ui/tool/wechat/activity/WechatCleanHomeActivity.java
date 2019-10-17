@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,13 +19,17 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
@@ -160,11 +165,23 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_chat_clear));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
+                boolean isOpen = false;
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
+                }
+                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear)) < 3) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_chat_clear));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_chat_clear));
+                    bundle.putString("num", "");
+                    bundle.putString("unit", "");
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
                 finish();
             } else {
                 if (!tvDelete.isSelected()) return;

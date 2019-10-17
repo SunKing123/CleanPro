@@ -26,22 +26,33 @@ public class SwitchInfoList extends BaseEntity {
 
         private boolean isOpen;
         private String configKey;
+        private String switcherName;
+        private String advertPosition;
+        private String versions;
+        private String advertId;
 
-        public void setId(String id) {
-            this.configKey = id;
-        }
-
-        public String getId() {
-            return configKey;
-        }
-
-        public boolean isIsOpen() {
+        public boolean isOpen() {
             return isOpen;
         }
 
-        public void setIsOpen(boolean isOpen) {
-            this.isOpen = isOpen;
+        public String getConfigKey() {
+            return configKey;
         }
 
+        public String getSwitcherName() {
+            return switcherName;
+        }
+
+        public String getAdvertPosition() {
+            return advertPosition;
+        }
+
+        public String getVersions() {
+            return versions;
+        }
+
+        public String getAdvertId() {
+            return advertId;
+        }
     }
 }

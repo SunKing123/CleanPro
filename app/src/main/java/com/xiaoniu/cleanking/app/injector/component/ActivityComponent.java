@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanAudActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanFileActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -102,5 +103,7 @@ public interface ActivityComponent {
     void inject(QQCleanAudActivity qqCleanAudActivity);
 
     void inject(SplashADHotActivity splashADHotActivity);
+
+    void inject(NewCleanFinishActivity newCleanFinishActivity);
 }
 

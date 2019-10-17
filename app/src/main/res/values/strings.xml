@@ -109,5 +109,14 @@
     <string name="finished_clean_notify_hint">开启防骚扰保护</string>
     <string name="lengthen_time">延长待机时间%s分钟</string>
     <string name="optimize_finish">已优化</string>
-
+    <string name="internal_storage_scale_hint">内存占用高，手机运行缓慢</string>
+    <string name="quicken_now">立即加速</string>
+    <string name="power_consumption_thread">这些进程正在大量耗电</string>
+    <string name="power_now">立即省电</string>
+    <string name="find_cache_garbage">发现大量缓存垃圾</string>
+    <string name="file_clean">文件清理</string>
+    <string name="find_apk">发现大量无用安装包和大文件</string>
+    <string name="cpu_height">CPU电池温度过高</string>
+    <string name="download_now">立即下载</string>
+    <string name="find_harass_notify_num">发现%s条骚扰通知</string>
 </resources>

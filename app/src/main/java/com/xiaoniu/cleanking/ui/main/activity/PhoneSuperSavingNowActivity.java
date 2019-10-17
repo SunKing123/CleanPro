@@ -29,9 +29,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -108,7 +111,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         hideToolBar();
         num = intent.getIntExtra("processNum", 0);
         mSelectedList = PhoneSuperPowerDetailActivity.sSelectedList;
-        if (mSelectedList != null && mSelectedList.size() > 0){
+        if (mSelectedList != null && mSelectedList.size() > 0) {
             mTime = 3000 / mSelectedList.size();
         }
         PhoneSuperPowerDetailActivity.sSelectedList = null;
@@ -335,13 +338,26 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         if (PreferenceUtil.getPowerCleanTime()) {
             PreferenceUtil.savePowerCleanTime();
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("title", getString(R.string.tool_super_power_saving));
-        bundle.putString("num", "");
-        bundle.putString("unit", "");
-        Intent intent = new Intent(PhoneSuperSavingNowActivity.this, NewCleanFinishActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+
+        boolean isOpen = false;
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                isOpen = switchInfoList.isOpen();
+            }
+        }
+        if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving)) < 3) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_super_power_saving));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_super_power_saving));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            Intent intent = new Intent(PhoneSuperSavingNowActivity.this, NewCleanFinishActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
         finish();
     }
 
@@ -405,7 +421,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-               if (!isError) {
+                if (!isError) {
                     if (mLayoutNotNet != null) {
                         mLayoutNotNet.setVisibility(View.GONE);
                     }

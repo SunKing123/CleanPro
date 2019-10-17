@@ -99,7 +99,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_finish_layout;
+        return R.layout.activity_finish_layout_adv;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        mToolBar = findViewById(R.id.toolBar);
+       /* mToolBar = findViewById(R.id.toolBar);
         mToolBar.setBackgroundColor(ContextCompat.getColor(this, R.color.color_5180EF));
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -138,20 +138,20 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
         mIvNotificationClean = headerTool.findViewById(R.id.iv_notification_clean);
         mIvWeChatClean = headerTool.findViewById(R.id.iv_wechat_clean);
         mIvFileClean = headerTool.findViewById(R.id.iv_file_clean);
-        mIvCooling = headerTool.findViewById(R.id.iv_cooling);
+        mIvCooling = headerTool.findViewById(R.id.iv_cooling);*/
     }
 
     private void changeUI(Intent intent) {
         if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
             if (AppHolder.getInstance().getSwitchInfoList() != null) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                /*for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.FINISH_ID.equals(switchInfoList.getId())) {
                         if (switchInfoList.isIsOpen()) {
                             //加载广告
                             refreshAd();
                         }
                     }
-                }
+                }*/ //暂时注释
             }
         } else {
             PreferenceUtil.saveFirstOpenCLeanFinishApp();
@@ -244,7 +244,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
         }*/
 
         //是否显示推荐功能（一键加速，超强省电，通知栏清理，微信专清，文件清理，手机降温）
-        showTool();
+//        showTool();
     }
 
     /**
@@ -402,7 +402,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
     @Override
     protected void setListener() {
-        mIvSpeedClean.setOnClickListener(this);
+       /* mIvSpeedClean.setOnClickListener(this);
         mIvPowerClean.setOnClickListener(this);
         mIvNotificationClean.setOnClickListener(this);
         mIvWeChatClean.setOnClickListener(this);
@@ -431,17 +431,17 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
                 mIsRefresh = false;
                 startLoadData();
             }
-        });
+        });*/
 
     }
 
     @Override
     protected void loadData() {
-        Intent intent = getIntent();
+       /* Intent intent = getIntent();
         changeUI(intent);
 
         mIsRefresh = false;
-        startLoadData();
+        startLoadData();*/
     }
 
     @Override
@@ -452,7 +452,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
     @Override
     public void onBackPressed() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+       /* if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
@@ -461,13 +461,13 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
         if (Jzvd.backPress()) {
             return;
-        }
+        }*/
         super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
-        if (getString(R.string.app_name).contains(mTitle)) {
+       /* if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
@@ -496,7 +496,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
             NiuDataAPI.onPageStart("cooling_success_page_view_page", "降温结果页出现时");
         } else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
-        }
+        }*/
 
 
         super.onResume();
@@ -504,7 +504,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
     @Override
     protected void onPause() {
-        Jzvd.releaseAllVideos();
+        /*Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
@@ -534,7 +534,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "cooling_success_page", "cooling_success_page_view_page", "降温结果页出现时");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
-        }
+        }*/
 
 
         super.onPause();

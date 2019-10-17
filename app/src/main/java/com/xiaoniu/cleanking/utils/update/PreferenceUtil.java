@@ -471,6 +471,7 @@ public class PreferenceUtil {
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime()) { // 通知栏清理
             count++;
         }
+        count++; //文件清理
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
             count++;
         }
