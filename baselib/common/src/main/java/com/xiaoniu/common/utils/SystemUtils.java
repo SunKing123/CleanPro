@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Build;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SystemUtils {
     /**
@@ -75,4 +77,5 @@ public class SystemUtils {
         }
         return true;
     }
+
 }

@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -31,6 +32,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,6 +55,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     private DockingExpandableListViewAdapter mAdapter;
     private CountEntity mCountEntity;
     private HashMap<Integer, JunkGroup> mJunkGroups;
+
+    @Inject
+    NoClearSPHelper mSPHelper;
 
     public static CleanFragment newInstance() {
         return new CleanFragment();
@@ -210,7 +216,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-        });
+            double memoryShow = NoClearSPHelper.getMemoryShow();
+            if (memoryShow == 1) {
+                //清理完成，存储时间点
+                mSPHelper.saveCleanTime(System.currentTimeMillis());
+            }
+            });
 
     }
 

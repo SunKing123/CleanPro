@@ -137,11 +137,14 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             boolean isScanFile =  apkJunkInfos.size() > 0;
             //扫描私有路径下缓存文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
-
             //根据私有路径扫描公用路径
             ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
 
             e.onNext(publicDataInfo);
+
+            //公用路径残留文件
+            ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
+            e.onNext(leaveDataInfo);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
@@ -227,6 +230,10 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     } else if ("TYPE_APK".equals(info.getGarbageType())) {
                         apkGroup.mChildren.add(info);
                         apkGroup.mSize += info.getTotalSize();
+
+                    } else if( "TYPE_LEAVED".equals(info.getGarbageType())){
+                        uninstallGroup.mChildren.add(info);
+                        uninstallGroup.mSize += info.getTotalSize();
                     }
                 }
             } else {
@@ -391,7 +398,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     //开始
                     if (mView == null)
                         return;
-                    mView.storagePermissionOk();
+                    mView.startScan();
                 } else {
                     if (mView == null)
                         return;
@@ -408,46 +415,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
 
-    boolean isFromClick = false;
-    public AlertDialog showPermissionDialog(Context context, final DialogClickListener okListener) {
-        isFromClick = false;
-        final AlertDialog dlg = new AlertDialog.Builder(context).create();
-        if (((Activity) context).isFinishing()) {
-            return dlg;
-        }
-        dlg.setCancelable(true);
-        dlg.show();
-        Window window = dlg.getWindow();
-        window.setContentView(R.layout.alite_permission_dialog);
-        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
-        //这里设置居中
-        lp.gravity = Gravity.CENTER;
-        window.setAttributes(lp);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView tv_goto = window.findViewById(R.id.tv_goto);
-        ImageView ivExit = window.findViewById(R.id.iv_exit);
-        ivExit.setOnClickListener(v -> {
-            dlg.cancel();
-        });
-        tv_goto.setOnClickListener(v -> {
-            isFromClick = true;
-            okListener.clickOKBtn();
-        });
-        dlg.setOnDismissListener(dialog -> {
-            if (!isFromClick)
-                mView.getActivity().finish();
-
-        });
-        return dlg;
-    }
 
 
-    public interface DialogClickListener {
-        void clickOKBtn();
-
-        void cancelBtn();
-
-    }
 
 
     /**

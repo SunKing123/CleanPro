@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -77,4 +81,19 @@ public class SystemHelper {
         }
         return false;
     }
+
+
+    /**
+     * List转Map
+     * @param junklist
+     * @return
+     */
+    public static HashMap<String, FirstJunkInfo> listToMap(ArrayList<FirstJunkInfo> junklist){
+        HashMap<String, FirstJunkInfo> junkInfoMap = new HashMap<String, FirstJunkInfo>();
+        for (FirstJunkInfo firstJunkInfo : junklist) {
+            junkInfoMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
+        }
+        return  junkInfoMap;
+    }
+
 }

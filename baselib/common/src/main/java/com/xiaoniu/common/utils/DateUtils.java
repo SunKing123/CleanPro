@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class DateUtils {
@@ -435,6 +436,54 @@ public class DateUtils {
         }
 
     }
+
+
+    /**
+     * 时间格式化（刚刚、几分钟前、几小时前、昨天、前天、年-月-日）
+     */
+    public static String getShortTime(long time) {
+        String shortString = "";
+        if (time == 0) {
+            return shortString;
+        }
+
+        long now = Calendar.getInstance().getTimeInMillis();
+        long datetime = (now - time) / 1000;
+        if (datetime > 365 * 24 * 60 * 60) {
+            shortString = formatDate(PATTERN_YMD, time);
+            //shortString = FORMAT_DATE.format(new Date(time));
+        } else if (datetime > 24 * 60 * 60 && ((int) (datetime / (24 * 60 * 60))) == 2) {
+            shortString = "前天";
+        } else if (datetime > 24 * 60 * 60 && ((int) (datetime / (24 * 60 * 60))) == 1) {
+            shortString = "昨天";
+        } else if (datetime > 60 * 60) {
+            shortString = (int) (datetime / (60 * 60)) + "小时前";
+        } else if (datetime > 60) {
+            shortString = (int) (datetime / (60)) + "分钟前";
+        } else {
+            shortString = "刚刚";
+        }
+        return shortString;
+    }
+
+    /**
+     * 时间格式化
+     */
+    public static String formatDate(String format, Long time) {
+        return formatDate(new SimpleDateFormat(format, Locale.CHINA), time);
+    }
+
+
+    /**
+     * 时间格式化
+     */
+    public static String formatDate(SimpleDateFormat format, Long time) {
+        if (null == time || time <= 0) {
+            return "";
+        }
+        return format.format(new Date(String.valueOf(time).length() == 13 ? time : time * 1000));
+    }
+
 
     public static String formatSimplifyCurrentTime(long systemTime, long timestamp) {
 

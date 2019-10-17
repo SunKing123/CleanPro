@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import com.geek.push.GeekPush;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
@@ -42,12 +44,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
+
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.geek.push.core.PushResultCode.TYPE_DEL_TAG;
 
 /**
  * Created by tie on 2017/5/15.
@@ -216,6 +222,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
             return;
         GeekPush.bindAlias(DeviceUtils.getUdid());
+        GeekPush.addTag(BuildConfig.PUSH_TAG);//区分推送环境
         mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {

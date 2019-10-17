@@ -10,10 +10,10 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
-import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.common.base.BaseFragment;
@@ -27,7 +27,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * 单个新闻列表页面
+ */
 public class NewsListFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
     private XRecyclerView mRecyclerView;
@@ -35,7 +39,13 @@ public class NewsListFragment extends BaseFragment {
     private LinearLayout mLlNoNet;
     private NewsType mType;
 
-    private static final int PAGE_NUM = 20;//每一页数据
+    private static final int PAGE_VIDEO_NUM = 20;//每一页数据_视频类型用到的
+
+    /*分页，或下拉刷新次数。用户上滑，可依次传入1,2,3等。
+    用户下拉刷新，可传入page=-1。第二次下拉刷新，可传入page=-2。以此类推。
+    注意，不要传入page=0。*/
+    private int page_index = 1;
+    private int page_ref_index = -1;
     private boolean mIsRefresh = true;
 
     public static NewsListFragment getInstance(NewsType type) {
@@ -122,27 +132,24 @@ public class NewsListFragment extends BaseFragment {
     }
 
     private void loadNewsData() {
-        String type = mType.getValue();
-        String lastId = SPUtil.getLastNewsID(mType.getName());
-        if (mIsRefresh) {
-            lastId = "";
-        }
-        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
-        EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
+        String type = mType.getName();
+        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type  + "&page=" + (mIsRefresh ? page_ref_index : page_index);
+        EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
             public void onFailure(Throwable e) {
             }
 
             @Override
-            public void onSuccess(NewsListInfo result) {
-                if (result != null && result.data != null && result.data.size() > 0) {
+            public void onSuccess(List<NewsItemInfoRuishi> result) {
+                if (result != null  && result.size() > 0) {
                     if (mLlNoNet.getVisibility() == View.VISIBLE)
                         mLlNoNet.setVisibility(View.GONE);
-                    SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
                     if (mIsRefresh) {
-                        mNewsAdapter.setData(result.data);
+                        page_ref_index--;
+                        mNewsAdapter.setData(result);
                     } else {
-                        mNewsAdapter.addData(result.data);
+                        page_index ++;
+                        mNewsAdapter.addData(result);
                     }
                 }
             }
@@ -158,12 +165,13 @@ public class NewsListFragment extends BaseFragment {
         });
     }
 
+    //加载视频信息
     private void loadVideoData() {
         //请求参数设置：比如一个json字符串
         JSONObject jsonObject = new JSONObject();
         try {
             String lastId = SPUtil.getLastNewsID(mType.getName());
-            jsonObject.put("pageSize", PAGE_NUM);
+            jsonObject.put("pageSize", PAGE_VIDEO_NUM);
             jsonObject.put("lastId", lastId);
         } catch (JSONException e) {
             e.printStackTrace();

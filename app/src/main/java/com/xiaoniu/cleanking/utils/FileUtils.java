@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +16,8 @@ import com.xiaoniu.common.utils.DateUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileUtils {
 
@@ -145,5 +148,42 @@ public class FileUtils {
             return null;
         }
         return json;
+    }
+
+
+
+    public static Map<String, String> checkOutAllGarbageFolder(final File file) {
+        final HashMap<String, String> hashMap = new HashMap<String, String>();
+        checAllkFiles(hashMap, file);
+        return hashMap;
+    }
+
+    /**
+     * 筛选file下需要清理的文件夹
+     *
+     * @param map
+     * @param file
+     *
+     */
+    private static Map<String, String> checAllkFiles(final Map<String, String> map, final File file) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        File[] listFiles = file.listFiles();
+        if (listFiles != null && listFiles.length>0) {
+            for (File file2 : listFiles) {
+                String fileName = file2.getName();
+                if (file2.isDirectory()) {//文件夹
+                        checAllkFiles(map, file2);
+                } else { //文件类型
+                    map.put(file2.getAbsolutePath(), "残留文件");
+                }
+            }
+        }else{
+            try {
+                file.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
     }
 }

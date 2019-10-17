@@ -9,13 +9,17 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.base.SimpleWebActivity;
+import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
+
+import java.util.Date;
 
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
@@ -39,27 +43,27 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageUtil.display(itemInfo.coverImage, jzvdStd.thumbImageView);
         } else {
-            final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
-            ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
-            ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
-            ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
+            final NewsItemInfoRuishi itemInfo = (NewsItemInfoRuishi) itemData;
+            ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.getTitle());
+            ((TextView) commonHolder.getView(R.id.tvDate)).setText(DateUtils.getShortTime(DateUtils.getTimeLong(itemInfo.getUpdate_time())));
+            ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.getSource());
             if (viewType == 1) {//一张图
-                ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
+                ImageUtil.display(itemInfo.getImages().get(0).getUrl(), (commonHolder.getView(R.id.ivPic1)));
             } else if (viewType == 2) {//两张图
-                ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
-                ImageUtil.display(itemInfo.miniimg.get(1).src, (commonHolder.getView(R.id.ivPic2)));
+                ImageUtil.display(itemInfo.getImages().get(0).getUrl(), (commonHolder.getView(R.id.ivPic1)));
+                ImageUtil.display(itemInfo.getImages().get(1).getUrl(), (commonHolder.getView(R.id.ivPic2)));
             } else if (viewType == 3) {//三张图
-                ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
-                ImageUtil.display(itemInfo.miniimg.get(1).src, (commonHolder.getView(R.id.ivPic2)));
-                ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
+                ImageUtil.display(itemInfo.getImages().get(0).getUrl(), (commonHolder.getView(R.id.ivPic1)));
+                ImageUtil.display(itemInfo.getImages().get(1).getUrl(), (commonHolder.getView(R.id.ivPic2)));
+                ImageUtil.display(itemInfo.getImages().get(2).getUrl(), (commonHolder.getView(R.id.ivPic3)));
             }
 
             commonHolder.itemView.setOnClickListener(v -> {
-                        SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
+                        SimpleWebActivity.startActivity(mContext, itemInfo.getClk_url(), mContext.getString(R.string.app_name));
                         //埋点
                         if (position > 11)
                             return;
-                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.topic, itemInfo.rowkey, position + 1);
+                        StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.getTitle(), itemInfo.getId(), position + 1);
                     }
             );
         }
@@ -70,14 +74,16 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         return new CommonViewHolder(itemView);
     }
 
+    //多类型Item View 展示
     public static class NewsItemTypeSupport implements MultiItemTypeSupport<Object> {
 
         @Override
         public int getItemViewType(int position, Object itemData) {
             if (itemData instanceof VideoItemInfo) {
                 return 0;
-            } else if (itemData instanceof NewsItemInfo) {
-                return ((NewsItemInfo) itemData).miniimg_size;
+            } else if (itemData instanceof NewsItemInfoRuishi) {
+                int size = ((NewsItemInfoRuishi) itemData).getImages().size();
+                return size <= 3 ? size : 3;
             }
             return -1;
         }

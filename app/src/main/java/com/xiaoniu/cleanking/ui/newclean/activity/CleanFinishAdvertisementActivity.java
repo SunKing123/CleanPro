@@ -687,6 +687,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity implements Na
 
     @Override
     public void onADClicked(NativeExpressADView nativeExpressADView) {
+
         StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success_page", "success_page");
 
         if (mContainer != null && mContainer.getChildCount() > 0) {

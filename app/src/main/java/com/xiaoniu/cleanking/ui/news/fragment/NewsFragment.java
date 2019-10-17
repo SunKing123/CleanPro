@@ -27,6 +27,9 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 
+/**
+ * viewpager 新闻页
+ */
 public class NewsFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
     private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.VIDEO, NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
