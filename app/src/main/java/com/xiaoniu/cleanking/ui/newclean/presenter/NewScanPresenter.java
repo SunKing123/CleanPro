@@ -134,11 +134,14 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             boolean isScanFile =  apkJunkInfos.size() > 0;
             //扫描私有路径下缓存文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
-
             //根据私有路径扫描公用路径
             ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
 
             e.onNext(publicDataInfo);
+
+            //公用路径残留文件
+            ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
+            e.onNext(leaveDataInfo);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
@@ -224,6 +227,10 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     } else if ("TYPE_APK".equals(info.getGarbageType())) {
                         apkGroup.mChildren.add(info);
                         apkGroup.mSize += info.getTotalSize();
+
+                    } else if( "TYPE_LEAVED".equals(info.getGarbageType())){
+                        uninstallGroup.mChildren.add(info);
+                        uninstallGroup.mSize += info.getTotalSize();
                     }
                 }
             } else {
