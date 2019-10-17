@@ -49,6 +49,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
@@ -136,12 +137,15 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             //根据私有路径扫描公用路径
             ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
-
             e.onNext(publicDataInfo);
 
             //公用路径残留文件
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
             e.onNext(leaveDataInfo);
+
+            //其他垃圾
+            JunkGroup otherGroup = mFileQueryUtils.getOtherCache();
+            e.onNext(otherGroup);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
@@ -199,20 +203,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                 }
 
 
-
-                //其他垃圾
-                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
-                if (adGroup == null) {
-                    adGroup = new JunkGroup();
-                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
-                    adGroup.isChecked = true;
-                    adGroup.isExpand = true;
-                    adGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
-                    adGroup.mSize += 0;
-                }
-
-
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
                         if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
@@ -229,11 +219,24 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                         apkGroup.mSize += info.getTotalSize();
 
                     } else if( "TYPE_LEAVED".equals(info.getGarbageType())){
-                        uninstallGroup.mChildren.add(info);
-                        uninstallGroup.mSize += info.getTotalSize();
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                            uninstallGroup.mChildren.add(info);
+                            uninstallGroup.mSize += info.getTotalSize();
+                        }
                     }
                 }
-            } else {
+            } else if(o instanceof JunkGroup){ //其他垃圾
+                 //其他垃圾
+                JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
+                if (adGroup == null) {
+                    adGroup = (JunkGroup)o;
+                    adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
+                    adGroup.isChecked = true;
+                    adGroup.isExpand = false;
+                    adGroup.mChildren = new ArrayList<>();
+                    mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
+                }
+            }else {
                 if (mFileQueryUtils.isFinish())
                     return;
                 mView.scanFinish(mJunkGroups);

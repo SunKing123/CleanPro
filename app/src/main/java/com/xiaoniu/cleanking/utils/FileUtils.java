@@ -26,11 +26,11 @@ public class FileUtils {
         try {
             packageInfo = AppApplication.getInstance().getPackageManager().getPackageInfo(str, 0);
         } catch (PackageManager.NameNotFoundException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
         if (packageInfo != null) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -52,7 +52,7 @@ public class FileUtils {
 //          if (file.getAbsolutePath().endsWith(".apk") || file.getAbsolutePath().endsWith(".apk.1")) {
 //                DisplayImageUtils.getInstance().displayImage(file.getAbsolutePath(), imageView);
 //            } else
-              if (file.getAbsolutePath().toLowerCase().endsWith(".mp3") || file.getAbsolutePath().toLowerCase().endsWith(".ape") || file.getAbsolutePath().toLowerCase().endsWith(".flac") || file.getAbsolutePath().toLowerCase().endsWith(".wav") || file.getAbsolutePath().toLowerCase().endsWith(".wma") || file.getAbsolutePath().toLowerCase().endsWith(".amr") || file.getAbsolutePath().toLowerCase().endsWith(".rm") || file.getAbsolutePath().toLowerCase().endsWith(".mwv") || file.getAbsolutePath().toLowerCase().endsWith(".amv")) {
+            if (file.getAbsolutePath().toLowerCase().endsWith(".mp3") || file.getAbsolutePath().toLowerCase().endsWith(".ape") || file.getAbsolutePath().toLowerCase().endsWith(".flac") || file.getAbsolutePath().toLowerCase().endsWith(".wav") || file.getAbsolutePath().toLowerCase().endsWith(".wma") || file.getAbsolutePath().toLowerCase().endsWith(".amr") || file.getAbsolutePath().toLowerCase().endsWith(".rm") || file.getAbsolutePath().toLowerCase().endsWith(".mwv") || file.getAbsolutePath().toLowerCase().endsWith(".amv")) {
                 imageView.setImageResource(R.mipmap.icon_clean_music);
             } else if (file.getAbsolutePath().toLowerCase().endsWith(".doc") || file.getAbsolutePath().toLowerCase().endsWith(".docx")) {
                 imageView.setImageResource(R.drawable.clean_icon_doc);
@@ -108,7 +108,7 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cacheInnerListFiles(secondJunkInfo, file);
             } else {   //单个文件
-                if (checkFile(file,3)) { //改文件操作超过三天
+                if (checkFile(file, 3)) { //改文件操作超过三天
                     secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
                     secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
                 }
@@ -118,13 +118,13 @@ public class FileUtils {
     }
 
     //判断是否超过n天
-    public static boolean checkFile(File file,int count) {
+    public static boolean checkFile(File file, int count) {
         if (!file.exists()) {
             return false;
         }
         try {
             long time = file.lastModified();
-            return DateUtils.isOverThreeDay(time,count);
+            return DateUtils.isOverThreeDay(time, count);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,39 +151,26 @@ public class FileUtils {
     }
 
 
-
-    public static Map<String, String> checkOutAllGarbageFolder(final File file) {
-        final HashMap<String, String> hashMap = new HashMap<String, String>();
-        checAllkFiles(hashMap, file);
+    /**
+     * 筛选其他垃圾
+     * 根目录下超过14天的file
+     *
+     * @param file
+     * @return
+     */
+    public static Map<String, String> otherAllkFiles(final File file) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        File[] listFiles = file.listFiles();
+        if (listFiles != null && listFiles.length > 0) {
+            for (File file2 : listFiles) {
+                if (file2.isFile() && checkFile(file2, 14)) {
+                    hashMap.put(file2.getAbsolutePath(), "其他垃圾");
+                }
+            }
+        }
         return hashMap;
     }
 
-    /**
-     * 筛选file下需要清理的文件夹
-     *
-     * @param map
-     * @param file
-     *
-     */
-    private static Map<String, String> checAllkFiles(final Map<String, String> map, final File file) {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        File[] listFiles = file.listFiles();
-        if (listFiles != null && listFiles.length>0) {
-            for (File file2 : listFiles) {
-                String fileName = file2.getName();
-                if (file2.isDirectory()) {//文件夹
-                        checAllkFiles(map, file2);
-                } else { //文件类型
-                    map.put(file2.getAbsolutePath(), "残留文件");
-                }
-            }
-        }else{
-            try {
-                file.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return map;
-    }
+
+
 }
