@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -12,6 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
@@ -19,12 +26,14 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -33,7 +42,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
-import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
+import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
@@ -43,6 +52,7 @@ import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -52,13 +62,15 @@ import com.xiaoniu.common.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
  * 1.2.1 新版本清理主页
  */
-public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
+public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
     private long firstTime;
     @BindView(R.id.tv_clean_type)
@@ -69,11 +81,11 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     @BindView(R.id.text_wjgl)
     LinearLayout textWjgl;
     @BindView(R.id.view_phone_thin)
-    ImageView viewPhoneThin;
+    View viewPhoneThin;
     @BindView(R.id.view_qq_clean)
-    ImageView viewQqClean;
+    View viewQqClean;
     @BindView(R.id.view_news)
-    ImageView viewNews;
+    View viewNews;
     @BindView(R.id.tv_acc)
     TextView mAccTv;
     @BindView(R.id.tv_noti_clear)
@@ -92,6 +104,10 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     ImageView mNotiClearFinishIv;
     @BindView(R.id.iv_electricity_g)
     ImageView mElectricityFinishIv;
+    @BindView(R.id.iv_interaction)
+    ImageView mInteractionIv;
+
+    private int mInteractionPoistion; //互动式广告position
 
     @Override
     protected int getLayoutId() {
@@ -102,6 +118,7 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        mPresenter.getInteractionSwitch();
         if (!PreferenceUtil.isFirstForHomeIcon()) {
             mAccTv.setText(getString(R.string.tool_one_key_speed));
             mNotiClearTv.setText(getString(R.string.tool_notification_clean));
@@ -122,6 +139,70 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
                 mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
             }
         }
+    }
+
+    private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
+
+    /**
+     * 获取互动式广告成功
+     *
+     * @param switchInfoList
+     */
+    public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
+        if (switchInfoList.getData().get(0).isOpen()) {
+            mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
+            Glide.with(this).load(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl()).into(mInteractionIv);
+        }
+    }
+
+    /**
+     * 互动式广告
+     */
+    @OnClick(R.id.iv_interaction)
+    public void interactionClick() {
+        if (mInteractionPoistion > 2) {
+            mInteractionPoistion = 0;
+        }
+        startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+        mInteractionPoistion++;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (null != mInteractionList && mInteractionList.size() > 0) {
+            if (mInteractionPoistion > 2) {
+                mInteractionPoistion = 0;
+            }
+
+//            GlideUtils.loadImage(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv);
+//暂时注释
+            Glide.with(this).load(R.drawable.hot_pakge).listener(new RequestListener() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
+                    if (resource instanceof GifDrawable) {
+                        //加载一次
+                        ((GifDrawable) resource).setLoopCount(1000);
+                    }
+                    return false;
+                }
+            }).into(mInteractionIv);
+        }
+
+        lineShd.setEnabled(true);
+        textWjgl.setEnabled(true);
+        viewPhoneThin.setEnabled(true);
+        viewQqClean.setEnabled(true);
+        viewNews.setEnabled(true);
+        EventBus.getDefault().post(new ResidentUpdateEvent(false));
+        mPresenter.getSwitchInfoList();
     }
 
     @Subscribe
@@ -165,9 +246,6 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         mElectricityTv.setText(getString(R.string.lengthen_time, event.getHour()));
     }
 
-    public void startCleanNow() {
-    }
-
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
@@ -176,18 +254,6 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void netError() {
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.getSwitchInfoList();
-        lineShd.setEnabled(true);
-        textWjgl.setEnabled(true);
-        viewPhoneThin.setEnabled(true);
-        viewQqClean.setEnabled(true);
-        viewNews.setEnabled(true);
-        EventBus.getDefault().post(new ResidentUpdateEvent(false));
     }
 
     /**

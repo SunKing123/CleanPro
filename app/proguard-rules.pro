@@ -560,4 +560,13 @@
 -dontwarn com.google.gson.**
 -keep public class com.google.gson.**{*;}
 # gson sdk 混淆结束
+
+# AgentWeb 混淆开始
+-keepclassmembers class com.just.agentweb.sample.common.AndroidInterface{ *; }
+-keep class com.just.agentweb.** {
+    *;
+}
+-dontwarn com.just.agentweb.**
+# AgentWeb 混淆结束
+
 #########################geek push混淆开始########################

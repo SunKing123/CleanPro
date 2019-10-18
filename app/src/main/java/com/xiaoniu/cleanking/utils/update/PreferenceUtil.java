@@ -467,7 +467,7 @@ public class PreferenceUtil {
     public static boolean getHomeBackTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_HOME_BACK_TIME, 0);
-        if (System.currentTimeMillis() - time > 0 * 60 * 1000)
+        if (System.currentTimeMillis() - time > 5 * 60 * 1000)
             return true;
         return false;
     }

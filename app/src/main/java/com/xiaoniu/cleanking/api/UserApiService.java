@@ -6,6 +6,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
@@ -57,6 +58,14 @@ public interface UserApiService {
      */
     @GET("/screen/switch")
     Flowable<SwitchInfoList> getScreentSwitch();
+
+    /**
+     * 互动式广告开关
+     *
+     * @return
+     */
+    @POST("/switcherNewActive/getSwitchInfoList")
+    Flowable<InteractionSwitchList> getInteractionSwitch(@Body RequestBody body);
 
     /**
      * 分享成功增加领券接口

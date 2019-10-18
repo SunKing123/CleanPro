@@ -152,16 +152,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
-                    .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
-//                    .addItem(new BottomBarTab(this, R.mipmap.msg_normal, "资讯"))
-                    .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
+//                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, "资讯"))
+                    .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
         } else {
-            mBottomBarTab = new BottomBarTab(this, R.mipmap.msg_normal, getString(R.string.top));
+            mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, getString(R.string.top));
             mBottomBar
-                    .addItem(new BottomBarTab(this, R.mipmap.clean_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.mipmap.tool_normal, getString(R.string.tool)))
+                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
+                    .addItem(new BottomBarTab(this, R.drawable.tool_normal, getString(R.string.tool)))
                     .addItem(mBottomBarTab)
-                    .addItem(new BottomBarTab(this, R.mipmap.me_normal, getString(R.string.mine)));
+                    .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
         }
 
         mBottomBar.setCurrentItem(0);

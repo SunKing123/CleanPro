@@ -9,9 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.MediaView;
 import com.qq.e.ads.nativ.NativeADEventListener;
@@ -30,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishAdvertisementPresenter;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -522,13 +520,11 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         tv_advert.setText(ad.getTitle());
         tv_advert_content.setText(ad.getDesc());
-        Glide.with(this).load(ad.getIconUrl())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
-                .into(iv_advert_logo);
+        GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo, 20);
         if (patternType == AdPatternType.NATIVE_VIDEO) {
             iv_advert.setVisibility(View.GONE);
         } else {
-            Glide.with(this).load(ad.getImgUrl()).into(iv_advert);
+            GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
         }
     }
 }

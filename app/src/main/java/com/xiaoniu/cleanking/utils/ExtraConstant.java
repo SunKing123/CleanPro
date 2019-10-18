@@ -14,4 +14,5 @@ public interface ExtraConstant {
     String PREVIEW_IMAGE_SEND = "PREVIEW_IMAGE_SEND";
 
 
+    String WEB_URL = "web_url";
 }

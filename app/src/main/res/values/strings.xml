@@ -120,4 +120,9 @@
     <string name="download_now">立即下载</string>
     <string name="find_harass_notify_num">发现%s条骚扰通知</string>
     <string name="download">下载</string>
+    <string name="clean_qq_litter">清除QQ垃圾 释放空间垃圾</string>
+    <string name="uninstall_software">卸载软件 释放存储空间</string>
+    <string name="tool_top_news">头条新闻热点</string>
+    <string name="lock_news">看最新时事资讯 娱乐热点</string>
+    <string name="lock_click">点击查看</string>
 </resources>

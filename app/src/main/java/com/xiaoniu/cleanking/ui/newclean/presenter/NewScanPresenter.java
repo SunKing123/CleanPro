@@ -9,14 +9,10 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AppOpsManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,18 +23,13 @@ import android.widget.TextView;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -46,7 +37,6 @@ import com.xiaoniu.common.utils.ContextUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -89,7 +79,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
             @Override
             public void currentNumber() {
-                Log.v("onAnimationEnd","currentNumber " + isFirst);
+                Log.v("onAnimationEnd", "currentNumber " + isFirst);
                 if (isFirst) {
                     isFirst = false;
                     if (mView.getActivity() == null) {
@@ -111,18 +101,18 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
             @Override
             public void reduceSize(long p0) {
-                Log.v("onAnimationEnd","reduceSize ");
+                Log.v("onAnimationEnd", "reduceSize ");
             }
 
             @Override
             public void scanFile(String p0) {
-                Log.v("onAnimationEnd","scanFile ");
+                Log.v("onAnimationEnd", "scanFile ");
                 mView.showScanFile(p0);
             }
 
             @Override
             public void totalSize(int p0) {
-                Log.v("onAnimationEnd","totalSize ");
+                Log.v("onAnimationEnd", "totalSize ");
             }
         });
 
@@ -134,7 +124,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
 
-            boolean isScanFile =  apkJunkInfos.size() > 0;
+            boolean isScanFile = apkJunkInfos.size() > 0;
             //扫描私有路径下缓存文件
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             //根据私有路径扫描公用路径
@@ -202,7 +192,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                 }
 
 
-
                 //其他垃圾
                 JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
                 if (adGroup == null) {
@@ -218,12 +207,12 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
                             cacheGroup.mChildren.add(info);
                             cacheGroup.mSize += info.getTotalSize();
                         }
                     } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
                             processGroup.mChildren.add(info);
                             processGroup.mSize += info.getTotalSize();
                         }
@@ -231,7 +220,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                         apkGroup.mChildren.add(info);
                         apkGroup.mSize += info.getTotalSize();
 
-                    } else if( "TYPE_LEAVED".equals(info.getGarbageType())){
+                    } else if ("TYPE_LEAVED".equals(info.getGarbageType())) {
                         uninstallGroup.mChildren.add(info);
                         uninstallGroup.mSize += info.getTotalSize();
                     }
@@ -247,51 +236,51 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     public void showColorChange() {
 
-            mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
-            mScanTranlateColor.setEvaluator(new ArgbEvaluator());
-            mScanTranlateColor.setDuration(1000);
-            if (!mScanTranlateColor.isRunning()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mScanTranlateColor.start();
-                }
+        mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
+        mScanTranlateColor.setEvaluator(new ArgbEvaluator());
+        mScanTranlateColor.setDuration(1000);
+        if (!mScanTranlateColor.isRunning()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mScanTranlateColor.start();
             }
-            mScanTranlateColor.addUpdateListener(animation -> {
-                int animatedValue = (int) animation.getAnimatedValue();
-                if (FirstLevel == animatedValue)
-                    isChangeRed = true;
-                Log.v("onAnimationEnd","FirstLevel ");
-                if (mView == null)
-                    return;
-                if (mView.getViewShow()) {
-                    //只有首页显示的时候会显示状态栏变化
-                    mView.showBarColor(animatedValue);
-                }
-            });
+        }
+        mScanTranlateColor.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+            if (FirstLevel == animatedValue)
+                isChangeRed = true;
+            Log.v("onAnimationEnd", "FirstLevel ");
+            if (mView == null)
+                return;
+            if (mView.getViewShow()) {
+                //只有首页显示的时候会显示状态栏变化
+                mView.showBarColor(animatedValue);
+            }
+        });
 
-            mScanTranlateColor.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
+        mScanTranlateColor.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
-                }
+            }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    Log.v("onAnimationEnd","onAnimationEnd ");
-                    mView.setColorChange(true);
-                    if(mScanTranlateColor!=null)
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.v("onAnimationEnd", "onAnimationEnd ");
+                mView.setColorChange(true);
+                if (mScanTranlateColor != null)
                     mScanTranlateColor.cancel();
-                }
+            }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+            @Override
+            public void onAnimationCancel(Animator animation) {
 
-                }
+            }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
-                }
-            });
+            }
+        });
     }
 
     AnimatorSet cleanScanAnimator;
@@ -347,7 +336,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
             cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
             cleanScanAnimator.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -369,6 +358,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         animator.setDuration(time);
         animator.setRepeatMode(repeatMode);
     }
+
     private static final int FirstLevel = 0xffFD6F46;
     private static final int SecondLevel = 0xffF1D53B;
     private static final int ThirdLevel = 0xff06C581;
@@ -413,10 +403,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             }
         });
     }
-
-
-
-
 
 
     /**
@@ -477,6 +463,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     /**
      * 外部圈缓慢旋转
+     *
      * @param iconOuter
      */
     public void showOuterViewRotation(ImageView iconOuter) {
@@ -485,33 +472,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             rotation.setRepeatCount(-1);
             rotation.setRepeatMode(ValueAnimator.RESTART);
             rotation.setDuration(1500);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList() {
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-            }
-
-            @Override
-            public void netConnectError() {
-            }
-        });
-    }
 }

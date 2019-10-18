@@ -14,9 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qq.e.ads.cfg.VideoOption;
@@ -56,6 +53,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -95,12 +93,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private NewsType mType = NewsType.TOUTIAO;
     private static final int PAGE_NUM = 20;//每一页数据
     private boolean mIsRefresh = true;
-    private TextView mIvSpeedClean;
-    private TextView mIvPowerClean;
-    private TextView mIvNotificationClean;
-    private TextView mIvWeChatClean;
-    private TextView mIvFileClean;
-    private TextView mIvCooling;
     private ImageView mBtnLeft;
 
     public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool;
@@ -187,13 +179,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         line_notification = headerTool.findViewById(R.id.line_notification);
         line_wechat = headerTool.findViewById(R.id.line_wechat);
         line_file = headerTool.findViewById(R.id.line_file);
-
-        mIvSpeedClean = headerTool.findViewById(R.id.iv_speed_clean);
-        mIvPowerClean = headerTool.findViewById(R.id.iv_power_clean);
-        mIvNotificationClean = headerTool.findViewById(R.id.iv_notification_clean);
-        mIvWeChatClean = headerTool.findViewById(R.id.iv_wechat_clean);
-        mIvFileClean = headerTool.findViewById(R.id.iv_file_clean);
-        mIvCooling = headerTool.findViewById(R.id.iv_cooling);
 
         tv_quicken = headerTool.findViewById(R.id.tv_quicken);
         tv_power = headerTool.findViewById(R.id.tv_power);
@@ -592,37 +577,37 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         String functionName = "";
         String functionPosition = "";
         switch (v.getId()) {
-            case R.id.iv_speed_clean:
+            case R.id.v_quicken:
                 //一键加速
                 functionName = "一键加速";
                 functionPosition = "1";
                 speedClean();
                 break;
-            case R.id.iv_power_clean:
+            case R.id.v_power:
                 //超强省电
                 functionName = "超强省电";
                 functionPosition = "2";
                 powerClean();
                 break;
-            case R.id.iv_notification_clean:
+            case R.id.v_notification:
                 //通知栏清理
                 functionName = "通知栏清理";
                 functionPosition = "3";
                 notificationClean();
                 break;
-            case R.id.iv_wechat_clean:
+            case R.id.v_wechat:
                 //微信专清
                 functionName = "微信专清";
                 functionPosition = "4";
                 weChatClean();
                 break;
-            case R.id.iv_file_clean:
+            case R.id.v_file:
                 //文件清理
                 functionName = "文件清理";
                 functionPosition = "5";
                 fileClean();
                 break;
-            case R.id.iv_cooling:
+            case R.id.v_cool:
                 //手机降温
                 functionName = "手机降温";
                 functionPosition = "6";
@@ -709,12 +694,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     protected void setListener() {
-        mIvSpeedClean.setOnClickListener(this);
-        mIvPowerClean.setOnClickListener(this);
-        mIvNotificationClean.setOnClickListener(this);
-        mIvWeChatClean.setOnClickListener(this);
-        mIvFileClean.setOnClickListener(this);
-        mIvCooling.setOnClickListener(this);
+        v_quicken.setOnClickListener(this);
+        v_power.setOnClickListener(this);
+        v_notification.setOnClickListener(this);
+        v_wechat.setOnClickListener(this);
+        v_file.setOnClickListener(this);
+        v_cool.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
             /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
@@ -759,7 +744,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     public void onBackPressed() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+        /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
@@ -768,7 +753,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         if (Jzvd.backPress()) {
             return;
+        }*/
+
+        //使用的第2，4，6...次 并且插屏开关打开 展示
+        if ((PreferenceUtil.getCleanFinishClickCount() % 2 == 0) && isScreenSwitchOpen) {
+            startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
         }
+        PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
+        finish();
         super.onBackPressed();
     }
 
@@ -1326,13 +1318,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         tv_advert.setText(ad.getTitle());
         tv_advert_content.setText(ad.getDesc());
-        Glide.with(this).load(ad.getIconUrl())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
-                .into(iv_advert_logo);
+        GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo, 20);
         if (patternType == AdPatternType.NATIVE_VIDEO) {
             iv_advert.setVisibility(View.GONE);
         } else {
-            Glide.with(this).load(ad.getImgUrl()).into(iv_advert);
+            GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
         }
     }
 
@@ -1343,13 +1333,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         tv_advert2.setText(ad.getTitle());
         tv_advert_content2.setText(ad.getDesc());
-        Glide.with(this).load(ad.getIconUrl())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
-                .into(iv_advert_logo2);
+        GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo2, 20);
         if (patternType == AdPatternType.NATIVE_VIDEO) {
             iv_advert2.setVisibility(View.GONE);
         } else {
-            Glide.with(this).load(ad.getImgUrl()).into(iv_advert2);
+            GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert2);
         }
     }
 }

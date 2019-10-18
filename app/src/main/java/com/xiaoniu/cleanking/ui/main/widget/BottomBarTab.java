@@ -34,8 +34,8 @@ public class BottomBarTab extends FrameLayout {
     private Context mContext;
     private int mTabPosition = -1;
 
-    private int[] iconsSelect = {R.mipmap.clean_select, R.mipmap.tool_select, R.mipmap.msg_select, R.mipmap.me_select};
-    private int[] icons = {R.mipmap.clean_normal, R.mipmap.tool_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
+    private int[] iconsSelect = {R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
+    private int[] icons = {R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
 
 
     private TextView mTvUnreadCount;
@@ -60,11 +60,11 @@ public class BottomBarTab extends FrameLayout {
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(getContext(), AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
-            icons = new int[]{R.mipmap.clean_normal, R.mipmap.me_normal};
-            iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.me_select};
+            icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
+            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
         } else {
-            icons = new int[]{R.mipmap.clean_normal,R.mipmap.tool_normal, R.mipmap.msg_normal, R.mipmap.me_normal};
-            iconsSelect = new int[]{R.mipmap.clean_select, R.mipmap.tool_select,R.mipmap.msg_select, R.mipmap.me_select};
+            icons = new int[]{R.drawable.clean_normal,R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
+            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select,R.drawable.msg_select, R.drawable.me_select};
         }
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);

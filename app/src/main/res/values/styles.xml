@@ -176,4 +176,14 @@
         <item name="android:layout_width">@dimen/dimen_25dp</item>
     </style>
 
+    <style name="toolBar">
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="android:homeAsUpIndicator">@drawable/cha</item>
+        <item name="android:titleTextStyle">@style/titlestyle</item>
+    </style>
+
+    <style name="titlestyle">
+        <item name="android:textSize">@dimen/dimen_15dp</item>
+    </style>
+
 </resources>
