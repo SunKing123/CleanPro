@@ -43,7 +43,6 @@ import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
-import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
@@ -109,6 +108,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private ImageView iv_advert_logo, iv_advert, iv_advert_logo2, iv_advert2;
     private TextView tv_advert, tv_advert_content, tv_advert2, tv_advert_content2, tv_download2;
     private View v_advert, v_advert2;
+    private TextView tv_quicken, tv_power, tv_notification;
+    private ImageView iv_power, iv_notification;
 
     private NativeUnifiedADData mNativeUnifiedADData, mNativeUnifiedADData2;
     private NativeUnifiedAD mAdManager, mAdManager2;
@@ -117,18 +118,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private String mAdvertId = ""; //广告位1
     private String mAdvertId2 = ""; //广告位2
+    private boolean isScreenSwitchOpen; //插屏广告开关
 
-    private TextView tv_quicken, tv_power, tv_notification;
-    private ImageView iv_quicken, iv_power, iv_notification;
-
-
-    private ImageView mIvSpeedClean;
-    private ImageView mIvPowerClean;
-    private ImageView mIvNotificationClean;
-    private ImageView mIvWeChatClean;
-    private ImageView mIvFileClean;
-    private ImageView mIvCooling;
     private int page_index = 1;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -206,7 +199,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         tv_power = headerTool.findViewById(R.id.tv_power);
         tv_notification = headerTool.findViewById(R.id.tv_notification);
 
-        iv_quicken = headerTool.findViewById(R.id.iv_quicken);
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         setListener();
@@ -289,6 +281,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     public void getSwitchInfoListFail() {
 
+    }
+
+    /**
+     * 拉取插屏广告开关成功
+     *
+     * @return
+     */
+    public void getScreentSwitchSuccess(SwitchInfoList list) {
+        Log.d(TAG, "getScreentSwitchSuccess -- list.getData()=" + list.getData().size());
+        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+            if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
+                isScreenSwitchOpen = switchInfoList.isOpen();
+            } else if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
+                isScreenSwitchOpen = switchInfoList.isOpen();
+            } else if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
+                isScreenSwitchOpen = switchInfoList.isOpen();
+            } else if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
+                isScreenSwitchOpen = switchInfoList.isOpen();
+            } else if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
+                isScreenSwitchOpen = switchInfoList.isOpen();
+            } else if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //立即清理
+                isScreenSwitchOpen = switchInfoList.isOpen();
+            }
+        }
     }
 
     private void initNativeUnifiedAD() {
@@ -393,22 +409,22 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void changeUI(Intent intent) {
-        if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
+     /*   if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
             if (AppHolder.getInstance().getSwitchInfoList() != null) {
 //                refreshAd();
 //                refreshAd2();
-                /*for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                *//*for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.FINISH_ID.equals(switchInfoList.getId())) {
                         if (switchInfoList.isIsOpen()) {
                             //加载广告
                             refreshAd();
                         }
                     }
-                }*/ //暂时注释
+                }*//* //暂时注释
             }
         } else {
             PreferenceUtil.saveFirstOpenCLeanFinishApp();
-        }
+        }*/
 
         if (intent != null) {
             mTitle = intent.getStringExtra("title");
@@ -701,12 +717,18 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mIvCooling.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
-            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
                 String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
                 StatisticsUtils.trackClick("return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page");
+            }*/
+
+            //使用的第2，4，6...次 并且插屏开关打开 展示
+            if ((PreferenceUtil.getCleanFinishClickCount() % 2 == 0) && isScreenSwitchOpen) {
+                startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }
+            PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
             finish();
         });
 
@@ -752,6 +774,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void onResume() {
+        mPresenter.getScreentSwitch();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
@@ -938,7 +961,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private void loadNewsData() {
         String type = mType.getName();
-        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type  + "&page=" + page_index;
+        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type + "&page=" + page_index;
         Log.d("XiLei", "url=" + url);
         EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
@@ -948,7 +971,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onSuccess(List<NewsItemInfoRuishi> result) {
                 if (result != null && result.size() > 0) {
-                    page_index ++;
+                    page_index++;
                     mNewsAdapter.addData(result);
                 }
             }

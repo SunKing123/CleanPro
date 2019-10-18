@@ -2,13 +2,13 @@ package com.xiaoniu.cleanking.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
@@ -47,12 +47,20 @@ public interface UserApiService {
      *
      * @return
      */
-//    @POST("/switcherNew/getSwitchInfoList")
     @POST("/switcherNew/v2/getSwitchInfoList")
     Flowable<SwitchInfoList> getSwitchInfoList(@Body RequestBody body);
 
     /**
+     * 插屏广告开关
+     *
+     * @return
+     */
+    @GET("/screen/switch")
+    Flowable<SwitchInfoList> getScreentSwitch();
+
+    /**
      * 分享成功增加领券接口
+     *
      * @param body
      * @return
      */
@@ -61,6 +69,7 @@ public interface UserApiService {
 
     /**
      * 获取后台WebView URL
+     *
      * @param body
      * @return
      */
@@ -69,6 +78,7 @@ public interface UserApiService {
 
     /**
      * 保存JPush Alias
+     *
      * @param body
      * @return
      */
@@ -77,6 +87,7 @@ public interface UserApiService {
 
     /**
      * 操作记录(PUSH消息)
+     *
      * @param body
      * @return
      */
@@ -85,6 +96,7 @@ public interface UserApiService {
 
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
+
     /**
      * 查询app是否有补丁版本
      *

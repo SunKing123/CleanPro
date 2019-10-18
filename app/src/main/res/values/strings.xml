@@ -119,4 +119,5 @@
     <string name="cpu_height">CPU电池温度过高</string>
     <string name="download_now">立即下载</string>
     <string name="find_harass_notify_num">发现%s条骚扰通知</string>
+    <string name="download">下载</string>
 </resources>

@@ -58,16 +58,6 @@
 
     </LinearLayout>
 
-    <!--    <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginTop="-35dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/bg_shape_radio_white_12"
-            android:visibility="visible" />-->
     <com.qq.e.ads.nativ.widget.NativeAdContainer
         android:id="@+id/native_ad_container"
         android:layout_width="match_parent"

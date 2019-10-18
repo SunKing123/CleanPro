@@ -21,7 +21,9 @@ import com.xiaoniu.common.utils.ChannelUtil;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -63,6 +65,7 @@ public class MainModel extends BaseModel {
 
     /**
      * 激活极光推送
+     *
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
@@ -79,9 +82,10 @@ public class MainModel extends BaseModel {
 
     /**
      * 操作记录(PUSH消息)
+     *
      * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清）
      */
-    public void commitJPushClickTime(int type,Common4Subscriber<BaseEntity> commonSubscriber) {
+    public void commitJPushClickTime(int type, Common4Subscriber<BaseEntity> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("type", type);
@@ -89,6 +93,7 @@ public class MainModel extends BaseModel {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.commitJPushClickTime(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
+
     /**
      * 热修复补丁查询
      *
@@ -114,9 +119,10 @@ public class MainModel extends BaseModel {
 
     /**
      * 广告开关
+     *
      * @param commonSubscriber
      */
-    public void getSwitchInfoList(Common4Subscriber<SwitchInfoList> commonSubscriber){
+    public void getSwitchInfoList(Common4Subscriber<SwitchInfoList> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("channel", ChannelUtil.getChannel());
@@ -124,6 +130,21 @@ public class MainModel extends BaseModel {
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getSwitchInfoList(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+    /**
+     * 插屏广告开关
+     *
+     * @param commonSubscriber
+     */
+    public void getScreentSwitch(Common4Subscriber<SwitchInfoList> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("channel", ChannelUtil.getChannel());
+        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.getScreentSwitch().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
 }
