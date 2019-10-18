@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.utils;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -19,29 +18,25 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
-import com.tencent.bugly.crashreport.biz.UserInfoBean;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
-import com.xiaoniu.cleanking.ui.main.bean.AppUsageInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.PathData;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -147,27 +142,63 @@ public class FileQueryUtils {
         return pm.getApplicationIcon(applicationInfo);
     }
 
-   /**
+    //其他垃圾
+    public JunkGroup getOtherCache() {
+        JunkGroup otherGroup= new JunkGroup();
+        otherGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
+        otherGroup.isChecked = true;
+        otherGroup.isExpand = true;
+        otherGroup.mChildren = new ArrayList<>();
+        otherGroup.mSize += 0;
+        File outFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        Map<String, String> otherPathMap = FileUtils.otherAllkFiles(outFile);
+        for (final Map.Entry<String, String> entry : otherPathMap.entrySet()) {
+            if (new File(entry.getKey()).isFile()) { //文件路径
+                File cachefile = new File(entry.getKey());
+
+                if (cachefile.exists()) {
+                    otherGroup.mSize += cachefile.length();
+                    if (mScanFileListener != null) {
+                        mScanFileListener.increaseSize(cachefile.length());
+                    }
+                }
+            }
+        }
+        return  otherGroup;
+
+    }
+
+    /**
      * 残留文件扫描
      * 锁定文件夹下所有子文件
+     *
      * @param
      * @return
      */
     public ArrayList<FirstJunkInfo> getOmiteCache() {
         ArrayList<FirstJunkInfo> junkInfoArrayList = new ArrayList<>();
-        if(outJunkMap.size()<=0)
-            return  junkInfoArrayList;
-        for (final Map.Entry<String, FirstJunkInfo> outEntry : outJunkMap.entrySet()) {
-            FirstJunkInfo firstCleanJunk = outEntry.getValue();
-            firstCleanJunk.setGarbageType("TYPE_LEAVED");
-            if(firstCleanJunk==null)
-                continue;
-            File outFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+outEntry.getKey());
+        if (outJunkMap.size() <= 0)
+            return junkInfoArrayList;
 
-            Map<String, String> filePathMap = FileUtils.checkOutAllGarbageFolder(outFile);
+        HashMap<String ,FirstJunkInfo> hashMap = new HashMap<>();
+        for (final Map.Entry<String, FirstJunkInfo> entry : outJunkMap.entrySet()) {
+            if(!FileUtils.isAppInstalled(entry.getKey())) //私有路径中没有该安装包路径 视为共有残留
+            hashMap.put(entry.getKey(),entry.getValue());
+        }
+        for (final Map.Entry<String, FirstJunkInfo> outEntry : hashMap.entrySet()) {
+            if (isFinish) {
+                return junkInfoArrayList;
+            }
+            FirstJunkInfo firstCleanJunk = outEntry.getValue();
+            if (firstCleanJunk == null)
+                continue;
+            firstCleanJunk.setGarbageType("TYPE_LEAVED");
+            File outFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + firstCleanJunk.getSdPath());
+
+            Map<String, String> filePathMap = checkAllGarbageFolder(outFile);
 
             for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
-              if (new File(entry.getKey()).isFile()) { //文件路径
+                if (new File(entry.getKey()).isFile()) { //文件路径
                     File cachefile = new File(entry.getKey());
                     SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                     if (cachefile.exists()) {
@@ -188,7 +219,6 @@ public class FileQueryUtils {
                 continue;
             }
             junkInfoArrayList.add(firstCleanJunk);
-
         }
         return junkInfoArrayList;
 
@@ -202,8 +232,9 @@ public class FileQueryUtils {
      */
     public ArrayList<FirstJunkInfo> getExternalStorageCache(ArrayList<FirstJunkInfo> firstJunkInfos) {
         HashMap<String, FirstJunkInfo> junkInfoMap = new HashMap<String, FirstJunkInfo>();
-
-        for (FirstJunkInfo firstJunkInfo : firstJunkInfos) {
+        ArrayList<FirstJunkInfo> externalList = new ArrayList<>();
+        externalList.addAll(firstJunkInfos);
+        for (FirstJunkInfo firstJunkInfo : externalList) {
             if (pathMap.containsKey(firstJunkInfo.getAppPackageName())) {
                 //todo 暂时默认一个文件夹扫描
                 firstJunkInfo.setSdPath(pathMap.get(firstJunkInfo.getAppPackageName()).getFileList().get(0).getFolderName());
@@ -224,7 +255,7 @@ public class FileQueryUtils {
                     if (firstJunkInfo == null)
                         continue;
 
-                    outJunkMap.put(file.getName(), firstJunkInfo);
+                    outJunkMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
                     Map<String, String> filePathMap = this.checkOutAllGarbageFolder(file, file.getName());
                     for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
                         if (new File(entry.getKey()).isDirectory()) {    //文件夹路径
@@ -242,7 +273,7 @@ public class FileQueryUtils {
                             if (mScanFileListener != null) {
                                 mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                             }
-                        } else if (new File(entry.getKey()).isFile()) { //文件路径
+                        }else if (new File(entry.getKey()).isFile()) { //文件路径
                             File cachefile = new File(entry.getKey());
                             SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                             if (cachefile.exists()) {
@@ -262,7 +293,7 @@ public class FileQueryUtils {
                             continue;
                         }
                         //put更新后的juckInfo
-                        junkInfoMap.put(firstJunkInfo.getAppPackageName(),firstJunkInfo);
+                        junkInfoMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
                     }
                 }
             }
@@ -361,7 +392,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null) {
+                        if (mScanFileListener != null&& !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -376,7 +407,7 @@ public class FileQueryUtils {
 
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null) {
+                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -403,7 +434,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null) {
+                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -416,6 +447,9 @@ public class FileQueryUtils {
                             secondJunkInfo.setGarbagetype("TYPE_CACHE");
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                                mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                            }
                         }
                     }
 
@@ -439,10 +473,10 @@ public class FileQueryUtils {
                 }
             }
         }
-        ArrayList<FirstJunkInfo> appCacheAndAdGarbage = getAppCacheAndAdGarbage(list);
-        if (appCacheAndAdGarbage != null) {
-            list.addAll(appCacheAndAdGarbage);
-        }
+//        ArrayList<FirstJunkInfo> appCacheAndAdGarbage = getAppCacheAndAdGarbage(list);
+//        if (appCacheAndAdGarbage != null) {
+//            list.addAll(appCacheAndAdGarbage);
+//        }
         return list;
     }
 
@@ -895,7 +929,7 @@ public class FileQueryUtils {
                         long j = cursor.getLong(1);
                         if (new File(string).exists() && j != 0) {
                             FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
-                            onelevelGarbageInfo.setAllchecked(false);
+                            onelevelGarbageInfo.setAllchecked(true);
                             onelevelGarbageInfo.setGarbageType("TYPE_APK");
                             onelevelGarbageInfo.setTotalSize(j);
                             onelevelGarbageInfo.setGarbageCatalog(string);
@@ -918,9 +952,9 @@ public class FileQueryUtils {
                                     onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
                                     onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
                                     onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
-                                    if (mScanFileListener != null) {
+                                   /* if (mScanFileListener != null) {
                                         mScanFileListener.increaseSize(j);
-                                    }
+                                    }*/
                                     if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
                                         onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
                                         onelevelGarbageInfo.setApkInstalled(true);
@@ -930,8 +964,13 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName))
+                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)){
                                         arrayList.add(onelevelGarbageInfo);
+                                        if (mScanFileListener != null) {
+                                            mScanFileListener.increaseSize(j);
+                                        }
+                                    }
+
                                 }
 //                                else {
 //                                    onelevelGarbageInfo.setAppGarbageName(string.substring(string.lastIndexOf("/") + 1));
@@ -1402,5 +1441,46 @@ public class FileQueryUtils {
                 }
             }
         }
+    }
+
+
+
+    /**
+     * 筛选file下需要清理的文件夹
+     *
+     * @param file
+     */
+
+    private  Map<String, String> checkAllGarbageFolder(final File file) {
+        final HashMap<String, String> hashMap = new HashMap<String, String>();
+        checAllkFiles(hashMap, file);
+        return hashMap;
+    }
+
+
+    /**
+     * 筛选file下需要清理的文件夹
+     *
+     * @param map
+     * @param file
+     */
+    private  void checAllkFiles(final Map<String, String> map, final File file) {
+        File[] listFiles = file.listFiles();
+        if (listFiles != null && listFiles.length > 0) {
+            for (File file2 : listFiles) {
+                if (file2.isDirectory()) {//文件夹
+                    checAllkFiles(map, file2);
+                } else { //文件类型
+                    map.put(file2.getAbsolutePath(), "残留文件");
+                }
+            }
+        } else {
+            try {
+                file.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

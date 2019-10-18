@@ -81,10 +81,10 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @BindView(R.id.layout_clean_top)
     FrameLayout mLayoutCleanTop;
 
-    /**
+/*    *//**
      * 清理的分类列表
-     */
-    public static HashMap<Integer, JunkGroup> mJunkGroups;
+     *//*
+    public static HashMap<Integer, JunkGroup> mJunkGroups;*/
     private CountEntity mCountEntity = new CountEntity();
 
     /**
@@ -179,13 +179,13 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         type = TYPE_SCAN_FINISH;
         if (mTextScanTrace == null)
             return;
-
         if (mCountEntity != null) {
             if (mCountEntity.getNumber() > 0) {
-                mJunkGroups = junkGroups;
-                ((NowCleanActivity) getActivity()).setJunkGroups(mJunkGroups);
-                mArrowRight.setVisibility(VISIBLE);
+                mCountEntity = CleanUtil.formatShortFileSize(CleanUtil.getTotalSize(junkGroups));
+                ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
+                ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
                 ((NowCleanActivity) getActivity()).scanFinish();
+                mArrowRight.setVisibility(VISIBLE);
             } else {
                 //没有扫描到垃圾
                 cleanFinishSign();
@@ -215,7 +215,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             return;
         }
         mCountEntity = CleanUtil.formatShortFileSize(total);
-        ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
         getActivity().runOnUiThread(() -> {
             CountEntity countEntity = CleanUtil.formatShortFileSize(total);
             if (mTextCount == null)
