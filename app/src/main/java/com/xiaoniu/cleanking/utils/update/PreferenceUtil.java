@@ -440,6 +440,26 @@ public class PreferenceUtil {
     }
 
     /**
+     * 获取清理完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, -1);
+    }
+
+    /**
+     * 保存清理完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, count).commit();
+        return true;
+    }
+
+    /**
      * 从后台回到前台的时间是否大于5分钟
      *
      * @return true 大于5分钟 false 小于5分钟
@@ -471,6 +491,7 @@ public class PreferenceUtil {
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime()) { // 通知栏清理
             count++;
         }
+        count++; //文件清理
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
             count++;
         }

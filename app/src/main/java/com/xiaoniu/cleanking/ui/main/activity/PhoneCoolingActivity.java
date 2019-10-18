@@ -43,12 +43,15 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.JavaInterface;
@@ -173,9 +176,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void initView() {
         Intent intent = getIntent();
-        if (intent != null){
+        if (intent != null) {
             String notification = intent.getStringExtra("NotificationService");
-            if ("clean".equals(notification)){
+            if ("clean".equals(notification)) {
                 AppHolder.getInstance().setCleanFinishSourcePageId("toggle_cooling_click");
                 StatisticsUtils.trackClick("toggle_cooling_click", "常驻通知栏点击降温", "", "toggle_page");
             }
@@ -240,6 +243,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mProgressBar.setProgress(phoneTemperature);
         initAnimator(phoneTemperature);
     }
+
     private static final int FirstLevel = 0xffFD6F46;
     private static final int ThirdLevel = 0xff06C581;
 
@@ -331,7 +335,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     mBgTitle.setVisibility(VISIBLE);
                     alpha.setDuration(1000);
                     alpha.start();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -368,7 +372,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             ObjectAnimator alpha = ObjectAnimator.ofFloat(mLayoutTitleContent, "alpha", 1, 0);
             alpha.setDuration(200);
             alpha.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         anim.setDuration(500);
@@ -696,14 +700,26 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (PreferenceUtil.getCoolingCleanTime()){
+                if (PreferenceUtil.getCoolingCleanTime()) {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
+                boolean isOpen = false;
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
+                }
+                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low)) < 3) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                    bundle.putString("num", "");
+                    bundle.putString("unit", "");
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
                 finish();
             }
 

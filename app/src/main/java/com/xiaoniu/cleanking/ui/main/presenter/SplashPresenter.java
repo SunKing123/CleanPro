@@ -30,7 +30,10 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
         mActivity = activity;
     }
 
-    public void getSwitchInfoList(){
+    /**
+     * 冷启动、热启动、完成页广告开关
+     */
+    public void getSwitchInfoList() {
         mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
@@ -39,17 +42,18 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
+                mView.getSwitchInfoListSuccess(switchInfoList);
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
             }
 
             @Override
             public void showExtraOp(String message) {
-
+                mView.getSwitchInfoListFail();
             }
 
             @Override
             public void netConnectError() {
-
+                mView.getSwitchInfoListFail();
             }
         });
     }

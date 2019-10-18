@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,34 +27,22 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
-import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishAdvertisementPresenter;
+import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
 import com.xiaoniu.common.utils.StatisticsUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import cn.jzvd.Jzvd;
 
 /**
- * 自渲染广告位3
+ * 插屏广告
  */
-public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAdvertisementPresenter> implements View.OnClickListener {
-
-    private static final String TAG = "AD_DEMO";
-    private String mTitle;
-    private TextView mTitleTv;
-    private TextView mTvSize;
-    private TextView mTvGb;
-    private TextView mTvQl;
+public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishPresenter> implements View.OnClickListener {
 
     private ImageView iv_advert_logo, iv_advert;
-    private TextView tv_advert, tv_advert_content;
-    private TextView mBtnDownload;
+    private TextView tv_advert, tv_advert_content, mBtnDownload;
     private View mViewDownload;
 
     private NativeUnifiedADData mNativeUnifiedADData;
@@ -63,11 +50,18 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     private MediaView mMediaView;
     private NativeAdContainer mContainer;
 
+    private String mTitle = "";
     private String mAdvertId = ""; //广告位1
+
+    private H mHandler = new H();
+    private static final int AD_COUNT = 1;
+    private static final int MSG_INIT_AD = 0;
+    private static final int MSG_VIDEO_START = 1;
+    private static final String TAG = "AD_DEMO";
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_finish_layout_adv;
+        return R.layout.activity_screen;
     }
 
     @Override
@@ -77,113 +71,17 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     @Override
     protected void initView() {
-        mPresenter.getSwitchInfoList();
-        findViewById(R.id.btnLeft).setOnClickListener(this);
-        mTitleTv = (TextView) findViewById(R.id.tvTitle);
-
-        mTvSize = findViewById(R.id.tv_size);
-        mTvGb = findViewById(R.id.tv_clear_finish_gb_title);
-        mTvQl = findViewById(R.id.tv_ql);
-
+        mTitle = getIntent().getStringExtra("title");
+        mPresenter.getScreentSwitch();
+        findViewById(R.id.iv_close).setOnClickListener(this);
         mContainer = findViewById(R.id.native_ad_container);
         mMediaView = findViewById(R.id.gdt_media_view);
         iv_advert_logo = findViewById(R.id.iv_advert_logo);
         iv_advert = findViewById(R.id.iv_advert);
         tv_advert = findViewById(R.id.tv_advert);
         tv_advert_content = findViewById(R.id.tv_advert_content);
-
         mViewDownload = findViewById(R.id.v_download);
         mBtnDownload = findViewById(R.id.tv_download);
-        changeUI(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        changeUI(intent);
-    }
-
-    private void changeUI(Intent intent) {
-
-        if (intent != null) {
-            mTitle = intent.getStringExtra("title");
-            String num = intent.getStringExtra("num");
-            String unit = intent.getStringExtra("unit");
-            mTvSize.setText(num);
-            mTvGb.setText(unit);
-            if (TextUtils.isEmpty(mTitle))
-                mTitle = getString(R.string.app_name);
-            if (getString(R.string.app_name).contains(mTitle)) {
-                //悟空清理
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("已达到最佳状态");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他功能");
-                }
-            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                CleanEvent cleanEvent = new CleanEvent();
-                cleanEvent.setCleanAminOver(true);
-                EventBus.getDefault().post(cleanEvent);
-                //建议清理
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("已达到最佳状态");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他功能");
-                }
-            } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
-                //QQ专清
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("手机很干净");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他功能");
-                }
-            } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                //一键加速
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("已加速");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快试试其他功能吧！");
-                }
-
-            } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
-                //超强省电
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("已达到最佳状态");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他功能");
-                }
-
-            } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
-                //通知栏清理
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("通知栏很干净");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快去体验其他炫酷功能");
-                }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
-                //微信专情
-                if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
-                    mTvSize.setText("");
-                    mTvGb.setText("已清理");
-                    mTvGb.setTextSize(20);
-                    mTvQl.setText("快试试其他功能吧！");
-                }
-            } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
-                //手机降温
-                mTvSize.setText("");
-                int tem = new Random().nextInt(3) + 1;
-                mTvGb.setText("成功降温" + tem + "°C");
-                mTvGb.setTextSize(20);
-                mTvQl.setText("60s后达到最佳降温效果");
-            }
-            mTitleTv.setText(mTitle);
-        }
     }
 
     /**
@@ -196,35 +94,41 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
 
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
-                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
+
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) { //超强省电
-                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
+
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {//通知栏清理
-                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
+
             } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {//微信专情
-                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
+
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) { //手机降温
-                if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
+
             } else { //立即清理
-                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
+
             }
         }
         Log.d(TAG, "mAdvertId=" + mAdvertId);
@@ -291,12 +195,17 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    @Override
     public void onClick(View v) {
         String functionName = "";
         String functionPosition = "";
-
         switch (v.getId()) {
-            case R.id.btnLeft:
+
+            case R.id.iv_close:
                 finish();
                 break;
         }
@@ -309,11 +218,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override
@@ -334,17 +238,11 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         if (mNativeUnifiedADData != null) {
             // 必须要在Actiivty.destroy()时通知到广告数据，以便释放内存
             mNativeUnifiedADData.destroy();
         }
     }
-
-    private H mHandler = new H();
-    private static final int AD_COUNT = 1;
-    private static final int MSG_INIT_AD = 0;
-    private static final int MSG_VIDEO_START = 1;
 
     @Override
     public void netError() {
@@ -412,7 +310,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             }
         });
         updateAdAction(mBtnDownload, ad);
-
         if (ad.getAdPatternType() == AdPatternType.NATIVE_VIDEO) { //视频类型
             mHandler.sendEmptyMessage(MSG_VIDEO_START);
 
@@ -492,22 +389,22 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         }
         switch (ad.getAppStatus()) {
             case 0:
-                button.setText("立即下载");
+                button.setText("下载");
                 break;
             case 1:
-                button.setText("立即启动");
+                button.setText("启动");
                 break;
             case 2:
-                button.setText("立即更新");
+                button.setText("更新");
                 break;
             case 4:
                 button.setText(ad.getProgress() + "%");
                 break;
             case 8:
-                button.setText("立即安装");
+                button.setText("安装");
                 break;
             case 16:
-                button.setText("下载失败");
+                button.setText("失败");
                 break;
             default:
                 button.setText("浏览");

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="@dimen/dimen_56dp"
-        android:background="#06C581"
+
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@id/viewt"
@@ -135,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_18dp"
-                android:background="@drawable/bg_big_home">
+                android:background="@drawable/bg_gradient_clean_screen">
 
                 <TextView
                     android:layout_width="wrap_content"

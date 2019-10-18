@@ -6,11 +6,15 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import java.util.List;
@@ -32,16 +36,18 @@ public class AppLifecycleObserver implements LifecycleObserver {
     void onEnterForeground() {
 
         if (isBack && PreferenceUtil.getHomeBackTime()) {
-//            Toast.makeText(mContext, mContext.getString(R.string.foreground_message), Toast.LENGTH_SHORT).show();
-            mContext.startActivity(new Intent(mContext, SplashADHotActivity.class));
-            isBack = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    Log.d("XiLei", "isOpen--hot=" + switchInfoList.isOpen());
+                    mContext.startActivity(new Intent(mContext, SplashADHotActivity.class));
+                    isBack = false;
+                }
+            }
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void onEnterBackground() {
-//        Toast.makeText(mContext, mContext.getString(R.string.background_message), Toast.LENGTH_SHORT).show();
-
         if (!isAppOnForeground()) {
             //app 进入后台
             isBack = true;

@@ -276,6 +276,13 @@
         <activity
             android:name=".ui.main.activity.SplashADHotActivity"
             android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.newclean.activity.InsertScreenFinishActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
 

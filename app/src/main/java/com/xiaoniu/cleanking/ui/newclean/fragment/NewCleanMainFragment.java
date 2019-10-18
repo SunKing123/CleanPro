@@ -1,14 +1,11 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,15 +25,18 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
-import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -92,7 +92,6 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     ImageView mNotiClearFinishIv;
     @BindView(R.id.iv_electricity_g)
     ImageView mElectricityFinishIv;
-
 
     @Override
     protected int getLayoutId() {
@@ -182,6 +181,7 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.getSwitchInfoList();
         lineShd.setEnabled(true);
         textWjgl.setEnabled(true);
         viewPhoneThin.setEnabled(true);
@@ -200,12 +200,24 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
             startActivity(NowCleanActivity.class);
         } else {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_suggest_clean));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            bundle.putString("home", "");
-            startActivity(NewCleanFinishActivity.class, bundle);
+            boolean isOpen = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_suggest_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_suggest_clean));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                bundle.putString("home", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         }
     }
 
@@ -231,11 +243,23 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_one_key_speed));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            startActivity(NewCleanFinishActivity.class, bundle);
+            boolean isOpen = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         } else {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
@@ -256,11 +280,23 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_super_power_saving));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            startActivity(NewCleanFinishActivity.class, bundle);
+            boolean isOpen = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving)) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         }
 
     }
@@ -334,11 +370,23 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_chat_clear));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            startActivity(NewCleanFinishActivity.class, bundle);
+            boolean isOpen = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear)) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         }
     }
 
@@ -352,11 +400,23 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_notification_clean));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            startActivity(NewCleanFinishActivity.class, bundle);
+            boolean isOpen = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean)) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         }
     }
 
@@ -372,11 +432,23 @@ public class NewCleanMainFragment extends BaseFragment<NewScanPresenter> {
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            startActivity(NewCleanFinishActivity.class, bundle);
+            boolean isOpen = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low)) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
         }
     }
 
