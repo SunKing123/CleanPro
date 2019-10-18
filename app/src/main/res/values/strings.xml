@@ -19,6 +19,8 @@
     <string name="log_clean">日志文件</string>
     <string name="cache_clean">缓存垃圾</string>
     <string name="system_cache">系统缓存</string>
+    <string name="select_already">已勾选:</string>
+
 
     <string name="byte_short">B</string>
     <!-- Suffix added to a number to signify size in kilobytes. -->

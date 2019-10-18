@@ -24,12 +24,23 @@
             android:textColor="@color/color_333333"
             android:textSize="@dimen/dimen_16sp"/>
 
+        <TextView
+            android:id="@+id/tv_pop_contain"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:ellipsize="marquee"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@null"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_16sp"/>
+
         <ImageView
             android:id="@+id/icon_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_8dp"
-            android:src="@mipmap/arrow_down"/>
+            android:src="@drawable/icon_arrow_down"/>
 
         <View
             android:layout_width="0dp"
@@ -55,7 +66,7 @@
             android:layout_width="@dimen/dimen_20dp"
             android:layout_height="@dimen/dimen_20dp"
             android:layout_gravity="center"
-            android:background="@drawable/icon_choose_selector"/>
+            android:background="@drawable/icon_clean_choose_selector"/>
         </FrameLayout>
     </LinearLayout>
 

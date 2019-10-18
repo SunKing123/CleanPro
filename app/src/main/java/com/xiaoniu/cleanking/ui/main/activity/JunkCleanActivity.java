@@ -48,6 +48,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author Administrator
  */
+@Deprecated
 @Route(path = RouteConstants.JUNK_CLEAN_ACTIVITY)
 public class JunkCleanActivity extends SimpleActivity {
 

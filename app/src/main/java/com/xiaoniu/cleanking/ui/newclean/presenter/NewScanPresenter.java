@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -134,12 +135,12 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
             boolean isScanFile =  apkJunkInfos.size() > 0;
             //扫描私有路径下缓存文件
-            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
+            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(false);
             //根据私有路径扫描公用路径
             ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
             e.onNext(publicDataInfo);
 
-            //公用路径残留文件
+//            //公用路径残留文件
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
             e.onNext(leaveDataInfo);
 
@@ -232,11 +233,29 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     adGroup = (JunkGroup)o;
                     adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
                     adGroup.isChecked = true;
+                    adGroup.needExpand= false;//不能展开显示
                     adGroup.isExpand = false;
                     adGroup.mChildren = new ArrayList<>();
                     mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
                 }
-            }else {
+            } else {
+                long totalSize = CleanUtil.getTotalSize(mJunkGroups);
+                if (total > totalSize) {//设置为其他垃圾
+                    JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
+                    if(adGroup !=null){
+                        adGroup.mSize += (total - totalSize);
+//                        mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
+                    }else{
+                        JunkGroup otherGroup= new JunkGroup();
+                        otherGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
+                        otherGroup.isChecked = true;
+                        otherGroup.isExpand = true;
+                        adGroup.needExpand= false;//不能展开显示
+                        otherGroup.mChildren = new ArrayList<>();
+                        otherGroup.mSize+= (total - totalSize);
+                        mJunkGroups.put(JunkGroup.GROUP_OTHER, otherGroup);
+                    }
+                }
                 if (mFileQueryUtils.isFinish())
                     return;
                 mView.scanFinish(mJunkGroups);
@@ -244,6 +263,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         });
 
     }
+
+
+
 
     public void showColorChange() {
 

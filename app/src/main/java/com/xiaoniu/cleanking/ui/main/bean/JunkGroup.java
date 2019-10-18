@@ -19,6 +19,40 @@ public class JunkGroup implements Parcelable {
     public boolean isChecked;
     public ArrayList<FirstJunkInfo> mChildren;
     public boolean isExpand;
+    public boolean needExpand = true;
+
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public long getmSize() {
+        return mSize;
+    }
+
+    public void setmSize(long mSize) {
+        this.mSize = mSize;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    public ArrayList<FirstJunkInfo> getmChildren() {
+        return mChildren;
+    }
+
+    public void setmChildren(ArrayList<FirstJunkInfo> mChildren) {
+        this.mChildren = mChildren;
+    }
 
     public boolean isExpand() {
         return isExpand;
@@ -27,6 +61,15 @@ public class JunkGroup implements Parcelable {
     public void setExpand(boolean expand) {
         isExpand = expand;
     }
+
+    public boolean isNeedExpand() {
+        return needExpand;
+    }
+
+    public void setNeedExpand(boolean needExpand) {
+        this.needExpand = needExpand;
+    }
+
 
     @Override
     public int describeContents() {
@@ -39,6 +82,8 @@ public class JunkGroup implements Parcelable {
         dest.writeLong(this.mSize);
         dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
         dest.writeList(this.mChildren);
+        dest.writeByte(this.isExpand ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.needExpand ? (byte) 1 : (byte) 0);
     }
 
     public JunkGroup() {
@@ -50,6 +95,8 @@ public class JunkGroup implements Parcelable {
         this.isChecked = in.readByte() != 0;
         this.mChildren = new ArrayList<FirstJunkInfo>();
         in.readList(this.mChildren, FirstJunkInfo.class.getClassLoader());
+        this.isExpand = in.readByte() != 0;
+        this.needExpand = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<JunkGroup> CREATOR = new Parcelable.Creator<JunkGroup>() {

@@ -8,10 +8,13 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
+import com.xiaoniu.common.utils.ContextUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by mazhuang on 16/1/14.
@@ -185,6 +188,24 @@ public class CleanUtil {
         }
 
         return total;
+    }
+
+    //计算当前一级总数
+    public static long getTotalSize(HashMap<Integer, JunkGroup> mJunkGroups) {
+        long size = 0L;
+        for (JunkGroup group : mJunkGroups.values()) {
+            if(group.mChildren.size()>0){
+                for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                    if (firstJunkInfo.isAllchecked()) {
+                        size += firstJunkInfo.getTotalSize();
+                    }
+                }
+            }else if(group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean))){
+                size+= group.mSize;
+            }
+
+        }
+        return size;
     }
 
 

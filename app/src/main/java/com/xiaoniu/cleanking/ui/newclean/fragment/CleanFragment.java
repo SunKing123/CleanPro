@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -22,7 +23,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -50,10 +50,16 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     ExpandableListView mExpandableListView;
     @BindView(R.id.view_clean_anim)
     NewCleanAnimView mCleanAnimView;
+    @BindView(R.id.do_junk_clean)
+    TextView doJunkClean;
+    TextView tvCheckedSize;
     View mHeadView;
 
     private DockingExpandableListViewAdapter mAdapter;
-    private CountEntity mCountEntity;
+    private CountEntity totalCountEntity;
+    private CountEntity checkCountEntity;
+    private long checkedSize = 0;
+    private long totalSize = 0;
     private HashMap<Integer, JunkGroup> mJunkGroups;
 
     @Inject
@@ -89,13 +95,17 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
         TextView tvSize = mHeadView.findViewById(R.id.tv_size);
         TextView tvUnit = mHeadView.findViewById(R.id.tv_clear_finish_gb_title);
-
-        mCountEntity = ((NowCleanActivity) getActivity()).getCountEntity();
-        if (mCountEntity != null){
-            tvSize.setText(mCountEntity.getTotalSize());
-            tvUnit.setText(mCountEntity.getUnit());
-        }
+        tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
         mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
+
+        totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
+        checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
+        if (totalCountEntity != null) {
+            tvSize.setText(totalCountEntity.getTotalSize());
+            tvUnit.setText(totalCountEntity.getUnit());
+            tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+            doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+        }
 
         mExpandableListView.setGroupIndicator(null);
         mExpandableListView.setChildIndicator(null);
@@ -113,10 +123,43 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         });
 
         mAdapter = new DockingExpandableListViewAdapter(getActivity(), mExpandableListView);
+        mAdapter.setOnCleanListSelectListener(new OnCleanListSelectListener() {
+            @Override
+            public void onGroupSelected(int groupPosition, boolean isChecked) {
+                JunkGroup junkGroup = mJunkGroups.get(groupPosition);
+                junkGroup.isChecked = isChecked;
+                checkedSize = isChecked ? (checkedSize + junkGroup.mSize) : (checkedSize - junkGroup.mSize);
+                checkCountEntity = CleanUtil.formatShortFileSize(checkedSize);
+                if (checkCountEntity != null) {
+                    tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                    doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                }
+            }
 
+            @Override
+            public void onFistChilSelected(int groupPosition, int childPosition, boolean isChecked) {
+                JunkGroup junkGroup = mJunkGroups.get(groupPosition);
+                FirstJunkInfo firstJunkInfo= junkGroup.mChildren.get(childPosition);
+                if(isChecked){
+                    junkGroup.mSize = junkGroup.mSize + firstJunkInfo.getTotalSize();
+                }else{
+                    junkGroup.mSize = junkGroup.mSize - firstJunkInfo.getTotalSize();
+                }
+                mJunkGroups.put(groupPosition,junkGroup);
+
+                totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
+                checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
+                if (totalCountEntity != null) {
+                    tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                    doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+
+                }
+
+            }
+        });
         mAdapter.setOnItemSelectListener(() -> {
-            long totalSize = getTotalSize();
-            mCountEntity = CleanUtil.formatShortFileSize(totalSize);
+            long totalSize = CleanUtil.getTotalSize(mJunkGroups);
+            totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
         });
 
         mExpandableListView.setAdapter(mAdapter);
@@ -131,7 +174,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
 
         mCleanAnimView.setCleanOverListener(() -> {
-            if (getActivity() !=null){
+            if (getActivity() != null) {
                 ((NowCleanActivity) getActivity()).setClean(false);
             }
         });
@@ -156,7 +199,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     @OnClick(R.id.layout_junk_clean)
     public void starClean() {
         //扫描中弹框_确认按钮
-        StatisticsUtils.trackClick( "cleaning_button_click", "用户在扫描结果页点击【清理】按钮", "clean_up_scan_page", "scanning_result_page");
+        StatisticsUtils.trackClick("cleaning_button_click", "用户在扫描结果页点击【清理】按钮", "clean_up_scan_page", "scanning_result_page");
         startClean();
     }
 
@@ -170,8 +213,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_suggest_clean));
-        bundle.putString("num", mCountEntity.getTotalSize());
-        bundle.putString("unit", mCountEntity.getUnit());
+        bundle.putString("num", totalCountEntity.getTotalSize());
+        bundle.putString("unit", totalCountEntity.getUnit());
         startActivity(NewCleanFinishActivity.class, bundle);
         getActivity().finish();
     }
@@ -179,7 +222,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     private void startClean() {
         mCleanAnimView.setStopClean(false);
         mCleanAnimView.setVisibility(View.VISIBLE);
-        mCleanAnimView.setData(mCountEntity);
+        mCleanAnimView.setData(totalCountEntity);
         //清理动画
         mCleanAnimView.startCleanAnim(false);
         clearAll();
@@ -221,11 +264,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 //清理完成，存储时间点
                 mSPHelper.saveCleanTime(System.currentTimeMillis());
             }
-            });
+        });
 
     }
 
-    private long getTotalSize() {
+/*    private long getTotalSize() {
         long size = 0L;
         for (JunkGroup group : mJunkGroups.values()) {
             for (FirstJunkInfo firstJunkInfo : group.mChildren) {
@@ -235,7 +278,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             }
         }
         return size;
-    }
+    }*/
 
     /**
      * 停止清理
@@ -255,6 +298,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     @Override
     public void onPause() {
         super.onPause();
-        NiuDataAPIUtil.onPageEnd("clean_up_scan_page","scanning_result_page","scanning_result_page_view_page", "用户在扫描结果页浏览");
+        NiuDataAPIUtil.onPageEnd("clean_up_scan_page", "scanning_result_page", "scanning_result_page_view_page", "用户在扫描结果页浏览");
     }
 }

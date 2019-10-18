@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
 import com.xiaoniu.cleanking.callback.OnItemSelectListener;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -29,12 +30,14 @@ import java.util.Set;
 /**
  * 一键清理详情的列表Adapter
  */
-public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapter {
+public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private final ExpandableListView mListView;
     private HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
 
     private OnItemSelectListener mOnItemSelectListener;
+
+    private OnCleanListSelectListener onCleanListSelectListener;
 
     private Context mContext;
 
@@ -47,6 +50,9 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
         mOnItemSelectListener = onItemSelectListener;
     }
 
+    public void setOnCleanListSelectListener(OnCleanListSelectListener listener) {
+        onCleanListSelectListener = listener;
+    }
     public void setData(HashMap<Integer, JunkGroup> data) {
         mJunkGroups = data;
         if (mJunkGroups == null) {
@@ -54,6 +60,9 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
         }
         notifyDataSetChanged();
     }
+
+
+
 
     @Override
     public int getGroupCount() {
@@ -120,26 +129,39 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
         holder.mPackageNameTv.setText(group.mName);
         holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
         holder.mCheckButton.setSelected(group.isChecked);
+        if(!group.needExpand){
+            holder.mIconArrow.setVisibility(View.GONE);
+        }else{
+            holder.mIconArrow.setVisibility(View.VISIBLE);
+        }
         if (isExpanded &&  group.mSize > 0){
-            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.arrow_up));
+            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_arrow_up));
         }else {
-            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.arrow_down));
+            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_arrow_down));
         }
         holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
         holder.mCheckButton.setOnClickListener(v -> {
             group.isChecked = !group.isChecked;
-            resetSelectButton(group, group.isChecked);
+            resetGroupButton(group,groupPosition, group.isChecked);
         });
 
         return convertView;
     }
 
-    /**
-     * 第一级选择框点击时， 设置所有子按钮为选中/未选中状态
-     *
-     * @param group
-     * @param isChecked
-     */
+    //第一级选择框点击时， 设置所有子按钮为选中/未选中状态
+    private void resetGroupButton(JunkGroup group, int position,boolean isChecked) {
+        for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+            if (!firstJunkInfo.isLock()) {
+                //选中没有上锁的apk应用
+                firstJunkInfo.setAllchecked(isChecked);
+            }
+        }
+        notifyDataSetChanged();
+        if(onCleanListSelectListener!=null)
+        onCleanListSelectListener.onGroupSelected(position,isChecked);
+    }
+
+/*
     private void resetSelectButton(JunkGroup group, boolean isChecked) {
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
             if (!firstJunkInfo.isLock()) {
@@ -151,7 +173,7 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
             mOnItemSelectListener.onCount();
         }
         notifyDataSetChanged();
-    }
+    }*/
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -159,7 +181,7 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
         ChildViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.level1_item_list, null);
+                    .inflate(R.layout.level1_item_list01, null);
             holder = new ChildViewHolder();
             holder.mJunkTypeTv = convertView.findViewById(R.id.text_app_name);
             holder.mLogo = convertView.findViewById(R.id.app_logo);
@@ -194,34 +216,36 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
                     holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.mipmap.icon_lock));
                     info.setAllchecked(false);
                     info.setLock(true);
-                    resetItemSelectButton(mJunkGroups.get(groupPosition));
+                    resetChildSelectButton(mJunkGroups.get(groupPosition),groupPosition,childPosition,false);
                 } else {
-                    holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_choose_selector));
+                    holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_clean_choose_selector));
                     info.setLock(false);
                 }
             }
         } else {
             holder.mTextVersion.setVisibility(View.GONE);
             holder.mRootView.setOnClickListener(null);
-            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_choose_selector));
+            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_clean_choose_selector));
         }
 
 
         holder.mLayoutCheck.setOnClickListener(v -> {
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
-            resetItemSelectButton(mJunkGroups.get(groupPosition));
+            resetChildSelectButton(mJunkGroups.get(groupPosition),groupPosition,childPosition,checked);
+//            resetItemSelectButton(mJunkGroups.get(groupPosition));
         });
 
         return convertView;
     }
 
+
+
     /**
-     * 重置父类的全选按钮状态
+     * 重置子类选择按钮
      *
-     * @param group
      */
-    private void resetItemSelectButton(JunkGroup group) {
+    private void resetChildSelectButton(JunkGroup group,int groupPosition, int childPosition,boolean isChecked) {
         group.isChecked = true;
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
             if (!firstJunkInfo.isAllchecked()) {
@@ -229,11 +253,11 @@ public class    DockingExpandableListViewAdapter extends BaseExpandableListAdapt
                 break;
             }
         }
-        if (mOnItemSelectListener != null) {
-            mOnItemSelectListener.onCount();
-        }
         notifyDataSetChanged();
+        if(onCleanListSelectListener!=null)
+        onCleanListSelectListener.onFistChilSelected(groupPosition,childPosition,isChecked);
     }
+
 
     /**
      * Apk安装包保护弹窗

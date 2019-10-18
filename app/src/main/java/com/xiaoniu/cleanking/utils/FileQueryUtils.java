@@ -273,7 +273,7 @@ public class FileQueryUtils {
                             if (mScanFileListener != null) {
                                 mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                             }
-                        } else if (new File(entry.getKey()).isFile()) { //文件路径
+                        }else if (new File(entry.getKey()).isFile()) { //文件路径
                             File cachefile = new File(entry.getKey());
                             SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                             if (cachefile.exists()) {
@@ -392,7 +392,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null) {
+                        if (mScanFileListener != null&& !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -407,7 +407,7 @@ public class FileQueryUtils {
 
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null) {
+                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -434,7 +434,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null) {
+                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -447,6 +447,9 @@ public class FileQueryUtils {
                             secondJunkInfo.setGarbagetype("TYPE_CACHE");
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                                mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                            }
                         }
                     }
 
@@ -470,10 +473,10 @@ public class FileQueryUtils {
                 }
             }
         }
-        ArrayList<FirstJunkInfo> appCacheAndAdGarbage = getAppCacheAndAdGarbage(list);
-        if (appCacheAndAdGarbage != null) {
-            list.addAll(appCacheAndAdGarbage);
-        }
+//        ArrayList<FirstJunkInfo> appCacheAndAdGarbage = getAppCacheAndAdGarbage(list);
+//        if (appCacheAndAdGarbage != null) {
+//            list.addAll(appCacheAndAdGarbage);
+//        }
         return list;
     }
 
@@ -926,7 +929,7 @@ public class FileQueryUtils {
                         long j = cursor.getLong(1);
                         if (new File(string).exists() && j != 0) {
                             FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
-                            onelevelGarbageInfo.setAllchecked(false);
+                            onelevelGarbageInfo.setAllchecked(true);
                             onelevelGarbageInfo.setGarbageType("TYPE_APK");
                             onelevelGarbageInfo.setTotalSize(j);
                             onelevelGarbageInfo.setGarbageCatalog(string);
@@ -949,9 +952,9 @@ public class FileQueryUtils {
                                     onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
                                     onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
                                     onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
-                                    if (mScanFileListener != null) {
+                                   /* if (mScanFileListener != null) {
                                         mScanFileListener.increaseSize(j);
-                                    }
+                                    }*/
                                     if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
                                         onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
                                         onelevelGarbageInfo.setApkInstalled(true);
@@ -961,8 +964,13 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName))
+                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)){
                                         arrayList.add(onelevelGarbageInfo);
+                                        if (mScanFileListener != null) {
+                                            mScanFileListener.increaseSize(j);
+                                        }
+                                    }
+
                                 }
 //                                else {
 //                                    onelevelGarbageInfo.setAppGarbageName(string.substring(string.lastIndexOf("/") + 1));
