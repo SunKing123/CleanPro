@@ -128,7 +128,14 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         JunkGroup group = mJunkGroups.get(groupPosition);
         holder.mPackageNameTv.setText(group.mName);
         holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
-        holder.mCheckButton.setSelected(group.isChecked);
+        if(group.isCheckPart){
+            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_cb_contain));
+        }else{
+            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_clean_choose_selector));
+            holder.mCheckButton.setSelected(group.isChecked);
+        }
+
+
         if(!group.needExpand){
             holder.mIconArrow.setVisibility(View.GONE);
         }else{
@@ -161,19 +168,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         onCleanListSelectListener.onGroupSelected(position,isChecked);
     }
 
-/*
-    private void resetSelectButton(JunkGroup group, boolean isChecked) {
-        for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-            if (!firstJunkInfo.isLock()) {
-                //选中没有上锁的apk应用
-                firstJunkInfo.setAllchecked(isChecked);
-            }
-        }
-        if (mOnItemSelectListener != null) {
-            mOnItemSelectListener.onCount();
-        }
-        notifyDataSetChanged();
-    }*/
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -233,7 +227,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
             resetChildSelectButton(mJunkGroups.get(groupPosition),groupPosition,childPosition,checked);
-//            resetItemSelectButton(mJunkGroups.get(groupPosition));
+
         });
 
         return convertView;
@@ -246,12 +240,21 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
      *
      */
     private void resetChildSelectButton(JunkGroup group,int groupPosition, int childPosition,boolean isChecked) {
-        group.isChecked = true;
+        int childCheckCount = 0;
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-            if (!firstJunkInfo.isAllchecked()) {
-                group.isChecked = false;
-                break;
+            if (firstJunkInfo.isAllchecked()) {
+                childCheckCount++;
             }
+        }
+        if(childCheckCount ==0){
+            group.isChecked = false;
+            group.isCheckPart = false;
+        }else if(childCheckCount>=0 && childCheckCount < group.getmChildren().size()){
+            group.isChecked = true;
+            group.isCheckPart = true;
+        }else if(childCheckCount == group.getmChildren().size()){
+            group.isChecked= true;
+            group.isCheckPart = false;
         }
         notifyDataSetChanged();
         if(onCleanListSelectListener!=null)

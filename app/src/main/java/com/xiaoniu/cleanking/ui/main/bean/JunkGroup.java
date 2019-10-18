@@ -17,6 +17,7 @@ public class JunkGroup implements Parcelable {
     public String mName;
     public long mSize;
     public boolean isChecked;
+    public boolean isCheckPart = false;
     public ArrayList<FirstJunkInfo> mChildren;
     public boolean isExpand;
     public boolean needExpand = true;
@@ -71,6 +72,14 @@ public class JunkGroup implements Parcelable {
     }
 
 
+    public boolean isCheckPart() {
+        return isCheckPart;
+    }
+
+    public void setCheckPart(boolean checkPart) {
+        isCheckPart = checkPart;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -81,6 +90,7 @@ public class JunkGroup implements Parcelable {
         dest.writeString(this.mName);
         dest.writeLong(this.mSize);
         dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isCheckPart ? (byte) 1 : (byte) 0);
         dest.writeList(this.mChildren);
         dest.writeByte(this.isExpand ? (byte) 1 : (byte) 0);
         dest.writeByte(this.needExpand ? (byte) 1 : (byte) 0);
@@ -93,6 +103,7 @@ public class JunkGroup implements Parcelable {
         this.mName = in.readString();
         this.mSize = in.readLong();
         this.isChecked = in.readByte() != 0;
+        this.isCheckPart = in.readByte() != 0;
         this.mChildren = new ArrayList<FirstJunkInfo>();
         in.readList(this.mChildren, FirstJunkInfo.class.getClassLoader());
         this.isExpand = in.readByte() != 0;

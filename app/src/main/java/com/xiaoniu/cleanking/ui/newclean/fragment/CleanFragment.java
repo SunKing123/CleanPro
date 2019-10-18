@@ -100,6 +100,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
         totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
         checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
+
         if (totalCountEntity != null) {
             tvSize.setText(totalCountEntity.getTotalSize());
             tvUnit.setText(totalCountEntity.getUnit());
@@ -128,7 +129,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             public void onGroupSelected(int groupPosition, boolean isChecked) {
                 JunkGroup junkGroup = mJunkGroups.get(groupPosition);
                 junkGroup.isChecked = isChecked;
-                checkedSize = isChecked ? (checkedSize + junkGroup.mSize) : (checkedSize - junkGroup.mSize);
+                mJunkGroups.put(groupPosition,junkGroup);
+                checkedSize = CleanUtil.getTotalSize(mJunkGroups);
                 checkCountEntity = CleanUtil.formatShortFileSize(checkedSize);
                 if (checkCountEntity != null) {
                     tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
@@ -139,16 +141,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             @Override
             public void onFistChilSelected(int groupPosition, int childPosition, boolean isChecked) {
                 JunkGroup junkGroup = mJunkGroups.get(groupPosition);
-                FirstJunkInfo firstJunkInfo= junkGroup.mChildren.get(childPosition);
-                if(isChecked){
-                    junkGroup.mSize = junkGroup.mSize + firstJunkInfo.getTotalSize();
-                }else{
-                    junkGroup.mSize = junkGroup.mSize - firstJunkInfo.getTotalSize();
-                }
+                junkGroup.mChildren.get(childPosition).setAllchecked(isChecked);
                 mJunkGroups.put(groupPosition,junkGroup);
-
-                totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
-                checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
+                checkedSize = CleanUtil.getTotalSize(mJunkGroups);
+                checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(checkedSize);
                 if (totalCountEntity != null) {
                     tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
                     doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
