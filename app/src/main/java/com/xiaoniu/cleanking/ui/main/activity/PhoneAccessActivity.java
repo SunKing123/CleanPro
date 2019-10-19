@@ -485,8 +485,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
         long totalSizes = 0;
-        for (FirstJunkInfo firstJunkInfo : listInfo)
+        for (FirstJunkInfo firstJunkInfo : listInfo){
             totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
+        }
         setCleanSize(totalSizes, true);
         this.totalSizesCleaned = totalSizes;
     }
@@ -501,12 +502,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     public void setCleanSize(long totalSizes, boolean canPlayAnim) {
         if (acceview == null) return;
-        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
+        String str_totalSize = CleanAllFileScanUtil.getFileSize(totalSizes);
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
-            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            sizeMb= Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim()).intValue();
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim)
@@ -515,10 +516,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
         } else if (str_totalSize.endsWith("GB")) {
-            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
-            strNum = String.valueOf(sizeMb);
+            double gbnum = Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim());
             strUnit = "GB";
-            sizeMb *= 1024;
+            sizeMb = NumberUtils.getRoundCeilingInt(gbnum*1024);
+            strNum = String.valueOf(sizeMb);
             if (canPlayAnim)
                 mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
             else
@@ -590,7 +591,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 if (TextUtils.equals(listP.get(j).packageName.trim(), firstJunkInfo.getAppPackageName())) {
                     firstJunkInfo.setAppName(listP.get(j).applicationInfo.loadLabel(packageManager).toString().trim());
                     firstJunkInfo.setGarbageIcon(listP.get(j).applicationInfo.loadIcon(packageManager));
-                    firstJunkInfo.setTotalSize((int) (Math.random() * un) + un);
+                    firstJunkInfo.setTotalSize((long) (Math.random() * un) + un);
                 }
             }
         }
