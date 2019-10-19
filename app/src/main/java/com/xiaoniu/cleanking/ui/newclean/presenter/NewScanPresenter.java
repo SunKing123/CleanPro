@@ -128,7 +128,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
             boolean isScanFile = apkJunkInfos.size() > 0;
             //扫描私有路径下缓存文件
-            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(false);
+            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             //根据私有路径扫描公用路径
             ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
             e.onNext(publicDataInfo);

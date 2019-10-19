@@ -135,7 +135,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mCheckButton.setSelected(group.isChecked);
         }
 
-
+        //判断是否需要展示子类
         if(!group.needExpand){
             holder.mIconArrow.setVisibility(View.GONE);
         }else{
@@ -148,25 +148,14 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         }
         holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
         holder.mCheckButton.setOnClickListener(v -> {
-            group.isChecked = !group.isChecked;
-            resetGroupButton(group,groupPosition, group.isChecked);
+//            group.isChecked = !group.isChecked;
+            resetGroupButton(group,groupPosition);
         });
 
         return convertView;
     }
 
-    //第一级选择框点击时， 设置所有子按钮为选中/未选中状态
-    private void resetGroupButton(JunkGroup group, int position,boolean isChecked) {
-        for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-            if (!firstJunkInfo.isLock()) {
-                //选中没有上锁的apk应用
-                firstJunkInfo.setAllchecked(isChecked);
-            }
-        }
-        notifyDataSetChanged();
-        if(onCleanListSelectListener!=null)
-        onCleanListSelectListener.onGroupSelected(position,isChecked);
-    }
+
 
 
     @Override
@@ -233,11 +222,41 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         return convertView;
     }
 
-
+    //第一级选择框点击时， 设置所有子按钮为选中/未选中状态
+    private void resetGroupButton(JunkGroup group, int position) {
+        if(group.isChecked && group.isCheckPart == false){
+            group.isChecked = !group.isChecked;
+            for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                if (!firstJunkInfo.isLock()) {
+                    //选中没有上锁的apk应用
+                    firstJunkInfo.setAllchecked(group.isChecked);
+                }
+            }
+        }else if(group.isChecked && group.isCheckPart == true){
+            group.isChecked = !group.isChecked;
+            group.isCheckPart = !group.isCheckPart;
+            for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                if (!firstJunkInfo.isLock()) {
+                    //选中没有上锁的apk应用
+                    firstJunkInfo.setAllchecked(group.isChecked);
+                }
+            }
+        }else if(!group.isChecked){
+            group.isChecked = !group.isChecked;
+            for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                if (!firstJunkInfo.isLock()) {
+                    //选中没有上锁的apk应用
+                    firstJunkInfo.setAllchecked(group.isChecked);
+                }
+            }
+        }
+        notifyDataSetChanged();
+        if(onCleanListSelectListener!=null)
+            onCleanListSelectListener.onGroupSelected(position,group.isChecked);
+    }
 
     /**
-     * 重置子类选择按钮
-     *
+     * 子类cb点击事件
      */
     private void resetChildSelectButton(JunkGroup group,int groupPosition, int childPosition,boolean isChecked) {
         int childCheckCount = 0;
