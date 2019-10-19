@@ -282,4 +282,16 @@ public class NumberUtils {
         int number = (int) (start + Math.random() * (end - start + 1));
         return String.valueOf(number);
     }
+
+    /**
+     * 两个整数之间的随机数
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static int mathRandomInt(int start, int end) {
+        int number = (int) (start + Math.random() * (end - start + 1));
+        return number;
+    }
 }

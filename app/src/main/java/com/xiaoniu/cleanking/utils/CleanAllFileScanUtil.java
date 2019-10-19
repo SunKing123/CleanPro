@@ -11,6 +11,7 @@ import com.xiaoniu.common.utils.AsyncTaskUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -228,6 +229,23 @@ public class CleanAllFileScanUtil {
         } else {
             return String.format(Locale.getDefault(), "%.0fGB", (double) byteNum / GB);
         }
+    }
+
+    /**
+     * 字节数转合适大小
+     * <p>保留3位小数</p>
+     *
+     * @param size 字节数
+     * @return 1...1024 unit
+     */
+    public static String getFileSize(long size) {
+        if (size <= 0)
+            return "0";
+
+        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     public static String byte2FitSizeOne(long byteNum) {
