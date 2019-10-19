@@ -309,6 +309,51 @@ public class PreferenceUtil {
     }
 
 
+
+    /**
+     * 保存清理运行内存是否全选
+     * @return
+     */
+    public static boolean saveCacheIsCheckedAll(boolean ischeck) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.RUN_CACHES_IS_CHECK_ALL, ischeck).commit();
+        return true;
+    }
+
+
+    /**
+     * 获取清理勾选页面三分钟内的随机 乘数
+     * @return
+     */
+    public static boolean getCacheIsCheckedAll() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        boolean mul = sharedPreferences.getBoolean(SpCacheConfig.RUN_CACHES_IS_CHECK_ALL,true);
+        return mul;
+    }
+    /**
+     * 保存清理勾选页面三分钟内的随机 乘数
+     * @return
+     */
+    public static boolean saveMulCacheNum(float mul) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat(SpCacheConfig.MUL_RUN_CACHES_CUSTOM, mul).commit();
+        return true;
+    }
+
+
+    /**
+     * 获取清理勾选页面三分钟内的随机 乘数
+     * @return
+     */
+    public static float getMulCacheNum() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        float mul = sharedPreferences.getFloat(SpCacheConfig.MUL_RUN_CACHES_CUSTOM, 1f);
+        return mul;
+    }
+
+
     /**
      * 保存立即清理清理时间
      *

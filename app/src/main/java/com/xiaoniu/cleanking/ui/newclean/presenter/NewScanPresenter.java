@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 
 import java.util.ArrayList;
@@ -212,21 +213,21 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                         apkGroup.mChildren.add(info);
                         apkGroup.mSize += info.getTotalSize();
 
-                    } else if( "TYPE_LEAVED".equals(info.getGarbageType())){
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName()) ) {
+                    } else if ("TYPE_LEAVED".equals(info.getGarbageType())) {
+                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
                             uninstallGroup.mChildren.add(info);
                             uninstallGroup.mSize += info.getTotalSize();
                         }
                     }
                 }
-            } else if(o instanceof JunkGroup){ //其他垃圾
-                 //其他垃圾
+            } else if (o instanceof JunkGroup) { //其他垃圾
+                //其他垃圾
                 JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
                 if (adGroup == null) {
-                    adGroup = (JunkGroup)o;
+                    adGroup = (JunkGroup) o;
                     adGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
                     adGroup.isChecked = true;
-                    adGroup.needExpand= false;//不能展开显示
+                    adGroup.needExpand = false;//不能展开显示
                     adGroup.isExpand = false;
                     adGroup.mChildren = new ArrayList<>();
                     mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
@@ -235,20 +236,23 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
                 if (total > totalSize) {//设置为其他垃圾
                     JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
-                    if(adGroup !=null){
+                    if (adGroup != null) {
                         adGroup.mSize += (total - totalSize);
 //                        mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
-                    }else{
-                        JunkGroup otherGroup= new JunkGroup();
+                    } else {
+                        JunkGroup otherGroup = new JunkGroup();
                         otherGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
                         otherGroup.isChecked = true;
                         otherGroup.isExpand = true;
-                        adGroup.needExpand= false;//不能展开显示
+                        adGroup.needExpand = false;//不能展开显示
                         otherGroup.mChildren = new ArrayList<>();
-                        otherGroup.mSize+= (total - totalSize);
+                        otherGroup.mSize += (total - totalSize);
                         mJunkGroups.put(JunkGroup.GROUP_OTHER, otherGroup);
                     }
                 }
+
+                //三分钟限制
+//                cacheFilter();
                 if (mFileQueryUtils.isFinish())
                     return;
                 mView.scanFinish(mJunkGroups);
@@ -258,6 +262,26 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
 
+    public void cacheFilter() {
+        JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
+        if (processGroup != null) {
+            if (!PreferenceUtil.getNowCleanTime()) {//三分钟以内
+                if (PreferenceUtil.getCacheIsCheckedAll()) {//上次全选
+                    processGroup.getmChildren().clear();
+                    Float total = Float.valueOf(processGroup.getmSize() + "") * PreferenceUtil.getMulCacheNum();
+                    processGroup.setmSize(total.longValue());
+                    processGroup.setNeedExpand(false);
+                } else {//上次非全选
+                    for (int i = 0; i < processGroup.getmChildren().size(); i++) {
+                        Float totalSize = Float.valueOf(processGroup.getmChildren().get(i).getTotalSize()) * PreferenceUtil.getMulCacheNum();
+                        processGroup.getmChildren().get(i).setTotalSize(totalSize.longValue());
+                    }
+                }
+            }else{
+                PreferenceUtil.saveMulCacheNum(1f);
+            }
+        }
+    }
 
 
     public void showColorChange() {

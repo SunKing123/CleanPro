@@ -15,6 +15,9 @@ public class SpCacheConfig {
     public static final String CACHES_KEY_VIDEO = "key_caches_files_video";
     public static final String CACHES_KEY_FIRST = "key_caches_files_first";
 
+    public static final String MUL_RUN_CACHES_CUSTOM = "mul_run_caches_custom";
+    public static final String RUN_CACHES_IS_CHECK_ALL= "run_caches_is_check_all";
+
     /**
      * 安装包白名单文件缓存配置
      */

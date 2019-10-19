@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 
@@ -144,7 +145,7 @@ public class FileQueryUtils {
 
     //其他垃圾
     public JunkGroup getOtherCache() {
-        JunkGroup otherGroup= new JunkGroup();
+        JunkGroup otherGroup = new JunkGroup();
         otherGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
         otherGroup.isChecked = true;
         otherGroup.isExpand = true;
@@ -164,7 +165,7 @@ public class FileQueryUtils {
                 }
             }
         }
-        return  otherGroup;
+        return otherGroup;
 
     }
 
@@ -180,10 +181,10 @@ public class FileQueryUtils {
         if (outJunkMap.size() <= 0)
             return junkInfoArrayList;
 
-        HashMap<String ,FirstJunkInfo> hashMap = new HashMap<>();
+        HashMap<String, FirstJunkInfo> hashMap = new HashMap<>();
         for (final Map.Entry<String, FirstJunkInfo> entry : outJunkMap.entrySet()) {
-            if(!FileUtils.isAppInstalled(entry.getKey())) //私有路径中没有该安装包路径 视为共有残留
-            hashMap.put(entry.getKey(),entry.getValue());
+            if (!FileUtils.isAppInstalled(entry.getKey())) //私有路径中没有该安装包路径 视为共有残留
+                hashMap.put(entry.getKey(), entry.getValue());
         }
         for (final Map.Entry<String, FirstJunkInfo> outEntry : hashMap.entrySet()) {
             if (isFinish) {
@@ -273,7 +274,7 @@ public class FileQueryUtils {
                             if (mScanFileListener != null) {
                                 mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                             }
-                        }else if (new File(entry.getKey()).isFile()) { //文件路径
+                        } else if (new File(entry.getKey()).isFile()) { //文件路径
                             File cachefile = new File(entry.getKey());
                             SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                             if (cachefile.exists()) {
@@ -392,7 +393,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null&& !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -495,7 +496,7 @@ public class FileQueryUtils {
         try {
             HashMap hashMap = new HashMap();
             //8.0以上
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= 26) {  //特殊处理
                 return getTaskInfo26();
             }
             //7.0以上
@@ -652,7 +653,27 @@ public class FileQueryUtils {
             int packageSize = installedList.size();
             if (packageSize == 0)
                 return junkList;
-            int[] randomPosition = CountUtil.randomNumber(0, packageSize - 1, packageSize / 7 < 30 ? 30 : packageSize / 7);
+
+
+            int packNum = 30;
+            int sizeNum = 50;
+            if (!PreferenceUtil.getNowCleanTime()) {//三分钟以内
+                if (PreferenceUtil.getCacheIsCheckedAll()) {//上次全选
+                    Float packNumf = Float.valueOf(packNum) * PreferenceUtil.getMulCacheNum() * 0.6f;
+                    Float sizeNumF = Float.valueOf(sizeNum) * PreferenceUtil.getMulCacheNum() * 0.6f;
+                    packNum = packNumf < 2f ? 2 : packNumf.intValue();
+                    sizeNum =  sizeNum < 1f ? 1 : sizeNumF.intValue();
+                } else {//上次非全选
+                    Float packNumf = Float.valueOf(packNum) * PreferenceUtil.getMulCacheNum();
+                    Float sizeNumF = Float.valueOf(sizeNum) * PreferenceUtil.getMulCacheNum();
+                    packNum = packNumf < 2f ? 2 : packNumf.intValue();
+                    sizeNum = sizeNum < 1f ? 1 : sizeNumF.intValue();
+                }
+            } else {
+                PreferenceUtil.saveMulCacheNum(1f);
+            }
+
+            int[] randomPosition = CountUtil.randomNumber(0, packageSize - 1, packageSize / 7 < packNum ? packNum : packageSize / 7);
             for (int random : randomPosition) {
                 PackageInfo packageInfo = installedList.get(random);
                 if (isFinish) {
@@ -670,7 +691,7 @@ public class FileQueryUtils {
                         junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
                         junkInfo.setAppPackageName(packageName);
                         junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                        long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
+                        long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
                         if (mScanFileListener != null) {
                             mScanFileListener.increaseSize(totalSize);
                         }
@@ -964,7 +985,7 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)){
+                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)) {
                                         arrayList.add(onelevelGarbageInfo);
                                         if (mScanFileListener != null) {
                                             mScanFileListener.increaseSize(j);
@@ -1444,14 +1465,13 @@ public class FileQueryUtils {
     }
 
 
-
     /**
      * 筛选file下需要清理的文件夹
      *
      * @param file
      */
 
-    private  Map<String, String> checkAllGarbageFolder(final File file) {
+    private Map<String, String> checkAllGarbageFolder(final File file) {
         final HashMap<String, String> hashMap = new HashMap<String, String>();
         checAllkFiles(hashMap, file);
         return hashMap;
@@ -1464,7 +1484,7 @@ public class FileQueryUtils {
      * @param map
      * @param file
      */
-    private  void checAllkFiles(final Map<String, String> map, final File file) {
+    private void checAllkFiles(final Map<String, String> map, final File file) {
         File[] listFiles = file.listFiles();
         if (listFiles != null && listFiles.length > 0) {
             for (File file2 : listFiles) {
