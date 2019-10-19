@@ -120,12 +120,14 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mIconArrow = convertView.findViewById(R.id.icon_arrow);
             holder.mViewDivider = convertView.findViewById(R.id.view_divider);
             holder.mLayoutCheck = convertView.findViewById(R.id.layout_check);
+            holder.tvItemTop01 = convertView.findViewById(R.id.tv_item_top01);
             convertView.setTag(holder);
         } else {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
         JunkGroup group = mJunkGroups.get(groupPosition);
+        holder.tvItemTop01.setVisibility(groupPosition==0?View.VISIBLE:View.GONE);
         holder.mPackageNameTv.setText(group.mName);
         holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
         if(group.isCheckPart){
@@ -393,6 +395,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public ImageView mCheckButton;
         public ImageView mIconArrow;
         public View mViewDivider;
+        public TextView tvItemTop01;
         public FrameLayout mLayoutCheck;
     }
 

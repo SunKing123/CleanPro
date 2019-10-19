@@ -3,19 +3,29 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
         android:id="@+id/layout_show_list"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="match_parent">
-
+        <ExpandableListView
+            android:id="@+id/junk_list"
+            android:overScrollMode="never"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="68dp"
+            >
+        </ExpandableListView>
         <FrameLayout
             android:id="@+id/layout_junk_clean"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/bg_bottom_layout">
+            android:background="@drawable/icon_clean_btn">
 
             <TextView
                 android:id="@+id/do_junk_clean"
@@ -32,14 +42,7 @@
 
         </FrameLayout>
 
-        <ExpandableListView
-            android:id="@+id/junk_list"
-            android:overScrollMode="never"
-            android:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/layout_junk_clean">
-        </ExpandableListView>
+
     </RelativeLayout>
 
     <RelativeLayout
