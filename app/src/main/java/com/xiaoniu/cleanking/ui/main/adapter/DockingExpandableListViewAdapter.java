@@ -158,15 +158,12 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
     }
 
 
-
-
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         FirstJunkInfo info = mJunkGroups.get(groupPosition).mChildren.get(childPosition);
         ChildViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.level1_item_list01, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.level1_item_list01, null);
             holder = new ChildViewHolder();
             holder.mJunkTypeTv = convertView.findViewById(R.id.text_app_name);
             holder.mLogo = convertView.findViewById(R.id.app_logo);
@@ -175,10 +172,12 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             holder.mTextVersion = convertView.findViewById(R.id.text_version);
             holder.mRootView = convertView.findViewById(R.id.layout_root);
             holder.mLayoutCheck = convertView.findViewById(R.id.layout_check);
+            holder.viewLine = convertView.findViewById(R.id.view_line);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
+        holder.viewLine.setVisibility(childPosition ==(mJunkGroups.get(groupPosition).mChildren.size()-1)?View.GONE:View.VISIBLE);
         //名称
         holder.mJunkTypeTv.setText(info.getAppName());
         //垃圾的LOGO
@@ -407,5 +406,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         public TextView mTextVersion;
         public LinearLayout mRootView;
         public LinearLayout mLayoutCheck;
+        public View viewLine;
     }
 }
