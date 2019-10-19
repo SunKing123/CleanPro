@@ -36,7 +36,10 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -144,7 +147,7 @@ public class FileQueryUtils {
 
     //其他垃圾
     public JunkGroup getOtherCache() {
-        JunkGroup otherGroup= new JunkGroup();
+        JunkGroup otherGroup = new JunkGroup();
         otherGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
         otherGroup.isChecked = true;
         otherGroup.isExpand = true;
@@ -164,7 +167,7 @@ public class FileQueryUtils {
                 }
             }
         }
-        return  otherGroup;
+        return otherGroup;
 
     }
 
@@ -180,10 +183,10 @@ public class FileQueryUtils {
         if (outJunkMap.size() <= 0)
             return junkInfoArrayList;
 
-        HashMap<String ,FirstJunkInfo> hashMap = new HashMap<>();
+        HashMap<String, FirstJunkInfo> hashMap = new HashMap<>();
         for (final Map.Entry<String, FirstJunkInfo> entry : outJunkMap.entrySet()) {
-            if(!FileUtils.isAppInstalled(entry.getKey())) //私有路径中没有该安装包路径 视为共有残留
-            hashMap.put(entry.getKey(),entry.getValue());
+            if (!FileUtils.isAppInstalled(entry.getKey())) //私有路径中没有该安装包路径 视为共有残留
+                hashMap.put(entry.getKey(), entry.getValue());
         }
         for (final Map.Entry<String, FirstJunkInfo> outEntry : hashMap.entrySet()) {
             if (isFinish) {
@@ -273,7 +276,7 @@ public class FileQueryUtils {
                             if (mScanFileListener != null) {
                                 mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                             }
-                        }else if (new File(entry.getKey()).isFile()) { //文件路径
+                        } else if (new File(entry.getKey()).isFile()) { //文件路径
                             File cachefile = new File(entry.getKey());
                             SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                             if (cachefile.exists()) {
@@ -392,7 +395,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null&& !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -964,7 +967,7 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)){
+                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)) {
                                         arrayList.add(onelevelGarbageInfo);
                                         if (mScanFileListener != null) {
                                             mScanFileListener.increaseSize(j);
@@ -1444,14 +1447,13 @@ public class FileQueryUtils {
     }
 
 
-
     /**
      * 筛选file下需要清理的文件夹
      *
      * @param file
      */
 
-    private  Map<String, String> checkAllGarbageFolder(final File file) {
+    private Map<String, String> checkAllGarbageFolder(final File file) {
         final HashMap<String, String> hashMap = new HashMap<String, String>();
         checAllkFiles(hashMap, file);
         return hashMap;
@@ -1464,7 +1466,7 @@ public class FileQueryUtils {
      * @param map
      * @param file
      */
-    private  void checAllkFiles(final Map<String, String> map, final File file) {
+    private void checAllkFiles(final Map<String, String> map, final File file) {
         File[] listFiles = file.listFiles();
         if (listFiles != null && listFiles.length > 0) {
             for (File file2 : listFiles) {
@@ -1483,4 +1485,71 @@ public class FileQueryUtils {
         }
 
     }
+
+    /**
+     * 获取系统RAM运存总大小(单位：MB)
+     *
+     * @return
+     */
+    public static int getTotalRam() {
+        String path = "/proc/meminfo";
+        String firstLine = null;
+        int totalRam = 0;
+        try {
+            FileReader fileReader = new FileReader(path);
+            BufferedReader br = new BufferedReader(fileReader, 8192);
+            firstLine = br.readLine().split("\\s+")[1];
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (firstLine != null) {
+            totalRam = (int) Math.ceil((new Float(Float.valueOf(firstLine) / (1024 * 1024)).doubleValue()));
+        }
+        return totalRam * 1024;
+    }
+
+    /**
+     * 计算总的缓存大小
+     *
+     * @param listInfo
+     */
+    public int computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
+        long totalSizes = 0;
+        for (FirstJunkInfo firstJunkInfo : listInfo)
+            totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
+        return setCleanSize(totalSizes);
+    }
+
+    /**
+     * 获取缓存白名单
+     */
+    public boolean isCacheWhite(String packageName) {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets.contains(packageName);
+    }
+
+    /**
+     * 使用内存占总RAM的比例
+     *
+     * @param totalSizes
+     * @return
+     */
+    public int setCleanSize(long totalSizes) {
+        int sizeMb = 0;
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
+        if (str_totalSize.endsWith("KB")) {
+            sizeMb = 0;
+        }
+        //数字动画转换，GB转成Mb播放，kb太小就不扫描
+        if (str_totalSize.endsWith("MB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+        } else if (str_totalSize.endsWith("GB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            sizeMb *= 1024;
+        }
+        return new BigDecimal(sizeMb).divide(new BigDecimal(FileQueryUtils.getTotalRam()), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).intValue();
+    }
+
 }

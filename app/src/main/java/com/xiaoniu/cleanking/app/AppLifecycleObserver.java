@@ -38,7 +38,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
         if (isBack && PreferenceUtil.getHomeBackTime()) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                    Log.d("XiLei", "isOpen--hot=" + switchInfoList.isOpen());
                     mContext.startActivity(new Intent(mContext, SplashADHotActivity.class));
                     isBack = false;
                 }

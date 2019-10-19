@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
@@ -27,6 +29,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.AsyncTaskUtils;
@@ -309,6 +312,56 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         rotation.setInterpolator(new LinearInterpolator());
         rotation.start();
         return rotation;
+    }
+
+    /**
+     * 获取到可以加速的应用名单Android O以下的获取最近使用情况
+     */
+    @SuppressLint("CheckResult")
+    public void getAccessListBelow() {
+//        mView.showLoadingDialog();
+        Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
+            //获取到可以加速的应用名单
+            FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+            //文件加载进度回调
+            mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
+                @Override
+                public void currentNumber() {
+
+                }
+
+                @Override
+                public void increaseSize(long p0) {
+
+                }
+
+                @Override
+                public void reduceSize(long p0) {
+
+                }
+
+                @Override
+                public void scanFile(String p0) {
+
+                }
+
+                @Override
+                public void totalSize(int p0) {
+
+                }
+            });
+            ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
+            if (listInfo == null) {
+                listInfo = new ArrayList<>();
+            }
+            e.onNext(listInfo);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(strings -> {
+                    if (mView == null) return;
+//                    mView.cancelLoadingDialog();
+                    mView.getAccessListBelow(strings);
+                });
     }
 
 }

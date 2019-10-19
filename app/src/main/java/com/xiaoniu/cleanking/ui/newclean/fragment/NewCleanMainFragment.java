@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -14,11 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
@@ -33,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -53,6 +48,8 @@ import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -62,6 +59,7 @@ import com.xiaoniu.common.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -107,6 +105,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @BindView(R.id.iv_interaction)
     ImageView mInteractionIv;
 
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //使用内存占总RAM的比例
     private int mInteractionPoistion; //互动式广告position
 
     @Override
@@ -120,23 +121,48 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         EventBus.getDefault().register(this);
         mPresenter.getInteractionSwitch();
         if (!PreferenceUtil.isFirstForHomeIcon()) {
-            mAccTv.setText(getString(R.string.tool_one_key_speed));
-            mNotiClearTv.setText(getString(R.string.tool_notification_clean));
-            mElectricityTv.setText(getString(R.string.tool_super_power_saving));
             PreferenceUtil.saveFirstForHomeIcon();
         } else {
-            mAccIv.setImageResource(R.drawable.icon_yjjs_r);
-            mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
-            if (!NotifyUtils.isNotificationListenerEnabled()) {
-                mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
-                mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                mNotiClearTv.setText(R.string.find_harass_notify);
+            if (!PreferenceUtil.getCleanTime()) {
+                mAccFinishIv.setVisibility(View.VISIBLE);
+                mAccIv.setImageResource(R.drawable.icon_yjjs);
+                mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+                mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
+            } else {
+                mAccIv.setImageResource(R.drawable.icon_yjjs_r);
+                mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+                mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
             }
+
+            if (!NotifyUtils.isNotificationListenerEnabled()) {
+                mNotiClearIv.setImageResource(R.drawable.icon_home_qq_o);
+                mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
+                mNotiClearTv.setText(R.string.find_harass_notify);
+            } else {
+                if (!PreferenceUtil.getNotificationCleanTime()) {
+                    mNotiClearFinishIv.setVisibility(View.VISIBLE);
+                    mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
+                    mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+                    mNotiClearTv.setText(R.string.finished_clean_notify_hint);
+                } else {
+                    mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
+                    mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+                    mNotiClearTv.setText(R.string.find_harass_notify);
+                }
+            }
+
             if (AndroidUtil.getElectricityNum(getActivity()) <= 70) {
-                mElectricityIv.setImageResource(R.drawable.icon_power_r);
-                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
+                if (!PreferenceUtil.getPowerCleanTime()) {
+                    mElectricityFinishIv.setVisibility(View.VISIBLE);
+                    mElectricityIv.setImageResource(R.drawable.icon_power);
+                    mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                } else {
+                    mElectricityIv.setImageResource(R.drawable.icon_power_r);
+                    mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+                    mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
+                }
+
             }
         }
     }
@@ -171,29 +197,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.getAccessListBelow();
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > 2) {
                 mInteractionPoistion = 0;
             }
-
-//            GlideUtils.loadImage(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv);
-//暂时注释
-            Glide.with(this).load(R.drawable.hot_pakge).listener(new RequestListener() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
-                    if (resource instanceof GifDrawable) {
-                        //加载一次
-                        ((GifDrawable) resource).setLoopCount(1000);
-                    }
-                    return false;
-                }
-            }).into(mInteractionIv);
+            GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
         }
 
         lineShd.setEnabled(true);
@@ -244,6 +256,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mElectricityIv.setImageResource(R.drawable.icon_power);
         mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
         mElectricityTv.setText(getString(R.string.lengthen_time, event.getHour()));
+        PreferenceUtil.saveLengthenAwaitTime(event.getHour());
     }
 
     @Override
@@ -272,7 +285,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_suggest_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -315,7 +328,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -352,7 +365,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving)) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -442,7 +455,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear)) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -472,7 +485,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean)) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -504,7 +517,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low)) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -515,6 +528,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 bundle.putString("unit", "");
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
+        }
+    }
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null) return;
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                listInfo.remove(firstJunkInfo);
+            }
+        }
+        if (listInfo.size() != 0) {
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
         }
     }
 

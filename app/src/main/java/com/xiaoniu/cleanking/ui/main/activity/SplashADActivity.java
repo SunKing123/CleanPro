@@ -234,9 +234,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         } else {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    Log.d("XiLei", "switchInfoList.isOpen()=" + switchInfoList.isOpen());
                     if (switchInfoList.isOpen()) {
-                        Log.d("XiLei", "posId=" + posId);
                         splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
                         splashAD.fetchAndShowIn(adContainer);
                         return;
@@ -374,8 +372,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        Log.d("XiLei", "getSwitchInfoListSuccess");
-        Log.d("XiLei", "list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
                 mAdvertId = switchInfoList.getAdvertId();
@@ -390,7 +386,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-        Log.d("XiLei", "getSwitchInfoListFail");
         startActivity(new Intent(SplashADActivity.this, MainActivity.class));
         finish();
     }

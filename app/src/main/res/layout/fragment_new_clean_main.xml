@@ -88,36 +88,63 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_anim"
+    <!--  <FrameLayout
+          android:id="@+id/fl_anim"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:paddingBottom="@dimen/dimen_60dp"
+          android:visibility="gone">
+
+          <TextView
+              android:id="@+id/tv_anim_title"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="150dp"
+              android:text="@string/tool_cleaned_up"
+              android:textColor="@color/white"
+              android:textSize="16sp"
+              android:visibility="visible" />
+
+          <com.airbnb.lottie.LottieAnimationView
+              android:id="@+id/animation_clean_finish"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center" />
+
+      </FrameLayout>-->
+
+    <RelativeLayout
+        android:id="@+id/v_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="@dimen/dimen_60dp"
-        android:visibility="gone">
+        android:layout_height="56dp"
+        android:background="@drawable/bg_gradient_clean_finish_tobar"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
 
         <TextView
-            android:id="@+id/tv_anim_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="150dp"
-            android:text="@string/tool_cleaned_up"
+            android:layout_centerVertical="true"
+            android:text="悟空清理"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:visibility="visible" />
+            android:textSize="20sp" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animation_clean_finish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+        <ImageView
+            android:id="@+id/iv_interaction"
+            android:layout_width="@dimen/dimen_35dp"
+            android:layout_height="@dimen/dimen_35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
 
-    </FrameLayout>
+    </RelativeLayout>
+
     <!--完成动画-->
     <ScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/v_top"
         android:fadingEdgeLength="@dimen/dimen_0dp"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -137,35 +164,10 @@
                     android:layout_height="match_parent"
                     app:arcHeight="40dp" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_20dp"
-                    android:layout_marginRight="@dimen/dimen_16dp"
-                    android:minHeight="45dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="悟空清理"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:id="@+id/iv_interaction"
-                        android:layout_width="@dimen/dimen_35dp"
-                        android:layout_height="@dimen/dimen_35dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
-
-                </RelativeLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="65dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -243,9 +245,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/dimen_16dp"
+                    android:paddingLeft="@dimen/dimen_8dp"
                     android:paddingTop="@dimen/dimen_16dp"
-                    android:paddingRight="@dimen/dimen_16dp"
+                    android:paddingRight="@dimen/dimen_8dp"
                     android:paddingBottom="@dimen/dimen_16dp"
                     android:weightSum="3">
                     <!--一键加速-->
@@ -266,7 +268,7 @@
                                 android:id="@+id/iv_acc"
                                 android:layout_width="@dimen/dimen_32dp"
                                 android:layout_height="@dimen/dimen_32dp"
-                                android:src="@drawable/icon_yjjs_o" />
+                                android:src="@drawable/icon_yjjs" />
 
                             <ImageView
                                 android:id="@+id/iv_acc_g"
@@ -285,7 +287,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
                             android:text="@string/tool_one_key_speed"
-                            android:textColor="@color/color_FFAC01"
+                            android:textColor="@color/color_323232"
                             android:textSize="13sp" />
                     </LinearLayout>
                     <!--手机降温-->
@@ -348,8 +350,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dimen_20dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/dimen_16dp"
-                    android:paddingRight="@dimen/dimen_16dp"
+                    android:paddingLeft="@dimen/dimen_8dp"
+                    android:paddingRight="@dimen/dimen_8dp"
                     android:paddingBottom="@dimen/dimen_16dp"
                     android:weightSum="3">
                     <!--通知栏清理-->
@@ -370,7 +372,7 @@
                                 android:id="@+id/iv_noti_clear"
                                 android:layout_width="@dimen/dimen_32dp"
                                 android:layout_height="@dimen/dimen_32dp"
-                                android:src="@drawable/icon_home_qq_o" />
+                                android:src="@drawable/icon_home_qq" />
 
                             <ImageView
                                 android:id="@+id/iv_noti_g"
@@ -389,7 +391,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
                             android:text="@string/tool_notification_clean"
-                            android:textColor="@color/color_FFAC01"
+                            android:textColor="@color/color_323232"
                             android:textSize="13sp" />
 
                     </LinearLayout>
@@ -438,7 +440,7 @@
                                 android:id="@+id/iv_electricity"
                                 android:layout_width="@dimen/dimen_32dp"
                                 android:layout_height="@dimen/dimen_32dp"
-                                android:src="@drawable/icon_power_o" />
+                                android:src="@drawable/icon_power" />
 
                             <ImageView
                                 android:id="@+id/iv_electricity_g"
@@ -456,8 +458,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
-                            android:text="超强省电"
-                            android:textColor="@color/color_FFAC01"
+                            android:text="@string/tool_super_power_saving"
+                            android:textColor="@color/color_323232"
                             android:textSize="13sp" />
 
                     </LinearLayout>

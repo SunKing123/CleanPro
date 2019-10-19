@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -134,6 +135,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     private String strNum;
     private String strUnit;
     private boolean isShowListInfo = false;
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //所有应用所占内存大小
 
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
@@ -230,6 +234,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -337,14 +343,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
-        Log.d("XiLei", "size=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)));
         boolean isOpen = false;
         for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
             if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                 isOpen = switchInfoList.isOpen();
             }
         }
-        if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed)) < 3) {
+        if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -475,6 +480,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         acceview.setListInfoSize(listInfo.size());
         if (listInfo.size() != 0) {
+
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             computeTotalSize(listInfo);
             setAdapter(listInfo);
         }

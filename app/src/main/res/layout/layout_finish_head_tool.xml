@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_home_qq_r" />
+                android:src="@drawable/icon_yjjs" />
 
             <TextView
                 android:id="@+id/tv_quicken_title"
@@ -44,7 +44,7 @@
                 android:layout_marginTop="@dimen/dimen_5dp"
                 android:layout_toRightOf="@+id/iv_quicken"
                 android:text="@string/internal_storage_scale_hint"
-                android:textColor="@color/color_FF4545"
+                android:textColor="@color/color_777777"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -104,7 +104,7 @@
                 android:layout_marginTop="@dimen/dimen_5dp"
                 android:layout_toRightOf="@+id/iv_power"
                 android:text="@string/power_consumption_thread"
-                android:textColor="@color/color_BABABA"
+                android:textColor="@color/color_777777"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -163,8 +163,8 @@
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginTop="@dimen/dimen_5dp"
                 android:layout_toRightOf="@+id/iv_notification"
-                android:text="@string/power_consumption_thread"
-                android:textColor="@color/color_BABABA"
+                android:text="@string/find_harass_notify"
+                android:textColor="@color/color_777777"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
