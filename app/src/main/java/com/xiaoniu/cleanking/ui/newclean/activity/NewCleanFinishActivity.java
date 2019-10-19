@@ -21,13 +21,10 @@ import com.qq.e.ads.nativ.MediaView;
 import com.qq.e.ads.nativ.NativeADEventListener;
 import com.qq.e.ads.nativ.NativeADMediaListener;
 import com.qq.e.ads.nativ.NativeADUnifiedListener;
-import com.qq.e.ads.nativ.NativeExpressADView;
-import com.qq.e.ads.nativ.NativeExpressMediaListener;
 import com.qq.e.ads.nativ.NativeUnifiedAD;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.qq.e.comm.constants.AdPatternType;
-import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -39,6 +36,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -53,9 +51,11 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -82,7 +82,7 @@ import cn.jzvd.Jzvd;
 public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> implements View.OnClickListener {
 
     private static final String TAG = "AD_DEMO";
-    private String mTitle;
+    private String mTitle = "";
     private TextView mTitleTv;
     private TextView mTvSize;
     private TextView mTvGb;
@@ -101,7 +101,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private TextView tv_advert, tv_advert_content, tv_advert2, tv_advert_content2, tv_download2;
     private View v_advert, v_advert2;
     private TextView tv_quicken, tv_power, tv_notification;
-    private ImageView iv_power, iv_notification;
+    private ImageView iv_quicken, iv_power, iv_notification;
 
     private NativeUnifiedADData mNativeUnifiedADData, mNativeUnifiedADData2;
     private NativeUnifiedAD mAdManager, mAdManager2;
@@ -113,6 +113,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private boolean isScreenSwitchOpen; //插屏广告开关
 
     private int page_index = 1;
+    private int mShowCount; //推荐显示的数量
+    private int mRamScale; //所有应用所占内存大小
 
     @Override
     protected int getLayoutId() {
@@ -126,6 +128,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void initView() {
+        mTitle = getIntent().getStringExtra("title");
+
         mPresenter.getSwitchInfoList();
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
@@ -184,8 +188,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         tv_power = headerTool.findViewById(R.id.tv_power);
         tv_notification = headerTool.findViewById(R.id.tv_notification);
 
+        iv_quicken = headerTool.findViewById(R.id.iv_quicken);
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
+
+        mTitleTv.setText(mTitle);
         setListener();
         loadData();
     }
@@ -394,25 +401,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void changeUI(Intent intent) {
-     /*   if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
-//                refreshAd();
-//                refreshAd2();
-                *//*for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.FINISH_ID.equals(switchInfoList.getId())) {
-                        if (switchInfoList.isIsOpen()) {
-                            //加载广告
-                            refreshAd();
-                        }
-                    }
-                }*//* //暂时注释
-            }
-        } else {
-            PreferenceUtil.saveFirstOpenCLeanFinishApp();
-        }*/
-
+        int result = 0;
         if (intent != null) {
-            mTitle = intent.getStringExtra("title");
             String num = intent.getStringExtra("num");
             String unit = intent.getStringExtra("unit");
             mTvSize.setText(num);
@@ -489,16 +479,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvGb.setTextSize(20);
                 mTvQl.setText("60s后达到最佳降温效果");
             }
-            mTitleTv.setText(mTitle);
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                tv_quicken.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+
+            if (!PermissionUtils.isUsageAccessAllowed(this)) {
+                iv_quicken.setImageResource(R.drawable.icon_yjjs_o);
+                tv_quicken.setTextColor(ContextCompat.getColor(this, R.color.color_FFAC01));
+                tv_quicken.setText(getString(R.string.internal_storage_scale_hint));
             } else {
-                tv_quicken.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(40, 100)) + "%");
+                iv_quicken.setImageResource(R.drawable.icon_yjjs_r);
+                tv_quicken.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tv_quicken.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+                } else {
+                    tv_quicken.setText(getString(R.string.internal_storage_scale, String.valueOf(mRamScale)) + "%");
+                }
             }
 
-            iv_power.setImageResource(R.drawable.icon_power_r);
-            tv_power.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
-            tv_power.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(5, 15)));
+            if (!PermissionUtils.isUsageAccessAllowed(this)) {
+                iv_power.setImageResource(R.drawable.icon_power_o);
+                tv_power.setTextColor(ContextCompat.getColor(this, R.color.color_FFAC01));
+                tv_power.setText(getString(R.string.power_consumption_thread));
+            } else {
+                iv_power.setImageResource(R.drawable.icon_power_r);
+                tv_power.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
+                tv_power.setText(getString(R.string.power_consumption_num, new FileQueryUtils().getRunningProcess().size() + ""));
+            }
 
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 iv_notification.setImageResource(R.drawable.icon_home_qq_o);
@@ -507,35 +511,32 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else {
                 iv_notification.setImageResource(R.drawable.icon_home_qq_r);
                 tv_notification.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
-                tv_notification.setText(getString(R.string.find_harass_notify_num, NumberUtils.mathRandom(5, 20)));
+                tv_notification.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
             }
         }
-
         //是否显示推荐功能（一键加速，超强省电，通知栏清理，微信专清，文件清理，手机降温）
-        showTool();
+        showTool(result);
     }
-
-    private int mShowCount;
 
     /**
      * 是否显示推荐功能项
      */
-    private void showTool() {
+    private void showTool(int ram) {
 
-        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime()) {
+        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime() && ram > 20) {
             // 一键加速间隔时间至少3分钟  否则隐藏功能项
             mShowCount++;
             v_quicken.setVisibility(View.VISIBLE);
             line_quicken.setVisibility(View.VISIBLE);
         }
-        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime()) {
+        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime() && new FileQueryUtils().getRunningProcess().size() > 5) {
             // 超强省电间隔时间至少3分钟 否则隐藏
             mShowCount++;
             v_power.setVisibility(View.VISIBLE);
             line_power.setVisibility(View.VISIBLE);
         }
 
-        if (!getString(R.string.tool_notification_clean).contains(mTitle) && PreferenceUtil.getNotificationCleanTime()) {
+        if (!getString(R.string.tool_notification_clean).contains(mTitle) && PreferenceUtil.getNotificationCleanTime() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
             // 通知栏清理间隔时间至少3分钟 否则隐藏
             mShowCount++;
             v_notification.setVisibility(View.VISIBLE);
@@ -569,7 +570,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        changeUI(intent);
+        if (Build.VERSION.SDK_INT < 26) {
+            mPresenter.getAccessListBelow();
+        }
     }
 
     @Override
@@ -731,8 +734,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     protected void loadData() {
-        Intent intent = getIntent();
-        changeUI(intent);
         startLoadData();
     }
 
@@ -766,6 +767,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void onResume() {
+        if (Build.VERSION.SDK_INT < 26) {
+            mPresenter.getAccessListBelow();
+        }
         mPresenter.getScreentSwitch();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
@@ -845,75 +849,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onPause();
     }
 
-    /**
-     * 获取播放器实例
-     * <p>
-     * 仅当视频回调{@link NativeExpressMediaListener#onVideoInit(NativeExpressADView)}调用后才会有返回值
-     *
-     * @param videoPlayer
-     * @return
-     */
-    private String getVideoInfo(AdData.VideoPlayer videoPlayer) {
-        if (videoPlayer != null) {
-            StringBuilder videoBuilder = new StringBuilder();
-            videoBuilder.append("{state:").append(videoPlayer.getVideoState()).append(",")
-                    .append("duration:").append(videoPlayer.getDuration()).append(",")
-                    .append("position:").append(videoPlayer.getCurrentPosition()).append("}");
-            return videoBuilder.toString();
-        }
-        return null;
-    }
-
-    private NativeExpressMediaListener mediaListener = new NativeExpressMediaListener() {
-        @Override
-        public void onVideoInit(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoInit: " + getVideoInfo(nativeExpressADView.getBoundData().getProperty(AdData.VideoPlayer.class)));
-        }
-
-        @Override
-        public void onVideoLoading(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoLoading");
-        }
-
-        @Override
-        public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
-            Log.i(TAG, "onVideoReady");
-        }
-
-        @Override
-        public void onVideoStart(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoStart: "
-                    + getVideoInfo(nativeExpressADView.getBoundData().getProperty(AdData.VideoPlayer.class)));
-        }
-
-        @Override
-        public void onVideoPause(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoPause: "
-                    + getVideoInfo(nativeExpressADView.getBoundData().getProperty(AdData.VideoPlayer.class)));
-        }
-
-        @Override
-        public void onVideoComplete(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoComplete: "
-                    + getVideoInfo(nativeExpressADView.getBoundData().getProperty(AdData.VideoPlayer.class)));
-        }
-
-        @Override
-        public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
-            Log.i(TAG, "onVideoError");
-        }
-
-        @Override
-        public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoPageOpen");
-        }
-
-        @Override
-        public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoPageClose");
-        }
-    };
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -954,7 +889,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private void loadNewsData() {
         String type = mType.getName();
         String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type + "&page=" + page_index;
-        Log.d("XiLei", "url=" + url);
         EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
             public void onFailure(Throwable e) {
@@ -1046,7 +980,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     Log.d(TAG, "eCPM = " + mNativeUnifiedADData.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData.getECPMLevel());
                     break;
                 case MSG_VIDEO_START:
-                    Log.d("AD_DEMO", "handleMessage");
                     iv_advert.setVisibility(View.GONE);
                     mMediaView.setVisibility(View.VISIBLE);
                     break;
@@ -1059,7 +992,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     Log.d(TAG, "eCPM = " + mNativeUnifiedADData2.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData2.getECPMLevel());
                     break;
                 case MSG_VIDEO_START2:
-                    Log.d("AD_DEMO", "handleMessage2222222");
                     iv_advert2.setVisibility(View.GONE);
                     mMediaView2.setVisibility(View.VISIBLE);
                     break;
@@ -1109,7 +1041,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             builder.setAutoPlayMuted(false) //设置视频广告在预览页自动播放时是否静音
                     .setEnableDetailPage(false) //点击视频是否跳转到详情页
                     .setEnableUserControl(true) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
-                    .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.WIFI);
+                    .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS);
             VideoOption videoOption = builder.build();
             // 视频广告需对MediaView进行绑定，MediaView必须为容器mContainer的子View
             ad.bindMediaView(mMediaView, videoOption,
@@ -1139,6 +1071,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         @Override
                         public void onVideoStart() {
                             Log.d(TAG, "onVideoStart: ");
+                            if (mNativeUnifiedADData2 != null) {
+                                mNativeUnifiedADData2.pauseVideo();
+                            }
                         }
 
                         @Override
@@ -1149,6 +1084,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         @Override
                         public void onVideoResume() {
                             Log.d(TAG, "onVideoResume: ");
+                            if (mNativeUnifiedADData2 != null) {
+                                mNativeUnifiedADData2.pauseVideo();
+                            }
                         }
 
                         @Override
@@ -1246,6 +1184,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         @Override
                         public void onVideoStart() {
                             Log.d(TAG, "onVideoStart: ");
+                            if (mNativeUnifiedADData != null) {
+                                mNativeUnifiedADData.pauseVideo();
+                            }
                         }
 
                         @Override
@@ -1256,6 +1197,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         @Override
                         public void onVideoResume() {
                             Log.d(TAG, "onVideoResume: ");
+                            if (mNativeUnifiedADData != null) {
+                                mNativeUnifiedADData.pauseVideo();
+                            }
                         }
 
                         @Override
@@ -1339,5 +1283,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else {
             GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert2);
         }
+    }
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null) return;
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                listInfo.remove(firstJunkInfo);
+            }
+        }
+        if (listInfo.size() != 0) {
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+        }
+        changeUI(getIntent());
     }
 }

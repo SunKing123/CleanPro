@@ -37,7 +37,10 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1503,4 +1506,71 @@ public class FileQueryUtils {
         }
 
     }
+
+    /**
+     * 获取系统RAM运存总大小(单位：MB)
+     *
+     * @return
+     */
+    public static int getTotalRam() {
+        String path = "/proc/meminfo";
+        String firstLine = null;
+        int totalRam = 0;
+        try {
+            FileReader fileReader = new FileReader(path);
+            BufferedReader br = new BufferedReader(fileReader, 8192);
+            firstLine = br.readLine().split("\\s+")[1];
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (firstLine != null) {
+            totalRam = (int) Math.ceil((new Float(Float.valueOf(firstLine) / (1024 * 1024)).doubleValue()));
+        }
+        return totalRam * 1024;
+    }
+
+    /**
+     * 计算总的缓存大小
+     *
+     * @param listInfo
+     */
+    public int computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
+        long totalSizes = 0;
+        for (FirstJunkInfo firstJunkInfo : listInfo)
+            totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
+        return setCleanSize(totalSizes);
+    }
+
+    /**
+     * 获取缓存白名单
+     */
+    public boolean isCacheWhite(String packageName) {
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        return sets.contains(packageName);
+    }
+
+    /**
+     * 使用内存占总RAM的比例
+     *
+     * @param totalSizes
+     * @return
+     */
+    public int setCleanSize(long totalSizes) {
+        int sizeMb = 0;
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizes);
+        if (str_totalSize.endsWith("KB")) {
+            sizeMb = 0;
+        }
+        //数字动画转换，GB转成Mb播放，kb太小就不扫描
+        if (str_totalSize.endsWith("MB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+        } else if (str_totalSize.endsWith("GB")) {
+            sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));
+            sizeMb *= 1024;
+        }
+        return new BigDecimal(sizeMb).divide(new BigDecimal(FileQueryUtils.getTotalRam()), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).intValue();
+    }
+
 }

@@ -61,7 +61,7 @@ public class ArcView extends View {
 //        mPaint.setColor(mBgColor);
 
         LinearGradient linearGradient = new LinearGradient(750, 0, 750, 1200, new int[]{
-                Color.rgb(39, 214, 152),
+                Color.rgb(40,208,170),
                 Color.rgb(45, 185, 240)},
                 new float[]{0, .9F}, Shader.TileMode.CLAMP);
         //new float[]{},中的数据表示相对位置，将150,50,150,300，划分10个单位，.3，.6，.9表示它的绝对位置。300到400，将直接画出rgb（0,232,210）

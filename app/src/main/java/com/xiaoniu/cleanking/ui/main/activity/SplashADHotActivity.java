@@ -190,7 +190,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
                     if (switchInfoList.isOpen()) {
-                        Log.d("XiLei", "posId22=" + posId);
                         splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
                         splashAD.fetchAndShowIn(adContainer);
                         return;
@@ -328,8 +327,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        Log.d("XiLei", "getSwitchInfoListSuccess");
-        Log.d("XiLei", "list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
                 mAdvertId = switchInfoList.getAdvertId();

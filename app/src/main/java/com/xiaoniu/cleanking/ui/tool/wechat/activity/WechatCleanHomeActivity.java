@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -30,10 +32,12 @@ import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -42,6 +46,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -111,6 +117,9 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     @BindView(R.id.line_smed)
     LinearLayout lineSmed;
     ObjectAnimator objectAnimatorScanIng;
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //所有应用所占内存大小
 
     @Override
     public int getLayoutId() {
@@ -124,6 +133,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
     @Override
     public void initView() {
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        if (Build.VERSION.SDK_INT < 26) {
+            mPresenter.getAccessListBelow();
+        }
         //注册订阅者
         EventBus.getDefault().register(this);
         ViewHelper.setTextViewToDDINOTF(tvGabsize);
@@ -171,7 +185,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                         isOpen = switchInfoList.isOpen();
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear)) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -370,4 +384,19 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     @Override
     public void netError() {
     }
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null) return;
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                listInfo.remove(firstJunkInfo);
+            }
+        }
+        if (listInfo.size() != 0) {
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+        }
+    }
+
 }

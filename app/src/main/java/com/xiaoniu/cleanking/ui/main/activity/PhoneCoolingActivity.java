@@ -17,6 +17,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -53,7 +54,9 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
@@ -167,6 +170,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * 数字增加动画
      */
     private ValueAnimator numberAnimator;
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //所有应用所占内存大小
 
     @Override
     protected int getLayoutId() {
@@ -175,6 +181,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @Override
     protected void initView() {
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        if (Build.VERSION.SDK_INT < 26) {
+            mPresenter.getAccessListBelow();
+        }
         Intent intent = getIntent();
         if (intent != null) {
             String notification = intent.getStringExtra("NotificationService");
@@ -709,7 +720,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low)) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -734,4 +745,19 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             }
         });
     }
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null) return;
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                listInfo.remove(firstJunkInfo);
+            }
+        }
+        if (listInfo.size() != 0) {
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+        }
+    }
+
 }

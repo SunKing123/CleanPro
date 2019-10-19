@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils.update;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -518,13 +519,33 @@ public class PreferenceUtil {
     }
 
     /**
+     * 获取延长待机时间
+     */
+    public static String getLengthenAwaitTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.LENGTHEN_AWAIT_TIME, "");
+    }
+
+    /**
+     * 保存延长待机时间
+     *
+     * @return
+     */
+    public static boolean saveLengthenAwaitTime(String time) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.LENGTHEN_AWAIT_TIME, time).commit();
+        return true;
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return
      */
-    public static int getShowCount(String title) {
+    public static int getShowCount(String title, int ramScale, int notifSize, int powerSize) {
         int count = 0;
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime() && ramScale > 20) {  // 一键加速
             count++;
         }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
@@ -533,11 +554,11 @@ public class PreferenceUtil {
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
             count++;
         }
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime()) { // 通知栏清理
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime() && notifSize > 0) { // 通知栏清理
             count++;
         }
         count++; //文件清理
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime() && powerSize > 5) { //超强省电
             count++;
         }
         return count;
