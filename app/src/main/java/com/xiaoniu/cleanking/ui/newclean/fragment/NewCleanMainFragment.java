@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.annotation.SuppressLint;
 import android.animation.Animator;
 import android.content.Intent;
 import android.net.Uri;
@@ -231,6 +232,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (mInteractionPoistion > 2) {
             mInteractionPoistion = 0;
         }
+        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
         startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                 .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
         mInteractionPoistion++;
@@ -352,9 +354,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
             boolean isOpen = false;
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
@@ -396,9 +401,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             boolean isOpen = false;
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
@@ -441,9 +449,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
             boolean isOpen = false;
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
                 }
             }
 
@@ -538,9 +549,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             startActivity(WechatCleanHomeActivity.class);
         } else {
             boolean isOpen = false;
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
                 }
             }
 
@@ -575,9 +589,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             boolean isOpen = false;
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
                 }
             }
             Log.d("XiLei", "isOpen=" + isOpen);
@@ -613,9 +630,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
             boolean isOpen = false;
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
                 }
             }
             Log.d("XiLei", "isOpen=" + isOpen);
@@ -652,14 +672,18 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     }
 
     public void onKeyBack() {
-        long currentTimeMillis = System.currentTimeMillis();
-        if (currentTimeMillis - firstTime > 1500) {
-            Toast.makeText(getActivity(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            firstTime = currentTimeMillis;
-        } else {
-            SPUtil.setInt(getContext(), "turnask", 0);
-            AppManager.getAppManager().AppExit(getContext(), false);
-        }
+//        long currentTimeMillis = System.currentTimeMillis();
+//        if (currentTimeMillis - firstTime > 1500) {
+//            Toast.makeText(getActivity(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+//            firstTime = currentTimeMillis;
+//        } else {
+//            SPUtil.setInt(getContext(), "turnask", 0);
+//            AppManager.getAppManager().AppExit(getContext(), false);
+//        }
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        startActivity(home);
     }
 
     @Override

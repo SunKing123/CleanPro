@@ -320,7 +320,7 @@ public class StatisticsUtils {
     }
 
     /**
-     * 广告请求
+     * 广告请求_自定义 类型
      * @param event_code
      * @param event_name
      * @param ad_position_id

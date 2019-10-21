@@ -716,9 +716,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
                 boolean isOpen = false;
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
+                if (AppHolder.getInstance().getSwitchInfoList() != null) { //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                            isOpen = switchInfoList.isOpen();
+                        }
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());

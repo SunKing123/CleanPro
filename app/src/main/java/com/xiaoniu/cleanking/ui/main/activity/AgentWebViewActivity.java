@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.BaseAgentWebActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * @author XiLei
@@ -43,6 +44,7 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StatisticsUtils.trackClick("Interaction_ad_return_click", "用户在首页点击互动式广告返回", "home_page", "Interaction_ad_page");
                 finish();
             }
         });
@@ -53,6 +55,13 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
     @Override
     protected ViewGroup getAgentWebParent() {
         return (ViewGroup) this.findViewById(R.id.container);
+    }
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("Interaction_ad_return_click", "用户在首页点击互动式广告返回", "home_page", "Interaction_ad_page");
+        super.onBackPressed();
+
     }
 
     @Override

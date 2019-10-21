@@ -210,17 +210,21 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
             getWebView().goBack();
             firstTime = 0;
         } else {
-            long currentTimeMillis = System.currentTimeMillis();
-            if (currentTimeMillis - firstTime > 1500) {
-                Toast.makeText(getActivity(), "再按一次退出程序",
-                        Toast.LENGTH_SHORT).show();
-                firstTime = currentTimeMillis;
-            } else {
-                SPUtil.setInt(getContext(), "turnask", 0);
-                if (getActivity() != null) {
-                    getActivity().finish();
-                }
-            }
+//            long currentTimeMillis = System.currentTimeMillis();
+//            if (currentTimeMillis - firstTime > 1500) {
+//                Toast.makeText(getActivity(), "再按一次退出程序",
+//                        Toast.LENGTH_SHORT).show();
+//                firstTime = currentTimeMillis;
+//            } else {
+//                SPUtil.setInt(getContext(), "turnask", 0);
+//                if (getActivity() != null) {
+//                    getActivity().finish();
+//                }
+//            }
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
         }
     }
 
