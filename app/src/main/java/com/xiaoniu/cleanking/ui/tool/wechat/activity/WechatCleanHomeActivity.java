@@ -180,9 +180,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         } else if (ids == R.id.tv_delete) {
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 boolean isOpen = false;
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
+                //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+                if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                            isOpen = switchInfoList.isOpen();
+                        }
                     }
                 }
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {

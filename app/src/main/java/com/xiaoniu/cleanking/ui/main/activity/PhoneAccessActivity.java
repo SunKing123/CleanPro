@@ -344,9 +344,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             PreferenceUtil.saveCleanTime();
         }
         boolean isOpen = false;
-        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-            if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                isOpen = switchInfoList.isOpen();
+        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+        if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
             }
         }
         if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
