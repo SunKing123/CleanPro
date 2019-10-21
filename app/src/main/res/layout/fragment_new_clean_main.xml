@@ -477,6 +477,36 @@
                 android:textColor="@color/color_666666"
                 android:visibility="visible" />
 
+            <!--分享图片-->
+            <ImageView
+                android:id="@+id/image_ad_bottom_first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_bottom_title"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:layout_marginRight="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/image_ad_bottom_second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image_ad_bottom_first"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:layout_marginRight="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_14dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/text_bottom_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_b"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:text="更多推荐"
+                android:visibility="gone" />
+
             <RelativeLayout
                 android:id="@+id/view_qq_clean"
                 android:layout_width="match_parent"

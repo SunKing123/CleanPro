@@ -490,7 +490,7 @@ public class PreferenceUtil {
      */
     public static int getCleanFinishClickCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, -1);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, 0);
     }
 
     /**
