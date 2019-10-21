@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -120,8 +121,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     protected void initView() {
         EventBus.getDefault().register(this);
         mPresenter.getInteractionSwitch();
-        if (!PreferenceUtil.isFirstForHomeIcon()) {
-            PreferenceUtil.saveFirstForHomeIcon();
+        if (PreferenceUtil.isFirstForHomeIcon()) {
+            PreferenceUtil.saveFirstForHomeIcon(false);
         } else {
             if (!PreferenceUtil.getCleanTime()) {
                 mAccFinishIv.setVisibility(View.VISIBLE);
@@ -144,10 +145,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
-                } else {
+                } else if (NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                    mNotiClearTv.setText(R.string.find_harass_notify);
+                    mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
                 }
             }
 
@@ -162,7 +163,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
                 }
-
             }
         }
     }
@@ -194,6 +194,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mInteractionPoistion++;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onResume() {
         super.onResume();
@@ -220,7 +221,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Subscribe
     public void onEventMainThread(ResidentUpdateEvent event) {
         //获取通知条数后改变 通知栏清理 icon和文案状态
-        if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 5) {
+        if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
             mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mNotiClearTv.setText(R.string.find_harass_notify);
@@ -543,6 +544,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (listInfo.size() != 0) {
             mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
         }
+        Log.d("XiLei", "mRamScale--home=" + mRamScale);
     }
 
     public void onKeyBack() {

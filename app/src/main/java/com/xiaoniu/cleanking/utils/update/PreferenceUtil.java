@@ -461,16 +461,16 @@ public class PreferenceUtil {
      *
      * @return
      */
-    public static boolean saveFirstForHomeIcon() {
+    public static boolean saveFirstForHomeIcon(boolean isFirst) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_KEY_FIRST, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, true).commit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, isFirst).commit();
         return true;
     }
 
     public static boolean isFirstForHomeIcon() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_KEY_FIRST, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, false);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, true);
     }
 
     /**
