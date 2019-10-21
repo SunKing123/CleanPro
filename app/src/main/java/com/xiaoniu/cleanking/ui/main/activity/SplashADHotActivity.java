@@ -38,6 +38,8 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -209,7 +211,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
 
     @Override
     public void onADClicked() {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "splash_page", "splash_page");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "hot_splash_page", "hot_splash_page");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -251,8 +253,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "splash_page", "splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "splash_page", "splash_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "hot_splash_page", "hot_splash_page");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "hot_splash_page", "hot_splash_page");
     }
 
     @Override
@@ -265,7 +267,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     public void onNoAD(AdError error) {
         mBigLogo.setVisibility(View.VISIBLE);
         mCleanLogo.setVisibility(View.VISIBLE);
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", "splash_page", "splash_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", "hot_splash_page", "hot_splash_page");
         Log.i("AD_DEMO", String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(), error.getErrorMsg()));
         /**
          * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
@@ -317,7 +319,14 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
             findViewById(R.id.app_logo).setVisibility(View.GONE);
         }
         skipView.setOnClickListener(v -> {
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "splash_page", "splash_page");
+            JSONObject extension = new JSONObject();
+            try {
+                extension.put("ad_id", mAdvertId);
+                extension.put("ad_agency", "优量汇");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
         });
     }
 
