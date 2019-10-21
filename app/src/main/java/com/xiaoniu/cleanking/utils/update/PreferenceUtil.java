@@ -2,7 +2,7 @@ package com.xiaoniu.cleanking.utils.update;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.os.Build;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -310,9 +310,9 @@ public class PreferenceUtil {
     }
 
 
-
     /**
      * 保存清理运行内存是否全选
+     *
      * @return
      */
     public static boolean saveCacheIsCheckedAll(boolean ischeck) {
@@ -325,15 +325,18 @@ public class PreferenceUtil {
 
     /**
      * 获取清理勾选页面三分钟内的随机 乘数
+     *
      * @return
      */
     public static boolean getCacheIsCheckedAll() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        boolean mul = sharedPreferences.getBoolean(SpCacheConfig.RUN_CACHES_IS_CHECK_ALL,true);
+        boolean mul = sharedPreferences.getBoolean(SpCacheConfig.RUN_CACHES_IS_CHECK_ALL, true);
         return mul;
     }
+
     /**
      * 保存清理勾选页面三分钟内的随机 乘数
+     *
      * @return
      */
     public static boolean saveMulCacheNum(float mul) {
@@ -346,6 +349,7 @@ public class PreferenceUtil {
 
     /**
      * 获取清理勾选页面三分钟内的随机 乘数
+     *
      * @return
      */
     public static float getMulCacheNum() {
@@ -546,8 +550,10 @@ public class PreferenceUtil {
      */
     public static int getShowCount(String title, int ramScale, int notifSize, int powerSize) {
         int count = 0;
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime() && ramScale > 20) {  // 一键加速
-            count++;
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || ramScale > 20) {
+                count++;
+            }
         }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
             count++;
@@ -559,8 +565,10 @@ public class PreferenceUtil {
             count++;
         }
         count++; //文件清理
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime() && powerSize > 5) { //超强省电
-            count++;
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || powerSize > 5) {
+                count++;
+            }
         }
         return count;
     }

@@ -395,30 +395,4 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
     }
 
-    /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList(){
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });
-    }
 }

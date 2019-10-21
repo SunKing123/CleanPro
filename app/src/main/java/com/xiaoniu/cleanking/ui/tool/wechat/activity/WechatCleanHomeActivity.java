@@ -187,6 +187,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+                Log.d("XiLei", "isOpen=" + isOpen);
+                Log.d("XiLei", "mRamScale=" + mRamScale);
+                Log.d("XiLei", "mNotifySize=" + mNotifySize);
+                Log.d("XiLei", "mPowerSize=" + mPowerSize);
+                Log.d("XiLei", "微信完成 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));

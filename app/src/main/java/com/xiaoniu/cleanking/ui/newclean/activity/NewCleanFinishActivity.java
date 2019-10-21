@@ -134,7 +134,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initView() {
         EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
-
         mPresenter.getSwitchInfoList();
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
@@ -542,11 +541,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 line_quicken.setVisibility(View.VISIBLE);
             }
         }
-        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime() && new FileQueryUtils().getRunningProcess().size() > 5) {
+        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime()) {
             // 超强省电间隔时间至少3分钟 否则隐藏
-            mShowCount++;
-            v_power.setVisibility(View.VISIBLE);
-            line_power.setVisibility(View.VISIBLE);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 5) {
+                mShowCount++;
+                v_power.setVisibility(View.VISIBLE);
+                line_power.setVisibility(View.VISIBLE);
+            }
         }
 
         if (!getString(R.string.tool_notification_clean).contains(mTitle) && PreferenceUtil.getNotificationCleanTime() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {

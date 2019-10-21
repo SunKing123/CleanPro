@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -7,12 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
@@ -49,7 +52,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
-import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -115,6 +117,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     ImageView mImageFirstAd;
     @BindView(R.id.image_ad_bottom_second)
     ImageView mImageSecondAd;
+    @BindView(R.id.view_lottie_home)
+    LottieAnimationView mLottieHomeView;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -133,6 +137,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        showHomeLottieView();
+        mPresenter.getSwitchInfoList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
         if (PreferenceUtil.isFirstForHomeIcon()) {
@@ -251,7 +257,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         viewQqClean.setEnabled(true);
         viewNews.setEnabled(true);
         EventBus.getDefault().post(new ResidentUpdateEvent(false));
-        mPresenter.getSwitchInfoList();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -340,6 +345,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
+        mLottieHomeView.pauseAnimation();
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             startActivity(NowCleanActivity.class);
@@ -396,6 +402,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+
+            Log.d("XiLei", "isOpen=" + isOpen);
+            Log.d("XiLei", "mRamScale=" + mRamScale);
+            Log.d("XiLei", "mNotifySize=" + mNotifySize);
+            Log.d("XiLei", "mPowerSize=" + mPowerSize);
+            Log.d("XiLei", "加速点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
+
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
@@ -433,6 +446,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
+
+            Log.d("XiLei", "isOpen=" + isOpen);
+            Log.d("XiLei", "mRamScale=" + mRamScale);
+            Log.d("XiLei", "mNotifySize=" + mNotifySize);
+            Log.d("XiLei", "mPowerSize=" + mPowerSize);
+            Log.d("XiLei", "省电点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
+
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
@@ -523,6 +543,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
+
+            Log.d("XiLei", "isOpen=" + isOpen);
+            Log.d("XiLei", "mRamScale=" + mRamScale);
+            Log.d("XiLei", "mNotifySize=" + mNotifySize);
+            Log.d("XiLei", "mPowerSize=" + mPowerSize);
+            Log.d("XiLei", "微信点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
+
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
@@ -553,6 +580,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
+            Log.d("XiLei", "isOpen=" + isOpen);
+            Log.d("XiLei", "mRamScale=" + mRamScale);
+            Log.d("XiLei", "mNotifySize=" + mNotifySize);
+            Log.d("XiLei", "mPowerSize=" + mPowerSize);
+            Log.d("XiLei", "通知点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
+
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
@@ -585,6 +618,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     isOpen = switchInfoList.isOpen();
                 }
             }
+            Log.d("XiLei", "isOpen=" + isOpen);
+            Log.d("XiLei", "mRamScale=" + mRamScale);
+            Log.d("XiLei", "mNotifySize=" + mNotifySize);
+            Log.d("XiLei", "mPowerSize=" + mPowerSize);
+            Log.d("XiLei", "降温点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
@@ -645,6 +683,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
+                mLottieHomeView.useHardwareAcceleration(true);
+                mLottieHomeView.setAnimation("clean_home_top2.json");
+                mLottieHomeView.setImageAssetsFolder("images_home");
+                mLottieHomeView.playAnimation();
             }
         }
     }
@@ -669,6 +711,38 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             Uri content_url = Uri.parse(downloadUrl);
             intent.setData(content_url);
             startActivity(intent);
+        });
+    }
+
+    /**
+     * 静止时动画
+     */
+    private void showHomeLottieView() {
+        mLottieHomeView.useHardwareAcceleration(true);
+        mLottieHomeView.setAnimation("clean_home_top.json");
+        mLottieHomeView.setImageAssetsFolder("images_home");
+        mLottieHomeView.playAnimation();
+        mLottieHomeView.setVisibility(VISIBLE);
+        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLottieHomeView.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
         });
     }
 
