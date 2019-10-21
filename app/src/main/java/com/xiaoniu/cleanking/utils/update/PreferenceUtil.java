@@ -461,16 +461,16 @@ public class PreferenceUtil {
      *
      * @return
      */
-    public static boolean saveFirstForHomeIcon() {
+    public static boolean saveFirstForHomeIcon(boolean isFirst) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_KEY_FIRST, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, true).commit();
+        editor.putBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, isFirst).commit();
         return true;
     }
 
     public static boolean isFirstForHomeIcon() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_KEY_FIRST, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, false);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_HOME_ICON, true);
     }
 
     /**
@@ -490,7 +490,7 @@ public class PreferenceUtil {
      */
     public static int getCleanFinishClickCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, -1);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, 0);
     }
 
     /**
@@ -513,7 +513,8 @@ public class PreferenceUtil {
     public static boolean getHomeBackTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_HOME_BACK_TIME, 0);
-        if (System.currentTimeMillis() - time > 5 * 60 * 1000)
+//        if (System.currentTimeMillis() - time > 5 * 60 * 1000) //暂时注释
+        if (System.currentTimeMillis() - time > 1 * 60 * 1000)
             return true;
         return false;
     }

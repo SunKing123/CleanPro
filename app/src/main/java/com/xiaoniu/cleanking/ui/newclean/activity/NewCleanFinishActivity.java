@@ -47,6 +47,7 @@ import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
@@ -58,6 +59,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.ViewUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
 import com.xiaoniu.common.http.request.HttpRequest;
@@ -67,6 +69,7 @@ import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -112,6 +115,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private String mAdvertId = ""; //广告位1
     private String mAdvertId2 = ""; //广告位2
     private boolean isScreenSwitchOpen; //插屏广告开关
+    private int mScreenShowCount; //插屏广告展示次数
 
     private int page_index = 1;
     private int mShowCount; //推荐显示的数量
@@ -129,6 +133,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
 
         mPresenter.getSwitchInfoList();
@@ -197,6 +202,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         setListener();
         loadData();
     }
+
 
     /**
      * 拉取广告开关成功
@@ -286,16 +292,22 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
             } else if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
                 isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
             } else if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
             } else if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
                 isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
             } else if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
                 isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
             } else if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //立即清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
             }
         }
     }
@@ -402,7 +414,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void changeUI(Intent intent) {
-        int result = 0;
         if (intent != null) {
             String num = intent.getStringExtra("num");
             String unit = intent.getStringExtra("unit");
@@ -516,19 +527,21 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         }
         //是否显示推荐功能（一键加速，超强省电，通知栏清理，微信专清，文件清理，手机降温）
-        showTool(result);
+        showTool();
     }
 
     /**
      * 是否显示推荐功能项
      */
-    private void showTool(int ram) {
+    private void showTool() {
 
-        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime() && ram > 20) {
+        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime()) {
             // 一键加速间隔时间至少3分钟  否则隐藏功能项
-            mShowCount++;
-            v_quicken.setVisibility(View.VISIBLE);
-            line_quicken.setVisibility(View.VISIBLE);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
+                mShowCount++;
+                v_quicken.setVisibility(View.VISIBLE);
+                line_quicken.setVisibility(View.VISIBLE);
+            }
         }
         if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime() && new FileQueryUtils().getRunningProcess().size() > 5) {
             // 超强省电间隔时间至少3分钟 否则隐藏
@@ -573,6 +586,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onNewIntent(intent);
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
+        } else {
+            changeUI(getIntent());
         }
     }
 
@@ -622,6 +637,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
         StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page", functionName, functionPosition);
 //        finish();
+    }
+
+    /**
+     * @param event
+     */
+    @Subscribe
+    public void finishCleanFinishActivityEvent(FinishCleanFinishActivityEvent event) {
+        finish();
     }
 
     /**
@@ -713,9 +736,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 StatisticsUtils.trackClick("return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page");
             }*/
 
-            //使用的第2，4，6...次 并且插屏开关打开 展示
-            if ((PreferenceUtil.getCleanFinishClickCount() % 2 == 0) && isScreenSwitchOpen) {
-                startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
+            //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
+            if (isScreenSwitchOpen) {
+                if (PreferenceUtil.getCleanFinishClickCount() == 0 || (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0)) {
+                    startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
+                }
             }
             PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
             finish();
@@ -757,9 +782,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }*/
 
-        //使用的第2，4，6...次 并且插屏开关打开 展示
-        if ((PreferenceUtil.getCleanFinishClickCount() % 2 == 0) && isScreenSwitchOpen) {
-            startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
+        //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
+        if (isScreenSwitchOpen) {
+            if (PreferenceUtil.getCleanFinishClickCount() == 0 || (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0)) {
+                startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
+            }
         }
         PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
         finish();
@@ -814,6 +841,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             // 必须要在Actiivty.onResume()时通知到广告数据，以便重置广告恢复状态
             mNativeUnifiedADData2.resume();
         }
+
+        StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
+
     }
 
     @Override
@@ -855,7 +885,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        EventBus.getDefault().unregister(this);
         if (mNativeUnifiedADData != null) {
             // 必须要在Actiivty.destroy()时通知到广告数据，以便释放内存
             mNativeUnifiedADData.destroy();

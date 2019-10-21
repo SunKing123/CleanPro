@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebChromeClient;
@@ -40,6 +39,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
@@ -51,6 +51,8 @@ import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.roundedimageview.RoundedImageView;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -368,6 +370,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 }
             }
         }
+        EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_super_power_saving));

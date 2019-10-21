@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.interfice.CleanOverListener;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * 1.2.1 版本清理动画
@@ -275,11 +276,13 @@ public class NewCleanAnimView extends RelativeLayout {
         mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                //清理完成动画开始
+                NiuDataAPI.onPageStart("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                NiuDataAPI.onPageEnd("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
                 if (mAnimationEnd != null)
                     mAnimationEnd.onAnimationEnd();
             }

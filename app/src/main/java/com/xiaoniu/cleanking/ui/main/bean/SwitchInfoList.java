@@ -30,6 +30,11 @@ public class SwitchInfoList extends BaseEntity {
         private String advertPosition;
         private String versions;
         private String advertId;
+        private int showRate;
+
+        public int getShowRate() {
+            return showRate;
+        }
 
         public boolean isOpen() {
             return isOpen;
