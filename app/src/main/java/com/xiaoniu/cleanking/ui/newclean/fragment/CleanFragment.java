@@ -150,13 +150,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                     doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
 
                 }
-
             }
         });
-        mAdapter.setOnItemSelectListener(() -> {
+    /*    mAdapter.setOnItemSe lectListener(() -> {
             long totalSize = CleanUtil.getTotalSize(mJunkGroups);
             totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
-        });
+        });*/
 
         mExpandableListView.setAdapter(mAdapter);
 
@@ -232,6 +231,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         Observable.create(e -> {
             long total = 0;
+            boolean isCacheCheckAll= true;  //运行内存是否全选
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();
                 if (value.mChildren != null && value.mChildren.size() > 0) {
@@ -240,19 +240,24 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                             if (info.isAllchecked()) {
                                 total += info.getTotalSize();
                                 CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+                            }else{
+                                isCacheCheckAll = false;
                             }
                         }
+
+
                     } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) {
                         long l = CleanUtil.freeJunkInfos(value.mChildren);
                         total += l;
                     } else if ("TYPE_APK".equals(value.mChildren.get(0).getGarbageType())) {
                         long l1 = CleanUtil.freeJunkInfos(value.mChildren);
-
                         total += l1;
                     }
                 }
             }
 
+            PreferenceUtil.saveCacheIsCheckedAll(isCacheCheckAll);
+            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum()*0.3f);
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             double memoryShow = NoClearSPHelper.getMemoryShow();

@@ -200,7 +200,9 @@ public class CleanUtil {
                         size += firstJunkInfo.getTotalSize();
                     }
                 }
-            }else if(group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean))&& group.isChecked){//其他垃圾类目单独处理
+            } else if(group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean))&& group.isChecked){//其他垃圾类目单独处理
+                size+= group.mSize;
+            } else if(group.mName.equals(ContextUtils.getContext().getString(R.string.process_clean))&& group.isChecked){
                 size+= group.mSize;
             }
 

@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.db.CleanDBManager;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 
@@ -498,7 +499,7 @@ public class FileQueryUtils {
         try {
             HashMap hashMap = new HashMap();
             //8.0以上
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= 26) {  //特殊处理
                 return getTaskInfo26();
             }
             //7.0以上
@@ -655,7 +656,27 @@ public class FileQueryUtils {
             int packageSize = installedList.size();
             if (packageSize == 0)
                 return junkList;
-            int[] randomPosition = CountUtil.randomNumber(0, packageSize - 1, packageSize / 7 < 30 ? 30 : packageSize / 7);
+
+
+            int packNum = 30;
+            int sizeNum = 50;
+            if (!PreferenceUtil.getNowCleanTime()) {//三分钟以内
+                if (PreferenceUtil.getCacheIsCheckedAll()) {//上次全选
+                    Float packNumf = Float.valueOf(packNum) * PreferenceUtil.getMulCacheNum() * 0.6f;
+                    Float sizeNumF = Float.valueOf(sizeNum) * PreferenceUtil.getMulCacheNum() * 0.6f;
+                    packNum = packNumf < 2f ? 2 : packNumf.intValue();
+                    sizeNum =  sizeNum < 1f ? 1 : sizeNumF.intValue();
+                } else {//上次非全选
+                    Float packNumf = Float.valueOf(packNum) * PreferenceUtil.getMulCacheNum();
+                    Float sizeNumF = Float.valueOf(sizeNum) * PreferenceUtil.getMulCacheNum();
+                    packNum = packNumf < 2f ? 2 : packNumf.intValue();
+                    sizeNum = sizeNum < 1f ? 1 : sizeNumF.intValue();
+                }
+            } else {
+                PreferenceUtil.saveMulCacheNum(1f);
+            }
+
+            int[] randomPosition = CountUtil.randomNumber(0, packageSize - 1, packageSize / 7 < packNum ? packNum : packageSize / 7);
             for (int random : randomPosition) {
                 PackageInfo packageInfo = installedList.get(random);
                 if (isFinish) {
@@ -673,7 +694,7 @@ public class FileQueryUtils {
                         junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
                         junkInfo.setAppPackageName(packageName);
                         junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                        long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
+                        long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
                         if (mScanFileListener != null) {
                             mScanFileListener.increaseSize(totalSize);
                         }
