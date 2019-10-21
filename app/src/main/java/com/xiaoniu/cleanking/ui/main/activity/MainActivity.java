@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -456,26 +457,37 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 fragment.onKeyBack();
                 return true;
             } else {
-                long secondTime = System.currentTimeMillis();
-                if (secondTime - firstTime > 1500) {
-                    // 如果两次按键时间间隔大于800毫秒，则不退出
-                    Toast.makeText(getApplicationContext(), R.string.press_exit_again, Toast.LENGTH_SHORT).show();
-                    // 更新firstTime
-                    firstTime = secondTime;
-                    Intent intent = new Intent();
-                    intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                    return true;
-                } else {
-
-                    //如果审核满足答题条件时自动跳转答题页面，返回则不跳
-                    SPUtil.setInt(MainActivity.this, "turnask", 0);
-                    SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);
-                    AppManager.getAppManager().clearStack();
-                }
+//                long secondTime = System.currentTimeMillis();
+//                if (secondTime - firstTime > 1500) {
+//                    // 如果两次按键时间间隔大于800毫秒，则不退出
+//                    Toast.makeText(getApplicationContext(), R.string.press_exit_again, Toast.LENGTH_SHORT).show();
+//                    // 更新firstTime
+//                    firstTime = secondTime;
+//                    Intent intent = new Intent();
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+//                    return true;
+//                } else {
+//
+//                    //如果审核满足答题条件时自动跳转答题页面，返回则不跳
+//                    SPUtil.setInt(MainActivity.this, "turnask", 0);
+//                    SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);
+//                    AppManager.getAppManager().clearStack();
+//                }
+                Intent home = new Intent(Intent.ACTION_MAIN);
+                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                home.addCategory(Intent.CATEGORY_HOME);
+                startActivity(home);
             }
         }
         StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    //        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -549,4 +561,5 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
 
     }
+
 }

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -633,14 +634,18 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     }
 
     public void onKeyBack() {
-        long currentTimeMillis = System.currentTimeMillis();
-        if (currentTimeMillis - firstTime > 1500) {
-            Toast.makeText(getActivity(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            firstTime = currentTimeMillis;
-        } else {
-            SPUtil.setInt(getContext(), "turnask", 0);
-            AppManager.getAppManager().AppExit(getContext(), false);
-        }
+//        long currentTimeMillis = System.currentTimeMillis();
+//        if (currentTimeMillis - firstTime > 1500) {
+//            Toast.makeText(getActivity(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+//            firstTime = currentTimeMillis;
+//        } else {
+//            SPUtil.setInt(getContext(), "turnask", 0);
+//            AppManager.getAppManager().AppExit(getContext(), false);
+//        }
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        startActivity(home);
     }
 
     @Override
