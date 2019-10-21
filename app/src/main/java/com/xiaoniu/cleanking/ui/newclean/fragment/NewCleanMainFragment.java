@@ -225,6 +225,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (mInteractionPoistion > 2) {
             mInteractionPoistion = 0;
         }
+        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
         startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                 .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
         mInteractionPoistion++;
