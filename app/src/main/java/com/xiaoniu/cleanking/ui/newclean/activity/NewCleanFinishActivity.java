@@ -56,6 +56,7 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.ViewUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -1008,6 +1009,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(v_advert);
+        //solve umeng error ->You must call removeView() on the child's parent first
+        ViewUtil.removeViewByParent(v_advert);
         // 将布局与广告进行绑定
         ad.bindAdToView(this, mContainer, null, clickableViews);
         // 设置广告事件监听
@@ -1120,6 +1123,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(v_advert2);
+        //solve umeng error ->You must call removeView() on the child's parent first
+        ViewUtil.removeViewByParent(v_advert2);
         // 将布局与广告进行绑定
         ad.bindAdToView(this, mContainer2, null, clickableViews);
         // 设置广告事件监听
