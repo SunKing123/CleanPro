@@ -58,6 +58,7 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
 import com.xiaoniu.common.http.request.HttpRequest;
@@ -200,6 +201,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         setListener();
         loadData();
     }
+
 
     /**
      * 拉取广告开关成功
@@ -838,6 +840,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             // 必须要在Actiivty.onResume()时通知到广告数据，以便重置广告恢复状态
             mNativeUnifiedADData2.resume();
         }
+
+        StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
+
     }
 
     @Override
