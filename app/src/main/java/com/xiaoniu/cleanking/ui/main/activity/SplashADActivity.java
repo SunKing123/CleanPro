@@ -296,8 +296,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "splash_page", "splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "splash_page", "splash_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "clod_splash_page", "clod_splash_page");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page");
     }
 
     @Override

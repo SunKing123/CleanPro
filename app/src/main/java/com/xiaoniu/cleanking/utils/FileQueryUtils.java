@@ -238,8 +238,9 @@ public class FileQueryUtils {
         HashMap<String, FirstJunkInfo> junkInfoMap = new HashMap<String, FirstJunkInfo>();
         ArrayList<FirstJunkInfo> externalList = new ArrayList<>();
         externalList.addAll(firstJunkInfos);
+
         for (FirstJunkInfo firstJunkInfo : externalList) {
-            if (pathMap.containsKey(firstJunkInfo.getAppPackageName())) {
+            if (pathMap.containsKey(firstJunkInfo.getAppPackageName())) { //关联路径包含此包
                 //todo 暂时默认一个文件夹扫描
                 firstJunkInfo.setSdPath(pathMap.get(firstJunkInfo.getAppPackageName()).getFileList().get(0).getFolderName());
             }
@@ -1447,21 +1448,21 @@ public class FileQueryUtils {
 
                     //多媒体相关文件
                     //bmp,jpg,png,tif,gif,pcx,tga,exif,fpx,svg,psd
-                    if (fileLow.endsWith(".png") || fileLow.endsWith(".bmp") || fileLow.endsWith(".jpg") || fileLow.endsWith(".tif") || fileLow.endsWith(".gif") || fileLow.endsWith(".pcx") || fileLow.endsWith(".tga") || fileLow.endsWith(".exif") || fileLow.endsWith(".fpx") || fileLow.endsWith(".svg") || fileLow.endsWith(".psd")) {
+                    if (DateUtils.isOverThreeDay(file2.lastModified(), 7)&&(fileLow.endsWith(".png") || fileLow.endsWith(".bmp") || fileLow.endsWith(".jpg") || fileLow.endsWith(".tif") || fileLow.endsWith(".gif") || fileLow.endsWith(".pcx") || fileLow.endsWith(".tga") || fileLow.endsWith(".exif") || fileLow.endsWith(".fpx") || fileLow.endsWith(".svg") || fileLow.endsWith(".psd"))) {
                         map.put(file2.getAbsolutePath(), "图片文件");
                         //cdr,pcd,dxf,ufo,eps,ai,raw,WMF,webp
-                    } else if (fileLow.endsWith(".cdr") || fileLow.endsWith(".pcd") || fileLow.endsWith(".dxf") || fileLow.endsWith(".ufo") || fileLow.endsWith(".eps") || fileLow.endsWith(".ai") || fileLow.endsWith(".raw") || fileLow.endsWith(".WMF") || fileLow.endsWith(".webp")) {
+                    } else if (DateUtils.isOverThreeDay(file2.lastModified(), 7) &&(fileLow.endsWith(".cdr") || fileLow.endsWith(".pcd") || fileLow.endsWith(".dxf") || fileLow.endsWith(".ufo") || fileLow.endsWith(".eps") || fileLow.endsWith(".ai") || fileLow.endsWith(".raw") || fileLow.endsWith(".WMF") || fileLow.endsWith(".webp"))) {
                         map.put(file2.getAbsolutePath(), "图片文件");
                         //rm，rmvb，mpeg1-4 mov mtv dat wmv avi 3gp amv dmv flv
-                    } else if (fileLow.endsWith(".rm") || fileLow.endsWith(".rmvb") || fileLow.endsWith(".mpeg1-4") || fileLow.endsWith(".mov") || fileLow.endsWith(".mtv") || fileLow.endsWith(".dat") || fileLow.endsWith(".wmv") || fileLow.endsWith(".avi") || fileLow.endsWith(".amv") || fileLow.endsWith(".dmv") || fileLow.endsWith(".flv")) {//amv dmv flv
+                    } else if (DateUtils.isOverThreeDay(file2.lastModified(), 3) &&(fileLow.endsWith(".rm") || fileLow.endsWith(".rmvb") || fileLow.endsWith(".mpeg1-4") || fileLow.endsWith(".mov") || fileLow.endsWith(".mtv") || fileLow.endsWith(".dat") || fileLow.endsWith(".wmv") || fileLow.endsWith(".avi") || fileLow.endsWith(".amv") || fileLow.endsWith(".dmv") || fileLow.endsWith(".flv"))) {
                         map.put(file2.getAbsolutePath(), "视频文件");
-                    } else if (fileLow.endsWith(".hprof")) {
+                    } else if(DateUtils.isOverThreeDay(file2.lastModified(), 3)&& (fileLow.endsWith(".aac")||fileLow.endsWith(".flac")||fileLow.endsWith(".ape")||fileLow.endsWith(".amr")||fileLow.endsWith(".oggvorbis")||fileLow.endsWith(".vqf")||fileLow.endsWith(".realaudio")||fileLow.endsWith(".wma")||fileLow.endsWith(".midi")||fileLow.endsWith(".mpeg-4")||fileLow.endsWith(".wave")||fileLow.endsWith(".cd")||fileLow.endsWith(".mp3")||fileLow.endsWith(".cd") || fileLow.endsWith(".wave") || fileLow.endsWith(".aiff")|| fileLow.endsWith(".mpeg"))){
+                        map.put(file2.getAbsolutePath(), "音频文件");
+                    }else if (fileLow.endsWith(".hprof")) {
                         map.put(file2.getAbsolutePath(), "hprof日志文件");
                     } else if (fileLow.endsWith(".trace")) {
                         map.put(file2.getAbsolutePath(), "trace日志文件");
                     }
-
-
                 }
             }
         }
