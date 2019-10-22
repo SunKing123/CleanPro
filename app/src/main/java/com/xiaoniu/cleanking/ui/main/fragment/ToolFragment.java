@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -50,6 +52,7 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ToolFragment extends SimpleFragment {
@@ -297,10 +300,23 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_notification_clear) {
             //手机清理
-            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
-            //((MainActivity) getActivity()).commitJpushClickTime(3);
-            StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
-            startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
+            String permissionsHint = "需要打开文件读写权限";
+            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            new RxPermissions(getActivity()).request(permissions).subscribe(new Consumer<Boolean>() {
+                @Override
+                public void accept(Boolean aBoolean) throws Exception {
+                    if (aBoolean) {//开始更新
+                        //手机清理
+                        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
+                        //((MainActivity) getActivity()).commitJpushClickTime(3);
+                        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
+                        startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
+                    } else {
+                        ToastUtils.showShort(permissionsHint);
+                    }
+                }
+            });
         }
     }
 
