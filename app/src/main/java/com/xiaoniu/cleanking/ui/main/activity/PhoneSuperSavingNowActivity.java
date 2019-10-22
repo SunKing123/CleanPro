@@ -360,7 +360,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         if (PreferenceUtil.getPowerCleanTime()) {
             PreferenceUtil.savePowerCleanTime();
         }
-
+        PreferenceUtil.saveCleanPowerUsed(true);
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference
         if (AppHolder.getInstance().getSwitchInfoList() != null) {

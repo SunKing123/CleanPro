@@ -416,8 +416,9 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         Log.d("AD_DEMO", "广告类型=" + patternType);
         tv_advert.setText(ad.getTitle());
         tv_advert_content.setText(ad.getDesc());
-
-        GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo, 20);
+        if (!InsertScreenFinishActivity.this.isFinishing()) {
+            GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo, 20);
+        }
         if (patternType == AdPatternType.NATIVE_VIDEO) {
             iv_advert.setVisibility(View.GONE);
         } else {

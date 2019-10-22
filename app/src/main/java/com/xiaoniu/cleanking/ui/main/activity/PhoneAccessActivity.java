@@ -265,7 +265,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
                 @Override
                 public void cancelBtn() {
-
+                    mContext.finish();
                 }
             });
         } else {
@@ -349,6 +349,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
+        PreferenceUtil.saveCleanJiaSuUsed(true);
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference
         if (AppHolder.getInstance().getSwitchInfoList() != null) {
@@ -455,6 +456,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             isFromProtect = false;
             return;
         }
+
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 if (mAlertDialog != null)

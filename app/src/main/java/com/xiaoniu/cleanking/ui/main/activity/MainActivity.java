@@ -3,8 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -22,13 +20,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -53,6 +49,7 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.ykun.live_library.KeepAliveManager;
 import com.ykun.live_library.config.ForegroundNotification;
@@ -325,7 +322,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.getSwitchInfoList();
         //开启常驻通知栏服务
         if (NotificationsUtils.isNotificationEnabled(this))
             startService(new Intent(this, NotificationService.class));
@@ -427,6 +423,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onCreate(savedInstanceState);
         //注册订阅者
         EventBus.getDefault().register(this);
+        PreferenceUtil.saveCleanJiaSuUsed(false);
+        PreferenceUtil.saveCleanPowerUsed(false);
+        PreferenceUtil.saveCleanNotifyUsed(false);
+        PreferenceUtil.saveCleanWechatUsed(false);
+        PreferenceUtil.saveCleanCoolUsed(false);
     }
 
     @Override
@@ -487,7 +488,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @SuppressLint("MissingSuperCall")
     @Override
     public void onSaveInstanceState(Bundle outState) {
-    //        super.onSaveInstanceState(outState);
+        //        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -556,7 +557,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             //定义前台服务的通知点击事件
                             (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
             );
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 

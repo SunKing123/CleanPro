@@ -34,9 +34,11 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
-
+        Log.d("XiLei", "isBack=" + isBack);
+        Log.d("XiLei", "PreferenceUtil.getHomeBackTime()=" + PreferenceUtil.getHomeBackTime());
         if (isBack && PreferenceUtil.getHomeBackTime()) {
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            Log.d("XiLei", "AppHolder.getInstance().getSwitchInfoList()=" + AppHolder.getInstance().getSwitchInfoList().getData().size());
             if (AppHolder.getInstance().getSwitchInfoList() != null) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
@@ -50,11 +52,13 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void onEnterBackground() {
+        Log.d("XiLei", "isAppOnForeground=" + isAppOnForeground());
         if (!isAppOnForeground()) {
             //app 进入后台
             isBack = true;
             PreferenceUtil.saveHomeBackTime();
         }
+        Log.d("XiLei", "isBack222=" + isBack);
     }
 
     /**

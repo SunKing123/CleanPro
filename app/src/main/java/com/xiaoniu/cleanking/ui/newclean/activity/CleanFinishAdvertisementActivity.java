@@ -244,6 +244,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             public void onNoAD(AdError adError) {
                 mContainer.setVisibility(View.GONE);
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
+                finish();
             }
 
             @Override

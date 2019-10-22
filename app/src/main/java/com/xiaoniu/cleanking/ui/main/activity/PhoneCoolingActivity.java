@@ -715,6 +715,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 if (PreferenceUtil.getCoolingCleanTime()) {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
+                PreferenceUtil.saveCleanCoolUsed(true);
                 boolean isOpen = false;
                 if (AppHolder.getInstance().getSwitchInfoList() != null) { //solve umeng error --> SwitchInfoList.getData()' on a null object reference
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {

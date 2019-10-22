@@ -17,6 +17,7 @@ public class SpCacheConfig {
 
     public static final String MUL_RUN_CACHES_CUSTOM = "mul_run_caches_custom";
     public static final String RUN_CACHES_IS_CHECK_ALL= "run_caches_is_check_all";
+    public static final String CLEAN_USED= "clean_used";
 
     /**
      * 安装包白名单文件缓存配置
@@ -83,5 +84,9 @@ public class SpCacheConfig {
     //瑞狮信息流地址
     public static final String RUISHI_BASEURL = "http://api.viaweb.cn/";
 
+    public static final  String IS_USED_JIASU = "is_used_jiasu";
+    public static final  String IS_USED_POWER = "is_used_power";
+    public static final  String IS_USED_NOTIFY = "is_used_notify";
+    public static final  String IS_USED_WECHAT = "is_used_wechat";
 
 }

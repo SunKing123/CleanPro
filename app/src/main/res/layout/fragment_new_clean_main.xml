@@ -181,13 +181,19 @@
                             android:layout_height="0dp"
                             android:layout_weight="20"></TextView>
 
-                        <ImageView
+                        <!-- <ImageView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="60"
                             android:minHeight="139dp"
-                            android:src="@mipmap/icon_home_logo" />
+                            android:src="@mipmap/icon_home_logo" />-->
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/view_lottie_home"
+                            android:layout_width="0dp"
+                            android:layout_height="190dp"
+                            android:layout_weight="60" />
 
                         <TextView
                             android:layout_width="0dp"

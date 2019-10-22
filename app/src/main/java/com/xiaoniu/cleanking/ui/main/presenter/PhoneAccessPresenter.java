@@ -376,7 +376,11 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         window.setAttributes(lp);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView tv_goto = window.findViewById(R.id.tv_goto);
-        window.findViewById(R.id.iv_exit).setOnClickListener(v -> dlg.cancel());
+        window.findViewById(R.id.iv_exit).setOnClickListener(
+                v -> {
+                    dlg.cancel();
+                    okListener.cancelBtn();
+                });
         tv_goto.setOnClickListener(v -> {
             isFromClick = true;
             okListener.clickOKBtn();
