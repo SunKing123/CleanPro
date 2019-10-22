@@ -22,8 +22,10 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.interfice.CleanOverListener;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -42,17 +44,18 @@ public class NewCleanAnimView extends RelativeLayout {
     private TextView mTextUnit;
     private RelativeLayout mLayoutRoot;
     private TextView mTvAnimTitle;
-    private AnimationEnd mAnimationEnd;
+
     private CleanOverListener mCleanOverListener;
+    private AnimationStateListener stateListener;
 
     public void setCleanOverListener(CleanOverListener mCleanOverListener) {
         this.mCleanOverListener = mCleanOverListener;
     }
 
-    public void setAnimationEnd(AnimationEnd mAnimationEnd) {
-        this.mAnimationEnd = mAnimationEnd;
-    }
 
+    public void setStateListener(AnimationStateListener customListener){
+        stateListener = customListener;
+    }
     /**
      * 第二阶段
      */
@@ -276,15 +279,16 @@ public class NewCleanAnimView extends RelativeLayout {
         mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                //清理完成动画开始
-                NiuDataAPI.onPageStart("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
+                if(stateListener !=null){
+                    stateListener.onAnimationStart();
+                }
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                NiuDataAPI.onPageEnd("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
-                if (mAnimationEnd != null)
-                    mAnimationEnd.onAnimationEnd();
+                if(stateListener !=null){
+                    stateListener.onAnimationEnd();
+                }
             }
 
             @Override

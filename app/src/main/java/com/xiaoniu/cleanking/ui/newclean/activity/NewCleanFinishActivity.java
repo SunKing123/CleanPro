@@ -814,6 +814,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             changeUI(getIntent());
         }
         mPresenter.getScreentSwitch();
+        /*---------------------------------------- 埋点---------------------------------------------------------------------*/
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
