@@ -93,7 +93,11 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         if (android.os.Build.VERSION.SDK_INT >=Build.VERSION_CODES.O) {
             if (!hasUsageStatsPermission(this)) {
                 //没有权限
-                startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
+                try {
+                    //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
+                    startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
+                } catch (Exception e){
+                }
             }else {
                 //有权限
                 mPresenter.scanData();

@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.geek.push.GeekPush;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
@@ -37,12 +38,14 @@ import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
 
 import cn.jpush.android.api.JPushInterface;
@@ -195,7 +198,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(WebUrlEntity webUrlEntity) {
-                if(webUrlEntity == null)
+                if (webUrlEntity == null)
                     return;
                 if (!TextUtils.isEmpty(webUrlEntity.getData())) {
                     //保存后台webView URL
@@ -218,7 +221,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 激活极光
      */
-    public void commitJPushAlias(){
+    public void commitJPushAlias() {
         if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
             return;
         GeekPush.bindAlias(DeviceUtils.getUdid());
@@ -248,9 +251,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     /**
      * 操作记录(PUSH消息)
+     *
      * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清）
      */
-    public void commitJpushClickTime(int type){
+    public void commitJpushClickTime(int type) {
         mModel.commitJPushClickTime(type, new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
@@ -273,6 +277,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         });
     }
+
     static class LoadFileTask implements Runnable {
         private Patch result;
         private WeakReference<Context> weakReference;
@@ -369,13 +374,18 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         MediaStore.Audio.Media.DATA}, null
                 , null, null);
 
-        while (cursor.moveToNext()) {
-            String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
-            File file = new File(url);
-            if (null != file) {
-                cachesMusicFiles.add(file.getPath());
+        try {
+            //solve umeng error -> Caused by: java.lang.OutOfMemoryError
+            while (cursor.moveToNext()) {
+                String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                File file = new File(url);
+                if (null != file) {
+                    cachesMusicFiles.add(file.getPath());
+                }
             }
+        } catch (OutOfMemoryError e) {
         }
+
         try {
             cursor.close();
         } catch (Exception e) {
@@ -387,7 +397,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (result != null && result.getData() != null) {
             if (TextUtils.equals("1", result.getData().popup))
                 if (mUpdateAgent == null) {
-                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {});
+                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {
+                    });
                     mUpdateAgent.check();
                 } else {
                     mUpdateAgent.check();

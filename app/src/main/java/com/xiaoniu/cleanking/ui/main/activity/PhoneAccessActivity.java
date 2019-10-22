@@ -225,7 +225,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent != null) {
+        if (intent != null && intent.getExtras() != null) {
+            //solve umeng error -> 'java.lang.String android.os.BaseBundle.getString(java.lang.String)' on a null object reference
             String notification = intent.getExtras().getString("NotificationService");
             if ("clean".equals(notification)) {
                 StatisticsUtils.trackClick("toggle_boost_click", "常驻通知栏点击加速", "", "toggle_page");
@@ -252,9 +253,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 @Override
                 public void clickOKBtn() {
                     isClick = true;
-                    //开启权限
-                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                    startActivity(intent);
+                    try {
+                        //开启权限
+                        //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
+                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                        startActivity(intent);
+                    } catch (Exception e){
+                    }
                     startActivity(PhonePremisActivity.class);
                 }
 
@@ -550,8 +555,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
-                    //开启权限
-                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                    try {
+                        //开启权限
+                        //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
+                        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                    } catch (Exception e) {
+                    }
                     startActivity(PhonePremisActivity.class);
                 }
 

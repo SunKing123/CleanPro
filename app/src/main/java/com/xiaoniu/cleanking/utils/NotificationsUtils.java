@@ -21,6 +21,12 @@ public class NotificationsUtils {
 
     @SuppressLint("NewApi")
     public static boolean isNotificationEnabled(Context context) {
+        //solve umeng error -> java.lang.NoClassDefFoundError: android.app.AppOpsManager
+        //这个api是在19新加入的，所以要注意加个判断
+        //https://www.jianshu.com/p/dd9714beb7ea
+        if (Build.VERSION.SDK_INT < 19) {
+            return true;
+        }
         AppOpsManager mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
         ApplicationInfo appInfo = context.getApplicationInfo();
         String pkg = context.getApplicationContext().getPackageName();

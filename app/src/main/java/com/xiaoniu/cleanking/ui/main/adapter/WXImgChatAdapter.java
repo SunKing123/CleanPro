@@ -34,7 +34,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
 
     private WXImgAdapter mWXImgAdapter;
 
-    private  OnCheckListener onCheckListener;
+    private OnCheckListener onCheckListener;
 
     public WXImgChatAdapter(Context context) {
         this.mContext = context;
@@ -64,9 +64,10 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         return mLists.size();
     }
 
-    public void clear(){
+    public void clear() {
         mLists.clear();
     }
+
     public List<FileTitleEntity> getList() {
         return mLists;
     }
@@ -112,42 +113,46 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         } else {
             mViewParent = (ViewHolderParent) convertView.getTag();
         }
-        FileTitleEntity fileTitleEntity = mLists.get(groupPosition);
+        try {
+            //solve umeng error -> java.lang.IndexOutOfBoundsException: Invalid index 0, size is 0
+            FileTitleEntity fileTitleEntity = mLists.get(groupPosition);
 
-        if(fileTitleEntity.size==0){
-            mViewParent.mTxtSize.setText("");
-        }else {
-            mViewParent.mTxtSize.setText(FileSizeUtils.formatFileSize(fileTitleEntity.size));
-        }
-        if (isExpanded) {
-            mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_up);
-        } else {
-            mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_down);
-        }
-        mViewParent.mTxtTitle.setText(fileTitleEntity.title);
-
-        mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
-        mViewParent.mImgSelect.setOnClickListener(v -> {
-            if (fileTitleEntity.isSelect) {
-                fileTitleEntity.isSelect = false;
+            if (fileTitleEntity.size == 0) {
+                mViewParent.mTxtSize.setText("");
             } else {
-                fileTitleEntity.isSelect = true;
+                mViewParent.mTxtSize.setText(FileSizeUtils.formatFileSize(fileTitleEntity.size));
             }
-            mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
-            List<FileChildEntity> listChild = fileTitleEntity.lists;
-            for (FileChildEntity childEntity : listChild) {
-                childEntity.isSelect = fileTitleEntity.isSelect;
+            if (isExpanded) {
+                mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_up);
+            } else {
+                mViewParent.mImgArrow.setBackgroundResource(R.mipmap.arrow_down);
             }
-            if(null!=onCheckListener){
-                onCheckListener.onCheckAll(groupPosition,-1,fileTitleEntity.isSelect);
-            }
-            //notifyDataSetChanged();
-        });
+            mViewParent.mTxtTitle.setText(fileTitleEntity.title);
 
+            mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
+            mViewParent.mImgSelect.setOnClickListener(v -> {
+                if (fileTitleEntity.isSelect) {
+                    fileTitleEntity.isSelect = false;
+                } else {
+                    fileTitleEntity.isSelect = true;
+                }
+                mViewParent.mImgSelect.setSelected(fileTitleEntity.isSelect);
+                List<FileChildEntity> listChild = fileTitleEntity.lists;
+                for (FileChildEntity childEntity : listChild) {
+                    childEntity.isSelect = fileTitleEntity.isSelect;
+                }
+                if (null != onCheckListener) {
+                    onCheckListener.onCheckAll(groupPosition, -1, fileTitleEntity.isSelect);
+                }
+                //notifyDataSetChanged();
+            });
+        } catch (Exception e) {
+        }
         return convertView;
     }
 
-    private  int mSelectPosition=0;
+    private int mSelectPosition = 0;
+
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (null == convertView) {
@@ -163,16 +168,16 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
             @Override
             public void select(int position, boolean isSelect) {
-                if(null!=onCheckListener){
-                    mSelectPosition=position;
-                    onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                if (null != onCheckListener) {
+                    mSelectPosition = position;
+                    onCheckListener.onCheck(groupPosition, childPosition, isSelect);
                 }
             }
 
             @Override
             public void onClickImg(int position) {
-                if(null!=onCheckListener){
-                    onCheckListener.onCheckImg(groupPosition,position);
+                if (null != onCheckListener) {
+                    onCheckListener.onCheckImg(groupPosition, position);
                 }
             }
         });
@@ -182,8 +187,8 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    public WXImgAdapter getWXImgAdapter(){
-        return  this.mWXImgAdapter;
+    public WXImgAdapter getWXImgAdapter() {
+        return this.mWXImgAdapter;
     }
 
     @Override
@@ -211,7 +216,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
     }
 
 
-   public class ViewHolderChild {
+    public class ViewHolderChild {
 
         public RecyclerView mRecyclerView;
 
@@ -228,7 +233,7 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
             };
             mRecyclerView.setLayoutManager(layoutManager);
 
-            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         }
     }
@@ -237,11 +242,12 @@ public class WXImgChatAdapter extends BaseExpandableListAdapter {
         this.onCheckListener = onCheckListener;
     }
 
-    public interface OnCheckListener{
-        void  onCheck(int groupPosition,int position,boolean isCheck);
+    public interface OnCheckListener {
+        void onCheck(int groupPosition, int position, boolean isCheck);
 
-        void onCheckAll(int groupPosition,int position,boolean isCheck);
-        void onCheckImg(int groupPosition,int position);
+        void onCheckAll(int groupPosition, int position, boolean isCheck);
+
+        void onCheckImg(int groupPosition, int position);
     }
 
 }
