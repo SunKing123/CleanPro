@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +11,12 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
+import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -38,6 +41,7 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ToolFragment extends SimpleFragment {
@@ -99,30 +103,30 @@ public class ToolFragment extends SimpleFragment {
                 .subscribe(strings -> {
                     if (mTvPhoneSpaceState == null) return;
                     //String数组第一个是剩余存储量，第二个是总存储量
-                    mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", (Double.valueOf(strings[1]) - Double.valueOf(strings[0])))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
+                    mTvPhoneSpaceState.setText("已用：" + String.format("%.1f", (Double.valueOf(strings[1]) - Double.valueOf(strings[0]))) + "GB/" + String.format("%.1f", Double.valueOf(strings[1])) + "GB");
                     int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));
                     mToolCircleProgress.startAnimProgress(spaceProgress, 700);
-                    if ((Double.valueOf(strings[1]) - Double.valueOf(strings[0])) / Double.valueOf(strings[1]) > 0.75){
+                    if ((Double.valueOf(strings[1]) - Double.valueOf(strings[0])) / Double.valueOf(strings[1]) > 0.75) {
                         //手机内存不足
                         mTvPhoneSpace.setText(R.string.tool_phone_memory_full);
-                    }else {
+                    } else {
                         //手机内存充足
                         mTvPhoneSpace.setText(R.string.tool_phone_memory_empty);
                     }
                 });
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_NAME_WXQQ_CACHE, Context.MODE_PRIVATE);
-        long qqCatheSize = sp.getLong(SpCacheConfig.QQ_CACHE_SIZE,0L);
-        long wxCatheSize = sp.getLong(SpCacheConfig.WX_CACHE_SIZE,0L);
-        if (wxCatheSize > 0){
+        long qqCatheSize = sp.getLong(SpCacheConfig.QQ_CACHE_SIZE, 0L);
+        long wxCatheSize = sp.getLong(SpCacheConfig.WX_CACHE_SIZE, 0L);
+        if (wxCatheSize > 0) {
             mTvChatTitle.setVisibility(View.GONE);
             mTvDefChatTitle.setVisibility(View.GONE);
 
             mTvChatGbTitle.setVisibility(View.VISIBLE);
             mTvChatSubTitle.setVisibility(View.VISIBLE);
 
-            mTvChatSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeTwo(wxCatheSize,mTvDefChatSubTitleGb));
+            mTvChatSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeTwo(wxCatheSize, mTvDefChatSubTitleGb));
             mTvDefChatSubTitleGb.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mTvChatTitle.setVisibility(View.VISIBLE);
             mTvDefChatTitle.setVisibility(View.VISIBLE);
 
@@ -130,15 +134,15 @@ public class ToolFragment extends SimpleFragment {
             mTvChatSubTitle.setVisibility(View.GONE);
             mTvDefChatSubTitleGb.setVisibility(View.GONE);
         }
-        if (qqCatheSize >0){
+        if (qqCatheSize > 0) {
             mTvQqTitle.setVisibility(View.GONE);
             mTvDefQqTitle.setVisibility(View.GONE);
 
             mTvQqGbTitle.setVisibility(View.VISIBLE);
             mTvQqSubTitle.setVisibility(View.VISIBLE);
-            mTvQqSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeTwo(qqCatheSize,mTvDefQqSubTitleGb));
+            mTvQqSubTitle.setText(CleanAllFileScanUtil.byte2FitSizeTwo(qqCatheSize, mTvDefQqSubTitleGb));
             mTvDefQqSubTitleGb.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mTvQqTitle.setVisibility(View.VISIBLE);
             mTvDefQqTitle.setVisibility(View.VISIBLE);
 
@@ -154,7 +158,7 @@ public class ToolFragment extends SimpleFragment {
         super.onResume();
     }
 
-    @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin,R.id.ll_notification_clear})
+    @OnClick({R.id.rl_chat, R.id.rl_qq, R.id.ll_phone_speed, R.id.text_cooling, R.id.text_phone_thin, R.id.ll_notification_clear})
     public void onCoolingViewClicked(View view) {
         int ids = view.getId();
         if (ids == R.id.rl_chat) {
@@ -165,7 +169,7 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
-            ((MainActivity)getActivity()).commitJpushClickTime(5);
+            ((MainActivity) getActivity()).commitJpushClickTime(5);
             if (PreferenceUtil.getWeChatCleanTime()) {
                 // 每次清理间隔 至少3秒
                 startActivity(WechatCleanHomeActivity.class);
@@ -174,14 +178,14 @@ public class ToolFragment extends SimpleFragment {
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                startActivity( NewCleanFinishActivity.class,bundle);
+                startActivity(NewCleanFinishActivity.class, bundle);
             }
         } else if (ids == R.id.rl_qq) {
             if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
                 return;
             }
-            ((MainActivity)getActivity()).commitJpushClickTime(7);
+            ((MainActivity) getActivity()).commitJpushClickTime(7);
             if (QQUtil.audioList != null)
                 QQUtil.audioList.clear();
             if (QQUtil.fileList != null)
@@ -190,7 +194,7 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-            ((MainActivity)getActivity()).commitJpushClickTime(2);
+            ((MainActivity) getActivity()).commitJpushClickTime(2);
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
@@ -208,11 +212,11 @@ public class ToolFragment extends SimpleFragment {
             //手机降温
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
-            ((MainActivity)getActivity()).commitJpushClickTime(6);
+            ((MainActivity) getActivity()).commitJpushClickTime(6);
             // 添加每次降温时间间隔至少3分钟
-            if (PreferenceUtil.getCoolingCleanTime()){
+            if (PreferenceUtil.getCoolingCleanTime()) {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-            }else {
+            } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 bundle.putString("num", "");
@@ -221,15 +225,27 @@ public class ToolFragment extends SimpleFragment {
             }
         } else if (ids == R.id.text_phone_thin) {
             Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
-            intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,getString(R.string.tool_phone_thin));
+            intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_phone_thin));
             startActivity(intent);
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
-        }else if (ids == R.id.ll_notification_clear){
-            //手机清理
-            AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
-            //((MainActivity) getActivity()).commitJpushClickTime(3);
-            StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
-            startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
+        } else if (ids == R.id.ll_notification_clear) {
+            String permissionsHint = "需要打开文件读写权限";
+            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            new RxPermissions(getActivity()).request(permissions).subscribe(new Consumer<Boolean>() {
+                @Override
+                public void accept(Boolean aBoolean) throws Exception {
+                    if (aBoolean) {//开始更新
+                        //手机清理
+                        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
+                        //((MainActivity) getActivity()).commitJpushClickTime(3);
+                        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "home_page");
+                        startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
+                    } else {
+                        ToastUtils.showShort(permissionsHint);
+                    }
+                }
+            });
         }
     }
 
