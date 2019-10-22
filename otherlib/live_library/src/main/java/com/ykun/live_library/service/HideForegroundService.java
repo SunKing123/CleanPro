@@ -39,15 +39,16 @@ public class HideForegroundService extends Service {
 
     private void startForeground() {
         if (KeepAliveConfig.foregroundNotification != null) {
-            Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
-            intent.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
-            Notification notification = NotificationUtils.createNotification(this,
-                    SPUtils.getInstance(getApplicationContext(),SP_NAME).getString(KeepAliveConfig.TITLE),
-                    SPUtils.getInstance(getApplicationContext(),SP_NAME).getString(KeepAliveConfig.CONTENT),
-                    SPUtils.getInstance(getApplicationContext(),SP_NAME).getInt(KeepAliveConfig.RES_ICON),
-                    intent
-            );
-            startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
+            //注释进程保活 通知栏
+//            Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
+//            intent.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+//            Notification notification = NotificationUtils.createNotification(this,
+//                    SPUtils.getInstance(getApplicationContext(),SP_NAME).getString(KeepAliveConfig.TITLE),
+//                    SPUtils.getInstance(getApplicationContext(),SP_NAME).getString(KeepAliveConfig.CONTENT),
+//                    SPUtils.getInstance(getApplicationContext(),SP_NAME).getInt(KeepAliveConfig.RES_ICON),
+//                    intent
+//            );
+//            startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
         }
     }
 
