@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishAdvertisementPresenter;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,10 +52,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     private TextView mTvGb;
     private TextView mTvQl;
 
-    private ImageView iv_advert_logo, iv_advert;
+    private ImageView iv_advert_logo, iv_advert, mErrorIv;
     private TextView tv_advert, tv_advert_content;
     private TextView mBtnDownload;
-    private View mViewDownload;
+    private View mViewContent, mViewDownload;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -77,6 +78,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     protected void initView() {
         mPresenter.getSwitchInfoList();
         findViewById(R.id.btnLeft).setOnClickListener(this);
+        mViewContent = findViewById(R.id.v_content);
+        mErrorIv = (ImageView) findViewById(R.id.iv_error);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
 
         mTvSize = findViewById(R.id.tv_size);
@@ -233,8 +236,21 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      *
      * @return
      */
-    public void getSwitchInfoListFail() {
+    public void getSwitchInfoListFail(String message) {
+        mViewContent.setVisibility(View.GONE);
+        mErrorIv.setVisibility(View.VISIBLE);
+        ToastUtils.showShort(message);
+    }
 
+    /**
+     * 拉取广告开关失败
+     *
+     * @return
+     */
+    public void getSwitchInfoListConnectError() {
+        mViewContent.setVisibility(View.GONE);
+        mErrorIv.setVisibility(View.VISIBLE);
+        ToastUtils.showShort("网络连接失败，请假查您的网络连接");
     }
 
     private void initNativeUnifiedAD() {

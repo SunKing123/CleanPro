@@ -68,11 +68,10 @@ public final class RemoteService extends Service {
             Log.d("JOB-->"+TAG,"KeepAliveConfig.CONTENT_"+KeepAliveConfig.CONTENT+"    " + KeepAliveConfig.TITLE+"  "+title);
             if (!TextUtils.isEmpty(KeepAliveConfig.TITLE) && !TextUtils.isEmpty( KeepAliveConfig.CONTENT)) {
                 //启用前台服务，提升优先级
-                //注释进程保活 通知栏
-//                Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
-//                intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
-//                Notification notification = NotificationUtils.createNotification(RemoteService.this, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
-//                startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
+                Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
+                intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+                Notification notification = NotificationUtils.createNotification(RemoteService.this, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
+                startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
                 Log.d("JOB-->", TAG + "显示通知栏");
             }
         }
@@ -102,11 +101,10 @@ public final class RemoteService extends Service {
                 }
                 if (KeepAliveConfig.TITLE != null && KeepAliveConfig.CONTENT != null) {
                     //启用前台服务，提升优先级
-                    //注释进程保活 通知栏
-//                    Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
-//                    intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
-//                    Notification notification = NotificationUtils.createNotification(RemoteService.this, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
-//                    startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
+                    Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
+                    intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+                    Notification notification = NotificationUtils.createNotification(RemoteService.this, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
+                    startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
                     Log.d("JOB-->", TAG + "2 显示通知栏");
                 }
             }

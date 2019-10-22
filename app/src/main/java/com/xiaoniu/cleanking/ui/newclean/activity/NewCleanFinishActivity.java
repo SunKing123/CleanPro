@@ -256,7 +256,25 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mAdvertId2 = switchInfoList.getAdvertId();
                     initNativeUnifiedAD2();
                 }
-            } else { //立即清理
+            } else if (getString(R.string.tool_qq_clear_n).contains(mTitle)) { //QQ清理
+                if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD();
+                }
+                if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId2 = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD2();
+                }
+            } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
+                if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD();
+                }
+                if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId2 = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD2();
+                }
+            } else { //建议清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
@@ -288,26 +306,33 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void getScreentSwitchSuccess(SwitchInfoList list) {
         Log.d(TAG, "getScreentSwitchSuccess -- list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
+            if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-            } else if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
+            } else if (getString(R.string.tool_one_key_speed).contains(mTitle) && PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-            } else if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
+            } else if (getString(R.string.tool_super_power_saving).contains(mTitle) && PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-            } else if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
+            } else if (getString(R.string.tool_notification_clean).contains(mTitle) && PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-            } else if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
+            } else if (getString(R.string.tool_chat_clear_n).contains(mTitle) && PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) { //微信清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-            } else if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //立即清理
+            } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle) && PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
+                isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
+            } else if (getString(R.string.tool_qq_clear_n).contains(mTitle) && PositionId.KEY_QQ.equals(switchInfoList.getConfigKey())) { //QQ清理
+                isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
+            } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
             }
         }
+        Log.d(TAG, "isScreenSwitchOpen=" + isScreenSwitchOpen);
     }
 
     private void initNativeUnifiedAD() {
@@ -539,34 +564,59 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Log.d("XiLei", "mRamScale=" + mRamScale);
         Log.d("XiLei", "PreferenceUtil.getCleanTime()=" + PreferenceUtil.getCleanTime());
         Log.d("XiLei", "PreferenceUtil.isCleanJiaSuUsed()=" + PreferenceUtil.isCleanJiaSuUsed());
-        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
-            // 一键加速间隔时间至少3分钟  否则隐藏功能项
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
-                Log.d("XiLei", "aaaaaaaaa");
+        if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            if (!PermissionUtils.isUsageAccessAllowed(this)) {
+                Log.d("XiLei", "aaaaaaaaa11");
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
                 line_quicken.setVisibility(View.VISIBLE);
             }
+            if (PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
+                    Log.d("XiLei", "aaaaaaaaa22");
+                    mShowCount++;
+                    v_quicken.setVisibility(View.VISIBLE);
+                    line_quicken.setVisibility(View.VISIBLE);
+                }
+            }
         }
-        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
-            // 超强省电间隔时间至少3分钟 否则隐藏
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
-                Log.d("XiLei", "bbbbbbbb");
+        if (!getString(R.string.tool_super_power_saving).contains(mTitle)) {
+            if (!PermissionUtils.isUsageAccessAllowed(this)) {
+                Log.d("XiLei", "bbbbbbbb111");
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
                 line_power.setVisibility(View.VISIBLE);
             }
+            if (PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
+                // 超强省电间隔时间至少3分钟 否则隐藏
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
+                    Log.d("XiLei", "bbbbbbbb222");
+                    mShowCount++;
+                    v_power.setVisibility(View.VISIBLE);
+                    line_power.setVisibility(View.VISIBLE);
+                }
+            }
         }
 
-        if (!getString(R.string.tool_notification_clean).contains(mTitle) && PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
-            if (NotifyUtils.isNotificationListenerEnabled() || NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
+        if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
+            if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
-                Log.d("XiLei", "cccccccccc");
+                Log.d("XiLei", "cccccccccc111");
                 mShowCount++;
                 v_notification.setVisibility(View.VISIBLE);
                 line_notification.setVisibility(View.VISIBLE);
             }
+            if (PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
+                if (NotifyUtils.isNotificationListenerEnabled() || NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
+                    // 通知栏清理间隔时间至少3分钟 否则隐藏
+                    Log.d("XiLei", "cccccccccc222");
+                    mShowCount++;
+                    v_notification.setVisibility(View.VISIBLE);
+                    line_notification.setVisibility(View.VISIBLE);
+                }
+            }
         }
+
         if (!getString(R.string.tool_chat_clear).contains(mTitle) || !getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             if (PreferenceUtil.getWeChatCleanTime() && !PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
@@ -788,6 +838,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+        super.onBackPressed();
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "clean_finish_annimation_page" : "";
@@ -798,15 +850,64 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }*/
 
+        Log.d("XiLei", "isScreenSwitchOpen=" + isScreenSwitchOpen);
+        Log.d("XiLei", "mScreenShowCount=" + mScreenShowCount);
+        Log.d("XiLei", "PreferenceUtil.getCleanFinishClickCount()=" + PreferenceUtil.getCleanFinishClickCount());
         //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
         if (isScreenSwitchOpen) {
-            if (PreferenceUtil.getCleanFinishClickCount() == 0 || (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0)) {
+            int count = 0;
+            boolean isClick = false;
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
+                count = PreferenceUtil.getCleanFinishClickJiaSuCount();
+                isClick = (PreferenceUtil.getCleanFinishClickJiaSuCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) { //超强省电
+                count = PreferenceUtil.getCleanFinishClickPowerCount();
+                isClick = (PreferenceUtil.getCleanFinishClickPowerCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {//通知栏清理
+                count = PreferenceUtil.getCleanFinishClickNotifyCount();
+                isClick = (PreferenceUtil.getCleanFinishClickNotifyCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {//微信专情
+                count = PreferenceUtil.getCleanFinishClickWechatCount();
+                isClick = (PreferenceUtil.getCleanFinishClickWechatCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) { //手机降温
+                count = PreferenceUtil.getCleanFinishClickCoolCount();
+                isClick = (PreferenceUtil.getCleanFinishClickCoolCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.tool_qq_clear_n).contains(mTitle)) { //QQ清理
+                count = PreferenceUtil.getCleanFinishClickQQCount();
+                isClick = (PreferenceUtil.getCleanFinishClickQQCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
+                count = PreferenceUtil.getCleanFinishClickPhoneCount();
+                isClick = (PreferenceUtil.getCleanFinishClickPhoneCount() % mScreenShowCount == 0);
+            } else { //建议清理
+                count = PreferenceUtil.getCleanFinishClickCount();
+                isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
+            }
+
+            if (count == 0 || isClick) {
                 startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }
         }
-        PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
+
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
+            PreferenceUtil.saveCleanFinishClickJiaSuCount(PreferenceUtil.getCleanFinishClickJiaSuCount() + 1);
+        } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) { //超强省电
+            PreferenceUtil.saveCleanFinishClickPowerCount(PreferenceUtil.getCleanFinishClickPowerCount() + 1);
+        } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {//通知栏清理
+            PreferenceUtil.saveCleanFinishClickNotifyCount(PreferenceUtil.getCleanFinishClickNotifyCount() + 1);
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {//微信专情
+            PreferenceUtil.saveCleanFinishClickWechatCount(PreferenceUtil.getCleanFinishClickWechatCount() + 1);
+        } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) { //手机降温
+            PreferenceUtil.saveCleanFinishClickCoolCount(PreferenceUtil.getCleanFinishClickCoolCount() + 1);
+        } else if (getString(R.string.tool_qq_clear_n).contains(mTitle)) { //QQ清理
+            PreferenceUtil.saveCleanFinishClickQQCount(PreferenceUtil.getCleanFinishClickQQCount() + 1);
+        } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
+            PreferenceUtil.saveCleanFinishClickPhoneCount(PreferenceUtil.getCleanFinishClickPhoneCount() + 1);
+        } else { //建议清理
+            PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
+        }
         finish();
-        super.onBackPressed();
+
+    }
     }
 
     @Override

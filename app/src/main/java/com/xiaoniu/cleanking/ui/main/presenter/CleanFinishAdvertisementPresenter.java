@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.util.Log;
+
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -43,12 +45,14 @@ public class CleanFinishAdvertisementPresenter extends RxPresenter<CleanFinishAd
 
             @Override
             public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
+                Log.d("XiLei", "message=" + message);
+                mView.getSwitchInfoListFail(message);
             }
 
             @Override
             public void netConnectError() {
-                mView.getSwitchInfoListFail();
+                Log.d("XiLei", "netConnectError=" );
+                mView.getSwitchInfoListConnectError();
             }
         });
     }
