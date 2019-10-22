@@ -208,8 +208,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_suggest_clean));
-        bundle.putString("num", totalCountEntity.getTotalSize());
-        bundle.putString("unit", totalCountEntity.getUnit());
+        bundle.putString("num", checkCountEntity.getTotalSize());
+        bundle.putString("unit", checkCountEntity.getUnit());
         startActivity(NewCleanFinishActivity.class, bundle);
         getActivity().finish();
     }
@@ -217,7 +217,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     private void startClean() {
         mCleanAnimView.setStopClean(false);
         mCleanAnimView.setVisibility(View.VISIBLE);
-        mCleanAnimView.setData(totalCountEntity);
+        mCleanAnimView.setData(checkCountEntity);
         //清理动画
         mCleanAnimView.startCleanAnim(false);
         clearAll();
