@@ -265,7 +265,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
                 @Override
                 public void cancelBtn() {
-
+                    mContext.finish();
                 }
             });
         } else {
@@ -455,6 +455,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             isFromProtect = false;
             return;
         }
+
         if (isClick) {
             if (isUsageAccessAllowed()) {
                 if (mAlertDialog != null)

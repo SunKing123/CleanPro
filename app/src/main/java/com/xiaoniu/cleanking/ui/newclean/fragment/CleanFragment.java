@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
@@ -166,7 +167,19 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 mExpandableListView.expandGroup(i);
             }
         }
-        mCleanAnimView.setAnimationEnd(() -> cleanFinish());
+        mCleanAnimView.setStateListener(new AnimationStateListener() {
+            @Override
+            public void onAnimationStart() {
+                //清理完成动画开始
+                NiuDataAPI.onPageStart("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                NiuDataAPIUtil.onPageEnd("scanning_result_page","clean_finish_annimation_page","clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
+                cleanFinish();
+            }
+        });
 
         mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
 
@@ -283,6 +296,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         return size;
     }*/
+
 
     /**
      * 停止清理

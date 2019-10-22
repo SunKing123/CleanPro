@@ -342,7 +342,6 @@ public class DateUtils {
      * @throws ParseException
      */
     public static boolean isOverThreeDay(long day, int count) {
-
         Calendar pre = Calendar.getInstance();
         Date predate = new Date(System.currentTimeMillis());
         pre.setTime(predate);
