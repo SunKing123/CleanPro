@@ -72,7 +72,48 @@ public class NotificationService extends Service {
             notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);//锁屏显示通知
             notificationManager.createNotificationChannel(notificationChannel);
             mBuilder.setChannelId("1");
+        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT){  //4.4版本兼容点击跳转
+
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout);
+           //logo
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.putExtra("NotificationService","home");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout).setOnClickPendingIntent(R.id.iv_app_icon, PendingIntent.getActivity(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            //清理
+            Intent intentClean = new Intent(context, NowCleanActivity.class);
+            intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentClean.putExtra("NotificationService","clean");
+            new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout).setOnClickPendingIntent(R.id.ll_clean, PendingIntent.getActivity(context, REQUEST_CODE, intentClean, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            //加速
+            Intent phoneAccessIntent = new Intent(context, PhoneAccessActivity.class);
+            intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            phoneAccessIntent.putExtra("NotificationService","clean");
+            phoneAccessIntent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+            new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout).setOnClickPendingIntent(R.id.ll_speed, PendingIntent.getActivity(context, REQUEST_CODE, phoneAccessIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            //降温
+            Intent phoneCoolingIntent = new Intent(context, PhoneCoolingActivity.class);
+            intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            phoneCoolingIntent.putExtra("NotificationService","clean");
+            new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout).setOnClickPendingIntent(R.id.ll_temperature, PendingIntent.getActivity(context, REQUEST_CODE, phoneCoolingIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            //省电
+            Intent phoneSuperPowerIntent = new Intent(context, PhoneSuperPowerActivity.class);
+            intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            phoneSuperPowerIntent.putExtra("NotificationService","clean");
+            new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout).setOnClickPendingIntent(R.id.ll_power, PendingIntent.getActivity(context, REQUEST_CODE, phoneSuperPowerIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            //通知栏清理
+            Intent notifyCleanGuideIntent = new Intent(context, NotifyCleanGuideActivity.class);
+            intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notifyCleanGuideIntent.putExtra("NotificationService","clean");
+            new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout).setOnClickPendingIntent(R.id.ll_notification, PendingIntent.getActivity(context, REQUEST_CODE, notifyCleanGuideIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         }
+
+
         //logo
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("NotificationService","home");
