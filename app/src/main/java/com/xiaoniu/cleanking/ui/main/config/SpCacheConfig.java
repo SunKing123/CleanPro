@@ -67,6 +67,13 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_FIRST_HOME_ICON = "first_home_icon";
     public static final  String IS_HOME_BACK_TIME = "home_back";
     public static final  String CLEAN_FINISH_CLICK_COUNT = "CleanFinishClickCount";
+    public static final  String CLEAN_FINISH_CLICK_JIAU_COUNT = "CleanFinishClickJiaSuCount";
+    public static final  String CLEAN_FINISH_CLICK_POWER_COUNT = "CleanFinishClickPowerCount";
+    public static final  String CLEAN_FINISH_CLICK_NOTIFY_COUNT = "CleanFinishClickNotifyCount";
+    public static final  String CLEAN_FINISH_CLICK_WECHAT_COUNT = "CleanFinishClickWechatCount";
+    public static final  String CLEAN_FINISH_CLICK_COOL_COUNT = "CleanFinishClickCoolCount";
+    public static final  String CLEAN_FINISH_CLICK_QQ_COUNT = "CleanFinishClickQQCount";
+    public static final  String CLEAN_FINISH_CLICK_PHONE_COUNT = "CleanFinishClickPhoneCount";
     public static final  String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
 
     //埋点上一级页面
@@ -88,5 +95,6 @@ public class SpCacheConfig {
     public static final  String IS_USED_POWER = "is_used_power";
     public static final  String IS_USED_NOTIFY = "is_used_notify";
     public static final  String IS_USED_WECHAT = "is_used_wechat";
+    public static final  String IS_USED_COLL = "is_used_coll";
 
 }

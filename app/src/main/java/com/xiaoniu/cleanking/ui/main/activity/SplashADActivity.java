@@ -351,7 +351,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
-        mPresenter.getSwitchInfoList();
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -373,6 +372,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page",extension);
         });
+
+        mPresenter.getSwitchInfoList();
     }
 
     /**
@@ -395,8 +396,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-        startActivity(new Intent(SplashADActivity.this, MainActivity.class));
-        finish();
+        skip();
     }
 
     @Override

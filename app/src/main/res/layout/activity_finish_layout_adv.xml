@@ -32,10 +32,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_app_bar_title"
+        android:id="@+id/v_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -175,5 +176,12 @@
         </com.qq.e.ads.nativ.widget.NativeAdContainer>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/iv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@mipmap/icon_no_net"
+        android:visibility="gone"/>
 
 </LinearLayout>

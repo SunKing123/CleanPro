@@ -135,7 +135,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     protected void initView() {
         EventBus.getDefault().register(this);
         showHomeLottieView();
-        mPresenter.getSwitchInfoList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
         if (PreferenceUtil.isFirstForHomeIcon()) {
@@ -239,6 +238,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.getSwitchInfoList();
         mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
@@ -299,7 +299,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Subscribe
     public void quickenEvent(QuickenEvent event) {
-        mShowCount--;
+        --mShowCount;
+
+        Log.d("XiLei", "mShowCount=" + mShowCount);
+        Log.d("XiLei", "AndroidUtil.getElectricityNum(getActivity())=" + AndroidUtil.getElectricityNum(getActivity()));
         mAccFinishIv.setVisibility(View.VISIBLE);
         mAccIv.setImageResource(R.drawable.icon_yjjs);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -364,7 +367,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_suggest_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -586,7 +589,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void mClickQq() {
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (PreferenceUtil.getNotificationCleanTime()) {
+        if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             boolean isOpen = false;

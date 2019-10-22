@@ -359,6 +359,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 }
             }
         }
+        EventBus.getDefault().post(new QuickenEvent());
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
@@ -439,8 +440,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
         }
         StatisticsUtils.trackClick("cleaning_click", "清理点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
-
-        EventBus.getDefault().post(new QuickenEvent());
     }
 
     @Override

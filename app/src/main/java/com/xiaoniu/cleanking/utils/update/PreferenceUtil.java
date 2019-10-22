@@ -545,7 +545,7 @@ public class PreferenceUtil {
     public static void saveCleanCoolUsed(boolean isUsed) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SpCacheConfig.IS_USED_WECHAT, isUsed).commit();
+        editor.putBoolean(SpCacheConfig.IS_USED_COLL, isUsed).commit();
     }
 
     /**
@@ -555,7 +555,7 @@ public class PreferenceUtil {
      */
     public static boolean isCleanCoolUsed() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_WECHAT, false);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_COLL, false);
     }
 
     /**
@@ -588,15 +588,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 获取清理完成页点击返回键的次数
-     */
-    public static int getCleanFinishClickCount() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, 0);
-    }
-
-    /**
-     * 保存清理完成页点击返回键的次数
+     * 保存垃圾清理完成页点击返回键的次数
      *
      * @return
      */
@@ -606,6 +598,155 @@ public class PreferenceUtil {
         editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, count).commit();
         return true;
     }
+
+    /**
+     * 获取垃圾清理完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COUNT, 0);
+    }
+
+    /**
+     * 保存一键加速完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickJiaSuCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_JIAU_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取一键加速完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickJiaSuCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_JIAU_COUNT, 0);
+    }
+
+    /**
+     * 保存超强省电完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickPowerCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_POWER_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取超强省电完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickPowerCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_POWER_COUNT, 0);
+    }
+
+    /**
+     * 保存通知栏清理完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickNotifyCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_NOTIFY_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取通知栏清理完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickNotifyCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_NOTIFY_COUNT, 0);
+    }
+
+    /**
+     * 保存微信清理完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickWechatCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_WECHAT_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取微信清理完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickWechatCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_WECHAT_COUNT, 0);
+    }
+
+    /**
+     * 保存手机降温完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickCoolCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_COOL_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取手机降温完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickCoolCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_COOL_COUNT, 0);
+    }
+
+    /**
+     * 保存QQ清理完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickQQCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_QQ_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取QQ清理完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickQQCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_QQ_COUNT, 0);
+    }
+
+    /**
+     * 保存手机清理完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickPhoneCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_PHONE_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取手机清理完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickPhoneCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_PHONE_COUNT, 0);
+    }
+
 
     /**
      * 从后台回到前台的时间是否大于5分钟
