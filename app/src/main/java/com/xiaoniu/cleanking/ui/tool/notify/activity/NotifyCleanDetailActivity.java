@@ -219,6 +219,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         if (PreferenceUtil.getNotificationCleanTime()) {
             PreferenceUtil.saveNotificationCleanTime();
         }
+        PreferenceUtil.saveCleanNotifyUsed(true);
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference
         if (AppHolder.getInstance().getSwitchInfoList() != null) {

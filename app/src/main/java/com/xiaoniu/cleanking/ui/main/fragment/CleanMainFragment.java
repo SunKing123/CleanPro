@@ -296,7 +296,6 @@ public class CleanMainFragment extends BaseFragment<CleanMainPresenter> {
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (PreferenceUtil.getCleanTime()) {
-            PreferenceUtil.saveCleanTime();
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             bundle.putString("num", "");

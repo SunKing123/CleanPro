@@ -511,7 +511,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else {
                 iv_power.setImageResource(R.drawable.icon_power_r);
                 tv_power.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
-                tv_power.setText(getString(R.string.power_consumption_num, new FileQueryUtils().getRunningProcess().size() + ""));
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tv_power.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
+                } else {
+                    tv_power.setText(getString(R.string.power_consumption_num, new FileQueryUtils().getRunningProcess().size() + ""));
+                }
             }
 
             if (!NotifyUtils.isNotificationListenerEnabled()) {
@@ -532,35 +536,42 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 是否显示推荐功能项
      */
     private void showTool() {
-
-        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime()) {
+        Log.d("XiLei", "mRamScale=" + mRamScale);
+        Log.d("XiLei", "PreferenceUtil.getCleanTime()=" + PreferenceUtil.getCleanTime());
+        Log.d("XiLei", "PreferenceUtil.isCleanJiaSuUsed()=" + PreferenceUtil.isCleanJiaSuUsed());
+        if (!getString(R.string.tool_one_key_speed).contains(mTitle) && PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
             // 一键加速间隔时间至少3分钟  否则隐藏功能项
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
+                Log.d("XiLei", "aaaaaaaaa");
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
                 line_quicken.setVisibility(View.VISIBLE);
             }
         }
-        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime()) {
+        if (!getString(R.string.tool_super_power_saving).contains(mTitle) && PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
             // 超强省电间隔时间至少3分钟 否则隐藏
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 5) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
+                Log.d("XiLei", "bbbbbbbb");
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
                 line_power.setVisibility(View.VISIBLE);
             }
         }
 
-        if (!getString(R.string.tool_notification_clean).contains(mTitle) && PreferenceUtil.getNotificationCleanTime() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
-            // 通知栏清理间隔时间至少3分钟 否则隐藏
-            mShowCount++;
-            v_notification.setVisibility(View.VISIBLE);
-            line_notification.setVisibility(View.VISIBLE);
+        if (!getString(R.string.tool_notification_clean).contains(mTitle) && PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
+            if (NotifyUtils.isNotificationListenerEnabled() || NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
+                // 通知栏清理间隔时间至少3分钟 否则隐藏
+                Log.d("XiLei", "cccccccccc");
+                mShowCount++;
+                v_notification.setVisibility(View.VISIBLE);
+                line_notification.setVisibility(View.VISIBLE);
+            }
         }
-
-        if (PreferenceUtil.getWeChatCleanTime()) {
-            if (!getString(R.string.tool_chat_clear).contains(mTitle) || !getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+        if (!getString(R.string.tool_chat_clear).contains(mTitle) || !getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            if (PreferenceUtil.getWeChatCleanTime() && !PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
                 if (mShowCount >= 3) return;
+                Log.d("XiLei", "dddddddddd");
                 mShowCount++;
                 v_wechat.setVisibility(View.VISIBLE);
                 line_wechat.setVisibility(View.VISIBLE);
@@ -568,13 +579,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         if (mShowCount >= 3) return;
+        Log.d("XiLei", "eeeeeee");
         mShowCount++;
         v_file.setVisibility(View.VISIBLE);
         line_file.setVisibility(View.VISIBLE);
 
-        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && PreferenceUtil.getCoolingCleanTime()) {
+        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && PreferenceUtil.getCoolingCleanTime() && !PreferenceUtil.isCleanCoolUsed()) {
             // 手机降温间隔时间至少3分钟 否则隐藏
             if (mShowCount >= 3) return;
+            Log.d("XiLei", "ffffffffff");
             mShowCount++;
             v_cool.setVisibility(View.VISIBLE);
         }

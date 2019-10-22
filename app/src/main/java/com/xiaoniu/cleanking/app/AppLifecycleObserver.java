@@ -38,6 +38,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
         Log.d("XiLei", "PreferenceUtil.getHomeBackTime()=" + PreferenceUtil.getHomeBackTime());
         if (isBack && PreferenceUtil.getHomeBackTime()) {
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            Log.d("XiLei", "AppHolder.getInstance().getSwitchInfoList()=" + AppHolder.getInstance().getSwitchInfoList().getData().size());
             if (AppHolder.getInstance().getSwitchInfoList() != null) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {

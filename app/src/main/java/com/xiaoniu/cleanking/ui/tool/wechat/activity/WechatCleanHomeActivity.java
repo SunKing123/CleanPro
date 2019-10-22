@@ -214,6 +214,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             }
             //保存微信专清清理时间
             PreferenceUtil.saveWeChatCleanTime();
+            PreferenceUtil.saveCleanWechatUsed(true);
         } else if (ids == R.id.tv_select) {
             tvSelect.setSelected(tvSelect.isSelected() ? false : true);
             getSelectCacheSize();

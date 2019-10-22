@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
-import android.annotation.SuppressLint;
 import android.animation.Animator;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,12 +13,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -39,7 +36,6 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -157,6 +153,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
             }
 
+            Log.d("XiLei", "通知大小=" + NotifyCleanManager.getInstance().getAllNotifications().size());
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
                 mNotiClearIv.setImageResource(R.drawable.icon_home_qq_o);
@@ -250,7 +247,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (mInteractionPoistion > 2) {
                 mInteractionPoistion = 0;
             }
-            GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+            if (mInteractionList.size() == 1) {
+                GlideUtils.loadGif(getActivity(), mInteractionList.get(0).getImgUrl(), mInteractionIv, 10000);
+            } else {
+                GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+            }
         }
 
         lineShd.setEnabled(true);

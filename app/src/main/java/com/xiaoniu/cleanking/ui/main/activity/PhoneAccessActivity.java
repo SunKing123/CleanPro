@@ -344,6 +344,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
+        PreferenceUtil.saveCleanJiaSuUsed(true);
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference
         if (AppHolder.getInstance().getSwitchInfoList() != null) {

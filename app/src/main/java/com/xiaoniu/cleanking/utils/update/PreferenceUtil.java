@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.utils.update;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -227,6 +228,26 @@ public class PreferenceUtil {
         return false;
     }
 
+
+    /**
+     * 保存一键加速是否已使用
+     */
+    public static void saveCleanJiaSuUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_JIASU, isUsed).commit();
+    }
+
+    /**
+     * 获取一键加速是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanJiaSuUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_JIASU, false);
+    }
+
     /**
      * 保存微信专清清理时间
      *
@@ -250,6 +271,25 @@ public class PreferenceUtil {
         if (System.currentTimeMillis() - time > 3 * 60 * 1000)
             return true;
         return false;
+    }
+
+    /**
+     * 保存微信清理是否已使用
+     */
+    public static void saveCleanWechatUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_WECHAT, isUsed).commit();
+    }
+
+    /**
+     * 获取微信清理是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanWechatUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_WECHAT, false);
     }
 
     /**
@@ -409,6 +449,25 @@ public class PreferenceUtil {
         return false;
     }
 
+    /**
+     * 保存通知栏清理是否已使用
+     */
+    public static void saveCleanNotifyUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_NOTIFY, isUsed).commit();
+    }
+
+    /**
+     * 获取通知栏清理是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanNotifyUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_NOTIFY, false);
+    }
+
 
     /**
      * 保存超强省电清理时间
@@ -435,6 +494,26 @@ public class PreferenceUtil {
         return false;
     }
 
+
+    /**
+     * 保存超强省电是否已使用
+     */
+    public static void saveCleanPowerUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_POWER, isUsed).commit();
+    }
+
+    /**
+     * 获取超强省电是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanPowerUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_POWER, false);
+    }
+
     /**
      * 保存手机降温时间
      *
@@ -458,6 +537,25 @@ public class PreferenceUtil {
         if (System.currentTimeMillis() - time > 3 * 60 * 1000)
             return true;
         return false;
+    }
+
+    /**
+     * 保存手机降温是否已使用
+     */
+    public static void saveCleanCoolUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_WECHAT, isUsed).commit();
+    }
+
+    /**
+     * 获取手机降温是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanCoolUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_WECHAT, false);
     }
 
     /**
@@ -552,21 +650,27 @@ public class PreferenceUtil {
         int count = 0;
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || ramScale > 20) {
+                Log.d("XiLei", "111111111");
                 count++;
             }
         }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
+            Log.d("XiLei", "22222222");
             count++;
         }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
+            Log.d("XiLei", "33333333333");
             count++;
         }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime() && notifSize > 0) { // 通知栏清理
+            Log.d("XiLei", "444444444");
             count++;
         }
+        Log.d("XiLei", "555555555555");
         count++; //文件清理
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || powerSize > 5) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || powerSize > 0) {
+                Log.d("XiLei", "6666666666");
                 count++;
             }
         }
