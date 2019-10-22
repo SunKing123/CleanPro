@@ -647,7 +647,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 break;
         }
         //1.21 版本推荐清理_标识sourcePage,其他""
-        String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
+        String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "clean_success_page" : "";
         StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page", functionName, functionPosition);
 //        finish();
     }
@@ -742,12 +742,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         v_cool.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
-            /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
-                StatisticsUtils.trackClick("return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page");
-            }*/
+                String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "clean_finish_annimation_page" : "";
+                StatisticsUtils.trackClick("return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "clean_success_page");
+            }
 
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
             if (isScreenSwitchOpen) {
@@ -773,6 +773,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     protected void loadData() {
+        //页面创建事件埋点
+        String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "clean_finish_annimation_page" : "";
+        StatisticsUtils.customTrackEvent( "clean_success_page_custom","清理结果页创建时",sourcePage,"clean_success_page");
         startLoadData();
     }
 
@@ -784,13 +787,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     public void onBackPressed() {
-        /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-            String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
-            StatisticsUtils.trackClick("system_return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page");
+            String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "clean_finish_annimation_page" : "";
+            StatisticsUtils.trackClick("system_return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "clean_success_page");
         }
-
+        /*
         if (Jzvd.backPress()) {
             return;
         }*/
@@ -823,7 +826,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPI.onPageStart("boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPI.onPageStart("home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
+            NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
@@ -871,7 +874,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_success_page", "boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "home_page_clean_up_page", "home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
