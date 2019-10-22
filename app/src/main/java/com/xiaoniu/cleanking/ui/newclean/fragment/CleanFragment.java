@@ -160,9 +160,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mExpandableListView.setAdapter(mAdapter);
 
         mAdapter.setData(mJunkGroups);
-        for (int i = 0; i < mJunkGroups.size(); i++) {
-            mExpandableListView.expandGroup(i);
-
+        //solve umeng error -> 'int java.util.HashMap.size()' on a null object reference
+        if (mJunkGroups != null) {
+            for (int i = 0; i < mJunkGroups.size(); i++) {
+                mExpandableListView.expandGroup(i);
+            }
         }
         mCleanAnimView.setAnimationEnd(() -> cleanFinish());
 
@@ -207,7 +209,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             PreferenceUtil.saveNowCleanTime();
         }
         Bundle bundle = new Bundle();
-        bundle.putString("title", getString(R.string.tool_suggest_clean));
+        //solve umeng error --> not attached to a context.
+        bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
         bundle.putString("num", totalCountEntity.getTotalSize());
         bundle.putString("unit", totalCountEntity.getUnit());
         startActivity(NewCleanFinishActivity.class, bundle);

@@ -90,9 +90,12 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         TextView tv_goto = window.findViewById(R.id.tv_goto);
         tv_goto.setOnClickListener(v -> {
             isClick = true;
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivity(intent);
-
+            try {
+                //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                startActivity(intent);
+            } catch (Exception e){
+            }
             startActivity(PhonePremisActivity.class);
         });
 
