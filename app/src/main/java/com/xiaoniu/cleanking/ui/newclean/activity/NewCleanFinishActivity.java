@@ -1256,8 +1256,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     //加载广告
     private void initAd(final NativeUnifiedADData ad) {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", sourcePage, currentPage);
         renderAdUi(ad);
-
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(v_advert);
         // 将布局与广告进行绑定
@@ -1267,7 +1267,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
                 //广告请求
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", sourcePage, currentPage);
+
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage);
                 Log.d(TAG, "广告曝光");
             }
@@ -1372,8 +1372,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     //加载广告2
     private void initAd2(final NativeUnifiedADData ad) {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
         renderAdUi2(ad);
-
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(v_advert2);
         // 将布局与广告进行绑定
@@ -1382,7 +1382,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
+
                 StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
                 Log.d(TAG, "广告曝光");
             }
