@@ -17,7 +17,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -37,6 +36,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -59,6 +59,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
@@ -158,9 +159,21 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     public static final int REQUEST_CODE_HARDWARE = 10001;
 
+    /*埋点相关*/
+    private String returnEventName = "";
+    private String sysReturnEventName = "";
+
+    private String currentPageId = "";
+    private String sourcePageId = "";
+
+    String viewPageEventName ="";
+    String viewPageEventCode = "";
+
+
     private int position_bluetooth = 2;
     private int position_location = 3;
     private int position_wifi = 4;
+
 
     /**
      * 是否温度过高
@@ -231,6 +244,20 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mTextNumberCool.setText("成功降温" + tem + "°C");
 
         new Handler().postDelayed(() -> initBottomLayout(), 1000);
+
+        //埋点参数相关
+        String preName = AppManager.getAppManager().preActivityName();
+        if (preName.contains("MainActivity")) {
+            sourcePageId = AppHolder.getInstance().getSourcePageId();
+        }else if(preName.contains("NewCleanFinishActivity")){
+            sourcePageId = "clean_success_page";
+        }
+        returnEventName = "用户在降温扫描页点击返回";
+        sysReturnEventName = "用户在降温扫描页点击返回";
+        currentPageId = "cool_scan_page";
+        viewPageEventName = "用户在降温扫描页浏览";
+        viewPageEventCode ="cool_scan_page_view_page";
+
 
     }
 
@@ -366,6 +393,15 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+
+                sourcePageId = "cool_scan_page";
+                returnEventName = "用户在降温扫描完成后的诊断页返回";
+                sysReturnEventName = "用户在降温扫描完成后的诊断页返回";
+                currentPageId = "cool_scan_result_page";
+
+                viewPageEventName = "用户在降温扫描完成后的诊断页浏览";
+                viewPageEventCode ="cool_scan_result_page_view_page";
+
                 if (mLayoutAnimCool != null) {
                     mLayoutAnimCool.setVisibility(GONE);
                 }
@@ -377,6 +413,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * 播放降温动画
      */
     public void setViewPlay() {
+        sourcePageId = "cool_scan_result_page";
+        currentPageId = "cool_animation_page";
+        returnEventName = "用户在降温扫描完成后的诊断页返回";
+        sysReturnEventName = "用户在降温扫描完成后的诊断页返回";
+
+        viewPageEventName = "用户在降温动画页浏览";
+        viewPageEventCode ="cool_animation_page_view_page";
         int bottom = mBgTitle.getBottom();
         int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(0, startHeight - bottom);
@@ -522,15 +565,17 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mRecyclerProcess.setAdapter(mProcessIconAdapter);
     }
 
+
+
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
-        StatisticsUtils.trackClick("Cell_phone_cooling_return_click", "\"手机降温\"返回", AppHolder.getInstance().getSourcePageId(), "temperature_result_display_page");
+        StatisticsUtils.trackClick("return_click", returnEventName, sourcePageId, currentPageId);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Cell_phone_cooling_return_click", "\"手机降温\"返回", AppHolder.getInstance().getSourcePageId(), "temperature_result_display_page");
+        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePageId, currentPageId);
         super.onBackPressed();
     }
 
@@ -546,13 +591,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_process)
     public void onMLayoutProcessClicked() {
-        StatisticsUtils.trackClick("Running_applications_click ", "\"运行的应用\"点击", AppHolder.getInstance().getSourcePageId(), "temperature_result_display_page");
+        StatisticsUtils.trackClick("running_application_click ", "用户在降温扫描完成后的诊断页点击运行应用", source_page, currentPageId);
         startActivity(RouteConstants.PROCESS_INFO_ACTIVITY);
     }
 
     @OnClick(R.id.layout_hardware)
     public void onMLayoutHardwareClicked() {
-        StatisticsUtils.trackClick("Operating_components_click ", "\"运行的部件\"点击", AppHolder.getInstance().getSourcePageId(), "temperature_result_display_page");
+        StatisticsUtils.trackClick("running_parts_click ", "用户在降温扫描完成后的诊断页点击运行部件", source_page, currentPageId);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
@@ -561,7 +606,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.text_cool_now)
     public void onMLayoutCoolClicked() {
-        StatisticsUtils.trackClick("Cool_down_immediately_click", "\"立即降温\"点击", AppHolder.getInstance().getSourcePageId(), "temperature_result_display_page");
+
+        StatisticsUtils.trackClick("cooling_button_click", "用户在降温扫描完成后的诊断页点击【降温】按钮",sourcePageId, currentPageId);
 
         if (mRunningProcess == null) return;
         //立即降温
@@ -570,6 +616,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         }
         //手机降温
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
+
         setViewPlay();
     }
 
@@ -597,7 +644,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         event.setType("cooling");
         EventBus.getDefault().post(event);
 
-        NiuDataAPI.onPageStart("Cell_phone_cooling_view_page", "手机降温浏览");
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         if (mRunningProcess != null) {
             showProcess(mRunningProcess);
         }
@@ -607,7 +654,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("Cell_phone_cooling_view_page", "手机降温浏览");
+
+        NiuDataAPIUtil.onPageEnd(sourcePageId,currentPageId,viewPageEventCode, viewPageEventName);
     }
 
     /**
@@ -699,6 +747,11 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     }
 
     public void startFinishAnimator() {
+        sourcePageId = "cool_animation_page";
+        currentPageId = "cool_finish_annimation_page";
+        returnEventName = "降温完成动画展示页返回";
+        sysReturnEventName = "降温完成动画展示页返回";
+
         mFlAnim.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
@@ -730,10 +783,12 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
                 } else {
+                    AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     bundle.putString("num", "");
                     bundle.putString("unit", "");
+
                     startActivity(NewCleanFinishActivity.class, bundle);
                 }
                 finish();

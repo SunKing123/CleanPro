@@ -164,6 +164,8 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
+                mContainer.setVisibility(View.GONE);
                 mContainer.setVisibility(View.GONE);
                 mViewContent.setVisibility(View.GONE);
                 mErrorV.setVisibility(View.VISIBLE);
@@ -222,15 +224,15 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         String functionPosition = "";
         switch (v.getId()) {
             case R.id.iv_close:
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
                 finish();
                 break;
             case R.id.iv_close_error:
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
                 finish();
                 break;
         }
-        //1.21 版本推荐清理_标识sourcePage,其他""
-        String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
-        StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page", functionName, functionPosition);
+
     }
 
     @Override
@@ -307,13 +309,16 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success_page", "success_page");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
+
             }
 
             @Override

@@ -120,6 +120,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
 
+    public static String sourcePage ="";
+    public static String currentPage = "";
+    String createEventCode = "";
+    String createEventName = "";
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -202,8 +207,50 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_notification = headerTool.findViewById(R.id.iv_notification);
 
         mTitleTv.setText(mTitle);
+
+        getPageData();
         setListener();
         loadData();
+    }
+
+    void getPageData() {
+        sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
+
+        if (getString(R.string.app_name).contains(mTitle)) {
+            //悟空清理
+            currentPage = "clean_success_page";
+        } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            //一键加速
+            currentPage = "boost_success_page";
+        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            //1.2.1清理完成页面_建议清理
+            currentPage = "clean_success_page";
+            createEventName = "清理结果页创建时";
+            createEventCode = "clean_success_page_custom";
+        } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
+            //手机清理
+            currentPage = "clean_success_page";
+        } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
+            //超强省电
+            currentPage = "powersave_success_page";
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            //微信专情
+            currentPage = "wxclean_success_page";
+        } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
+            //QQ专清
+            currentPage = "clean_up_page_view_immediately";
+        } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
+            //通知栏清理
+            currentPage = "notification_clean_success_page";
+        } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
+            //手机降温
+            currentPage = "cooling_success_page";
+            createEventName = "降温结果页创建时";
+            createEventCode = "cooling_success_page_custom";
+            currentPage = "cooling_success_page";
+        } else {
+            currentPage = "clean_up_page_view_immediately";
+        }
     }
 
 
@@ -349,12 +396,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onNoAD(AdError adError) {
                 mContainer.setVisibility(View.GONE);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", sourcePage, "clean_success_page");
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
             }
 
             @Override
             public void onADLoaded(List<NativeUnifiedADData> ads) {
                 Log.d(TAG, "ads.size()=" + ads.size());
+
                 if (ads != null && ads.size() > 0) {
                     mContainer.setVisibility(View.VISIBLE);
                     Message msg = Message.obtain();
@@ -392,6 +441,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
          */
         mAdManager.setVideoADContainerRender(VideoOption.VideoADContainerRender.SDK); // 视频播放前，用户看到的广告容器是由SDK渲染的
         mAdManager.loadData(AD_COUNT);
+
     }
 
     private void initNativeUnifiedAD2() {
@@ -399,6 +449,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onNoAD(AdError adError) {
                 mContainer2.setVisibility(View.GONE);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "fail", sourcePage, "clean_success_page");
                 Log.d(TAG, "onNoAd error code222: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
             }
 
@@ -705,8 +756,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 break;
         }
         //1.21 版本推荐清理_标识sourcePage,其他""
-        String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
-        StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page", functionName, functionPosition);
+        StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage, functionName, functionPosition);
 //        finish();
     }
 
@@ -724,7 +774,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void speedClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-//        StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+
         Bundle bundle = new Bundle();
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
         startActivity(PhoneAccessActivity.class, bundle);
@@ -737,7 +787,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         startActivity(PhoneSuperPowerActivity.class);
-//        StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
     }
 
     /**
@@ -747,7 +796,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_click");
         //通知栏清理
         NotifyCleanManager.startNotificationCleanActivity(this, 0);
-//        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     /**
@@ -757,7 +805,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
-//        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
@@ -778,7 +825,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 文件清理
      */
     public void fileClean() {
-//        StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
         startActivity(FileManagerHomeActivity.class);
     }
 
@@ -788,7 +834,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void coolingClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId("cooling_click");
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
-//        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
     }
 
     protected void setListener() {
@@ -800,12 +845,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         v_cool.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
-            /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
-                StatisticsUtils.trackClick("return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page");
-            }*/
+
+                StatisticsUtils.trackClick("return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+            }
 
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
             if (isScreenSwitchOpen) {
@@ -876,6 +921,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     protected void loadData() {
+        //页面创建事件埋点
+        StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
         startLoadData();
     }
 
@@ -887,14 +934,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        /*if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
-        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-            String sourcePage = getString(R.string.tool_suggest_clean).contains(mTitle) ? "scanning_result_page" : "";
-            StatisticsUtils.trackClick("system_return_back_click", "用户在垃圾清理完成页点击【建议清理】返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, "home_page_clean_up_page");
-        }
-
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            super.onBackPressed();
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+                StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
+            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+                StatisticsUtils.trackClick("system_return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+            }
+        /*
         if (Jzvd.backPress()) {
             return;
         }*/
@@ -953,6 +1000,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         finish();
 
+        }
     }
 
     @Override
@@ -972,12 +1020,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPI.onPageStart("boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPI.onPageStart("home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
+            NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
+
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
+
             NiuDataAPI.onPageStart("powersave_success_page_view_page", "省电结果出现时");
         } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
@@ -1014,31 +1064,31 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_success_page", "boost_success_page_view_page", "加速结果出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "home_page_clean_up_page", "home_page_clean_up_page_view_page", "用户在垃圾清理完成页浏览");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "clean_success_page", "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "powersave_success_page", "powersave_success_page_view_page", "省电结果出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "powersave_success_page_view_page", "省电结果出现时");
         } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "wxclean_success_page", "wxclean_success_page_view_page", "微信清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
             //QQ专清
-            NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
+//            NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
             //通知栏清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "notification_clean_success_page", "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "cooling_success_page", "cooling_success_page_view_page", "降温结果页出现时");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "cooling_success_page_view_page", "降温结果页出现时");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
@@ -1208,13 +1258,17 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
+                //广告请求
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", sourcePage, currentPage);
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage);
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success_page", "success_page");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage);
+
             }
 
             @Override
@@ -1320,13 +1374,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
+                StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", "success_page", "success_page");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage);
+
             }
 
             @Override
