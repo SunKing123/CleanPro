@@ -7,9 +7,11 @@ import android.widget.ImageView;
 
 import com.suke.widget.SwitchButton;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * 超强省电通知 设置
@@ -20,6 +22,8 @@ public class PhoneSuperPowerMessageActivity extends BaseActivity implements View
     private SwitchButton mSBtnNightPower;
     private SwitchButton mSBtnErrorPower;
     private ImageView mBack;
+
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_phone_super_power_messge;
@@ -78,17 +82,24 @@ public class PhoneSuperPowerMessageActivity extends BaseActivity implements View
     @Override
     protected void onResume() {
         super.onResume();
-        StatisticsUtils.trackClick("Super_Power_Saving_Notice_view_page", "“超强省电通知”浏览","Super_Power_Saving_page", "Super_Power_Saving_Notice_page");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.iv_back:
-                StatisticsUtils.trackClick("Super_Power_Saving_Notice_Return_click", "““超强省电通知返回”点击", "Super_Power_Saving_page", "Super_Power_Saving_Notice_page");
+
                 finish();
                 break;
         }
     }
+
 
 }

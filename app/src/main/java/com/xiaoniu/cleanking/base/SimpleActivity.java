@@ -59,6 +59,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityCollector.addActivity(this, getClass());
+        AppManager.getAppManager().addActivityName(this);
         mHandler = new MHandler(this);
 
         int layoutId = getLayoutId();
@@ -106,7 +107,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onDestroy() {
         mUnBinder.unbind();
-//        AppManager.getAppManager().finishActivity(this);
+        AppManager.getAppManager().finishActivity(this);
         cancelLoadingDialog();
         this.mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
@@ -116,7 +117,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AppManager.getAppManager().addActivityName(this);
+
         MobclickAgent.onResume(this);
     }
 

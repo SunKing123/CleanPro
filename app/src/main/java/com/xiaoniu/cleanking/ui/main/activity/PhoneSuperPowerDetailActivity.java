@@ -30,12 +30,14 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.BattaryView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -75,6 +77,16 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     private TextView mTvAfterUpdate;
     private int mBatteryPower = 50;
 
+
+
+    String sourcePage = "";
+    String currentPage = "";
+    String sysReturnEventName = "";
+    String returnEventName ="";
+
+    String viewPageEventCode ="";
+    String viewPageEventName ="";
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_phone_super_power_detail;
@@ -89,6 +101,13 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        viewPageEventCode = "powersave_scan_result_page_view_page";
+        viewPageEventName = "用户在省电扫描完成后的诊断页浏览";
+        sourcePage = "powersave_guidance_page";
+        currentPage = "powersave_scan_result_page";
+        sysReturnEventName = "用户在省电扫描完成后的诊断页浏览";
+        returnEventName = "用户在省电扫描完成后的诊断页返回";
+
         mRecyclerView = findViewById(R.id.power_recyclerView);
         /*title*/
         mTvClean = findViewById(R.id.tv_super_power);
@@ -230,22 +249,28 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, viewPageEventCode, viewPageEventName);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
-                StatisticsUtils.trackClick("Super_Power_Saving_Return_click", "“超强省电返回”点击", "home_page", "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("return_click", "用户在省电扫描完成后的诊断页返回", sourcePage, currentPage);
                 finish();
                 break;
             case R.id.icon_saving_right:
-                StatisticsUtils.trackClick("Super_Power_Saving_Notice_click", "“超强省电通知”点击", "home_page", "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("whitelist_click", "用户在省电扫描完成后的诊断页点击白名单", sourcePage, currentPage);
                 startActivity(new Intent(mContext, PhoneSuperPowerMessageActivity.class));
                 break;
             case R.id.tv_super_power:
-                StatisticsUtils.trackClick("One_Touch_Optimize_click", "“一键优化”点击", "home_page", "Super_Power_Saving_page");
+                StatisticsUtils.trackClick("optimization_button_click", "用户在省电扫描完成后的诊断页点击【优化】按钮", sourcePage, currentPage);
                 sSelectedList = mPowerCleanAdapter.getSelectedData();
 
                 for (int i = 0; i < sSelectedList.size(); i++) {
@@ -263,6 +288,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
     }
 
     @Override
@@ -460,5 +491,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             }
         });
     }
+
+
 
 }

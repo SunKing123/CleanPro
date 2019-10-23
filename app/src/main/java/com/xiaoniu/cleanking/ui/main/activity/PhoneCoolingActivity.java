@@ -361,6 +361,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * 数字动画播放完后上移，布局高度缩小
      */
     public void setViewTrans() {
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
+
         if (isDestroyed()) {
             return;
         }
@@ -403,6 +405,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 viewPageEventName = "用户在降温扫描完成后的诊断页浏览";
                 viewPageEventCode = "cool_scan_result_page_view_page";
 
+                NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+                NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId,viewPageEventCode, viewPageEventName);
+
                 if (mLayoutAnimCool != null) {
                     mLayoutAnimCool.setVisibility(GONE);
                 }
@@ -421,6 +426,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
         viewPageEventName = "用户在降温动画页浏览";
         viewPageEventCode = "cool_animation_page_view_page";
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId,viewPageEventCode, viewPageEventName);
+
         int bottom = mBgTitle.getBottom();
         int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(0, startHeight - bottom);
@@ -751,6 +759,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         currentPageId = "cool_finish_annimation_page";
         returnEventName = "降温完成动画展示页返回";
         sysReturnEventName = "降温完成动画展示页返回";
+        viewPageEventName = "降温完成动画展示页浏览";
+        viewPageEventCode = "cool_finish_annimation_page_view_page";
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId,viewPageEventCode, viewPageEventName);
 
         mFlAnim.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();

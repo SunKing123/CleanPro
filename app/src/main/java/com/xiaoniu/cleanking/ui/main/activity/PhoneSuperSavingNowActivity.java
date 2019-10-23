@@ -43,6 +43,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.common.base.BaseActivity;
@@ -51,6 +52,7 @@ import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.roundedimageview.RoundedImageView;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -96,6 +98,14 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
 
+    String sourcePage = "";
+    String currentPage = "";
+    String sysReturnEventName = "";
+    String returnEventName ="";
+
+    String viewPageEventCode ="";
+    String viewPageEventName ="";
+
     private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
 
@@ -136,6 +146,14 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        viewPageEventCode = "powersave_animation_page_view_page";
+        viewPageEventName = "用户在省电动画页浏览";
+        sourcePage = "powersave_scan_result_page";
+        currentPage = "powersave_animation_page";
+        sysReturnEventName = "用户在省电动画页返回";
+        returnEventName = "用户在省电动画页返回";
+
+
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         if (Build.VERSION.SDK_INT < 26) {
@@ -163,6 +181,18 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mTvAllNum.setText("/" + String.valueOf(num));
         initWebView();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, viewPageEventCode, viewPageEventName);
     }
 
     @Override
@@ -320,6 +350,15 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
      * 完成动画
      */
     public void showFinishAnim() {
+        viewPageEventCode = "powersave_finish_annimation_page_view_page";
+        viewPageEventName = "省电完成动画展示页浏览";
+        sourcePage = "powersave_animation_page";
+        currentPage = "powersave_finish_annimation_page";
+        sysReturnEventName = "省电完成动画展示页返回";
+        returnEventName = "省电完成动画展示页返回";
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, viewPageEventCode, viewPageEventName);
+
         SPUtil.setLastPowerCleanTime(System.currentTimeMillis());
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
 
@@ -417,12 +456,19 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 if (isFinish)
                     StatisticsUtils.trackClick("Super_Power_Saving_Completion_Return_click", "\"超强省电完成返回\"点击", "Super_Power_Saving_page", "Super_Power_Saving_Completion_page");
             case R.id.btn_cancel:
+                StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
                 finish();
                 break;
             case R.id.layout_not_net:
                 mNestedScrollWebView.loadUrl(PreferenceUtil.getWebViewUrl());
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("system_return_click", returnEventName, sourcePage, currentPage);
+        super.onBackPressed();
     }
 
     public void initWebView() {

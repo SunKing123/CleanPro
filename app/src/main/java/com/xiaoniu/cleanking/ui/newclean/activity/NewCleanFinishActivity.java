@@ -237,6 +237,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
             currentPage = "powersave_success_page";
+            createEventName = "省电结果页创建时";
+            createEventCode = "powersave_success_page_custom";
+            returnEventName = "省电结果页出现返回";
+            sysReturnEventName = "省电结果页出现返回";
         } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
             currentPage = "wxclean_success_page";
@@ -857,7 +861,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", returnEventName, AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-
                 StatisticsUtils.trackClick("return_click", returnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
             }
 
@@ -1033,7 +1036,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
-
             NiuDataAPI.onPageStart("powersave_success_page_view_page", "省电结果出现时");
         } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
