@@ -397,7 +397,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 sourcePageId = "cool_scan_page";
                 returnEventName = "用户在降温扫描完成后的诊断页返回";
                 sysReturnEventName = "用户在降温扫描完成后的诊断页返回";
-                currentPageId = "cool_scan_result_page";\
+                currentPageId = "cool_scan_result_page";
 
                 viewPageEventName = "用户在降温扫描完成后的诊断页浏览";
                 viewPageEventCode ="cool_scan_result_page_view_page";
