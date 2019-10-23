@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -258,7 +259,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
                         Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                         startActivity(intent);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                     }
                     startActivity(PhonePremisActivity.class);
                 }
@@ -462,6 +463,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 if (mAlertDialog != null)
                     mAlertDialog.cancel();
                 startCleanAnim();
+                EventBus.getDefault().post(new InternalStoragePremEvent());
             } else {
                 ToastUtils.showShort(getString(R.string.tool_get_premis));
                 if (isDoubleBack) finish();
@@ -504,7 +506,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
         long totalSizes = 0;
-        for (FirstJunkInfo firstJunkInfo : listInfo){
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
             totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
         }
         setCleanSize(totalSizes, true);
@@ -526,7 +528,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
-            sizeMb= Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim()).intValue();
+            sizeMb = Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim()).intValue();
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim)
@@ -537,7 +539,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         } else if (str_totalSize.endsWith("GB")) {
             double gbnum = Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim());
             strUnit = "GB";
-            sizeMb = NumberUtils.getRoundCeilingInt(gbnum*1024);
+            sizeMb = NumberUtils.getRoundCeilingInt(gbnum * 1024);
             strNum = String.valueOf(sizeMb);
             if (canPlayAnim)
                 mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);

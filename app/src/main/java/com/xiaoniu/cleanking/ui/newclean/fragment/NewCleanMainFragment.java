@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -185,7 +186,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mElectricityFinishIv.setVisibility(View.VISIBLE);
                     mElectricityIv.setImageResource(R.drawable.icon_power);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                    if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
+                        mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
+                    } else {
+                        mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                    }
                 } else {
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
@@ -309,7 +314,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
                 mElectricityIv.setImageResource(R.drawable.icon_power);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
+                    mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
+                } else {
+                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                }
             } else {
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
@@ -335,13 +344,28 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
                 mElectricityIv.setImageResource(R.drawable.icon_power);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
+                    mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
+                } else {
+                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+                }
             } else {
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
             }
         }
+    }
+
+    /**
+     * 一键加速获取权限后通知首页一键加速状态改变h
+     */
+    @Subscribe
+    public void internalStoragePremEvent(InternalStoragePremEvent event) {
+        Log.d("XiLei", "ddddddddddddddddd");
+        GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
+        mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+        mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
     }
 
     /**
@@ -354,7 +378,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mElectricityFinishIv.setVisibility(View.VISIBLE);
         mElectricityIv.setImageResource(R.drawable.icon_power);
         mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        mElectricityTv.setText(getString(R.string.lengthen_time, event.getHour()));
+        if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
+            mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
+        } else {
+            mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+        }
         PreferenceUtil.saveLengthenAwaitTime(event.getHour());
     }
 
@@ -437,11 +465,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     }
                 }
             }
-            Log.d("XiLei", "isOpen---111=" + isOpen);
-            Log.d("XiLei", "mRamScale---111=" + mRamScale);
-            Log.d("XiLei", "mNotifySize---111=" + mNotifySize);
-            Log.d("XiLei", "mPowerSize---111=" + mPowerSize);
-            Log.d("XiLei", "ssssssss---111=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize));
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -539,7 +562,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             QQUtil.audioList.clear();
         if (QQUtil.fileList != null)
             QQUtil.fileList.clear();
-        startActivity(QQCleanHomeActivity.class);
+        Intent intent = new Intent();
+        intent.putExtra("mRamScale", mRamScale);
+        intent.putExtra("mNotifySize", mNotifySize);
+        intent.putExtra("mPowerSize", mPowerSize);
+        intent.setClass(getActivity(),QQCleanHomeActivity.class);
+        getActivity().startActivity(intent);
     }
 
     /*    *//**

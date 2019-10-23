@@ -144,6 +144,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      */
     public void getSwitchInfoListFail(String message) {
         mViewContent.setVisibility(View.GONE);
+        mBtnDownload.setVisibility(View.GONE);
         mErrorV.setVisibility(View.VISIBLE);
         ToastUtils.showShort(message);
     }
@@ -155,6 +156,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      */
     public void getSwitchInfoListConnectError() {
         mViewContent.setVisibility(View.GONE);
+        mBtnDownload.setVisibility(View.GONE);
         mErrorV.setVisibility(View.VISIBLE);
         ToastUtils.showShort("网络连接失败，请假查您的网络连接");
     }
@@ -167,8 +169,8 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
                 mContainer.setVisibility(View.GONE);
-                mContainer.setVisibility(View.GONE);
                 mViewContent.setVisibility(View.GONE);
+                mBtnDownload.setVisibility(View.GONE);
                 mErrorV.setVisibility(View.VISIBLE);
             }
 

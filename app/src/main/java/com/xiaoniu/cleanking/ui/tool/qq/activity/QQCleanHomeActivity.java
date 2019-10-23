@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,13 +25,16 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QQCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QQCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
@@ -42,6 +46,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -204,11 +209,39 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             long totalSize = 0;
             totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
             if (totalSize == 0) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_qq_clear));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                startActivity( NewCleanFinishActivity.class,bundle);
+
+                boolean isOpen = false;
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                            isOpen = switchInfoList.isOpen();
+                        }
+                    }
+                }
+
+                int mNotifySize = 0; //通知条数
+                int mPowerSize = 0; //耗电应用数
+                int mRamScale = 0; //使用内存占总RAM的比例
+                if (null != getIntent()) {
+                    mRamScale = getIntent().getIntExtra("mRamScale", 0);
+                    mNotifySize = getIntent().getIntExtra("mNotifySize", 0);
+                    mPowerSize = getIntent().getIntExtra("mPowerSize", 0);
+                }
+                Log.d("XiLei", "QQ---mRamScale=" + mRamScale);
+                Log.d("XiLei", "QQ---mNotifySize=" + mNotifySize);
+                Log.d("XiLei", "QQ---mPowerSize=" + mPowerSize);
+                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_qq_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_qq_clear));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_qq_clear));
+                    bundle.putString("num", "");
+                    bundle.putString("unit", "");
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
                 finish();
             } else {
                 if (selectSize == 0) return;
@@ -369,7 +402,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             try {
                 roundAnim1 = mPresenter.playRoundAnim(ivHua1);
                 roundAnim3 = mPresenter.playRoundAnim(ivHua3);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {

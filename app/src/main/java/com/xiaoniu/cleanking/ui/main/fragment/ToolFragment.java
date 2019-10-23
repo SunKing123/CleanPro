@@ -243,11 +243,6 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
-                Log.d("XiLei", "isOpen---222=" + isOpen);
-                Log.d("XiLei", "mRamScale---222=" + mRamScale);
-                Log.d("XiLei", "mNotifySize---222=" + mNotifySize);
-                Log.d("XiLei", "mPowerSize---222=" + mPowerSize);
-                Log.d("XiLei", "ssssssss---222=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize));
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();

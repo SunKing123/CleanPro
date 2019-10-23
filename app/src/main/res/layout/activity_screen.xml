@@ -1,92 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.qq.e.ads.nativ.widget.NativeAdContainer xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/native_ad_container"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ScrollView
         android:id="@+id/v_content"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_download"
+        android:layout_marginBottom="@dimen/dimen_10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.qq.e.ads.nativ.widget.NativeAdContainer
+                android:id="@+id/native_ad_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:id="@+id/v_advert"
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_gradient_clean_screen">
+
+                        <!-- 原生广告的视频组件 -->
+                        <com.qq.e.ads.nativ.MediaView
+                            android:id="@+id/gdt_media_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:id="@+id/iv_advert"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_advert_logo"
+                        android:layout_width="@dimen/dimen_50dp"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:layout_below="@+id/v_advert"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="-25dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/v_download"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/iv_advert_logo">
+
+                        <TextView
+                            android:id="@+id/tv_advert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/dimen_16dp"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_17sp" />
+
+                        <TextView
+                            android:id="@+id/tv_advert_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_advert"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/dimen_16dp"
+                            android:textColor="@color/color_777777"
+                            android:textSize="@dimen/dimen_14sp" />
+
+                    </RelativeLayout>
+                </RelativeLayout>
+            </com.qq.e.ads.nativ.widget.NativeAdContainer>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_download"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen_20dp"
-        android:visibility="visible">
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dimen_10dp"
+        android:background="@drawable/icon_btn_g"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_17sp" />
 
-        <RelativeLayout
-            android:id="@+id/v_advert"
-            android:layout_width="match_parent"
-            android:layout_height="450dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/bg_gradient_clean_screen">
-
-            <ImageView
-                android:id="@+id/iv_close"
-                android:layout_width="@dimen/dimen_35dp"
-                android:layout_height="@dimen/dimen_35dp"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/dimen_16dp"
-                android:src="@drawable/icon_close" />
-
-            <!-- 原生广告的视频组件 -->
-            <com.qq.e.ads.nativ.MediaView
-                android:id="@+id/gdt_media_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
-            <ImageView
-                android:id="@+id/iv_advert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/iv_advert_logo"
-            android:layout_width="@dimen/dimen_50dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_below="@+id/v_advert"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="-25dp" />
-
-        <RelativeLayout
-            android:id="@+id/v_download"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/iv_advert_logo">
-
-            <TextView
-                android:id="@+id/tv_advert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:textColor="@color/color_404040"
-                android:textSize="@dimen/dimen_17sp" />
-
-            <TextView
-                android:id="@+id/tv_advert_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_advert"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:textColor="@color/color_777777"
-                android:textSize="@dimen/dimen_14sp" />
-
-            <TextView
-                android:id="@+id/tv_download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/icon_btn_g"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dimen_17sp" />
-        </RelativeLayout>
-
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="@dimen/dimen_35dp"
+        android:layout_height="@dimen/dimen_35dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/dimen_16dp"
+        android:src="@drawable/icon_close" />
 
     <RelativeLayout
         android:id="@+id/v_error"
@@ -109,5 +126,4 @@
             android:src="@mipmap/icon_no_net" />
 
     </RelativeLayout>
-
-</com.qq.e.ads.nativ.widget.NativeAdContainer>
+</RelativeLayout>

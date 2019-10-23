@@ -1,7 +1,8 @@
 package com.xiaoniu.cleanking.utils;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
@@ -13,7 +14,6 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.xiaoniu.cleanking.R;
 
 /**
  * @author XiLei
@@ -27,14 +27,18 @@ public class GlideUtils {
         Glide.with(context).load(url).into(imageView);
     }
 
-    public static void loadRoundImage(Context context, String url, ImageView imageView, int round) {
-        if (null == context) return;
-        Glide.with(context).load(url)
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
-                .into(imageView);
+    public static void loadRoundImage(Activity context, String url, ImageView imageView, int round) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (null != context && !context.isDestroyed()) {
+                Glide.with(context).load(url)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
+                        .into(imageView);
+            }
+        }
     }
 
     public static void loadGif(Context context, String url, ImageView imageView, int count) {
+        if (null == context) return;
         Glide.with(context).load(url).listener(new RequestListener() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
@@ -54,11 +58,13 @@ public class GlideUtils {
 
     /**
      * 加载本地Gif
+     *
      * @param context
      * @param resourceId
      * @param imageView
      */
     public static void loadDrawble(Context context, int resourceId, ImageView imageView) {
+        if (null == context) return;
         Glide.with(context).load(resourceId).into(imageView);
     }
 
