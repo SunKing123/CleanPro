@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/iv_quicken"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_yjjs" />
 
@@ -80,8 +80,8 @@
 
             <ImageView
                 android:id="@+id/iv_power"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_power" />
 
@@ -140,8 +140,8 @@
 
             <ImageView
                 android:id="@+id/iv_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_home_qq" />
 
@@ -200,8 +200,8 @@
 
             <ImageView
                 android:id="@+id/iv_wechat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_home_wx" />
 
@@ -260,8 +260,8 @@
 
             <ImageView
                 android:id="@+id/iv_file"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_wjql" />
 
@@ -320,8 +320,8 @@
 
             <ImageView
                 android:id="@+id/iv_cool"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_home_jw" />
 

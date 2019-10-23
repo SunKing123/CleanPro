@@ -193,7 +193,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        Log.d(TAG, "getSwitchInfoListSuccess -- list.getData()=" + list.getData().size());
+        if (null == list || null == list.getData() || list.getData().size() <= 0) return;
+        Log.d("XiLei", "getSwitchInfoListSuccess -- list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
 
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
@@ -221,7 +222,17 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            } else { //立即清理
+            }else if (getString(R.string.tool_qq_clear).contains(mTitle)) { //QQ专清
+                if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD();
+                }
+            }  else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
+                if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD();
+                }
+            }else { //立即清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
@@ -258,9 +269,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
             @Override
             public void onNoAD(AdError adError) {
-                mContainer.setVisibility(View.GONE);
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
-                finish();
+                mContainer.setVisibility(View.GONE);
+                mViewContent.setVisibility(View.GONE);
+                mErrorIv.setVisibility(View.VISIBLE);
             }
 
             @Override

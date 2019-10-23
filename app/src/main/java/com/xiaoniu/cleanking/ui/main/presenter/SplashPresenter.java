@@ -71,17 +71,20 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
             @Override
             public void showExtraOp(String code, String message) {
-                mView.getAuditSwitch(null);
+                Log.d("XiLei", "showExtraOp111");
+                mView.getAuditSwitchFail();
             }
 
             @Override
             public void showExtraOp(String message) {
-                mView.getAuditSwitch(null);
+                Log.d("XiLei", "showExtraOp222");
+                mView.getAuditSwitchFail();
             }
 
             @Override
             public void netConnectError() {
-                mView.getAuditSwitch(null);
+                Log.d("XiLei", "netConnectError");
+                mView.getAuditSwitchFail();
             }
         });
     }

@@ -147,7 +147,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
             } else {
                 mShowCount++;
-                mAccIv.setImageResource(R.drawable.icon_yjjs_r);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
             }
@@ -166,7 +166,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mShowCount++;
-                    mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
                 }
@@ -179,7 +179,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
                 } else {
-                    mElectricityIv.setImageResource(R.drawable.icon_power_r);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
                 }
@@ -214,6 +214,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      * @param switchInfoList
      */
     public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
+        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
+            return;
         if (switchInfoList.getData().get(0).isOpen()) {
             mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
             Glide.with(this).load(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl()).into(mInteractionIv);
@@ -229,9 +231,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             mInteractionPoistion = 0;
         }
         StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
-        startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
-        mInteractionPoistion++;
+        if (null != mInteractionList && mInteractionList.size() > 0) {
+
+            if (mInteractionList.size() == 1) {
+                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
+            } else {
+                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+            }
+            mInteractionPoistion++;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -267,7 +277,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void onEventMainThread(ResidentUpdateEvent event) {
         //获取通知条数后改变 通知栏清理 icon和文案状态
         if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
-            mNotiClearIv.setImageResource(R.drawable.icon_home_qq_r);
+            GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
         }
@@ -286,7 +296,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
             } else {
-                mElectricityIv.setImageResource(R.drawable.icon_power_r);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
             }
@@ -315,7 +325,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
             } else {
-                mElectricityIv.setImageResource(R.drawable.icon_power_r);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
             }
