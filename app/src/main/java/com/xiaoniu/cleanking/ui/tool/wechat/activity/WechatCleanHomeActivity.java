@@ -151,14 +151,15 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         //埋点参数相关
         String preName = AppManager.getAppManager().preActivityName();
         if (preName.contains("MainActivity")) {
-            sourcePageId = AppHolder.getInstance().getSourcePageId();
+            sourcePageId = "home_page";
         }
         currentPageId = "wxclean_scan_page";
         returnEventName = "用户在微信清理扫描页点击返回";
         sysReturnEventName = "用户在微信清理扫描页点击返回";
         viewPageEventName = "用户在微信清理扫描页浏览";
         viewPageEventCode = "wxclean_scan_page_view_page";
-
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
@@ -184,8 +185,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.iv_back) {
+            StatisticsUtils.trackClick("return_click", returnEventName, sourcePageId, currentPageId);
             finish();
-            StatisticsUtils.trackClick("return_click", returnEventName, source_page, currentPageId);
         } else if (ids == R.id.iv_gabcache) {
             consGabcache.setVisibility(consGabcache.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivGabcache.setImageResource(consGabcache.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
@@ -408,7 +409,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, source_page, currentPageId);
+        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePageId, currentPageId);
         super.onBackPressed();
     }
 
