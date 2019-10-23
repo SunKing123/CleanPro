@@ -152,8 +152,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         String preName = AppManager.getAppManager().preActivityName();
         if (preName.contains("MainActivity")) {
             sourcePageId = AppHolder.getInstance().getSourcePageId();
-        } else if (preName.contains("NewCleanFinishActivity")) {
-            sourcePageId = NewCleanFinishActivity.currentPage;
         }
         currentPageId = "wxclean_scan_page";
         returnEventName = "用户在微信清理扫描页点击返回";

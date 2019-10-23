@@ -108,7 +108,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         pageviewEventCode = "notification_clean_result_page_view_page";
         returnEventName = "用户在通知清理诊断页返回";
         sysReturnEventName = "用户在通知清理诊断页返回";
-        sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : NewCleanFinishActivity.currentPage;
+        sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
 
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
