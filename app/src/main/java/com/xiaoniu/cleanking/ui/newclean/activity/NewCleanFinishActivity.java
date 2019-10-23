@@ -124,6 +124,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public static String currentPage = "";
     String createEventCode = "";
     String createEventName = "";
+    String returnEventName = "";
+    String sysReturnEventName = "";
 
     @Override
     protected int getLayoutId() {
@@ -222,6 +224,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             currentPage = "clean_success_page";
             createEventName = "清理结果页创建时";
             createEventCode = "clean_success_page_custom";
+            returnEventName = "用户在清理结果页返回";
+            sysReturnEventName = "用户在清理结果页返回";
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
             currentPage = "clean_success_page";
@@ -231,6 +235,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
             currentPage = "wxclean_success_page";
+            createEventName = "微信结果页创建时";
+            createEventCode = "wxclean_success_page_custom";
+            returnEventName = "用户在微信清理结果页返回";
+            sysReturnEventName = "用户在微信清理结果页返回";
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
             //QQ专清
             currentPage = "clean_up_page_view_immediately";
@@ -242,7 +250,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             currentPage = "cooling_success_page";
             createEventName = "降温结果页创建时";
             createEventCode = "cooling_success_page_custom";
-            currentPage = "cooling_success_page";
+            returnEventName = "用户在降温结果页返回";
+            sysReturnEventName = "用户在降温结果页返回";
         } else {
             currentPage = "clean_up_page_view_immediately";
         }
@@ -838,10 +847,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
+                StatisticsUtils.trackClick("return_back", returnEventName, AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
 
-                StatisticsUtils.trackClick("return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+                StatisticsUtils.trackClick("return_click", returnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
             }
 
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
@@ -881,12 +890,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     public void onBackPressed() {
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             super.onBackPressed();
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", "selected_page", "one_click_acceleration_clean_up_page");
+                StatisticsUtils.trackClick("system_return_click", sysReturnEventName, "selected_page", "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                StatisticsUtils.trackClick("system_return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+                StatisticsUtils.trackClick("system_return_click", sysReturnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
             }
         /*
         if (Jzvd.backPress()) {
@@ -951,7 +959,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             finish();
 
         }
-    }
+
 
     @Override
     protected void onResume() {

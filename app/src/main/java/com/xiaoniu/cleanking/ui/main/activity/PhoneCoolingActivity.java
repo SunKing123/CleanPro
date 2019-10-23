@@ -166,7 +166,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     private String currentPageId = "";
     private String sourcePageId = "";
 
-    String viewPageEventName ="";
+    String viewPageEventName = "";
     String viewPageEventCode = "";
 
 
@@ -195,6 +195,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @Override
     protected void initView() {
+
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         if (Build.VERSION.SDK_INT < 26) {
@@ -249,14 +250,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         String preName = AppManager.getAppManager().preActivityName();
         if (preName.contains("MainActivity")) {
             sourcePageId = AppHolder.getInstance().getSourcePageId();
-        }else if(preName.contains("NewCleanFinishActivity")){
+        } else if (preName.contains("NewCleanFinishActivity")) {
             sourcePageId = "clean_success_page";
         }
         returnEventName = "用户在降温扫描页点击返回";
         sysReturnEventName = "用户在降温扫描页点击返回";
         currentPageId = "cool_scan_page";
         viewPageEventName = "用户在降温扫描页浏览";
-        viewPageEventCode ="cool_scan_page_view_page";
+        viewPageEventCode = "cool_scan_page_view_page";
 
 
     }
@@ -400,7 +401,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 currentPageId = "cool_scan_result_page";
 
                 viewPageEventName = "用户在降温扫描完成后的诊断页浏览";
-                viewPageEventCode ="cool_scan_result_page_view_page";
+                viewPageEventCode = "cool_scan_result_page_view_page";
 
                 if (mLayoutAnimCool != null) {
                     mLayoutAnimCool.setVisibility(GONE);
@@ -419,7 +420,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         sysReturnEventName = "用户在降温扫描完成后的诊断页返回";
 
         viewPageEventName = "用户在降温动画页浏览";
-        viewPageEventCode ="cool_animation_page_view_page";
+        viewPageEventCode = "cool_animation_page_view_page";
         int bottom = mBgTitle.getBottom();
         int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(0, startHeight - bottom);
@@ -566,7 +567,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     }
 
 
-
     @OnClick({R.id.img_back})
     public void onBackPress(View view) {
         StatisticsUtils.trackClick("return_click", returnEventName, sourcePageId, currentPageId);
@@ -607,7 +607,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @OnClick(R.id.text_cool_now)
     public void onMLayoutCoolClicked() {
 
-        StatisticsUtils.trackClick("cooling_button_click", "用户在降温扫描完成后的诊断页点击【降温】按钮",sourcePageId, currentPageId);
+        StatisticsUtils.trackClick("cooling_button_click", "用户在降温扫描完成后的诊断页点击【降温】按钮", sourcePageId, currentPageId);
 
         if (mRunningProcess == null) return;
         //立即降温
@@ -655,7 +655,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     protected void onPause() {
         super.onPause();
 
-        NiuDataAPIUtil.onPageEnd(sourcePageId,currentPageId,viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
     }
 
     /**

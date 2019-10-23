@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -39,6 +40,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -122,6 +124,17 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
 
+    /*埋点相关*/
+    private String returnEventName = "";
+    private String sysReturnEventName = "";
+
+    private String currentPageId = "";
+    private String sourcePageId = "";
+
+    private String viewPageEventName ="";
+    private String viewPageEventCode = "";
+
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_wxclean_home;
@@ -134,6 +147,21 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
     @Override
     public void initView() {
+
+        //埋点参数相关
+        String preName = AppManager.getAppManager().preActivityName();
+        if (preName.contains("MainActivity")) {
+            sourcePageId = AppHolder.getInstance().getSourcePageId();
+        } else if (preName.contains("NewCleanFinishActivity")) {
+            sourcePageId = NewCleanFinishActivity.currentPage;
+        }
+        currentPageId = "wxclean_scan_page";
+        returnEventName = "用户在微信清理扫描页点击返回";
+        sysReturnEventName = "用户在微信清理扫描页点击返回";
+        viewPageEventName = "用户在微信清理扫描页浏览";
+        viewPageEventCode = "wxclean_scan_page_view_page";
+
+
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         if (Build.VERSION.SDK_INT < 26) {
@@ -159,7 +187,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
         int ids = view.getId();
         if (ids == R.id.iv_back) {
             finish();
-            StatisticsUtils.trackClick("wechat_cleaning_return_click", "微信清理返回点击", "home_page", "wechat_cleaning_page");
+            StatisticsUtils.trackClick("return_click", returnEventName, source_page, currentPageId);
         } else if (ids == R.id.iv_gabcache) {
             consGabcache.setVisibility(consGabcache.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivGabcache.setImageResource(consGabcache.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
@@ -179,6 +207,15 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
+            sourcePageId = "wxclean_sacn_result_page";
+            currentPageId = "wxclean_animation_page";
+            returnEventName = "用户在微信清理诊断页返回";
+            sysReturnEventName = "用户在微信清理动画页返回";
+            viewPageEventName = "用户在微信清理动画页浏览";
+            viewPageEventCode = "wxclean_animation_page_view_page";
+            NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+            NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
+
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 boolean isOpen = false;
                 //solve umeng error --> SwitchInfoList.getData()' on a null object reference
@@ -245,7 +282,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("wechat_ceaning_view_page", "微信清理页面浏览");
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         SharedPreferences sp = mContext.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long wxCatheSizeImg = sp.getLong(Constant.WX_CACHE_SIZE_IMG, 0L);
         long wxCatheSizeVideo = sp.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
@@ -256,13 +293,23 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("wechat_ceaning_view_page", "微信清理页面浏览");
+        NiuDataAPIUtil.onPageEnd(sourcePageId,currentPageId,viewPageEventCode, viewPageEventName);
     }
 
     //获取扫描结果
     public void getScanResult() {
-        setScanStatus(false);
 
+        sourcePageId = "wxclean_scan_page";
+        currentPageId = "wxclean_sacn_result_page";
+        returnEventName = "用户在微信清理诊断页返回";
+        sysReturnEventName = "用户在微信清理诊断页返回";
+        viewPageEventName = "用户在微信清理诊断页浏览";
+        viewPageEventCode = "wxclean_sacn_result_pag_view_page";
+
+        NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
+
+        setScanStatus(false);
         if (tvWxgabageSize == null) return;
         CleanWxEasyInfo wxprogramInfo = WxQqUtil.f;  //微信小程序
         CleanWxEasyInfo headCacheInfo = WxQqUtil.e;  //缓存表情   浏览聊天记录产生的表情
@@ -362,6 +409,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             tvDelete.setBackgroundResource(R.drawable.delete_select_bg);
             tvDelete.setSelected(true);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, source_page, currentPageId);
+        super.onBackPressed();
     }
 
     public void deleteResult(long result) {

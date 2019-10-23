@@ -11,11 +11,17 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
-
+/*
+*  微信清理完成后动画页
+*
+* */
 public class WechatCleanResultActivity extends SimpleActivity {
 
     @BindView(R.id.acceview)
@@ -34,6 +40,26 @@ public class WechatCleanResultActivity extends SimpleActivity {
         startCleanAnim(countEntity);
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
 
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("wxclean_finish_annimation_page_view_page", "微信清理完成动画展示页浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPIUtil.onPageEnd("wxclean_animation_page","wxclean_finish_annimation_page","wxclean_finish_annimation_page_view_page", "微信清理完成动画展示页浏览");
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("system_return_click", "微信清理完成动画展示页返回", "wxclean_animation_page", "wxclean_finish_annimation_page");
+        super.onBackPressed();
     }
 
     /**
