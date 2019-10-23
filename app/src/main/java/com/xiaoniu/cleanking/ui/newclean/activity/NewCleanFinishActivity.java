@@ -120,7 +120,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
 
-    public static String sourcePage ="";
+    public static String sourcePage = "";
     public static String currentPage = "";
     String createEventCode = "";
     String createEventName = "";
@@ -848,7 +848,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", "\"一键加速返回\"点击", AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-
                 StatisticsUtils.trackClick("return_click", "用户在清理结果页返回", getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
             }
 
@@ -945,6 +944,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (Jzvd.backPress()) {
             return;
         }*/
+        }
 
         //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
         if (isScreenSwitchOpen) {
@@ -999,8 +999,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
         }
         finish();
-
-        }
     }
 
     @Override
