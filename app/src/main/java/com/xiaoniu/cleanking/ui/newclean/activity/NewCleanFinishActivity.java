@@ -859,8 +859,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", returnEventName, AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
-            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_click", returnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+            } else {
+                StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
 
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示

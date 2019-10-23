@@ -258,8 +258,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         currentPageId = "cool_scan_page";
         viewPageEventName = "用户在降温扫描页浏览";
         viewPageEventCode = "cool_scan_page_view_page";
-
-
     }
 
     private void initBottomLayout() {
@@ -421,8 +419,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     public void setViewPlay() {
         sourcePageId = "cool_scan_result_page";
         currentPageId = "cool_animation_page";
-        returnEventName = "用户在降温扫描完成后的诊断页返回";
-        sysReturnEventName = "用户在降温扫描完成后的诊断页返回";
+        returnEventName = "用户在降温动画页返回";
+        sysReturnEventName = "用户在降温动画页返回";
 
         viewPageEventName = "用户在降温动画页浏览";
         viewPageEventCode = "cool_animation_page_view_page";
@@ -599,13 +597,13 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_process)
     public void onMLayoutProcessClicked() {
-        StatisticsUtils.trackClick("running_application_click ", "用户在降温扫描完成后的诊断页点击运行应用", source_page, currentPageId);
+        StatisticsUtils.trackClick("running_application_click ", "用户在降温扫描完成后的诊断页点击运行应用", sourcePageId, currentPageId);
         startActivity(RouteConstants.PROCESS_INFO_ACTIVITY);
     }
 
     @OnClick(R.id.layout_hardware)
     public void onMLayoutHardwareClicked() {
-        StatisticsUtils.trackClick("running_parts_click ", "用户在降温扫描完成后的诊断页点击运行部件", source_page, currentPageId);
+        StatisticsUtils.trackClick("running_parts_click ", "用户在降温扫描完成后的诊断页点击运行部件", sourcePageId, currentPageId);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
