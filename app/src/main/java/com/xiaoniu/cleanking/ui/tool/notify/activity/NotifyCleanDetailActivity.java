@@ -6,19 +6,19 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -31,11 +31,13 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,6 +49,9 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 授权后通知栏详情页面
+ */
 public class NotifyCleanDetailActivity extends BaseActivity {
     private XRecyclerView mRecyclerView;
     private View mHeaderView;
@@ -64,6 +69,13 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
+
+    String sourcePage = "";
+    String currentPage = "";
+    String pageviewEventCode = "";
+    String pageviewEventName = "";
+    String returnEventName = "";
+    String sysReturnEventName = "";
 
     public static void startNotificationCleanActivity(Context context) {
         if (context != null) {
@@ -91,6 +103,13 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        currentPage = "notification_clean_result_page";
+        pageviewEventName = "用户在通知清理诊断页浏览";
+        pageviewEventCode = "notification_clean_result_page_view_page";
+        returnEventName = "用户在通知清理诊断页返回";
+        sysReturnEventName = "用户在通知清理诊断页返回";
+        sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
+
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         getAccessListBelow();
@@ -106,10 +125,24 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mRecyclerView.setHeaderView(mHeaderView);
         hideToolBar();
         mCleanAnimView = findViewById(R.id.view_clean_anim);
-        mCleanAnimView.setAnimationEnd(new AnimationEnd() {
+        //已清理圆形动画监控
+        mCleanAnimView.setAnimationStateListener(new AnimationStateListener() {
             @Override
             public void onAnimationEnd() {
                 showCleanFinishView();
+            }
+
+            @Override
+            public void onAnimationStart() {
+                currentPage = "notification_clean_success_page";
+                pageviewEventName = "通知清理结果页展示页浏览";
+                pageviewEventCode = "notification_clean_success_page_view_page";
+                returnEventName = "通知清理结果页展示页返回";
+                sysReturnEventName = "通知清理结果页展示页返回";
+                sourcePage = "notification_clean_animation_page";
+                NiuDataAPI.onPageStart( pageviewEventCode, pageviewEventName);
+                NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
+
             }
         });
     }
@@ -118,28 +151,32 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         //通知栏清理浏览"
-        StatisticsUtils.trackClick("Notice_Bar_Cleaning_view_page", "\"通知栏清理\"浏览", "home_page", "Notice_Bar_Cleaning_page");
+        NiuDataAPI.onPageStart(pageviewEventCode, pageviewEventName);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
     }
 
     @Override
     protected void setListener() {
         mIvBack.setOnClickListener(v -> {
             finish();
-            if (isCleanFinish) {
-                //通知栏清理完成返回 点击",
-                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_Return_click", "\"通知栏清理完成返回\"点击", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
-            } else {
-                //通知栏清理返回 点击",
-                StatisticsUtils.trackClick("Notice_Bar_Cleaning_Return_click", "\"通知栏清理返回\"点击", "home_page", "Notice_Bar_Cleaning_page");
-            }
+                //通知栏清理返回 点击"
+                StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
         });
+
         mIvSet.setOnClickListener(v -> {
             NotifyCleanSetActivity.start(NotifyCleanDetailActivity.this);
             //通知栏清理返回 点击",
-            StatisticsUtils.trackClick("Notification_Bar_Cleaning_Settings_click", "\"通知栏清理设置\"点击", "home_page", "Notice_Bar_Cleaning_page");
+            StatisticsUtils.trackClick("whitelist_click", "用户在通知清理诊断页点击白名单按钮", sourcePage, currentPage);
         });
 
         mTvDelete.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("cleaning_button_click", "用户在通知栏清理扫描结果页点击【清理】按钮", sourcePage, currentPage);
             //通知栏清理
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.NOTITY);
             mIsClearNotification = true;
@@ -153,7 +190,20 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             mCleanAnimView.startTopAnim(false);
             //title bar
             showBarColor(getResources().getColor(R.color.color_06C581));
-//            mCleanAnimView.setOnColorChangeListener(this::showBarColor);
+
+            //----进入动画页
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
+
+
+            currentPage = "notification_clean_animation_page";
+            pageviewEventName = "用户在通知清理动画页浏览";
+            pageviewEventCode = "notification_clean_animation_page_view_page";
+            returnEventName = "用户在通知清理动画页返回";
+            sysReturnEventName = "用户在通知清理动画页返回";
+            sourcePage = "notification_clean_result_page";
+            NiuDataAPI.onPageStart( pageviewEventCode, pageviewEventName);
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
+
         });
     }
 
@@ -206,6 +256,12 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
+        super.onBackPressed();
+    }
+
     private void showCleanFinishView() {
 //        isCleanFinish = true;
 //        /*显示完成页*/
@@ -213,7 +269,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 //        showBarColor(getResources().getColor(R.color.color_06C581));
 //        mCleanAnimView.setViewTrans();
         //通知栏清理完成浏览
-        StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
+//        StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
 
         //保存通知栏清理完成时间
         if (PreferenceUtil.getNotificationCleanTime()) {
@@ -230,6 +286,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
                 }
             }
         }
+        AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
@@ -246,6 +303,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         }
         finish();
     }
+
 
     /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况

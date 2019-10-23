@@ -217,7 +217,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * 清理完成
      */
     public void cleanFinish() {
-        AppHolder.getInstance().setCleanFinishSourcePageId("scanning_result_page");
+        AppHolder.getInstance().setCleanFinishSourcePageId("clean_finish_annimation_page");
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             PreferenceUtil.saveNowCleanTime();
         }

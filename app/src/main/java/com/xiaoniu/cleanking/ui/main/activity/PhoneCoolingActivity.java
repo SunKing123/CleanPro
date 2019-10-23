@@ -790,6 +790,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                         }
                     }
                 }
+                AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
