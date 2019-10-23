@@ -5,9 +5,11 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/v_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen_20dp">
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/v_advert"
@@ -83,6 +85,28 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_17sp" />
         </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/v_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_close_error"
+            android:layout_width="@dimen/dimen_35dp"
+            android:layout_height="@dimen/dimen_35dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/dimen_16dp"
+            android:src="@drawable/icon_close" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/icon_no_net" />
 
     </RelativeLayout>
 

@@ -51,32 +51,4 @@ public class SplashHotPresenter extends RxPresenter<SplashADHotActivity, MainMod
             }
         });
     }
-
-    /**
-     * 过审
-     */
-    public void getAuditSwitch() {
-        mModel.queryAuditSwitch(new Common4Subscriber<AuditSwitch>() {
-
-            @Override
-            public void getData(AuditSwitch auditSwitch) {
-                mView.getAuditSwitch(auditSwitch);
-            }
-
-            @Override
-            public void showExtraOp(String code, String message) {
-                mView.getAuditSwitch(null);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getAuditSwitch(null);
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getAuditSwitch(null);
-            }
-        });
-    }
 }

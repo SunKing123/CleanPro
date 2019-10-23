@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
@@ -43,12 +44,22 @@ public class GlideUtils {
             @Override
             public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
                 if (resource instanceof GifDrawable) {
-                    //加载一次
+                    //加载次数
                     ((GifDrawable) resource).setLoopCount(count);
                 }
                 return false;
             }
         }).into(imageView);
+    }
+
+    /**
+     * 加载本地Gif
+     * @param context
+     * @param resourceId
+     * @param imageView
+     */
+    public static void loadDrawble(Context context, int resourceId, ImageView imageView) {
+        Glide.with(context).load(resourceId).into(imageView);
     }
 
 }

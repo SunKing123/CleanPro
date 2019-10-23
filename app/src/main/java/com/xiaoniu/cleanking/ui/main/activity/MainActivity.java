@@ -147,11 +147,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         isFirstCreate = true;
         initFragments();
 //        状态（0=隐藏，1=显示）
+        Log.d("XiLei", "过审开关 =" + SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1"));
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
-//                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, "资讯"))
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
         } else {
             mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, getString(R.string.top));

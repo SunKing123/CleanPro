@@ -8,12 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,15 +23,12 @@ import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -80,26 +74,12 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
      * 延迟跳转
      */
     public void skip() {
-        mPresenter.getAuditSwitch();
         if (Build.VERSION.SDK_INT >= 23) {
             checkAndRequestPermission();
         } else {
             // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
             fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
         }
-    }
-
-    public void getAuditSwitch(AuditSwitch auditSwitch) {
-        if (auditSwitch == null) {
-            //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
-            SPUtil.setString(SplashADHotActivity.this, AppApplication.AuditSwitch, "1");
-        } else {
-            SPUtil.setString(SplashADHotActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
-        }
-        /*if (!PreferenceUtil.isNoFirstOpenApp()) {
-            PreferenceUtil.saveFirstOpenApp();
-            jumpActivity();
-        }*/
     }
 
     public void jumpActivity() {
@@ -336,9 +316,11 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
-                mAdvertId = switchInfoList.getAdvertId();
+        if (null != list && null != list.getData() && list.getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+                if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                }
             }
         }
         skip();

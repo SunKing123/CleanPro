@@ -41,12 +41,12 @@ public class InsertScreenFinishPresenter extends RxPresenter<InsertScreenFinishA
 
             @Override
             public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
+                mView.getSwitchInfoListFail(message);
             }
 
             @Override
             public void netConnectError() {
-                mView.getSwitchInfoListFail();
+                mView.getSwitchInfoListConnectError();
             }
         });
     }

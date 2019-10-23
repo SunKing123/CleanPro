@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     private ImageView iv_advert_logo, iv_advert;
     private TextView tv_advert, tv_advert_content, mBtnDownload;
-    private View mViewDownload;
+    private View mViewDownload, mViewContent, mErrorV;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -73,6 +74,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         mTitle = getIntent().getStringExtra("title");
         mPresenter.getScreentSwitch();
         findViewById(R.id.iv_close).setOnClickListener(this);
+        findViewById(R.id.iv_close_error).setOnClickListener(this);
         mContainer = findViewById(R.id.native_ad_container);
         mMediaView = findViewById(R.id.gdt_media_view);
         iv_advert_logo = findViewById(R.id.iv_advert_logo);
@@ -81,6 +83,8 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         tv_advert_content = findViewById(R.id.tv_advert_content);
         mViewDownload = findViewById(R.id.v_download);
         mBtnDownload = findViewById(R.id.tv_download);
+        mViewContent = findViewById(R.id.v_content);
+        mErrorV = findViewById(R.id.v_error);
     }
 
     /**
@@ -89,6 +93,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
+        if (null == list || null == list.getData() || list.getData().size() <= 0) return;
         Log.d(TAG, "getSwitchInfoListSuccess -- list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
 
@@ -127,7 +132,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-
             }
         }
         Log.d(TAG, "mAdvertId=" + mAdvertId);
@@ -138,8 +142,21 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      *
      * @return
      */
-    public void getSwitchInfoListFail() {
+    public void getSwitchInfoListFail(String message) {
+        mViewContent.setVisibility(View.GONE);
+        mErrorV.setVisibility(View.VISIBLE);
+        ToastUtils.showShort(message);
+    }
 
+    /**
+     * 拉取广告开关失败
+     *
+     * @return
+     */
+    public void getSwitchInfoListConnectError() {
+        mViewContent.setVisibility(View.GONE);
+        mErrorV.setVisibility(View.VISIBLE);
+        ToastUtils.showShort("网络连接失败，请假查您的网络连接");
     }
 
     private void initNativeUnifiedAD() {
@@ -147,9 +164,12 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
             @Override
             public void onNoAD(AdError adError) {
+                Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
                 mContainer.setVisibility(View.GONE);
-                Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
+                mContainer.setVisibility(View.GONE);
+                mViewContent.setVisibility(View.GONE);
+                mErrorV.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -204,8 +224,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         String functionName = "";
         String functionPosition = "";
         switch (v.getId()) {
-
             case R.id.iv_close:
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
+                finish();
+                break;
+            case R.id.iv_close_error:
                 StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
                 finish();
                 break;

@@ -25,7 +25,6 @@ import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -81,6 +80,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private Disposable mSubscription;
 
     private String mAdvertId = ""; //冷启动广告id
+    private boolean mIsOpen; //冷启动广告开关
 
 
     @Override
@@ -98,30 +98,55 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      */
     public void skip() {
         this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            mPresenter.getAuditSwitch();
 
             if (PreferenceUtil.isNoFirstOpenApp()) {
                 if (Build.VERSION.SDK_INT >= 23) {
                     checkAndRequestPermission();
                 } else {
-                    // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                    fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+                    if (mIsOpen) {
+                        Log.d("XiLei", "123");
+                        // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                        fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+                    }
                 }
             }
         });
     }
 
+    /**
+     * 获取过审开关成功
+     *
+     * @param auditSwitch
+     */
     public void getAuditSwitch(AuditSwitch auditSwitch) {
         if (auditSwitch == null) {
             //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
+            Log.d("XiLei", "111111");
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
         } else {
+            Log.d("XiLei", "222222");
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
+            Log.d("XiLei", "aaaa");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
+        } else if (auditSwitch.getData().equals("0")) {
+            Log.d("XiLei", "bbb");
+            this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                jumpActivity();
+            });
+        } else if (auditSwitch.getData().equals("1")) {
+            Log.d("XiLei", "ccc");
+            mPresenter.getSwitchInfoList();
         }
+    }
+
+    /**
+     * 获取过审开关失败
+     */
+    public void getAuditSwitchFail() {
+        mPresenter.getSwitchInfoList();
     }
 
     public void jumpActivity() {
@@ -184,7 +209,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            if (mIsOpen) {
+                Log.d("XiLei", "456");
+                fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            } else {
+                jumpActivity();
+            }
+            ;
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -206,7 +237,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
-            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            if (mIsOpen) {
+                Log.d("XiLei", "789");
+                fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            }
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -231,7 +265,18 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         fetchSplashADTime = System.currentTimeMillis();
 
         //后台控制是否显示开关
-        if (AppHolder.getInstance() == null || AppHolder.getInstance().getSwitchInfoList() == null || AppHolder.getInstance().getSwitchInfoList().getData() == null) {
+
+        if (mIsOpen) {
+            splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
+            splashAD.fetchAndShowIn(adContainer);
+            return;
+        } else {
+            jumpActivity();
+            return;
+        }
+
+        /*if (AppHolder.getInstance() == null || AppHolder.getInstance().getSwitchInfoList() == null || AppHolder.getInstance().getSwitchInfoList().getData() == null) {
+            Log.d("XiLei", "aaaaaaaaa");
             jumpActivity();
         } else {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
@@ -241,12 +286,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                         splashAD.fetchAndShowIn(adContainer);
                         return;
                     } else {
+                        Log.d("XiLei", "bbbb");
                         jumpActivity();
                         return;
                     }
                 }
             }
-        }
+        }*/
     }
 
     @Override
@@ -351,6 +397,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
+
+        mPresenter.getAuditSwitch();
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -370,10 +418,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page",extension);
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
         });
-
-        mPresenter.getSwitchInfoList();
     }
 
     /**
@@ -382,9 +428,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
-                mAdvertId = switchInfoList.getAdvertId();
+        if (null != list && null != list.getData() && list.getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+                if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    mIsOpen = switchInfoList.isOpen();
+                    Log.d("XiLei", "mIsOpen=" + mIsOpen);
+                }
             }
         }
         skip();
@@ -396,7 +446,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-        skip();
+        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
+            PreferenceUtil.saveFirstOpenApp();
+            jumpActivity();
+        });
     }
 
     @Override
