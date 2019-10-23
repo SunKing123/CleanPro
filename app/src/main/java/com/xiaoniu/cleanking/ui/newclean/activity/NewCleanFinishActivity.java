@@ -120,7 +120,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
 
-    public static String sourcePage ="";
+    public static String sourcePage = "";
     public static String currentPage = "";
     String createEventCode = "";
     String createEventName = "";
@@ -629,19 +629,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 是否显示推荐功能项
      */
     private void showTool() {
-        Log.d("XiLei", "mRamScale=" + mRamScale);
-        Log.d("XiLei", "PreferenceUtil.getCleanTime()=" + PreferenceUtil.getCleanTime());
-        Log.d("XiLei", "PreferenceUtil.isCleanJiaSuUsed()=" + PreferenceUtil.isCleanJiaSuUsed());
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
-                Log.d("XiLei", "aaaaaaaaa11");
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
                 line_quicken.setVisibility(View.VISIBLE);
             }
             if (PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
-                    Log.d("XiLei", "aaaaaaaaa22");
                     mShowCount++;
                     v_quicken.setVisibility(View.VISIBLE);
                     line_quicken.setVisibility(View.VISIBLE);
@@ -650,7 +645,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         if (!getString(R.string.tool_super_power_saving).contains(mTitle)) {
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
-                Log.d("XiLei", "bbbbbbbb111");
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
                 line_power.setVisibility(View.VISIBLE);
@@ -658,7 +652,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
-                    Log.d("XiLei", "bbbbbbbb222");
                     mShowCount++;
                     v_power.setVisibility(View.VISIBLE);
                     line_power.setVisibility(View.VISIBLE);
@@ -669,7 +662,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
-                Log.d("XiLei", "cccccccccc111");
                 mShowCount++;
                 v_notification.setVisibility(View.VISIBLE);
                 line_notification.setVisibility(View.VISIBLE);
@@ -677,10 +669,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
                 if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     // 通知栏清理间隔时间至少3分钟 否则隐藏
-                    Log.d("XiLei", "cccccccccc222");
                     mShowCount++;
                     v_notification.setVisibility(View.VISIBLE);
-                    line_notification.setVisibility(View.VISIBLE);
+                    if (mShowCount < 3) {
+                        line_notification.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }
@@ -689,23 +682,24 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (PreferenceUtil.getWeChatCleanTime() && !PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
                 if (mShowCount >= 3) return;
-                Log.d("XiLei", "dddddddddd");
                 mShowCount++;
                 v_wechat.setVisibility(View.VISIBLE);
-                line_wechat.setVisibility(View.VISIBLE);
+                if (mShowCount < 3) {
+                    line_wechat.setVisibility(View.VISIBLE);
+                }
             }
         }
 
         if (mShowCount >= 3) return;
-        Log.d("XiLei", "eeeeeee");
         mShowCount++;
         v_file.setVisibility(View.VISIBLE);
-        line_file.setVisibility(View.VISIBLE);
+        if (mShowCount < 3) {
+            line_file.setVisibility(View.VISIBLE);
+        }
 
         if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && PreferenceUtil.getCoolingCleanTime() && !PreferenceUtil.isCleanCoolUsed()) {
             // 手机降温间隔时间至少3分钟 否则隐藏
             if (mShowCount >= 3) return;
-            Log.d("XiLei", "ffffffffff");
             mShowCount++;
             v_cool.setVisibility(View.VISIBLE);
         }
@@ -735,6 +729,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 break;
             case R.id.v_power:
                 //超强省电
+                v_power.setEnabled(false);
                 functionName = "超强省电";
                 functionPosition = "2";
                 powerClean();
@@ -943,12 +938,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     public void onBackPressed() {
-            super.onBackPressed();
-            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("system_return_click", sysReturnEventName, "selected_page", "one_click_acceleration_clean_up_page");
-            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                StatisticsUtils.trackClick("system_return_click", sysReturnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
-            }
+        super.onBackPressed();
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, "selected_page", "one_click_acceleration_clean_up_page");
+        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+        }
         /*
         if (Jzvd.backPress()) {
             return;
@@ -1011,6 +1006,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void onResume() {
+        v_power.setEnabled(true);
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         } else {

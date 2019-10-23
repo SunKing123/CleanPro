@@ -45,13 +45,11 @@ public class CleanFinishAdvertisementPresenter extends RxPresenter<CleanFinishAd
 
             @Override
             public void showExtraOp(String message) {
-                Log.d("XiLei", "message=" + message);
                 mView.getSwitchInfoListFail(message);
             }
 
             @Override
             public void netConnectError() {
-                Log.d("XiLei", "netConnectError=" );
                 mView.getSwitchInfoListConnectError();
             }
         });

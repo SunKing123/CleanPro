@@ -363,7 +363,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         PreferenceUtil.saveCleanPowerUsed(true);
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (AppHolder.getInstance().getSwitchInfoList() != null) {
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();

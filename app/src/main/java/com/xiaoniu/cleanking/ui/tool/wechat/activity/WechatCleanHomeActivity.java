@@ -219,7 +219,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 boolean isOpen = false;
                 //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-                if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                         if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();
@@ -227,11 +228,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                Log.d("XiLei", "isOpen=" + isOpen);
-                Log.d("XiLei", "mRamScale=" + mRamScale);
-                Log.d("XiLei", "mNotifySize=" + mNotifySize);
-                Log.d("XiLei", "mPowerSize=" + mPowerSize);
-                Log.d("XiLei", "微信完成 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
