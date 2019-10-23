@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -80,7 +81,9 @@ public class WechatCleanResultActivity extends SimpleActivity {
         mCleanAnimView.setVisibility(View.VISIBLE);
         mCleanAnimView.startTopAnim(true);
         mCleanAnimView.setListener(() -> finish());
+
         mCleanAnimView.setAnimationEnd(() -> {
+            AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
             Bundle bundle = new Bundle();
             bundle.putString("title", mTitle);
             bundle.putString("num", "");

@@ -254,6 +254,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
             //通知栏清理
             currentPage = "notification_clean_success_page";
+            createEventName = "通知栏清理结果页出现时";
+            createEventCode = "notification_clean_success_page_custom";
+            returnEventName = "通知栏清理结果页出现返回";
+            sysReturnEventName = "通知栏清理结果页出现返回";
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
             currentPage = "cooling_success_page";

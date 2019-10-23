@@ -202,6 +202,8 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
+
+
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));

@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
+import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
@@ -84,10 +85,10 @@ public class NotityCleanAnimView extends RelativeLayout {
     public static final int page_file_clean = 1;
 
     private int currentPage = 0;
-    private AnimationEnd mAnimationEnd;
+    private AnimationStateListener animationStateListener;
 
-    public void setAnimationEnd(AnimationEnd mAnimationEnd) {
-        this.mAnimationEnd = mAnimationEnd;
+    public void setAnimationStateListener(AnimationStateListener listener) {
+        this.animationStateListener = listener;
     }
 
     /**
@@ -414,13 +415,14 @@ public class NotityCleanAnimView extends RelativeLayout {
         mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                if (animationStateListener != null)
+                    animationStateListener.onAnimationStart();
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-               if (mAnimationEnd != null)
-                   mAnimationEnd.onAnimationEnd();
+               if (animationStateListener != null)
+                   animationStateListener.onAnimationEnd();
 //                setViewTrans();
             }
 
