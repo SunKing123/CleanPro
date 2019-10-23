@@ -14,11 +14,13 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SecondLevelEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.model.CleanBigFileModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 
 import java.io.File;
@@ -30,6 +32,9 @@ import javax.inject.Inject;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, CleanBigFileModel> {
 
@@ -271,5 +276,54 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
             return;
         }
         dialog.show();
+    }
+    /**
+     * 获取到可以加速的应用名单Android O以下的获取最近使用情况
+     */
+    @SuppressLint("CheckResult")
+    public void getAccessListBelow() {
+//        mView.showLoadingDialog();
+        Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
+            //获取到可以加速的应用名单
+            FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+            //文件加载进度回调
+            mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
+                @Override
+                public void currentNumber() {
+
+                }
+
+                @Override
+                public void increaseSize(long p0) {
+
+                }
+
+                @Override
+                public void reduceSize(long p0) {
+
+                }
+
+                @Override
+                public void scanFile(String p0) {
+
+                }
+
+                @Override
+                public void totalSize(int p0) {
+
+                }
+            });
+            ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
+            if (listInfo == null) {
+                listInfo = new ArrayList<>();
+            }
+            e.onNext(listInfo);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(strings -> {
+                    if (mView == null) return;
+//                    mView.cancelLoadingDialog();
+                    mView.getAccessListBelow(strings);
+                });
     }
 }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -637,13 +638,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 是否显示推荐功能项
      */
     private void showTool() {
+        Toast.makeText(this, "内存占比=" + mRamScale, Toast.LENGTH_LONG).show(); //暂时注释
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
                 line_quicken.setVisibility(View.VISIBLE);
             }
-            if (PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
+//            if (PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
+            if (!PreferenceUtil.isCleanJiaSuUsed()) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
                     mShowCount++;
                     v_quicken.setVisibility(View.VISIBLE);
@@ -657,7 +660,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 v_power.setVisibility(View.VISIBLE);
                 line_power.setVisibility(View.VISIBLE);
             }
-            if (PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
+//            if (PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
+            if (!PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
                     mShowCount++;
@@ -674,7 +678,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 v_notification.setVisibility(View.VISIBLE);
                 line_notification.setVisibility(View.VISIBLE);
             }
-            if (PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
+//            if (PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
+            if (!PreferenceUtil.isCleanNotifyUsed()) {
                 if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     // 通知栏清理间隔时间至少3分钟 否则隐藏
                     mShowCount++;
@@ -686,8 +691,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         }
 
-        if (!getString(R.string.tool_chat_clear).contains(mTitle) || !getString(R.string.tool_chat_clear_n).contains(mTitle)) {
-            if (PreferenceUtil.getWeChatCleanTime() && !PreferenceUtil.isCleanWechatUsed()) {
+        if (!getString(R.string.tool_chat_clear).contains(mTitle)) {
+//            if (PreferenceUtil.getWeChatCleanTime() && !PreferenceUtil.isCleanWechatUsed()) {
+            if (!PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
                 if (mShowCount >= 3) return;
                 mShowCount++;
@@ -698,6 +704,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         }
 
+        //文件清理
         if (mShowCount >= 3) return;
         mShowCount++;
         v_file.setVisibility(View.VISIBLE);
@@ -705,7 +712,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             line_file.setVisibility(View.VISIBLE);
         }
 
-        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && PreferenceUtil.getCoolingCleanTime() && !PreferenceUtil.isCleanCoolUsed()) {
+//        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && PreferenceUtil.getCoolingCleanTime() && !PreferenceUtil.isCleanCoolUsed()) {
+        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
             // 手机降温间隔时间至少3分钟 否则隐藏
             if (mShowCount >= 3) return;
             mShowCount++;

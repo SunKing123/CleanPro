@@ -3,12 +3,15 @@ package com.xiaoniu.cleanking.utils.update;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 //TODO 待优化
@@ -786,23 +789,35 @@ public class PreferenceUtil {
      *
      * @return
      */
-    public static int getShowCount(String title, int ramScale, int notifSize, int powerSize) {
+    public static int getShowCount(Context context, String title, int ramScale, int notifSize, int powerSize) {
         int count = 0;
 //        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && !PreferenceUtil.isCleanJiaSuUsed()) {  // 一键加速
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || ramScale > 20) {
+            if (!PermissionUtils.isUsageAccessAllowed(context)) {
                 count++;
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || ramScale > 20) {
+                    count++;
+                }
             }
         }
 //        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && !PreferenceUtil.isCleanPowerUsed()) { //超强省电
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || powerSize > 0) {
+            if (!PermissionUtils.isUsageAccessAllowed(context)) {
                 count++;
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || powerSize > 0) {
+                    count++;
+                }
             }
         }
 //        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime() && notifSize > 0) { // 通知栏清理
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && !PreferenceUtil.isCleanNotifyUsed() && notifSize > 0) { // 通知栏清理
-            count++;
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean))) { // 通知栏清理
+            if (!NotifyUtils.isNotificationListenerEnabled()) {
+                count++;
+            } else if (!PreferenceUtil.isCleanNotifyUsed() && notifSize > 0) {
+                count++;
+            }
         }
 //        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && !PreferenceUtil.isCleanWechatUsed()) { // 微信专清

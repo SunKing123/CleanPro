@@ -363,7 +363,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         EventBus.getDefault().post(new QuickenEvent());
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-        if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

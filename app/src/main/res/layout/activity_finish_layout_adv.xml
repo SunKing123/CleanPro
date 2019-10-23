@@ -121,7 +121,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_advert_logo"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/dimen_10dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_10dp"
                     android:textColor="@color/color_404040"
                     android:textSize="@dimen/dimen_17sp" />
 
@@ -131,7 +133,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_advert"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/dimen_10dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_10dp"
                     android:textColor="@color/color_777777"
                     android:textSize="@dimen/dimen_14sp" />
 
@@ -182,6 +186,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@mipmap/icon_no_net"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </LinearLayout>
