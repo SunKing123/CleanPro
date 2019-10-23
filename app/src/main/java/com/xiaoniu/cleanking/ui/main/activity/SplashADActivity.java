@@ -104,7 +104,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                     checkAndRequestPermission();
                 } else {
                     if (mIsOpen) {
-                        Log.d("XiLei", "123");
                         // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
                         fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
                     }
@@ -121,23 +120,18 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     public void getAuditSwitch(AuditSwitch auditSwitch) {
         if (auditSwitch == null) {
             //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
-            Log.d("XiLei", "111111");
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
         } else {
-            Log.d("XiLei", "222222");
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
-            Log.d("XiLei", "aaaa");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
-            Log.d("XiLei", "bbb");
             this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
-            Log.d("XiLei", "ccc");
             mPresenter.getSwitchInfoList();
         }
     }
@@ -146,7 +140,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 获取过审开关失败
      */
     public void getAuditSwitchFail() {
-        mPresenter.getSwitchInfoList();
+        jumpActivity();
     }
 
     public void jumpActivity() {
@@ -210,7 +204,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
             if (mIsOpen) {
-                Log.d("XiLei", "456");
                 fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
             } else {
                 jumpActivity();
@@ -238,7 +231,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
             if (mIsOpen) {
-                Log.d("XiLei", "789");
                 fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
             }
         } else {
@@ -276,7 +268,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         }
 
         /*if (AppHolder.getInstance() == null || AppHolder.getInstance().getSwitchInfoList() == null || AppHolder.getInstance().getSwitchInfoList().getData() == null) {
-            Log.d("XiLei", "aaaaaaaaa");
             jumpActivity();
         } else {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
@@ -286,7 +277,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                         splashAD.fetchAndShowIn(adContainer);
                         return;
                     } else {
-                        Log.d("XiLei", "bbbb");
                         jumpActivity();
                         return;
                     }
@@ -397,7 +387,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
-
         mPresenter.getAuditSwitch();
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
@@ -433,7 +422,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
                     mAdvertId = switchInfoList.getAdvertId();
                     mIsOpen = switchInfoList.isOpen();
-                    Log.d("XiLei", "mIsOpen=" + mIsOpen);
                 }
             }
         }

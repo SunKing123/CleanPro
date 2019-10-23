@@ -109,7 +109,7 @@
     <string name="find_harass_notify">发现骚扰通知</string>
     <string name="power_consumption_num">%s个应用正在耗电</string>
     <string name="finished_clean_notify_hint">开启防骚扰保护</string>
-    <string name="lengthen_time">延长待机时间%s分钟</string>
+    <string name="lengthen_time">延长时间%s分钟</string>
     <string name="optimize_finish">已优化</string>
     <string name="internal_storage_scale_hint">内存占用高，手机运行缓慢</string>
     <string name="quicken_now">立即加速</string>
@@ -127,4 +127,5 @@
     <string name="tool_top_news">头条新闻热点</string>
     <string name="lock_news">看最新时事资讯 娱乐热点</string>
     <string name="lock_click">点击查看</string>
+    <string name="torage_scale_hint">内存占用高</string>
 </resources>

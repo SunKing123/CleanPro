@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -55,6 +57,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -147,12 +150,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
             } else {
                 mShowCount++;
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
-                mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+                if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
+                    mAccIv.setImageResource(R.drawable.icon_yjjs_o);
+                    mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
+                    mAccTv.setText(getString(R.string.torage_scale_hint));
+                } else {
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
+                    mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+                    mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+                }
             }
 
-            Log.d("XiLei", "通知大小=" + NotifyCleanManager.getInstance().getAllNotifications().size());
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
                 mNotiClearIv.setImageResource(R.drawable.icon_home_qq_o);
@@ -184,6 +192,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
                 }
             }
+        }
+        //状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(getActivity(), AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "0")) {
+            viewNews.setVisibility(View.GONE);
+        } else {
+            viewNews.setVisibility(VISIBLE);
         }
     }
 
@@ -310,9 +325,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Subscribe
     public void quickenEvent(QuickenEvent event) {
         --mShowCount;
-
-        Log.d("XiLei", "mShowCount=" + mShowCount);
-        Log.d("XiLei", "AndroidUtil.getElectricityNum(getActivity())=" + AndroidUtil.getElectricityNum(getActivity()));
         mAccFinishIv.setVisibility(View.VISIBLE);
         mAccIv.setImageResource(R.drawable.icon_yjjs);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -369,7 +381,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
             boolean isOpen = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
@@ -416,21 +429,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (!PreferenceUtil.getCleanTime()) {
             boolean isOpen = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
+            Log.d("XiLei", "isOpen---111=" + isOpen);
+            Log.d("XiLei", "mRamScale---111=" + mRamScale);
+            Log.d("XiLei", "mNotifySize---111=" + mNotifySize);
+            Log.d("XiLei", "mPowerSize---111=" + mPowerSize);
+            Log.d("XiLei", "ssssssss---111=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize));
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-
-            Log.d("XiLei", "isOpen=" + isOpen);
-            Log.d("XiLei", "mRamScale=" + mRamScale);
-            Log.d("XiLei", "mNotifySize=" + mNotifySize);
-            Log.d("XiLei", "mPowerSize=" + mPowerSize);
-            Log.d("XiLei", "加速点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
-
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
@@ -464,19 +476,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             boolean isOpen = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-
-            Log.d("XiLei", "isOpen=" + isOpen);
-            Log.d("XiLei", "mRamScale=" + mRamScale);
-            Log.d("XiLei", "mNotifySize=" + mNotifySize);
-            Log.d("XiLei", "mPowerSize=" + mPowerSize);
-            Log.d("XiLei", "省电点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
 
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -564,19 +571,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             boolean isOpen = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-
-            Log.d("XiLei", "isOpen=" + isOpen);
-            Log.d("XiLei", "mRamScale=" + mRamScale);
-            Log.d("XiLei", "mNotifySize=" + mNotifySize);
-            Log.d("XiLei", "mPowerSize=" + mPowerSize);
-            Log.d("XiLei", "微信点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
 
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -604,18 +606,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             boolean isOpen = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-            Log.d("XiLei", "isOpen=" + isOpen);
-            Log.d("XiLei", "mRamScale=" + mRamScale);
-            Log.d("XiLei", "mNotifySize=" + mNotifySize);
-            Log.d("XiLei", "mPowerSize=" + mPowerSize);
-            Log.d("XiLei", "通知点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
 
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -645,18 +643,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             boolean isOpen = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-            Log.d("XiLei", "isOpen=" + isOpen);
-            Log.d("XiLei", "mRamScale=" + mRamScale);
-            Log.d("XiLei", "mNotifySize=" + mNotifySize);
-            Log.d("XiLei", "mPowerSize=" + mPowerSize);
-            Log.d("XiLei", "降温点击 PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize)=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
             if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
@@ -723,7 +717,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
-                mLottieHomeView.setImageAssetsFolder("images_home");
+                mLottieHomeView.setImageAssetsFolder("images_home_finish");
                 mLottieHomeView.playAnimation();
             }
         }
@@ -769,7 +763,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mLottieHomeView.playAnimation();
+
             }
 
             @Override

@@ -194,18 +194,14 @@ public class ToolFragment extends SimpleFragment {
             } else {
 
                 boolean isOpen = false;
-                if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                         if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();
-                            Log.d("XiLei", "工具箱 isOpen=" + isOpen);
                         }
                     }
                 }
-                Log.d("XiLei", "工具箱 mRamScale=" + mRamScale);
-                Log.d("XiLei", "工具箱 mNotifySize=" + mNotifySize);
-                Log.d("XiLei", "工具箱 mPowerSize=" + mPowerSize);
-                Log.d("XiLei", "工具箱 ddd=" + PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize));
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
@@ -239,13 +235,19 @@ public class ToolFragment extends SimpleFragment {
 
                 boolean isOpen = false;
                 //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-                if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                if (AppHolder.getInstance().getSwitchInfoList() != null && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                         if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();
                         }
                     }
                 }
+                Log.d("XiLei", "isOpen---222=" + isOpen);
+                Log.d("XiLei", "mRamScale---222=" + mRamScale);
+                Log.d("XiLei", "mNotifySize---222=" + mNotifySize);
+                Log.d("XiLei", "mPowerSize---222=" + mPowerSize);
+                Log.d("XiLei", "ssssssss---222=" + PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize));
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
@@ -274,7 +276,8 @@ public class ToolFragment extends SimpleFragment {
             } else {
 
                 boolean isOpen = false;
-                if (AppHolder.getInstance().getSwitchInfoList() != null) {
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                         if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();

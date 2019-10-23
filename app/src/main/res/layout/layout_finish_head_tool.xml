@@ -7,7 +7,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_16dp"
+        android:layout_margin="@dimen/dimen_12dp"
         android:background="@drawable/bg_shape_radio_white_12"
         android:orientation="vertical">
         <!--一键加速-->
@@ -62,13 +62,13 @@
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <View
+        <ImageView
             android:id="@+id/line_quicken"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@color/color_F7F7F7"
+            android:background="@drawable/icon_line_hor"
             android:visibility="gone" />
         <!--超强省电-->
         <RelativeLayout
@@ -122,13 +122,13 @@
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <View
+        <ImageView
             android:id="@+id/line_power"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@color/color_F7F7F7"
+            android:background="@drawable/icon_line_hor"
             android:visibility="gone" />
         <!--通知栏清理-->
         <RelativeLayout
@@ -182,13 +182,13 @@
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <View
+        <ImageView
             android:id="@+id/line_notification"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@color/color_F7F7F7"
+            android:background="@drawable/icon_line_hor"
             android:visibility="gone" />
         <!--微信专清-->
         <RelativeLayout
@@ -242,13 +242,13 @@
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <View
+        <ImageView
             android:id="@+id/line_wechat"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@color/color_F7F7F7"
+            android:background="@drawable/icon_line_hor"
             android:visibility="gone" />
         <!--文件清理-->
         <RelativeLayout
@@ -302,13 +302,13 @@
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <View
+        <ImageView
             android:id="@+id/line_file"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@color/color_F7F7F7"
+            android:background="@drawable/icon_line_hor"
             android:visibility="gone" />
         <!--手机降温-->
         <RelativeLayout
@@ -368,10 +368,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/dimen_16dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_12dp"
         android:layout_marginBottom="@dimen/dimen_16dp"
-        android:background="@drawable/bg_shape_radio_white_12"
+        android:background="@drawable/bg_ad_two"
         android:padding="@dimen/dimen_16dp"
         android:visibility="gone">
 

@@ -1,10 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.util.Log;
-import android.widget.Toast;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
@@ -12,7 +11,6 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import javax.inject.Inject;
 
@@ -66,24 +64,25 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
             @Override
             public void getData(AuditSwitch auditSwitch) {
+                Log.d("XiLei", "过审成功");
                 mView.getAuditSwitch(auditSwitch);
             }
 
             @Override
             public void showExtraOp(String code, String message) {
-                Log.d("XiLei", "showExtraOp111");
+                Log.d("XiLei", "过审---showExtraOp");
                 mView.getAuditSwitchFail();
             }
 
             @Override
             public void showExtraOp(String message) {
-                Log.d("XiLei", "showExtraOp222");
+                Log.d("XiLei", "过审---showExtraOp22");
                 mView.getAuditSwitchFail();
             }
 
             @Override
             public void netConnectError() {
-                Log.d("XiLei", "netConnectError");
+                Log.d("XiLei", "过审---netConnectError");
                 mView.getAuditSwitchFail();
             }
         });

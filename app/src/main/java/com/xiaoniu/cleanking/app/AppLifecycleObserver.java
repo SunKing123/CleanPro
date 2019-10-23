@@ -36,7 +36,8 @@ public class AppLifecycleObserver implements LifecycleObserver {
     void onEnterForeground() {
         if (isBack && PreferenceUtil.getHomeBackTime()) {
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (AppHolder.getInstance().getSwitchInfoList() != null) {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                         mContext.startActivity(new Intent(mContext, SplashADHotActivity.class));

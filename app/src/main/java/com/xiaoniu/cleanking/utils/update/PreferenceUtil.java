@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.utils.update;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -789,31 +788,30 @@ public class PreferenceUtil {
      */
     public static int getShowCount(String title, int ramScale, int notifSize, int powerSize) {
         int count = 0;
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
+//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && !PreferenceUtil.isCleanJiaSuUsed()) {  // 一键加速
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || ramScale > 20) {
-                Log.d("XiLei", "111111111");
                 count++;
             }
         }
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
-            Log.d("XiLei", "22222222");
-            count++;
-        }
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
-            Log.d("XiLei", "33333333333");
-            count++;
-        }
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime() && notifSize > 0) { // 通知栏清理
-            Log.d("XiLei", "444444444");
-            count++;
-        }
-        Log.d("XiLei", "555555555555");
-        count++; //文件清理
-        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
+//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && !PreferenceUtil.isCleanPowerUsed()) { //超强省电
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || powerSize > 0) {
-                Log.d("XiLei", "6666666666");
                 count++;
             }
+        }
+//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime() && notifSize > 0) { // 通知栏清理
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && !PreferenceUtil.isCleanNotifyUsed() && notifSize > 0) { // 通知栏清理
+            count++;
+        }
+//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && !PreferenceUtil.isCleanWechatUsed()) { // 微信专清
+            count++;
+        }
+        count++; //文件清理
+//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && !PreferenceUtil.isCleanCoolUsed()) { //手机降温
+            count++;
         }
         return count;
     }

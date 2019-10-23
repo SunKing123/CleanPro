@@ -58,14 +58,19 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_finish"/>
+
     <com.qq.e.ads.nativ.widget.NativeAdContainer
         android:id="@+id/native_ad_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_16dp"
-        android:layout_marginTop="-35dp"
-        android:layout_marginRight="@dimen/dimen_16dp"
-        android:background="@drawable/bg_shape_radio_white_12"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginTop="-60dp"
+        android:layout_marginRight="@dimen/dimen_12dp"
+        android:background="@drawable/bg_ad_one"
         android:padding="@dimen/dimen_16dp"
         android:visibility="gone">
 

@@ -194,7 +194,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
         if (null == list || null == list.getData() || list.getData().size() <= 0) return;
-        Log.d("XiLei", "getSwitchInfoListSuccess -- list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
 
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
