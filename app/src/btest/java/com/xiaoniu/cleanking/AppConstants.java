@@ -8,8 +8,7 @@ package com.xiaoniu.cleanking;
 public class AppConstants {
     //测试环境服务器
 //    public static String Base_Host = "http://clsystem-mclean-dev-default.fqt188.com";
-//    public static String Base_Host = "http://clsystem-mclean-fat-default.fqt188.com";
-    public static String Base_Host = "http://192.168.128.238:8804";
+    public static String Base_Host = "http://clsystem-mclean-fat-default.fqt188.com";
 
     public static String Base_H5_Host = "http://testwlqlapph5.fqt188.com";//H5路径
     public static String BIGDATA_MD = "http://testwkdataprobe.fqt188.com/wkdataprobe/apis";//大数据买点

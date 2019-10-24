@@ -216,6 +216,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         setListener();
         loadData();
     }
+
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
@@ -668,6 +669,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
+            Log.d("XiLei", "完成页通知权限=" + NotifyUtils.isNotificationListenerEnabled());
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
                 mShowCount++;
@@ -1092,7 +1094,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "powersave_success_page_view_page", "省电结果出现时");
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle) ) {
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
@@ -1274,14 +1276,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
                 //广告请求
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
@@ -1396,7 +1398,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
