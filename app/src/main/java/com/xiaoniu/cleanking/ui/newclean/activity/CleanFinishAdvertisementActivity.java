@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishAdvertisementPresenter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -55,7 +56,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     private ImageView iv_advert_logo, iv_advert, mErrorIv;
     private TextView tv_advert, tv_advert_content;
     private TextView mBtnDownload;
-    private View mViewContent, mViewDownload;
+    private View mViewContent;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -93,7 +94,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         tv_advert = findViewById(R.id.tv_advert);
         tv_advert_content = findViewById(R.id.tv_advert_content);
 
-        mViewDownload = findViewById(R.id.v_download);
         mBtnDownload = findViewById(R.id.tv_download);
         changeUI(getIntent());
     }
@@ -167,7 +167,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他炫酷功能");
                 }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
                 //微信专情
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
@@ -211,7 +211,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {//微信专情
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {//微信专情
                 if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
@@ -221,17 +221,17 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            }else if (getString(R.string.tool_qq_clear).contains(mTitle)) { //QQ专清
+            } else if (getString(R.string.tool_qq_clear).contains(mTitle)) { //QQ专清
                 if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            }  else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
+            } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
                 if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            }else { //立即清理
+            } else { //立即清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
@@ -247,6 +247,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * @return
      */
     public void getSwitchInfoListFail(String message) {
+        mBtnDownload.setVisibility(View.GONE);
         mViewContent.setVisibility(View.GONE);
         mErrorIv.setVisibility(View.VISIBLE);
         ToastUtils.showShort(message);
@@ -258,6 +259,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * @return
      */
     public void getSwitchInfoListConnectError() {
+        mBtnDownload.setVisibility(View.GONE);
         mViewContent.setVisibility(View.GONE);
         mErrorIv.setVisibility(View.VISIBLE);
         ToastUtils.showShort("网络连接失败，请假查您的网络连接");
@@ -270,6 +272,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
                 mContainer.setVisibility(View.GONE);
+                mBtnDownload.setVisibility(View.GONE);
                 mViewContent.setVisibility(View.GONE);
                 mErrorIv.setVisibility(View.VISIBLE);
             }
@@ -323,6 +326,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         switch (v.getId()) {
             case R.id.btnLeft:
+                EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
                 finish();
                 break;
         }
@@ -340,6 +344,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
     }
 
     @Override
@@ -409,7 +414,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         List<View> clickableViews = new ArrayList<>();
         // 所有广告类型，注册mDownloadButton的点击事件
-        clickableViews.add(mViewDownload);
+        clickableViews.add(mBtnDownload);
         ad.bindAdToView(this, mContainer, null, clickableViews);
 
         // 设置广告事件监听

@@ -131,7 +131,7 @@
                         android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
-                        android:text="@string/tool_chat_clear_n"
+                        android:text="@string/tool_chat_clear"
                         android:textColor="@color/color_333333"
                         android:textSize="14sp" />
                     <TextView
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_toRightOf="@id/iv_icon_chat"
-                        android:text="@string/tool_chat_clear_n"
+                        android:text="@string/tool_chat_clear"
                         android:visibility="gone"
                         android:textColor="@color/color_333333"
                         android:textSize="14sp" />
@@ -206,7 +206,7 @@
                         android:id="@+id/tv_qq_title"
                         android:layout_width="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
-                        android:text="@string/tool_qq_clear_n"
+                        android:text="@string/tool_qq_clear"
                         android:textSize="14sp"
                         android:layout_marginLeft="@dimen/dimen_12dp"
                         android:layout_toRightOf="@id/iv_icon_qq"
@@ -216,7 +216,7 @@
                     <TextView
                         android:id="@+id/tv_qq_gb_title"
                         android:layout_width="wrap_content"
-                        android:text="@string/tool_qq_clear_n"
+                        android:text="@string/tool_qq_clear"
                         android:textSize="14sp"
                         android:layout_marginLeft="@dimen/dimen_12dp"
                         android:visibility="gone"
