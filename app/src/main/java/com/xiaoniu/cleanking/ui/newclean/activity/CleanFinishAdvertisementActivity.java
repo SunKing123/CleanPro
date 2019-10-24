@@ -107,6 +107,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         mBtnDownload = findViewById(R.id.tv_download);
         changeUI(getIntent());
         getPageData();
+
     }
 
     @Override
@@ -335,6 +336,11 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         switch (v.getId()) {
             case R.id.btnLeft:
+                if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+                    StatisticsUtils.trackClick("return_back", returnEventName,sourcePage, "one_click_acceleration_clean_up_page");
+                } else {
+                    StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
+                }
                 finish();
                 break;
         }
@@ -351,7 +357,13 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     @Override
     public void onBackPressed() {
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
+        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName,  sourcePage, currentPage);
+        }
         super.onBackPressed();
+
     }
 
     @Override
@@ -419,6 +431,9 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         } else {
             currentPage = "clean_up_page_view_immediately";
         }
+
+        //页面创建事件埋点
+        StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
     }
 
     /*---------------------------------------- 埋点---------------------------------------------------------------------*/
@@ -494,6 +509,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     }
     @Override
     protected void onPause() {
+        onPageEnd();
         Jzvd.releaseAllVideos();
         super.onPause();
     }

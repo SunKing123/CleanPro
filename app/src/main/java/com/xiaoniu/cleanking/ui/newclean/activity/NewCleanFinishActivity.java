@@ -859,7 +859,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_back", returnEventName, AppHolder.getInstance().getSourcePageId(), "one_click_acceleration_clean_up_page");
+                StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, "one_click_acceleration_clean_up_page");
             } else {
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
@@ -950,7 +950,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, "selected_page", "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage);
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         }
         /*
         if (Jzvd.backPress()) {
