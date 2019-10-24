@@ -918,7 +918,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                mTvCleanType.setVisibility(VISIBLE);
             }
 
             @Override

@@ -227,9 +227,10 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="24dp"
+                        android:visibility="gone"
                         android:text="@string/tool_home_hint"
                         android:textColor="@color/white"
-                        android:textSize="14sp" />
+                        android:textSize="15sp" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
