@@ -27,6 +27,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.OtherJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PathData;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -156,23 +157,33 @@ public class FileQueryUtils {
         otherGroup.isChecked = true;
         otherGroup.isExpand = true;
         otherGroup.mChildren = new ArrayList<>();
+        otherGroup.otherChildren = new ArrayList<>();
         otherGroup.mSize += 0;
+
+        ArrayList<OtherJunkInfo> otherList = new ArrayList<>();
         File outFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
         Map<String, String> otherPathMap = FileUtils.otherAllkFiles(outFile);
         for (final Map.Entry<String, String> entry : otherPathMap.entrySet()) {
             if (new File(entry.getKey()).isFile()) { //文件路径
                 File cachefile = new File(entry.getKey());
-
                 if (cachefile.exists()) {
-                    otherGroup.mSize += cachefile.length();
+                    OtherJunkInfo otherJunkInfo = new OtherJunkInfo();
+                    otherJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
+                    otherJunkInfo.setChecked(true);
+                    otherJunkInfo.setPackageName("other");
+                    otherJunkInfo.setGarbagetype("TYPE_OTHER");
+                    otherJunkInfo.setGarbageSize(outFile.length());
+                    otherList.add(otherJunkInfo);
+
+                    otherGroup.mSize += otherJunkInfo.getGarbageSize();
                     if (mScanFileListener != null) {
                         mScanFileListener.increaseSize(cachefile.length());
                     }
                 }
             }
         }
+        otherGroup.getOtherChildren().addAll(otherList);
         return otherGroup;
-
     }
 
     /**
@@ -1497,7 +1508,7 @@ public class FileQueryUtils {
 
     private Map<String, String> checkAllGarbageFolder(final File file) {
         final HashMap<String, String> hashMap = new HashMap<String, String>();
-        checAllkFiles(hashMap, file);
+        checAllkFiles(hashMap, file,0);
         return hashMap;
     }
 
@@ -1508,22 +1519,18 @@ public class FileQueryUtils {
      * @param map
      * @param file
      */
-    private void checAllkFiles(final Map<String, String> map, final File file) {
+    private void checAllkFiles(final Map<String, String> map, final File file,int t) {
         File[] listFiles = file.listFiles();
-        if (listFiles != null && listFiles.length > 0) {
+        if (listFiles != null && listFiles.length > 0 && t < 2) {
             for (File file2 : listFiles) {
                 if (file2.isDirectory()) {//文件夹
-                    checAllkFiles(map, file2);
+                    checAllkFiles(map, file2, t+1);
                 } else { //文件类型
                     map.put(file2.getAbsolutePath(), "残留文件");
                 }
             }
         } else {
-            try {
-                file.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+           return;
         }
 
     }

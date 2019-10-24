@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.OtherJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.common.utils.ContextUtils;
 
@@ -142,6 +143,7 @@ public class CleanUtil {
 
     }
 
+    //释放指定目录文件垃圾
     public static long freeJunkInfos(ArrayList<FirstJunkInfo> junks) {
         long total = 0;
         if (junks != null) {
@@ -157,9 +159,9 @@ public class CleanUtil {
                         for (SecondJunkInfo secondlevelGarbageInfo : junks.get(i2).getSubGarbages()) {
                             if (secondlevelGarbageInfo != null) {
                                 try {
-                                    if(secondlevelGarbageInfo.getFilecatalog()!=null){
+                                    if (secondlevelGarbageInfo.getFilecatalog() != null) {
                                         File delFile = new File(secondlevelGarbageInfo.getFilecatalog());
-                                        if(delFile!=null&& delFile.exists()){
+                                        if (delFile != null && delFile.exists()) {
                                             com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(delFile);
                                         }
                                     }
@@ -172,7 +174,7 @@ public class CleanUtil {
                         }
                     }
                     try {
-                        if(junks.get(i2).getGarbageCatalog()!=null){
+                        if (junks.get(i2).getGarbageCatalog() != null) {
                             File delFile = new File(junks.get(i2).getGarbageCatalog());
                             if (delFile != null && delFile.exists()) {
                                 com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(new File(junks.get(i2).getGarbageCatalog()));
@@ -190,20 +192,44 @@ public class CleanUtil {
         return total;
     }
 
+
+    //释放指定目录文件垃圾
+    public static long freeOtherJunkInfos(ArrayList<OtherJunkInfo> junks) {
+        long total = 0;
+        if (junks != null) {
+            for (OtherJunkInfo otherJunkInfo : junks) {
+                total += otherJunkInfo.getGarbageSize();
+                if (otherJunkInfo != null) {
+                    try {
+                        if (otherJunkInfo.getFilecatalog() != null) {
+                            File delFile = new File(otherJunkInfo.getFilecatalog());
+                            if (delFile != null && delFile.exists()) {
+                                com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(delFile);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
     //计算当前一级总数
     public static long getTotalSize(HashMap<Integer, JunkGroup> mJunkGroups) {
         long size = 0L;
         for (JunkGroup group : mJunkGroups.values()) {
-            if(group.mChildren.size()>0){
+            if (group.mChildren.size() > 0) {
                 for (FirstJunkInfo firstJunkInfo : group.mChildren) {
                     if (firstJunkInfo.isAllchecked()) {
                         size += firstJunkInfo.getTotalSize();
                     }
                 }
-            } else if(group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean))&& group.isChecked){//其他垃圾类目单独处理
-                size+= group.mSize;
-            } else if(group.mName.equals(ContextUtils.getContext().getString(R.string.process_clean))&& group.isChecked){
-                size+= group.mSize;
+            } else if (group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean)) && group.isChecked) {//其他垃圾类目单独处理
+                size += group.mSize;
+            } else if (group.mName.equals(ContextUtils.getContext().getString(R.string.process_clean)) && group.isChecked) {
+                size += group.mSize;
             }
 
         }

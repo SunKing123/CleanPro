@@ -288,7 +288,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();
                 if (value.mChildren != null && value.mChildren.size() > 0) {
-                    if ("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())) {
+                    if ("TYPE_PROCESS".equals(value.mChildren.get(0).getGarbageType())) { //运行内存
                         for (FirstJunkInfo info : value.mChildren) {
                             if (info.isAllchecked()) {
                                 total += info.getTotalSize();
@@ -298,14 +298,24 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                             }
                         }
 
-
-                    } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) {
+                    } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) { //缓存
+                        for (FirstJunkInfo info : value.mChildren) {
+                            if (!info.isAllchecked()) {
+                                isCacheCheckAll = false;
+                            }
+                        }
                         long l = CleanUtil.freeJunkInfos(value.mChildren);
                         total += l;
-                    } else if ("TYPE_APK".equals(value.mChildren.get(0).getGarbageType())) {
+                    } else if ("TYPE_APK".equals(value.mChildren.get(0).getGarbageType())) { //apk文件
                         long l1 = CleanUtil.freeJunkInfos(value.mChildren);
                         total += l1;
+                    } else if ("TYPE_LEAVED".equals(value.mChildren.get(0).getGarbageType())) {//残留垃圾
+                        long leavedCache = CleanUtil.freeJunkInfos(value.mChildren);
+                        total += leavedCache;
                     }
+                }else if(entry.getKey() ==4 && value.otherChildren.size()>0){//其他垃圾处理
+                    long otherCache = CleanUtil.freeOtherJunkInfos(value.otherChildren);
+                    total += otherCache;
                 }
             }
 
