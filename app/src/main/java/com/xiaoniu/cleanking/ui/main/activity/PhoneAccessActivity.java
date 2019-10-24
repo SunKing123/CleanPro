@@ -363,7 +363,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         EventBus.getDefault().post(new QuickenEvent());
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-        if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -528,6 +528,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
+            if (str_totalSize.contains(",")) {
+                str_totalSize = str_totalSize.replace(",", "");
+            }
+            Log.d("XiLei", "str_totalSize=" + str_totalSize);
             sizeMb = Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim()).intValue();
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";

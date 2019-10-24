@@ -73,7 +73,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
         if (!TextUtils.isEmpty(title)) {
             mTitle = getString(R.string.tool_qq_clear);
         } else {
-            mTitle = getString(R.string.tool_chat_clear_n);
+            mTitle = getString(R.string.tool_chat_clear);
         }
         mCleanAnimView.setTitle(mTitle);
         mCleanAnimView.setIcon(R.mipmap.icon_wx_cleaned, DisplayUtils.dip2px(49), DisplayUtils.dip2px(49));

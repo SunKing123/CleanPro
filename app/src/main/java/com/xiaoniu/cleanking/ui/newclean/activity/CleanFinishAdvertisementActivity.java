@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishAdvertisementPresenter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -58,7 +59,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     private ImageView iv_advert_logo, iv_advert, mErrorIv;
     private TextView tv_advert, tv_advert_content;
     private TextView mBtnDownload;
-    private View mViewContent, mViewDownload;
+    private View mViewContent;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -74,6 +75,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     String createEventName = "";
     String returnEventName = "";
     String sysReturnEventName = "";
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout_adv;
@@ -103,7 +105,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         tv_advert = findViewById(R.id.tv_advert);
         tv_advert_content = findViewById(R.id.tv_advert_content);
 
-        mViewDownload = findViewById(R.id.v_download);
         mBtnDownload = findViewById(R.id.tv_download);
         changeUI(getIntent());
         getPageData();
@@ -179,7 +180,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他炫酷功能");
                 }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
                 //微信专情
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
@@ -223,7 +224,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {//微信专情
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {//微信专情
                 if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
@@ -233,17 +234,17 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            }else if (getString(R.string.tool_qq_clear).contains(mTitle)) { //QQ专清
+            } else if (getString(R.string.tool_qq_clear).contains(mTitle)) { //QQ专清
                 if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            }  else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
+            } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
                 if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
                 }
-            }else { //立即清理
+            } else { //立即清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
                     initNativeUnifiedAD();
@@ -259,6 +260,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * @return
      */
     public void getSwitchInfoListFail(String message) {
+        mBtnDownload.setVisibility(View.GONE);
         mViewContent.setVisibility(View.GONE);
         mErrorIv.setVisibility(View.VISIBLE);
         ToastUtils.showShort(message);
@@ -270,6 +272,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * @return
      */
     public void getSwitchInfoListConnectError() {
+        mBtnDownload.setVisibility(View.GONE);
         mViewContent.setVisibility(View.GONE);
         mErrorIv.setVisibility(View.VISIBLE);
         ToastUtils.showShort("网络连接失败，请假查您的网络连接");
@@ -282,6 +285,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
                 mContainer.setVisibility(View.GONE);
+                mBtnDownload.setVisibility(View.GONE);
                 mViewContent.setVisibility(View.GONE);
                 mErrorIv.setVisibility(View.VISIBLE);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "3", mAdvertId, "优量汇", "fail", sourcePage, currentPage);
@@ -336,8 +340,9 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         switch (v.getId()) {
             case R.id.btnLeft:
+                EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
                 if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                    StatisticsUtils.trackClick("return_back", returnEventName,sourcePage, "one_click_acceleration_clean_up_page");
+                    StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, "one_click_acceleration_clean_up_page");
                 } else {
                     StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
                 }
@@ -360,9 +365,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-            StatisticsUtils.trackClick("system_return_click", sysReturnEventName,  sourcePage, currentPage);
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         }
         super.onBackPressed();
+        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
 
     }
 
@@ -375,7 +381,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             mNativeUnifiedADData.resume();
         }
     }
-
 
 
     //获取埋点参数
@@ -404,7 +409,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             createEventCode = "powersave_success_page_custom";
             returnEventName = "省电结果页出现返回";
             sysReturnEventName = "省电结果页出现返回";
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
             currentPage = "wxclean_success_page";
             createEventName = "微信结果页创建时";
@@ -438,7 +443,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     /*---------------------------------------- 埋点---------------------------------------------------------------------*/
     //获取焦点
-    public void pageStart(){
+    public void pageStart() {
 
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
@@ -456,7 +461,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
             NiuDataAPI.onPageStart("powersave_success_page_view_page", "省电结果出现时");
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
             NiuDataAPI.onPageStart("wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
@@ -475,7 +480,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
 
     //失去焦点
-    public void onPageEnd(){
+    public void onPageEnd() {
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
@@ -491,7 +496,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "powersave_success_page_view_page", "省电结果出现时");
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
@@ -507,6 +512,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
     }
+
     @Override
     protected void onPause() {
         onPageEnd();
@@ -567,7 +573,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         List<View> clickableViews = new ArrayList<>();
         // 所有广告类型，注册mDownloadButton的点击事件
-        clickableViews.add(mViewDownload);
+        clickableViews.add(mBtnDownload);
         ad.bindAdToView(this, mContainer, null, clickableViews);
 
         // 设置广告事件监听
@@ -581,7 +587,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "3", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "3", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
