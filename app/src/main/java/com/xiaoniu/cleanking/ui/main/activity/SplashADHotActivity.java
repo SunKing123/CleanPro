@@ -320,7 +320,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
             for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
                 if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    Toast.makeText(this, "广告id=" + mAdvertId, Toast.LENGTH_LONG).show(); //暂时注释
                 }
             }
         }

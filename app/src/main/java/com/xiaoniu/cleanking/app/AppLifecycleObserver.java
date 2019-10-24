@@ -58,9 +58,8 @@ public class AppLifecycleObserver implements LifecycleObserver {
         if (!isAppOnForeground()) {
             //app 进入后台
             isBack = true;
-
+            PreferenceUtil.saveHomeBackTime();
         }
-//       PreferenceUtil.saveIsProcessBack(true);
     }
 
     /**

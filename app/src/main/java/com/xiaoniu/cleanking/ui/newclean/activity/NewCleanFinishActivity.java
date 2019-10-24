@@ -640,7 +640,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 是否显示推荐功能项
      */
     private void showTool() {
-        Toast.makeText(this, "内存占比=" + mRamScale, Toast.LENGTH_LONG).show(); //暂时注释
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;

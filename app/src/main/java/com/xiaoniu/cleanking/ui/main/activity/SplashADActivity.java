@@ -140,7 +140,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 获取过审开关失败
      */
     public void getAuditSwitchFail() {
-        jumpActivity();
+        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            jumpActivity();
+        });
     }
 
     public void jumpActivity() {
