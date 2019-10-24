@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -273,12 +274,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Override
     public void onResume() {
         super.onResume();
-        if(tvNowClean.getVisibility() == View.GONE){
-            if(PreferenceUtil.getIsProcessBack()){
-                PreferenceUtil.saveIsProcessBack(false);
-                tvNowClean.setVisibility(View.VISIBLE);
-            }
-        }
+
         mPresenter.getSwitchInfoList();
         mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -582,6 +578,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+    }
+
+
+    @Subscribe
+    public void changeLifecyEvent(LifecycEvent lifecycEvent){
+        if(lifecycEvent.isActivity()){
+            tvNowClean.setVisibility(VISIBLE);
+            mTvCleanType.setText(getString(R.string.tool_home_hint));
+        }
     }
 
     /**
