@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.BattaryView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
@@ -78,14 +79,13 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
     private int mBatteryPower = 50;
 
 
-
     String sourcePage = "";
     String currentPage = "";
     String sysReturnEventName = "";
-    String returnEventName ="";
+    String returnEventName = "";
 
-    String viewPageEventCode ="";
-    String viewPageEventName ="";
+    String viewPageEventCode = "";
+    String viewPageEventName = "";
 
     @Override
     protected int getLayoutResId() {
@@ -216,6 +216,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             tvUnitHour.setVisibility(View.GONE);
             tvMini.setText(String.valueOf(time));
         }
+        Log.d("XiLei", "time=" + time);
+        PreferenceUtil.saveLengthenAwaitTime(String.valueOf(time));
     }
 
     /**
@@ -491,7 +493,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             }
         });
     }
-
 
 
 }
