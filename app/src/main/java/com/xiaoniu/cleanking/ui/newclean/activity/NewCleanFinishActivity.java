@@ -530,9 +530,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvQl.setText("快去体验其他功能");
                 }
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                CleanEvent cleanEvent = new CleanEvent();
-                cleanEvent.setCleanAminOver(true);
-                EventBus.getDefault().post(cleanEvent);
+                if(PreferenceUtil.getIsCheckedAll()){
+                    CleanEvent cleanEvent = new CleanEvent();
+                    cleanEvent.setCleanAminOver(true);
+                    EventBus.getDefault().post(cleanEvent);
+                }
                 //建议清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");

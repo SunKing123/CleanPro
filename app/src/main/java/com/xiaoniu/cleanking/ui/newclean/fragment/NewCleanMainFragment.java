@@ -121,8 +121,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     ImageView mImageSecondAd;
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
-    @BindView(R.id.view_lottie_bg)
-    LottieAnimationView lottieBg;
     @BindView(R.id.tv_now_clean)
     ImageView tvNowClean;
 
@@ -467,6 +465,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if(lifecycEvent.isActivity()){
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setText(getString(R.string.tool_home_hint));
+            mLottieHomeView.useHardwareAcceleration(true);
+            mLottieHomeView.setAnimation("clean_home_top.json");
+            mLottieHomeView.setImageAssetsFolder("images_home");
+            mLottieHomeView.playAnimation();
+            mLottieHomeView.setVisibility(VISIBLE);
         }
     }
 
@@ -845,11 +848,32 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (cleanEvent.isCleanAminOver()) {
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
                 tvNowClean.setVisibility(View.GONE);
-                lottieBg.setVisibility(View.GONE);
+
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
                 mLottieHomeView.playAnimation();
+                mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mLottieHomeView.playAnimation();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
         }
     }
@@ -881,36 +905,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      * 静止时动画
      */
     private void showHomeLottieView() {
-        lottieBg.useHardwareAcceleration(true);
-        lottieBg.setAnimation("clean_home_top3.json");
-        lottieBg.setImageAssetsFolder("images_home_bg");
-        lottieBg.playAnimation();
-        lottieBg.setVisibility(VISIBLE);
-        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                lottieBg.useHardwareAcceleration(true);
-                lottieBg.setAnimation("clean_home_top3.json");
-                lottieBg.setImageAssetsFolder("images_home_bg");
-                lottieBg.playAnimation();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
         mLottieHomeView.useHardwareAcceleration(true);
         mLottieHomeView.setAnimation("clean_home_top.json");
         mLottieHomeView.setImageAssetsFolder("images_home");

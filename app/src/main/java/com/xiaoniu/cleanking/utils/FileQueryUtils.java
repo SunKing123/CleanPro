@@ -214,7 +214,7 @@ public class FileQueryUtils {
                 junkInfo.setAllchecked(true);
                 junkInfo.setAppName(pData.getAppName());
                 junkInfo.setAppPackageName(pData.getPackName());
-                junkInfo.setGarbageIcon(mContext.getResources().getDrawable(R.mipmap.icon_directory));
+                junkInfo.setGarbageIcon(mContext.getResources().getDrawable(R.drawable.icon_other_cache));
                 junkInfo.setGarbageType("TYPE_LEAVED");
                 junkInfo.setSdPath(pData.getFileList().get(0).getFolderName());
 
