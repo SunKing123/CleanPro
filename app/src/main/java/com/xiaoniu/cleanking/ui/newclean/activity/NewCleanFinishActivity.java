@@ -952,8 +952,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onBackPressed();
         EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, "selected_page", "one_click_acceleration_clean_up_page");
-        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
+        } else {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         }
         /*

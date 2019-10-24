@@ -60,7 +60,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
             isBack = true;
 
         }
-       PreferenceUtil.saveIsProcessBack(true);
+//       PreferenceUtil.saveIsProcessBack(true);
     }
 
     /**
