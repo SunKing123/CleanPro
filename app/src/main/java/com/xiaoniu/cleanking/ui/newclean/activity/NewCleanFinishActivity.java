@@ -644,9 +644,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
                 line_quicken.setVisibility(View.VISIBLE);
-            }
-//            if (PreferenceUtil.getCleanTime() && !PreferenceUtil.isCleanJiaSuUsed()) {
-            if (!PreferenceUtil.isCleanJiaSuUsed()) {
+            } else if (!PreferenceUtil.isCleanJiaSuUsed()) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || mRamScale > 20) {
                     mShowCount++;
                     v_quicken.setVisibility(View.VISIBLE);
@@ -659,9 +657,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
                 line_power.setVisibility(View.VISIBLE);
-            }
-//            if (PreferenceUtil.getPowerCleanTime() && !PreferenceUtil.isCleanPowerUsed()) {
-            if (!PreferenceUtil.isCleanPowerUsed()) {
+            } else if (!PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
                     mShowCount++;
@@ -677,9 +673,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mShowCount++;
                 v_notification.setVisibility(View.VISIBLE);
                 line_notification.setVisibility(View.VISIBLE);
-            }
-//            if (PreferenceUtil.getNotificationCleanTime() && !PreferenceUtil.isCleanNotifyUsed()) {
-            if (!PreferenceUtil.isCleanNotifyUsed()) {
+            } else if (!PreferenceUtil.isCleanNotifyUsed()) {
                 if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     // 通知栏清理间隔时间至少3分钟 否则隐藏
                     mShowCount++;

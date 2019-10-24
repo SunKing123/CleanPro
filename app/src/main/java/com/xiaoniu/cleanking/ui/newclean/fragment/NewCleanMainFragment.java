@@ -170,7 +170,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             } else {
                 if (!PreferenceUtil.getNotificationCleanTime()) {
                     mNotiClearFinishIv.setVisibility(View.VISIBLE);
-                    mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
@@ -305,7 +305,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (event.isAllNotifyClean() && NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
             mShowCount--;
             mNotiClearFinishIv.setVisibility(View.VISIBLE);
-//            mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
             mNotiClearTv.setText(R.string.finished_clean_notify_hint);
@@ -313,7 +312,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (PreferenceUtil.isFirstForHomeIcon() && mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
             if (!PreferenceUtil.getPowerCleanTime()) {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
-//                mElectricityIv.setImageResource(R.drawable.icon_power);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
@@ -337,7 +335,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void quickenEvent(QuickenEvent event) {
         --mShowCount;
         mAccFinishIv.setVisibility(View.VISIBLE);
-//        mAccIv.setImageResource(R.drawable.icon_yjjs);
         GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
@@ -345,7 +342,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
             if (!PreferenceUtil.getPowerCleanTime()) {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
-//                mElectricityIv.setImageResource(R.drawable.icon_power);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
