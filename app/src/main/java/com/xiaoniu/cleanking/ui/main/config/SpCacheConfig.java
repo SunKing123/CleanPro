@@ -17,6 +17,7 @@ public class SpCacheConfig {
 
     public static final String MUL_RUN_CACHES_CUSTOM = "mul_run_caches_custom";
     public static final String RUN_CACHES_IS_CHECK_ALL= "run_caches_is_check_all";
+    public static final String RUN_CHECK_IS_CHECK_ALL= "run_is_check_all";
     public static final String CLEAN_USED= "clean_used";
 
     /**

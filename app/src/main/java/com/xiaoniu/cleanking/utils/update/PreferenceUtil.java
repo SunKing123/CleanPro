@@ -375,6 +375,30 @@ public class PreferenceUtil {
         return mul;
     }
 
+
+    /**
+     * 保存清理是否全选
+     *
+     * @return
+     */
+    public static boolean saveIsCheckedAll(boolean ischeck) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.RUN_CHECK_IS_CHECK_ALL, ischeck).commit();
+        return true;
+    }
+
+    /**
+     * 获取清理是否全选
+     *
+     * @return
+     */
+    public static boolean getIsCheckedAll() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        boolean mul = sharedPreferences.getBoolean(SpCacheConfig.RUN_CHECK_IS_CHECK_ALL, true);
+        return mul;
+    }
+
     /**
      * 保存清理勾选页面三分钟内的随机 乘数
      *

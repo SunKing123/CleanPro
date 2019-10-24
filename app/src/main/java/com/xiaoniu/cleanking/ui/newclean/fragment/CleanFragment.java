@@ -275,7 +275,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mCleanAnimView.startCleanAnim(false);
         clearAll();
     }
-
+    boolean isCacheCheckAll = true;  //运行内存是否全选
+    boolean isCheckAll = true;  //运行内存是否全选
     @SuppressLint("CheckResult")
     private void clearAll() {
         if (mJunkGroups == null || mJunkGroups.size() < 1) {
@@ -284,7 +285,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         Observable.create(e -> {
             long total = 0;
-            boolean isCacheCheckAll = true;  //运行内存是否全选
+
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();
                 if (value.mChildren != null && value.mChildren.size() > 0) {
@@ -294,31 +295,45 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                                 total += info.getTotalSize();
                                 CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
                             } else {
-                                isCacheCheckAll = false;
+                                isCheckAll = isCacheCheckAll = false;
                             }
                         }
 
                     } else if ("TYPE_CACHE".equals(value.mChildren.get(0).getGarbageType())) { //缓存
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
-                                isCacheCheckAll = false;
+                                isCheckAll = false;
                             }
                         }
                         long l = CleanUtil.freeJunkInfos(value.mChildren);
                         total += l;
                     } else if ("TYPE_APK".equals(value.mChildren.get(0).getGarbageType())) { //apk文件
+                        for (FirstJunkInfo info : value.mChildren) {
+                            if (!info.isAllchecked()) {
+                                isCheckAll = false;
+                            }
+                        }
                         long l1 = CleanUtil.freeJunkInfos(value.mChildren);
                         total += l1;
                     } else if ("TYPE_LEAVED".equals(value.mChildren.get(0).getGarbageType())) {//残留垃圾
+                        for (FirstJunkInfo info : value.mChildren) {
+                            if (!info.isAllchecked()) {
+                                isCheckAll = false;
+                            }
+                        }
                         long leavedCache = CleanUtil.freeJunkInfos(value.mChildren);
                         total += leavedCache;
                     }
-                }else if(entry.getKey() ==4 && value.otherChildren.size()>0){//其他垃圾处理
+                }else if(entry.getKey() == 4 && value.otherChildren.size()>0){//其他垃圾处理
+                    if(!value.isChecked()){
+                        isCheckAll = false;
+                    }
+
                     long otherCache = CleanUtil.freeOtherJunkInfos(value.otherChildren);
                     total += otherCache;
                 }
             }
-
+            PreferenceUtil.saveIsCheckedAll(isCheckAll);
             PreferenceUtil.saveCacheIsCheckedAll(isCacheCheckAll);
             PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.3f);
             e.onNext(total);
