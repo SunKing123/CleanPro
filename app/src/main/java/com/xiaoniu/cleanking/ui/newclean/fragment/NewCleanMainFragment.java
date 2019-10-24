@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.tencent.tinker.loader.shareutil.SharePatchFileUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -37,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -55,6 +57,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -118,12 +121,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     ImageView mImageSecondAd;
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
+    @BindView(R.id.view_lottie_bg)
+    LottieAnimationView lottieBg;
+    @BindView(R.id.tv_now_clean)
+    ImageView tvNowClean;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
     private int mInteractionPoistion; //互动式广告position、
     private int mShowCount;
+
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
 
@@ -135,6 +143,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
+        tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
         mPresenter.requestBottomAd();
@@ -452,6 +461,32 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
     }
 
+
+    @Subscribe
+    public void changeLifecyEvent(LifecycEvent lifecycEvent){
+        if(lifecycEvent.isActivity()){
+            tvNowClean.setVisibility(VISIBLE);
+            mTvCleanType.setText(getString(R.string.tool_home_hint));
+        }
+    }
+
+    /**
+     * 超强省电一键优化完成事件
+     * <p>
+     * //     * @param event
+     */
+   /* @Subscribe
+    public void cleanPowerEvent(CleanPowerEvent event) {
+        mElectricityFinishIv.setVisibility(View.VISIBLE);
+        mElectricityIv.setImageResource(R.drawable.icon_power);
+        mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+        if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
+            mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
+        } else {
+            mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+        }
+        PreferenceUtil.saveLengthenAwaitTime(event.getHour());
+    }*/
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
@@ -468,7 +503,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
+        //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
+        if (true) {
             startActivity(NowCleanActivity.class);
         } else {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
@@ -808,6 +844,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
+                tvNowClean.setVisibility(View.GONE);
+                lottieBg.setVisibility(View.GONE);
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -843,6 +881,36 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      * 静止时动画
      */
     private void showHomeLottieView() {
+        lottieBg.useHardwareAcceleration(true);
+        lottieBg.setAnimation("clean_home_top3.json");
+        lottieBg.setImageAssetsFolder("images_home_bg");
+        lottieBg.playAnimation();
+        lottieBg.setVisibility(VISIBLE);
+        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                lottieBg.useHardwareAcceleration(true);
+                lottieBg.setAnimation("clean_home_top3.json");
+                lottieBg.setImageAssetsFolder("images_home_bg");
+                lottieBg.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
         mLottieHomeView.useHardwareAcceleration(true);
         mLottieHomeView.setAnimation("clean_home_top.json");
         mLottieHomeView.setImageAssetsFolder("images_home");

@@ -588,6 +588,29 @@ public class PreferenceUtil {
         return true;
     }
 
+
+    /**
+     * 保存是否后台
+     *
+     * @return
+     */
+    public static boolean saveIsProcessBack(boolean isback) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_HOME_BACK, isback).commit();
+        return true;
+    }
+
+    /**
+     * 获取是否后台
+     *
+     * @return
+     */
+    public static boolean getIsProcessBack() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.getBoolean(SpCacheConfig.IS_HOME_BACK, false);
+        return true;
+    }
     /**
      * 保存垃圾清理完成页点击返回键的次数
      *
