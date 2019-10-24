@@ -215,10 +215,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         setListener();
         loadData();
     }
-
+    //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
-
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             currentPage = "clean_success_page";
@@ -414,7 +413,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onNoAD(AdError adError) {
                 mContainer.setVisibility(View.GONE);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", sourcePage, "clean_success_page");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", sourcePage, currentPage);
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
             }
 
@@ -467,7 +466,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onNoAD(AdError adError) {
                 mContainer2.setVisibility(View.GONE);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "fail", sourcePage, "clean_success_page");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "fail", sourcePage, currentPage);
                 Log.d(TAG, "onNoAd error code222: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
             }
 
@@ -1074,31 +1073,31 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "boost_success_page_view_page", "加速结果出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "powersave_success_page_view_page", "省电结果出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "powersave_success_page_view_page", "省电结果出现时");
         } else if (getString(R.string.tool_chat_clear).contains(mTitle) || getString(R.string.tool_chat_clear_n).contains(mTitle)) {
             //微信专情
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
             //QQ专清
 //            NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
             //通知栏清理
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), currentPage, "cooling_success_page_view_page", "降温结果页出现时");
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
