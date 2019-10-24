@@ -168,7 +168,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
-//                mContainer.setVisibility(View.GONE);
                 mViewContent.setVisibility(View.GONE);
                 mBtnDownload.setVisibility(View.GONE);
                 mErrorV.setVisibility(View.VISIBLE);
@@ -176,9 +175,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
             @Override
             public void onADLoaded(List<NativeUnifiedADData> ads) {
-                Log.d(TAG, "ads.size()=" + ads.size());
                 if (ads != null && ads.size() > 0) {
-//                    mContainer.setVisibility(View.VISIBLE);
                     Message msg = Message.obtain();
                     msg.what = MSG_INIT_AD;
                     mNativeUnifiedADData = ads.get(0);
