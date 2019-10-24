@@ -531,7 +531,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             if (str_totalSize.contains(",")) {
                 str_totalSize = str_totalSize.replace(",", "");
             }
-            Log.d("XiLei", "str_totalSize=" + str_totalSize);
             sizeMb = Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim()).intValue();
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";

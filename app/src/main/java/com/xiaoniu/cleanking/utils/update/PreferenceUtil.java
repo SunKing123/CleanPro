@@ -230,7 +230,6 @@ public class PreferenceUtil {
         return false;
     }
 
-
     /**
      * 保存一键加速是否已使用
      */

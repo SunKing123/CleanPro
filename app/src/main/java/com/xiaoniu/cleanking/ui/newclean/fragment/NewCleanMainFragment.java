@@ -153,14 +153,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             if (!PreferenceUtil.getCleanTime()) {
                 mAccFinishIv.setVisibility(View.VISIBLE);
-                mAccIv.setImageResource(R.drawable.icon_yjjs);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
             } else {
                 mShowCount++;
-                Log.d("XiLei", "一键加速权限=" + PermissionUtils.isUsageAccessAllowed(getActivity()));
                 if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
-                    mAccIv.setImageResource(R.drawable.icon_yjjs_o);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs_o, mAccIv);
                     mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                     mAccTv.setText(getString(R.string.tool_one_key_speed));
                 } else {
@@ -172,7 +171,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
-                mNotiClearIv.setImageResource(R.drawable.icon_home_qq_o);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq_o, mNotiClearIv);
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
             } else {
@@ -192,7 +191,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
                 if (!PreferenceUtil.getPowerCleanTime()) {
                     mElectricityFinishIv.setVisibility(View.VISIBLE);
-                    mElectricityIv.setImageResource(R.drawable.icon_power);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
                         mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
@@ -276,7 +275,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Override
     public void onResume() {
         super.onResume();
-
         mPresenter.getSwitchInfoList();
         mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -301,13 +299,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 //        EventBus.getDefault().post(new ResidentUpdateEvent(false));
     }
 
+    /**
+     * 清理完成回调
+     * @param event
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-        Log.d("XiLei", "fromHomeCleanFinishEvent");
-        if (null == event.getTitle()) return;
+        if (null == event || TextUtils.isEmpty(event.getTitle())) return;
         if (getString(R.string.tool_one_key_speed).contains(event.getTitle())) { //一键加速
-            Log.d("XiLei", "aaaaaaa");
             mShowCount--;
             mAccFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
@@ -317,7 +317,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
-                mNotiClearIv.setImageResource(R.drawable.icon_home_qq_o);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq_o, mNotiClearIv);
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
             } else {
@@ -349,7 +349,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 } else {
                     mShowCount--;
                     mElectricityFinishIv.setVisibility(View.VISIBLE);
-                    mElectricityIv.setImageResource(R.drawable.icon_power);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
                         mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
@@ -359,7 +359,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
         } else if (getString(R.string.tool_notification_clean).contains(event.getTitle())) {//通知栏清理
-            Log.d("XiLei", "cccccccccc");
             mShowCount--;
             mNotiClearFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
@@ -392,7 +391,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 } else {
                     mShowCount--;
                     mElectricityFinishIv.setVisibility(View.VISIBLE);
-                    mElectricityIv.setImageResource(R.drawable.icon_power);
+                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
                         mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
@@ -403,7 +402,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             }
 
         } else if (getString(R.string.tool_super_power_saving).contains(event.getTitle())) { //超强省电
-            Log.d("XiLei", "bbbbbbb");
             mShowCount--;
             mElectricityFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
@@ -428,7 +426,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
-                mNotiClearIv.setImageResource(R.drawable.icon_home_qq_o);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq_o, mNotiClearIv);
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
             } else {
@@ -453,127 +451,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
     }
 
-    /*@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Subscribe
-    public void onEventMainThread(ResidentUpdateEvent event) {
-        Log.d("XiLei", "onEventMainThread");
-        //清除所有通知后改变 通知栏清理 icon和文案状态
-        if (event.isAllNotifyClean() && NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
-            mShowCount--;
-            mNotiClearFinishIv.setVisibility(View.VISIBLE);
-            GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
-            mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-            mNotiClearTv.setText(R.string.finished_clean_notify_hint);
-        }
-        Log.d("XiLei", "mShowCount=" + mShowCount);
-        if (PreferenceUtil.isFirstForHomeIcon() && mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
-            if (!PreferenceUtil.getPowerCleanTime()) {
-                mElectricityFinishIv.setVisibility(View.VISIBLE);
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
-                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
-                    mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
-                } else {
-                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
-                }
-            } else {
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
-                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
-            }
-        }
-
-        //获取通知条数后改变 通知栏清理 icon和文案状态
-        if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
-            Log.d("XiLei", "11111111");
-            mShowCount++;
-            GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
-            mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
-
-            if (mShowCount >= 2 && !PreferenceUtil.isCleanJiaSuUsed()) {
-                Log.d("XiLei", "222");
-                mShowCount++;
-                if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
-                    Log.d("XiLei", "33333");
-                    mAccIv.setImageResource(R.drawable.icon_yjjs_o);
-                    mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
-                    mAccTv.setText(getString(R.string.torage_scale_hint));
-                } else {
-                    Log.d("XiLei", "44444");
-                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
-                    mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                    mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
-                }
-            } else {
-                Log.d("XiLei", "555");
-                mElectricityFinishIv.setVisibility(View.VISIBLE);
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
-                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
-                    mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
-                } else {
-                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
-                }
-                return;
-            }
-
-            if (mShowCount >= 2 && !PreferenceUtil.isCleanPowerUsed()) {
-                Log.d("XiLei", "6666");
-                mShowCount++;
-                if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
-                    Log.d("XiLei", "7777");
-                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_o, mElectricityIv);
-                    mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
-                    mElectricityTv.setText(getString(R.string.torage_scale_hint));
-                } else {
-                    Log.d("XiLei", "8888");
-                    GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
-                    mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                    mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
-                }
-            } else {
-                Log.d("XiLei", "9999");
-                mAccFinishIv.setVisibility(View.VISIBLE);
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
-                mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
-            }
-        }
-    }*/
-
     /**
-     * 一键加速完成改变一键加速状态
-     */
-   /* @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Subscribe
-    public void quickenEvent(QuickenEvent event) {
-        --mShowCount;
-        mAccFinishIv.setVisibility(View.VISIBLE);
-        GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
-        mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
-
-        if (mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
-            if (!PreferenceUtil.getPowerCleanTime()) {
-                mElectricityFinishIv.setVisibility(View.VISIBLE);
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
-                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-                if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
-                    mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
-                } else {
-                    mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
-                }
-            } else {
-                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
-                mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
-            }
-        }
-    }*/
-
-    /**
-     * 一键加速获取权限后通知首页一键加速状态改变h
+     * 一键加速获取权限后通知首页一键加速状态改变
      */
     @Subscribe
     public void internalStoragePremEvent(InternalStoragePremEvent event) {

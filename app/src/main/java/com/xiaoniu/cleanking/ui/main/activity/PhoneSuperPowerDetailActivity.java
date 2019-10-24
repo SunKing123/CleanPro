@@ -27,7 +27,6 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.tool.notify.event.CleanPowerEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -39,8 +38,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 import com.xiaoniu.statistic.NiuDataAPI;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -216,8 +213,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             tvUnitHour.setVisibility(View.GONE);
             tvMini.setText(String.valueOf(time));
         }
-        Log.d("XiLei", "time=" + time);
-        PreferenceUtil.saveLengthenAwaitTime(String.valueOf(time));
     }
 
     /**
@@ -282,11 +277,10 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                         CleanUtil.killAppProcesses(childInfo.packageName, 0);
                     }
                 }
-                EventBus.getDefault().post(new CleanPowerEvent(tvMini.getText().toString()));
+                PreferenceUtil.saveLengthenAwaitTime(String.valueOf(tvMini.getText().toString()));
                 Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
                 intent.putExtra("processNum", sSelectedList.size());
                 startActivity(intent);
-
                 finish();
                 break;
         }

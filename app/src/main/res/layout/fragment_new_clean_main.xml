@@ -118,7 +118,7 @@
         android:id="@+id/v_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/bg_gradient_clean_finish_tobar"
+        android:background="@drawable/bg_title"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
 

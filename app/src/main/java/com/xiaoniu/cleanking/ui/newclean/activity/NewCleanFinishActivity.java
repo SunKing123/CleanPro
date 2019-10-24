@@ -143,6 +143,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initView() {
         EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
+        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
             mPresenter.getSwitchInfoList();
         } else {
@@ -216,6 +217,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         setListener();
         loadData();
     }
+
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
@@ -375,7 +377,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @return
      */
     public void getScreentSwitchSuccess(SwitchInfoList list) {
-        Log.d("XiLei", "getScreentSwitchSuccess -- list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
@@ -405,7 +406,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mScreenShowCount = switchInfoList.getShowRate();
             }
         }
-        Log.d("XiLei", "isScreenSwitchOpen=" + isScreenSwitchOpen);
     }
 
     private void initNativeUnifiedAD() {
@@ -864,9 +864,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else {
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
-
-            EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
             if (isScreenSwitchOpen) {
                 int count = 0;
@@ -950,7 +947,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
+
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
         } else {
@@ -990,9 +987,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 count = PreferenceUtil.getCleanFinishClickCount();
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
             }
-
-            Log.d("XiLei", "count=" + count);
-            Log.d("XiLei", "isClick=" + isClick);
             if (count == 0 || isClick) {
                 startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }
@@ -1092,7 +1086,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "powersave_success_page_view_page", "省电结果出现时");
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle) ) {
+        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
@@ -1274,14 +1268,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
                 //广告请求
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
@@ -1396,7 +1390,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage,ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
