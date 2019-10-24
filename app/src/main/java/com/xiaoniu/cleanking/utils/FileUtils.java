@@ -153,7 +153,7 @@ public class FileUtils {
 
     /**
      * 筛选其他垃圾
-     * 根目录下超过14天的file
+     * 根目录下超过30天的file
      *
      * @param file
      * @return
@@ -163,7 +163,7 @@ public class FileUtils {
         File[] listFiles = file.listFiles();
         if (listFiles != null && listFiles.length > 0) {
             for (File file2 : listFiles) {
-                if (file2.isFile() && checkFile(file2, 14)) {
+                if (file2.isFile() && checkFile(file2, 30)) {
                     hashMap.put(file2.getAbsolutePath(), "其他垃圾");
                 }
             }
