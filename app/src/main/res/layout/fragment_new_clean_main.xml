@@ -181,13 +181,14 @@
 
                         <FrameLayout
                             android:layout_width="0dp"
-                            android:layout_weight="60"
-                            android:layout_height="190dp">
+                            android:layout_height="190dp"
+                            android:layout_weight="60">
+
                             <com.airbnb.lottie.LottieAnimationView
                                 android:id="@+id/view_lottie_bg"
                                 android:layout_width="match_parent"
-                                android:layout_height="190dp"
-                                />
+                                android:layout_height="190dp" />
+
                             <com.airbnb.lottie.LottieAnimationView
                                 android:id="@+id/view_lottie_home"
                                 android:layout_width="match_parent"
@@ -554,7 +555,6 @@
                 android:layout_marginRight="@dimen/dimen_12dp"
                 android:background="@drawable/bg_recommend"
                 android:paddingLeft="@dimen/dimen_16dp"
-                android:paddingTop="@dimen/dimen_12dp"
                 android:paddingRight="@dimen/dimen_16dp">
 
                 <ImageView
@@ -564,27 +564,32 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_qq" />
 
-                <TextView
-                    android:id="@+id/tv_quicken_title"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:layout_toRightOf="@+id/iv_quicken"
-                    android:text="@string/tool_qq_clear"
-                    android:textColor="@color/color_404040"
-                    android:textSize="@dimen/dimen_17sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_quicken"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_quicken_title"
-                    android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:layout_toRightOf="@+id/iv_quicken"
-                    android:text="@string/clean_qq_litter"
-                    android:textColor="@color/color_777777"
-                    android:textSize="@dimen/dimen_14sp" />
+                    <TextView
+                        android:id="@+id/tv_quicken_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tool_qq_clear"
+                        android:textColor="@color/color_404040"
+                        android:textSize="@dimen/dimen_17sp" />
+
+                    <TextView
+                        android:id="@+id/tv_quicken"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:text="@string/clean_qq_litter"
+                        android:textColor="@color/color_777777"
+                        android:textSize="@dimen/dimen_14sp" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/iv_speed_clean"
@@ -620,27 +625,31 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_file_unins" />
 
-                <TextView
-                    android:id="@+id/tv_file_title"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:layout_toRightOf="@+id/iv_file"
-                    android:text="@string/tool_soft_manager"
-                    android:textColor="@color/color_404040"
-                    android:textSize="@dimen/dimen_17sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_file"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_file_title"
-                    android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:layout_toRightOf="@+id/iv_file"
-                    android:text="@string/uninstall_software"
-                    android:textColor="@color/color_777777"
-                    android:textSize="@dimen/dimen_14sp" />
+                    <TextView
+                        android:id="@+id/tv_file_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tool_soft_manager"
+                        android:textColor="@color/color_404040"
+                        android:textSize="@dimen/dimen_17sp" />
+
+                    <TextView
+                        android:id="@+id/tv_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:text="@string/uninstall_software"
+                        android:textColor="@color/color_777777"
+                        android:textSize="@dimen/dimen_14sp" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -676,27 +685,31 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_news" />
 
-                <TextView
-                    android:id="@+id/tv_news_title"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12dp"
                     android:layout_toRightOf="@+id/iv_news"
-                    android:text="@string/tool_top_news"
-                    android:textColor="@color/color_404040"
-                    android:textSize="@dimen/dimen_17sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_news"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_news_title"
-                    android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:layout_toRightOf="@+id/iv_news"
-                    android:text="@string/lock_news"
-                    android:textColor="@color/color_777777"
-                    android:textSize="@dimen/dimen_14sp" />
+                    <TextView
+                        android:id="@+id/tv_news_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tool_top_news"
+                        android:textColor="@color/color_404040"
+                        android:textSize="@dimen/dimen_17sp" />
+
+                    <TextView
+                        android:id="@+id/tv_news"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:text="@string/lock_news"
+                        android:textColor="@color/color_777777"
+                        android:textSize="@dimen/dimen_14sp" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

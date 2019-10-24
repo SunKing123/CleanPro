@@ -6,17 +6,12 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,7 +40,11 @@ public class AppLifecycleObserver implements LifecycleObserver {
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                        mContext.startActivity(new Intent(mContext, SplashADHotActivity.class));
+                        if (null == mContext) return;
+                        Intent intent = new Intent();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.setClass(mContext, SplashADHotActivity.class);
+                        mContext.startActivity(intent);
                         isBack = false;
                     }
                 }
