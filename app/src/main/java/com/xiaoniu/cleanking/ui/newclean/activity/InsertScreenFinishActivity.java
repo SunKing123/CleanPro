@@ -227,11 +227,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         String functionPosition = "";
         switch (v.getId()) {
             case R.id.iv_close:
-                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage,tv_advert.getText().toString().trim());
                 finish();
                 break;
             case R.id.iv_close_error:
-                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage,tv_advert.getText().toString().trim());
                 finish();
                 break;
         }
@@ -313,14 +313,14 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void onADExposed() {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage,ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage,ad.getTitle());
 
             }
 

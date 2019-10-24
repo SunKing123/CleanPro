@@ -1269,15 +1269,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
                 //广告请求
-
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage);
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage);
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage,ad.getTitle());
 
             }
 
@@ -1392,7 +1391,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage);
+                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage,ad.getTitle());
 
             }
 
