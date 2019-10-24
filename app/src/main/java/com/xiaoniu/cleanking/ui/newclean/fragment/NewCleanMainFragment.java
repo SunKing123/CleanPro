@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.tencent.tinker.loader.shareutil.SharePatchFileUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -57,6 +58,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -120,12 +122,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     ImageView mImageSecondAd;
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
+    @BindView(R.id.tv_now_clean)
+    ImageView tvNowClean;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
     private int mInteractionPoistion; //互动式广告position、
     private int mShowCount;
+
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
 
@@ -137,6 +142,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
+        tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
         mPresenter.requestBottomAd();
@@ -268,6 +274,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     @Override
     public void onResume() {
         super.onResume();
+        if(tvNowClean.getVisibility() == View.GONE){
+            if(PreferenceUtil.getIsProcessBack()){
+                PreferenceUtil.saveIsProcessBack(false);
+                tvNowClean.setVisibility(View.VISIBLE);
+            }
+        }
         mPresenter.getSwitchInfoList();
         mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -741,6 +753,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
+                tvNowClean.setVisibility(View.GONE);
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");

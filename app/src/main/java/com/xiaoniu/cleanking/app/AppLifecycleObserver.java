@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
+//        PreferenceUtil.saveIsProcessBack(false);
         if (isBack && PreferenceUtil.getHomeBackTime()) {
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
@@ -53,8 +55,9 @@ public class AppLifecycleObserver implements LifecycleObserver {
         if (!isAppOnForeground()) {
             //app 进入后台
             isBack = true;
-            PreferenceUtil.saveHomeBackTime();
+
         }
+       PreferenceUtil.saveIsProcessBack(true);
     }
 
     /**

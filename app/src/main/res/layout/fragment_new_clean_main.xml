@@ -196,17 +196,27 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="12dp"
+                        android:layout_marginBottom="24dp"
                         android:text="@string/tool_home_hint"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
-
-                    <ImageView
-                        android:id="@+id/tv_now_clean"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="125dp"
-                        android:src="@drawable/icon_clean_now" />
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="125dp">
+                        </TextView>
+                        <ImageView
+                            android:id="@+id/tv_now_clean"
+                            android:layout_width="wrap_content"
+                            android:layout_height="56dp"
+                            android:layout_marginBottom="125dp"
+                            android:visibility="gone"
+                            android:src="@drawable/icon_clean_now" />
+                    </RelativeLayout>
+
                 </LinearLayout>
 
             </FrameLayout>
