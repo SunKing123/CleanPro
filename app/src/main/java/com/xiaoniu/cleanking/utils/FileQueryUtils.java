@@ -184,8 +184,8 @@ public class FileQueryUtils {
      */
     public ArrayList<FirstJunkInfo> getOmiteCache() {
         ArrayList<FirstJunkInfo> junkInfoArrayList = new ArrayList<>();
+        //已按照应用map
         HashMap<String ,FirstJunkInfo> packMap = new HashMap<>();
-
         if(installedList==null)
             installedList = getInstalledList();
         if(installedList!=null&&installedList.size()>0){
@@ -207,6 +207,9 @@ public class FileQueryUtils {
                 junkInfo.setGarbageType("TYPE_LEAVED");
                 junkInfo.setSdPath(pData.getFileList().get(0).getFolderName());
 
+                if (mScanFileListener != null) {
+                    mScanFileListener.scanFile(junkInfo.getAppPackageName());
+                }
                 File outFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + junkInfo.getSdPath());
 
                 Map<String, String> filePathMap = checkAllGarbageFolder(outFile);
@@ -272,6 +275,9 @@ public class FileQueryUtils {
                         continue;
 
                     outJunkMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
+                    if (mScanFileListener != null) {
+                        mScanFileListener.scanFile(firstJunkInfo.getAppPackageName());
+                    }
                     Map<String, String> filePathMap = this.checkOutAllGarbageFolder(file, file.getName());
                     for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
                         if (new File(entry.getKey()).isDirectory()) {    //文件夹路径
