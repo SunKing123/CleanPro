@@ -216,6 +216,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
+                PreferenceUtil.saveCleanWechatUsed(true);
                 boolean isOpen = false;
                 //solve umeng error --> SwitchInfoList.getData()' on a null object reference
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
@@ -247,7 +248,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             }
             //保存微信专清清理时间
             PreferenceUtil.saveWeChatCleanTime();
-            PreferenceUtil.saveCleanWechatUsed(true);
         } else if (ids == R.id.tv_select) {
             tvSelect.setSelected(tvSelect.isSelected() ? false : true);
             getSelectCacheSize();

@@ -143,6 +143,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initView() {
         EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
+        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
             mPresenter.getSwitchInfoList();
         } else {
@@ -376,7 +377,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @return
      */
     public void getScreentSwitchSuccess(SwitchInfoList list) {
-        Log.d("XiLei", "getScreentSwitchSuccess -- list.getData()=" + list.getData().size());
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
@@ -406,7 +406,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mScreenShowCount = switchInfoList.getShowRate();
             }
         }
-        Log.d("XiLei", "isScreenSwitchOpen=" + isScreenSwitchOpen);
     }
 
     private void initNativeUnifiedAD() {
@@ -669,7 +668,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
-            Log.d("XiLei", "完成页通知权限=" + NotifyUtils.isNotificationListenerEnabled());
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
                 mShowCount++;
@@ -866,9 +864,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else {
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
-
-            EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
             if (isScreenSwitchOpen) {
                 int count = 0;
@@ -952,7 +947,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
+
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, "selected_page", "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
@@ -992,9 +987,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 count = PreferenceUtil.getCleanFinishClickCount();
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
             }
-
-            Log.d("XiLei", "count=" + count);
-            Log.d("XiLei", "isClick=" + isClick);
             if (count == 0 || isClick) {
                 startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }

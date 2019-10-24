@@ -191,7 +191,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
 
     @Override
     public void onADClicked() {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "hot_splash_page", "hot_splash_page","");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "hot_splash_page", "hot_splash_page", "");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -234,7 +234,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "hot_splash_page", "hot_splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "hot_splash_page", "hot_splash_page","");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "hot_splash_page", "hot_splash_page", "");
     }
 
     @Override
@@ -320,6 +320,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
             for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
                 if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
                     mAdvertId = switchInfoList.getAdvertId();
+                    Toast.makeText(this, "广告id=" + mAdvertId, Toast.LENGTH_LONG).show(); //暂时注释
                 }
             }
         }

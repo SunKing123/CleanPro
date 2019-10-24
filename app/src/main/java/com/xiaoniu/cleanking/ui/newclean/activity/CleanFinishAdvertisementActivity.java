@@ -108,7 +108,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         mBtnDownload = findViewById(R.id.tv_download);
         changeUI(getIntent());
         getPageData();
-
     }
 
     @Override
@@ -125,6 +124,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             String unit = intent.getStringExtra("unit");
             mTvSize.setText(num);
             mTvGb.setText(unit);
+
+            EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
             if (TextUtils.isEmpty(mTitle))
                 mTitle = getString(R.string.app_name);
             if (getString(R.string.app_name).contains(mTitle)) {
@@ -340,7 +341,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         switch (v.getId()) {
             case R.id.btnLeft:
-                EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
                 if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                     StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, "one_click_acceleration_clean_up_page");
                 } else {
@@ -368,8 +368,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         }
         super.onBackPressed();
-        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-
     }
 
     @Override
