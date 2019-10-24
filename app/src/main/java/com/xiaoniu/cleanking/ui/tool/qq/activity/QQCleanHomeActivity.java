@@ -228,10 +228,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                     mNotifySize = getIntent().getIntExtra("mNotifySize", 0);
                     mPowerSize = getIntent().getIntExtra("mPowerSize", 0);
                 }
-                Log.d("XiLei", "QQ---mRamScale=" + mRamScale);
-                Log.d("XiLei", "QQ---mNotifySize=" + mNotifySize);
-                Log.d("XiLei", "QQ---mPowerSize=" + mPowerSize);
-                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_qq_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_qq_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_qq_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -18,12 +19,19 @@ import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -31,6 +39,9 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +74,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     private long totalSize = 0;
     private HashMap<Integer, JunkGroup> mJunkGroups;
 
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //使用内存占总RAM的比例
+
+
     @Inject
     NoClearSPHelper mSPHelper;
 
@@ -94,6 +110,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         mHeadView = getLayoutInflater().inflate(R.layout.layout_head_now_clean, null);
 
+        mPresenter.getAccessListBelow();
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+
         TextView tvSize = mHeadView.findViewById(R.id.tv_size);
         TextView tvUnit = mHeadView.findViewById(R.id.tv_clear_finish_gb_title);
         tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
@@ -106,7 +126,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             tvSize.setText(totalCountEntity.getTotalSize());
             tvUnit.setText(totalCountEntity.getUnit());
             tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-            doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+            doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
         }
 
         mExpandableListView.setGroupIndicator(null);
@@ -130,12 +150,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             public void onGroupSelected(int groupPosition, boolean isChecked) {
                 JunkGroup junkGroup = mJunkGroups.get(groupPosition);
                 junkGroup.isChecked = isChecked;
-                mJunkGroups.put(groupPosition,junkGroup);
+                mJunkGroups.put(groupPosition, junkGroup);
                 checkedSize = CleanUtil.getTotalSize(mJunkGroups);
                 checkCountEntity = CleanUtil.formatShortFileSize(checkedSize);
                 if (checkCountEntity != null) {
                     tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-                    doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                    doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
                 }
             }
 
@@ -143,12 +163,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             public void onFistChilSelected(int groupPosition, int childPosition, boolean isChecked) {
                 JunkGroup junkGroup = mJunkGroups.get(groupPosition);
                 junkGroup.mChildren.get(childPosition).setAllchecked(isChecked);
-                mJunkGroups.put(groupPosition,junkGroup);
+                mJunkGroups.put(groupPosition, junkGroup);
                 checkedSize = CleanUtil.getTotalSize(mJunkGroups);
                 checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(checkedSize);
                 if (totalCountEntity != null) {
                     tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-                    doJunkClean.setText(mContext.getString(R.string.text_clean)+checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                    doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
 
                 }
             }
@@ -176,7 +196,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
             @Override
             public void onAnimationEnd() {
-                NiuDataAPIUtil.onPageEnd("scanning_result_page","clean_finish_annimation_page","clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
+                NiuDataAPIUtil.onPageEnd("scanning_result_page", "clean_finish_annimation_page", "clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
                 cleanFinish();
             }
         });
@@ -221,12 +241,29 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             PreferenceUtil.saveNowCleanTime();
         }
-        Bundle bundle = new Bundle();
-        //solve umeng error --> not attached to a context.
-        bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
-        bundle.putString("num", totalCountEntity.getTotalSize());
-        bundle.putString("unit", totalCountEntity.getUnit());
-        startActivity(NewCleanFinishActivity.class, bundle);
+
+        boolean isOpen = false;
+        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_suggest_clean));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
+            bundle.putString("num", totalCountEntity.getTotalSize());
+            bundle.putString("unit", totalCountEntity.getUnit());
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
         getActivity().finish();
     }
 
@@ -247,7 +284,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
         Observable.create(e -> {
             long total = 0;
-            boolean isCacheCheckAll= true;  //运行内存是否全选
+            boolean isCacheCheckAll = true;  //运行内存是否全选
             for (Map.Entry<Integer, JunkGroup> entry : mJunkGroups.entrySet()) {
                 JunkGroup value = entry.getValue();
                 if (value.mChildren != null && value.mChildren.size() > 0) {
@@ -256,7 +293,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                             if (info.isAllchecked()) {
                                 total += info.getTotalSize();
                                 CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-                            }else{
+                            } else {
                                 isCacheCheckAll = false;
                             }
                         }
@@ -273,7 +310,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             }
 
             PreferenceUtil.saveCacheIsCheckedAll(isCacheCheckAll);
-            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum()*0.3f);
+            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.3f);
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             double memoryShow = NoClearSPHelper.getMemoryShow();
@@ -317,5 +354,19 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     public void onPause() {
         super.onPause();
         NiuDataAPIUtil.onPageEnd("clean_up_scan_page", "scanning_result_page", "scanning_result_page_view_page", "用户在扫描结果页浏览");
+    }
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null) return;
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                listInfo.remove(firstJunkInfo);
+            }
+        }
+        if (listInfo.size() != 0) {
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+        }
     }
 }

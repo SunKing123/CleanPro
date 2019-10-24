@@ -204,7 +204,7 @@ public class ToolFragment extends SimpleFragment {
                 }
 
 
-                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -246,7 +246,7 @@ public class ToolFragment extends SimpleFragment {
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_one_key_speed));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -281,7 +281,7 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);

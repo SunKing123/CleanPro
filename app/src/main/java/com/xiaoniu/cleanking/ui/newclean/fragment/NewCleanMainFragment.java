@@ -305,14 +305,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (event.isAllNotifyClean() && NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
             mShowCount--;
             mNotiClearFinishIv.setVisibility(View.VISIBLE);
-            mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
+//            mNotiClearIv.setImageResource(R.drawable.icon_home_qq);
+            GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
             mNotiClearTv.setText(R.string.finished_clean_notify_hint);
         }
         if (PreferenceUtil.isFirstForHomeIcon() && mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
             if (!PreferenceUtil.getPowerCleanTime()) {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
-                mElectricityIv.setImageResource(R.drawable.icon_power);
+//                mElectricityIv.setImageResource(R.drawable.icon_power);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
                     mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
@@ -335,14 +337,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void quickenEvent(QuickenEvent event) {
         --mShowCount;
         mAccFinishIv.setVisibility(View.VISIBLE);
-        mAccIv.setImageResource(R.drawable.icon_yjjs);
+//        mAccIv.setImageResource(R.drawable.icon_yjjs);
+        GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
 
         if (mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
             if (!PreferenceUtil.getPowerCleanTime()) {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
-                mElectricityIv.setImageResource(R.drawable.icon_power);
+//                mElectricityIv.setImageResource(R.drawable.icon_power);
+                GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                 if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
                     mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
@@ -362,7 +366,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      */
     @Subscribe
     public void internalStoragePremEvent(InternalStoragePremEvent event) {
-        Log.d("XiLei", "ddddddddddddddddd");
         GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
@@ -401,7 +404,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
-        mLottieHomeView.pauseAnimation();
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             startActivity(NowCleanActivity.class);
@@ -418,7 +420,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_suggest_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -466,7 +468,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -508,7 +510,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -566,7 +568,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         intent.putExtra("mRamScale", mRamScale);
         intent.putExtra("mNotifySize", mNotifySize);
         intent.putExtra("mPowerSize", mPowerSize);
-        intent.setClass(getActivity(),QQCleanHomeActivity.class);
+        intent.setClass(getActivity(), QQCleanHomeActivity.class);
         getActivity().startActivity(intent);
     }
 
@@ -608,7 +610,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -643,7 +645,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -679,7 +681,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     }
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
