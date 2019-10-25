@@ -72,7 +72,7 @@ public class AppManager {
     public String preActivityName() {
         int index = activityName.size() - 2;
         if (index < 0) {
-            return null;
+            return "";
         }
         String activityNames = activityName.get(index);
         return activityNames;

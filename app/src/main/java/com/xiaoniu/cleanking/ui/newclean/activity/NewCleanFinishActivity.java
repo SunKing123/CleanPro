@@ -1304,9 +1304,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             VideoOption.Builder builder = new VideoOption.Builder();
             builder.setAutoPlayMuted(true) //设置视频广告在预览页自动播放时是否静音
-                    .setEnableDetailPage(false) //点击视频是否跳转到详情页
-                    .setEnableUserControl(true) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
+                    .setEnableDetailPage(true) //点击视频是否跳转到详情页
+                    .setEnableUserControl(false) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
                     .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS);
+
             VideoOption videoOption = builder.build();
             // 视频广告需对MediaView进行绑定，MediaView必须为容器mContainer的子View
             ad.bindMediaView(mMediaView, videoOption,
@@ -1335,10 +1336,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                         @Override
                         public void onVideoStart() {
-                            Log.d(TAG, "onVideoStart: ");
+                           /* Log.d(TAG, "onVideoStart: ");
                             if (mNativeUnifiedADData2 != null) {
                                 mNativeUnifiedADData2.pauseVideo();
-                            }
+                            }*/
                         }
 
                         @Override
@@ -1348,14 +1349,17 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                         @Override
                         public void onVideoResume() {
-                            Log.d(TAG, "onVideoResume: ");
+                           /* Log.d(TAG, "onVideoResume: ");
                             if (mNativeUnifiedADData2 != null) {
                                 mNativeUnifiedADData2.pauseVideo();
-                            }
+                            }*/
                         }
 
                         @Override
                         public void onVideoCompleted() {
+                            if (mNativeUnifiedADData != null) {
+                                mNativeUnifiedADData.startVideo();
+                            }
                             Log.d(TAG, "onVideoCompleted: ");
                         }
 
@@ -1420,9 +1424,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             VideoOption.Builder builder = new VideoOption.Builder();
             builder.setAutoPlayMuted(true) //设置视频广告在预览页自动播放时是否静音
-                    .setEnableDetailPage(false) //点击视频是否跳转到详情页
-                    .setEnableUserControl(true) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
-                    .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.NEVER); //不自动播放
+                    .setEnableDetailPage(true) //点击视频是否跳转到详情页
+                    .setEnableUserControl(false) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
+                    .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS); //不自动播放
             VideoOption videoOption = builder.build();
             // 视频广告需对MediaView进行绑定，MediaView必须为容器mContainer的子View
             ad.bindMediaView(mMediaView2, videoOption,
@@ -1452,9 +1456,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         @Override
                         public void onVideoStart() {
                             Log.d(TAG, "onVideoStart: ");
-                            if (mNativeUnifiedADData != null) {
+                            /*if (mNativeUnifiedADData != null) {
                                 mNativeUnifiedADData.pauseVideo();
-                            }
+                            }*/
                         }
 
                         @Override
@@ -1465,13 +1469,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         @Override
                         public void onVideoResume() {
                             Log.d(TAG, "onVideoResume: ");
-                            if (mNativeUnifiedADData != null) {
-                                mNativeUnifiedADData.pauseVideo();
-                            }
+                          /*  if (mNativeUnifiedADData != null) {
+                                mNativeUnifiedADData.resumeVideo();
+                            }*/
                         }
 
                         @Override
                         public void onVideoCompleted() {
+                              if (mNativeUnifiedADData2 != null) {
+                                mNativeUnifiedADData2.startVideo();
+                            }
                             Log.d(TAG, "onVideoCompleted: ");
                         }
 

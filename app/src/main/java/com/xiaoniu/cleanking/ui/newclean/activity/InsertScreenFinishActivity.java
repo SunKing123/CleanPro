@@ -350,8 +350,8 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
             VideoOption.Builder builder = new VideoOption.Builder();
             builder.setAutoPlayMuted(true) //设置视频广告在预览页自动播放时是否静音
-                    .setEnableDetailPage(false) //点击视频是否跳转到详情页
-                    .setEnableUserControl(true) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
+                    .setEnableDetailPage(true) //点击视频是否跳转到详情页
+                    .setEnableUserControl(false) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
                     .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS);
             VideoOption videoOption = builder.build();
             // 视频广告需对MediaView进行绑定，MediaView必须为容器mContainer的子View
@@ -396,6 +396,10 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
                         @Override
                         public void onVideoCompleted() {
+                            if(mNativeUnifiedADData!=null){
+                                mNativeUnifiedADData.startVideo();
+                            }
+
                             Log.d(TAG, "onVideoCompleted: ");
                         }
 
