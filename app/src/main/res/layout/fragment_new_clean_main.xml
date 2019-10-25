@@ -587,7 +587,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="@string/clean_qq_litter"
-                        android:textColor="@color/color_777777"
+                        android:alpha="0.4"
+                        android:textColor="@color/color_404040"
                         android:textSize="@dimen/dimen_14sp" />
                 </LinearLayout>
 
@@ -648,7 +649,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="@string/uninstall_software"
-                        android:textColor="@color/color_777777"
+                        android:alpha="0.4"
+                        android:textColor="@color/color_404040"
                         android:textSize="@dimen/dimen_14sp" />
                 </LinearLayout>
 
@@ -708,7 +710,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
                         android:text="@string/lock_news"
-                        android:textColor="@color/color_777777"
+                        android:alpha="0.4"
+                        android:textColor="@color/color_404040"
                         android:textSize="@dimen/dimen_14sp" />
                 </LinearLayout>
 
