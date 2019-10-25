@@ -8,14 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_12dp"
-        android:background="@drawable/bg_shape_radio_white_12"
+        android:background="@drawable/bg_finish_rem"
         android:orientation="vertical">
         <!--一键加速-->
         <RelativeLayout
             android:id="@+id/v_quicken"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_16dp"
             android:visibility="gone">
 
             <ImageView
@@ -75,7 +76,8 @@
             android:id="@+id/v_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_16dp"
             android:visibility="gone">
 
             <ImageView
@@ -135,7 +137,8 @@
             android:id="@+id/v_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_16dp"
             android:visibility="gone">
 
             <ImageView
@@ -195,7 +198,8 @@
             android:id="@+id/v_wechat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_16dp"
             android:visibility="gone">
 
             <ImageView
@@ -255,7 +259,8 @@
             android:id="@+id/v_file"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_16dp"
             android:visibility="gone">
 
             <ImageView
@@ -315,7 +320,8 @@
             android:id="@+id/v_cool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_16dp"
             android:visibility="gone">
 
             <ImageView
