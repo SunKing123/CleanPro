@@ -17,6 +17,7 @@
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher" />
 <!--        android:screenOrientation="portrait"-->
         <activity
