@@ -104,5 +104,8 @@
     <color name="color_777777">#777777</color>
     <color name="color_F7F7F7">#F7F7F7</color>
     <color name="color_27D698">#27D698</color>
+    <color name="color_B3B3B3">#B3B3B3</color>
+    <color name="color_DDDDDD">#DDDDDD</color>
+    <color name="color_F0F0F0">#F0F0F0</color>
 
 </resources>

@@ -25,22 +25,36 @@
                     <RelativeLayout
                         android:id="@+id/v_advert"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="500dp"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/bg_gradient_clean_screen">
 
-                        <!-- 原生广告的视频组件 -->
-                        <com.qq.e.ads.nativ.MediaView
-                            android:id="@+id/gdt_media_view"
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true" />
+                            android:layout_centerInParent="true">
+                            <!-- 原生广告的视频组件 -->
+                            <com.qq.e.ads.nativ.MediaView
+                                android:id="@+id/gdt_media_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true" />
 
-                        <ImageView
-                            android:id="@+id/iv_advert"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true" />
+                            <ImageView
+                                android:id="@+id/iv_advert"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true" />
+
+                            <ImageView
+                                android:id="@+id/iv_close"
+                                android:layout_width="@dimen/dimen_35dp"
+                                android:layout_height="@dimen/dimen_35dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_margin="@dimen/dimen_8dp"
+                                android:src="@drawable/icon_close" />
+                        </RelativeLayout>
+
 
                     </RelativeLayout>
 
@@ -100,14 +114,6 @@
             </com.qq.e.ads.nativ.widget.NativeAdContainer>
         </LinearLayout>
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="@dimen/dimen_35dp"
-        android:layout_height="@dimen/dimen_35dp"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/dimen_16dp"
-        android:src="@drawable/icon_close" />
 
     <RelativeLayout
         android:id="@+id/v_error"

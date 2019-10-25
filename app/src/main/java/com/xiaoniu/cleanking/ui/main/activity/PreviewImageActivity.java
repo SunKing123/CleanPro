@@ -111,7 +111,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         tvSelectImage.setOnClickListener(v -> {
             tvSelectImage.setSelected(!tvSelectImage.isSelected());
             tvSelectImage.setBackgroundResource(tvSelectImage.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            if (selectPos > adapter.getListImage().size()-1) {
+            if (selectPos > adapter.getListImage().size() - 1) {
                 return;
             }
             adapter.getListImage().get(selectPos).setIsSelect(tvSelectImage.isSelected());
@@ -128,7 +128,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         tvDelete.setOnClickListener(v -> {
 
             List<FileEntity> listF = new ArrayList<>();
-            List<FileEntity> listData=adapter.getListImage();
+            List<FileEntity> listData = adapter.getListImage();
             for (int i = 0; i < listData.size(); i++) {
                 if (listData.get(i).getIsSelect())
                     listF.add(adapter.getListImage().get(i));
@@ -140,10 +140,10 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
                 public void clickOKBtn() {
                     for (int i = 0; i < listF.size(); i++) {
                         File f = new File(listF.get(i).getPath());
-                        if(null!=f && f.exists()){
+                        if (null != f && f.exists()) {
                             f.delete();
                         }
-                        AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,MediaStore.Audio.Media.DATA+"= \""+listF.get(i).getPath()+"\"",null);
+                        AppApplication.getInstance().getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.DATA + "= \"" + listF.get(i).getPath() + "\"", null);
 
                     }
                     //数据库删除选中的文件
@@ -159,10 +159,21 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /**
+         * Umeng
+         * java.lang.IllegalStateException: The application's PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged! Expected adapter item count: 88, found: 85 Pager id: com.xiaoniu.cleanking:id/preview_image_vp_content Pager class: class com.xiaoniu.cleanking.widget.HackyViewPager Problematic adapter: class com.xiaoniu.cleanking.ui.main.adapter.PreviewImagePagerAdapter
+         */
+        if (null != previewImagePagerAdapter) {
+            previewImagePagerAdapter.notifyDataSetChanged();
+        }
+    }
 
     public void computeDeleteSize() {
         List<FileEntity> listF = new ArrayList<>();
-        List<FileEntity> listData=adapter.getListImage();
+        List<FileEntity> listData = adapter.getListImage();
         for (int i = 0; i < listData.size(); i++) {
             if (listData.get(i).getIsSelect())
                 listF.add(listData.get(i));
@@ -226,14 +237,15 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
         super.onBackPressed();
     }
 
-    public void backToActivity(){
+    public void backToActivity() {
         Intent intent1 = new Intent();
         Bundle bundle = new Bundle();
         intent1.putExtras(bundle);
         setResult(205, intent1);
         if (mImageArrayList == null) return;
-        CleanAllFileScanUtil.clean_image_list =mImageArrayList;
+        CleanAllFileScanUtil.clean_image_list = mImageArrayList;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

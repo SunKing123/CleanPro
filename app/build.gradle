@@ -148,8 +148,6 @@ dependencies {
     //Application生命周期管理
     api 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
-    //WebView
-    api 'com.just.agentweb:agentweb:4.1.2'
 }
 
 

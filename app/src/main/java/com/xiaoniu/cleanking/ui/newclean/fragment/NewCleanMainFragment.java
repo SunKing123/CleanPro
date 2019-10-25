@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,10 +14,8 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
-import com.tencent.tinker.loader.shareutil.SharePatchFileUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -57,7 +53,6 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -138,7 +133,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         return R.layout.fragment_new_clean_main;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void initView() {
         tvNowClean.setVisibility(View.VISIBLE);
@@ -269,7 +263,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onResume() {
         super.onResume();
@@ -277,6 +270,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
+
+        if (mNotifySize > 0 && !PreferenceUtil.isCleanNotifyUsed() && mShowCount < 2) {
+            mShowCount++;
+            GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
+            mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+            mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
+        }
 
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > 2) {
@@ -299,9 +299,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
     /**
      * 清理完成回调
+     *
      * @param event
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
         if (null == event || TextUtils.isEmpty(event.getTitle())) return;
@@ -461,8 +461,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
 
     @Subscribe
-    public void changeLifecyEvent(LifecycEvent lifecycEvent){
-        if(lifecycEvent.isActivity()){
+    public void changeLifecyEvent(LifecycEvent lifecycEvent) {
+        if (lifecycEvent.isActivity()) {
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setVisibility(VISIBLE);
             mTvCleanType.setText(getString(R.string.tool_home_hint));

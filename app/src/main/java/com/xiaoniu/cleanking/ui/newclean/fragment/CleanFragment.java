@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -102,11 +101,13 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @Override
     protected void initView() {
-        ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), true);
-        } else {
-            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), false);
+        if (null != ((NowCleanActivity) getActivity()).getToolBar()) {
+            ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), false);
+            }
         }
         mHeadView = getLayoutInflater().inflate(R.layout.layout_head_now_clean, null);
 
@@ -275,8 +276,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mCleanAnimView.startCleanAnim(false);
         clearAll();
     }
+
     boolean isCacheCheckAll = true;  //运行内存是否全选
     boolean isCheckAll = true;  //运行内存是否全选
+
     @SuppressLint("CheckResult")
     private void clearAll() {
         if (mJunkGroups == null || mJunkGroups.size() < 1) {
@@ -324,8 +327,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         long leavedCache = CleanUtil.freeJunkInfos(value.mChildren);
                         total += leavedCache;
                     }
-                }else if(entry.getKey() == 4 && value.otherChildren.size()>0){//其他垃圾处理
-                    if(!value.isChecked()){
+                } else if (entry.getKey() == 4 && value.otherChildren.size() > 0) {//其他垃圾处理
+                    if (!value.isChecked()) {
                         isCheckAll = false;
                     }
 

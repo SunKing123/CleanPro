@@ -7,12 +7,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -253,11 +251,13 @@ public class AndroidUtil {
      * 获取手机剩余电量
      *
      * @param context
-     * @return
+     * @return 获取手机电量手机系统大于5.0才有该方法，5.0之下返回小于70让首页超强省电展示危急状态
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static int getElectricityNum(Context context) {
-        BatteryManager batteryManager = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
-        return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            BatteryManager batteryManager = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
+            return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        }
+        return 65;
     }
 }

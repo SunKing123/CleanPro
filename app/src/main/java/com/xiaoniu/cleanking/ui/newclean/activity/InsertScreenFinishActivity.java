@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qq.e.ads.cfg.VideoOption;
@@ -43,7 +45,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     private ImageView iv_advert_logo, iv_advert;
     private TextView tv_advert, tv_advert_content, mBtnDownload;
-    private View mViewDownload, mViewContent, mErrorV;
+    private View mViewDownload, mViewContent, mErrorV, v_advert;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -85,6 +87,15 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         mBtnDownload = findViewById(R.id.tv_download);
         mViewContent = findViewById(R.id.v_content);
         mErrorV = findViewById(R.id.v_error);
+        v_advert = findViewById(R.id.v_advert);
+
+        WindowManager wm = this.getWindowManager();
+        int height = wm.getDefaultDisplay().getHeight();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v_advert.getLayoutParams();
+        params.height = height * 2 / 3;
+        v_advert.setLayoutParams(params);
+        Log.d("XiLei", "height=" + height);
+
     }
 
     /**
@@ -224,11 +235,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         String functionPosition = "";
         switch (v.getId()) {
             case R.id.iv_close:
-                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage,tv_advert.getText().toString().trim());
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage, tv_advert.getText().toString().trim());
                 finish();
                 break;
             case R.id.iv_close_error:
-                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage,tv_advert.getText().toString().trim());
+                StatisticsUtils.clickAD("full_ad_page_close_click", "全屏广告关闭按钮点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage, tv_advert.getText().toString().trim());
                 finish();
                 break;
         }
@@ -309,15 +320,15 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage);
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage,ad.getTitle());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage);
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage, ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage,NewCleanFinishActivity.currentPage,ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", PositionId.CLEAN_FINISH_ID, "优量汇", NewCleanFinishActivity.currentPage, NewCleanFinishActivity.currentPage, ad.getTitle());
 
             }
 
