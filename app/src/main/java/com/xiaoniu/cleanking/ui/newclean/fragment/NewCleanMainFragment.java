@@ -464,6 +464,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void changeLifecyEvent(LifecycEvent lifecycEvent){
         if(lifecycEvent.isActivity()){
             tvNowClean.setVisibility(VISIBLE);
+            mTvCleanType.setVisibility(VISIBLE);
             mTvCleanType.setText(getString(R.string.tool_home_hint));
             mLottieHomeView.useHardwareAcceleration(true);
             mLottieHomeView.setAnimation("clean_home_top.json");
@@ -913,7 +914,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                mTvCleanType.setVisibility(VISIBLE);
             }
 
             @Override
