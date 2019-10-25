@@ -72,7 +72,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .apiModule(new ApiModule(application))
                 .build();
         mAppComponent.inject(application);
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver(application));
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver(application.getApplicationContext()));
     }
 
     private void initGeekPush(Application application) {

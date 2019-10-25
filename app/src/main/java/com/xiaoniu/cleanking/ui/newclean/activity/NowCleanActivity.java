@@ -93,10 +93,13 @@ public class NowCleanActivity extends BaseActivity {
      * 开始扫描
      */
     private void startScan() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getToolBar().setBackgroundColor(getResources().getColor(R.color.color_4690FD));
-        } else {
-            getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+        // Umeng --- java.lang.NullPointerException: Attempt to invoke virtual method 'android.support.v7.widget.Toolbar com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity.getToolBar()' on a null object reference
+        if(null != getToolBar()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getToolBar().setBackgroundColor(getResources().getColor(R.color.color_4690FD));
+            } else {
+                getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
+            }
         }
 
         isScan = true;

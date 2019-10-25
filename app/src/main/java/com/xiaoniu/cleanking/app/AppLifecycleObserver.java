@@ -33,7 +33,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
-        EventBus.getDefault().post(new LifecycEvent(true));
         if (isBack && PreferenceUtil.getHomeBackTime()) {
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
@@ -42,7 +41,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
                     if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                         if (null == mContext) return;
                         Intent intent = new Intent();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setClass(mContext, SplashADHotActivity.class);
                         mContext.startActivity(intent);
                         isBack = false;
@@ -50,6 +49,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
                 }
             }
         }
+        EventBus.getDefault().post(new LifecycEvent(true));
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)

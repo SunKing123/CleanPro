@@ -14,8 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qq.e.ads.cfg.VideoOption;
@@ -534,7 +535,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvQl.setText("快去体验其他功能");
                 }
             } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-                if(PreferenceUtil.getIsCheckedAll()){
+                if (PreferenceUtil.getIsCheckedAll()) {
                     CleanEvent cleanEvent = new CleanEvent();
                     cleanEvent.setCleanAminOver(true);
                     EventBus.getDefault().post(cleanEvent);
@@ -599,11 +600,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
-                iv_quicken.setImageResource(R.drawable.icon_yjjs_o);
+                iv_quicken.setImageResource(R.drawable.icon_yjjs_o_clean);
                 tv_quicken.setTextColor(ContextCompat.getColor(this, R.color.color_FFAC01));
                 tv_quicken.setText(getString(R.string.internal_storage_scale_hint));
             } else {
-                GlideUtils.loadDrawble(this, R.drawable.icon_quicken_finish, iv_quicken);
+                GlideUtils.loadDrawble(this, R.drawable.icon_quicken_clean_gif, iv_quicken);
                 tv_quicken.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     tv_quicken.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
@@ -613,11 +614,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
-                iv_power.setImageResource(R.drawable.icon_power_o);
+                iv_power.setImageResource(R.drawable.icon_power_o_clean);
                 tv_power.setTextColor(ContextCompat.getColor(this, R.color.color_FFAC01));
                 tv_power.setText(getString(R.string.power_consumption_thread));
             } else {
-                GlideUtils.loadDrawble(this, R.drawable.icon_power_finish, iv_power);
+                GlideUtils.loadDrawble(this, R.drawable.icon_power_clean_gif, iv_power);
                 tv_power.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     tv_power.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
@@ -627,11 +628,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
 
             if (!NotifyUtils.isNotificationListenerEnabled()) {
-                iv_notification.setImageResource(R.drawable.icon_home_qq_o);
+                iv_notification.setImageResource(R.drawable.icon_notify_o_clean);
                 tv_notification.setTextColor(ContextCompat.getColor(this, R.color.color_FFAC01));
                 tv_notification.setText(R.string.find_harass_notify);
             } else {
-                GlideUtils.loadDrawble(this, R.drawable.icon_notify_finish, iv_notification);
+                GlideUtils.loadDrawble(this, R.drawable.icon_notify_clean_gif, iv_notification);
                 tv_notification.setTextColor(ContextCompat.getColor(this, R.color.color_FF4545));
                 tv_notification.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
             }
@@ -1126,6 +1127,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             mRecyclerView.destroy(); // this will totally release XR's memory
             mRecyclerView = null;
         }
+        //Umeng --- Caused by: java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
+        if (Util.isOnMainThread()) {
+            Glide.get(this).clearMemory();
+        }
+        //Umeng ---
     }
 
     public void startLoadData() {

@@ -76,8 +76,6 @@ public abstract class BaseAgentWebActivity extends AppCompatActivity {
                 .createAgentWeb()
                 .ready()
                 .go(getUrl());
-
-
     }
 
 

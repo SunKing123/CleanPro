@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qq.e.ads.cfg.VideoOption;
@@ -43,7 +45,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     private ImageView iv_advert_logo, iv_advert;
     private TextView tv_advert, tv_advert_content, mBtnDownload;
-    private View mViewDownload, mViewContent, mErrorV;
+    private View mViewDownload, mViewContent, mErrorV, v_advert;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -85,6 +87,15 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         mBtnDownload = findViewById(R.id.tv_download);
         mViewContent = findViewById(R.id.v_content);
         mErrorV = findViewById(R.id.v_error);
+        v_advert = findViewById(R.id.v_advert);
+
+        WindowManager wm = this.getWindowManager();
+        int height = wm.getDefaultDisplay().getHeight();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v_advert.getLayoutParams();
+        params.height = height * 2 / 3;
+        v_advert.setLayoutParams(params);
+        Log.d("XiLei", "height=" + height);
+
     }
 
     /**

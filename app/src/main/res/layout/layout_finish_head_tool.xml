@@ -4,10 +4,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_12dp"
+        android:layout_margin="@dimen/dimen_8dp"
         android:background="@drawable/bg_finish_rem"
         android:orientation="vertical">
         <!--一键加速-->
@@ -15,8 +15,8 @@
             android:id="@+id/v_quicken"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
 
             <ImageView
@@ -24,7 +24,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_yjjs" />
+                android:src="@drawable/icon_yjjs_clean" />
 
             <TextView
                 android:id="@+id/tv_quicken_title"
@@ -42,10 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_quicken_title"
                 android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_quicken"
                 android:text="@string/internal_storage_scale_hint"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -53,31 +53,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_5dp"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:paddingLeft="@dimen/dimen_11dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/quicken_now"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <ImageView
+        <View
             android:id="@+id/line_quicken"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/icon_line_hor"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_marginRight="@dimen/dimen_8dp"
+            android:background="@color/color_F0F0F0"
             android:visibility="gone" />
         <!--超强省电-->
         <RelativeLayout
             android:id="@+id/v_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
 
             <ImageView
@@ -85,7 +87,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_power" />
+                android:src="@drawable/icon_power_clean" />
 
             <TextView
                 android:id="@+id/tv_power_title"
@@ -103,10 +105,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_power_title"
                 android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_power"
                 android:text="@string/power_consumption_thread"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -114,31 +116,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_5dp"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:paddingLeft="@dimen/dimen_11dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/power_now"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <ImageView
+        <View
             android:id="@+id/line_power"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/icon_line_hor"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_marginRight="@dimen/dimen_8dp"
+            android:background="@color/color_F0F0F0"
             android:visibility="gone" />
         <!--通知栏清理-->
         <RelativeLayout
             android:id="@+id/v_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
 
             <ImageView
@@ -146,7 +150,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_home_qq" />
+                android:src="@drawable/icon_notify_clean" />
 
             <TextView
                 android:id="@+id/tv_notification_title"
@@ -164,10 +168,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_notification_title"
                 android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_notification"
                 android:text="@string/find_harass_notify"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -175,31 +179,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_5dp"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:paddingLeft="@dimen/dimen_11dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/tool_now_clean"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <ImageView
+        <View
             android:id="@+id/line_notification"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/icon_line_hor"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_marginRight="@dimen/dimen_8dp"
+            android:background="@color/color_F0F0F0"
             android:visibility="gone" />
         <!--微信专清-->
         <RelativeLayout
             android:id="@+id/v_wechat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
 
             <ImageView
@@ -207,7 +213,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_home_wx" />
+                android:src="@drawable/icon_wx_clean" />
 
             <TextView
                 android:id="@+id/tv_wechat_title"
@@ -225,10 +231,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_wechat_title"
                 android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_wechat"
                 android:text="@string/find_cache_garbage"
-                android:textColor="@color/color_BABABA"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -236,31 +242,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_5dp"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:paddingLeft="@dimen/dimen_11dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/tool_now_clean"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <ImageView
+        <View
             android:id="@+id/line_wechat"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/icon_line_hor"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_marginRight="@dimen/dimen_8dp"
+            android:background="@color/color_F0F0F0"
             android:visibility="gone" />
         <!--文件清理-->
         <RelativeLayout
             android:id="@+id/v_file"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
 
             <ImageView
@@ -268,7 +276,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_wjql" />
+                android:src="@drawable/icon_file_clean" />
 
             <TextView
                 android:id="@+id/tv_file_title"
@@ -286,10 +294,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_file_title"
                 android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_file"
                 android:text="@string/find_apk"
-                android:textColor="@color/color_BABABA"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -297,31 +305,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_5dp"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:paddingLeft="@dimen/dimen_11dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/tool_now_clean"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
 
-        <ImageView
+        <View
             android:id="@+id/line_file"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/icon_line_hor"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dimen_8dp"
+            android:layout_marginRight="@dimen/dimen_8dp"
+            android:background="@color/color_F0F0F0"
             android:visibility="gone" />
         <!--手机降温-->
         <RelativeLayout
             android:id="@+id/v_cool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dimen_16dp"
-            android:paddingBottom="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
 
             <ImageView
@@ -329,7 +339,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_home_jw" />
+                android:src="@drawable/icon_cool_clean" />
 
             <TextView
                 android:id="@+id/tv_file_cool"
@@ -347,10 +357,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_file_cool"
                 android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_cool"
                 android:text="@string/cpu_height"
-                android:textColor="@color/color_BABABA"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -358,13 +368,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_5dp"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:paddingLeft="@dimen/dimen_11dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/text_cool"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
     </LinearLayout>
@@ -374,11 +386,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_12dp"
+        android:layout_marginLeft="@dimen/dimen_8dp"
+        android:layout_marginRight="@dimen/dimen_8dp"
         android:layout_marginBottom="@dimen/dimen_16dp"
-        android:background="@drawable/bg_ad_two"
-        android:padding="@dimen/dimen_16dp"
+        android:background="@drawable/bg_finish_rem"
+        android:paddingLeft="@dimen/dimen_20dp"
+        android:paddingTop="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_20dp"
+        android:paddingBottom="@dimen/dimen_24dp"
         android:visibility="gone">
 
         <RelativeLayout
@@ -390,14 +405,17 @@
             <ImageView
                 android:id="@+id/iv_advert_logo"
                 android:layout_width="@dimen/dimen_35dp"
-                android:layout_height="@dimen/dimen_35dp" />
+                android:layout_height="@dimen/dimen_35dp"
+                android:layout_marginTop="@dimen/dimen_8dp" />
 
             <TextView
                 android:id="@+id/tv_advert"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginRight="@dimen/dimen_16dp"
+                android:layout_marginRight="@dimen/dimen_8dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_toLeftOf="@+id/tv_download"
                 android:layout_toRightOf="@+id/iv_advert_logo"
                 android:textColor="@color/color_404040"
@@ -408,11 +426,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginRight="@dimen/dimen_16dp"
+                android:layout_marginRight="@dimen/dimen_8dp"
                 android:layout_toLeftOf="@+id/tv_download"
                 android:layout_toRightOf="@+id/iv_advert_logo"
-                android:textColor="@color/color_777777"
+                android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
@@ -420,6 +440,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:lines="1"
                 android:paddingLeft="@dimen/dimen_11dp"
@@ -427,7 +448,8 @@
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/download_now"
-                android:textColor="@color/color_777777"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
 
             <!-- 原生广告的视频组件 -->
@@ -436,14 +458,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert_content"
-                android:layout_marginTop="@dimen/dimen_16dp" />
+                android:layout_marginTop="@dimen/dimen_8dp" />
 
             <ImageView
                 android:id="@+id/iv_advert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert_content"
-                android:layout_marginTop="@dimen/dimen_16dp" />
+                android:layout_marginTop="@dimen/dimen_8dp" />
         </RelativeLayout>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
 </LinearLayout>

@@ -87,7 +87,11 @@ dependencies {
     api 'com.jaredrummler:android-processes:1.1.1'
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
     api 'com.airbnb.android:lottie:2.7.0'
-    api 'com.just.agentweb:agentweb:4.0.3-beta' // (必选)
+    //WebView
+    api 'com.just.agentweb:agentweb:4.1.2' // (必选)
+    api 'com.just.agentweb:filechooser:4.1.2'// (可选)
+    api 'com.download.library:Downloader:4.1.2'// (可选)
+
     api 'se.emilsjolander:stickylistheaders:2.5.2'
 
     api project(path: ':otherlib:takephoto_library')
