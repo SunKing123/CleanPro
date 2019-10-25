@@ -87,7 +87,8 @@
                 android:id="@+id/iv_advert_logo"
                 android:layout_width="@dimen/dimen_35dp"
                 android:layout_height="@dimen/dimen_35dp"
-                android:layout_marginTop="@dimen/dimen_8dp" />
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/tv_advert"
@@ -104,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert"
                 android:layout_marginLeft="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_advert_logo"
                 android:alpha="0.4"
                 android:textColor="@color/color_404040"
