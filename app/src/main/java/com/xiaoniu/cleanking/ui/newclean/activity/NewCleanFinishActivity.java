@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -75,6 +76,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -173,6 +175,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         mTvSize = header.findViewById(R.id.tv_size);
         mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
+        mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
 
         mContainer = header.findViewById(R.id.native_ad_container);
@@ -1213,7 +1217,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         });
     }
 
-    private H mHandler = new H();
+    private final H mHandler = new H(this);
     private static final int AD_COUNT = 1;
     private static final int MSG_INIT_AD = 0;
     private static final int MSG_VIDEO_START = 1;
@@ -1226,38 +1230,43 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private class H extends Handler {
-        public H() {
-            super();
+        private WeakReference<NewCleanFinishActivity> mActivity ;
+        public H(NewCleanFinishActivity activity){
+            mActivity = new WeakReference<NewCleanFinishActivity>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_INIT_AD:
-                    NativeUnifiedADData ad = (NativeUnifiedADData) msg.obj;
-                    Log.d(TAG, String.format(Locale.getDefault(), "(pic_width,pic_height) = (%d , %d)", ad
-                                    .getPictureWidth(),
-                            ad.getPictureHeight()));
-                    initAd(ad);
-                    Log.d(TAG, "eCPM = " + mNativeUnifiedADData.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData.getECPMLevel());
-                    break;
-                case MSG_VIDEO_START:
-                    iv_advert.setVisibility(View.GONE);
-                    mMediaView.setVisibility(View.VISIBLE);
-                    break;
-                case MSG_INIT_AD2:
-                    NativeUnifiedADData ad2 = (NativeUnifiedADData) msg.obj;
-                    Log.d(TAG, String.format(Locale.getDefault(), "(pic_width,pic_height) = (%d , %d)", ad2
-                                    .getPictureWidth(),
-                            ad2.getPictureHeight()));
-                    initAd2(ad2);
-                    Log.d(TAG, "eCPM = " + mNativeUnifiedADData2.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData2.getECPMLevel());
-                    break;
-                case MSG_VIDEO_START2:
-                    iv_advert2.setVisibility(View.GONE);
-                    mMediaView2.setVisibility(View.VISIBLE);
-                    break;
+            NewCleanFinishActivity activity = mActivity.get();
+            if(activity!=null){
+                switch (msg.what) {
+                    case MSG_INIT_AD:
+                        NativeUnifiedADData ad = (NativeUnifiedADData) msg.obj;
+                        Log.d(TAG, String.format(Locale.getDefault(), "(pic_width,pic_height) = (%d , %d)", ad
+                                        .getPictureWidth(),
+                                ad.getPictureHeight()));
+                        initAd(ad);
+                        Log.d(TAG, "eCPM = " + mNativeUnifiedADData.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData.getECPMLevel());
+                        break;
+                    case MSG_VIDEO_START:
+                        iv_advert.setVisibility(View.GONE);
+                        mMediaView.setVisibility(View.VISIBLE);
+                        break;
+                    case MSG_INIT_AD2:
+                        NativeUnifiedADData ad2 = (NativeUnifiedADData) msg.obj;
+                        Log.d(TAG, String.format(Locale.getDefault(), "(pic_width,pic_height) = (%d , %d)", ad2
+                                        .getPictureWidth(),
+                                ad2.getPictureHeight()));
+                        initAd2(ad2);
+                        Log.d(TAG, "eCPM = " + mNativeUnifiedADData2.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData2.getECPMLevel());
+                        break;
+                    case MSG_VIDEO_START2:
+                        iv_advert2.setVisibility(View.GONE);
+                        mMediaView2.setVisibility(View.VISIBLE);
+                        break;
+                }
             }
+
         }
 
     }

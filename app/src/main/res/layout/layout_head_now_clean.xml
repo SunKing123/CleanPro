@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/color_FD6F46"
     android:gravity="center"
-    android:paddingTop="@dimen/dimen_28dp"
+    android:paddingTop="@dimen/dimen_23dp"
     android:paddingBottom="@dimen/dimen_23dp"
     android:orientation="vertical">
 
@@ -37,7 +37,7 @@
                 android:id="@+id/tv_clear_finish_gb_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_7dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
                 android:text="MB"
                 android:textColor="@color/white"
                 android:textSize="14sp" />

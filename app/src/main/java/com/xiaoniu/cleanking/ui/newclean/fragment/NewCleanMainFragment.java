@@ -5,8 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +43,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -79,6 +87,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     private long firstTime;
     @BindView(R.id.tv_clean_type)
     TextView mTvCleanType;
+    @BindView(R.id.tv_clean_type01)
+    TextView mTvCleanType01;
 
     @BindView(R.id.line_shd)
     LinearLayout lineShd;
@@ -250,14 +260,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             mInteractionPoistion = 0;
         }
         StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
-        if (null != mInteractionList && mInteractionList.size() > 0) {
+        if (null != mInteractionList && mInteractionList.size() > 0 ) {
 
             if (mInteractionList.size() == 1) {
                 startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                         .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
             } else {
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+                if( mInteractionList.size()-1 >= mInteractionPoistion ){
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+                }
+
             }
             mInteractionPoistion++;
         }
@@ -285,7 +298,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (mInteractionList.size() == 1) {
                 GlideUtils.loadGif(getActivity(), mInteractionList.get(0).getImgUrl(), mInteractionIv, 10000);
             } else {
-                GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+                if( mInteractionList.size()-1 >= mInteractionPoistion ){
+                    GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+                }
+
             }
         }
 
@@ -465,7 +481,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         if (lifecycEvent.isActivity()) {
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setVisibility(VISIBLE);
-            mTvCleanType.setText(getString(R.string.tool_home_hint));
+            mTvCleanType01.setVisibility(View.GONE);
+            showTextView();
             mLottieHomeView.useHardwareAcceleration(true);
             mLottieHomeView.setAnimation("clean_home_top.json");
             mLottieHomeView.setImageAssetsFolder("images_home");
@@ -832,8 +849,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D698), true);
-
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
             }
@@ -847,9 +863,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                mTvCleanType.setText(getString(R.string.tool_phone_already_clean));
+                showTextView01();
                 tvNowClean.setVisibility(View.GONE);
-
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -906,6 +921,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      * 静止时动画
      */
     private void showHomeLottieView() {
+        showTextView();
         mLottieHomeView.useHardwareAcceleration(true);
         mLottieHomeView.setAnimation("clean_home_top.json");
         mLottieHomeView.setImageAssetsFolder("images_home");
@@ -914,7 +930,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                mTvCleanType.setVisibility(VISIBLE);
+
             }
 
             @Override
@@ -938,5 +954,38 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+
+    public void showTextView(){
+        String hintText = getString(R.string.tool_home_hint);
+        SpannableString msp = new SpannableString(hintText);
+//        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mTvCleanType.setText(msp);
+                mTvCleanType.animate()
+                        .alpha(1f)
+                        .setDuration(500)
+                        .setListener(null);
+            }
+        }, 1000);
+    }
+
+
+    public void showTextView01(){
+        String showText = getString(R.string.tool_phone_already_clean);
+        String showText01 = getString(R.string.tool_try_more_clean);
+        SpannableString msp = new SpannableString(showText);
+        SpannableString msp01 = new SpannableString(showText01);
+        msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTvCleanType.setText(msp);
+        mTvCleanType.setVisibility(VISIBLE);
+        mTvCleanType01.setText(msp01);
+        mTvCleanType01.setVisibility(VISIBLE);
+
     }
 }

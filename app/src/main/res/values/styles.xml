@@ -30,7 +30,7 @@
     <!--启动页主题-->
     <style name="Theme.AppLauncher" parent="@style/Theme.FullScreen">
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
     </style>
     <style name="BaseDialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item><!-- 无边框 -->

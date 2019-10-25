@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -117,6 +118,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
         TextView tvSize = mHeadView.findViewById(R.id.tv_size);
         TextView tvUnit = mHeadView.findViewById(R.id.tv_clear_finish_gb_title);
+
+        tvSize.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        tvUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
         mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 
