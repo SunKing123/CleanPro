@@ -12,6 +12,7 @@
         android:layout_below="@+id/tvLeftTitle"
         android:background="@drawable/bg_gradient_clean_finish"
         android:gravity="center"
+        android:paddingBottom="@dimen/dimen_30dp"
         android:orientation="horizontal">
 
         <ImageView

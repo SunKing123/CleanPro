@@ -197,7 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="3dp"
                         android:layout_marginBottom="22dp"
                         android:alpha="0"
                         android:gravity="center"
@@ -222,13 +222,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minHeight="125dp"></TextView>
+                            android:minHeight="120dp"></TextView>
 
                         <ImageView
                             android:id="@+id/tv_now_clean"
                             android:layout_width="wrap_content"
                             android:layout_height="56dp"
-                            android:layout_marginBottom="125dp"
+                            android:layout_marginBottom="120dp"
                             android:src="@drawable/icon_clean_now"
                             android:visibility="gone" />
                     </RelativeLayout>
