@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -163,6 +164,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     protected void initView() {
         mPresenter.checkPermission();
+        mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        mTextUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
     }
 
     public void startScan() {

@@ -227,12 +227,23 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="12dp"
-                        android:layout_marginBottom="24dp"
+                        android:gravity="center"
                         android:visibility="gone"
+                        android:layout_marginBottom="22dp"
                         android:text="@string/tool_home_hint"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 
+                    <TextView
+                        android:id="@+id/tv_clean_type01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="18dp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
