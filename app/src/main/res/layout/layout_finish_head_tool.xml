@@ -15,6 +15,7 @@
             android:id="@+id/v_quicken"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
@@ -78,6 +79,7 @@
             android:id="@+id/v_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
@@ -141,6 +143,7 @@
             android:id="@+id/v_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
@@ -204,6 +207,7 @@
             android:id="@+id/v_wechat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
@@ -267,6 +271,7 @@
             android:id="@+id/v_file"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
@@ -330,6 +335,7 @@
             android:id="@+id/v_cool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
             android:visibility="gone">
@@ -414,10 +420,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginRight="@dimen/dimen_8dp"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:layout_toLeftOf="@+id/tv_download"
                 android:layout_toRightOf="@+id/iv_advert_logo"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_17sp" />
 
@@ -426,12 +432,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert"
-                android:maxLines="2"
-                android:ellipsize="end"
                 android:layout_marginLeft="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_marginRight="@dimen/dimen_8dp"
                 android:layout_toLeftOf="@+id/tv_download"
                 android:layout_toRightOf="@+id/iv_advert_logo"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 
@@ -440,6 +447,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/dimen_15dp"
                 android:alpha="0.8"
                 android:background="@drawable/bg_shape_radio_black_13"
                 android:lines="1"
@@ -448,7 +456,6 @@
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/download_now"
-                android:layout_marginTop="@dimen/dimen_15dp"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
 
