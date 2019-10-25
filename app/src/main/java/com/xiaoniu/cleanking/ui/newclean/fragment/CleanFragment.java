@@ -119,7 +119,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         TextView tvUnit = mHeadView.findViewById(R.id.tv_clear_finish_gb_title);
 
         tvSize.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-        tvSize.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        tvUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
         mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 

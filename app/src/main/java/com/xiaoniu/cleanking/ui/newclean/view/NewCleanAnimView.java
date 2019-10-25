@@ -6,6 +6,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -101,6 +102,9 @@ public class NewCleanAnimView extends RelativeLayout {
         mTextUnit = v.findViewById(R.id.text_unit);
         mLayoutRoot = v.findViewById(R.id.layout_root);
         mTvAnimTitle = v.findViewById(R.id.tv_anim_title);
+
+        mTextCount.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        mTextUnit.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
     }
 
     public void setData(CountEntity countEntity) {

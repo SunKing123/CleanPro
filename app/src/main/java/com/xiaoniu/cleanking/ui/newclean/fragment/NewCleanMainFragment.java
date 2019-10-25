@@ -264,14 +264,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             mInteractionPoistion = 0;
         }
         StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
-        if (null != mInteractionList && mInteractionList.size() > 0) {
+        if (null != mInteractionList && mInteractionList.size() > 0 ) {
 
             if (mInteractionList.size() == 1) {
                 startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                         .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
             } else {
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+                if( mInteractionList.size()-1 >= mInteractionPoistion ){
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+                }
+
             }
             mInteractionPoistion++;
         }
@@ -293,7 +296,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (mInteractionList.size() == 1) {
                 GlideUtils.loadGif(getActivity(), mInteractionList.get(0).getImgUrl(), mInteractionIv, 10000);
             } else {
-                GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+                if( mInteractionList.size()-1 >= mInteractionPoistion ){
+                    GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+                }
+
             }
         }
 
@@ -841,8 +847,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D698), true);
-
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
             }
@@ -953,15 +958,18 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     public void showTextView(){
         String hintText = getString(R.string.tool_home_hint);
         SpannableString msp = new SpannableString(hintText);
-        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mTvCleanType.setText(msp);
-                mTvCleanType.setVisibility(VISIBLE);
+                mTvCleanType.animate()
+                        .alpha(1f)
+                        .setDuration(500)
+                        .setListener(null);
             }
-        }, 2000);
+        }, 1000);
     }
 
 
@@ -970,7 +978,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         String showText01 = getString(R.string.tool_try_more_clean);
         SpannableString msp = new SpannableString(showText);
         SpannableString msp01 = new SpannableString(showText01);
-        msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvCleanType.setText(msp);
         mTvCleanType.setVisibility(VISIBLE);
