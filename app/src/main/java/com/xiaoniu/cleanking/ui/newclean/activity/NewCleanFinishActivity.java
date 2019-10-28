@@ -258,6 +258,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
             currentPage = "boost_success_page";
+            createEventName = "加速结果页创建时";
+            createEventCode = "boost_success_page_page_custom";
+            returnEventName = "用户在加速结果页返回";
+            sysReturnEventName = "用户在加速结果页返回";
+
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面_建议清理
             currentPage = "clean_success_page";
@@ -301,6 +306,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             sysReturnEventName = "用户在降温结果页返回";
         } else {
             currentPage = "clean_up_page_view_immediately";
+        }
+
+
+        //首页三分钟以内直接进入当前页
+        if(sourcePage.equals("home_page")){
+            currentPage = "direct_success_page";
+            createEventName = "直接跳结果页创建时";
+            createEventCode = "direct_success_page_custom";
+            returnEventName = "直接跳结果页返回";
+            sysReturnEventName = "直接跳结果页返回";
         }
     }
 
@@ -1216,7 +1231,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private void loadNewsData() {
         String type = mType.getName();
-        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type + "&page=" + page_index;
+        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?media=563&submedia=779&category=" + type + "&page=" + page_index;
         EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
             public void onFailure(Throwable e) {

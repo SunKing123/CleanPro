@@ -411,6 +411,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
         });
+        //页面创建事件埋点
+        StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
     }
 
     /**
