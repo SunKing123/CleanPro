@@ -6,14 +6,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -134,7 +132,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     private int mRamScale; //使用内存占总RAM的比例
     private int mInteractionPoistion; //互动式广告position、
     private int mShowCount;
-
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
 
@@ -265,13 +262,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             mInteractionPoistion = 0;
         }
         StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
-        if (null != mInteractionList && mInteractionList.size() > 0 ) {
+        if (null != mInteractionList && mInteractionList.size() > 0) {
 
             if (mInteractionList.size() == 1) {
                 startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                         .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
             } else {
-                if( mInteractionList.size()-1 >= mInteractionPoistion ){
+                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
                     startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                             .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
                 }
@@ -289,6 +286,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
+        //有通知时改变通知栏清理状态
         if (mNotifySize > 0 && !PreferenceUtil.isCleanNotifyUsed() && mShowCount < 2) {
             mShowCount++;
             mNotiClearFinishIv.setVisibility(View.GONE);
@@ -304,7 +302,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (mInteractionList.size() == 1) {
                 GlideUtils.loadGif(getActivity(), mInteractionList.get(0).getImgUrl(), mInteractionIv, 10000);
             } else {
-                if( mInteractionList.size()-1 >= mInteractionPoistion ){
+                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
                     GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
                 }
 
@@ -316,7 +314,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         viewPhoneThin.setEnabled(true);
         viewQqClean.setEnabled(true);
         viewNews.setEnabled(true);
-//        EventBus.getDefault().post(new ResidentUpdateEvent(false));
     }
 
     /**
@@ -492,7 +489,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
     }
-
 
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
@@ -958,7 +954,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     }
 
 
-    public void showTextView(){
+    public void showTextView() {
         String hintText = getString(R.string.tool_home_hint);
         SpannableString msp = new SpannableString(hintText);
 //        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -977,18 +973,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         }, 1000);
     }
 
-
-    public void showTextView01(){
+    public void showTextView01() {
         String showText = getString(R.string.tool_phone_already_clean);
-        String showText01 = getString(R.string.tool_try_more_clean);
+        String showText01 = "";
+        if (mShowCount <= 0) {
+            showText01 = getString(R.string.recommend_count_hint_all);
+        } else {
+            showText01 = getString(R.string.recommend_count_hint, String.valueOf(mShowCount));
+        }
         SpannableString msp = new SpannableString(showText);
         SpannableString msp01 = new SpannableString(showText01);
-        msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvCleanType.setText(msp);
         mTvCleanType.setVisibility(VISIBLE);
         mTvCleanType01.setText(msp01);
         mTvCleanType01.setVisibility(VISIBLE);
-
     }
 }
