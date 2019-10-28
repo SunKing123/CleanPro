@@ -7,9 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -882,7 +882,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     protected void setListener() {
         v_quicken.setOnClickListener(this);
         v_power.setOnClickListener(this);
@@ -964,19 +963,44 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         });
 
-        mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                //获取第一个完全显示的ItemPosition
-                int lastVisibleItem = manager.findFirstVisibleItemPosition();
-                int totalItemCount = manager.getItemCount();
-                //recyclerView滑动到底部再滑动回顶部后重新执行动画
-                if (null != mLottieAd && lastVisibleItem == 1) {
-                    mLottieAd.playAnimation();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                    Log.d("XiLei", "onScrollChange");
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    //获取第一个完全显示的ItemPosition
+                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
+                    int totalItemCount = manager.getItemCount();
+                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
+                    if (null != mLottieAd && lastVisibleItem == 1) {
+                        mLottieAd.playAnimation();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    Log.d("XiLei", "onScrolled");
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    //获取第一个完全显示的ItemPosition
+                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
+                    int totalItemCount = manager.getItemCount();
+                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
+                    Log.d("XiLei", "lastVisibleItem=" + lastVisibleItem);
+                    if (null != mLottieAd && lastVisibleItem == 1) {
+                        mLottieAd.playAnimation();
+                    }
+                }
+            });
+        }
     }
 
     protected void loadData() {
