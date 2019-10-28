@@ -256,19 +256,21 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     @Override
     protected void onResume() {
+        NiuDataAPI.onPageStart("screen_advertising_view_page", "插屏广告浏览");
         super.onResume();
         if (mNativeUnifiedADData != null) {
             // 必须要在Actiivty.onResume()时通知到广告数据，以便重置广告恢复状态
             mNativeUnifiedADData.resume();
         }
-        NiuDataAPI.onPageStart("screen_advertising_view_page", "插屏广告浏览");
+
     }
 
     @Override
     protected void onPause() {
         Jzvd.releaseAllVideos();
+        NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "插屏广告浏览");
         super.onPause();
-        NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "清理结果出现时");
+
     }
 
     @Override

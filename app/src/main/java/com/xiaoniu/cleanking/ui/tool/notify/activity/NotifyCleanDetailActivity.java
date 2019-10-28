@@ -102,6 +102,11 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
         currentPage = "notification_sacn_result_page";
         pageviewEventName = "用户在通知清理诊断页浏览";
@@ -157,7 +162,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
     }
 

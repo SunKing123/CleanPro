@@ -368,6 +368,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);
         } else {
+            AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
