@@ -967,7 +967,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                    Log.d("XiLei", "onScrollChange");
                     LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                     //获取第一个完全显示的ItemPosition
                     int lastVisibleItem = manager.findFirstVisibleItemPosition();
@@ -988,13 +987,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    Log.d("XiLei", "onScrolled");
                     LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                     //获取第一个完全显示的ItemPosition
                     int lastVisibleItem = manager.findFirstVisibleItemPosition();
                     int totalItemCount = manager.getItemCount();
                     //recyclerView滑动到底部再滑动回顶部后重新执行动画
-                    Log.d("XiLei", "lastVisibleItem=" + lastVisibleItem);
                     if (null != mLottieAd && lastVisibleItem == 1) {
                         mLottieAd.playAnimation();
                     }
