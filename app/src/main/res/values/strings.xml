@@ -54,8 +54,6 @@
     <string name="text_confirm_select">确认勾选</string>
     <string name="msg_del_video">永久从设备中删除这些视频，删除后将不可恢复。</string>
     <string name="msg_save_video">正在导出聊天视频，请稍等…</string>
-    <string name="tool_try_more_clean">尝试以下更多清理功能吧~</string>
-
 
     <string name="tool_qq_clear">QQ专清</string>
     <string name="tool_chat_clear">微信专清</string>
@@ -128,4 +126,6 @@
     <string name="lock_news">看最新时事资讯 娱乐热点</string>
     <string name="lock_click">点击查看</string>
     <string name="torage_scale_hint">内存占用高</string>
+    <string name="recommend_count_hint">以下%s个专项清理功能，待使用~</string>
+    <string name="recommend_count_hint_all">快去使用以下功能吧~</string>
 </resources>
