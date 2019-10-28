@@ -103,9 +103,9 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        currentPage = "notification_clean_result_page";
+        currentPage = "notification_sacn_result_page";
         pageviewEventName = "用户在通知清理诊断页浏览";
-        pageviewEventCode = "notification_clean_result_page_view_page";
+        pageviewEventCode = "notification_sacn_result_page_view_page";
         returnEventName = "用户在通知清理诊断页返回";
         sysReturnEventName = "用户在通知清理诊断页返回";
         sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
