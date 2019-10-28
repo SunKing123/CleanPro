@@ -68,14 +68,15 @@ public class WhiteListIntallPackagePresenter extends RxPresenter<WhiteListInstal
     }
 
 
-    public List<AppInfoBean> getData() {
+    public void getData() {
+        apps.clear();
         Set<String> caches = getCacheWhite();
         for (String path : caches) {
             AppInfoBean appInfoBean = new AppInfoBean();
             appInfoBean.name = path;
             apps.add(appInfoBean);
         }
-        return apps;
+        mView.setViewData(apps);
     }
 
 

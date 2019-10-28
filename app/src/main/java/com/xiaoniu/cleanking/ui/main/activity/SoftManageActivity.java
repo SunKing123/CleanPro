@@ -81,11 +81,24 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             checkAll(mIsCheckAll);
             totalSelectFiles();
         });
-
+        registResceiver();
         mPresenter.scanData();
-
     }
 
+
+
+    public void registResceiver(){
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
+            intentFilter.addAction("android.intent.action.PACKAGE_REMOVED");
+            intentFilter.addDataScheme("package");
+            mMonitorSysReceiver = new MonitorSysReceiver();
+            registerReceiver(mMonitorSysReceiver, intentFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -93,12 +106,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
     @Override
     protected void onStart() {
         super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
-        intentFilter.addAction("android.intent.action.PACKAGE_REMOVED");
-        intentFilter.addDataScheme("package");
-        mMonitorSysReceiver = new MonitorSysReceiver();
-        registerReceiver(mMonitorSysReceiver, intentFilter);
+
 
     }
 
