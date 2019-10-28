@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -220,7 +221,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         mTitleTv.setText(mTitle);
 
-        mLottieAd = (LottieAnimationView)  header.findViewById(R.id.lottie_ad);
+        mLottieAd = (LottieAnimationView) header.findViewById(R.id.lottie_ad);
         mLottieAd.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -896,6 +897,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     protected void setListener() {
         v_quicken.setOnClickListener(this);
         v_power.setOnClickListener(this);
@@ -974,6 +976,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onLoadMore() {
                 startLoadData();
+            }
+        });
+
+        mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                //获取第一个完全显示的ItemPosition
+                int lastVisibleItem = manager.findFirstVisibleItemPosition();
+                int totalItemCount = manager.getItemCount();
+                //recyclerView滑动到底部再滑动回顶部后重新执行动画
+                if (null != mLottieAd && lastVisibleItem == 1) {
+                    mLottieAd.playAnimation();
+                }
             }
         });
     }
@@ -1270,15 +1286,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private class H extends Handler {
-        private WeakReference<NewCleanFinishActivity> mActivity ;
-        public H(NewCleanFinishActivity activity){
+        private WeakReference<NewCleanFinishActivity> mActivity;
+
+        public H(NewCleanFinishActivity activity) {
             mActivity = new WeakReference<NewCleanFinishActivity>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
             NewCleanFinishActivity activity = mActivity.get();
-            if(activity!=null){
+            if (activity != null) {
                 switch (msg.what) {
                     case MSG_INIT_AD:
                         NativeUnifiedADData ad = (NativeUnifiedADData) msg.obj;
@@ -1525,7 +1542,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                         @Override
                         public void onVideoCompleted() {
-                              if (mNativeUnifiedADData2 != null) {
+                            if (mNativeUnifiedADData2 != null) {
                                 mNativeUnifiedADData2.startVideo();
                             }
                             Log.d(TAG, "onVideoCompleted: ");
