@@ -161,10 +161,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             } else {
                 mShowCount++;
                 if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
+                    mAccFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs_o, mAccIv);
                     mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                     mAccTv.setText(getString(R.string.tool_one_key_speed));
                 } else {
+                    mAccFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                     mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
@@ -173,6 +175,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
+                mNotiClearFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq_o, mNotiClearIv);
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
@@ -184,6 +187,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mShowCount++;
+                    mNotiClearFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
@@ -201,6 +205,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
                         mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
                     }
                 } else {
+                    mElectricityFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
@@ -286,6 +291,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
         if (mNotifySize > 0 && !PreferenceUtil.isCleanNotifyUsed() && mShowCount < 2) {
             mShowCount++;
+            mNotiClearFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
@@ -331,12 +337,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
+                mNotiClearFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq_o, mNotiClearIv);
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
             } else {
                 if (!PreferenceUtil.isCleanNotifyUsed() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mShowCount++;
+                    mNotiClearFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
@@ -357,6 +365,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             if (AndroidUtil.getElectricityNum(getActivity()) <= 70) {
                 if (!PreferenceUtil.isCleanPowerUsed()) {
                     mShowCount++;
+                    mElectricityFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
@@ -381,10 +390,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
             //一键加速
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
+                mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs_o, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mAccTv.setText(getString(R.string.tool_one_key_speed));
             } else if (!PreferenceUtil.isCleanJiaSuUsed()) {
+                mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
@@ -393,12 +404,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             //超强省电
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
                 mShowCount++;
+                mElectricityFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_o, mElectricityIv);
                 mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mElectricityTv.setText(getString(R.string.tool_super_power_saving));
             } else if (AndroidUtil.getElectricityNum(getActivity()) <= 70) {
                 if (!PreferenceUtil.isCleanPowerUsed()) {
                     mShowCount++;
+                    mElectricityFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
@@ -428,10 +441,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
 
             //一键加速
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
+                mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs_o, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mAccTv.setText(getString(R.string.tool_one_key_speed));
             } else if (!PreferenceUtil.isCleanJiaSuUsed()) {
+                mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
@@ -440,12 +455,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
+                mNotiClearFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq_o, mNotiClearIv);
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
             } else {
                 if (!PreferenceUtil.isCleanNotifyUsed() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mShowCount++;
+                    mNotiClearFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
@@ -470,6 +487,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
      */
     @Subscribe
     public void internalStoragePremEvent(InternalStoragePremEvent event) {
+        mAccFinishIv.setVisibility(View.GONE);
         GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
         mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
         mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
@@ -491,23 +509,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         }
     }
 
-    /**
-     * 超强省电一键优化完成事件
-     * <p>
-     * //     * @param event
-     */
-   /* @Subscribe
-    public void cleanPowerEvent(CleanPowerEvent event) {
-        mElectricityFinishIv.setVisibility(View.VISIBLE);
-        mElectricityIv.setImageResource(R.drawable.icon_power);
-        mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
-            mElectricityTv.setText(getString(R.string.lengthen_time, "40"));
-        } else {
-            mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
-        }
-        PreferenceUtil.saveLengthenAwaitTime(event.getHour());
-    }*/
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
