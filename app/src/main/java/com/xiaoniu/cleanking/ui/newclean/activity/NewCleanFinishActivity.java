@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -110,6 +112,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private View v_advert, v_advert2;
     private TextView tv_quicken, tv_power, tv_notification;
     private ImageView iv_quicken, iv_power, iv_notification;
+    private LottieAnimationView mLottieAd;
 
     private NativeUnifiedADData mNativeUnifiedADData, mNativeUnifiedADData2;
     private NativeUnifiedAD mAdManager, mAdManager2;
@@ -215,8 +218,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_quicken = headerTool.findViewById(R.id.iv_quicken);
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
-
         mTitleTv.setText(mTitle);
+
+        mLottieAd = (LottieAnimationView)  header.findViewById(R.id.lottie_ad);
+        mLottieAd.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLottieAd.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
         getPageData();
         setListener();
@@ -1552,6 +1577,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else {
             GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
         }
+
+        mLottieAd.useHardwareAcceleration(true);
+        mLottieAd.setAnimation("clean_finish_download.json");
+        mLottieAd.setImageAssetsFolder("images_clean_download");
+        mLottieAd.playAnimation();
     }
 
     // 获取广告资源并加载到UI
