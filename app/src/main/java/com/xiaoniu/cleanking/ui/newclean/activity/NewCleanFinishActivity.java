@@ -1154,7 +1154,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private void loadNewsData() {
         String type = mType.getName();
-        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type + "&page=" + page_index;
+        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?media=563&submedia=779&category=" + type + "&page=" + page_index;
         EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
             public void onFailure(Throwable e) {
