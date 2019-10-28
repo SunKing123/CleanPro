@@ -52,13 +52,8 @@ public class WhiteListInstallPackgeManageActivity extends BaseActivity<WhiteList
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
-
-        mAdapter.modifyList(mPresenter.getData());
+        mPresenter.getData();
         mAdapter.setOnCheckListener(this);
-
-        setStatusEmptyView();
-
-
     }
 
     @OnClick({R.id.img_back})
@@ -86,6 +81,18 @@ public class WhiteListInstallPackgeManageActivity extends BaseActivity<WhiteList
     }
 
     private  void setStatusEmptyView(){
+        if (mAdapter.getLists().size() > 0 && null != mLLEmptyView) {
+            mLLEmptyView.setVisibility(View.GONE);
+        }else if(null!=mLLEmptyView){
+            mLLEmptyView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public  void setViewData(List<AppInfoBean> appLists){
+        if(appLists!=null && appLists.size()>0){
+            mAdapter.modifyList(appLists);
+        }
         if (mAdapter.getLists().size() > 0 && null != mLLEmptyView) {
             mLLEmptyView.setVisibility(View.GONE);
         }else if(null!=mLLEmptyView){
