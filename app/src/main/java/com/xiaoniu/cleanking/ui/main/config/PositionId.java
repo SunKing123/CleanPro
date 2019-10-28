@@ -8,7 +8,7 @@ public class PositionId {
     //热启动开屏广告页面ID
 //    public static final String SPLASH_POS_HOT_ID = "1000785618355120";
     //清理完成页面ID
-    public static final String CLEAN_FINISH_ID = "4070988415680442";
+//    public static final String CLEAN_FINISH_ID = "4070988415680442";
     //    public static final String CLEAN_FINISH_ID = "7050485671481324";
     public static final String CLEAN_FINISH_ID2 = "8060884615900776";
 
