@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -115,10 +116,16 @@ public class NotifyCleanGuideActivity extends BaseActivity {
                         StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, currentPage);
                         isClick = true;
                         //开启权限
-                        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
-                        NotifyCleanGuideActivity.this.startActivity(intent);
-                        ;
-                        NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
+                        try {
+                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+                            NotifyCleanGuideActivity.this.startActivity(intent);
+                            NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
+                        }catch (ActivityNotFoundException exception){
+                            exception.printStackTrace();
+                            Intent intent = new Intent();
+                            NotifyCleanGuideActivity.this.startActivity(intent);
+                            NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
+                        }
                     }
 
                     @Override

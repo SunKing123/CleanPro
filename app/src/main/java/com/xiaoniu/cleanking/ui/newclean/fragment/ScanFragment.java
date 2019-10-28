@@ -132,11 +132,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             if (msg.what == 2) {
                 /*((NowCleanActivity)getActivity()).setCountEntity(null);
                 ((NowCleanActivity)getActivity()).setJunkGroups(null);*/
-
-                ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
-                ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
-
                 try {
+                    ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
+                    ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
                     mPresenter.startScan();
                     mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
                     type = TYPE_SCANING;
@@ -163,9 +161,14 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     @Override
     protected void initView() {
-        mPresenter.checkPermission();
-        mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-        mTextUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        try {
+            mPresenter.checkPermission();
+            mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+            mTextUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+
     }
 
     public void startScan() {
@@ -220,10 +223,12 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         mCountEntity = CleanUtil.formatShortFileSize(total);
         getActivity().runOnUiThread(() -> {
             CountEntity countEntity = CleanUtil.formatShortFileSize(total);
-            if (mTextCount == null)
+            if (mTextCount == null || mTextUnit == null)
                 return;
-            mTextCount.setText(countEntity.getTotalSize());
-            mTextUnit.setText(countEntity.getUnit());
+            if (countEntity != null){
+                mTextCount.setText(countEntity.getTotalSize());
+                mTextUnit.setText(countEntity.getUnit());
+            }
         });
     }
 

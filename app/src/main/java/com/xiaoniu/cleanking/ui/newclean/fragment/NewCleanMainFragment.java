@@ -965,11 +965,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mTvCleanType.setText(msp);
-                mTvCleanType.animate()
-                        .alpha(1f)
-                        .setDuration(500)
-                        .setListener(null);
+                if (mTvCleanType!=null && msp != null){
+                    mTvCleanType.setText(msp);
+                    mTvCleanType.animate()
+                            .alpha(1f)
+                            .setDuration(500)
+                            .setListener(null);
+                }
             }
         }, 1000);
     }

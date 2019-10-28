@@ -71,7 +71,9 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
             if (!recycle_view.isComputingLayout()) {
                 cb_checkall.setSelected(!cb_checkall.isSelected());
                 tv_delete.setSelected(cb_checkall.isSelected());
-                imageAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                if (imageAdapter != null){
+                    imageAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
+                }
                 cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                 tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                 compulateDeleteSize();

@@ -219,19 +219,26 @@ public class CleanUtil {
     //计算当前一级总数
     public static long getTotalSize(HashMap<Integer, JunkGroup> mJunkGroups) {
         long size = 0L;
-        for (JunkGroup group : mJunkGroups.values()) {
-            if (group.mChildren.size() > 0) {
-                for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-                    if (firstJunkInfo.isAllchecked()) {
-                        size += firstJunkInfo.getTotalSize();
+        if (CollectionUtils.isEmpty(mJunkGroups)){
+            return size;
+        }
+        try {
+            for (JunkGroup group : mJunkGroups.values()) {
+                if (group.mChildren.size() > 0) {
+                    for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                        if (firstJunkInfo.isAllchecked()) {
+                            size += firstJunkInfo.getTotalSize();
+                        }
                     }
+                } else if (group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean)) && group.isChecked) {//其他垃圾类目单独处理
+                    size += group.mSize;
+                } else if (group.mName.equals(ContextUtils.getContext().getString(R.string.process_clean)) && group.isChecked) {
+                    size += group.mSize;
                 }
-            } else if (group.mName.equals(ContextUtils.getContext().getString(R.string.other_clean)) && group.isChecked) {//其他垃圾类目单独处理
-                size += group.mSize;
-            } else if (group.mName.equals(ContextUtils.getContext().getString(R.string.process_clean)) && group.isChecked) {
-                size += group.mSize;
-            }
 
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
         return size;
     }

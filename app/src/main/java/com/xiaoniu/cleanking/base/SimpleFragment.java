@@ -145,12 +145,14 @@ public abstract class SimpleFragment extends RxFragment {
      * 含有Bundle通过Class跳转界面
      **/
     public void startActivity(Class<?> cls, Bundle bundle) {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), cls);
-        if (bundle != null) {
-            intent.putExtras(bundle);
+        if (getActivity() != null){
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), cls);
+            if (bundle != null) {
+                intent.putExtras(bundle);
+            }
+            startActivity(intent);
         }
-        startActivity(intent);
     }
 
     /**

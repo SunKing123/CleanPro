@@ -23,17 +23,26 @@ import com.bumptech.glide.util.Util;
  */
 public class GlideUtils {
 
-    public static void loadImage(Context context, String url, ImageView imageView) {
-        if (null == context) return;
-        Glide.with(context).load(url).into(imageView);
+    public static void loadImage(Activity context, String url, ImageView imageView) {
+        if (null != context && !context.isDestroyed()) {
+            try {
+                Glide.with(context).load(url).into(imageView);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void loadRoundImage(Activity context, String url, ImageView imageView, int round) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             if (null != context && !context.isDestroyed()) {
-                Glide.with(context).load(url)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
-                        .into(imageView);
+                try {
+                    Glide.with(context).load(url)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
+                            .into(imageView);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -64,10 +73,14 @@ public class GlideUtils {
      * @param resourceId
      * @param imageView
      */
-    public static void loadDrawble(Context context, int resourceId, ImageView imageView) {
+    public static void loadDrawble(Activity context, int resourceId, ImageView imageView) {
         //Umeng --- Caused by: java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
-        if (Util.isOnMainThread() && null != context) {
-            Glide.with(context).load(resourceId).into(imageView);
+        if (Util.isOnMainThread() && null != context && !context.isDestroyed()) {
+            try {
+                Glide.with(context).load(resourceId).into(imageView);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

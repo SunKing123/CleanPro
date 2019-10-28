@@ -70,14 +70,19 @@ public class AndroidUtil {
     //调用第三方程序uri版本兼容
     public static void fileUri(Context context, Intent intent, File file, String type) {
         //判断是否是AndroidN以及更高的版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".updatefileprovider", file);
-            intent.setDataAndType(contentUri, type);
-        } else {
-            intent.setDataAndType(Uri.fromFile(file), type);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".updatefileprovider", file);
+                intent.setDataAndType(contentUri, type);
+            } else {
+                intent.setDataAndType(Uri.fromFile(file), type);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
         }
+
     }
 
     /**
