@@ -27,6 +27,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 
+import io.reactivex.exceptions.UndeliverableException;
+
 /**
  * 文件与流处理工具�?<br>
  * <p>
@@ -612,7 +614,8 @@ public final class FileUtils {
 
             DecimalFormat df = new DecimalFormat("0.00");//格式化小数
             mToalS = df.format(bytes);
-        } catch (Exception e) {
+        } catch (UndeliverableException e) {
+            e.printStackTrace();
         }
         return mToalS;
     }

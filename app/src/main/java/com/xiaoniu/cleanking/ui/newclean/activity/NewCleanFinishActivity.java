@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -110,6 +113,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private View v_advert, v_advert2, mRecommendV;
     private TextView tv_quicken, tv_power, tv_notification;
     private ImageView iv_quicken, iv_power, iv_notification;
+    private LottieAnimationView mLottieAd;
 
     private NativeUnifiedADData mNativeUnifiedADData, mNativeUnifiedADData2;
     private NativeUnifiedAD mAdManager, mAdManager2;
@@ -216,8 +220,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_quicken = headerTool.findViewById(R.id.iv_quicken);
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
-
         mTitleTv.setText(mTitle);
+
+        mLottieAd = (LottieAnimationView) header.findViewById(R.id.lottie_ad);
+        mLottieAd.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLottieAd.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
         getPageData();
         setListener();
@@ -233,6 +259,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
             currentPage = "boost_success_page";
+            createEventName = "加速结果页创建时";
+            createEventCode = "boost_success_page_page_custom";
+            returnEventName = "用户在加速结果页返回";
+            sysReturnEventName = "用户在加速结果页返回";
+
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面_建议清理
             currentPage = "clean_success_page";
@@ -276,6 +307,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             sysReturnEventName = "用户在降温结果页返回";
         } else {
             currentPage = "clean_up_page_view_immediately";
+        }
+
+
+        //首页三分钟以内直接进入当前页
+        if(sourcePage.equals("home_page")){
+            currentPage = "direct_success_page";
+            createEventName = "直接跳结果页创建时";
+            createEventCode = "direct_success_page_custom";
+            returnEventName = "直接跳结果页返回";
+            sysReturnEventName = "直接跳结果页返回";
         }
     }
 
@@ -937,6 +978,45 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 startLoadData();
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                    Log.d("XiLei", "onScrollChange");
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    //获取第一个完全显示的ItemPosition
+                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
+                    int totalItemCount = manager.getItemCount();
+                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
+                    if (null != mLottieAd && lastVisibleItem == 1) {
+                        mLottieAd.playAnimation();
+                    }
+                }
+            });
+        } else {
+            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    Log.d("XiLei", "onScrolled");
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    //获取第一个完全显示的ItemPosition
+                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
+                    int totalItemCount = manager.getItemCount();
+                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
+                    Log.d("XiLei", "lastVisibleItem=" + lastVisibleItem);
+                    if (null != mLottieAd && lastVisibleItem == 1) {
+                        mLottieAd.playAnimation();
+                    }
+                }
+            });
+        }
     }
 
     protected void loadData() {
@@ -1155,7 +1235,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private void loadNewsData() {
         String type = mType.getName();
-        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?&category=" + type + "&page=" + page_index;
+        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?media=563&submedia=779&category=" + type + "&page=" + page_index;
         EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
             @Override
             public void onFailure(Throwable e) {
@@ -1554,6 +1634,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else {
             GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
         }
+
+        mLottieAd.useHardwareAcceleration(true);
+        mLottieAd.setAnimation("clean_finish_download.json");
+        mLottieAd.setImageAssetsFolder("images_clean_download");
+        mLottieAd.playAnimation();
     }
 
     // 获取广告资源并加载到UI

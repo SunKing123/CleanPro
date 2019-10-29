@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -132,9 +133,14 @@ public class FloatingImageDisplayService extends Service {
             displayView.setVisibility(View.GONE);
             stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
         });
-        if (displayView.isAttachedToWindow())
-            windowManager.removeViewImmediate(displayView);
-        windowManager.addView(displayView, layoutParams);
+        try {
+            if (displayView.isAttachedToWindow())
+                windowManager.removeViewImmediate(displayView);
+            windowManager.addView(displayView, layoutParams);
+        }catch (NoSuchMethodError error){
+            error.printStackTrace();
+        }
+
 
 //        }
     }

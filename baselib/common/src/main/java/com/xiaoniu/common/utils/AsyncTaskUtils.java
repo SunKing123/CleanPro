@@ -7,6 +7,7 @@ import android.os.Looper;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -65,7 +66,11 @@ public class AsyncTaskUtils {
 
     public static void background(final Runnable task) {
         if (task != null) {
-            THREAD_POOL_EXECUTOR.execute(task);
+            try {
+                THREAD_POOL_EXECUTOR.execute(task);
+            }catch (RejectedExecutionException r){
+                r.printStackTrace();
+            }
         }
     }
 

@@ -349,20 +349,25 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     @Override
     public void play(VideoInfoBean appInfoBean) {
-        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(appInfoBean.name,FileSizeUtils.formatFileSize(appInfoBean.packageSize)
-                ,"时长: "+ MusicFileUtils.getPlayDuration2(appInfoBean.path),"未知");
-        videoPlayFragment.show(getFragmentManager(),"");
-        videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
-            @Override
-            public void onCancel() {
+        try {
+            VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(appInfoBean.name,FileSizeUtils.formatFileSize(appInfoBean.packageSize)
+                    ,"时长: "+ MusicFileUtils.getPlayDuration2(appInfoBean.path),"未知");
+            videoPlayFragment.show(getFragmentManager(),"");
+            videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
+                @Override
+                public void onCancel() {
 
-            }
+                }
 
-            @Override
-            public void onConfirm() {
-                playAudio(appInfoBean.path);
-            }
-        });
+                @Override
+                public void onConfirm() {
+                    playAudio(appInfoBean.path);
+                }
+            });
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -12,8 +12,8 @@
         android:layout_below="@+id/tvLeftTitle"
         android:background="@drawable/bg_gradient_clean_finish"
         android:gravity="center"
-        android:paddingBottom="@dimen/dimen_30dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dimen_30dp">
 
         <ImageView
             android:id="@+id/iv_dun"
@@ -112,21 +112,30 @@
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_14sp" />
 
-            <!-- 原生广告的视频组件 -->
-            <com.qq.e.ads.nativ.MediaView
-                android:id="@+id/gdt_media_view"
+            <RelativeLayout
+                android:id="@+id/v_video"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert_content"
-                android:layout_marginTop="@dimen/dimen_8dp" />
+                android:layout_marginTop="@dimen/dimen_8dp">
+                <!-- 原生广告的视频组件 -->
+                <com.qq.e.ads.nativ.MediaView
+                    android:id="@+id/gdt_media_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            <ImageView
-                android:id="@+id/iv_advert"
+                <ImageView
+                    android:id="@+id/iv_advert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_ad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_advert_content"
+                android:layout_height="@dimen/dimen_60dp"
+                android:layout_below="@+id/v_video"
                 android:layout_marginTop="@dimen/dimen_8dp" />
-
         </RelativeLayout>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
 </LinearLayout>

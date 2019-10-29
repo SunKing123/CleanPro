@@ -257,19 +257,21 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 }
             }
         }
-        EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-        if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_suggest_clean));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
-            bundle.putString("num", totalCountEntity.getTotalSize());
-            bundle.putString("unit", totalCountEntity.getUnit());
-            startActivity(NewCleanFinishActivity.class, bundle);
+        if(getActivity()!= null && this.isAdded()) {
+            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_suggest_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
+                bundle.putString("num", totalCountEntity.getTotalSize());
+                bundle.putString("unit", totalCountEntity.getUnit());
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+            getActivity().finish();
         }
-        getActivity().finish();
     }
 
     private void startClean() {
