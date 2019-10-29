@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,12 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
+
+            if(Build.VERSION.SDK_INT<Build.VERSION_CODES.O){
+                ((ImageViewHolder) holder).tv_size.setVisibility(View.VISIBLE);
+                ((ImageViewHolder) holder).tv_select.setVisibility(View.VISIBLE);
+            }
+
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setImageDrawable(listImage.get(position).getGarbageIcon());
             ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSize(listImage.get(position).getTotalSize()));
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getAppName());

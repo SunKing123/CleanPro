@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/cdl_root"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_06C581"
     android:orientation="vertical">
@@ -185,11 +185,13 @@
     <RelativeLayout
         android:id="@+id/rel_bottom"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:visibility="visible"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingTop="@dimen/dimen_5dp"
+        android:paddingBottom="@dimen/dimen_5dp"
+        android:visibility="visible">
 
         <View
             android:id="@+id/viewline"
@@ -200,13 +202,13 @@
         <TextView
             android:id="@+id/tv_delete"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
-            android:background="@drawable/delete_select_bg"
+            android:background="@drawable/icon_clean_btn_bg"
             android:gravity="center"
-            android:text="@string/tool_one_key_clean"
+            android:text="@string/tool_one_key_speed"
             android:textColor="@color/white" />
     </RelativeLayout>
 

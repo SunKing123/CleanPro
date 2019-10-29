@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Build;
 
 /**
- * @author XiLei
+ * @author \XiLei
  * @date 2019/10/19.
  * description：权限管理类
  */

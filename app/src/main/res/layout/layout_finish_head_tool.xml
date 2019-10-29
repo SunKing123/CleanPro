@@ -5,11 +5,13 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/v_recommend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_8dp"
         android:background="@drawable/bg_finish_rem"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
         <!--一键加速-->
         <RelativeLayout
             android:id="@+id/v_quicken"

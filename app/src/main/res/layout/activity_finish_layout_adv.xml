@@ -176,7 +176,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/dimen_50dp"
                             android:layout_marginBottom="@dimen/dimen_20dp"
-                            android:background="@drawable/icon_btn_g"
+                            android:background="@drawable/icon_clean_btn_bg"
                             android:gravity="center"
                             android:textColor="@color/white"
                             android:textSize="@dimen/dimen_17sp" />
