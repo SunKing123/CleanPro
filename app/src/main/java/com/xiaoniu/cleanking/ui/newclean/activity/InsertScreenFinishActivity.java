@@ -96,8 +96,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v_advert.getLayoutParams();
         params.height = height * 2 / 3;
         v_advert.setLayoutParams(params);
-        Log.d("XiLei", "height=" + height);
-
     }
 
     /**

@@ -38,7 +38,7 @@ public class AccessAnimView extends RelativeLayout {
     private Context mContext;
     RelativeLayout mRlAnimBg;
     LinearLayout line_hj;
-    TextView line_access;
+//    TextView line_access;
     LinearLayout line_size;
     LinearLayout line_title;
     ImageView iv_bot;
@@ -114,7 +114,7 @@ public class AccessAnimView extends RelativeLayout {
         iv_bot = v.findViewById(R.id.iv_bot);
         tv_size = v.findViewById(R.id.tv_size_show);
         tv_gb = v.findViewById(R.id.tv_gb);
-        line_access = v.findViewById(R.id.line_access);
+//        line_access = v.findViewById(R.id.line_access);
         line_size = v.findViewById(R.id.line_size);
         line_allnum = v.findViewById(R.id.line_allnum);
         line_title = v.findViewById(R.id.line_title);
@@ -160,12 +160,13 @@ public class AccessAnimView extends RelativeLayout {
         tv_size.setText(sizeMb + "");
     }
 
-    public void setTitleName(String name){
+    public void setTitleName(String name) {
         tv_title_name.setText(name);
     }
 
     /**
      * Step1:上面红色布局和中间1dp的布局动画开始
+     *
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     public void startTopAnim(boolean b) {
@@ -181,7 +182,7 @@ public class AccessAnimView extends RelativeLayout {
             mRlAnimBg.setLayoutParams(rlp);
         });
         if (b)
-          anim.start();
+            anim.start();
         startMiddleAnim(b);
     }
 
@@ -195,9 +196,9 @@ public class AccessAnimView extends RelativeLayout {
         LinearLayout.LayoutParams rlp = (LinearLayout.LayoutParams) line_allnum.getLayoutParams();
         anim.addUpdateListener(animation -> {
             if (b) {
-            int currentValue = (int) animation.getAnimatedValue();
-            rlp.topMargin = currentValue;
-            line_allnum.setLayoutParams(rlp);
+                int currentValue = (int) animation.getAnimatedValue();
+                rlp.topMargin = currentValue;
+                line_allnum.setLayoutParams(rlp);
             }
         });
         anim.addListener(new AnimatorListenerAdapter() {
@@ -367,7 +368,7 @@ public class AccessAnimView extends RelativeLayout {
     //数字动画播放完后火箭上移，布局高度缩小
     public void setViewTrans() {
         line_size.setVisibility(GONE);
-        line_access.setVisibility(GONE);
+//        line_access.setVisibility(GONE);
 
         int endHeight = DisplayUtils.dip2px(150);
         int startHeight = DisplayUtils.getScreenHeight();
@@ -399,7 +400,7 @@ public class AccessAnimView extends RelativeLayout {
     public ObjectAnimator createFadeAnimator() {
         PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY(), (-1) * DisplayUtils.dip2px(706));
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY, alpha);
         animator.setDuration(700);
         return animator;
     }
@@ -409,9 +410,9 @@ public class AccessAnimView extends RelativeLayout {
      */
     public ObjectAnimator createStartFadeAnimator() {
 
-        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + (1)* DisplayUtils.dip2px(990),line_hj.getTranslationY());
+        PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + (1) * DisplayUtils.dip2px(990), line_hj.getTranslationY());
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY,alpha);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY, alpha);
         animator.setDuration(700);
         animator.start();
         animator.addListener(new Animator.AnimatorListener() {
@@ -428,14 +429,13 @@ public class AccessAnimView extends RelativeLayout {
                 if (!animationDrawable.isRunning()) {
                     animationDrawable.start();
                 }
-                if (mListInfoSize == 0|| !PreferenceUtil.getCleanTime()){
+                if (mListInfoSize == 0 || !PreferenceUtil.getCleanTime()) {
                     if (mAnimationEnd != null)
                         mAnimationEnd.onAnimationEnd();
                     return;
                 }
 
                 line_allnum.setVisibility(VISIBLE);
-
             }
 
             @Override
@@ -540,6 +540,7 @@ public class AccessAnimView extends RelativeLayout {
         mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
         mAnimationCloudView.playAnimation();
     }
+
     /**
      * 显示lottie动画 火箭飞出
      */

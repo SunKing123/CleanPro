@@ -569,4 +569,10 @@
 -dontwarn com.just.agentweb.**
 # AgentWeb 混淆结束
 
+#穿山甲 begin
+-keep class com.bytedance.sdk.openadsdk.** { *; }
+-keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
+#穿山甲 end
+
+
 #########################geek push混淆开始########################

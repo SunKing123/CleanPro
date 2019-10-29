@@ -44,7 +44,6 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -52,7 +51,6 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -253,7 +251,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
      */
     boolean canPlaying = true;
 
-    public void setNumAnim(View mTvSpeed, View view, TextView tv_size, TextView tv_size_show, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
+    public void setNumAnim(View view, TextView tv_size, TextView tv_size_show, TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -263,9 +261,12 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             int currentValue = (int) animation.getAnimatedValue();
             tv_size.setText(currentValue + "");
             tv_size_show.setText(currentValue + "");
+            tv_delete.setText("一键加速 " + currentValue + (currentValue < 1024 ? "MB" : "GB"));
             if (currentValue == endNum) {
-                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue )/Double.valueOf(1024) )));
-                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue )/ Double.valueOf(1024) )));
+                tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))));
+                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))));
+                tv_delete.setText("一键加速 " + (type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))))
+                        + (currentValue < 1024 ? "MB" : "GB"));
 
                 switch (type) {
                     case 1:
@@ -294,12 +295,11 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 
         });
 
-        anim.addListener(new AnimatorListenerAdapter() {
+        anim.addListener(new AnimatorListenerAdapter() { //扫描数字动画结束
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 mView.setCanClickDelete(true);
-                mTvSpeed.setVisibility(View.VISIBLE);
                 mView.showCleanButton();
             }
         });

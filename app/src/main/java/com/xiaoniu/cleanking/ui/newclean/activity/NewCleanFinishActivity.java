@@ -110,7 +110,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public View line_quicken, line_power, line_notification, line_wechat, line_file;
     private ImageView iv_advert_logo, iv_advert, iv_advert_logo2, iv_advert2;
     private TextView tv_advert, tv_advert_content, tv_advert2, tv_advert_content2, tv_download2;
-    private View v_advert, v_advert2;
+    private View v_advert, v_advert2, mRecommendV;
     private TextView tv_quicken, tv_power, tv_notification;
     private ImageView iv_quicken, iv_power, iv_notification;
     private LottieAnimationView mLottieAd;
@@ -191,6 +191,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         tv_advert = header.findViewById(R.id.tv_advert);
         tv_advert_content = header.findViewById(R.id.tv_advert_content);
 
+        mRecommendV = headerTool.findViewById(R.id.v_recommend);
         mContainer2 = headerTool.findViewById(R.id.native_ad_container);
         mMediaView2 = headerTool.findViewById(R.id.gdt_media_view);
         v_advert2 = headerTool.findViewById(R.id.v_advert);
@@ -326,8 +327,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (null == list || null == list.getData() || list.getData().size() <= 0) return;
-        Log.d(TAG, "getSwitchInfoListSuccess -- list.getData()=" + list.getData().size());
+        if (null == list || null == list.getData() || list.getData().size() <= 0 || TextUtils.isEmpty(mTitle)) return;
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
 
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
@@ -686,6 +686,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 是否显示推荐功能项
      */
     private void showTool() {
+        mRecommendV.setVisibility(View.VISIBLE);
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;

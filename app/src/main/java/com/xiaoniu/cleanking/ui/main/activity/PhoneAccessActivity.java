@@ -119,10 +119,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     TextView mTvTitleName;
     @BindView(R.id.rl_anim_bg)
     RelativeLayout mRlAnimBg;
-    @BindView(R.id.tv_speed)
-    TextView mTvSpeed;
-    @BindView(R.id.line_access)
-    TextView mLineAccess;
+    /*    @BindView(R.id.tv_speed)
+        TextView mTvSpeed;*/
+//    @BindView(R.id.line_access)
+//    TextView mLineAccess;
     @BindView(R.id.n_scroll_view)
     NestedScrollView mNestedScrollView;
 
@@ -275,11 +275,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         iv_back.setOnClickListener(v -> {
             if (!keyBack()) {
-                if (mTvSpeed.getVisibility() == View.GONE) {
+               /* if (mTvSpeed.getVisibility() == View.GONE) {
                     StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "one_click_acceleration_page");
                 } else {
                     StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "clean_up_ immediately_page");
-                }
+                }*/
                 finish();
             } else {
                 StatisticsUtils.trackClick("return_back", "”一键加速返回“点击", "home_page", "accelerate_access_to_details_page");
@@ -291,16 +291,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             startClean(false);
         });
 
-        mTvSpeed.setOnClickListener(view -> {
+        /*mTvSpeed.setOnClickListener(view -> {
             //开始清理
             startClean(false);
-        });
-        mLineAccess.setOnClickListener(view -> {
+        });*/
+       /* mLineAccess.setOnClickListener(view -> {
             StatisticsUtils.trackClick("view_details_click", "\"查看详情\"点击", "home_page", "clean_up_ immediately_page");
             NiuDataAPI.onPageStart("accelerate_access_to_details_view_page", "加速查看详情页浏览");
             isShowListInfo = true;
             acceview.setVisibility(View.GONE);
-        });
+        });*/
         icon_more.setOnClickListener(v -> mPresenter.showPopupWindow(icon_more));
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
@@ -337,6 +337,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * 一键加速
      */
     public void showCleanButton() {
+        acceview.setVisibility(View.GONE);
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
     }
 
@@ -382,7 +383,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         //小飞机飞入动画
         acceview.planFlyInAnimator();
         if (Build.VERSION.SDK_INT >= 26) {
-            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+            mPresenter.getAccessAbove22();
+            /*long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
             if (lastCheckTime == 0) {
                 mPresenter.getAccessAbove22();
@@ -402,7 +404,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 mPresenter.getAccessAbove22();
-            }
+            }*/
         } else {
             mPresenter.getAccessListBelow();
         }
@@ -414,10 +416,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     private void startClean(boolean b) {
-        if (!canClickDelete || mTvSpeed == null || acceview == null) return;
-        mTvSpeed.setVisibility(View.GONE);
-        mLineAccess.setCompoundDrawables(null, null, null, null);
-        mLineAccess.setText(getString(R.string.tool_speed_now));
+        if (!canClickDelete || acceview == null) return;
+//        mTvSpeed.setVisibility(View.GONE);
+//        mLineAccess.setCompoundDrawables(null, null, null, null);
+//        mLineAccess.setText(getString(R.string.tool_speed_now));
         ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
         for (FirstJunkInfo info : belowAdapter.getListImage()) {
             if (info.getIsSelect()) {
@@ -433,14 +435,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
         }
         belowAdapter.deleteData(junkTemp);
-        computeTotalSizeDeleteClick(junkTemp);
-
         if (total == 0)
             acceview.setListInfoSize(0);
         if (Build.VERSION.SDK_INT >= 26) {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
         }
+        computeTotalSizeDeleteClick(junkTemp);
         StatisticsUtils.trackClick("cleaning_click", "清理点击", AppHolder.getInstance().getSourcePageId(), "once_accelerate_page");
     }
 
@@ -494,7 +495,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         acceview.setListInfoSize(listInfo.size());
         if (listInfo.size() != 0) {
-
             mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             computeTotalSize(listInfo);
             setAdapter(listInfo);
@@ -506,17 +506,52 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
         long totalSizes = 0;
-        for (FirstJunkInfo firstJunkInfo : listInfo) {
-            totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            for (FirstJunkInfo firstJunkInfo : listInfo) {
+                totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
+            }
+        } else { //8.0以上内存[200M,2G]随机数
+            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+            long timeTemp = System.currentTimeMillis() - lastCheckTime;
+            Log.d("XiLei", "lastCheckTime=" + lastCheckTime);
+            Log.d("XiLei", "timeTemp=" + timeTemp);
+            Log.d("XiLei", "sdsdsds=" + SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0));
+            if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
+                Log.d("XiLei", "aaaaaaaaa");
+                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                totalSizes = (long) (cacheSize * 0.3);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
+            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
+                Log.d("XiLei", "bbbbbbbbb");
+                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                totalSizes = (long) (cacheSize * 0.6);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
+            } else {
+                Log.d("XiLei", "cccccccc");
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
+                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+                totalSizes = Long.valueOf(NumberUtils.mathRandom(200 * 1024 * 1024, 2 * 1024 * 1024 * 1024));
+            }
+
         }
+        Log.d("XiLei", "扫描  totalSizes=" + totalSizes);
         setCleanSize(totalSizes, true);
         this.totalSizesCleaned = totalSizes;
     }
 
+    /**
+     * 清理
+     * @param listInfo
+     */
     public void computeTotalSizeDeleteClick(ArrayList<FirstJunkInfo> listInfo) {
         long totalSizes = 0;
-        for (FirstJunkInfo firstJunkInfo : listInfo)
-            totalSizes += firstJunkInfo.getTotalSize();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            for (FirstJunkInfo firstJunkInfo : listInfo)
+                totalSizes += firstJunkInfo.getTotalSize();
+        } else {
+            totalSizes = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
+        }
+        Log.d("XiLei", "清理后  totalSizes=" + totalSizes);
         setCleanSize(totalSizes, false);
         this.totalSizesCleaned = totalSizes;
     }
@@ -535,7 +570,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
+                mPresenter.setNumAnim(mRlAnimBg, tv_size, tv_size_show, tv_delete, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
             else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
@@ -545,13 +580,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             sizeMb = NumberUtils.getRoundCeilingInt(gbnum * 1024);
             strNum = String.valueOf(sizeMb);
             if (canPlayAnim)
-                mPresenter.setNumAnim(mTvSpeed, mRlAnimBg, tv_size, tv_size_show, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
+                mPresenter.setNumAnim(mRlAnimBg, tv_size, tv_size_show, tv_delete, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
             else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
         }
     }
-
 
     //Android O以上的
     PackageManager packageManager = AppApplication.getInstance().getPackageManager();
@@ -651,22 +685,33 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         recycle_view.setAdapter(belowAdapter);
         belowAdapter.setmOnCheckListener((listFile, pos) -> {
             int selectCount = 0;
+            long selectTotalSize = 0;
             for (int i = 0; i < listFile.size(); i++) {
                 if (listFile.get(i).getIsSelect()) {
                     selectCount++;
+                    selectTotalSize += listFile.get(i).getTotalSize();
                 }
             }
-            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
+//            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.icon_clean_btn_bg);
             tv_delete.setSelected(selectCount == 0 ? false : true);
+            if (selectCount <= 0) {
+                tv_delete.getBackground().setAlpha(75);
+                tv_delete.setText(getString(R.string.tool_one_key_speed));
+            } else if (selectCount == listFile.size()) {
+                tv_delete.getBackground().setAlpha(255);
+                tv_delete.setText(getString(R.string.tool_one_key_speed) + " " + tv_size.getText().toString() + tv_gb.getText().toString());
+            } else {
+                tv_delete.getBackground().setAlpha(255);
+                tv_delete.setText(getString(R.string.tool_one_key_speed) + " " + CleanAllFileScanUtil.byte2FitSize(selectTotalSize));
+            }
         });
 
         AnimationItem animationItem = new AnimationItem("Slide from bottom", R.anim.layout_animation_from_bottom);
         mPresenter.runLayoutAnimation(recycle_view, animationItem);
-
     }
 
     //清理完毕后展示内容
-    public void setCleanedView(long sized) {
+ /*   public void setCleanedView(long sized) {
         NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
         recycle_view.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
@@ -679,7 +724,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         tv_ql.setText("内存已清理");
         setHasCleaned(sized);
         rel_bottom.setVisibility(View.GONE);
-    }
+    }*/
 
     @Override
     protected void onDestroy() {

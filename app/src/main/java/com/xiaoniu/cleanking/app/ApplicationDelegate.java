@@ -14,6 +14,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -28,8 +29,6 @@ import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.json.JSONObject;
-
-import javax.inject.Inject;
 
 /**
  * Created by admin on 2017/6/8.
@@ -62,6 +61,10 @@ public class ApplicationDelegate implements IApplicationDelegate {
         UMConfigure.init(application, "5d230f2f4ca357bdb700106d", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
+
+        //穿山甲SDK初始化
+        //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
+        TTAdManagerHolder.init(application);
     }
 
     private static AppComponent mAppComponent;

@@ -7,25 +7,25 @@
     <!-- 开始扫描 动画-->
     <RelativeLayout
         android:id="@+id/rl_anim_bg"
-        android:paddingTop="@dimen/dimen_56dp"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/color_06C581"
-        android:layout_height="match_parent">
+        android:paddingTop="@dimen/dimen_56dp">
 
         <!--一键加速按钮-->
-        <TextView
+        <!--<TextView
             android:id="@+id/tv_speed"
             android:layout_width="match_parent"
+            android:layout_height="46dp"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
             android:layout_marginBottom="@dimen/dimen_12dp"
+            android:background="@drawable/btn_white_all_bg"
+            android:gravity="center"
             android:text="一键加速"
             android:textColor="@color/color_FD6F46"
-            android:gravity="center"
-            android:background="@drawable/btn_white_all_bg"
-            android:layout_height="46dp"/>
+            android:visibility="gone" />-->
     </RelativeLayout>
     <!--下雨动画-->
     <include layout="@layout/layout_yu_anim" />
@@ -36,101 +36,102 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical">
-    <!--小火箭-->
-    <LinearLayout
-        android:id="@+id/line_hj"
-        android:layout_width="97dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:src="@mipmap/hj_top" />
-
-        <ImageView
-            android:id="@+id/iv_bot"
-            android:layout_width="32dp"
-            android:visibility="invisible"
-            android:layout_height="66dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@mipmap/hj_bottom1" />
-    </LinearLayout>
-
-    <!--具体的缓存数据-->
-    <LinearLayout
-        android:id="@+id/line_allnum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="90dp"
-        android:visibility="invisible"
-        android:orientation="vertical">
-
+        <!--小火箭-->
         <LinearLayout
-            android:id="@+id/line_size"
+            android:id="@+id/line_hj"
+            android:layout_width="97dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:src="@mipmap/hj_top" />
+
+            <ImageView
+                android:id="@+id/iv_bot"
+                android:layout_width="32dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/hj_bottom1"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!--具体的缓存数据-->
+        <LinearLayout
+            android:id="@+id/line_allnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_dun"
-                android:layout_width="47dp"
-                android:layout_height="54dp"
-                android:layout_marginRight="@dimen/dimen_15dp"
-                android:src="@mipmap/icon_dun"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_size_show"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/white"
-                android:textSize="55sp" />
+            android:layout_marginTop="90dp"
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <LinearLayout
+                android:id="@+id/line_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_4dp"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_dun"
+                    android:layout_width="47dp"
+                    android:layout_height="54dp"
+                    android:layout_marginRight="@dimen/dimen_15dp"
+                    android:src="@mipmap/icon_dun"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tv_gb"
+                    android:id="@+id/tv_size_show"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:text="MB"
+                    android:text="0"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="55sp" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="内"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:visibility="invisible" />
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_gb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dimen_10dp"
+                        android:text="MB"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="内"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:visibility="invisible" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <TextView
-            android:id="@+id/line_access"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dimen_2dp"
-            android:drawablePadding="@dimen/dimen_4dp"
-            android:drawableRight="@mipmap/icon_right_pic"
-            android:text="查看详情"
-            android:textColor="@color/white"
-            android:textSize="13sp" />
-    </LinearLayout>
+            <!--<TextView
+                android:id="@+id/line_access"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dimen_2dp"
+                android:drawableRight="@mipmap/icon_right_pic"
+                android:drawablePadding="@dimen/dimen_4dp"
+                android:text="查看详情"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:visibility="gone"/>-->
+        </LinearLayout>
     </LinearLayout>
     <!--完成动画-->
     <FrameLayout
@@ -162,18 +163,18 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/view_lottie_speed_up"
         android:layout_width="match_parent"
-        android:scaleType="fitEnd"
-        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:scaleType="fitEnd" />
 
     <!-- 飞机尾部火焰下降-->
     <ImageView
         android:id="@+id/iv_plant_fly_out"
         android:layout_width="match_parent"
+        android:layout_height="306dp"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:layout_height="306dp" />
+        android:layout_gravity="bottom" />
 
     <!--顶部导航栏-->
     <LinearLayout
