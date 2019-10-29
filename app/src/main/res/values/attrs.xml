@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GalleryIndicator">
+        <attr name="count" format="integer" />
+        <attr name="space" format="dimension" />
+        <attr name="point_size" format="dimension" />
+        <attr name="point_seleted_color" format="color|reference" />
+        <attr name="point_normal_color" format="color|reference" />
+        <attr name="point_radius" format="dimension" />
+        <attr name="point_style" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="CircleProgressView">
+        <!--画笔宽度-->
+        <attr name="progress_width" format="dimension" />
+        <!--画笔颜色-->
+        <attr name="progress_color" format="color" />
+        <!-- 正常颜色-->
+        <attr name="progress_normal_color" format="color" />
+        <!--加载进度起始位置-->
+        <attr name="location_start" format="enum">
+            <enum name="left" value="1" />
+            <enum name="top" value="2" />
+            <enum name="right" value="3" />
+            <enum name="bottom" value="4" />
+        </attr>
+
+    </declare-styleable>
+
+    <string-array name="wx_file_titles">
+        <item>缩略图</item>
+        <item>今天</item>
+        <item>昨天</item>
+        <item>一月内</item>
+        <item>更早</item>
+    </string-array>
+
+    <string-array name="wx_file_titles_video">
+        <item>今天</item>
+        <item>昨天</item>
+        <item>一月内</item>
+        <item>更早</item>
+    </string-array>
+
+    <declare-styleable name="ArcProgressBar">
+        <attr name="arc_max_progress" format="float" />
+        <attr name="arc_bg_color" format="color" />
+        <attr name="arc_stroke_width" format="dimension" />
+        <attr name="arc_progress" format="float" />
+        <attr name="arc_progress_color" format="color" />
+        <attr name="arc_first_text" format="string" />
+        <attr name="arc_first_text_color" format="color" />
+        <attr name="arc_first_text_size" format="dimension" />
+        <attr name="arc_second_text" format="string" />
+        <attr name="arc_second_text_color" format="color" />
+        <attr name="arc_second_text_size" format="dimension" />
+        <attr name="arc_angle_size" format="float" />
+        <attr name="arc_start_angle" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="BattaryView">
+        <attr name="battaryPercnet" format="integer" />
+        <attr name="color" />
+    </declare-styleable>
+
+    <declare-styleable name="RoundProgressBar">
+        <attr name="roundColor" format="color" />
+        <attr name="roundProgressColor" format="color" />
+        <attr name="roundInsideColor" format="color" />
+        <attr name="textProgressColor" format="color" />
+        <attr name="textTitleColor" format="color" />
+        <attr name="progress" format="float" />
+        <attr name="textProgressSize" format="dimension" />
+        <attr name="textTitleSize" format="dimension" />
+        <attr name="roundWidth" format="dimension" />
+        <attr name="titleStr" format="string" />
+        <attr name="progressStr" format="string" />
+        <attr name="isShowProgress" format="boolean" />
+    </declare-styleable>
+
+    <attr name="arcHeight" format="dimension" />
+    <declare-styleable name="ArcView">
+        <attr name="arcHeight" />
+        <attr name="bgColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ArcImageView">
+        <attr name="arcHeight" />
+    </declare-styleable>
+
+</resources>

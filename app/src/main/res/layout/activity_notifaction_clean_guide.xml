@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_06C581"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/fl_clean_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="192dp"
+            android:layout_height="270dp"
+            android:src="@drawable/icon_notification_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_27dp"
+            android:text="垃圾通知正在拖慢手机速度"
+            android:textColor="@color/white"
+            android:layout_marginBottom="200dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+    <!--一键加速按钮-->
+    <TextView
+        android:id="@+id/tv_clean"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_12dp"
+        android:background="@drawable/btn_white_all_bg"
+        android:gravity="center"
+        android:text="@string/tool_now_clean"
+        android:textColor="@color/color_06C581"
+        android:textSize="16sp" />
+</RelativeLayout>

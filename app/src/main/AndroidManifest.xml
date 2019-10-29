@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.xiaoniu.cleanking">
+
+    <application
+        android:name=".app.AppApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/applogo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:label">
+
+        <activity
+            android:name=".ui.main.activity.SplashADActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppLauncher" />
+<!--        android:screenOrientation="portrait"-->
+        <activity
+            android:name=".scheme.ui.DispatcherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppLauncher">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="cleanking" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.main.activity.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Main.Theme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.usercenter.activity.UserLoadH5Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.NavigationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.FileManagerHomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".app.DebugActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.ImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.FloatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+        <activity
+            android:name=".ui.main.activity.PreviewImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanedResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.NewsLoadActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.JunkCleanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneAccessActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneCoolingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.CleanInstallPackageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.CleanMusicManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.AboutActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.CleanBigFileActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.CleanVideoManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.HardwareInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.ProcessInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WhiteListInstallPackgeManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WhiteListSpeedManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.FeedBackActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WhiteListSpeedAddActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.CleanFinishActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanHomeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanFileActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanAudActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.wechat.activity.WechatCleanResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WhiteListSettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.PermissionActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.PermissionDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".ui.main.activity.QuestionReportActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.main.activity.SimplePhotoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneThinActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneThinResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.SoftManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WXCleanImgActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.WXCleanVideoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" /> <!-- 手机瘦身 -->
+        <activity
+            android:name=".ui.main.activity.QQCleanImgActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" /> <!-- 手机瘦身结果页 -->
+        <activity android:name=".ui.main.activity.QQCleanVideoActivity" /> <!-- 软件管理 -->
+        <activity
+            android:name=".ui.tool.qq.activity.QQCleanHomeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.qq.activity.QQCleanFileActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.qq.activity.QQCleanAudActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:theme="@style/ImagePickerThemeFullScreen" />
+        <activity
+            android:name=".ui.main.activity.PhoneSuperPowerActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneSuperPowerMessageActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.PhoneSuperSavingNowActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.notify.activity.NotifyCleanGuideActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tool.notify.activity.NotifyCleanSetActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.newclean.activity.NewCleanFinishActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.NewsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- 微信分享 -->
+        <activity
+            android:name=".ui.tool.notify.activity.NotifyCleanDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" /> <!-- 常驻通知栏 -->
+        <activity
+            android:name=".ui.main.activity.PhoneSuperPowerDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.PhonePremisActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+
+        <activity
+            android:name=".ui.newclean.activity.NowCleanActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.SplashADHotActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.newclean.activity.InsertScreenFinishActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.main.activity.AgentWebViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+
+        <!-- Since JCore2.0.0 Required SDK核心功能 -->
+        <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
+        <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
+        <activity-alias
+            android:name=".splash"
+            android:label="@string/app_name"
+            android:targetActivity=".ui.main.activity.SplashADActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias> <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="6c0f162f789cb257e51ceecc1e6b88ec" />
+
+        <meta-data
+            android:name="PARTNER_CODE"
+            android:value="hlxx" />
+
+        <meta-data
+            android:name="com.xiaoniu.cleanking.app.ApplicationDelegate"
+            android:value="IModuleConfig" />
+
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="geek_push" />
+
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="819597e28ecddae10e2297ad" />
+
+        <meta-data
+            android:name="XIAOMI_APPKEY"
+            android:value="MI-5531807057088" />
+        <meta-data
+            android:name="XIAOMI_APPID"
+            android:value="MI-2882303761518070088" /> <!-- 极光推送 -->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="100946605" /> <!-- 极光推送静态注册 -->
+        <meta-data
+            android:name="MEIZU_APPKEY"
+            android:value="MZ-704651545da347cc8194d1aec4763002" />
+        <meta-data
+            android:name="MEIZU_APPID"
+            android:value="MZ-124077" /> <!-- ###########################厂商平台key开始############################# -->
+        <!-- 小米开始 -->
+        <meta-data
+            android:name="OPPO_APPKEY"
+            android:value="OP-9ff701f1ab004d92ae02fc11a514edd5" />
+        <meta-data
+            android:name="OPPO_APPID"
+            android:value="OP-30143914" /> <!-- 小米结束 -->
+        <!-- huawei start -->
+        <meta-data
+            android:name="OPPO_APPSECRET"
+            android:value="OP-1cbb7b63c94540179bbbeb7b35e9bf9b" /> <!-- huawei end -->
+        <!-- meizu start -->
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="031981ca-ef35-4cd3-a24d-6e46183de8f7" />
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="15374" /> <!-- meizhu end -->
+        <!-- oppo start -->
+        <meta-data
+            android:name="Geek_JPush_106"
+            android:value="com.geek.push.jpush.JPushClient" />
+        <provider
+            android:name=".utils.update.UpdateFileProvider"
+            android:authorities="${applicationId}.updatefileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/update_cache_path" />
+        </provider>
+        <receiver android:name=".jpush.JPushReceiver">
+            <intent-filter>
+                <action android:name="com.geek.push.ACTION_RECEIVE_NOTIFICATION" />
+                <action android:name="com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK" />
+                <action android:name="com.geek.push.ACTION_RECEIVE_MESSAGE" />
+                <action android:name="com.geek.push.ACTION_RECEIVE_COMMAND_RESULT" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver> <!-- oppo end -->
+        <!-- vivo start -->
+        <service android:name=".ui.notifition.NotificationService" />
+        <service android:name=".ui.usercenter.service.FloatingImageDisplayService" /> <!-- vivo end -->
+        <!-- ###########################厂商平台key结束################################ -->
+        <!-- 添加支持push-getui库 -->
+        <!-- <meta-data -->
+        <!-- android:name="Geek_GeTui_105" -->
+        <!-- android:value="com.geek.push.getui.GeTuiPushClient"/> -->
+        <!-- 添加支持push-jpush库 -->
+        <service
+            android:name=".ui.tool.notify.service.NotificationCleanService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+    </application>
+    <!-- 允许程序扩展或收缩状态栏 -->
+    <permission
+        android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
+
+</manifest>

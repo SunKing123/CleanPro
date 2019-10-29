@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ll_main_bg"
+    android:gravity="center"
+    android:background="@drawable/bg_btn_white12"
+    android:orientation="horizontal"
+    tools:ignore="ResourceName">
+
+    <ImageView
+        android:id="@+id/iv_app_icon"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginBottom="@dimen/dimen_10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@drawable/applogo" />
+
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_clean"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_clean"
+            style="@style/notification_img"
+            android:background="@mipmap/icon_notifi_clean_nor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="清理"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:textSize="11sp"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_speed"
+            style="@style/notification_img"
+            android:background="@mipmap/icon_notifi_one_key_no" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加速"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:textSize="11sp"
+            android:textColor="#000" />
+    </LinearLayout>
+
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_temperature"
+            style="@style/notification_img"
+            android:background="@mipmap/icon_notifi_temperature_nor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="降温"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:textSize="11sp"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_power"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_power"
+            style="@style/notification_img"
+            android:background="@mipmap/icon_notifi_power_no" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="省电"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:textSize="11sp"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+    <TextView android:layout_width="1dp"
+        android:background="@color/color_DEDEDE"
+        android:layout_height="18dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_notification"
+            style="@style/notification_img"
+            android:background="@mipmap/icon_notifi_notification_nor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:text="通知清理"
+            android:textSize="11sp"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+</LinearLayout>

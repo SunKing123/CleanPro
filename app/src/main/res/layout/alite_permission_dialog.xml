@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_corner_bg"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="117dp"
+            android:layout_height="105dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_34dp"
+            android:src="@mipmap/hjper_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_36dp"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:text="系统需要开启权限"
+            android:textColor="#06C581"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/dimen_20dp"
+            android:layout_marginRight="@dimen/dimen_20dp"
+            android:text="一键加速，通知清理，超强省电等功能均受限制，需要手动开启权限。"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_goto"
+            android:layout_width="234dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_23dp"
+            android:layout_marginBottom="@dimen/dimen_15dp"
+            android:background="@mipmap/icon_setting" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_exit"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:src="@mipmap/icon_premis_close"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

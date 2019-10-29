@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/line_title"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#06C581"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            style="@style/top_iv_back"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_title_name"
+            style="@style/top_tv_title"
+            android:layout_gravity="center_vertical"
+            android:text="@string/tool_super_power_message" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_low_power"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_below="@id/line_title"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="低电量通知栏提醒"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp" />
+
+        <com.suke.widget.SwitchButton
+            android:id="@+id/s_btn_low_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:sb_background="@color/color_EDEDED"
+            app:sb_border_width="0.5dp"
+            app:sb_checked="true"
+            app:sb_checked_color="@color/color_06C581"
+            app:sb_show_indicator="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_night"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_below="@id/ll_low_power"
+        android:layout_marginTop="0.5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="夜间省电提醒"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp" />
+
+        <com.suke.widget.SwitchButton
+            android:id="@+id/s_btn_night_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:sb_background="@color/color_EDEDED"
+            app:sb_border_width="0.5dp"
+            app:sb_checked_color="@color/color_06C581"
+            app:sb_show_indicator="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_not_nor"
+        android:background="@color/color_EDEDED" />
+
+    <RelativeLayout
+        android:id="@+id/ll_not_nor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_night"
+        android:layout_marginTop="1dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dimen_16dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="异常耗电弹框提醒"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="软件和硬件耗电异常时提醒"
+            android:textColor="@color/color_999999"
+            android:textSize="12sp" />
+
+        <com.suke.widget.SwitchButton
+            android:id="@+id/s_btn_error_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            app:sb_background="@color/color_EDEDED"
+            app:sb_border_width="1dp"
+            app:sb_checked_color="@color/color_06C581"
+            app:sb_show_indicator="false" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/ll_low_power"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@color/color_EDEDED" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/ll_night"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@color/color_EDEDED" />
+</RelativeLayout>

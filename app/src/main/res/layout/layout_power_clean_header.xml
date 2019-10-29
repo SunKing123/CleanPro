@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_150dp"
+    android:background="#FF06C581"
+    android:visibility="visible">
+
+    <com.xiaoniu.cleanking.widget.BattaryView
+        android:id="@+id/bv_view"
+        android:layout_width="53dp"
+        android:layout_height="91dp"
+        android:layout_marginLeft="@dimen/dimen_64dp"
+        android:layout_marginTop="@dimen/dimen_25dp"
+        app:color="#4BFF73" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/view_lottie_super_saving_power"
+        android:layout_width="120dp"
+        android:layout_height="117dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="29dp"
+        android:layout_marginTop="@dimen/dimen_29dp" />
+
+    <TextView
+        android:id="@+id/tv_after_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_32dp"
+        android:layout_marginTop="@dimen/dimen_46dp"
+        android:layout_toRightOf="@id/bv_view"
+        android:text="优化后"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+   <LinearLayout
+       android:id="@+id/ll_power_low"
+       android:layout_width="wrap_content"
+       android:orientation="vertical"
+       android:visibility="gone"
+       android:layout_marginLeft="@dimen/dimen_68dp"
+       android:layout_toRightOf="@id/bv_view"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/dimen_46dp"
+           android:layout_toRightOf="@id/bv_view"
+           android:text="点击优化"
+           android:textColor="@color/white"
+           android:textSize="14sp" />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/dimen_5dp"
+           android:layout_toRightOf="@id/bv_view"
+           android:text="@string/tool_power_hint"
+           android:textColor="@color/white"
+           android:textSize="20sp" />
+   </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_after_update"
+        android:layout_marginLeft="@dimen/dimen_32dp"
+        android:layout_marginTop="@dimen/dimen_4dp"
+        android:layout_toRightOf="@id/bv_view"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="延长待机时间 "
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_unit_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 小时 "
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvMini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_mini_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 分钟"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</RelativeLayout>
+
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/layout_clean_right_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/color_0AD3EB"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_count"
+            android:text="0"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
+
+        <TextView
+            android:id="@+id/text_scan"
+            android:text="立即扫描"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
+
+        <TextView
+            android:id="@+id/text_cooling"
+            android:text="手机降温"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
+        <TextView
+            android:id="@+id/text_wjgl"
+            android:text="文件管理"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
+        <TextView
+            android:id="@+id/text_acce"
+            android:text="一键加速"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

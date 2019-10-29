@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="184dp"
+    android:layout_height="61dp"
+    android:background="@mipmap/acc_w"
+    android:orientation="horizontal">
+
+
+
+    <TextView
+        android:id="@+id/text_memory"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dimen_1dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_gravity="center_vertical"
+        android:text="加速保护名单"
+        android:textSize="@dimen/dimen_16sp"
+        android:textColor="@color/color_4A4A4A"/>
+</LinearLayout>

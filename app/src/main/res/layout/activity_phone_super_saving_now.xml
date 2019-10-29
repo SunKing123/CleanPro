@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_06C581"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_power_saving_bar_layout"
+        android:layout_width="match_parent"
+        app:expanded="false"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <LinearLayout
+                android:id="@+id/viewt_finish"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginTop="@dimen/dimen_56dp"
+                android:background="#06C581"
+                android:gravity="center"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@id/viewt_finish"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@id/viewt_finish"
+                app:layout_constraintTop_toTopOf="@id/viewt_finish">
+
+                <ImageView
+                    android:id="@+id/iv_dun"
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
+                    android:layout_marginRight="@dimen/dimen_8dp"
+                    android:src="@mipmap/icon_dun" />
+
+                <TextView
+                    android:id="@+id/tv_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="55sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/layout_right_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_gb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:text="已达最佳状态"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tv_ql"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快去体验其他功能"
+                        android:textColor="#ccffffff"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_phone_speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
+                android:minHeight="50dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin">
+
+                <LinearLayout
+                    android:id="@+id/line_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:background="#06C581"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_back"
+                        style="@style/top_iv_back"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/tv_title_name"
+                        style="@style/top_tv_title"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/tool_super_power_saving" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/n_scroll_view"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.xiaoniu.cleanking.widget.NestedScrollWebView
+                android:id="@+id/web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="@color/white" />
+
+            <RelativeLayout
+                android:id="@+id/rl_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/ll_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dimen_60dp"
+                    android:layout_centerInParent="true"
+                    android:paddingLeft="@dimen/dimen_15dp"
+                    android:layout_centerHorizontal="true">
+
+                    <TextView
+                        android:id="@+id/tv_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="0"
+                        android:gravity="bottom"
+                        android:textColor="@color/white"
+                        android:textSize="70sp" />
+
+                    <TextView
+                        android:id="@+id/tvAllNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:text=""
+                        android:paddingBottom="@dimen/dimen_16dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dimen_16dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_num"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="12sp"
+                    android:text="正在休眠应用减少耗电..."
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:id="@+id/view_lottie_super_saving_sleep"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dimen_50dp"
+                    android:background="@drawable/super_power_top"/>
+
+                <FrameLayout
+                    android:id="@+id/layIconAnim"
+                    android:layout_width="220dp"
+                    android:layout_height="220dp"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/dimen_50dp">
+
+                    <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
+                        android:id="@+id/ivIcon1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:riv_corner_radius="25dp"
+                        app:riv_border_width="5dp"
+                        app:riv_border_color="#06C581"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY" />
+
+                    <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
+                        android:id="@+id/ivIcon2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:riv_corner_radius="25dp"
+                        app:riv_border_width="5dp"
+                        app:riv_border_color="#06C581"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY" />
+
+                </FrameLayout>
+
+
+                <TextView
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:layout_marginBottom="@dimen/dimen_12dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:text="@string/tool_cancel"
+                    android:background="@drawable/btn_white_bg"
+                    android:layout_height="@dimen/dimen_46dp"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_not_net"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dimen_80dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_no_net" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="资讯列表获取失败～"
+                    android:textColor="@color/color_999999" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <FrameLayout
+        android:id="@+id/fl_anim"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_anim_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="150dp"
+            android:text="@string/tool_cleaned_up"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

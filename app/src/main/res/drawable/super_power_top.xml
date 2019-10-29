@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/icon_super_power_1" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_2" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_3" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_4" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_5" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_6" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_7" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_8" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_9" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_10" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_11" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_12" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_13" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_14" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_15" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_16" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_17" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_18" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_19" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_20" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_21" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_22" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_23" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_24" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_25" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_26" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_27" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_28" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_29" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_30" android:duration="50"/>
+    <item android:drawable="@drawable/icon_super_power_31" android:duration="50"/>
+</animation-list>
