@@ -1,6 +1,7 @@
 package com.xiaoniu.common.utils;
 
 
+import android.app.Application;
 import android.content.Context;
 
 /**
@@ -10,10 +11,28 @@ public class ContextUtils {
 
     private static Context sContext;
 
+    private static Application application;
     private ContextUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+    /**
+     * 初始化工具类
+     *
+     *
+     */
+    public static void initApplication(Application app) {
+        application = app;
+    }
+
+    /**
+     * 获取ApplicationContext
+     *
+     * @return ApplicationContext
+     */
+    public static Application getApplication() {
+        return application;
+    }
     /**
      * 初始化工具类
      *

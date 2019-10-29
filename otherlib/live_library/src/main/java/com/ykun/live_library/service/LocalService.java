@@ -114,6 +114,7 @@ public final class LocalService extends Service {
         if (mKeepAliveRuning == null)
             mKeepAliveRuning = new KeepAliveRuning();
         mKeepAliveRuning.onRuning();
+
         return START_STICKY;
     }
 

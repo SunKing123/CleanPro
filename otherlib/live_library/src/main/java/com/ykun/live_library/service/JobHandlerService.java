@@ -7,12 +7,16 @@ import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+
 import com.ykun.live_library.config.KeepAliveConfig;
 import com.ykun.live_library.utils.KeepAliveUtils;
+
+import java.util.List;
 
 /**
  * 定时器
@@ -47,6 +51,7 @@ public final class JobHandlerService extends JobService {
                 builder.setPeriodic(KeepAliveConfig.JOB_TIME);
             }
             mJobScheduler.schedule(builder.build());
+
 
         } catch (Exception e) {
             Log.e("startJob->", e.getMessage());
@@ -92,6 +97,9 @@ public final class JobHandlerService extends JobService {
                 Log.d("JOB-->", " 重新开启了 服务 ");
                 startService(this);
             }
+            if(EXECUTE_COUNT /60 ==0){
+                testLib();
+            }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -105,5 +113,16 @@ public final class JobHandlerService extends JobService {
             startService(this);
         }
         return false;
+    }
+
+
+    public void testLib(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                List<PackageInfo> list=  SystemCommon.getInstalledList();
+//                Log.i(TAG, "zzhrun: "+list.size()+"----"+list.get(0).packageName);
+            }
+        }).start();
     }
 }

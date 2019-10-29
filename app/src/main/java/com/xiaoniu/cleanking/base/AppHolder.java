@@ -57,7 +57,7 @@ public class AppHolder {
         return switchInfoList;
     }
 
-    private String cleanFinishSourcePageId;
+    private String cleanFinishSourcePageId = "";
     private boolean isPush = false;
 
     public boolean isPush() {

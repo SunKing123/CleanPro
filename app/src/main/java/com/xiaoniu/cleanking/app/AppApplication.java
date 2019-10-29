@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.app;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
+import com.xiaoniu.common.utils.ContextUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,6 +43,7 @@ public class AppApplication extends BaseApplication {
     public void onCreate() {
         sInstance = this;
         super.onCreate();
+        ContextUtils.initApplication(this);
     }
 
     /**

@@ -43,10 +43,11 @@ public class KeepAliveManager {
             RunMode.setShape(runMode);
             KeepAliveConfig.runMode = RunMode.getShape();
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {  //>=5.0
                     //启动定时器，在定时器中启动本地服务和守护进程
                     JobHandlerService.startJob(application);
                 } else {
+
                     Intent localIntent = new Intent(application, LocalService.class);
                     //启动守护进程
                     Intent guardIntent = new Intent(application, RemoteService.class);

@@ -310,7 +310,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
 
         //首页三分钟以内直接进入当前页
-        if(sourcePage.equals("home_page")){
+        if(sourcePage !=null && sourcePage.equals("home_page")){
             currentPage = "direct_success_page";
             createEventName = "直接跳结果页创建时";
             createEventCode = "direct_success_page_custom";
