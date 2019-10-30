@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.MediaView;
 import com.qq.e.ads.nativ.NativeADEventListener;
@@ -58,7 +60,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     private ImageView iv_advert_logo, iv_advert, mErrorIv;
     private TextView tv_advert, tv_advert_content;
-    private TextView mBtnDownload;
+    private LottieAnimationView mBtnDownload;
     private View mViewContent;
 
     private NativeUnifiedADData mNativeUnifiedADData;
@@ -106,8 +108,37 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         tv_advert_content = findViewById(R.id.tv_advert_content);
 
         mBtnDownload = findViewById(R.id.tv_download);
+        initLottie();
         changeUI(getIntent());
         getPageData();
+    }
+
+    private void initLottie(){
+        mBtnDownload.useHardwareAcceleration(true);
+        mBtnDownload.setAnimation("clean_finish_download.json");
+        mBtnDownload.setImageAssetsFolder("images_clean_download");
+        mBtnDownload.playAnimation();
+        mBtnDownload.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBtnDownload.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     @Override
@@ -598,10 +629,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             @Override
             public void onADStatusChanged() {
                 Log.d(TAG, "广告状态变化");
-                updateAdAction(mBtnDownload, ad);
+//                updateAdAction(mBtnDownload, ad);
             }
         });
-        updateAdAction(mBtnDownload, ad);
+//        updateAdAction(mBtnDownload, ad);
 
         if (ad.getAdPatternType() == AdPatternType.NATIVE_VIDEO) { //视频类型
             mHandler.sendEmptyMessage(MSG_VIDEO_START);

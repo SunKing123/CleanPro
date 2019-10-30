@@ -321,8 +321,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void onResume() {
         super.onResume();
         //开启常驻通知栏服务
-        if (NotificationsUtils.isNotificationEnabled(this))
-            startService(new Intent(this, NotificationService.class));
+        if (NotificationsUtils.isNotificationEnabled(this)){
+            try {
+                startService(new Intent(this, NotificationService.class));
+            }catch (RuntimeException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

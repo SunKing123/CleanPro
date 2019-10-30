@@ -30,7 +30,6 @@ import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
@@ -154,10 +153,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * @return
      */
     public void getSwitchInfoListFail(String message) {
-        mViewContent.setVisibility(View.GONE);
+       /* mViewContent.setVisibility(View.GONE);
         mBtnDownload.setVisibility(View.GONE);
         mErrorV.setVisibility(View.VISIBLE);
-        ToastUtils.showShort(message);
+        ToastUtils.showShort(message);*/
+        finish();
     }
 
     /**
@@ -166,10 +166,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * @return
      */
     public void getSwitchInfoListConnectError() {
-        mViewContent.setVisibility(View.GONE);
+        /*mViewContent.setVisibility(View.GONE);
         mBtnDownload.setVisibility(View.GONE);
         mErrorV.setVisibility(View.VISIBLE);
-        ToastUtils.showShort("网络连接失败，请假查您的网络连接");
+        ToastUtils.showShort("网络连接失败，请假查您的网络连接");*/
+        finish();
     }
 
     private void initNativeUnifiedAD() {
@@ -179,9 +180,10 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
-                mViewContent.setVisibility(View.GONE);
+                /*mViewContent.setVisibility(View.GONE);
                 mBtnDownload.setVisibility(View.GONE);
-                mErrorV.setVisibility(View.VISIBLE);
+                mErrorV.setVisibility(View.VISIBLE);*/
+                finish();
             }
 
             @Override
@@ -254,19 +256,21 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     @Override
     protected void onResume() {
+        NiuDataAPI.onPageStart("screen_advertising_view_page", "插屏广告浏览");
         super.onResume();
         if (mNativeUnifiedADData != null) {
             // 必须要在Actiivty.onResume()时通知到广告数据，以便重置广告恢复状态
             mNativeUnifiedADData.resume();
         }
-        NiuDataAPI.onPageStart("screen_advertising_view_page", "插屏广告浏览");
+
     }
 
     @Override
     protected void onPause() {
         Jzvd.releaseAllVideos();
+        NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "插屏广告浏览");
         super.onPause();
-        NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "清理结果出现时");
+
     }
 
     @Override
@@ -398,7 +402,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
                         @Override
                         public void onVideoCompleted() {
-                            if(mNativeUnifiedADData!=null){
+                            if (mNativeUnifiedADData != null) {
                                 mNativeUnifiedADData.startVideo();
                             }
 
