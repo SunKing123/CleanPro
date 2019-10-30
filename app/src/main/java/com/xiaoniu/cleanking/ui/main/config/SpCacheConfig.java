@@ -14,6 +14,7 @@ public class SpCacheConfig {
     public static final String CACHES_KEY_APK = "key_caches_files_apk";
     public static final String CACHES_KEY_VIDEO = "key_caches_files_video";
     public static final String CACHES_KEY_FIRST = "key_caches_files_first";
+    public static final String KEY_FIRST_HOME_RECOMMEND = "key_first_home_recommend";
 
     public static final String MUL_RUN_CACHES_CUSTOM = "mul_run_caches_custom";
     public static final String RUN_CACHES_IS_CHECK_ALL= "run_caches_is_check_all";
@@ -77,6 +78,7 @@ public class SpCacheConfig {
     public static final  String CLEAN_FINISH_CLICK_QQ_COUNT = "CleanFinishClickQQCount";
     public static final  String CLEAN_FINISH_CLICK_PHONE_COUNT = "CleanFinishClickPhoneCount";
     public static final  String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
+    public static final  String IS_FIRST_HOME_RECOMMEND = "is_first_home_recommend";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";

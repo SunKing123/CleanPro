@@ -1,10 +1,12 @@
 package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -153,5 +155,36 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 //                    mView.cancelLoadingDialog();
                     mView.getAccessListBelow(strings);
                 });
+    }
+
+    /**
+     * 推荐列表
+     */
+    public void getRecommendList() {
+        mModel.getRecommendList(new Common4Subscriber<HomeRecommendEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+                Log.d("XiLei", "showExtraOp1111");
+                mView.getRecommendListFail();
+            }
+
+            @Override
+            public void getData(HomeRecommendEntity entity) {
+                Log.d("XiLei", "成功--------------------------");
+                mView.getRecommendListSuccess(entity);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+                Log.d("XiLei", "showExtraOp2222");
+                mView.getRecommendListFail();
+            }
+
+            @Override
+            public void netConnectError() {
+                Log.d("XiLei", "netConnectError");
+                mView.getRecommendListFail();
+            }
+        });
     }
 }

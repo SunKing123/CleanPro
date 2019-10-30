@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/v_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_recommend"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="@dimen/dimen_35dp"
+            android:layout_height="@dimen/dimen_35dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_qq" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_12dp"
+            android:layout_toRightOf="@+id/iv_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_404040"
+                android:textSize="@dimen/dimen_17sp" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:alpha="0.4"
+                android:textColor="@color/color_404040"
+                android:textSize="@dimen/dimen_14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_shape_radio_black_13"
+            android:paddingLeft="@dimen/dimen_11dp"
+            android:paddingTop="@dimen/dimen_5dp"
+            android:paddingRight="@dimen/dimen_11dp"
+            android:paddingBottom="@dimen/dimen_5dp"
+            android:text="@string/tool_now_clean"
+            android:textColor="@color/color_777777"
+            android:textSize="@dimen/dimen_12sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
