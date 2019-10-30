@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
 import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.arch.persistence.room.Room;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -20,6 +21,7 @@ import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
+import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
@@ -37,6 +39,7 @@ import org.json.JSONObject;
 public class ApplicationDelegate implements IApplicationDelegate {
 
     private static final String TAG = "Tinker.ApplicationDelegate";
+    private static AppDataBase mAppDatabase;
 
     @Override
     public void onCreate(Application application) {
@@ -65,6 +68,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
+        initRoom(application);
     }
 
     private static AppComponent mAppComponent;
@@ -109,6 +113,17 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
             }
         });
+    }
+
+    private void initRoom(Application application) {
+        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "wukong_cleanking.db")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+    }
+
+    public static AppDataBase getAppDatabase() {
+        return mAppDatabase;
     }
 
     public static AppComponent getAppComponent() {

@@ -140,7 +140,7 @@
     </RelativeLayout>
 
     <!--完成动画-->
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -238,6 +238,7 @@
             </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/v_recommend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -490,21 +491,12 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_more_function"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:text="更多推荐"
-                android:textColor="@color/color_666666"
-                android:visibility="visible" />
-
             <!--分享图片-->
             <ImageView
                 android:id="@+id/image_ad_bottom_first"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_bottom_title"
+                android:layout_below="@+id/v_recommend"
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
@@ -521,198 +513,212 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/text_bottom_title"
+                android:id="@+id/text_more_function"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/view_b"
                 android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
                 android:text="更多推荐"
-                android:visibility="gone" />
+                android:textColor="@color/color_666666"
+                android:visibility="visible" />
 
-            <RelativeLayout
-                android:id="@+id/view_qq_clean"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_12dp"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:layout_marginRight="@dimen/dimen_12dp"
+                android:layout_marginBottom="@dimen/dimen_16dp" />
+
+            <LinearLayout
+                android:id="@+id/v_no_net"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_4dp"
-                android:layout_marginRight="@dimen/dimen_12dp"
-                android:background="@drawable/bg_recommend"
-                android:paddingLeft="@dimen/dimen_16dp"
-                android:paddingRight="@dimen/dimen_16dp">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/iv_quicken"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/view_qq_clean"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_qq" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:layout_toRightOf="@+id/iv_quicken"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/dimen_4dp"
+                    android:layout_marginRight="@dimen/dimen_12dp"
+                    android:background="@drawable/bg_recommend"
+                    android:paddingLeft="@dimen/dimen_16dp"
+                    android:paddingRight="@dimen/dimen_16dp">
 
-                    <TextView
-                        android:id="@+id/tv_quicken_title"
+                    <ImageView
+                        android:id="@+id/iv_quicken"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tool_qq_clear"
-                        android:textColor="@color/color_404040"
-                        android:textSize="@dimen/dimen_17sp" />
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_game" />
 
-                    <TextView
-                        android:id="@+id/tv_quicken"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5dp"
-                        android:text="@string/clean_qq_litter"
-                        android:alpha="0.4"
-                        android:textColor="@color/color_404040"
-                        android:textSize="@dimen/dimen_14sp" />
-                </LinearLayout>
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
+                        android:layout_toRightOf="@+id/iv_quicken"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/tv_quicken_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/game_quicken"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_17sp" />
 
-                <TextView
-                    android:id="@+id/iv_speed_clean"
-                    android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/tv_quicken"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_5dp"
+                            android:alpha="0.4"
+                            android:text="@string/game_quicken_hint"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/iv_speed_clean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_shape_radio_black_13"
+                        android:paddingLeft="@dimen/dimen_11dp"
+                        android:paddingTop="@dimen/dimen_5dp"
+                        android:paddingRight="@dimen/dimen_11dp"
+                        android:paddingBottom="@dimen/dimen_5dp"
+                        android:text="@string/quicken_now"
+                        android:textColor="@color/color_777777"
+                        android:textSize="@dimen/dimen_12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/view_phone_thin"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_shape_radio_black_13"
-                    android:paddingLeft="@dimen/dimen_11dp"
-                    android:paddingTop="@dimen/dimen_5dp"
-                    android:paddingRight="@dimen/dimen_11dp"
-                    android:paddingBottom="@dimen/dimen_5dp"
-                    android:text="@string/tool_now_clean"
-                    android:textColor="@color/color_777777"
-                    android:textSize="@dimen/dimen_12sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/view_phone_thin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginRight="@dimen/dimen_12dp"
-                android:background="@drawable/bg_recommend"
-                android:paddingLeft="@dimen/dimen_16dp"
-                android:paddingTop="@dimen/dimen_12dp"
-                android:paddingRight="@dimen/dimen_16dp">
-
-                <ImageView
-                    android:id="@+id/iv_file"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_file_unins" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:layout_toRightOf="@+id/iv_file"
-                    android:orientation="vertical">
+                    android:layout_marginRight="@dimen/dimen_12dp"
+                    android:background="@drawable/bg_recommend"
+                    android:paddingLeft="@dimen/dimen_16dp"
+                    android:paddingTop="@dimen/dimen_12dp"
+                    android:paddingRight="@dimen/dimen_16dp">
 
-                    <TextView
-                        android:id="@+id/tv_file_title"
+                    <ImageView
+                        android:id="@+id/iv_file"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tool_soft_manager"
-                        android:textColor="@color/color_404040"
-                        android:textSize="@dimen/dimen_17sp" />
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_file_unins" />
 
-                    <TextView
-                        android:id="@+id/tv_file"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5dp"
-                        android:text="@string/uninstall_software"
-                        android:alpha="0.4"
-                        android:textColor="@color/color_404040"
-                        android:textSize="@dimen/dimen_14sp" />
-                </LinearLayout>
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
+                        android:layout_toRightOf="@+id/iv_file"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/tv_file_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tool_soft_manager"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_17sp" />
+
+                        <TextView
+                            android:id="@+id/tv_file"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_5dp"
+                            android:alpha="0.4"
+                            android:text="@string/uninstall_software"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_shape_radio_black_13"
+                        android:paddingLeft="@dimen/dimen_11dp"
+                        android:paddingTop="@dimen/dimen_5dp"
+                        android:paddingRight="@dimen/dimen_11dp"
+                        android:paddingBottom="@dimen/dimen_5dp"
+                        android:text="@string/tool_now_clean"
+                        android:textColor="@color/color_777777"
+                        android:textSize="@dimen/dimen_12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/view_news"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_shape_radio_black_13"
-                    android:paddingLeft="@dimen/dimen_11dp"
-                    android:paddingTop="@dimen/dimen_5dp"
-                    android:paddingRight="@dimen/dimen_11dp"
-                    android:paddingBottom="@dimen/dimen_5dp"
-                    android:text="@string/tool_now_clean"
-                    android:textColor="@color/color_777777"
-                    android:textSize="@dimen/dimen_12sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/view_news"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_12dp"
-                android:layout_marginRight="@dimen/dimen_12dp"
-                android:layout_marginBottom="@dimen/dimen_12dp"
-                android:background="@drawable/bg_recommend"
-                android:paddingLeft="@dimen/dimen_16dp"
-                android:paddingTop="@dimen/dimen_12dp"
-                android:paddingRight="@dimen/dimen_16dp">
-
-                <ImageView
-                    android:id="@+id/iv_news"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_news" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12dp"
-                    android:layout_toRightOf="@+id/iv_news"
-                    android:orientation="vertical">
+                    android:layout_marginRight="@dimen/dimen_12dp"
+                    android:layout_marginBottom="@dimen/dimen_12dp"
+                    android:background="@drawable/bg_recommend"
+                    android:paddingLeft="@dimen/dimen_16dp"
+                    android:paddingTop="@dimen/dimen_12dp"
+                    android:paddingRight="@dimen/dimen_16dp">
 
-                    <TextView
-                        android:id="@+id/tv_news_title"
+                    <ImageView
+                        android:id="@+id/iv_news"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tool_top_news"
-                        android:textColor="@color/color_404040"
-                        android:textSize="@dimen/dimen_17sp" />
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_news" />
 
-                    <TextView
-                        android:id="@+id/tv_news"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5dp"
-                        android:text="@string/lock_news"
-                        android:alpha="0.4"
-                        android:textColor="@color/color_404040"
-                        android:textSize="@dimen/dimen_14sp" />
-                </LinearLayout>
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_12dp"
+                        android:layout_toRightOf="@+id/iv_news"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_shape_radio_black_13"
-                    android:paddingLeft="@dimen/dimen_11dp"
-                    android:paddingTop="@dimen/dimen_5dp"
-                    android:paddingRight="@dimen/dimen_11dp"
-                    android:paddingBottom="@dimen/dimen_5dp"
-                    android:text="@string/lock_click"
-                    android:textColor="@color/color_777777"
-                    android:textSize="@dimen/dimen_12sp" />
-            </RelativeLayout>
+                        <TextView
+                            android:id="@+id/tv_news_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tool_top_news"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_17sp" />
 
+                        <TextView
+                            android:id="@+id/tv_news"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_5dp"
+                            android:alpha="0.4"
+                            android:text="@string/lock_news"
+                            android:textColor="@color/color_404040"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_shape_radio_black_13"
+                        android:paddingLeft="@dimen/dimen_11dp"
+                        android:paddingTop="@dimen/dimen_5dp"
+                        android:paddingRight="@dimen/dimen_11dp"
+                        android:paddingBottom="@dimen/dimen_5dp"
+                        android:text="@string/lock_click"
+                        android:textColor="@color/color_777777"
+                        android:textSize="@dimen/dimen_12sp" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

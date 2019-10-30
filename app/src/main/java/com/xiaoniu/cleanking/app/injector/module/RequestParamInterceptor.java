@@ -49,7 +49,6 @@ public class RequestParamInterceptor implements Interceptor {
 //        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
 
 
-
 //        //请求定制：添加请求头
 //        Request.Builder requestBuilder = original.newBuilder();
 //        CommonParam commonParam = new CommonParam();
@@ -90,6 +89,7 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("talkVersion", "");
         mapHeader.put("timestamp", System.currentTimeMillis());
         mapHeader.put("uid", "");
+        mapHeader.put("versionCode", AppUtils.getVersionCode(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
         if (original.body() instanceof FormBody) {
 

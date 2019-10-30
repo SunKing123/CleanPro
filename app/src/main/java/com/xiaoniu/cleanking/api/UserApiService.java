@@ -5,6 +5,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
+import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
@@ -150,4 +151,12 @@ public interface UserApiService {
     @JSONField
     Flowable<ImageAdEntity> queryBottomAd(@Body RequestBody requestBody);
 
+    /**
+     * 首页推荐列表
+     *
+     * @param positionCode
+     * @return
+     */
+    @GET("/operate/list")
+    Flowable<HomeRecommendEntity> getRecommendList(@Query("positionCode") String positionCode);
 }

@@ -7,11 +7,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,10 +25,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
@@ -33,6 +39,8 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
+import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -46,6 +54,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivi
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
+import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
@@ -74,13 +83,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
 
 /**
  * 1.2.1 新版本清理主页
  */
-public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
+public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener {
 
     private long firstTime;
     @BindView(R.id.tv_clean_type)
@@ -94,8 +109,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     LinearLayout textWjgl;
     @BindView(R.id.view_phone_thin)
     View viewPhoneThin;
-    @BindView(R.id.view_qq_clean)
-    View viewQqClean;
     @BindView(R.id.view_news)
     View viewNews;
     @BindView(R.id.tv_acc)
@@ -126,6 +139,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     LottieAnimationView mLottieHomeView;
     @BindView(R.id.tv_now_clean)
     ImageView tvNowClean;
+    @BindView(R.id.recycleview)
+    RecyclerView mRecycleview;
+    @BindView(R.id.layout_scroll)
+    NestedScrollView mNestedScrollView;
+    @BindView(R.id.v_no_net)
+    View mNoNetView;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -134,6 +153,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
     private int mShowCount;
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
+    private HomeRecommendAdapter mRecommendAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -145,6 +165,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
+        initRecyclerView();
+        mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
         if (PreferenceUtil.isFirstForHomeIcon()) {
@@ -216,6 +238,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         } else {
             viewNews.setVisibility(VISIBLE);
         }
+    }
+
+    private void initRecyclerView() {
+        mRecycleview.setNestedScrollingEnabled(false);
+        mRecommendAdapter = new HomeRecommendAdapter(getActivity());
+        mRecommendAdapter.setmOnCheckListener(this);
+        mRecycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecycleview.setAdapter(mRecommendAdapter);
+        mNestedScrollView.smoothScrollTo(0, 0);
+        mRecycleview.setFocusable(false);
     }
 
     /**
@@ -312,7 +344,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         lineShd.setEnabled(true);
         textWjgl.setEnabled(true);
         viewPhoneThin.setEnabled(true);
-        viewQqClean.setEnabled(true);
         viewNews.setEnabled(true);
     }
 
@@ -664,31 +695,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         StatisticsUtils.trackClick("app_manage_click", "用户在首页点击【软件管理】按钮", "home_page", "home_page");
     }
 
-    /**
-     * QQ专清
-     */
-    @OnClick(R.id.view_qq_clean)
-    public void ViewQQCleanClick() {
-        viewQqClean.setEnabled(false);
-        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.QQ_CLEAN);
-        ((MainActivity) getActivity()).commitJpushClickTime(7);
-        StatisticsUtils.trackClick("qqclean_click", "“用户在首页点击【qq专清】按钮", "home_page", "home_page");
-        if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
-            ToastUtils.showShort(R.string.tool_no_install_qq);
-            return;
-        }
-        if (QQUtil.audioList != null)
-            QQUtil.audioList.clear();
-        if (QQUtil.fileList != null)
-            QQUtil.fileList.clear();
-        Intent intent = new Intent();
-        intent.putExtra("mRamScale", mRamScale);
-        intent.putExtra("mNotifySize", mNotifySize);
-        intent.putExtra("mPowerSize", mPowerSize);
-        intent.setClass(getActivity(), QQCleanHomeActivity.class);
-        getActivity().startActivity(intent);
-    }
-
     /*    *//**
      * 权限设置
      *//*
@@ -962,7 +968,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mTvCleanType!=null && msp != null){
+                if (mTvCleanType != null && msp != null) {
                     mTvCleanType.setText(msp);
                     mTvCleanType.animate()
                             .alpha(1f)
@@ -989,5 +995,78 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> {
         mTvCleanType.setVisibility(VISIBLE);
         mTvCleanType01.setText(msp01);
         mTvCleanType01.setVisibility(VISIBLE);
+    }
+
+    /**
+     * 获取推荐列表成功
+     *
+     * @param entity
+     */
+    public void getRecommendListSuccess(HomeRecommendEntity entity) {
+        if (null == mRecommendAdapter || null == entity || null == entity.getData() || entity.getData().size() <= 0)
+            return;
+        PreferenceUtil.saveFirstHomeRecommend(false);
+        mRecycleview.setVisibility(VISIBLE);
+        mNoNetView.setVisibility(View.GONE);
+        mRecommendAdapter.setData(entity.getData());
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                ApplicationDelegate.getAppDatabase().homeRecommendDao().delete(entity.getData());
+                ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    /**
+     * 获取推荐列表失败 取本地数据
+     */
+    public void getRecommendListFail() {
+        if (PreferenceUtil.isFirstHomeRecommend()) {
+            mRecycleview.setVisibility(View.GONE);
+            mNoNetView.setVisibility(VISIBLE);
+            return;
+        }
+        if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao()
+                || null == ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll() || ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll().size() <= 0)
+            return;
+        Observable<List<HomeRecommendListEntity>> observable = Observable.create(new ObservableOnSubscribe<List<HomeRecommendListEntity>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<HomeRecommendListEntity>> emitter) throws Exception {
+                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
+                emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
+            }
+        });
+        Consumer<List<HomeRecommendListEntity>> consumer = new Consumer<List<HomeRecommendListEntity>>() {
+            @Override
+            public void accept(List<HomeRecommendListEntity> list) throws Exception {
+                Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
+                if (null == mRecommendAdapter) return;
+                mRecommendAdapter.setData(list);
+            }
+        };
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer);
+    }
+
+    @Override
+    public void onCheck(List<HomeRecommendListEntity> list, int pos) {
+        if (null == getActivity() || null == list || list.size() <= 0) return;
+        if (list.get(pos).getLinkType().equals("1")) {
+            SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
+        } else if (list.get(pos).getLinkType().equals("2")) {
+            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                    .putExtra(ExtraConstant.WEB_URL, list.get(pos).getLinkUrl()));
+        } else if (list.get(pos).getLinkType().equals("3")) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+        }
+
     }
 }

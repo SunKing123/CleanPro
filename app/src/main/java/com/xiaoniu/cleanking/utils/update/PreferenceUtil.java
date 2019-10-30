@@ -839,6 +839,23 @@ public class PreferenceUtil {
     }
 
     /**
+     * 第一次进入app获取首页推荐功能接口请求失败或者无网络时判断使用
+     *
+     * @return
+     */
+    public static boolean saveFirstHomeRecommend(boolean isFirst) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.KEY_FIRST_HOME_RECOMMEND, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_FIRST_HOME_RECOMMEND, isFirst).commit();
+        return true;
+    }
+
+    public static boolean isFirstHomeRecommend() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.KEY_FIRST_HOME_RECOMMEND, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_FIRST_HOME_RECOMMEND, true);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return

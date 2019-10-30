@@ -128,4 +128,6 @@
     <string name="torage_scale_hint">内存占用高</string>
     <string name="recommend_count_hint">以下%s个专项清理功能，待使用~</string>
     <string name="recommend_count_hint_all">快去使用以下功能吧~</string>
+    <string name="game_quicken">游戏加速</string>
+    <string name="game_quicken_hint">游戏不卡顿，提速50%</string>
 </resources>
