@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebChromeClient;
@@ -101,10 +102,10 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     String sourcePage = "";
     String currentPage = "";
     String sysReturnEventName = "";
-    String returnEventName ="";
+    String returnEventName = "";
 
-    String viewPageEventCode ="";
-    String viewPageEventName ="";
+    String viewPageEventCode = "";
+    String viewPageEventName = "";
 
     private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
@@ -410,10 +411,10 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 }
             }
         }
+        Log.d("XiLei", "超强省电结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");
-        if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_super_power_saving));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

@@ -182,7 +182,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void netConnectError() {
-                Log.d("XiLei", "netConnectError");
                 mView.getRecommendListFail();
             }
         });

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -145,7 +146,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
                 returnEventName = "通知清理结果页展示页返回";
                 sysReturnEventName = "通知清理结果页展示页返回";
                 sourcePage = "notification_clean_animation_page";
-                NiuDataAPI.onPageStart( pageviewEventCode, pageviewEventName);
+                NiuDataAPI.onPageStart(pageviewEventCode, pageviewEventName);
                 NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
 
             }
@@ -169,8 +170,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     protected void setListener() {
         mIvBack.setOnClickListener(v -> {
             finish();
-                //通知栏清理返回 点击"
-                StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
+            //通知栏清理返回 点击"
+            StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
         });
 
         mIvSet.setOnClickListener(v -> {
@@ -205,7 +206,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             returnEventName = "用户在通知清理动画页返回";
             sysReturnEventName = "用户在通知清理动画页返回";
             sourcePage = "notification_clean_result_page";
-            NiuDataAPI.onPageStart( pageviewEventCode, pageviewEventName);
+            NiuDataAPI.onPageStart(pageviewEventCode, pageviewEventName);
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
 
         });
@@ -291,8 +292,9 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             }
         }
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
+        Log.d("XiLei", "通知栏清理结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-        if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_notification_clean));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

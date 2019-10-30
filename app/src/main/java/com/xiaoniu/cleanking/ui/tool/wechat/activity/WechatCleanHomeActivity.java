@@ -131,7 +131,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     private String currentPageId = "";
     private String sourcePageId = "";
 
-    private String viewPageEventName ="";
+    private String viewPageEventName = "";
     private String viewPageEventCode = "";
 
 
@@ -229,7 +229,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 }
                 AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -289,7 +289,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPIUtil.onPageEnd(sourcePageId,currentPageId,viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
     }
 
     //获取扫描结果

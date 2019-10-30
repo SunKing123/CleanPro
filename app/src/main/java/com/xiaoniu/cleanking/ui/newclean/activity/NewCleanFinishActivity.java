@@ -311,7 +311,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
 
         //首页三分钟以内直接进入当前页
-        if(sourcePage !=null && sourcePage.equals("home_page")){
+        if (sourcePage != null && sourcePage.equals("home_page")) {
             currentPage = "direct_success_page";
             createEventName = "直接跳结果页创建时";
             createEventCode = "direct_success_page_custom";
@@ -327,7 +327,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (null == list || null == list.getData() || list.getData().size() <= 0 || TextUtils.isEmpty(mTitle)) return;
+        if (null == list || null == list.getData() || list.getData().size() <= 0 || TextUtils.isEmpty(mTitle))
+            return;
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
 
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
@@ -827,6 +828,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     @Subscribe
     public void finishCleanFinishActivityEvent(FinishCleanFinishActivityEvent event) {
+        Log.d("XiLei", "完成页finish");
         finish();
     }
 
@@ -983,7 +985,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                    Log.d("XiLei", "onScrollChange");
                     LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                     //获取第一个完全显示的ItemPosition
                     int lastVisibleItem = manager.findFirstVisibleItemPosition();

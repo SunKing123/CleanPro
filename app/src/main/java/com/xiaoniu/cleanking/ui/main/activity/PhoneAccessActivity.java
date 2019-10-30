@@ -337,7 +337,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * 一键加速
      */
     public void showCleanButton() {
-        if(null != acceview){
+        if (null != acceview) {
             acceview.setVisibility(View.GONE);
         }
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
@@ -365,6 +365,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         }
         EventBus.getDefault().post(new QuickenEvent());
+        Log.d("XiLei", "一键加速结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
@@ -544,6 +545,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     /**
      * 清理
+     *
      * @param listInfo
      */
     public void computeTotalSizeDeleteClick(ArrayList<FirstJunkInfo> listInfo) {
@@ -677,7 +679,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
-        if(null == recycle_view)
+        if (null == recycle_view)
             return;
         ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
         for (FirstJunkInfo firstJunkInfo : listInfos) {
