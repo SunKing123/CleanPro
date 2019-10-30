@@ -886,7 +886,7 @@ public class PreferenceUtil {
     }
 
     //保存最近一次操作记录
-    public void saveCleanLog(String cleanlog){
+    public static void saveCleanLog(String cleanlog){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SpCacheConfig.CLEAN_ACTION_LOG, cleanlog).commit();
@@ -894,7 +894,7 @@ public class PreferenceUtil {
 
 
     //获取最近一次操作记录
-    public Map<Integer, CleanLogInfo> getCleanLog(){
+    public static Map<Integer, CleanLogInfo> getCleanLog(){
         Map<Integer, CleanLogInfo> map = new HashMap<>();
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
         String spString = sharedPreferences.getString(SpCacheConfig.CLEAN_ACTION_LOG,"");

@@ -21,10 +21,10 @@ public class CleanLogInfo {
 
     private int actionId;
     private String actionName;
-    private long spaceLong;
-    private int decide;
+    private long spaceLong = 0;
+    private int decide= 0;
     private String popContant;
-    private long lastTime;
+    private long lastTime= 0;
     private String other01;
 
     public int getActionId() {
