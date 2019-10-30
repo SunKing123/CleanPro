@@ -415,6 +415,9 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".keeplive.receive.TimingReceiver">
+        </receiver>
+
         <activity android:name=".keeplive.onepx.OnePixelActivity"></activity>
 
         <service

@@ -239,5 +239,8 @@ public class Constant {
     public static final int SANXING = 6;
     public static final int LESHI = 7;
 
+    //定时任务间隔检测时间（分钟）
+    public static final int SCAN_SPACE_LONG = 1;
+
 }
 

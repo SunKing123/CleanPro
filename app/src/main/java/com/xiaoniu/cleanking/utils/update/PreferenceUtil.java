@@ -3,16 +3,25 @@ package com.xiaoniu.cleanking.utils.update;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
+import com.xiaoniu.cleanking.ui.main.bean.PathData;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //TODO 待优化
 public class PreferenceUtil {
@@ -875,4 +884,36 @@ public class PreferenceUtil {
         }
         return count;
     }
+
+    //保存最近一次操作记录
+    public void saveCleanLog(String cleanlog){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.CLEAN_ACTION_LOG, cleanlog).commit();
+    }
+
+
+    //获取最近一次操作记录
+    public Map<Integer, CleanLogInfo> getCleanLog(){
+        Map<Integer, CleanLogInfo> map = new HashMap<>();
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
+        String spString = sharedPreferences.getString(SpCacheConfig.CLEAN_ACTION_LOG,"");
+        if(!TextUtils.isEmpty(spString)){
+            List<CleanLogInfo> logInfos =new Gson().fromJson(spString, new TypeToken<List<CleanLogInfo>>() {}.getType());
+            for(CleanLogInfo info:logInfos){
+                map.put(info.getActionId(),info);
+            }
+            return map;
+        }else{
+            return map;
+        }
+    }
+
+
+
+
+
+
+
+
 }

@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.keeplive.service;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -14,6 +16,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -24,10 +27,12 @@ import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.config.RunMode;
 import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
+import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
 
+import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
 
@@ -116,7 +121,7 @@ public final class LocalService extends Service {
         if (mKeepAliveRuning == null)
             mKeepAliveRuning = new KeepAliveRuning();
         mKeepAliveRuning.onRuning();
-
+        sendTimingReceiver();
         return START_STICKY;
     }
 
@@ -190,6 +195,23 @@ public final class LocalService extends Service {
             }
         }
     };
+
+    //启动定时器
+    public void sendTimingReceiver(){
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long spacelong = SCAN_SPACE_LONG * 60 * 1000;
+        long triggerAtTime = SystemClock.elapsedRealtime() + spacelong;
+        Intent i = new Intent(this, TimingReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+        } else {
+            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+        }
+    }
 
     @Override
     public void onDestroy() {
