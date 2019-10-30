@@ -37,16 +37,27 @@ public class TimingReceiver extends BroadcastReceiver {
     
     public boolean isStartScan(CleanLogInfo cleanLogInfo){
         long lastTime = cleanLogInfo.getLastTime();
-        long currentTime =System.currentTimeMillis();
-        if((currentTime -lastTime)>=(cleanLogInfo.getSpaceLong()*60*1000)){
+        long currentTime = System.currentTimeMillis();
+        if((currentTime - lastTime)>=(cleanLogInfo.getSpaceLong()*60*1000)){
            return true;
         }
         return false;
 
     }
 
-
+    /**
+     * 超过时间阈值开启功能
+     * @param cleanLogInfo
+     */
     public void startScan(CleanLogInfo cleanLogInfo){
+        int actionId = cleanLogInfo.getActionId();
+        switch (actionId){
+            case 1:
+
+                break;
+
+
+        }
 
     }
 

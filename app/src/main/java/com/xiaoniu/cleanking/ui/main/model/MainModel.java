@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -145,6 +146,21 @@ public class MainModel extends BaseModel {
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getScreentSwitch().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+
+    /**
+     * 本地推送配置
+     *
+     * @param commonSubscriber
+     */
+    public void getLocalPushSet(Common4Subscriber<PushSettingList> commonSubscriber) {
+        /*Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("versionCode", AppUtils.getVersionCode(mActivity, mActivity.getPackageName()));
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);*/
+        mService.getPushLocalSet().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
 }

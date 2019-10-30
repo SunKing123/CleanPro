@@ -31,7 +31,6 @@ import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
-
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 

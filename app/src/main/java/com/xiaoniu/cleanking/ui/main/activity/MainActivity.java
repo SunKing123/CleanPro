@@ -206,7 +206,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
-
+        //获取本地推送配置
+        mPresenter.getPushSetList();
         start();
 
         //开启定时扫面缓存
