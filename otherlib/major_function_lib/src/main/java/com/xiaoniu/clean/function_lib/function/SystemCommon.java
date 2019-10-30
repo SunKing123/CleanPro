@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-
-import com.xiaoniu.common.utils.ContextUtils;
+import android.util.Log;
 
 import java.util.List;
 
@@ -31,9 +30,9 @@ public class SystemCommon {
      */
 
     public static List<PackageInfo> getInstalledList() {
-        if(mApplication==null){
-            mApplication = ContextUtils.getApplication();
-        }
+//        if(mApplication==null){
+//            mApplication = ContextUtils.getApplication();
+//        }
         PackageManager pm = mApplication.getPackageManager();
         installedPackages = pm.getInstalledPackages(0);
         return installedPackages;
@@ -49,6 +48,14 @@ public class SystemCommon {
             }
         }
         return null;
+    }
+
+
+    public static void  test() {
+//        if(mApplication==null){
+//            mApplication = ContextUtils.getApplication();
+//        }
+        Log.i("aaa","ssss");
     }
 
 

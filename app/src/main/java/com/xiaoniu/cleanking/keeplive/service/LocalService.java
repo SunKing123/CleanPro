@@ -1,4 +1,4 @@
-package com.ykun.live_library.service;
+package com.xiaoniu.cleanking.keeplive.service;
 
 import android.app.Notification;
 import android.app.Service;
@@ -17,17 +17,17 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ykun.keeplive.KeepAliveAidl;
-import com.ykun.live_library.KeepAliveRuning;
-import com.ykun.live_library.R;
-import com.ykun.live_library.config.KeepAliveConfig;
-import com.ykun.live_library.config.NotificationUtils;
-import com.ykun.live_library.config.RunMode;
-import com.ykun.live_library.receive.NotificationClickReceiver;
-import com.ykun.live_library.receive.OnepxReceiver;
-import com.ykun.live_library.utils.SPUtils;
+import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
+import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
+import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
+import com.xiaoniu.cleanking.keeplive.config.RunMode;
+import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
+import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
+import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.keeplive.KeepAliveAidl;
 
-import static com.ykun.live_library.config.KeepAliveConfig.SP_NAME;
+import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
 
 public final class LocalService extends Service {

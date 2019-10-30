@@ -398,6 +398,35 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+
+        <service
+            android:name=".keeplive.service.LocalService"
+            android:exported="true"
+            android:process=":local"></service>
+        <service
+            android:name=".keeplive.service.RemoteService"
+            android:exported="true"
+            android:process=":remote"></service>
+
+        <receiver android:name=".keeplive.receive.NotificationClickReceiver">
+            <intent-filter>
+                <action android:name="CLICK_NOTIFICATION"></action>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".keeplive.onepx.OnePixelActivity"></activity>
+
+        <service
+            android:name=".keeplive.service.JobHandlerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+
+
+        <provider
+            android:authorities="com.xiaoniu.preference"
+            android:name=".keeplive.pro_sp.SharedPreferenceProvider"
+            android:process=":remote"
+            android:exported="false"/>
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission
@@ -412,5 +441,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
+
+
+
 
 </manifest>

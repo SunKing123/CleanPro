@@ -186,4 +186,7 @@
         <item name="android:textSize">@dimen/dimen_15dp</item>
     </style>
 
+    <style name="NotificationText" parent="android:TextAppearance.StatusBar.EventContent" />
+    <style name="NotificationTitle" parent="android:TextAppearance.StatusBar.EventContent.Title" />
+
 </resources>
