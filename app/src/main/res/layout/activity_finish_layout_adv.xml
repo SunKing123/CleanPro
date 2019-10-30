@@ -168,7 +168,16 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/frame_layout">
 
-                        <TextView
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/tv_download"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dimen_60dp"
+                            android:layout_below="@+id/v_video"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/dimen_50dp"
+                            android:layout_marginBottom="@dimen/dimen_20dp" />
+
+                       <!-- <TextView
                             android:id="@+id/tv_download"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -179,7 +188,7 @@
                             android:background="@drawable/icon_clean_btn_bg"
                             android:gravity="center"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/dimen_17sp" />
+                            android:textSize="@dimen/dimen_17sp" />-->
                     </RelativeLayout>
                 </RelativeLayout>
             </com.qq.e.ads.nativ.widget.NativeAdContainer>

@@ -32,6 +32,8 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
+import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
@@ -51,9 +53,6 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.ykun.live_library.KeepAliveManager;
-import com.ykun.live_library.config.ForegroundNotification;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -66,7 +65,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
-import static com.ykun.live_library.config.RunMode.HIGH_POWER_CONSUMPTION;
+import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
 
 /**
  * main主页面
@@ -322,8 +321,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void onResume() {
         super.onResume();
         //开启常驻通知栏服务
-        if (NotificationsUtils.isNotificationEnabled(this))
-            startService(new Intent(this, NotificationService.class));
+        if (NotificationsUtils.isNotificationEnabled(this)){
+            try {
+                startService(new Intent(this, NotificationService.class));
+            }catch (RuntimeException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

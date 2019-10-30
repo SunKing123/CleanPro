@@ -142,7 +142,7 @@ dependencies {
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 
     implementation project(':baselib:common')
-    implementation project(':otherlib:live_library')
+//    implementation project(':otherlib:live_library')
     implementation project(':otherlib:asmhelp')
     implementation project(':otherlib:xrecyclerview')
     //推送

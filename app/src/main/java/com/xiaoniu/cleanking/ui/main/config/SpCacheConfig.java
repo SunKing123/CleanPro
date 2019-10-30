@@ -21,6 +21,8 @@ public class SpCacheConfig {
     public static final String RUN_CHECK_IS_CHECK_ALL= "run_is_check_all";
     public static final String CLEAN_USED= "clean_used";
 
+    public static final String CLEAN_ACTION_LOG = "clean_action_log";
+
     /**
      * 安装包白名单文件缓存配置
      */

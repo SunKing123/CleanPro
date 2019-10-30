@@ -371,6 +371,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);
         } else {
+            AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
@@ -676,6 +677,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
+        if(null == recycle_view)
+            return;
         ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
         for (FirstJunkInfo firstJunkInfo : listInfos) {
             if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
