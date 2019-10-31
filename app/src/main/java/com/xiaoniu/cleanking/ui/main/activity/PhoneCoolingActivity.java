@@ -17,6 +17,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -404,7 +405,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 viewPageEventCode = "cool_scan_result_page_view_page";
 
                 NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
-                NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId,viewPageEventCode, viewPageEventName);
+                NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
                 if (mLayoutAnimCool != null) {
                     mLayoutAnimCool.setVisibility(GONE);
@@ -425,7 +426,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         viewPageEventName = "用户在降温动画页浏览";
         viewPageEventCode = "cool_animation_page_view_page";
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
-        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId,viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
         int bottom = mBgTitle.getBottom();
         int startHeight = ScreenUtils.getFullActivityHeight();
@@ -760,7 +761,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         viewPageEventName = "降温完成动画展示页浏览";
         viewPageEventCode = "cool_finish_annimation_page_view_page";
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
-        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId,viewPageEventCode, viewPageEventName);
+        NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
         mFlAnim.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
@@ -789,8 +790,9 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     }
                 }
                 AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
+                Log.d("Xilei", "手机降温结束");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(PhoneCoolingActivity.this,getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(PhoneCoolingActivity.this, getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -800,7 +802,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     bundle.putString("num", "");
                     bundle.putString("unit", "");
-
                     startActivity(NewCleanFinishActivity.class, bundle);
                 }
                 finish();

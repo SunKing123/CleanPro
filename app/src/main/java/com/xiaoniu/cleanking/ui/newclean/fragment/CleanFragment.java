@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -257,8 +258,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 }
             }
         }
-        if(getActivity()!= null && this.isAdded()) {
-            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        Log.d("XiLei", "垃圾清理结束");
+        EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        if (getActivity() != null && this.isAdded()) {
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_suggest_clean));
