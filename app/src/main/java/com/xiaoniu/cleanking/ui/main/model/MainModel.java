@@ -155,11 +155,7 @@ public class MainModel extends BaseModel {
      * @param commonSubscriber
      */
     public void getLocalPushSet(Common4Subscriber<PushSettingList> commonSubscriber) {
-        /*Gson gson = new Gson();
-        Map<String, Object> map = new HashMap<>();
-        map.put("versionCode", AppUtils.getVersionCode(mActivity, mActivity.getPackageName()));
-        String json = gson.toJson(map);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);*/
+
         mService.getPushLocalSet().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 

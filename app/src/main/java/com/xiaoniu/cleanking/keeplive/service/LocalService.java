@@ -124,6 +124,9 @@ public final class LocalService extends Service {
         return START_STICKY;
     }
 
+
+
+
     private void play() {
         Log.i(TAG, "播放音乐");
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
@@ -198,11 +201,10 @@ public final class LocalService extends Service {
     //启动定时器
     public void sendTimingReceiver(){
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long spacelong = SCAN_SPACE_LONG * 60 * 1000;
+        long spacelong = SCAN_SPACE_LONG * 10 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + spacelong;
         Intent i = new Intent(this, TimingReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -247,4 +249,8 @@ public final class LocalService extends Service {
             }
         }
     }
+
+
+
+
 }

@@ -430,6 +430,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 }else{//网络配置异常时读取本地
                     PreferenceUtil.saveCleanLog(FileUtils.readJSONFromAsset(mActivity, "action_log.json"));
                 }
+                //启动保活进程
+                mView.start();
             }
             @Override
             public void showExtraOp(String message) {
