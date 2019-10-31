@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,12 +34,16 @@ import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.MiitHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -170,6 +175,39 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 mSPHelper.setUploadImeiStatus(true);
             }
         }
+        /**
+         * NiuSdk设置oaid
+         */
+       /* new MiitHelper(new MiitHelper.AppIdsUpdater() {
+            @Override
+            public void OnIdsAvalid(@NonNull String oaid) {
+                NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
+                    @Override
+                    public void onTrackAutoCollectEvent(String s, JSONObject jsonObject) {
+                        if (!TextUtils.isEmpty(s) && !TextUtils.isEmpty(oaid)) {
+                            try {
+                                jsonObject.put("oaid", oaid == null ? "" : oaid);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        super.onTrackAutoCollectEvent(s, jsonObject);
+                    }
+
+                    @Override
+                    public void onTrackEvent(String s, JSONObject jsonObject) {
+                        if (!TextUtils.isEmpty(s) && !TextUtils.isEmpty(oaid)) {
+                            try {
+                                jsonObject.put("oaid", oaid == null ? "" : oaid);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        super.onTrackEvent(s, jsonObject);
+                    }
+                });
+            }
+        }).getDeviceIds(mContext);*/
     }
 
     /*private String getPosId() {

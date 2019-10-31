@@ -3,9 +3,12 @@ package com.xiaoniu.cleanking.app;
 import android.app.Application;
 import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.persistence.room.Room;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bun.miitmdid.core.JLibrary;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 import com.tencent.bugly.Bugly;
@@ -26,10 +29,13 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.MiitHelper;
 import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -43,6 +49,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     @Override
     public void onCreate(Application application) {
+        JLibrary.InitEntry(application);
         initNiuData(application);
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
@@ -94,6 +101,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
     public void initNiuData(Application application) {
+
         //测试环境
         NiuDataAPI.init(application, new Configuration()
                 //切换到sdk默认的测试环境地址
@@ -113,6 +121,32 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
             }
         });
+
+        //设置oaid到埋点公共参数
+        new MiitHelper(new MiitHelper.AppIdsUpdater() {
+            @Override
+            public void OnIdsAvalid(@NonNull String oaid) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    oaid = (oaid == null)? "" : oaid;
+                    jsonObject.put("oaid",oaid);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //重置niuSDK
+                NiuDataAPI.init(application, new Configuration()
+                        //切换到sdk默认的测试环境地址
+                        .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
+                        .serverUrl(AppConstants.BIGDATA_MD)
+                        .setHeartbeatUrl(AppConstants.BIGDATA_MD)
+                        .setCommonParams(jsonObject)
+                        //打开sdk日志信息
+                        .logOpen()
+                        .setHeartbeatInterval(5000)
+                        .channel(ChannelUtil.getChannel())
+                );
+            }
+        }).getDeviceIds(application);
     }
 
     private void initRoom(Application application) {

@@ -9,6 +9,7 @@ import com.bun.miitmdid.core.IIdentifierListener;
 import com.bun.miitmdid.core.MdidSdk;
 import com.bun.miitmdid.core.MdidSdkHelper;
 import com.bun.miitmdid.supplier.IdSupplier;
+import com.just.agentweb.LogUtils;
 
 /**
  * Created by zheng on 2019/8/22.
@@ -54,8 +55,8 @@ public class MiitHelper implements IIdentifierListener {
 
     /*
     * 直接java调用，如果这样调用，在android 9以前没有题，在android 9以后会抛找不到so方法的异常
-    * 解决办法是和JLibrary.InitEntry(cxt)，分开调用，比如在A类中调用JLibrary.InitEntry(cxt)，在B类中调用MdidSdk的方法
-    * A和B不能存在直接和间接依赖关系，否则也会报错
+     * 解决办法是和JLibrary.InitEntry(cxt)，分开调用，比如在A类中调用JLibrary.InitEntry(cxt)，在B类中调用MdidSdk的方法
+     * A和B不能存在直接和间接依赖关系，否则也会报错
     *
     * */
     private int DirectCall(Context cxt){
@@ -78,9 +79,10 @@ public class MiitHelper implements IIdentifierListener {
         builder.append("VAID: ").append(vaid).append("\n");
         builder.append("AAID: ").append(aaid).append("\n");
         String idstext=builder.toString();
+        LogUtils.i("zzz","----"+idstext);
         _supplier.shutDown();
         if(_listener!=null){
-            _listener.OnIdsAvalid(idstext);
+            _listener.OnIdsAvalid(oaid);
         }
     }
     public interface AppIdsUpdater{
