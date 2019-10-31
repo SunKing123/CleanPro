@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -129,7 +130,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
-            this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
@@ -396,7 +397,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
-        mPresenter.getAuditSwitch();
+        if(NetworkUtils.isNetConnected()){
+            mPresenter.getAuditSwitch();
+        }else{
+            getAuditSwitchFail();
+        }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -445,11 +450,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-//        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
-//        });
+        });
     }
 
     @Override
