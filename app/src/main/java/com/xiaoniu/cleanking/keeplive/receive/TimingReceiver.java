@@ -1,13 +1,24 @@
 package com.xiaoniu.cleanking.keeplive.receive;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Keep;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.geek.push.entity.PushMsg;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
+import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
+import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
+import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -28,6 +39,9 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.DEF_ICONS;
+import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
+
 /**
  * @author zhengzhihao
  * @date 2019/10/30 14
@@ -36,10 +50,11 @@ import io.reactivex.disposables.CompositeDisposable;
 public class TimingReceiver extends BroadcastReceiver {
 
     private static final String TAG = "TimingReceiver";
-
+    private Context mContext;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        mContext = context;
         Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
         for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
             PushSettingList.DataBean dataBean = entry.getValue();
@@ -51,10 +66,10 @@ public class TimingReceiver extends BroadcastReceiver {
                 PreferenceUtil.saveCleanLogMap(map);
             }
         }
-
         //重新打开保活service
         Intent i = new Intent(context, LocalService.class);
         context.startService(i);
+        createNotify();
     }
 
 
@@ -77,7 +92,7 @@ public class TimingReceiver extends BroadcastReceiver {
         String codeX = dataBean.getCodeX();
         switch (codeX) {
             case "push_1"://垃圾清理
-                startScan();
+                startScan(mContext);
                 break;
             case "push_2"://一键加速
                 break;
@@ -92,9 +107,10 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
-
-
-    public void startScan() {
+    /**
+     * 获取清理文件大小
+     */
+    public void startScan(Context mContext) {
         HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
         Observable.create(e -> {
@@ -210,10 +226,34 @@ public class TimingReceiver extends BroadcastReceiver {
                 }*/
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
                 LogUtils.i("----" + totalSize);
+
+
+
             }
         });
 
     }
+
+    public void createNotify(){
+        KeepAliveConfig.CONTENT = "sssss";
+        KeepAliveConfig.DEF_ICONS = SPUtils.getInstance(mContext, SP_NAME).getInt(KeepAliveConfig.RES_ICON, R.drawable.ic_launcher);
+        KeepAliveConfig.TITLE = "ffffffff";
+        String title = SPUtils.getInstance(mContext, SP_NAME).getString(KeepAliveConfig.TITLE);
+
+        if (!TextUtils.isEmpty(KeepAliveConfig.TITLE) && !TextUtils.isEmpty(KeepAliveConfig.CONTENT)) {
+            //启用前台服务，提升优先级
+            Intent intent2 = new Intent(mContext, NotificationClickReceiver.class);
+            intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+            Map<String,String> actionMap = new HashMap<>();
+            actionMap.put("url","cleanking://com.xiaoniu.cleanking/native_no_params?a_name=main.activity.PhoneAccessActivity");
+            intent2.putExtra("push_data", new PushMsg(102102, "test", "this is a test", null, null, actionMap));
+//                    Notification notification = NotificationUtils.createNotification(mContext, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
+            KeepAliveManager.sendNotification(mContext,"aa","ssssssss",DEF_ICONS,intent2);
+            Log.d("JOB-->", TAG + "显示通知栏");
+        }
+    }
+
+
 
 
 }

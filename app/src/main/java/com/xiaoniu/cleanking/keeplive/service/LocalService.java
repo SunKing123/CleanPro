@@ -129,14 +129,22 @@ public final class LocalService extends Service {
 
     private void play() {
         Log.i(TAG, "播放音乐");
-        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-            mediaPlayer.start();
+        try {
+            if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                mediaPlayer.start();
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
     }
 
     private void pause() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
+        try {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
     }
 
