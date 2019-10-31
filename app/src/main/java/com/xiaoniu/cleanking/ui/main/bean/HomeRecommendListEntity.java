@@ -12,7 +12,7 @@ public class HomeRecommendListEntity implements Serializable {
 
     @NotNull
     @PrimaryKey
-    private String sort = "";
+    private String sort;
     private String positionCode;
     private String name;
     private String content;

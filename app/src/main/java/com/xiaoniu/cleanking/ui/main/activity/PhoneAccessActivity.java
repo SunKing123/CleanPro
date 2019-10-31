@@ -426,7 +426,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 //        mLineAccess.setText(getString(R.string.tool_speed_now));
         ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
         for (FirstJunkInfo info : belowAdapter.getListImage()) {
-            if (info.getIsSelect()) {
+            if (info.isSelect()) {
                 junkTemp.add(info);
             }
         }
@@ -694,7 +694,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             int selectCount = 0;
             long selectTotalSize = 0;
             for (int i = 0; i < listFile.size(); i++) {
-                if (listFile.get(i).getIsSelect()) {
+                if (listFile.get(i).isSelect()) {
                     selectCount++;
                     selectTotalSize += listFile.get(i).getTotalSize();
                 }

@@ -8,6 +8,8 @@ import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
+import com.xiaoniu.cleanking.ui.main.activity.GameListActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -111,5 +113,9 @@ public interface ActivityComponent {
     void inject(InsertScreenFinishActivity insertScreenFinishActivity);
 
     void inject(CleanFinishAdvertisementActivity cleanFinishAdvertisementActivity);
+
+    void inject(GameActivity activity);
+
+    void inject(GameListActivity activity);
 }
 

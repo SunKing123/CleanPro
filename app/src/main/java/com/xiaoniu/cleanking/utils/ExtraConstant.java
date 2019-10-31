@@ -15,4 +15,5 @@ public interface ExtraConstant {
 
 
     String WEB_URL = "web_url";
+    String SELECT_GAME_LIST = "select_game_list";
 }
