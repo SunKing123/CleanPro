@@ -206,8 +206,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
+        //获取本地推送配置
+        mPresenter.getPushSetList();
 
-        start();
 
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
@@ -546,6 +547,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         Jzvd.releaseAllVideos();
         super.onPause();
     }
+
+
 
     public void start() {
         try {

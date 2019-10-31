@@ -25,3 +25,5 @@
 -keep class com.xiaoniu.common.http.** { *; }
 #-keep class com.xiaoniu.common.widget.** { *; }
 -keep public class * extends com.xiaoniu.common.base.IApplicationDelegate
+#mdid获取sdk
+-keep class com.bun.miitmdid.core.** {*;}

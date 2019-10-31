@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.geek.push.GeekPush;
+import com.google.gson.Gson;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -23,10 +24,13 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -43,6 +47,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -404,6 +409,40 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     mUpdateAgent.check();
                 }
         }
+    }
+
+
+    /**
+     * 本地Push配置
+     */
+    public void getPushSetList() {
+        mModel.getLocalPushSet(new Common4Subscriber<PushSettingList>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(PushSettingList pushSettingList) {
+                List<PushSettingList.DataBean> list = pushSettingList.getData();
+                if(list!=null&&list.size()>0){
+                    PreferenceUtil.saveCleanLog(new Gson().toJson(pushSettingList.getData()));
+                }else{//网络配置异常时读取本地
+                    PreferenceUtil.saveCleanLog(FileUtils.readJSONFromAsset(mActivity, "action_log.json"));
+                }
+                //启动保活进程
+                mView.start();
+            }
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
     }
 
 }

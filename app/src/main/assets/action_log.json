@@ -1,0 +1,68 @@
+[
+  {
+    "code": "push_1",
+    "title": "垃圾清理",
+    "content": "垃圾过多严重影响手机使用",
+    "position": "立即清理页面",
+    "url": "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4",
+    "thresholdSign": 1,
+    "thresholdNum": 200,
+    "interValTime": 2,
+    "dailyLimit": 12
+  },
+  {
+    "code": "push_2",
+    "title": "一键加速",
+    "content": "内存占比#,手机运行缓慢",
+    "position": "一键加速页面",
+    "url": "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=main.activity.PhoneAccessActivity",
+    "thresholdSign": 1,
+    "thresholdNum": 20,
+    "interValTime": 2,
+    "dailyLimit": 12
+  },
+  {
+    "code": "push_3",
+    "title": "超强省电提醒",
+    "content": "超强省电，延长待机时间",
+    "position": "超强省电页面",
+    "url": "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=main.activity.PhoneSuperPowerActivity",
+    "thresholdSign": 2,
+    "thresholdNum": 30,
+    "interValTime": 1,
+    "dailyLimit": 24
+  },
+  {
+    "code": "push_4",
+    "title": "降温提醒",
+    "content": "手机过热会影响手机寿命哦",
+    "position": "手机降温页面",
+    "url": "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=main.activity.PhoneCoolingActivity",
+    "thresholdSign": 1,
+    "thresholdNum": 37,
+    "interValTime": 1,
+    "dailyLimit": 24
+  },
+  {
+    "code": "push_7",
+    "title": "test",
+    "content": "test",
+    "position": "手机清理页面",
+    "url": "test",
+    "thresholdSign": 1,
+    "thresholdNum": 17,
+    "interValTime": 2,
+    "dailyLimit": 12
+  },
+  {
+    "code": "push_8",
+    "title": "test",
+    "content": "test",
+    "position": "手机清理页面",
+    "url": "test",
+    "thresholdSign": 1,
+    "thresholdNum": 17,
+    "interValTime": 2,
+    "dailyLimit": 12
+  }
+]

@@ -14,11 +14,13 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PathData;
+import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -902,6 +904,15 @@ public class PreferenceUtil {
         return count;
     }
 
+
+    //保存最近一次操作记录_map值
+    public static void saveCleanLogMap(Map<String, PushSettingList.DataBean> map){
+        if(map!=null){
+            List<PushSettingList.DataBean> list = new ArrayList<PushSettingList.DataBean>(map.values());
+            saveCleanLog(new Gson().toJson(list));
+        }
+    }
+
     //保存最近一次操作记录
     public static void saveCleanLog(String cleanlog){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
@@ -911,14 +922,14 @@ public class PreferenceUtil {
 
 
     //获取最近一次操作记录
-    public static Map<Integer, CleanLogInfo> getCleanLog(){
-        Map<Integer, CleanLogInfo> map = new HashMap<>();
+    public static Map<String, PushSettingList.DataBean> getCleanLog(){
+        Map<String, PushSettingList.DataBean> map = new HashMap<>();
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
         String spString = sharedPreferences.getString(SpCacheConfig.CLEAN_ACTION_LOG,"");
         if(!TextUtils.isEmpty(spString)){
-            List<CleanLogInfo> logInfos =new Gson().fromJson(spString, new TypeToken<List<CleanLogInfo>>() {}.getType());
-            for(CleanLogInfo info:logInfos){
-                map.put(info.getActionId(),info);
+            List<PushSettingList.DataBean> logInfos =new Gson().fromJson(spString, new TypeToken<List<PushSettingList.DataBean>>() {}.getType());
+            for(PushSettingList.DataBean info:logInfos){
+                map.put(info.getCodeX(),info);
             }
             return map;
         }else{

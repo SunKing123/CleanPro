@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 
@@ -59,6 +60,14 @@ public interface UserApiService {
      */
     @GET("/screen/switch")
     Flowable<SwitchInfoList> getScreentSwitch();
+
+    /**
+     * 本地Push阀值配置
+     *
+     * @return
+     */
+    @GET("/pushLocal/list")
+    Flowable<PushSettingList> getPushLocalSet();
 
     /**
      * 互动式广告开关
