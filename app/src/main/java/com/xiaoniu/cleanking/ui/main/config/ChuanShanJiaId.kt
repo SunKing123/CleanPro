@@ -7,7 +7,8 @@ package com.xiaoniu.cleanking.ui.main.config
  */
 class ChuanShanJiaId {
     companion object {
-        const val AppId = "5001121"
+//        const val AppId = "5001121" //穿山甲demo id
+        const val AppId = "5034152"
     }
 
 }

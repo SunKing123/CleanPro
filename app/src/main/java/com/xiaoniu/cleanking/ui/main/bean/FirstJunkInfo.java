@@ -1,6 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.drawable.Drawable;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +14,7 @@ import java.util.List;
  * Created by mazhuang on 16/1/14.
  */
 public class FirstJunkInfo implements Serializable {
+    private int position;
     private String appGarbageName;
     private String appPackageName;
     private String appName;
@@ -21,17 +26,23 @@ public class FirstJunkInfo implements Serializable {
     private boolean isDeploy;
     private boolean isRemoved;
     private int pid;
-    private int position;
     private String garbageType;
     private long selectSize;
     private List<SecondJunkInfo> subGarbages = new ArrayList<>();
     private long totalSize;
     private String versionName;
     private int versionCode;
-    private boolean isSelect=true;
+    private boolean isSelect;
     private boolean isLock;
     private String sdPath;
 
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
 
     public String getSdPath() {
         return sdPath;
@@ -49,16 +60,9 @@ public class FirstJunkInfo implements Serializable {
         isLock = lock;
     }
 
-    public boolean getIsSelect() {
-        return isSelect;
-    }
-
-    public void setIsSelect(boolean select) {
-        isSelect = select;
-    }
-
     /**
      * 添加子类垃圾对象
+     *
      * @param secondJunkInfo
      */
     public void addSecondJunk(SecondJunkInfo secondJunkInfo) {

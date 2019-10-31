@@ -23,6 +23,6 @@ public interface HomeRecommendDao {
     @Insert
     void insertAll(List<HomeRecommendListEntity> list);
 
-    @Delete
-    void delete(List<HomeRecommendListEntity> list);
+    @Query("DELETE FROM HomeRecommend")
+    void deleteAll();
 }

@@ -60,8 +60,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
-import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
-import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -140,7 +138,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.tv_now_clean)
     ImageView tvNowClean;
     @BindView(R.id.recycleview)
-    RecyclerView mRecycleview;
+    RecyclerView mRecyclerView;
     @BindView(R.id.layout_scroll)
     NestedScrollView mNestedScrollView;
     @BindView(R.id.v_no_net)
@@ -241,13 +239,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private void initRecyclerView() {
-        mRecycleview.setNestedScrollingEnabled(false);
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecommendAdapter = new HomeRecommendAdapter(getActivity());
         mRecommendAdapter.setmOnCheckListener(this);
-        mRecycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecycleview.setAdapter(mRecommendAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mRecommendAdapter);
         mNestedScrollView.smoothScrollTo(0, 0);
-        mRecycleview.setFocusable(false);
+        mRecyclerView.setFocusable(false);
     }
 
     /**
@@ -1006,14 +1004,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == mRecommendAdapter || null == entity || null == entity.getData() || entity.getData().size() <= 0)
             return;
         PreferenceUtil.saveFirstHomeRecommend(false);
-        mRecycleview.setVisibility(VISIBLE);
+        mRecyclerView.setVisibility(VISIBLE);
         mNoNetView.setVisibility(View.GONE);
         mRecommendAdapter.setData(entity.getData());
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
-                ApplicationDelegate.getAppDatabase().homeRecommendDao().delete(entity.getData());
+                ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
                 ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
             }
         }).subscribeOn(Schedulers.newThread())
@@ -1026,7 +1024,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     public void getRecommendListFail() {
         if (PreferenceUtil.isFirstHomeRecommend()) {
-            mRecycleview.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
             mNoNetView.setVisibility(VISIBLE);
             return;
         }
@@ -1062,11 +1060,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                     .putExtra(ExtraConstant.WEB_URL, list.get(pos).getLinkUrl()));
         } else if (list.get(pos).getLinkType().equals("3")) {
-            Intent home = new Intent(Intent.ACTION_MAIN);
-            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            home.addCategory(Intent.CATEGORY_HOME);
-            startActivity(home);
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse(list.get(pos).getLinkUrl());
+            intent.setData(content_url);
+            startActivity(intent);
         }
-
     }
 }

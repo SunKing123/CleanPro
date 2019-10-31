@@ -1,8 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +11,11 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GameListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<FirstJunkInfo> listImage;
     private onCheckListener mOnCheckListener;
 
@@ -30,33 +29,35 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
         return listImage;
     }
 
-    public PhoneAccessBelowAdapter(Activity mActivity, ArrayList<FirstJunkInfo> listImage) {
-        super();
+    public GameListAdapter(Activity mActivity, ArrayList<FirstJunkInfo> listImage, ArrayList<String> list) {
         this.listImage = listImage;
+        Log.d("XiLei", "listImage.size()=" + listImage.size());
+        Log.d("XiLei", "list.size()=" + list.size());
+        for (int i = 0; i < listImage.size(); i++) {
+            for (int j = 0; j < list.size(); j++) {
+                if (listImage.get(i).getAppName().equals(list.get(j))) {
+                    listImage.get(i).setSelect(true);
+                }
+            }
+        }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_phone_access, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_game_list, parent, false);
         return new ImageViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
 
-            listImage.get(position).setSelect(true);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                ((ImageViewHolder) holder).tv_size.setVisibility(View.VISIBLE);
-                ((ImageViewHolder) holder).tv_select.setVisibility(View.VISIBLE);
-            }
-
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setImageDrawable(listImage.get(position).getGarbageIcon());
-            ((ImageViewHolder) holder).tv_size.setText(CleanAllFileScanUtil.byte2FitSize(listImage.get(position).getTotalSize()));
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getAppName());
             ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).isSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
             ((ImageViewHolder) holder).tv_select.setOnClickListener(v -> {
+                Log.d("XiLei", "listImage=" + listImage.size());
+                Log.d("XiLei", "position=" + position);
                 listImage.get(position).setSelect(!listImage.get(position).isSelect());
                 ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).isSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
                 if (mOnCheckListener != null)
@@ -74,14 +75,12 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_photo_filelist_pic;
         public TextView tv_select;
-        public TextView tv_size;
         public TextView tv_name;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             iv_photo_filelist_pic = itemView.findViewById(R.id.iv_photo_filelist_pic);
             tv_select = itemView.findViewById(R.id.tv_select);
-            tv_size = itemView.findViewById(R.id.tv_size);
             tv_name = itemView.findViewById(R.id.tv_name);
         }
     }

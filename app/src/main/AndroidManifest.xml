@@ -19,7 +19,7 @@
             android:name=".ui.main.activity.SplashADActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher" />
-<!--        android:screenOrientation="portrait"-->
+        <!--        android:screenOrientation="portrait"-->
         <activity
             android:name=".scheme.ui.DispatcherActivity"
             android:screenOrientation="portrait"
@@ -288,6 +288,15 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.main.activity.GameActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.GameListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
@@ -415,8 +424,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".keeplive.receive.TimingReceiver">
-        </receiver>
+        <receiver android:name=".keeplive.receive.TimingReceiver"></receiver>
 
         <activity android:name=".keeplive.onepx.OnePixelActivity"></activity>
 
@@ -426,10 +434,10 @@
 
 
         <provider
-            android:authorities="com.xiaoniu.preference"
             android:name=".keeplive.pro_sp.SharedPreferenceProvider"
-            android:process=":remote"
-            android:exported="false"/>
+            android:authorities="com.xiaoniu.preference"
+            android:exported="false"
+            android:process=":remote" />
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission
@@ -444,8 +452,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
-
-
 
 
 </manifest>
