@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -140,9 +141,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 获取过审开关失败
      */
     public void getAuditSwitchFail() {
-        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            jumpActivity();
-        });
+//        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jumpActivity();
+            }
+        }, 100);
+
+//        });
     }
 
     public void jumpActivity() {
@@ -438,11 +445,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+//        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
-        });
+//        });
     }
 
     @Override
