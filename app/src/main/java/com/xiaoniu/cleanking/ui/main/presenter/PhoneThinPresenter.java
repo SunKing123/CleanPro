@@ -93,7 +93,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
 
                     @Override
                     public void onNext(String o) {
-                        mView.updateText(o,mFileTotalSize);
+                        mView.updateText(o, mFileTotalSize);
                     }
 
                     @Override
@@ -120,8 +120,8 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
                     String fileName = file1.getName().toLowerCase();
                     e.onNext(fileName);
                     if (file1.isDirectory()) {
-                        scanDirectory(path + "/" + file1.getName(),e);
-                    } else if(fileName.endsWith(".mp4")){
+                        scanDirectory(path + "/" + file1.getName(), e);
+                    } else if (fileName.endsWith(".mp4")) {
                         mFileTotalSize += file1.length();
                     }
                 }
@@ -184,7 +184,9 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
-                viewY.setVisibility(VISIBLE);
+                if (null != viewY) {
+                    viewY.setVisibility(VISIBLE);
+                }
             }
         });
         animator.start();
@@ -282,7 +284,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
         StorageManager storageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
         //获取所有应用的StorageVolume列表
         List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
-        UUID uuid=null;
+        UUID uuid = null;
         for (StorageVolume item : storageVolumes) {
             String uuidStr = item.getUuid();
 
@@ -310,6 +312,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
         }
 
     }
+
     /**
      * 根据应用包名获取对应uid
      */
@@ -334,7 +337,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
             AppInfoBean appInfoBean = apps.get(i);
             appInfoBean.packageSize = packageSize.get(i);
             mFileTotalSize += appInfoBean.packageSize;
-            if (i == apps.size()-1) {
+            if (i == apps.size() - 1) {
                 mView.updateData(apps.size(), mFileTotalSize, true);
             } else {
                 mView.updateData(apps.size(), mFileTotalSize, false);
@@ -362,7 +365,7 @@ public class PhoneThinPresenter extends RxPresenter<PhoneThinActivity, MainModel
                 getPackageSizeInfo.invoke(mPackageManager, pkgName, new PhoneThinPresenter.PkgSizeObserver(pkgName, isLast));// 方法使用的参数
 
             } catch (Exception ex) {
-                Log.e("asdfg",""+ex.getMessage());
+                Log.e("asdfg", "" + ex.getMessage());
                 ex.printStackTrace();
 
             }

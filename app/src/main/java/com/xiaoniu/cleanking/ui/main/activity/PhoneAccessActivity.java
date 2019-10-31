@@ -19,7 +19,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -261,7 +260,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         startActivity(intent);
                     } catch (Exception e) {
                     }
-                    startActivity(PhonePremisActivity.class);
+//                    startActivity(PhonePremisActivity.class);
                 }
 
                 @Override
@@ -568,7 +567,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                     } catch (Exception e) {
                     }
-                    startActivity(PhonePremisActivity.class);
+//                    startActivity(PhonePremisActivity.class);
                 }
 
                 @Override

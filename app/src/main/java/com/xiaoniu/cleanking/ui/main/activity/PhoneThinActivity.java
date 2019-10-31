@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -66,6 +67,7 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
     private String mTitleName;
     @BindView(R.id.tv_title_name)
     TextView mTvTitleName;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -86,14 +88,18 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
         mTotalSize = mPresenter.queryStorageSize(mPath);
         Intent intent = getIntent();
-        if(intent != null){
+        if (intent != null) {
             mTitleName = intent.getStringExtra(SpCacheConfig.ITEM_TITLE_NAME);
             mTvTitleName.setText(mTitleName);
-            if (getString(R.string.tool_phone_thin).equals(mTitleName)){
+            if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
                 //视频专清
-                mLlVideoFile.setVisibility(View.VISIBLE);
-            }else {
-                mLlSystemSpace.setVisibility(View.VISIBLE);
+                if (null != mLlVideoFile) {
+                    mLlVideoFile.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (null != mLlSystemSpace) {
+                    mLlSystemSpace.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -123,7 +129,6 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
         }
 
     }
-
 
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -157,11 +162,11 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
                 }
                 if (null != mTxtSpaceSize) {
                     mCurrentTime = System.currentTimeMillis();
-                    Log.i("test","size="+ FileSizeUtils.formatFileSize(size)+",totalSize="+FileSizeUtils.formatFileSize(mTotalSize));
+                    Log.i("test", "size=" + FileSizeUtils.formatFileSize(size) + ",totalSize=" + FileSizeUtils.formatFileSize(mTotalSize));
 
-                    if (getString(R.string.tool_phone_thin).equals(mTitleName)){
+                    if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
                         mTxtSpaceSize.setText(mPresenter.accuracy(size, mTotalSize, 0));
-                    }else {
+                    } else {
                         mTxtSpaceSize.setText(mPresenter.accuracy(mSizeL, mTotalSize, 0));
                     }
                 }
@@ -171,22 +176,23 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
 
     /**
      * 更新软件数据
-     * @param size 安装应用大小
-     * @param totalSize  应用总大小
+     *
+     * @param size      安装应用大小
+     * @param totalSize 应用总大小
      */
-    public void updateData(int size,long totalSize,final boolean isFinish){
+    public void updateData(int size, long totalSize, final boolean isFinish) {
         runOnUiThread(() -> {
             if (mTxtSpaceSize == null)
                 return;
 
-            mSizeL=size;
+            mSizeL = size;
             if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
                 mPresenter.scanFile(mPath);
-            }else {
+            } else {
                 String s = mPresenter.accuracy(totalSize, mTotalSize, 0);
                 if (Double.valueOf(s) == 0) {
                     mTxtSpaceSize.setText("1");
-                }else {
+                } else {
                     mTxtSpaceSize.setText(s);
                 }
                 if (isFinish) {
@@ -218,17 +224,20 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
             mImgProgressSystem.animate().rotation(0).setDuration(10).start();
         }
     }
+
     /**
      * 扫描完成
      */
     public void onComplete() {
         if (tv_use_space == null) return;
-        mIvScanFrame.setVisibility(View.GONE);
+        if (null != mIvScanFrame) {
+            mIvScanFrame.setVisibility(View.GONE);
+        }
         long fileTotalSize = mPresenter.getFileSize();
         String s = mPresenter.accuracy(fileTotalSize, mTotalSize, 0);
         if (Double.valueOf(s) == 0) {
             mTxtSpaceSize.setText("1");
-        }else {
+        } else {
             mTxtSpaceSize.setText(s);
         }
         if (objectAnimatorScanIng != null) objectAnimatorScanIng.cancel();
@@ -237,17 +246,18 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
             mImgProgressSystem.post(() -> {
                 Intent intent = new Intent(PhoneThinActivity.this, PhoneThinResultActivity.class);
                 intent.putExtra(PARAMS_SPACE_SIZE_AVAILABLE, mPresenter.accuracy(fileTotalSize, mTotalSize, 0));
-                intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME,mTitleName);
+                intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, mTitleName);
                 startActivity(intent);
-                Log.i("123","onComplete");
+                Log.i("123", "onComplete");
                 finish();
             });
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK)
-            StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
+            StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
 }
