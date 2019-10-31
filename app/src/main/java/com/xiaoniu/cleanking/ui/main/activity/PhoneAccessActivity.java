@@ -640,6 +640,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
+        if (null == recycle_view) return;
         ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
         for (FirstJunkInfo firstJunkInfo : listInfos) {
             if (!isCacheWhite(firstJunkInfo.getAppPackageName()))

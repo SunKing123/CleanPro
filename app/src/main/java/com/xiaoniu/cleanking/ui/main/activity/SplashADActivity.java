@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -128,7 +129,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
-            this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
@@ -140,9 +141,16 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 获取过审开关失败
      */
     public void getAuditSwitchFail() {
-        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+      /*  this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             jumpActivity();
-        });
+        });*/
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jumpActivity();
+            }
+        }, 100);
     }
 
     public void jumpActivity() {
@@ -294,7 +302,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onADClicked() {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page","");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page", "");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -337,7 +345,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "clod_splash_page", "clod_splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page","");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page", "");
     }
 
     @Override
@@ -389,7 +397,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
-        mPresenter.getAuditSwitch();
+        if (NetworkUtils.isNetConnected()) {
+            mPresenter.getAuditSwitch();
+        } else {
+            getAuditSwitchFail();
+        }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -438,7 +450,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();

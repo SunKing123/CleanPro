@@ -106,14 +106,18 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, viewPageEventCode, viewPageEventName);
 
-
+        if (null == mAlertDialog) {
+            mAlertDialog = new AlertDialog.Builder(this).create();
+        }
         mAlertDialog = new AlertDialog.Builder(this).create();
         if (isFinishing()) {
             return;
         }
         mAlertDialog.setCancelable(true);
         mAlertDialog.setCanceledOnTouchOutside(false);
-        mAlertDialog.show();
+        if (!mAlertDialog.isShowing()) {
+            mAlertDialog.show();
+        }
         Window window = mAlertDialog.getWindow();
         window.setContentView(R.layout.alite_power_saving_permission_dialog);
         WindowManager.LayoutParams lp = mAlertDialog.getWindow().getAttributes();
@@ -208,5 +212,19 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     public void onBackPressed() {
         super.onBackPressed();
         StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (null != mAlertDialog) {
+                mAlertDialog.cancel();
+                mAlertDialog.dismiss();
+                mAlertDialog = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
