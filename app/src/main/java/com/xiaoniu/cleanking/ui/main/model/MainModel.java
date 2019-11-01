@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -159,4 +160,10 @@ public class MainModel extends BaseModel {
         mService.getPushLocalSet().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
+    /**
+     * 游戏加速列表顶部广告
+     */
+    public void getRecommendList(Common4Subscriber<HomeRecommendEntity> commonSubscriber) {
+        mService.getRecommendList("opearte_page_add_game").compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
 }

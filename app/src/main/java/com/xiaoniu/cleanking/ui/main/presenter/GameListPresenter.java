@@ -11,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Process;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
@@ -19,8 +20,10 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.GameListActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.ArrayList;
@@ -173,4 +176,27 @@ public class GameListPresenter extends RxPresenter<GameListActivity, MainModel> 
         recyclerView.scheduleLayoutAnimation();
     }
 
+    /**
+     * 游戏加速列表顶部广告
+     */
+    public void getRecommendList() {
+        mModel.getRecommendList(new Common4Subscriber<HomeRecommendEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+            }
+
+            @Override
+            public void getData(HomeRecommendEntity entity) {
+                mView.getRecommendListSuccess(entity);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+            }
+        });
+    }
 }
