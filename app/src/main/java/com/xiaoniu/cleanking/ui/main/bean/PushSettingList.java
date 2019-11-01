@@ -33,15 +33,15 @@ public class PushSettingList extends BaseEntity {
          */
 
 
-    /*code	String	模板编码，本地推送唯一编码
-    title	String	模板标题
-    position	String	跳转页面(中文表述，暂时不用)
-    content	String	推送内容，一键加速（push_speed_up）中，#代表占位符，替换成当前已用内存百分比
-    url	String	跳转页面
-    thresholdMin	int	最低阈值，0则代表无限制
-    thresholdMax	int	最高阈值，0则代表无限制
-    interValTime	int	每次推送间隔时间（单位：小时）
-    dailyLimit	int	日限定次数*/
+        /*code	String	模板编码，本地推送唯一编码
+        title	String	模板标题
+        position	String	跳转页面(中文表述，暂时不用)
+        content	String	推送内容，一键加速（push_speed_up）中，#代表占位符，替换成当前已用内存百分比
+        url	String	跳转页面
+        thresholdMin	int	最低阈值，0则代表无限制
+        thresholdMax	int	最高阈值，0则代表无限制
+        interValTime	int	每次推送间隔时间（单位：小时）
+        dailyLimit	int	日限定次数*/
         @SerializedName("code")
         private String codeX;
         private String title;

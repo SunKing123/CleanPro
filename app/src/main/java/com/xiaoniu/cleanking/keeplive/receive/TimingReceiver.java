@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -69,7 +70,7 @@ public class TimingReceiver extends BroadcastReceiver {
         //重新打开保活service
         Intent i = new Intent(context, LocalService.class);
         context.startService(i);
-        createNotify();
+
     }
 
 
@@ -92,7 +93,7 @@ public class TimingReceiver extends BroadcastReceiver {
         String codeX = dataBean.getCodeX();
         switch (codeX) {
             case "push_1"://垃圾清理
-                startScan(mContext);
+                startScanAll(dataBean,mContext);
                 break;
             case "push_2"://一键加速
                 break;
@@ -110,7 +111,7 @@ public class TimingReceiver extends BroadcastReceiver {
     /**
      * 获取清理文件大小
      */
-    public void startScan(Context mContext) {
+    public void startScanAll(PushSettingList.DataBean dataBean,Context mContext) {
         HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
         Observable.create(e -> {
@@ -132,9 +133,6 @@ public class TimingReceiver extends BroadcastReceiver {
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
             e.onNext(leaveDataInfo);
 
-            //其他垃圾
-            JunkGroup otherGroup = mFileQueryUtils.getOtherCache();
-            e.onNext(otherGroup);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper()).subscribe(o -> {
@@ -225,32 +223,27 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                 }*/
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-                LogUtils.i("----" + totalSize);
-
-
-
+                long mbNum = totalSize / (1024*1024);
+                if (mbNum >= dataBean.getThresholdNum()) {
+                    createNotify(mbNum,mContext);
+                }
             }
         });
 
     }
 
-    public void createNotify(){
-        KeepAliveConfig.CONTENT = "sssss";
-        KeepAliveConfig.DEF_ICONS = SPUtils.getInstance(mContext, SP_NAME).getInt(KeepAliveConfig.RES_ICON, R.drawable.ic_launcher);
-        KeepAliveConfig.TITLE = "ffffffff";
-        String title = SPUtils.getInstance(mContext, SP_NAME).getString(KeepAliveConfig.TITLE);
+    public void createNotify(long mbNum, Context conx) {
+        String push_content = conx.getString(R.string.push_content_scan_all, mbNum);
+        String push_title = "";
+        //cheme跳转路径
+        Map<String, String> actionMap = new HashMap<>();
+        actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
 
-        if (!TextUtils.isEmpty(KeepAliveConfig.TITLE) && !TextUtils.isEmpty(KeepAliveConfig.CONTENT)) {
-            //启用前台服务，提升优先级
-            Intent intent2 = new Intent(mContext, NotificationClickReceiver.class);
-            intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
-            Map<String,String> actionMap = new HashMap<>();
-            actionMap.put("url","cleanking://com.xiaoniu.cleanking/native_no_params?a_name=main.activity.PhoneAccessActivity");
-            intent2.putExtra("push_data", new PushMsg(102102, "test", "this is a test", null, null, actionMap));
-//                    Notification notification = NotificationUtils.createNotification(mContext, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
-            KeepAliveManager.sendNotification(mContext,"aa","ssssssss",DEF_ICONS,intent2);
-            Log.d("JOB-->", TAG + "显示通知栏");
-        }
+        Intent intent = new Intent(conx, NotificationClickReceiver.class);
+        intent.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+        //notifyId不关注_跟产品已经确认(100001)
+        intent.putExtra("push_data", new PushMsg(100001, push_title, push_content, null, null, actionMap));
+        KeepAliveManager.sendNotification(conx, push_title, push_content, R.drawable.ic_launcher, intent);
     }
 
 

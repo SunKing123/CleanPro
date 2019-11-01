@@ -67,9 +67,9 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private ImageView mIvBack;
     private ImageView mIvSet;
     private boolean isCleanFinish = false;
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //所有应用所占内存大小
+    private int mNotifySize = 0; //通知条数
+    private int mPowerSize= 0; //耗电应用数
+    private int mRamScale= 0; //所有应用所占内存大小
 
     String sourcePage = "";
     String currentPage = "";
@@ -115,9 +115,12 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         returnEventName = "用户在通知清理诊断页返回";
         sysReturnEventName = "用户在通知清理诊断页返回";
         sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
-
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        if (null != NotifyCleanManager.getInstance().getAllNotifications()) {
+            mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        }
+        if (null != new FileQueryUtils().getRunningProcess()) {
+            mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        }
         getAccessListBelow();
         mTitleBar = findViewById(R.id.title_bar);
         mRecyclerView = findViewById(R.id.notify_recyclerView);

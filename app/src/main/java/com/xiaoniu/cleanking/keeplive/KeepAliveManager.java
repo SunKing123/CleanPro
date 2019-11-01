@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
@@ -66,6 +67,7 @@ public class KeepAliveManager {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void stopWork(Application application) {
         try {
             KeepAliveConfig.foregroundNotification = null;
