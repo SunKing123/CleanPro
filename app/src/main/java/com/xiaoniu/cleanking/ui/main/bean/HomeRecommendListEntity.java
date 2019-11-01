@@ -12,6 +12,7 @@ public class HomeRecommendListEntity implements Serializable {
 
     @NotNull
     @PrimaryKey
+    private String id;
     private String sort;
     private String positionCode;
     private String name;
@@ -20,6 +21,15 @@ public class HomeRecommendListEntity implements Serializable {
     private String buttonName;
     private String linkType;
     private String linkUrl;
+
+    @NotNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NotNull String id) {
+        this.id = id;
+    }
 
     public void setSort(String sort) {
         this.sort = sort;
