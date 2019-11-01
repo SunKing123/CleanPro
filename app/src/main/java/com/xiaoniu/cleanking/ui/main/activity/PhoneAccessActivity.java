@@ -51,7 +51,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivi
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.event.QuickenEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -364,7 +363,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 }
             }
         }
-        EventBus.getDefault().post(new QuickenEvent());
         Log.d("XiLei", "一键加速结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {

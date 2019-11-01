@@ -31,8 +31,6 @@ public class GameListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public GameListAdapter(Activity mActivity, ArrayList<FirstJunkInfo> listImage, ArrayList<String> list) {
         this.listImage = listImage;
-        Log.d("XiLei", "listImage.size()=" + listImage.size());
-        Log.d("XiLei", "list.size()=" + list.size());
         for (int i = 0; i < listImage.size(); i++) {
             for (int j = 0; j < list.size(); j++) {
                 if (listImage.get(i).getAppName().equals(list.get(j))) {

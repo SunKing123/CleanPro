@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -25,6 +26,10 @@ public class GameSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setData(List<FirstJunkInfo> list) {
         mData = list;
+    }
+
+    public List<FirstJunkInfo> getData() {
+        return mData;
     }
 
     @Override
