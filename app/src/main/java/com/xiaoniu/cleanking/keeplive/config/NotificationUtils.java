@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
 
@@ -55,22 +56,25 @@ public class NotificationUtils extends ContextWrapper {
         //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (TextUtils.isEmpty(title)) {
-            title = mContext.getApplicationInfo().name;
+            title = mContext.getString(R.string.app_name);
         }
         if (TextUtils.isEmpty(content)) {
-            content = mContext.getApplicationInfo().name;
+            content = mContext.getString(R.string.app_name);
         }
         if (icon == 0) {
             icon = R.drawable.ic_launcher;
         }
         Notification.Builder builder = new Notification.Builder(mContext, id)
-                .setContentTitle("")
-                .setContentText("")
+                .setContentTitle(title)
+                .setContentText(content)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
         //添加自定义视图  activity_notification
         RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.live_notification);
+        mRemoteViews.setTextViewText(R.id.title, title);
+        mRemoteViews.setTextViewText(R.id.text,Html.fromHtml(content));
+
         builder.setContent(mRemoteViews);
         return builder;
     }
