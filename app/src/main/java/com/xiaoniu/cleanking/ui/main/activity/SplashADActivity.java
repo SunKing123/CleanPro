@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -38,12 +37,11 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
-import com.xiaoniu.common.utils.MiitHelper;
+
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -133,7 +131,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
-            this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
@@ -145,9 +143,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 获取过审开关失败
      */
     public void getAuditSwitchFail() {
-        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            jumpActivity();
-        });
+//        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jumpActivity();
+            }
+        }, 100);
+
+//        });
     }
 
     public void jumpActivity() {
@@ -175,39 +179,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 mSPHelper.setUploadImeiStatus(true);
             }
         }
-        /**
-         * NiuSdk设置oaid
-         */
-       /* new MiitHelper(new MiitHelper.AppIdsUpdater() {
-            @Override
-            public void OnIdsAvalid(@NonNull String oaid) {
-                NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
-                    @Override
-                    public void onTrackAutoCollectEvent(String s, JSONObject jsonObject) {
-                        if (!TextUtils.isEmpty(s) && !TextUtils.isEmpty(oaid)) {
-                            try {
-                                jsonObject.put("oaid", oaid == null ? "" : oaid);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        super.onTrackAutoCollectEvent(s, jsonObject);
-                    }
-
-                    @Override
-                    public void onTrackEvent(String s, JSONObject jsonObject) {
-                        if (!TextUtils.isEmpty(s) && !TextUtils.isEmpty(oaid)) {
-                            try {
-                                jsonObject.put("oaid", oaid == null ? "" : oaid);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        super.onTrackEvent(s, jsonObject);
-                    }
-                });
-            }
-        }).getDeviceIds(mContext);*/
     }
 
     /*private String getPosId() {
@@ -427,7 +398,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
-        mPresenter.getAuditSwitch();
+        if(NetworkUtils.isNetConnected()){
+            mPresenter.getAuditSwitch();
+        }else{
+            getAuditSwitchFail();
+        }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -476,7 +451,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListFail() {
-        this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();

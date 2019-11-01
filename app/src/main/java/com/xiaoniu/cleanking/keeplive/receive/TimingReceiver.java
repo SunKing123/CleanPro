@@ -79,7 +79,8 @@ public class TimingReceiver extends BroadcastReceiver {
     public boolean isStartScan(PushSettingList.DataBean dataBean) {
         long lastTime = dataBean.getLastTime();
         long currentTime = System.currentTimeMillis();
-        if ((currentTime - lastTime) >= (BuildConfig.DEBUG ? 10 * 1000 : dataBean.getInterValTime() * 60 * 1000)) {
+//        if ((currentTime - lastTime) >= (BuildConfig.DEBUG ? 10 * 1000 : dataBean.getInterValTime() * 60 * 1000)) {
+            if ((currentTime - lastTime) >=  dataBean.getInterValTime() * 60 * 1000) {
             return true;
         }
         return false;
