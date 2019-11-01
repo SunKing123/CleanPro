@@ -22,8 +22,10 @@ public class FilePathUtil {
         HashMap<String, PathData> pathDataHashMap = new HashMap<>();
         String pathString = SPUtil.getString(context, "path_data", "");
         List<PathData> pathDataList = new Gson().fromJson(pathString, new TypeToken<List<PathData>>() {}.getType());
-        for (PathData path : pathDataList) {
-            pathDataHashMap.put(path.getPackName(),path);
+        if (pathDataList != null && pathDataList.size() > 0) {
+            for (PathData path : pathDataList) {
+                pathDataHashMap.put(path.getPackName(), path);
+            }
         }
         return pathDataHashMap;
     }

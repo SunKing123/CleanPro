@@ -27,4 +27,23 @@ public class SchemeConstant {
     //native params参数
     public static final String EXTRA_MAIN_INDEX = "main_index";
 
+    /**
+     * 本地push scheme
+     */
+    public static class LocalPushScheme{
+
+        //一键清理
+        public static final String SCHEME_NOWCLEANACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "newclean.activity.NowCleanActivity";
+
+        //一键加速
+        public static final String SCHEME_PHONEACCESSACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.PhoneAccessActivity";
+
+        //超强省电
+        public static final String SCHEME_PHONESUPERPOWERACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.PhoneSuperPowerActivity";
+
+        //手机降温
+        public static final String SCHEME_PHONECOOLINGACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.PhoneCoolingActivity";
+
+    }
+
 }

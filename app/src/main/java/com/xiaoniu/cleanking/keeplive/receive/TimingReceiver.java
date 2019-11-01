@@ -1,13 +1,25 @@
 package com.xiaoniu.cleanking.keeplive.receive;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Keep;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.geek.push.entity.PushMsg;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
+import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
+import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
+import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -28,6 +40,9 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.DEF_ICONS;
+import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
+
 /**
  * @author zhengzhihao
  * @date 2019/10/30 14
@@ -36,10 +51,11 @@ import io.reactivex.disposables.CompositeDisposable;
 public class TimingReceiver extends BroadcastReceiver {
 
     private static final String TAG = "TimingReceiver";
-
+    private Context mContext;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        mContext = context;
         Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
         for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
             PushSettingList.DataBean dataBean = entry.getValue();
@@ -51,10 +67,10 @@ public class TimingReceiver extends BroadcastReceiver {
                 PreferenceUtil.saveCleanLogMap(map);
             }
         }
-
         //重新打开保活service
         Intent i = new Intent(context, LocalService.class);
         context.startService(i);
+
     }
 
 
@@ -77,7 +93,7 @@ public class TimingReceiver extends BroadcastReceiver {
         String codeX = dataBean.getCodeX();
         switch (codeX) {
             case "push_1"://垃圾清理
-                startScan();
+                startScanAll(dataBean,mContext);
                 break;
             case "push_2"://一键加速
                 break;
@@ -92,9 +108,10 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
-
-
-    public void startScan() {
+    /**
+     * 获取清理文件大小
+     */
+    public void startScanAll(PushSettingList.DataBean dataBean,Context mContext) {
         HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
         Observable.create(e -> {
@@ -116,9 +133,6 @@ public class TimingReceiver extends BroadcastReceiver {
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
             e.onNext(leaveDataInfo);
 
-            //其他垃圾
-            JunkGroup otherGroup = mFileQueryUtils.getOtherCache();
-            e.onNext(otherGroup);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper()).subscribe(o -> {
@@ -209,11 +223,30 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                 }*/
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-                LogUtils.i("----" + totalSize);
+                long mbNum = totalSize / (1024*1024);
+                if (mbNum >= dataBean.getThresholdNum()) {
+                    createNotify(mbNum,mContext);
+                }
             }
         });
 
     }
+
+    public void createNotify(long mbNum, Context conx) {
+        String push_content = conx.getString(R.string.push_content_scan_all, mbNum);
+        String push_title = "";
+        //cheme跳转路径
+        Map<String, String> actionMap = new HashMap<>();
+        actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
+
+        Intent intent = new Intent(conx, NotificationClickReceiver.class);
+        intent.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+        //notifyId不关注_跟产品已经确认(100001)
+        intent.putExtra("push_data", new PushMsg(100001, push_title, push_content, null, null, actionMap));
+        KeepAliveManager.sendNotification(conx, push_title, push_content, R.drawable.ic_launcher, intent);
+    }
+
+
 
 
 }
