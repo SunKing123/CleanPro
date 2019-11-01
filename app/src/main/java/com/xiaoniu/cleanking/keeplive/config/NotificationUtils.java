@@ -13,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.xiaoniu.cleanking.R;
@@ -74,7 +75,10 @@ public class NotificationUtils extends ContextWrapper {
         RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.live_notification);
         mRemoteViews.setTextViewText(R.id.title, title);
         mRemoteViews.setTextViewText(R.id.text,Html.fromHtml(content));
-
+        //守护push没有不显示查看
+        if (!TextUtils.isEmpty(title)&& title.contains(mContext.getString(R.string.push_content_default_title))){
+            mRemoteViews.setViewVisibility(R.id.tv_look_btn, View.GONE);
+        }
         builder.setContent(mRemoteViews);
         return builder;
     }

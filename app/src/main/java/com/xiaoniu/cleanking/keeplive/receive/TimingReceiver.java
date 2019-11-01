@@ -15,6 +15,7 @@ import android.util.Log;
 import com.geek.push.entity.PushMsg;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.jpush.JPushReceiver;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
@@ -109,6 +110,8 @@ public class TimingReceiver extends BroadcastReceiver {
         }
 
     }
+
+
 
 
     /**
@@ -229,14 +232,6 @@ public class TimingReceiver extends BroadcastReceiver {
                 long mbNum = totalSize / (1024 * 1024);
                 if (mbNum >= dataBean.getThresholdNum()) {
                     createNotify(mbNum,mContext);
-//                    Intent intent = new Intent("_ACTION_CREATE_NOTIFY");
-//                    intent.setAction("_ACTION_CREATE_NOTIFY");
-//                    mContext.sendBroadcast(intent);
-                /*    if (Build.VERSION.SDK_INT >= 26) {
-                       startForegroundService(intent);
-                    } else {
-                        mContext.startService(intent);
-                    }*/
                 }
             }
         });
@@ -250,9 +245,8 @@ public class TimingReceiver extends BroadcastReceiver {
         KeepAliveConfig.DEF_ICONS = SPUtils.getInstance(mContext, SP_NAME).getInt(KeepAliveConfig.RES_ICON, R.drawable.ic_launcher);
         Map<String, String> actionMap = new HashMap<>();
         actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
-
-        Intent intent = new Intent(conx, NotificationClickReceiver.class);
-        intent.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+        Intent intent = new Intent(conx, JPushReceiver.class);
+        intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
         //notifyId不关注_跟产品已经确认(100001)
         intent.putExtra("push_data", new PushMsg(100001, push_title, push_content, null, null, actionMap));
         KeepAliveManager.sendNotification(conx, push_title, push_content, KeepAliveConfig.DEF_ICONS, intent);
