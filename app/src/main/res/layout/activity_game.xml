@@ -80,4 +80,11 @@
             android:text="@string/open_quicken"
             android:textColor="@color/white" />
     </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/acceview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_gradient_clean_screen"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -394,6 +394,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mAdvertId2 = switchInfoList.getAdvertId();
                     initNativeUnifiedAD2();
                 }
+            } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
+                if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD();
+                }
+                if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId2 = switchInfoList.getAdvertId();
+                    initNativeUnifiedAD2();
+                }
             } else { //建议清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
@@ -449,6 +458,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
             } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
+                isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
+            } else if (getString(R.string.game_quicken).contains(mTitle) && PositionId.KEY_GAME.equals(switchInfoList.getConfigKey())) { //游戏加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
             }
@@ -639,6 +651,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvGb.setText("成功降温" + tem + "°C");
                 mTvGb.setTextSize(20);
                 mTvQl.setText("60s后达到最佳降温效果");
+            } else if (getString(R.string.game_quicken).contains(mTitle)) {
+                //游戏加速
+                mTvGb.setText("%");
+                mTvSize.setText(NumberUtils.mathRandom(25, 50));
+                mTvQl.setText("已提速");
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {

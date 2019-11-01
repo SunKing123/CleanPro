@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,9 +49,12 @@ public class GameListActivity extends BaseActivity<GameListPresenter> {
     @BindView(R.id.line_title)
     View line_title;
 
+    private int mNotSelectCount;
     private ArrayList<String> mSelectNameList;
+    private List<FirstJunkInfo> mAllList; //所有应用列表
     private ArrayList<FirstJunkInfo> mSelectList; //选择的应用列表
     private GameListAdapter mGameListAdapter;
+    private ArrayList<FirstJunkInfo> mListInfoData = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -65,6 +69,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> {
     @Override
     public void initView() {
         mSelectNameList = new ArrayList<>();
+        mAllList = new ArrayList<>();
         mSelectList = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= 26) {
             mPresenter.getAccessAbove22();
@@ -72,10 +77,10 @@ public class GameListActivity extends BaseActivity<GameListPresenter> {
             mPresenter.getAccessListBelow();
         }
         iv_back.setOnClickListener(v -> {
-            EventBus.getDefault().post(new SelectGameEvent(mSelectList));
+            EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
             GameListActivity.this.finish();
         });
-        if (null != getIntent().getSerializableExtra(ExtraConstant.SELECT_GAME_LIST)) {
+        if (null != getIntent() && null != getIntent().getSerializableExtra(ExtraConstant.SELECT_GAME_LIST)) {
             mSelectNameList = (ArrayList<String>) getIntent().getSerializableExtra(ExtraConstant.SELECT_GAME_LIST);
         }
     }
@@ -83,7 +88,9 @@ public class GameListActivity extends BaseActivity<GameListPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EventBus.getDefault().post(new SelectGameEvent(mSelectList));
+            Log.d("XiLei", "mNotSelectCount=" + mNotSelectCount);
+            Log.d("XiLei", "mListInfoData.size()=" + mListInfoData.size());
+            EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
             GameListActivity.this.finish();
             return true;
         }
@@ -150,19 +157,22 @@ public class GameListActivity extends BaseActivity<GameListPresenter> {
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
         if (null == recycle_view)
             return;
-        ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
+        mAllList = listInfos;
         for (FirstJunkInfo firstJunkInfo : listInfos) {
             if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
-                listInfoData.add(firstJunkInfo);
+                mListInfoData.add(firstJunkInfo);
         }
-        mGameListAdapter = new GameListAdapter(GameListActivity.this, listInfoData, mSelectNameList);
+        mGameListAdapter = new GameListAdapter(GameListActivity.this, mListInfoData, mSelectNameList);
         recycle_view.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
         recycle_view.setAdapter(mGameListAdapter);
         mGameListAdapter.setmOnCheckListener((listFile, pos) -> {
             mSelectList.clear();
+            mNotSelectCount = 0;
             for (int i = 0; i < listFile.size(); i++) {
                 if (listFile.get(i).isSelect()) {
                     mSelectList.add(listFile.get(i));
+                } else {
+                    mNotSelectCount++;
                 }
             }
         });

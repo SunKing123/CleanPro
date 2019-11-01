@@ -1055,6 +1055,31 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
         if (null == getActivity() || null == list || list.size() <= 0) return;
         if (list.get(pos).getLinkType().equals("1")) {
+            if (list.get(pos).getName().equals(getString(R.string.game_quicken))) { //游戏加速
+                if (PreferenceUtil.getGameTime()) {  // 每次清理间隔 至少3秒
+                    SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
+                } else {
+                    boolean isOpen = false;
+                    if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                            && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                            if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                                isOpen = switchInfoList.isOpen();
+                            }
+                        }
+                    }
+                    if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", getString(R.string.game_quicken));
+                        startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", getString(R.string.game_quicken));
+                        startActivity(NewCleanFinishActivity.class, bundle);
+                    }
+                }
+                return;
+            }
             SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
         } else if (list.get(pos).getLinkType().equals("2")) {
             startActivity(new Intent(getActivity(), AgentWebViewActivity.class)

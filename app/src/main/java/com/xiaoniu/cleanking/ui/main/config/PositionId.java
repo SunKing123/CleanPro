@@ -35,6 +35,7 @@ public class PositionId {
     public static final String KEY_QQ = "page_qq_clear_complete";
     public static final String KEY_PHONE = "page_phone_clear_complete";
     public static final String KEY_GAME_JILI = "page_speed_game_encourag";
+    public static final String KEY_GAME = "page_speed_game_complete";
 
 
     public static final String DRAW_ONE_CODE = "advert_position_advert1";

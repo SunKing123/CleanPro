@@ -1,6 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdManager;
@@ -20,14 +24,23 @@ import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.GameSelectAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.GamePresenter;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,7 +62,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     RecyclerView mRecyclerView;
     @BindView(R.id.tv_open)
     TextView mOpenTv;
+    @BindView(R.id.acceview)
+    LottieAnimationView mLottieAnimationView;
 
+    private List<FirstJunkInfo> mAllList; //所有应用列表
     private ArrayList<String> mSelectNameList;
     private ArrayList<FirstJunkInfo> mSelectList; //选择的应用列表
     private GameSelectAdapter mGameSelectAdapter;
@@ -57,6 +73,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private TTAdNative mTTAdNative;
     private TTRewardVideoAd mttRewardVideoAd;
     private boolean mHasShowDownloadActive = false;
+    private boolean mIsOpen;
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //所有应用所占内存大小
 
     private static final String TAG = "ChuanShanJia";
 
@@ -78,6 +98,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mOpenTv.setOnClickListener(this);
         mPresenter.getSwitchInfoList();
         initRecyclerView();
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        if (Build.VERSION.SDK_INT < 26) {
+            mPresenter.getAccessListBelow();
+        }
     }
 
     private void initRecyclerView() {
@@ -98,32 +123,48 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     @Override
     public void onCheck(List<FirstJunkInfo> listFile, int pos) {
-//        startActivity(new Intent(GameActivity.this, GameListActivity.class));
-//        EventBus.getDefault().post(new SelectGameToListEvent(mSelectList));
         Intent intent = new Intent();
         intent.putExtra(ExtraConstant.SELECT_GAME_LIST, mSelectNameList);
         intent.setClass(this, GameListActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * 选择游戏列表event事件
+     *
+     * @param event
+     */
     @Subscribe
     public void selectGameEvent(SelectGameEvent event) {
-        Log.d("XiLei", "selectGameEvent");
-        Log.d("XiLei", "event.getList()=" + event.getList().size());
-        if (null == mSelectList || null == event || null == event.getList())
-            return;
-        mSelectList.clear();
-        FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
-        firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
-        mSelectList = new ArrayList<>();
-        mSelectList.addAll(event.getList());
-        mSelectList.add(firstJunkInfo);
-//        Collections.reverse(mSelectList);
+        mAllList = event.getAllList();
+        if (null == mSelectList) {
+            mSelectList = new ArrayList<>();
+        }
+        if (null == event || null == event.getList() || event.getList().size() <= 0) {
+            if (null != mSelectList && mSelectList.size() > 1 && event.isNotSelectAll()) {
+                mOpenTv.setEnabled(false);
+                mOpenTv.getBackground().setAlpha(75);
+                mSelectList.clear();
+                mSelectNameList.clear();
+                FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
+                mSelectList.add(firstJunkInfo);
+            }
+        } else {
+            mOpenTv.setEnabled(true);
+            mOpenTv.getBackground().setAlpha(255);
+            mSelectList.clear();
+            mSelectNameList.clear();
+            FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+            firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
+            mSelectList.addAll(event.getList());
+            mSelectList.add(firstJunkInfo);
+            for (int i = 0; i < mSelectList.size(); i++) {
+                mSelectNameList.add(mSelectList.get(i).getAppName());
+            }
+        }
         mGameSelectAdapter.setData(mSelectList);
         mGameSelectAdapter.notifyDataSetChanged();
-        for (int i = 0; i < mSelectList.size(); i++) {
-            mSelectNameList.add(mSelectList.get(i).getAppName());
-        }
     }
 
     /**
@@ -137,6 +178,9 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (PositionId.KEY_GAME_JILI.equals(switchInfoList.getConfigKey())) {
                 initChuanShanJia(switchInfoList.getAdvertId());
+            }
+            if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                mIsOpen = switchInfoList.isOpen();
             }
         }
     }
@@ -243,6 +287,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * @param orientation
      */
     private void loadAd(String codeId, int orientation) {
+        Log.d("XiLei", "codeId=" + codeId);
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(codeId)
@@ -287,6 +332,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     @Override
                     public void onAdClose() {
                         Log.d(TAG, "rewardVideoAd close");
+                        startClean();
                     }
 
                     //视频播放完成回调
@@ -365,21 +411,84 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    /**
+     * 开始加速
+     */
+    private void startClean() {
+        mLottieAnimationView.setVisibility(View.VISIBLE);
+        mLottieAnimationView.useHardwareAcceleration(true);
+        mLottieAnimationView.setAnimation("clean_home_top.json");
+        mLottieAnimationView.setImageAssetsFolder("images_home");
+        mLottieAnimationView.playAnimation();
+        mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+//                mLottieAnimationView.playAnimation();
+
+                //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+                if (PreferenceUtil.getGameTime()) {
+                    PreferenceUtil.saveGameTime();
+                }
+                EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+                if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.game_quicken));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else {
+                    AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.game_quicken));
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
+                finish();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        if (null == mAllList || null == mSelectList || mAllList.size() <= 0 || mSelectList.size() <= 0)
+            return;
+        mSelectList.remove(mSelectList.size() - 1);
+        Log.d("XiLei", "开始清理  mSelectList=" + mSelectList.size());
+        Log.d("XiLei", "mAllList=" + mAllList.size());
+        for (int i = 0; i < mAllList.size(); i++) {
+            for (int j = 0; j < mSelectList.size(); j++) {
+                if (mAllList.get(i).getAppName().equals(mSelectList.get(j).getAppName())) {
+                    mAllList.remove(i);
+                }
+            }
+        }
+        Log.d("XiLei", "mAllList222=" + mAllList.size());
+        for (FirstJunkInfo info : mAllList) {
+            CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.getScreentSwitch();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null) return;
+        //悟空清理app加入默认白名单
+        for (FirstJunkInfo firstJunkInfo : listInfo) {
+            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                listInfo.remove(firstJunkInfo);
+            }
+        }
+        if (listInfo.size() != 0) {
+            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+        }
     }
 
     @Override
