@@ -479,9 +479,9 @@ if (buildWithTinker()) {
                     def filePath = "${destPath}/${newFileNamePrefix}.apk"
                     filePath2 = filePath.replace("\\", "/")
                     if ("${taskName.capitalize()}".contains("Btest")) {
-                        fddPath = "/一键清理管家/测试环境/${rootProject.ext.versionName}"
+                        fddPath = "/手机大师极速版/测试环境/${rootProject.ext.versionName}"
                     } else if ("${taskName.capitalize()}".contains("Prod")) {
-                        fddPath = "/一键清理管家/生产环境/${rootProject.ext.versionName}"
+                        fddPath = "/手机大师极速版/生产环境/${rootProject.ext.versionName}"
                     }
                     apkName = "${newFileNamePrefix}.apk"
                     println "输出路径： ${apkName}"
