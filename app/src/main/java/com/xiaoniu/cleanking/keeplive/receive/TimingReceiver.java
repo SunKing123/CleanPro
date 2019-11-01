@@ -6,12 +6,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.Keep;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.geek.push.entity.PushMsg;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
@@ -63,7 +65,7 @@ public class TimingReceiver extends BroadcastReceiver {
                 startScan(dataBean, context);
                 //更新本地保存的操作时间
                 dataBean.setLastTime(System.currentTimeMillis());
-                map.put(entry.getKey(),dataBean);
+                map.put(entry.getKey(), dataBean);
                 PreferenceUtil.saveCleanLogMap(map);
             }
         }
@@ -77,7 +79,7 @@ public class TimingReceiver extends BroadcastReceiver {
     public boolean isStartScan(PushSettingList.DataBean dataBean) {
         long lastTime = dataBean.getLastTime();
         long currentTime = System.currentTimeMillis();
-        if ((currentTime - lastTime) >= (dataBean.getInterValTime() * 60 * 1000)) {
+        if ((currentTime - lastTime) >= (BuildConfig.DEBUG ? 10 * 1000 : dataBean.getInterValTime() * 60 * 1000)) {
             return true;
         }
         return false;
@@ -93,7 +95,7 @@ public class TimingReceiver extends BroadcastReceiver {
         String codeX = dataBean.getCodeX();
         switch (codeX) {
             case "push_1"://垃圾清理
-                startScanAll(dataBean,mContext);
+                startScanAll(dataBean, mContext);
                 break;
             case "push_2"://一键加速
                 break;
@@ -111,7 +113,7 @@ public class TimingReceiver extends BroadcastReceiver {
     /**
      * 获取清理文件大小
      */
-    public void startScanAll(PushSettingList.DataBean dataBean,Context mContext) {
+    public void startScanAll(PushSettingList.DataBean dataBean, Context mContext) {
         HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
         Observable.create(e -> {
@@ -223,9 +225,17 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                 }*/
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-                long mbNum = totalSize / (1024*1024);
+                long mbNum = totalSize / (1024 * 1024);
                 if (mbNum >= dataBean.getThresholdNum()) {
                     createNotify(mbNum,mContext);
+//                    Intent intent = new Intent("_ACTION_CREATE_NOTIFY");
+//                    intent.setAction("_ACTION_CREATE_NOTIFY");
+//                    mContext.sendBroadcast(intent);
+                /*    if (Build.VERSION.SDK_INT >= 26) {
+                       startForegroundService(intent);
+                    } else {
+                        mContext.startService(intent);
+                    }*/
                 }
             }
         });
@@ -236,6 +246,7 @@ public class TimingReceiver extends BroadcastReceiver {
         String push_content = conx.getString(R.string.push_content_scan_all, mbNum);
         String push_title = "";
         //cheme跳转路径
+        KeepAliveConfig.DEF_ICONS = SPUtils.getInstance(mContext, SP_NAME).getInt(KeepAliveConfig.RES_ICON, R.drawable.ic_launcher);
         Map<String, String> actionMap = new HashMap<>();
         actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
 
@@ -243,10 +254,8 @@ public class TimingReceiver extends BroadcastReceiver {
         intent.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
         //notifyId不关注_跟产品已经确认(100001)
         intent.putExtra("push_data", new PushMsg(100001, push_title, push_content, null, null, actionMap));
-        KeepAliveManager.sendNotification(conx, push_title, push_content, R.drawable.ic_launcher, intent);
+        KeepAliveManager.sendNotification(conx, push_title, push_content, KeepAliveConfig.DEF_ICONS, intent);
     }
-
-
 
 
 }

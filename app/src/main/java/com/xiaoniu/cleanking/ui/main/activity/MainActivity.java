@@ -556,8 +556,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             KeepAliveManager.toKeepAlive(
                     getApplication()
                     , HIGH_POWER_CONSUMPTION,
-                    "进程保活",
-                    "Process: System",
+                    mContext.getString(R.string.push_content_default_title),
+                    mContext.getString(R.string.push_content_default_content),
                     R.mipmap.applogo,
                     new ForegroundNotification(
                             //定义前台服务的通知点击事件

@@ -38,6 +38,7 @@ import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 public final class LocalService extends Service {
     private OnepxReceiver mOnepxReceiver;
     private ScreenStateReceiver screenStateReceiver;
+    private CreateNitifyReceiver createNitifyReceiver;
     private boolean isPause = true;//控制暂停
     private MediaPlayer mediaPlayer;
     private LocalBinder mBilder;
@@ -99,6 +100,14 @@ public final class LocalService extends Service {
         intentFilter2.addAction("_ACTION_SCREEN_ON");
         registerReceiver(screenStateReceiver, intentFilter2);
 
+
+        if (createNitifyReceiver == null) {
+            createNitifyReceiver = new CreateNitifyReceiver();
+        }
+        IntentFilter intentFilter3 = new IntentFilter();
+        intentFilter2.addAction("_ACTION_CREATE_NOTIFY");
+        registerReceiver(createNitifyReceiver, intentFilter3);
+
         //开启一个前台通知，用于提升服务进程优先级
         shouDefNotify();
         //绑定守护进程
@@ -158,6 +167,13 @@ public final class LocalService extends Service {
                 isPause = true;
                 pause();
             }
+        }
+    }
+
+    private class CreateNitifyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            shouDefNotify();
         }
     }
 
