@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
@@ -610,8 +611,11 @@ public final class FileUtils {
             StatFs sf = new StatFs(Environment.getExternalStorageDirectory().getPath());
             float i = 1024 * 1024 * 1024;
             float bytes = 0;
-            bytes = sf.getTotalBytes() / i;
-
+            if(Build.VERSION.SDK_INT>=18){
+                bytes = sf.getTotalBytes() / i;
+            }else{
+                bytes = sf.getBlockSize()* sf.getBlockCount();
+            }
             DecimalFormat df = new DecimalFormat("0.00");//格式化小数
             mToalS = df.format(bytes);
         } catch (UndeliverableException e) {

@@ -20,6 +20,7 @@ import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
 import java.util.Date;
+import java.util.List;
 
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
@@ -82,7 +83,13 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             if (itemData instanceof VideoItemInfo) {
                 return 0;
             } else if (itemData instanceof NewsItemInfoRuishi) {
-                int size = ((NewsItemInfoRuishi) itemData).getImages().size();
+                int size = 0;
+                if(itemData!=null){
+                    List<NewsItemInfoRuishi.ImagesBean> list = ((NewsItemInfoRuishi) itemData).getImages();
+                    if(list!=null){
+                        size= list.size();
+                    }
+                }
                 return size <= 3 ? size : 3;
             }
             return -1;

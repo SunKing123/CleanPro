@@ -115,8 +115,15 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         sysReturnEventName = "用户在通知清理诊断页返回";
         sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
 
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        if (null != NotifyCleanManager.getInstance().getAllNotifications()) {
+            mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        }
+
+        ArrayList<FirstJunkInfo> firstJunkInfos = new FileQueryUtils().getRunningProcess();
+        if (null != firstJunkInfos) {
+            mPowerSize = firstJunkInfos.size();
+        }
+
         getAccessListBelow();
         mTitleBar = findViewById(R.id.title_bar);
         mRecyclerView = findViewById(R.id.notify_recyclerView);
