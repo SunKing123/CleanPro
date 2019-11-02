@@ -164,19 +164,16 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         mModel.getRecommendList(new Common4Subscriber<HomeRecommendEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
-                Log.d("XiLei", "showExtraOp1111");
                 mView.getRecommendListFail();
             }
 
             @Override
             public void getData(HomeRecommendEntity entity) {
-                Log.d("XiLei", "成功--------------------------");
                 mView.getRecommendListSuccess(entity);
             }
 
             @Override
             public void showExtraOp(String message) {
-                Log.d("XiLei", "showExtraOp2222");
                 mView.getRecommendListFail();
             }
 

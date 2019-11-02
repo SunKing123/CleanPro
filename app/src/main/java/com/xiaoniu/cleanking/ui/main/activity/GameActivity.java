@@ -22,12 +22,14 @@ import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.GameSelectAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.GameSelectEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -38,6 +40,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.DisplayImageUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -50,6 +53,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author XiLei
@@ -92,7 +101,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     @Override
     protected void initView() {
-        mSelectNameList = new ArrayList<>();
         findViewById(R.id.iv_back).setOnClickListener(this);
         EventBus.getDefault().register(this);
         mOpenTv.setOnClickListener(this);
@@ -106,19 +114,59 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     }
 
     private void initRecyclerView() {
+        mSelectList = new ArrayList<>();
+        mSelectNameList = new ArrayList<>();
         mRecyclerView.setNestedScrollingEnabled(false);
         mGameSelectAdapter = new GameSelectAdapter(this);
         mGameSelectAdapter.setmOnCheckListener(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mGameSelectAdapter);
-        FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
-        firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
-        mSelectList = new ArrayList<>();
-        mSelectList.add(firstJunkInfo);
-        mGameSelectAdapter.setData(mSelectList);
-        mOpenTv.setEnabled(false);
-        mOpenTv.getBackground().setAlpha(75);
+
+        //展示之前加速过的应用
+        if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().gameSelectDao()
+                && null != ApplicationDelegate.getAppDatabase().gameSelectDao().getAll()
+                && ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size() > 0) {
+            Observable<List<GameSelectEntity>> observable = Observable.create(new ObservableOnSubscribe<List<GameSelectEntity>>() {
+                @Override
+                public void subscribe(ObservableEmitter<List<GameSelectEntity>> emitter) throws Exception {
+                    Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
+                    emitter.onNext(ApplicationDelegate.getAppDatabase().gameSelectDao().getAll());
+                }
+            });
+            Consumer<List<GameSelectEntity>> consumer = new Consumer<List<GameSelectEntity>>() {
+                @Override
+                public void accept(List<GameSelectEntity> list) throws Exception {
+                    Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
+                    if (null == mSelectList || null == mSelectNameList || null == list || list.size() <= 0)
+                        return;
+                    for (int i = 0; i < list.size(); i++) {
+                        FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                        firstJunkInfo.setAppName(list.get(i).getAppName());
+                        firstJunkInfo.setGarbageIcon(DisplayImageUtils.bytesToDrawable(list.get(i).getGarbageIcon()));
+                        mSelectList.add(firstJunkInfo);
+                        mSelectNameList.add(list.get(i).getAppName());
+                    }
+                    FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                    firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
+                    mSelectList.add(firstJunkInfo);
+                    Log.d("XiLei", "缓存的--mSelectList=" + mSelectList.size());
+                    mGameSelectAdapter.setData(mSelectList);
+                }
+            };
+            observable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(consumer);
+            mOpenTv.setEnabled(true);
+            mOpenTv.getBackground().setAlpha(255);
+        } else {
+            mOpenTv.setEnabled(false);
+            mOpenTv.getBackground().setAlpha(75);
+            FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+            firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
+            mSelectList.add(firstJunkInfo);
+            mGameSelectAdapter.setData(mSelectList);
+        }
     }
 
     @Override
@@ -164,7 +212,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             }
         }
         mGameSelectAdapter.setData(mSelectList);
-        mGameSelectAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -209,44 +256,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         loadAd(id, TTAdConstant.VERTICAL);
     }
 
-
-    /**
-     * 拉取插屏广告开关成功
-     *
-     * @return
-     */
-    public void getScreentSwitchSuccess(SwitchInfoList list) {
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            /*if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_one_key_speed).contains(mTitle) && PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_super_power_saving).contains(mTitle) && PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_notification_clean).contains(mTitle) && PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) { //微信清理
-                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
-                    isScreenSwitchOpen = switchInfoList.isOpen();
-                    mScreenShowCount = switchInfoList.getShowRate();
-                }
-            } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle) && PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_qq_clear).contains(mTitle) && PositionId.KEY_QQ.equals(switchInfoList.getConfigKey())) { //QQ专清
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            }*/
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -268,6 +277,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     @Override
                     public void onClick(View view) {
                         showChuanShanJia();
+                        saveSelectApp();
                         dialog.dismiss();
                     }
                 });
@@ -287,7 +297,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * @param orientation
      */
     private void loadAd(String codeId, int orientation) {
-        Log.d("XiLei", "codeId=" + codeId);
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(codeId)
@@ -393,6 +402,30 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 });
             }
         });
+    }
+
+    /**
+     * 保存加速的应用
+     */
+    private void saveSelectApp() {
+        mSelectList.remove(mSelectList.size() - 1);
+        Log.d("XiLei", "mSelectList------333=" + mSelectList.size());
+        ArrayList<GameSelectEntity> selectSaveList = new ArrayList<>();
+        for (int i = 0; i < mSelectList.size(); i++) {
+            selectSaveList.add(new GameSelectEntity(i, mSelectList.get(i).getAppName(), DisplayImageUtils.drawableToBytes(mSelectList.get(i).getGarbageIcon())));
+        }
+        Log.d("XiLei", "selectSaveList=" + selectSaveList.size());
+        if (null == selectSaveList || selectSaveList.size() <= 0) return;
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                ApplicationDelegate.getAppDatabase().gameSelectDao().deleteAll();
+                ApplicationDelegate.getAppDatabase().gameSelectDao().insertAll(selectSaveList);
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     /**

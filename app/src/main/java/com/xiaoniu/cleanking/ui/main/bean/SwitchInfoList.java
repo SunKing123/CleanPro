@@ -30,7 +30,12 @@ public class SwitchInfoList extends BaseEntity {
         private String advertPosition;
         private String versions;
         private String advertId;
+        private String secondAdvertId;
         private int showRate;
+
+        public String getSecondAdvertId() {
+            return secondAdvertId;
+        }
 
         public int getShowRate() {
             return showRate;

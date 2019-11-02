@@ -34,7 +34,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
         if (isBack && PreferenceUtil.getHomeBackTime()) {
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {

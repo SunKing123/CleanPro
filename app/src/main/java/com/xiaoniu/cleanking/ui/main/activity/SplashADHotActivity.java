@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
+import android.support.annotation.MainThread;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,10 +21,16 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bytedance.sdk.openadsdk.AdSlot;
+import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTAdNative;
+import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
+import com.bytedance.sdk.openadsdk.TTSplashAd;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -30,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
+import com.xiaoniu.cleanking.utils.WeakHandler;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.json.JSONObject;
@@ -42,7 +51,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * 热启动开屏广告
  */
-public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implements SplashADListener {
+public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implements SplashADListener, WeakHandler.IHandler {
     private static final String SKIP_TEXT = "跳过 %d";
     public boolean canJump = false;
     private SplashAD splashAD;
@@ -64,6 +73,19 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
     private String mAdvertId = ""; //热启动广告id
+    private String mSecondAdvertId = ""; //热启动广告备用id
+
+    //穿山甲相关 begin
+    private TTAdNative mTTAdNative;
+    //开屏广告加载发生超时但是SDK没有及时回调结果的时候，做的一层保护。
+    private final WeakHandler mHandler = new WeakHandler(this);
+    //开屏广告加载超时时间,建议大于3000,这里为了冷启动第一次加载到广告并且展示,示例设置了3000ms
+    private static final int AD_TIME_OUT = 3000;
+    private static final int MSG_GO_MAIN = 1;
+    //开屏广告是否已经加载
+    private boolean mHasLoaded;
+    private final String TAG = "ChuanShanJia";
+    //穿山甲相关 end
 
     @Override
     protected int getLayoutId() {
@@ -77,8 +99,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         if (Build.VERSION.SDK_INT >= 23) {
             checkAndRequestPermission();
         } else {
-            // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            loadSplashAd();
         }
     }
 
@@ -119,7 +140,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            loadSplashAd();
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -141,7 +162,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
-            fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
+            loadSplashAd();
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -298,6 +319,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         if (!needLogo) {
             findViewById(R.id.app_logo).setVisibility(View.GONE);
         }
+        initChuanShanJia();
         skipView.setOnClickListener(v -> {
             JSONObject extension = new JSONObject();
             try {
@@ -355,6 +377,19 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     }
 
     /**
+     * 初始化穿山甲
+     */
+    private void initChuanShanJia() {
+        //step2:创建TTAdNative对象
+        mTTAdNative = TTAdManagerHolder.get().createAdNative(this);
+        //在合适的时机申请权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题
+        //在开屏时候申请不太合适，因为该页面倒计时结束或者请求超时会跳转，在该页面申请权限，体验不好
+        // TTAdManagerHolder.getInstance(this).requestPermissionIfNecessary(this);
+        //定时，AD_TIME_OUT时间到时执行，如果开屏广告没有加载则跳转到主页面
+        mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, AD_TIME_OUT);
+    }
+
+    /**
      * 开屏页一定要禁止用户对返回按钮的控制，否则将可能导致用户手动退出了App而广告无法正常曝光和计费
      */
     @Override
@@ -363,6 +398,135 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 加载穿山甲开屏广告
+     */
+    private void loadSplashAd() {
+        Log.d(TAG, "穿山甲 开屏id=" + mAdvertId);
+        //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
+        AdSlot adSlot = new AdSlot.Builder()
+                .setCodeId(mAdvertId)
+                .setSupportDeepLink(true)
+                .setImageAcceptedSize(1080, 1920)
+                .build();
+        //step4:请求广告，调用开屏广告异步请求接口，对请求回调的广告作渲染处理
+        mTTAdNative.loadSplashAd(adSlot, new TTAdNative.SplashAdListener() {
+            @Override
+            @MainThread
+            public void onError(int code, String message) {
+                Log.d(TAG, message);
+                mHasLoaded = true;
+                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
+            }
+
+            @Override
+            @MainThread
+            public void onTimeout() {
+                mHasLoaded = true;
+                Log.d(TAG, "穿山甲----开屏广告加载超时");
+                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
+            }
+
+            @Override
+            @MainThread
+            public void onSplashAdLoad(TTSplashAd ad) {
+                Log.d(TAG, "穿山甲----开屏广告请求成功");
+                mHasLoaded = true;
+                mHandler.removeCallbacksAndMessages(null);
+                if (ad == null) {
+                    return;
+                }
+                //获取SplashView
+                View view = ad.getSplashView();
+                if (view != null) {
+                    container.removeAllViews();
+                    //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
+                    container.addView(view);
+                    //设置不开启开屏广告倒计时功能以及不显示跳过按钮,如果这么设置，您需要自定义倒计时逻辑
+                    //ad.setNotAllowSdkCountdown();
+                } else {
+                    jumpActivity();
+                }
+
+                //设置SplashView的交互监听器
+                ad.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
+                    @Override
+                    public void onAdClicked(View view, int type) {
+                        Log.d(TAG, "穿山甲----onAdClicked");
+                    }
+
+                    @Override
+                    public void onAdShow(View view, int type) {
+                        Log.d(TAG, "穿山甲----onAdShow");
+                    }
+
+                    @Override
+                    public void onAdSkip() {
+                        Log.d(TAG, "穿山甲----onAdSkip");
+                        jumpActivity();
+                    }
+
+                    @Override
+                    public void onAdTimeOver() {
+                        Log.d(TAG, "穿山甲----onAdTimeOver");
+                        jumpActivity();
+                    }
+                });
+                if (ad.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
+                    ad.setDownloadListener(new TTAppDownloadListener() {
+                        boolean hasShow = false;
+
+                        @Override
+                        public void onIdle() {
+
+                        }
+
+                        @Override
+                        public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
+                            if (!hasShow) {
+                                Log.d(TAG, "穿山甲下载中...");
+                                hasShow = true;
+                            }
+                        }
+
+                        @Override
+                        public void onDownloadPaused(long totalBytes, long currBytes, String fileName, String appName) {
+                            Log.d(TAG, "穿山甲下载暂停...");
+                        }
+
+                        @Override
+                        public void onDownloadFailed(long totalBytes, long currBytes, String fileName, String appName) {
+                            Log.d(TAG, "穿山甲下载失败...");
+                        }
+
+                        @Override
+                        public void onDownloadFinished(long totalBytes, String fileName, String appName) {
+
+                        }
+
+                        @Override
+                        public void onInstalled(String fileName, String appName) {
+
+                        }
+                    });
+                }
+            }
+        }, AD_TIME_OUT);
+
+    }
+
+    @Override
+    public void handleMsg(Message msg) {
+        if (msg.what == MSG_GO_MAIN) {
+            if (!mHasLoaded) {
+                Log.d(TAG, "穿山甲广告已超时，跳到主页面");
+                jumpActivity();
+            }
+        }
     }
 
     @Override
