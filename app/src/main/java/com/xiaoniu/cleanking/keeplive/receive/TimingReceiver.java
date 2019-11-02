@@ -131,7 +131,7 @@ public class TimingReceiver extends BroadcastReceiver {
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY);
-            createNotify(cxt, push_content, actionMap);
+            createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_cool_btn));
         }
 
     }
@@ -148,7 +148,7 @@ public class TimingReceiver extends BroadcastReceiver {
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY);
-            createNotify(cxt, push_content, actionMap);
+            createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_power_btn));
         }
 
     }
@@ -204,7 +204,7 @@ public class TimingReceiver extends BroadcastReceiver {
                             //cheme跳转路径
                             Map<String, String> actionMap = new HashMap<>();
                             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY);
-                            createNotify(mContext, push_content, actionMap);
+                            createNotify(mContext, push_content, actionMap,mContext.getString(R.string.push_btn_access));
                         }
                     });
         }
@@ -316,7 +316,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     Map<String, String> actionMap = new HashMap<>();
                     actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
 
-                    createNotify(mContext, push_content, actionMap);
+                    createNotify(mContext, push_content, actionMap,mContext.getString(R.string.tool_now_clean));
                 }
             }
         });
@@ -330,12 +330,12 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param push_content
      * @param actionMap
      */
-    public void createNotify(Context conx, String push_content, Map<String, String> actionMap) {
+    public void createNotify(Context conx, String push_content, Map<String, String> actionMap,String btn) {
         Intent intent = new Intent(conx, JPushReceiver.class);
         intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
         //notifyId不关注_跟产品已经确认(100001)
         intent.putExtra("push_data", new PushMsg(100001, "", push_content, null, null, actionMap));
-        KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent);
+        KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
     }
 
 

@@ -53,7 +53,7 @@ public class NotificationUtils extends ContextWrapper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getChannelNotification(String title, String content, int icon, Intent intent) {
+    public Notification.Builder getChannelNotification(String title, String content, int icon, Intent intent,String btnString) {
         //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (TextUtils.isEmpty(title)) {
@@ -78,6 +78,9 @@ public class NotificationUtils extends ContextWrapper {
         //守护push没有不显示查看
         if (!TextUtils.isEmpty(title)&& title.contains(mContext.getString(R.string.push_content_default_title))){
             mRemoteViews.setViewVisibility(R.id.tv_look_btn, View.GONE);
+        }else if(!TextUtils.isEmpty(btnString)){
+            mRemoteViews.setTextViewText(R.id.tv_look_btn,btnString);
+            mRemoteViews.setViewVisibility(R.id.tv_look_btn, View.VISIBLE);
         }
         builder.setContent(mRemoteViews);
         return builder;
@@ -95,12 +98,12 @@ public class NotificationUtils extends ContextWrapper {
                 .setContentIntent(pendingIntent);
     }
 
-    public static void sendNotification(@NonNull Context context, @NonNull String title, @NonNull String content, @NonNull int icon, @NonNull Intent intent) {
+    public static void sendNotification(@NonNull Context context, @NonNull String title, @NonNull String content, @NonNull int icon, @NonNull Intent intent,String btn) {
         NotificationUtils notificationUtils = new NotificationUtils(context);
         Notification notification = null;
         if (Build.VERSION.SDK_INT >= 26) {
             notificationUtils.createNotificationChannel();
-            notification = notificationUtils.getChannelNotification(title, content, icon, intent).build();
+            notification = notificationUtils.getChannelNotification(title, content, icon, intent,btn).build();
         } else {
             notification = notificationUtils.getNotification_25(title, content, icon, intent).build();
         }
@@ -112,7 +115,7 @@ public class NotificationUtils extends ContextWrapper {
         Notification notification = null;
         if (Build.VERSION.SDK_INT >= 26) {
             notificationUtils.createNotificationChannel();
-            notification = notificationUtils.getChannelNotification(title, content, icon, intent).build();
+            notification = notificationUtils.getChannelNotification(title, content, icon, intent,"").build();
         } else {
             notification = notificationUtils.getNotification_25(title, content, icon, intent).build();
         }
