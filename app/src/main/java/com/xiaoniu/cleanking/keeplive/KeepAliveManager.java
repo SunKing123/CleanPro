@@ -87,8 +87,8 @@ public class KeepAliveManager {
     }
 
 
-    public static void sendNotification(Context context, String title, String content, int icon, Intent intent2) {
-        NotificationUtils.sendNotification(context, title, content, icon, intent2);
+    public static void sendNotification(Context context, String title, String content, int icon, Intent intent2,String btn) {
+        NotificationUtils.sendNotification(context, title, content, icon, intent2,btn);
     }
 
 }

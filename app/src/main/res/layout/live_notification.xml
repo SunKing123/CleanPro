@@ -37,6 +37,7 @@
         android:layout_toRightOf="@id/image" />
 
     <TextView
+        android:id="@+id/tv_look_btn"
         android:background="@drawable/notivittion_btn_bg"
         android:layout_width="60dp"
         android:layout_height="26dp"

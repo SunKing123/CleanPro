@@ -139,12 +139,17 @@
     <string name="game_list_hint">温馨提醒：添加游戏平均可被提速38%</string>
 <!--<![CDATA[<font color="#FFFD6F46">%1$dMB</font>垃圾严重影响使用]]>-->
     <string name="push_content_scan_all"><![CDATA[<font color="#FF5454">%1$dMB</font> 垃圾严重影响使用]]></string>
-    <string name="push_content_access">内存占比%1$d%,加速避免卡顿</string>
+    <string name="push_content_access">内存占比%1$d,加速避免卡顿</string>
     <string name="push_content_power">电量不足%1$d,一键省电</string>
     <string name="push_content_phoneCooling">手机高温%1$d,立即降温!</string>
 
     <string name="push_content_default_title">悟空清理持续护航中...</string>
     <string name="push_content_default_content">一键加速，让手机使用无比流畅</string>
+    <string name="push_btn_access">优化加速</string>
+    <string name="push_power_btn">省电</string>
+    <string name="push_cool_btn">降温</string>
+
+
 
 
 
