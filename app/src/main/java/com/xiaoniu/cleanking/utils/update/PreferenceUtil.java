@@ -889,7 +889,6 @@ public class PreferenceUtil {
      */
     public static int getShowCount(Context context, String title, int ramScale, int notifSize, int powerSize) {
         int count = 0;
-//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && getCleanTime()) {  // 一键加速
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && !PreferenceUtil.isCleanJiaSuUsed()) {  // 一键加速
             if (!PermissionUtils.isUsageAccessAllowed(context)) {
                 count++;
@@ -899,7 +898,6 @@ public class PreferenceUtil {
                 }
             }
         }
-//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && getPowerCleanTime()) { //超强省电
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_super_power_saving)) && !PreferenceUtil.isCleanPowerUsed()) { //超强省电
             if (!PermissionUtils.isUsageAccessAllowed(context)) {
                 count++;
@@ -909,7 +907,6 @@ public class PreferenceUtil {
                 }
             }
         }
-//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean)) && getNotificationCleanTime() && notifSize > 0) { // 通知栏清理
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_notification_clean))) { // 通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 count++;
@@ -917,12 +914,10 @@ public class PreferenceUtil {
                 count++;
             }
         }
-//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && getWeChatCleanTime()) { // 微信专清
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && !PreferenceUtil.isCleanWechatUsed()) { // 微信专清
             count++;
         }
         count++; //文件清理
-//        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && getCoolingCleanTime()) { //手机降温
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && !PreferenceUtil.isCleanCoolUsed()) { //手机降温
             count++;
         }

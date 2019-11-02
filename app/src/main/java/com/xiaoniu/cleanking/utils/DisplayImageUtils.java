@@ -6,6 +6,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -17,6 +19,8 @@ import android.widget.ImageView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.common.utils.AsyncTaskUtils;
+
+import java.io.ByteArrayOutputStream;
 
 public class DisplayImageUtils {
 
@@ -157,5 +161,84 @@ public class DisplayImageUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Drawable转换成byte[]
+     *
+     * @param d
+     * @return
+     */
+    public static byte[] drawableToBytes(Drawable d) {
+        Bitmap bitmap = drawableToBitmap(d);
+        return bitmapToBytes(bitmap);
+    }
+
+    /**
+     * Drawable转换成Bitmap
+     *
+     * @param drawable
+     * @return
+     */
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap
+                .createBitmap(
+                        drawable.getIntrinsicWidth(),
+                        drawable.getIntrinsicHeight(),
+                        drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                                : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    /**
+     * Bitmap转换成byte[]
+     *
+     * @param bm
+     * @return
+     */
+    public static byte[] bitmapToBytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    /**
+     * byte[]转换成Drawable
+     *
+     * @param b
+     * @return
+     */
+    public static Drawable bytesToDrawable(byte[] b) {
+        Bitmap bitmap = bytesToBitmap(b);
+        return bitmapToDrawable(bitmap);
+    }
+
+    /**
+     * byte[]转换成Bitmap
+     *
+     * @param b
+     * @return
+     */
+    public static Bitmap bytesToBitmap(byte[] b) {
+        if (b.length != 0) {
+            return BitmapFactory.decodeByteArray(b, 0, b.length);
+        }
+        return null;
+    }
+
+    /**
+     * Bitmap转换成Drawable
+     *
+     * @param bitmap
+     * @return
+     */
+    public static Drawable bitmapToDrawable(Bitmap bitmap) {
+        BitmapDrawable bd = new BitmapDrawable(bitmap);
+        Drawable d = (Drawable) bd;
+        return d;
     }
 }

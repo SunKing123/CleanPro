@@ -54,8 +54,6 @@ public class GameListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getAppName());
             ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).isSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
             ((ImageViewHolder) holder).tv_select.setOnClickListener(v -> {
-                Log.d("XiLei", "listImage=" + listImage.size());
-                Log.d("XiLei", "position=" + position);
                 listImage.get(position).setSelect(!listImage.get(position).isSelect());
                 ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).isSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
                 if (mOnCheckListener != null)

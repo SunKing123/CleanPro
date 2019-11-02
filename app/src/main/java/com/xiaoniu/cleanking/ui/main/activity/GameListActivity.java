@@ -131,8 +131,6 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.d("XiLei", "mNotSelectCount=" + mNotSelectCount);
-            Log.d("XiLei", "mListInfoData.size()=" + mListInfoData.size());
             EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
             GameListActivity.this.finish();
             return true;
