@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -41,7 +42,10 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.DEF_ICONS;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -55,10 +59,14 @@ public class TimingReceiver extends BroadcastReceiver {
 
     private static final String TAG = "TimingReceiver";
     private Context mContext;
+    private int mBatteryPower = 50;  //当前电量监控
+    private int temp = 30;          //当前电池温度
 
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
+        mBatteryPower = intent.getIntExtra("battery", 50);
+        temp = intent.getIntExtra("temp", 30);
         Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
         for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
             PushSettingList.DataBean dataBean = entry.getValue();
@@ -76,12 +84,11 @@ public class TimingReceiver extends BroadcastReceiver {
 
     }
 
-
+    //检测是否达到扫描时间
     public boolean isStartScan(PushSettingList.DataBean dataBean) {
         long lastTime = dataBean.getLastTime();
         long currentTime = System.currentTimeMillis();
-//        if ((currentTime - lastTime) >= (BuildConfig.DEBUG ? 10 * 1000 : dataBean.getInterValTime() * 60 * 1000)) {
-            if ((currentTime - lastTime) >=  dataBean.getInterValTime() * 60 * 1000) {
+        if ((currentTime - lastTime) >= dataBean.getInterValTime() * 60 * 1000) {
             return true;
         }
         return false;
@@ -100,18 +107,108 @@ public class TimingReceiver extends BroadcastReceiver {
                 startScanAll(dataBean, mContext);
                 break;
             case "push_2"://一键加速
+                getAccessListBelow(dataBean, mContext);
                 break;
             case "push_3"://超强省电
+                getBatteryInfo(dataBean, mContext);
                 break;
             case "push_4"://手机降温
+                phoneCooling(dataBean, mContext);
                 break;
 
+        }
+    }
 
+    /**
+     * 手机降温提示
+     *
+     * @param dataBean
+     * @param cxt
+     */
+    public void phoneCooling(PushSettingList.DataBean dataBean, Context cxt) {
+        if (temp > dataBean.getThresholdNum()) {
+            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp);
+            //cheme跳转路径
+            Map<String, String> actionMap = new HashMap<>();
+            actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY);
+            createNotify(cxt, push_content, actionMap);
+        }
+
+    }
+
+    /**
+     * 电量提示
+     *
+     * @param dataBean
+     * @param cxt
+     */
+    public void getBatteryInfo(PushSettingList.DataBean dataBean, Context cxt) {
+        if (mBatteryPower < dataBean.getThresholdNum()) {
+            String push_content = cxt.getString(R.string.push_content_power, 30);
+            //cheme跳转路径
+            Map<String, String> actionMap = new HashMap<>();
+            actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY);
+            createNotify(cxt, push_content, actionMap);
         }
 
     }
 
 
+    /**
+     * 一键加速
+     */
+    public void getAccessListBelow(PushSettingList.DataBean dataBean, Context cxt) {
+        //8.0以下 && 已经开启权限
+        if (Build.VERSION.SDK_INT < 26 && PermissionUtils.isUsageAccessAllowed(cxt)) {
+            FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+            Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
+                //获取到可以加速的应用名单
+                //文件加载进度回调
+                mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
+                    @Override
+                    public void currentNumber() {
+
+                    }
+
+                    @Override
+                    public void increaseSize(long p0) {
+
+                    }
+
+                    @Override
+                    public void reduceSize(long p0) {
+
+                    }
+
+                    @Override
+                    public void scanFile(String p0) {
+
+                    }
+
+                    @Override
+                    public void totalSize(int p0) {
+
+                    }
+                });
+                ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
+                if (listInfo == null) {
+                    listInfo = new ArrayList<>();
+                }
+                e.onNext(listInfo);
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(list -> {
+                        int computeTotalSize = mFileQueryUtils.computeTotalSize(list);
+                        if (computeTotalSize > dataBean.getThresholdNum()) {
+                            String push_content = mContext.getString(R.string.push_content_access, computeTotalSize);
+                            //cheme跳转路径
+                            Map<String, String> actionMap = new HashMap<>();
+                            actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY);
+                            createNotify(mContext, push_content, actionMap);
+                        }
+                    });
+        }
+    }
 
 
     /**
@@ -211,45 +308,34 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                 }
             } else {
-       /*         long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-                if (total > totalSize) {//设置为其他垃圾
-                    JunkGroup adGroup = mJunkGroups.get(JunkGroup.GROUP_OTHER);
-                    if (adGroup != null) {
-                        adGroup.mSize += (total - totalSize);
-//                        mJunkGroups.put(JunkGroup.GROUP_OTHER, adGroup);
-                    } else {
-                        JunkGroup otherGroup = new JunkGroup();
-                        otherGroup.mName = ContextUtils.getContext().getString(R.string.other_clean);
-                        otherGroup.isChecked = true;
-                        otherGroup.isExpand = true;
-                        adGroup.needExpand = false;//不能展开显示
-                        otherGroup.mChildren = new ArrayList<>();
-                        otherGroup.mSize += (total - totalSize);
-                        mJunkGroups.put(JunkGroup.GROUP_OTHER, otherGroup);
-                    }
-                }*/
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
                 long mbNum = totalSize / (1024 * 1024);
-                if (mbNum >= dataBean.getThresholdNum()) {
-                    createNotify(mbNum,mContext);
+                if (mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
+                    String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
+                    //cheme跳转路径
+                    Map<String, String> actionMap = new HashMap<>();
+                    actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
+
+                    createNotify(mContext, push_content, actionMap);
                 }
             }
         });
 
     }
 
-    public void createNotify(long mbNum, Context conx) {
-        String push_content = conx.getString(R.string.push_content_scan_all, mbNum);
-        String push_title = "";
-        //cheme跳转路径
-        KeepAliveConfig.DEF_ICONS = SPUtils.getInstance(mContext, SP_NAME).getInt(KeepAliveConfig.RES_ICON, R.drawable.ic_launcher);
-        Map<String, String> actionMap = new HashMap<>();
-        actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
+    /**
+     * 发送push
+     *
+     * @param conx
+     * @param push_content
+     * @param actionMap
+     */
+    public void createNotify(Context conx, String push_content, Map<String, String> actionMap) {
         Intent intent = new Intent(conx, JPushReceiver.class);
         intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
         //notifyId不关注_跟产品已经确认(100001)
-        intent.putExtra("push_data", new PushMsg(100001, push_title, push_content, null, null, actionMap));
-        KeepAliveManager.sendNotification(conx, push_title, push_content, KeepAliveConfig.DEF_ICONS, intent);
+        intent.putExtra("push_data", new PushMsg(100001, "", push_content, null, null, actionMap));
+        KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent);
     }
 
 

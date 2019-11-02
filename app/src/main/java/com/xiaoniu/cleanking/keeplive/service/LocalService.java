@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -38,13 +39,15 @@ import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 public final class LocalService extends Service {
     private OnepxReceiver mOnepxReceiver;
     private ScreenStateReceiver screenStateReceiver;
-    private CreateNitifyReceiver createNitifyReceiver;
+    private BroadcastReceiver batteryReceiver;
     private boolean isPause = true;//控制暂停
     private MediaPlayer mediaPlayer;
     private LocalBinder mBilder;
     private Handler handler;
     private String TAG = getClass().getSimpleName();
     private KeepAliveRuning mKeepAliveRuning;
+    private int mBatteryPower = 50;  //当前电量监控
+    private int temp = 30;
 
     @Override
     public void onCreate() {
@@ -101,12 +104,33 @@ public final class LocalService extends Service {
         registerReceiver(screenStateReceiver, intentFilter2);
 
 
-        if (createNitifyReceiver == null) {
-            createNitifyReceiver = new CreateNitifyReceiver();
+        //当前电量监控
+        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-        IntentFilter intentFilter3 = new IntentFilter();
-        intentFilter2.addAction("_ACTION_CREATE_NOTIFY");
-        registerReceiver(createNitifyReceiver, intentFilter3);
+
+
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        if (batteryReceiver == null) {
+            batteryReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //获取当前电量，如未获取具体数值，则默认为0
+                    int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                    //获取最大电量，如未获取到具体数值，则默认为100
+                    int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+                    mBatteryPower = (batteryLevel * 100 / batteryScale);
+                    //获取当前电池温度
+                    temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+                    int i = temp / 10;
+                    temp = i > 0 ? i : 30;
+                }
+            };
+        }
+        //注册接收器以获取电量信息
+        registerReceiver(batteryReceiver, iFilter);
+
 
         //开启一个前台通知，用于提升服务进程优先级
         shouDefNotify();
@@ -168,12 +192,7 @@ public final class LocalService extends Service {
         }
     }
 
-    private class CreateNitifyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-            shouDefNotify();
-        }
-    }
+
 
     private final class LocalBinder extends KeepAliveAidl.Stub {
         @Override
@@ -226,6 +245,8 @@ public final class LocalService extends Service {
         long spacelong = SCAN_SPACE_LONG * 10 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + spacelong;
         Intent i = new Intent(this, TimingReceiver.class);
+        i.putExtra("battery",mBatteryPower);
+        i.putExtra("temp",temp);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
@@ -270,6 +291,8 @@ public final class LocalService extends Service {
             }
         }
     }
+
+
 
 
 
