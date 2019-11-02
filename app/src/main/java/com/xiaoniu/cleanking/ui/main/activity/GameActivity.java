@@ -212,7 +212,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             }
         }
         mGameSelectAdapter.setData(mSelectList);
-        mGameSelectAdapter.notifyDataSetChanged();
     }
 
     /**
