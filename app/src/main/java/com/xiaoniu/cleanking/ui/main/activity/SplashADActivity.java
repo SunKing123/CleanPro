@@ -125,9 +125,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 if (Build.VERSION.SDK_INT >= 23) {
                     checkAndRequestPermission();
                 } else {
-//                    if (mIsOpen) {  //暂时注释
-                    loadSplashAd();
-//                    }
+                    if (mIsOpen) {
+                        loadSplashAd();
+                    }
                 }
             }
         });
@@ -233,11 +233,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-//            if (mIsOpen) { //暂时注释
-            loadSplashAd();
-           /* } else {
+            if (mIsOpen) {
+                loadSplashAd();
+            } else {
                 jumpActivity();
-            }*/
+            }
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -320,7 +320,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onADClicked() {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page", "");
+        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mSecondAdvertId, "优量汇", "clod_splash_page", "clod_splash_page", "");
         Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
     }
 
@@ -362,8 +362,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     @Override
     public void onADExposure() {
         Log.i("AD_DEMO", "SplashADExposure");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", "clod_splash_page", "clod_splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", "clod_splash_page", "clod_splash_page", "");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "success", "clod_splash_page", "clod_splash_page");
+        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mSecondAdvertId, "优量汇", "clod_splash_page", "clod_splash_page", "");
     }
 
     @Override
@@ -374,7 +374,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     public void onNoAD(AdError error) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", "clod_splash_page", "clod_splash_page");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "fail", "clod_splash_page", "clod_splash_page");
         Log.i("AD_DEMO", String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(), error.getErrorMsg()));
         /**
          * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
@@ -434,7 +434,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         skipView.setOnClickListener(v -> {
             JSONObject extension = new JSONObject();
             try {
-                extension.put("ad_id", mAdvertId);
+                extension.put("ad_id", mSecondAdvertId);
                 extension.put("ad_agency", "优量汇");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -454,7 +454,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         Log.d("XiLei", "getSwitchInfoListSuccess");
         if (null != list && null != list.getData() && list.getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-                if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition())) {
+                if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition()) && PositionId.SPLASH_ID.equals(switchInfoList.getConfigKey())) {
                     mIsOpen = switchInfoList.isOpen();
                     mAdvertId = switchInfoList.getAdvertId();
                     mSecondAdvertId = switchInfoList.getSecondAdvertId();
@@ -546,7 +546,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             @Override
             @MainThread
             public void onError(int code, String message) {
-                Log.d(TAG, message);
+                Log.d(TAG, "穿山甲加载失败=" + message);
                 mHasLoaded = true;
                 // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
                 fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);

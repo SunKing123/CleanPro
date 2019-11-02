@@ -26,7 +26,6 @@
             android:id="@+id/tv_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:textColor="@color/white"
             android:textSize="55sp"
             android:visibility="visible" />
@@ -44,7 +43,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_5dp"
-                android:text="GB"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -52,7 +50,6 @@
                 android:id="@+id/tv_ql"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="垃圾已清理"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
         </LinearLayout>

@@ -33,7 +33,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true">
-                            <!-- 原生广告的视频组件 -->
+
+                            <!-- 穿山甲视频组件 -->
+                            <FrameLayout
+                                android:id="@+id/v_video_chuanshanjia"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:layout_centerVertical="true"
+                                android:scaleType="centerCrop" />
+
+                            <!-- 优量汇原生广告的视频组件 -->
                             <com.qq.e.ads.nativ.MediaView
                                 android:id="@+id/gdt_media_view"
                                 android:layout_width="match_parent"
@@ -54,7 +63,6 @@
                                 android:layout_margin="@dimen/dimen_8dp"
                                 android:src="@drawable/icon_close" />
                         </RelativeLayout>
-
 
                     </RelativeLayout>
 
