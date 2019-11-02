@@ -3,6 +3,15 @@ package com.xiaoniu.cleanking.ui.main.event;
 public class NotificationEvent {
     private String type;
     private int flag = 0;
+    private int appendValue = 30;
+
+    public int getAppendValue() {
+        return appendValue;
+    }
+
+    public void setAppendValue(int appendValue) {
+        this.appendValue = appendValue;
+    }
 
     public int getFlag() {
         return flag;
