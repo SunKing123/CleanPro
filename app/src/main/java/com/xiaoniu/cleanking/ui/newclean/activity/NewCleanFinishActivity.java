@@ -14,12 +14,21 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
+import com.bytedance.sdk.openadsdk.AdSlot;
+import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTAdManager;
+import com.bytedance.sdk.openadsdk.TTAdNative;
+import com.bytedance.sdk.openadsdk.TTFeedAd;
+import com.bytedance.sdk.openadsdk.TTImage;
+import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qq.e.ads.cfg.VideoOption;
@@ -36,6 +45,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -122,6 +132,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private String mAdvertId = ""; //广告位1
     private String mAdvertId2 = ""; //广告位2
+    private String mSecondAdvertId = ""; //备用id
+    private String mSecondAdvertId2 = ""; //备用id
     private boolean isScreenSwitchOpen; //插屏广告开关
     private int mScreenShowCount; //插屏广告展示次数
 
@@ -135,6 +147,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String createEventName = "";
     String returnEventName = "";
     String sysReturnEventName = "";
+
+    //穿山甲相关 begin
+    private FrameLayout mChuanShanJiaVideo;
+    private TTAdNative mTTAdNative;
+    private FrameLayout mChuanShanJiaVideo2;
+    private TTAdNative mTTAdNative2;
+    //穿山甲相关 end
 
     @Override
     protected int getLayoutId() {
@@ -190,7 +209,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_advert = header.findViewById(R.id.iv_advert);
         tv_advert = header.findViewById(R.id.tv_advert);
         tv_advert_content = header.findViewById(R.id.tv_advert_content);
+        mChuanShanJiaVideo = header.findViewById(R.id.v_video_chuanshanjia);
 
+        mChuanShanJiaVideo2 = headerTool.findViewById(R.id.v_video_chuanshanjia);
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
         mContainer2 = headerTool.findViewById(R.id.native_ad_container);
         mMediaView2 = headerTool.findViewById(R.id.gdt_media_view);
@@ -248,6 +269,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         getPageData();
         setListener();
         loadData();
+        initChuanShanJia();
+        initChuanShanJia2();
     }
 
     //获取埋点参数
@@ -334,88 +357,128 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
                 if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) { //超强省电
                 if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {//通知栏清理
                 if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {//微信专情
                 if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) { //手机降温
                 if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) { //QQ专清
                 if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
                 if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
                 if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             } else { //建议清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD();
                 }
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId2 = switchInfoList.getAdvertId();
-                    initNativeUnifiedAD2();
+                }
+                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
             }
         }
         Log.d(TAG, "mAdvertId=" + mAdvertId);
         Log.d(TAG, "mAdvertId2=" + mAdvertId2);
+        Log.d(TAG, "mSecondAdvertId=" + mSecondAdvertId);
+        Log.d(TAG, "mSecondAdvertId2=" + mSecondAdvertId2);
+        loadListAd();
+        loadListAd2();
     }
 
     /**
@@ -467,13 +530,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
+    /**
+     * 优量汇广告位1
+     */
     private void initNativeUnifiedAD() {
-        mAdManager = new NativeUnifiedAD(this, PositionId.APPID, mAdvertId, new NativeADUnifiedListener() {
+        mAdManager = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertId, new NativeADUnifiedListener() {
 
             @Override
             public void onNoAD(AdError adError) {
                 mContainer.setVisibility(View.GONE);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "fail", sourcePage, currentPage);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "fail", sourcePage, currentPage);
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
             }
 
@@ -521,12 +587,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     }
 
+    /**
+     * 优量汇广告位2
+     */
     private void initNativeUnifiedAD2() {
-        mAdManager2 = new NativeUnifiedAD(this, PositionId.APPID, mAdvertId2, new NativeADUnifiedListener() {
+        mAdManager2 = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertId2, new NativeADUnifiedListener() {
             @Override
             public void onNoAD(AdError adError) {
                 mContainer2.setVisibility(View.GONE);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "fail", sourcePage, currentPage);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mSecondAdvertId2, "优量汇", "fail", sourcePage, currentPage);
                 Log.d(TAG, "onNoAd error code222: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
             }
 
@@ -1373,7 +1442,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     //加载广告
     private void initAd(final NativeUnifiedADData ad) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "优量汇", "success", sourcePage, currentPage);
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "success", sourcePage, currentPage);
         renderAdUi(ad);
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(v_advert);
@@ -1384,14 +1453,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
                 //广告请求
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mSecondAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mSecondAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
@@ -1492,7 +1561,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     //加载广告2
     private void initAd2(final NativeUnifiedADData ad) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mSecondAdvertId2, "优量汇", "success", sourcePage, currentPage);
         renderAdUi2(ad);
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(v_advert2);
@@ -1503,14 +1572,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
 
-                StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mAdvertId2, "优量汇", "success", sourcePage, currentPage);
+                StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mSecondAdvertId2, "优量汇", "success", sourcePage, currentPage);
                 Log.d(TAG, "广告曝光");
             }
 
             @Override
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mSecondAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
 
             }
 
@@ -1687,5 +1756,276 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
         }
         changeUI(getIntent());
+    }
+
+
+    /**
+     * 初始化穿山甲
+     */
+    private void initChuanShanJia() {
+        TTAdManager ttAdManager = TTAdManagerHolder.get();
+        mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
+        //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
+        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+    }
+
+    /**
+     * 初始化穿山甲
+     */
+    private void initChuanShanJia2() {
+        TTAdManager ttAdManager = TTAdManagerHolder.get();
+        mTTAdNative2 = ttAdManager.createAdNative(getApplicationContext());
+        //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
+        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+    }
+
+    /**
+     * 加载穿山甲广告位1
+     */
+    private void loadListAd() {
+        //feed广告请求类型参数
+        AdSlot adSlot = new AdSlot.Builder()
+                .setCodeId(mAdvertId)
+                .setSupportDeepLink(true)
+                .setImageAcceptedSize(640, 320)
+                .setAdCount(3)
+                .build();
+        //调用feed广告异步请求接口
+        mTTAdNative.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {
+            @Override
+            public void onError(int code, String message) {
+                Log.d(TAG, "穿山甲加载失败=" + message);
+                initNativeUnifiedAD();
+                initNativeUnifiedAD2();
+            }
+
+            @Override
+            public void onFeedAdLoad(List<TTFeedAd> ads) {
+                //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
+                if (null == ads || ads.isEmpty()) return;
+                Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
+
+                mLottieAd.useHardwareAcceleration(true);
+                mLottieAd.setAnimation("clean_finish_download.json");
+                mLottieAd.setImageAssetsFolder("images_clean_download");
+                mLottieAd.playAnimation();
+                mContainer.setVisibility(View.VISIBLE);
+                tv_advert.setText(ads.get(0).getTitle());
+                tv_advert_content.setText(ads.get(0).getDescription());
+
+                TTImage icon = ads.get(0).getIcon();
+                if (!NewCleanFinishActivity.this.isFinishing() && icon != null && icon.isValid()) {
+                    GlideUtils.loadRoundImage(NewCleanFinishActivity.this, icon.getImageUrl(), iv_advert_logo, 20);
+                }
+                Log.d(TAG, "穿山甲--广告类型=" + ads.get(0).getImageMode());
+                Log.d(TAG, "穿山甲--广告交互类型=" + ads.get(0).getInteractionType());
+                if (ads.get(0).getImageMode() == TTAdConstant.IMAGE_MODE_VIDEO) { //视频
+                    View video = ads.get(0).getAdView();
+                    if (video != null) { //展示视频
+                        if (video.getParent() == null) {
+                            mChuanShanJiaVideo.removeAllViews();
+                            mChuanShanJiaVideo.addView(video);
+                        }
+                    }
+                    //视频播放监听
+                    ads.get(0).setVideoAdListener(new TTFeedAd.VideoAdListener() {
+                        @Override
+                        public void onVideoLoad(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲视频---- onVideoLoad");
+                        }
+
+                        @Override
+                        public void onVideoError(int errorCode, int extraCode) {
+                            Log.d(TAG, "穿山甲视频---- onVideoError");
+                        }
+
+                        @Override
+                        public void onVideoAdStartPlay(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲视频---- onVideoAdStartPlay");
+                        }
+
+                        @Override
+                        public void onVideoAdPaused(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲视频---- onVideoAdPaused");
+                        }
+
+                        @Override
+                        public void onVideoAdContinuePlay(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲视频---- onVideoAdContinuePlay");
+                        }
+
+                        @Override
+                        public void onProgressUpdate(long current, long duration) {
+                            Log.d(TAG, "穿山甲视频---- onProgressUpdate");
+                        }
+
+                        @Override
+                        public void onVideoAdComplete(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲视频---- onVideoAdComplete");
+                        }
+                    });
+
+                } else {
+                    TTImage image = ads.get(0).getImageList().get(0);
+                    if (image != null && image.isValid()) {
+                        GlideUtils.loadImage(NewCleanFinishActivity.this, image.getImageUrl(), iv_advert);
+                    }
+                }
+
+                //可以被点击的view, 也可以把convertView放进来意味item可被点击
+                List<View> clickViewList = new ArrayList<>();
+                clickViewList.add(v_advert);
+                //触发创意广告的view（点击下载或拨打电话）
+                List<View> creativeViewList = new ArrayList<>();
+                creativeViewList.add(v_advert);
+                //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
+//            creativeViewList.add(convertView);
+                //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
+                ads.get(0).registerViewForInteraction((ViewGroup) v_advert, clickViewList, creativeViewList, new TTNativeAd.AdInteractionListener() {
+                    @Override
+                    public void onAdClicked(View view, TTNativeAd ad) {
+                        if (ad != null) {
+                            Log.d(TAG, "广告" + ad.getTitle() + "被点击");
+                        }
+                    }
+
+                    @Override
+                    public void onAdCreativeClick(View view, TTNativeAd ad) {
+                        if (ad != null) {
+                            Log.d(TAG, "广告" + ad.getTitle() + "被创意按钮被点击");
+                        }
+                    }
+
+                    @Override
+                    public void onAdShow(TTNativeAd ad) {
+                        if (ad != null) {
+                            Log.d(TAG, "广告" + ad.getTitle() + "展示");
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 加载穿山甲广告位2
+     */
+    private void loadListAd2() {
+        //feed广告请求类型参数
+        AdSlot adSlot = new AdSlot.Builder()
+                .setCodeId(mAdvertId2)
+                .setSupportDeepLink(true)
+                .setImageAcceptedSize(640, 320)
+                .setAdCount(3)
+                .build();
+        //调用feed广告异步请求接口
+        mTTAdNative2.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {
+            @Override
+            public void onError(int code, String message) {
+                Log.d(TAG, "穿山甲2加载失败=" + message);
+            }
+
+            @Override
+            public void onFeedAdLoad(List<TTFeedAd> ads) {
+                //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
+                if (null == ads || ads.isEmpty()) return;
+                Log.d(TAG, "穿山甲2----广告请求成功--ads.size()=" + ads.size());
+
+                mContainer2.setVisibility(View.VISIBLE);
+                tv_advert2.setText(ads.get(0).getTitle());
+                tv_advert_content2.setText(ads.get(0).getDescription());
+
+                TTImage icon = ads.get(0).getIcon();
+                if (!NewCleanFinishActivity.this.isFinishing() && icon != null && icon.isValid()) {
+                    GlideUtils.loadRoundImage(NewCleanFinishActivity.this, icon.getImageUrl(), iv_advert_logo2, 20);
+                }
+                Log.d(TAG, "穿山甲2--广告类型=" + ads.get(0).getImageMode());
+                Log.d(TAG, "穿山甲2--广告交互类型=" + ads.get(0).getInteractionType());
+                if (ads.get(0).getImageMode() == TTAdConstant.IMAGE_MODE_VIDEO) { //视频
+                    View video = ads.get(0).getAdView();
+                    if (video != null) { //展示视频
+                        if (video.getParent() == null) {
+                            mChuanShanJiaVideo2.removeAllViews();
+                            mChuanShanJiaVideo2.addView(video);
+                        }
+                    }
+                    //视频播放监听
+                    ads.get(0).setVideoAdListener(new TTFeedAd.VideoAdListener() {
+                        @Override
+                        public void onVideoLoad(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲2视频---- onVideoLoad");
+                        }
+
+                        @Override
+                        public void onVideoError(int errorCode, int extraCode) {
+                            Log.d(TAG, "穿山甲2视频---- onVideoError");
+                        }
+
+                        @Override
+                        public void onVideoAdStartPlay(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲2视频---- onVideoAdStartPlay");
+                        }
+
+                        @Override
+                        public void onVideoAdPaused(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲2视频---- onVideoAdPaused");
+                        }
+
+                        @Override
+                        public void onVideoAdContinuePlay(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲2视频---- onVideoAdContinuePlay");
+                        }
+
+                        @Override
+                        public void onProgressUpdate(long current, long duration) {
+                            Log.d(TAG, "穿山甲2视频---- onProgressUpdate");
+                        }
+
+                        @Override
+                        public void onVideoAdComplete(TTFeedAd ad) {
+                            Log.d(TAG, "穿山甲2视频---- onVideoAdComplete");
+                        }
+                    });
+
+                } else {
+                    TTImage image = ads.get(0).getImageList().get(0);
+                    if (image != null && image.isValid()) {
+                        GlideUtils.loadImage(NewCleanFinishActivity.this, image.getImageUrl(), iv_advert2);
+                    }
+                }
+
+                //可以被点击的view, 也可以把convertView放进来意味item可被点击
+                List<View> clickViewList = new ArrayList<>();
+                clickViewList.add(v_advert2);
+                //触发创意广告的view（点击下载或拨打电话）
+                List<View> creativeViewList = new ArrayList<>();
+                creativeViewList.add(v_advert2);
+                //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
+//            creativeViewList.add(convertView);
+                //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
+                ads.get(0).registerViewForInteraction((ViewGroup) v_advert2, clickViewList, creativeViewList, new TTNativeAd.AdInteractionListener() {
+                    @Override
+                    public void onAdClicked(View view, TTNativeAd ad) {
+                        if (ad != null) {
+                            Log.d(TAG, "广告2" + ad.getTitle() + "被点击");
+                        }
+                    }
+
+                    @Override
+                    public void onAdCreativeClick(View view, TTNativeAd ad) {
+                        if (ad != null) {
+                            Log.d(TAG, "广告2" + ad.getTitle() + "被创意按钮被点击");
+                        }
+                    }
+
+                    @Override
+                    public void onAdShow(TTNativeAd ad) {
+                        if (ad != null) {
+                            Log.d(TAG, "广告2" + ad.getTitle() + "展示");
+                        }
+                    }
+                });
+            }
+        });
     }
 }

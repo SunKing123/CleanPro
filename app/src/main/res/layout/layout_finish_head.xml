@@ -115,6 +115,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_advert_content"
                 android:layout_marginTop="@dimen/dimen_8dp">
+
+                <!-- 穿山甲视频组件 -->
+                <FrameLayout
+                    android:id="@+id/v_video_chuanshanjia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:scaleType="centerCrop" />
+
                 <!-- 原生广告的视频组件 -->
                 <com.qq.e.ads.nativ.MediaView
                     android:id="@+id/gdt_media_view"
