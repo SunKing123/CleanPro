@@ -41,6 +41,19 @@
         <item>更早</item>
     </string-array>
 
+    <string-array name="acess_drawale_array">
+        <item>@drawable/icon_notifiy_one_key01</item>
+        <item>@drawable/icon_notifiy_one_key02</item>
+        <item>@drawable/icon_notifiy_one_key03</item>
+        <item>@drawable/icon_notifiy_one_key04</item>
+        <item>@drawable/icon_notifiy_one_key05</item>
+        <item>@drawable/icon_notifiy_one_key06</item>
+        <item>@drawable/icon_notifiy_one_key07</item>
+        <item>@drawable/icon_notifiy_one_key08</item>
+        <item>@drawable/icon_notifiy_one_key09</item>
+        <item>@drawable/icon_notifiy_one_key10</item>
+    </string-array>
+
     <declare-styleable name="ArcProgressBar">
         <attr name="arc_max_progress" format="float" />
         <attr name="arc_bg_color" format="color" />
@@ -85,5 +98,8 @@
     <declare-styleable name="ArcImageView">
         <attr name="arcHeight" />
     </declare-styleable>
+
+
+
 
 </resources>

@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -35,6 +36,8 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,13 +129,19 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param cxt
      */
     public void phoneCooling(PushSettingList.DataBean dataBean, Context cxt) {
+        NotificationEvent event = new NotificationEvent();
+        event.setType("cooling");
         if (temp > dataBean.getThresholdNum()) {
+            event.setFlag(2);
             String push_content = cxt.getString(R.string.push_content_phoneCooling, temp);
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY);
             createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_cool_btn));
+        }else{
+            event.setFlag(0);
         }
+        EventBus.getDefault().post(event);
 
     }
 
@@ -143,13 +152,19 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param cxt
      */
     public void getBatteryInfo(PushSettingList.DataBean dataBean, Context cxt) {
+        NotificationEvent event = new NotificationEvent();
+        event.setType("cooling");
         if (mBatteryPower < dataBean.getThresholdNum()) {
+            event.setFlag(2);
             String push_content = cxt.getString(R.string.push_content_power, 30);
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY);
             createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_power_btn));
+        }else{
+            event.setFlag(0);
         }
+        EventBus.getDefault().post(event);
 
     }
 
@@ -206,6 +221,12 @@ public class TimingReceiver extends BroadcastReceiver {
                             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY);
                             createNotify(mContext, push_content, actionMap,mContext.getString(R.string.push_btn_access));
                         }
+
+                        NotificationEvent event = new NotificationEvent();
+                        event.setType("speed");
+                        event.setAppendValue(computeTotalSize);
+                        EventBus.getDefault().post(event);
+
                     });
         }
     }
@@ -310,14 +331,21 @@ public class TimingReceiver extends BroadcastReceiver {
             } else {
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
                 long mbNum = totalSize / (1024 * 1024);
+                NotificationEvent event = new NotificationEvent();
+                event.setType("clean");
                 if (mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
+                    event.setFlag(2);
+
                     String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
                     //cheme跳转路径
                     Map<String, String> actionMap = new HashMap<>();
                     actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
-
                     createNotify(mContext, push_content, actionMap,mContext.getString(R.string.tool_now_clean));
+
+                }else{
+                    event.setFlag(0);
                 }
+                EventBus.getDefault().post(event);
             }
         });
 
