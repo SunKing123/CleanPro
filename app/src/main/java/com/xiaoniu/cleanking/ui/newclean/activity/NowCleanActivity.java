@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -15,6 +16,7 @@ import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.HashMap;
@@ -62,10 +64,17 @@ public class NowCleanActivity extends BaseActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        StatusBarUtil.setTransparentForWindow(this);
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
         setStatusBar();
         startScan();
     }
+
     protected void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(com.xiaoniu.common.R.color.color_4690FD), true);
@@ -81,6 +90,11 @@ public class NowCleanActivity extends BaseActivity {
                 StatisticsUtils.trackClick("toggle_clean_click", "常驻通知栏点击清理", "", "toggle_page");
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -106,6 +120,7 @@ public class NowCleanActivity extends BaseActivity {
         setLeftTitle("扫描中");
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         mScanFragment = ScanFragment.newInstance();
+        getToolBar().setVisibility(View.GONE);//不显示公共toobar
         replaceFragment(R.id.fl_content, mScanFragment, false);
     }
 
@@ -131,7 +146,7 @@ public class NowCleanActivity extends BaseActivity {
      * 返回事件
      * @param isLeftBtn  true toolbar返回事件 false 系统返回
      */
-    private void backClick(boolean isLeftBtn) {
+    public void backClick(boolean isLeftBtn) {
         if (isBackClick)
             return;
         if (isScan) {
@@ -152,7 +167,6 @@ public class NowCleanActivity extends BaseActivity {
 
                 @Override
                 public void cancelBtn() {
-
                     //扫描中弹框_确认按钮
                     StatisticsUtils.trackClick( "confirm_exit_click", "用户在清理扫描页点击【确认退出】", "home_page", "clean_up_scan_page");
                     finish();

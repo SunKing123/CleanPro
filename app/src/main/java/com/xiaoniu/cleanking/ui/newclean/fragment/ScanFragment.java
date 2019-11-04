@@ -39,6 +39,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -54,19 +55,15 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
-    @BindView(R.id.view_lottie)
-    LottieAnimationView mAnimationView;
+    @BindView(R.id.view_lottie_ripple)
+    LottieAnimationView lottieRipple;
+ /*   @BindView(R.id.icon_outer)
+    ImageView mIconOuter;*/
+   /* @BindView(R.id.circle_outer)
+    View mCircleOuter;*/
+/*    @BindView(R.id.circle_outer2)
+    View mCircleOuter2;*/
 
-    @BindView(R.id.view_lottie_star)
-    LottieAnimationView mLottieStarView;
-    @BindView(R.id.icon_outer)
-    ImageView mIconOuter;
-    @BindView(R.id.circle_outer)
-    View mCircleOuter;
-    @BindView(R.id.circle_outer2)
-    View mCircleOuter2;
-    @BindView(R.id.icon_inner)
-    ImageView mIconInner;
     @BindView(R.id.layout_count)
     RelativeLayout mLayoutCount;
     @BindView(R.id.text_count)
@@ -81,6 +78,18 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     ImageView mArrowRight;
     @BindView(R.id.layout_clean_top)
     FrameLayout mLayoutCleanTop;
+    @BindView(R.id.iv_scan_bg03)
+    ImageView ivScanBg03;
+    @BindView(R.id.iv_scan_bg02)
+    ImageView ivScanBg02;
+    @BindView(R.id.iv_scan_bg01)
+    ImageView ivScanBg01;
+    @BindView(R.id.btn_left_scan)
+    ImageView btnLeftScan;
+    @BindView(R.id.tv_scan_left_title)
+    TextView tvScanLeftTitle;
+    ImageView[] ivs;
+
 
 /*    *//**
      * 清理的分类列表
@@ -130,13 +139,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                     mLottieHomeView.playAnimation();
             }
             if (msg.what == 2) {
-                /*((NowCleanActivity)getActivity()).setCountEntity(null);
-                ((NowCleanActivity)getActivity()).setJunkGroups(null);*/
                 try {
                     ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
                     ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
-                    mPresenter.startScan();
-                    mPresenter.startCleanScanAnimation(mIconOuter, mCircleOuter, mCircleOuter2);
+                    mPresenter.startScan(ivs);
+                    mPresenter.startCleanScanAnimation01(lottieRipple);
                     type = TYPE_SCANING;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,6 +151,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             }
         }
     }
+
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -161,6 +169,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     @Override
     protected void initView() {
+        tvScanLeftTitle.setText(getString(R.string.scaning));
+        ivs = new ImageView[]{ivScanBg01,ivScanBg02,ivScanBg03};
+        ivs[0].setAlpha(1f);
+        ivs[1].setAlpha(1f);
+        ivs[2].setAlpha(1f);
         try {
             mPresenter.checkPermission();
             mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
@@ -169,6 +182,16 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             e.printStackTrace();
         }
 
+    }
+
+
+    @OnClick({R.id.btn_left_scan})
+    public void viewClick(View view){
+        switch (view.getId()){
+            case R.id.btn_left_scan:
+                ((NowCleanActivity)getActivity()).backClick(true);
+                break;
+        }
     }
 
     public void startScan() {
@@ -211,6 +234,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         super.onStart();
     }
 
+
     /**
      * 统计总数
      *
@@ -245,9 +269,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
         setColorChange(false);
-        //播放lottie动画
-        mLottieStarView.setVisibility(VISIBLE);
-        mPresenter.showOuterViewRotation(mIconOuter);
+
+//        mPresenter.showOuterViewRotation(mIconOuter);
     }
 
     public void showScanFile(String p0) {
@@ -270,8 +293,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         mPresenter.setIsFinish(true);
         if (mPresenter.getCleanScanAnimator() != null)
             mPresenter.getCleanScanAnimator().cancel();
-        mCircleOuter2.setVisibility(GONE);
-        mCircleOuter.setVisibility(GONE);
+        lottieRipple.setVisibility(GONE);
+    /*    mCircleOuter2.setVisibility(GONE);
+        mCircleOuter.setVisibility(GONE);*/
         showHomeLottieView(true);
     }
 
@@ -279,11 +303,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * 扫描动画结束
      */
     public void endScanAnimation() {
-        if (mCircleOuter2 != null && mCircleOuter != null) {
-            mCircleOuter2.setVisibility(GONE);
-            mCircleOuter.setVisibility(GONE);
+        if (lottieRipple != null ) {
+            lottieRipple.setVisibility(GONE);
         }
-
         showHomeLottieView(true);
     }
 
@@ -375,21 +397,21 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     private void showHomeLottieView(boolean isMove) {
         Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_anim);
-        if (rotate == null) {
+     /*   if (rotate == null) {
             mIconOuter.setAnimation(rotate);
-        }
+        }*/
         if(mLottieHomeView==null)
             return;
         mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");
         mLottieHomeView.setImageAssetsFolder("images");
         if (isMove) {
-            mIconOuter.startAnimation(rotate);
+//            mIconOuter.startAnimation(rotate);
             mLottieHomeView.playAnimation();
             mLottieHomeView.setVisibility(VISIBLE);
         } else {
             mHandler.removeCallbacksAndMessages(null);
-            mIconOuter.clearAnimation();
+//            mIconOuter.clearAnimation();
             mLottieHomeView.cancelAnimation();
             mLottieHomeView.setVisibility(GONE);
         }

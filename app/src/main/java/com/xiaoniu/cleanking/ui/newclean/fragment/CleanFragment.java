@@ -104,6 +104,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     @Override
     protected void initView() {
         if (null != ((NowCleanActivity) getActivity()).getToolBar()) {
+            ((NowCleanActivity) getActivity()).getToolBar().setVisibility(View.VISIBLE);
             ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(getResources().getColor(R.color.color_FD6F46));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_FD6F46), true);

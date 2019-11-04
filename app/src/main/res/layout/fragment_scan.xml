@@ -1,38 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_clean_top"
-    android:paddingBottom="@dimen/dimen_56dp"
     android:layout_height="match_parent"
     android:background="@color/color_4690FD">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_marginBottom="56dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center" >
+        <ImageView
+            android:id="@+id/iv_scan_bg01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg03"></ImageView>
+        <ImageView
+            android:id="@+id/iv_scan_bg02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg02"></ImageView>
+        <ImageView
+            android:id="@+id/iv_scan_bg03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg01"></ImageView>
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_ripple"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_height="match_parent"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie_home"
             android:layout_width="match_parent"
+            android:layout_centerInParent="true"
             android:layout_height="390dp"/>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/view_lottie"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/view_lottie_star"
-            android:layout_width="140dp"
-            android:layout_height="120dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="120dp"
-            android:alpha="0.8" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
 
 
+<!--
         <ImageView
             android:id="@+id/icon_outer"
             android:layout_width="@dimen/dimen_230dp"
@@ -40,9 +58,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="85dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/icon_circle" />
+            android:src="@mipmap/icon_circle" />-->
 
-        <View
+       <!-- <View
             android:id="@+id/circle_outer"
             android:layout_width="@dimen/dimen_230dp"
             android:layout_height="@dimen/dimen_230dp"
@@ -58,9 +76,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="85dp"
             android:background="@drawable/icon_bg_circle"
-            android:visibility="visible" />
+            android:visibility="visible" />-->
 
-        <ImageView
+  <!--      <ImageView
             android:id="@+id/icon_inner"
             android:layout_width="164dp"
             android:layout_height="164dp"
@@ -68,14 +86,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="120dp"
             android:src="@mipmap/icon_inner"
-            android:visibility="gone" />
+            android:visibility="gone" />-->
 
         <RelativeLayout
             android:id="@+id/layout_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_150dp">
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_count"
@@ -83,19 +101,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:lines="1"
-                android:maxWidth="@dimen/dimen_170dp"
                 android:text="0.0"
                 android:textColor="@color/white"
-                android:textSize="50sp" />
+                android:textSize="90sp" />
 
             <TextView
                 android:id="@+id/text_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_4dp"
-                android:layout_marginTop="@dimen/dimen_14dp"
-                android:layout_toRightOf="@id/text_count"
+                android:layout_below="@id/text_count"
                 android:text="MB"
+                android:layout_centerHorizontal="true"
+                android:textSize="32sp"
                 android:textColor="@color/white" />
         </RelativeLayout>
 
@@ -105,18 +122,21 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/layout_count"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
+
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/text_scan_trace"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
-                android:gravity="center"
-                android:maxWidth="@dimen/dimen_140dp"
+                android:gravity="left"
+                android:text=""
+                android:maxWidth="300dp"
                 android:singleLine="true"
-                android:text="扫描中"
+                android:textSize="16sp"
                 android:textColor="@color/white" />
 
             <ImageView
@@ -128,18 +148,44 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/text_scan_trace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="middle"
-            android:layout_marginLeft="@dimen/dimen_56dp"
-            android:layout_marginTop="@dimen/dimen_56dp"
-            android:layout_below="@id/icon_outer"
-            android:gravity="left"
-            android:maxWidth="@dimen/dimen_140dp"
-            android:singleLine="true"
-            android:textColor="@color/white" />
+
     </RelativeLayout>
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:padding="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        android:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left">
+
+            <ImageView
+                android:id="@+id/btn_left_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/common_icon_back_arrow_white" />
+
+            <TextView
+                android:id="@+id/tv_scan_left_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="52dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+
+
+    </android.support.v7.widget.Toolbar>
 </FrameLayout>
