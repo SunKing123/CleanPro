@@ -108,5 +108,7 @@
     <color name="color_B3B3B3">#B3B3B3</color>
     <color name="color_DDDDDD">#DDDDDD</color>
     <color name="color_F0F0F0">#F0F0F0</color>
+    <color name="color_FF6565">#FF6565</color>
+    <color name="color_FF8D41">#FF8D41</color>
 
 </resources>

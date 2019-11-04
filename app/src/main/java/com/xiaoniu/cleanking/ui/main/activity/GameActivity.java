@@ -73,6 +73,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     TextView mOpenTv;
     @BindView(R.id.acceview)
     LottieAnimationView mLottieAnimationView;
+    @BindView(R.id.acceview2)
+    LottieAnimationView mLottieAnimationView2;
 
     private List<FirstJunkInfo> mAllList; //所有应用列表
     private ArrayList<String> mSelectNameList;
@@ -412,7 +414,9 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         Log.d("XiLei", "mSelectList------333=" + mSelectList.size());
         ArrayList<GameSelectEntity> selectSaveList = new ArrayList<>();
         for (int i = 0; i < mSelectList.size(); i++) {
-            selectSaveList.add(new GameSelectEntity(i, mSelectList.get(i).getAppName(), DisplayImageUtils.drawableToBytes(mSelectList.get(i).getGarbageIcon())));
+            if (null != mSelectList.get(i).getGarbageIcon() && mSelectList.get(i).getGarbageIcon().getIntrinsicWidth() > 0) {
+                selectSaveList.add(new GameSelectEntity(i, mSelectList.get(i).getAppName(), DisplayImageUtils.drawableToBytes(mSelectList.get(i).getGarbageIcon())));
+            }
         }
         Log.d("XiLei", "selectSaveList=" + selectSaveList.size());
         if (null == selectSaveList || selectSaveList.size() <= 0) return;
@@ -450,8 +454,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private void startClean() {
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
-        mLottieAnimationView.setAnimation("huojian2.json");
-        mLottieAnimationView.setImageAssetsFolder("images_game_two");
+        mLottieAnimationView.setAnimation("huojian1.json");
+        mLottieAnimationView.setImageAssetsFolder("images_game_one");
         mLottieAnimationView.playAnimation();
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -461,26 +465,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                /*mLottieAnimationView.setAnimation("huojian2.json");
-                mLottieAnimationView.setImageAssetsFolder("images_game_two");
-                mLottieAnimationView.playAnimation();*/
-
-                //保存本次清理完成时间 保证每次清理时间间隔为3分钟
-                if (PreferenceUtil.getGameTime()) {
-                    PreferenceUtil.saveGameTime();
-                }
-                EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.game_quicken));
-                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
-                } else {
-                    AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.game_quicken));
-                    startActivity(NewCleanFinishActivity.class, bundle);
-                }
-                finish();
+                showAnimal2();
             }
 
             @Override
@@ -510,6 +495,54 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         for (FirstJunkInfo info : mAllList) {
             CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
         }
+    }
+
+    private void showAnimal2() {
+        if (null == mLottieAnimationView2) return;
+        mLottieAnimationView.setVisibility(View.GONE);
+        mLottieAnimationView2.setVisibility(View.VISIBLE);
+        mLottieAnimationView2.useHardwareAcceleration(true);
+        mLottieAnimationView2.setAnimation("huojian2.json");
+        mLottieAnimationView2.setImageAssetsFolder("images_game_two");
+        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
+        mLottieAnimationView2.playAnimation();
+        mLottieAnimationView2.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+                if (PreferenceUtil.getGameTime()) {
+                    PreferenceUtil.saveGameTime();
+                }
+                EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+                if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.game_quicken));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else {
+                    AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.game_quicken));
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
+                finish();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
     }
 
     //低于Android O
