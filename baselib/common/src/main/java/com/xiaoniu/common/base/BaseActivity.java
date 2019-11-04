@@ -40,7 +40,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     public Context mContext;
     public LayoutInflater mInflater;
-    private Toolbar mToolBar;
+    public Toolbar mToolBar;
     private TextView mTvCenterTitle;
     private FrameLayout mLayBody;
     private View mContentView;

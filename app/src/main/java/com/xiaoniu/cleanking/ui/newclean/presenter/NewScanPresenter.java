@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,16 +13,20 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.components.RxFragment;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -49,15 +54,17 @@ import io.reactivex.functions.Function;
 public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     private ValueAnimator mScanTranlateColor;
-
+    private RxFragment mContext;
     @Inject
     NoClearSPHelper mSPHelper;
 
     //背景颜色是否已变为红色
     private boolean isChangeRed = false;
+    int shouIndex = 2;
 
     @Inject
     public NewScanPresenter() {
+
     }
 
     private HashMap<Integer, JunkGroup> mJunkGroups = null;
@@ -70,9 +77,12 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
      * 开始进行文件扫描
      */
     @SuppressLint("CheckResult")
-    public void startScan() {
-        if (!isChangeRed)
-            showColorChange();
+    public void startScan(ImageView[] ivs) {
+        if (!isChangeRed) {
+            shouIndex = 2;
+            showColorChange01(ivs, shouIndex);
+        }
+
         total = 0;
         mJunkGroups = new HashMap<>();
         mFileQueryUtils = new FileQueryUtils();
@@ -88,11 +98,11 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     if (mView.getActivity() == null) {
                         return;
                     }
-                    mView.getActivity().runOnUiThread(() -> {
-                        if (!mScanTranlateColor.isRunning()) {
+                   /* mView.getActivity().runOnUiThread(() -> {
+                       *//* if (!mScanTranlateColor.isRunning()) {
 //                            mScanTranlateColor.start();
-                        }
-                    });
+                        }*//*
+                    });*/
                 }
             }
 
@@ -262,30 +272,56 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
 
-    public void cacheFilter() {
-        JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
-        if (processGroup != null) {
-            if (!PreferenceUtil.getNowCleanTime()) {//三分钟以内
-                if (PreferenceUtil.getCacheIsCheckedAll()) {//上次全选
-                    processGroup.getmChildren().clear();
-                    Float total = Float.valueOf(processGroup.getmSize() + "") * PreferenceUtil.getMulCacheNum();
-                    processGroup.setmSize(total.longValue());
-                    processGroup.setNeedExpand(false);
-                } else {//上次非全选
-                    for (int i = 0; i < processGroup.getmChildren().size(); i++) {
-                        Float totalSize = Float.valueOf(processGroup.getmChildren().get(i).getTotalSize()) * PreferenceUtil.getMulCacheNum();
-                        processGroup.getmChildren().get(i).setTotalSize(totalSize.longValue());
-                    }
+
+
+    public void showColorChange01(ImageView[] ivs, int index) {
+        if (ivs.length == 3 && index <= 2 && index > 0) {
+            Drawable drawable = ivs[index].getBackground();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                if (drawable.getAlpha() == 255) {
+                ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
+                animator.setTarget(drawable);
+                animator.setDuration(2000);
+                if (!animator.isRunning()) {
+                    animator.start();
                 }
-            }else{
-                PreferenceUtil.saveMulCacheNum(1f);
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if(index==1){
+                            isChangeRed = true;
+                            Log.v("onAnimationEnd", "onAnimationEnd ");
+                            mView.setColorChange(true);
+                            if (animator != null)
+                                animator.cancel();
+                        }else{
+                            showColorChange01(ivs, (index - 1));
+                        }
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+//                }
             }
         }
+
     }
 
-
-    public void showColorChange() {
-
+/*    public void showColorChange() {
         mScanTranlateColor = ObjectAnimator.ofInt(mView.getCleanTopLayout(), "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         mScanTranlateColor.setEvaluator(new ArgbEvaluator());
         mScanTranlateColor.setDuration(1000);
@@ -302,7 +338,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             if (mView == null)
                 return;
             if (mView.getViewShow()) {
-                //只有首页显示的时候会显示状态栏变化
+                //显示状态栏变化
                 mView.showBarColor(animatedValue);
             }
         });
@@ -331,7 +367,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
             }
         });
-    }
+    }*/
 
     AnimatorSet cleanScanAnimator;
 
@@ -339,6 +375,19 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         return cleanScanAnimator;
     }
 
+
+    /**
+     * 波纹扫描动画
+     *
+     */
+    public void startCleanScanAnimation01(LottieAnimationView lottieAnimationView) {
+        lottieAnimationView.setVisibility(View.VISIBLE);
+        lottieAnimationView.useHardwareAcceleration();
+        lottieAnimationView.setAnimation("leida.json");
+        lottieAnimationView.setImageAssetsFolder("ripple");
+        lottieAnimationView.playAnimation();
+
+    }
     /**
      * 开始扫描动画
      *
@@ -389,7 +438,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**

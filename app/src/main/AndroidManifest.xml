@@ -263,9 +263,9 @@
 
         <activity
             android:name=".ui.newclean.activity.NowCleanActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
 
+            android:screenOrientation="portrait" />
+        <!--            android:launchMode="singleTask"-->
         <activity
             android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
             android:configChanges="orientation|screenSize"
