@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,12 +28,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="500dp"
                         android:layout_centerHorizontal="true"
-                        android:background="@drawable/bg_gradient_clean_screen">
+                        android:background="@drawable/bg_ad_screen">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true">
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="@dimen/dimen_12dp"
+                            android:layout_marginRight="@dimen/dimen_12dp"
+                            android:background="@drawable/bg_ad_video">
+
 
                             <!-- 穿山甲视频组件 -->
                             <FrameLayout
@@ -40,20 +45,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dimen_230dp"
                                 android:layout_centerVertical="true"
-                                android:scaleType="centerCrop" />
+                                android:scaleType="centerCrop"
+                                android:visibility="gone" />
 
                             <!-- 优量汇原生广告的视频组件 -->
                             <com.qq.e.ads.nativ.MediaView
                                 android:id="@+id/gdt_media_view"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true" />
+                                android:layout_height="wrap_content" />
 
                             <ImageView
                                 android:id="@+id/iv_advert"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true" />
+                                android:layout_height="wrap_content" />
 
                             <ImageView
                                 android:id="@+id/iv_close"
@@ -61,7 +65,25 @@
                                 android:layout_height="@dimen/dimen_35dp"
                                 android:layout_alignParentRight="true"
                                 android:layout_margin="@dimen/dimen_8dp"
-                                android:src="@drawable/icon_close" />
+                                android:src="@drawable/icon_close"
+                                android:visibility="gone" />
+
+                            <com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar
+                                android:id="@+id/skip_view"
+                                android:layout_width="@dimen/dimen_35dp"
+                                android:layout_height="@dimen/dimen_35dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_margin="@dimen/dimen_8dp"
+                                android:visibility="gone"
+                                app:isShowProgress="false"
+                                app:progress="100"
+                                app:progressStr="3s"
+                                app:roundColor="@color/color_29D69F"
+                                app:roundInsideColor="#50000000"
+                                app:roundProgressColor="@color/color_747474"
+                                app:roundWidth="1dp"
+                                app:textProgressColor="@color/white"
+                                app:textProgressSize="@dimen/dimen_14sp" />
                         </RelativeLayout>
 
                     </RelativeLayout>
@@ -72,7 +94,7 @@
                         android:layout_height="@dimen/dimen_50dp"
                         android:layout_below="@+id/v_advert"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="-25dp" />
+                        android:layout_marginTop="-40dp" />
 
                     <RelativeLayout
                         android:id="@+id/v_download"
