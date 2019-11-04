@@ -1079,6 +1079,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     }
                 }
                 return;
+            } else if (list.get(pos).getName().equals(getString(R.string.tool_one_key_speed))) {
+                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
             }
             SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
         } else if (list.get(pos).getLinkType().equals("2")) {

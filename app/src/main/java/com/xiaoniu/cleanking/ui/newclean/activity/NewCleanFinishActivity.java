@@ -996,7 +996,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, "one_click_acceleration_clean_up_page");
+                StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, currentPage);
             } else {
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
@@ -1123,7 +1123,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onBackPressed();
 
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
+            StatisticsUtils.trackClick("system_return_back_click", sysReturnEventName, sourcePage, currentPage);
         } else {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         }
