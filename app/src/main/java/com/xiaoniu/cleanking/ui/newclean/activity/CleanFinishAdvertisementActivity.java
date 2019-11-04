@@ -649,7 +649,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
                 StatisticsUtils.clickAD("ad_click", "广告点击", "3", mSecondAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
-
             }
 
             @Override
@@ -802,6 +801,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * 加载穿山甲广告
      */
     private void loadListAd() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "3", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -814,6 +814,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "穿山甲加载失败=" + message);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "3", mAdvertId, "穿山甲", "fail", sourcePage, currentPage);
                 initNativeUnifiedAD();
             }
 
@@ -898,6 +899,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     public void onAdClicked(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "3", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
 
@@ -905,6 +907,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     public void onAdCreativeClick(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "被创意按钮被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "3", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
 
@@ -912,6 +915,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     public void onAdShow(TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "展示");
+                            StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "3", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
                         }
                     }
                 });

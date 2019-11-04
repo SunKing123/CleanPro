@@ -50,7 +50,7 @@ public interface UserApiService {
      *
      * @return
      */
-    @POST("/switcherNew/v2/getSwitchInfoList")
+    @POST("/switcherNew/v3/getSwitchInfoList")
     Flowable<SwitchInfoList> getSwitchInfoList(@Body RequestBody body);
 
     /**

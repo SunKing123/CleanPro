@@ -365,13 +365,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", mSecondAdvertId, "优量汇", NewCleanFinishActivity.currentPage, "screen_advertising", ad.getTitle());
-
             }
 
             @Override
             public void onADError(AdError error) {
-                Log.d(TAG, "错误回调 error code :" + error.getErrorCode()
-                        + "  error msg: " + error.getErrorMsg());
+                Log.d(TAG, "错误回调 error code :" + error.getErrorCode() + "  error msg: " + error.getErrorMsg());
             }
 
             @Override
@@ -517,6 +515,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * 加载穿山甲广告
      */
     private void loadListAd() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -529,6 +528,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "穿山甲加载失败=" + message);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
                 initNativeUnifiedAD();
             }
 
@@ -614,6 +614,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                     public void onAdClicked(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", NewCleanFinishActivity.currentPage, "screen_advertising", ad.getTitle());
                         }
                     }
 
@@ -621,6 +622,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                     public void onAdCreativeClick(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "被创意按钮被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", NewCleanFinishActivity.currentPage, "screen_advertising", ad.getTitle());
                         }
                     }
 
@@ -628,6 +630,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                     public void onAdShow(TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "展示");
+                            StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "穿山甲", NewCleanFinishActivity.currentPage, "screen_advertising", ad.getTitle());
                         }
                     }
                 });

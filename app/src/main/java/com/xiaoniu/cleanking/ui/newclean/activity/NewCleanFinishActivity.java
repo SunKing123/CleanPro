@@ -996,7 +996,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, "one_click_acceleration_clean_up_page");
+                StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, currentPage);
             } else {
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
@@ -1123,7 +1123,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onBackPressed();
 
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
+            StatisticsUtils.trackClick("system_return_back_click", sysReturnEventName, sourcePage, currentPage);
         } else {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         }
@@ -1571,7 +1571,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
-
                 StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mSecondAdvertId2, "优量汇", "success", sourcePage, currentPage);
                 Log.d(TAG, "广告曝光");
             }
@@ -1580,7 +1579,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onADClicked() {
                 Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
                 StatisticsUtils.clickAD("ad_click", "广告点击", "2", mSecondAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
-
             }
 
             @Override
@@ -1783,6 +1781,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载穿山甲广告位1
      */
     private void loadListAd() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -1795,6 +1794,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "穿山甲加载失败=" + message);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", sourcePage, currentPage);
                 initNativeUnifiedAD();
                 initNativeUnifiedAD2();
             }
@@ -1886,6 +1886,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     public void onAdClicked(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
 
@@ -1893,6 +1894,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     public void onAdCreativeClick(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "被创意按钮被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
 
@@ -1900,6 +1902,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     public void onAdShow(TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告" + ad.getTitle() + "展示");
+                            StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
                 });
@@ -1911,6 +1914,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载穿山甲广告位2
      */
     private void loadListAd2() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId2)
@@ -1923,6 +1927,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "穿山甲2加载失败=" + message);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "fail", sourcePage, currentPage);
             }
 
             @Override
@@ -2008,6 +2013,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     public void onAdClicked(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告2" + ad.getTitle() + "被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
 
@@ -2015,6 +2021,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     public void onAdCreativeClick(View view, TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告2" + ad.getTitle() + "被创意按钮被点击");
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "穿山甲", sourcePage, currentPage, ad.getTitle());
                         }
                     }
 
@@ -2022,6 +2029,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     public void onAdShow(TTNativeAd ad) {
                         if (ad != null) {
                             Log.d(TAG, "广告2" + ad.getTitle() + "展示");
+                            StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
                         }
                     }
                 });

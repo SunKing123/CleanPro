@@ -534,7 +534,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 加载穿山甲开屏广告
      */
     private void loadSplashAd() {
-        Log.d(TAG, "穿山甲 开屏id=" + mAdvertId);
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", "clod_splash_page", "clod_splash_page");
         //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -546,8 +546,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             @Override
             @MainThread
             public void onError(int code, String message) {
-                Log.d(TAG, "穿山甲加载失败=" + message);
                 mHasLoaded = true;
+                Log.d(TAG, "穿山甲加载失败=" + message);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "clod_splash_page", "clod_splash_page");
                 // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
                 fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
             }
@@ -557,6 +558,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             public void onTimeout() {
                 mHasLoaded = true;
                 Log.d(TAG, "穿山甲----开屏广告加载超时");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "clod_splash_page", "clod_splash_page");
                 // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
                 fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
             }
@@ -564,8 +566,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             @Override
             @MainThread
             public void onSplashAdLoad(TTSplashAd ad) {
-                Log.d(TAG, "穿山甲----开屏广告请求成功");
                 mHasLoaded = true;
+                Log.d(TAG, "穿山甲----开屏广告请求成功");
                 mHandler.removeCallbacksAndMessages(null);
                 if (ad == null) {
                     return;
@@ -587,16 +589,26 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                     @Override
                     public void onAdClicked(View view, int type) {
                         Log.d(TAG, "穿山甲----onAdClicked");
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", "clod_splash_page", "clod_splash_page", "");
                     }
 
                     @Override
                     public void onAdShow(View view, int type) {
                         Log.d(TAG, "穿山甲----onAdShow");
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "穿山甲", "clod_splash_page", "clod_splash_page", "");
                     }
 
                     @Override
                     public void onAdSkip() {
                         Log.d(TAG, "穿山甲----onAdSkip");
+                        JSONObject extension = new JSONObject();
+                        try {
+                            extension.put("ad_id", mAdvertId);
+                            extension.put("ad_agency", "穿山甲");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
                         jumpActivity();
                     }
 
@@ -654,6 +666,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         if (msg.what == MSG_GO_MAIN) {
             if (!mHasLoaded) {
                 Log.d(TAG, "穿山甲广告已超时，跳到主页面");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "clod_splash_page", "clod_splash_page");
                 jumpActivity();
             }
         }
