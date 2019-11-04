@@ -120,7 +120,7 @@ public class NowCleanActivity extends BaseActivity {
         setLeftTitle("扫描中");
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         mScanFragment = ScanFragment.newInstance();
-        mToolBar.setVisibility(View.GONE);//不显示公共toobar
+        getToolBar().setVisibility(View.GONE);//不显示公共toobar
         replaceFragment(R.id.fl_content, mScanFragment, false);
     }
 
