@@ -128,12 +128,13 @@
                 <com.qq.e.ads.nativ.MediaView
                     android:id="@+id/gdt_media_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
                 <ImageView
                     android:id="@+id/iv_advert"
+                    android:scaleType="fitXY"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <com.airbnb.lottie.LottieAnimationView

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -37,6 +39,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
+import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -45,6 +48,9 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import cn.jzvd.Jzvd;
 
@@ -54,9 +60,10 @@ import cn.jzvd.Jzvd;
  */
 public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishPresenter> implements View.OnClickListener {
 
-    private ImageView iv_advert_logo, iv_advert;
+    private ImageView iv_advert_logo, iv_advert, mCloseIv;
     private TextView tv_advert, tv_advert_content, mBtnDownload;
     private View mViewDownload, mViewContent, mErrorV, v_advert;
+    private RoundProgressBar mProgressBar;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -92,9 +99,9 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     protected void initView() {
         mTitle = getIntent().getStringExtra("title");
         mPresenter.getScreentSwitch();
-        findViewById(R.id.iv_close).setOnClickListener(this);
-        findViewById(R.id.iv_close_error).setOnClickListener(this);
+
         mContainer = findViewById(R.id.native_ad_container);
+        mCloseIv = findViewById(R.id.iv_close);
         mMediaView = findViewById(R.id.gdt_media_view);
         iv_advert_logo = findViewById(R.id.iv_advert_logo);
         iv_advert = findViewById(R.id.iv_advert);
@@ -106,6 +113,10 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         mErrorV = findViewById(R.id.v_error);
         v_advert = findViewById(R.id.v_advert);
         mChuanShanJiaVideo = findViewById(R.id.v_video_chuanshanjia);
+        mProgressBar = findViewById(R.id.skip_view);
+
+        mCloseIv.setOnClickListener(this);
+        findViewById(R.id.iv_close_error).setOnClickListener(this);
 
         WindowManager wm = this.getWindowManager();
         int height = wm.getDefaultDisplay().getHeight();
@@ -537,6 +548,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                 //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
                 if (null == ads || ads.isEmpty()) return;
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
+                mChuanShanJiaVideo.setVisibility(View.VISIBLE);
                 mBtnDownload.setText(getString(R.string.download));
                 tv_advert.setText(ads.get(0).getTitle());
                 tv_advert_content.setText(ads.get(0).getDescription());
@@ -592,8 +604,31 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                             Log.d(TAG, "穿山甲视频---- onVideoAdComplete");
                         }
                     });
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mProgressBar.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mCloseIv.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
 
                 } else {
+                    mCloseIv.setVisibility(View.VISIBLE);
                     TTImage image = ads.get(0).getImageList().get(0);
                     if (image != null && image.isValid()) {
                         GlideUtils.loadImage(InsertScreenFinishActivity.this, image.getImageUrl(), iv_advert);
@@ -637,4 +672,5 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             }
         });
     }
+
 }

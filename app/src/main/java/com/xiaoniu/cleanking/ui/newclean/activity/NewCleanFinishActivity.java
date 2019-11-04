@@ -645,7 +645,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (intent != null) {
             String num = intent.getStringExtra("num");
             String unit = intent.getStringExtra("unit");
-            mTvSize.setText(num);
             mTvGb.setText(unit);
             if (TextUtils.isEmpty(mTitle))
                 mTitle = getString(R.string.app_name);
@@ -663,6 +662,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     cleanEvent.setCleanAminOver(true);
                     EventBus.getDefault().post(cleanEvent);
                 }
+                mTvSize.setText(num);
                 //建议清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
@@ -1866,6 +1866,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     });
 
                 } else {
+                    mChuanShanJiaVideo.setVisibility(View.GONE);
                     TTImage image = ads.get(0).getImageList().get(0);
                     if (image != null && image.isValid()) {
                         GlideUtils.loadImage(NewCleanFinishActivity.this, image.getImageUrl(), iv_advert);
@@ -1993,6 +1994,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     });
 
                 } else {
+                    mChuanShanJiaVideo2.setVisibility(View.GONE);
                     TTImage image = ads.get(0).getImageList().get(0);
                     if (image != null && image.isValid()) {
                         GlideUtils.loadImage(NewCleanFinishActivity.this, image.getImageUrl(), iv_advert2);

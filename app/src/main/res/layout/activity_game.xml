@@ -54,9 +54,9 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycleview"
-            android:padding="@dimen/dimen_20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_20dp" />
 
     </LinearLayout>
 
@@ -85,6 +85,13 @@
         android:id="@+id/acceview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_gradient_clean_screen"
+        android:background="@drawable/icon_scaning_bg03"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/acceview2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/icon_scaning_bg01"
         android:visibility="gone" />
 </RelativeLayout>
