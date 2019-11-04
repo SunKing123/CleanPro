@@ -17,7 +17,6 @@ import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.HashMap;
 
@@ -71,17 +70,9 @@ public class NowCleanActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        setStatusBar();
         startScan();
     }
 
-    protected void setStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarCompat.setStatusBarColor(this, getResources().getColor(com.xiaoniu.common.R.color.color_4690FD), true);
-        } else {
-            StatusBarCompat.setStatusBarColor(this, getResources().getColor(com.xiaoniu.common.R.color.color_FD6F46), false);
-        }
-    }
     private void addClick(Intent intent) {
         if (intent != null){
             String notification = intent.getStringExtra("NotificationService");
@@ -132,6 +123,7 @@ public class NowCleanActivity extends BaseActivity {
         setLeftTitle("建议清理");
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
         mCleanFragment = CleanFragment.newInstance();
+        getToolBar().setVisibility(View.GONE);          //不显示公共toobar
         replaceFragment(R.id.fl_content, mCleanFragment, false);
     }
 

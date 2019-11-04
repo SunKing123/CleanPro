@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_FD6F46"
@@ -9,12 +10,141 @@
         layout="@layout/content_junk_clean"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_title_bar" />
+        android:layout_marginTop="@dimen/dimen_80dp"
+        />
 
-    <com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView
-        android:id="@+id/view_clean_anim"
+    <!--  <com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView
+          android:id="@+id/view_clean_anim"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:visibility="gone" />
+  -->
+
+    <RelativeLayout
+        android:id="@+id/rel_clean_content"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:gravity="center" >
+
+
+            <ImageView
+                android:id="@+id/iv_clean_bg01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="1"
+                android:background="@drawable/icon_clean_bg01"></ImageView>
+            <ImageView
+                android:id="@+id/iv_clean_bg02"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="1"
+                android:background="@drawable/icon_clean_bg02"></ImageView>
+            <ImageView
+                android:id="@+id/iv_clean_bg03"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="1"
+                android:background="@drawable/icon_clean_bg03"></ImageView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_bottom"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="24dp"
+            android:layout_height="match_parent"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="66">
+
+            </TextView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="315">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_clean_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:layout_centerInParent="true"
+                    android:maxWidth="@dimen/dimen_200dp"
+                    android:text="0.0"
+                    android:textColor="@color/white"
+                    android:textSize="90sp" />
+
+                <TextView
+                    android:id="@+id/tv_clean_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_clean_count"
+                    android:text="MB"
+                    android:layout_centerInParent="true"
+                    android:textSize="32sp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="339"></TextView>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:padding="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        android:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left">
+
+            <ImageView
+                android:id="@+id/btn_left_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/common_icon_back_arrow_white" />
+
+            <TextView
+                android:id="@+id/tv_scan_left_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="52dp"
+                android:gravity="center"
+                android:text="垃圾清理"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+
+
+    </android.support.v7.widget.Toolbar>
 
 </FrameLayout>

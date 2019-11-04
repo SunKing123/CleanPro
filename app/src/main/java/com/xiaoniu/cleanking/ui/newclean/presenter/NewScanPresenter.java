@@ -381,12 +381,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
      *
      */
     public void startCleanScanAnimation01(LottieAnimationView lottieAnimationView) {
-        lottieAnimationView.setVisibility(View.VISIBLE);
-        lottieAnimationView.useHardwareAcceleration();
-        lottieAnimationView.setAnimation("leida.json");
-        lottieAnimationView.setImageAssetsFolder("ripple");
-        lottieAnimationView.playAnimation();
 
+        lottieAnimationView.playAnimation();
     }
     /**
      * 开始扫描动画

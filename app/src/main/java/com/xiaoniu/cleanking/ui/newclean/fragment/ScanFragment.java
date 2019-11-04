@@ -171,9 +171,12 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     protected void initView() {
         tvScanLeftTitle.setText(getString(R.string.scaning));
         ivs = new ImageView[]{ivScanBg01,ivScanBg02,ivScanBg03};
-        ivs[0].setAlpha(1f);
-        ivs[1].setAlpha(1f);
-        ivs[2].setAlpha(1f);
+
+        lottieRipple.setVisibility(View.VISIBLE);
+        lottieRipple.useHardwareAcceleration();
+        lottieRipple.setAnimation("leida.json");
+        lottieRipple.setImageAssetsFolder("ripple");
+        lottieRipple.setRepeatCount(5);
         try {
             mPresenter.checkPermission();
             mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
@@ -183,6 +186,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }
 
     }
+
+
+
 
 
     @OnClick({R.id.btn_left_scan})
