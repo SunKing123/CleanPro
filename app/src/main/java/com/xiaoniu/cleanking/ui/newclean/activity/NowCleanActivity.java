@@ -180,7 +180,7 @@ public class NowCleanActivity extends BaseActivity {
                         isBackClick = false;
                         //TODO 继续清理
                         if (mCleanFragment != null)
-                            mCleanFragment.starClean();
+                            mCleanFragment.reStartClean();
                     }
 
                     @Override

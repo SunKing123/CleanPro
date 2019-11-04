@@ -94,8 +94,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     TextView tvCleanUnit;
     @BindView(R.id.layout_show_list)
     RelativeLayout layoutShowList;
-
-
     View mHeadView;
     ImageView[] ivs;
     TextView tvCheckedSize;
@@ -379,6 +377,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         clearAll();
     }
 
+   public void  reStartClean(){
+        if(viewLottieBottom!=null){
+            viewLottieBottom.playAnimation();
+        }
+   }
+
     boolean isCacheCheckAll = true;  //运行内存是否全选
     boolean isCheckAll = true;  //运行内存是否全选
 
@@ -469,7 +473,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * 停止清理
      */
     public void stopClean() {
-
+        viewLottieBottom.pauseAnimation();
 //        mCleanAnimView.stopClean();
     }
 
