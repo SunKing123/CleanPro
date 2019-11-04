@@ -450,8 +450,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private void startClean() {
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
-        mLottieAnimationView.setAnimation("clean_home_top.json");
-        mLottieAnimationView.setImageAssetsFolder("images_home");
+        mLottieAnimationView.setAnimation("huojian2.json");
+        mLottieAnimationView.setImageAssetsFolder("images_game_two");
         mLottieAnimationView.playAnimation();
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -461,7 +461,9 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-//                mLottieAnimationView.playAnimation();
+                /*mLottieAnimationView.setAnimation("huojian2.json");
+                mLottieAnimationView.setImageAssetsFolder("images_game_two");
+                mLottieAnimationView.playAnimation();*/
 
                 //保存本次清理完成时间 保证每次清理时间间隔为3分钟
                 if (PreferenceUtil.getGameTime()) {

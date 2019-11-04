@@ -645,7 +645,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (intent != null) {
             String num = intent.getStringExtra("num");
             String unit = intent.getStringExtra("unit");
-            mTvSize.setText(num);
             mTvGb.setText(unit);
             if (TextUtils.isEmpty(mTitle))
                 mTitle = getString(R.string.app_name);
