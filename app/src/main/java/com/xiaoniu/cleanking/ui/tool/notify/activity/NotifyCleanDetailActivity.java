@@ -109,9 +109,9 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        currentPage = "notification_sacn_result_page";
+        currentPage = "notification_scan_result_page";
         pageviewEventName = "用户在通知清理诊断页浏览";
-        pageviewEventCode = "notification_sacn_result_page_view_page";
+        pageviewEventCode = "notification_scan_result_page_view_page";
         returnEventName = "用户在通知清理诊断页返回";
         sysReturnEventName = "用户在通知清理诊断页返回";
         sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
@@ -184,7 +184,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         });
 
         mTvDelete.setOnClickListener(v -> {
-            StatisticsUtils.trackClick("cleaning_button_click", "用户在通知栏清理扫描结果页点击【清理】按钮", sourcePage, currentPage);
+            StatisticsUtils.trackClick("notification_cleaning_button_click", "用户在通知栏清理扫描结果页点击【清理】按钮", sourcePage, currentPage);
             //通知栏清理
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.NOTITY);
             mIsClearNotification = true;

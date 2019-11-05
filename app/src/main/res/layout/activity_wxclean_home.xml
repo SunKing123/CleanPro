@@ -115,6 +115,7 @@
                     android:textSize="@dimen/dimen_14sp" />
             </RelativeLayout>
             <include layout="@layout/layout_wxclean_item1" />
+
             <include layout="@layout/layout_wxclean_item2" />
         </LinearLayout>
     </ScrollView>

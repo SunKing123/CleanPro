@@ -333,13 +333,46 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
 
-        //首页三分钟以内直接进入当前页
+        //首页三分钟以内直接进入当前页情况
         if (sourcePage != null && sourcePage.equals("home_page")) {
-            currentPage = "direct_success_page";
-            createEventName = "直接跳结果页创建时";
-            createEventCode = "direct_success_page_custom";
-            returnEventName = "直接跳结果页返回";
-            sysReturnEventName = "直接跳结果页返回";
+            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+                //一键加速
+                currentPage = "direct_boost_success_page";
+                createEventName = "直接跳加速结果页创建时";
+                createEventCode = "direct_boost_success_page_custom";
+
+            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+                //1.2.1清理完成页面_建议清理
+                currentPage = "direct_clean_success_page";
+                createEventName = "直接跳清理结果页创建时";
+                createEventCode = "direct_clean_success_page_custom";
+
+            }  else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
+                //超强省电
+                currentPage = "direct_powersave_success_page";
+                createEventName = "直接跳省电结果页创建时";
+                createEventCode = "direct_powersave_success_page_custom";
+
+            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
+                //微信专情
+                currentPage = "direct_wxclean_success_page";
+                createEventName = "直接跳微信结果页创建时";
+                createEventCode = "direct_wxclean_success_page_custom";
+
+            }  else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
+                //通知栏清理
+                currentPage = "direct_notification_clean_success_page";
+                createEventName = "直接跳通知结果页创建时";
+                createEventCode = "direct_notification_clean_success_page_custo";
+
+            } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
+                //手机降温
+                currentPage = "direct_cooling_success_page";
+                createEventName = "直接跳降温结果页创建时";
+                createEventCode = "direct_cooling_success_page_custom";
+
+            }
+
         }
     }
 
