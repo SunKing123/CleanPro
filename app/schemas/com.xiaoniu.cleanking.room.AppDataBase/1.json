@@ -2,23 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e3d40c9df2fd2958e423b508da92d8f4",
+    "identityHash": "06c8e227392b2f1a4c06bb3590d041b2",
     "entities": [
       {
         "tableName": "HomeRecommend",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT, `msg` TEXT, `sort` TEXT, `positionCode` TEXT, `name` TEXT, `content` TEXT, `iconUrl` TEXT, `buttonName` TEXT, `linkType` TEXT, `linkUrl` TEXT, PRIMARY KEY(`sort`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `sort` TEXT, `positionCode` TEXT, `name` TEXT, `content` TEXT, `iconUrl` TEXT, `buttonName` TEXT, `linkType` TEXT, `linkUrl` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "code",
-            "columnName": "code",
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "msg",
-            "columnName": "msg",
-            "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "sort",
@@ -71,7 +65,39 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "sort"
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "GameSelect",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER NOT NULL, `appName` TEXT, `garbageIcon` BLOB, PRIMARY KEY(`position`))",
+        "fields": [
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appName",
+            "columnName": "appName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "garbageIcon",
+            "columnName": "garbageIcon",
+            "affinity": "BLOB",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "position"
           ],
           "autoGenerate": false
         },
@@ -81,7 +107,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e3d40c9df2fd2958e423b508da92d8f4\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"06c8e227392b2f1a4c06bb3590d041b2\")"
     ]
   }
 }

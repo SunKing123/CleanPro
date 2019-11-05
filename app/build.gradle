@@ -26,7 +26,10 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath = true/*tinker编译报错*/
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                arguments = [AROUTER_MODULE_NAME    : project.getName(),
+                             "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                             "room.incremental"     : "true",
+                             "room.expandProjection": "true"]
             }
         }
 
