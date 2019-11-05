@@ -295,8 +295,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
-                bundle.putString("num", totalCountEntity.getTotalSize());
-                bundle.putString("unit", totalCountEntity.getUnit());
+                bundle.putString("num", checkCountEntity.getTotalSize());
+                bundle.putString("unit", checkCountEntity.getUnit());
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
             getActivity().finish();
