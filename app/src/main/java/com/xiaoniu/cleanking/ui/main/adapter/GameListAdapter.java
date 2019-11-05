@@ -53,7 +53,7 @@ public class GameListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((ImageViewHolder) holder).iv_photo_filelist_pic.setImageDrawable(listImage.get(position).getGarbageIcon());
             ((ImageViewHolder) holder).tv_name.setText(listImage.get(position).getAppName());
             ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).isSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            ((ImageViewHolder) holder).tv_select.setOnClickListener(v -> {
+            ((ImageViewHolder) holder).v_item.setOnClickListener(v -> {
                 listImage.get(position).setSelect(!listImage.get(position).isSelect());
                 ((ImageViewHolder) holder).tv_select.setBackgroundResource(listImage.get(position).isSelect() ? R.drawable.icon_select : R.drawable.icon_unselect);
                 if (mOnCheckListener != null)
@@ -69,12 +69,14 @@ public class GameListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
+        public View v_item;
         public ImageView iv_photo_filelist_pic;
         public TextView tv_select;
         public TextView tv_name;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
+            v_item = itemView.findViewById(R.id.v_item);
             iv_photo_filelist_pic = itemView.findViewById(R.id.iv_photo_filelist_pic);
             tv_select = itemView.findViewById(R.id.tv_select);
             tv_name = itemView.findViewById(R.id.tv_name);

@@ -274,6 +274,9 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (null == mSelectList) {
             mSelectList = new ArrayList<>();
         }
+        Log.d("XiLei", "mSelectList=" + mSelectList.size());
+        Log.d("XiLei", "mAllList=" + mAllList.size());
+        Log.d("XiLei", "event.getList()=" + event.getList().size());
         if (null == event || null == event.getList() || event.getList().size() <= 0) {
             if (null != mSelectList && mSelectList.size() > 1 && event.isNotSelectAll()) {
                 mOpenTv.setEnabled(false);

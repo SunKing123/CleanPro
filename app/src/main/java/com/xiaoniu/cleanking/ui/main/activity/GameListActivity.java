@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -76,7 +75,6 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     private List<FirstJunkInfo> mAllList; //所有应用列表
     private ArrayList<FirstJunkInfo> mSelectList; //选择的应用列表
     private GameListAdapter mGameListAdapter;
-    private ArrayList<FirstJunkInfo> mListInfoData = new ArrayList<>();
     private List<HomeRecommendListEntity> mBannerList;
     private final String CURRENT_PAGE = "gameboost_add_list_page";
 
@@ -132,7 +130,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
         switch (view.getId()) {
             case R.id.iv_back:
                 StatisticsUtils.trackClick("return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
-                EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
+                EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mAllList.size()) ? true : false));
                 GameListActivity.this.finish();
                 break;
             case R.id.v_banner:
@@ -156,21 +154,11 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             StatisticsUtils.trackClick("system_return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
-            EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
+            EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mAllList.size()) ? true : false));
             GameListActivity.this.finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-
-    /**
-     * 获取缓存白名单
-     */
-    public boolean isCacheWhite(String packageName) {
-        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
-        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
-        return sets.contains(packageName);
     }
 
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
