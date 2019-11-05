@@ -206,7 +206,10 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             consAllfiles.setVisibility(consAllfiles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             ivChatfile.setImageResource(consAllfiles.getVisibility() == View.VISIBLE ? R.mipmap.arrow_up : R.mipmap.arrow_down);
         } else if (ids == R.id.tv_delete) {
-            sourcePageId = "wxclean_sacn_result_page";
+            //清理点击事件
+            StatisticsUtils.trackClick("wx_cleaning_button_click", "用户在微信清理诊断页点击【清理】按钮", sourcePageId, currentPageId);
+
+            sourcePageId = "wxclean_scan_result_page";
             currentPageId = "wxclean_animation_page";
             returnEventName = "用户在微信清理诊断页返回";
             sysReturnEventName = "用户在微信清理动画页返回";
@@ -214,6 +217,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             viewPageEventCode = "wxclean_animation_page_view_page";
             NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
             NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
+
+
 
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 PreferenceUtil.saveCleanWechatUsed(true);
@@ -244,7 +249,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             } else {
                 if (!tvDelete.isSelected()) return;
                 mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
-                StatisticsUtils.trackClick("cleaning_click", "清理点击", "home_page", "wechat_cleaning_page");
+
             }
             //保存微信专清清理时间
             PreferenceUtil.saveWeChatCleanTime();
@@ -296,11 +301,12 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     public void getScanResult() {
 
         sourcePageId = "wxclean_scan_page";
-        currentPageId = "wxclean_sacn_result_page";
+
+        currentPageId = "wxclean_scan_result_page";
         returnEventName = "用户在微信清理诊断页返回";
         sysReturnEventName = "用户在微信清理诊断页返回";
         viewPageEventName = "用户在微信清理诊断页浏览";
-        viewPageEventCode = "wxclean_sacn_result_pag_view_page";
+        viewPageEventCode = "wxclean_scan_result_pag_view_page";
 
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
