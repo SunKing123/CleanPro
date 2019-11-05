@@ -1,13 +1,15 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -95,17 +97,34 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
         mSelectNameList = new ArrayList<>();
         mAllList = new ArrayList<>();
         mSelectList = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= 26) {
-            mPresenter.getAccessAbove22();
-        } else {
-            mPresenter.getAccessListBelow();
-        }
         mPresenter.getRecommendList();
         if (null != getIntent() && null != getIntent().getSerializableExtra(ExtraConstant.SELECT_GAME_LIST)) {
             mSelectNameList = (ArrayList<String>) getIntent().getSerializableExtra(ExtraConstant.SELECT_GAME_LIST);
         }
         iv_back.setOnClickListener(this);
         mBannerView.setOnClickListener(this);
+        allApp();
+    }
+
+    /**
+     * 获取手机安装的所有应用列表
+     */
+    private void allApp() {
+        PackageManager pm = AppApplication.getInstance().getPackageManager();
+        Intent launcherIntent = new Intent(Intent.ACTION_MAIN, null);
+        launcherIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> list = pm.queryIntentActivities(launcherIntent, 0);
+        if (null == list || list.isEmpty()) return;
+        ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
+        for (ResolveInfo mResolveInfo : list) {
+            Drawable icon = mResolveInfo.loadIcon(pm);
+            String name = mResolveInfo.loadLabel(pm).toString();
+            FirstJunkInfo mInfo = new FirstJunkInfo();
+            mInfo.setGarbageIcon(icon);
+            mInfo.setAppName(name);
+            aboveListInfo.add(mInfo);
+        }
+        setAdapter(aboveListInfo);
     }
 
     @Override
@@ -144,50 +163,6 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
         return super.onKeyDown(keyCode, event);
     }
 
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-
-        //悟空清理app加入默认白名单
-        for (FirstJunkInfo firstJunkInfo : listInfo) {
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                listInfo.remove(firstJunkInfo);
-            }
-        }
-        if (listInfo.size() != 0) {
-            setAdapter(listInfo);
-        }
-    }
-
-    public void getAccessListAbove22(List<ActivityManager.RunningAppProcessInfo> listInfo) {
-        if (listInfo.size() == 0) {
-
-        } else {
-            ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
-            if (listInfo.size() < 15) {
-                for (ActivityManager.RunningAppProcessInfo info : listInfo) {
-                    //悟空清理app加入默认白名单
-                    if (!SpCacheConfig.APP_ID.equals(info.processName)) {
-                        FirstJunkInfo mInfo = new FirstJunkInfo();
-                        mInfo.setAppPackageName(info.processName);
-                        mInfo.setAppName(info.processName);
-                        aboveListInfo.add(mInfo);
-                    }
-                }
-            } else {
-                for (int i = 0; i < 15; i++) {
-                    //悟空清理app加入默认白名单
-                    if (!SpCacheConfig.APP_ID.equals(listInfo.get(i).processName)) {
-                        FirstJunkInfo mInfo = new FirstJunkInfo();
-                        mInfo.setAppPackageName(listInfo.get(i).processName);
-                        mInfo.setAppName(listInfo.get(i).processName);
-                        aboveListInfo.add(mInfo);
-                    }
-                }
-            }
-            setAdapter(aboveListInfo);
-        }
-    }
 
     /**
      * 获取缓存白名单
@@ -202,11 +177,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
         if (null == recycle_view)
             return;
         mAllList = listInfos;
-        for (FirstJunkInfo firstJunkInfo : listInfos) {
-            if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
-                mListInfoData.add(firstJunkInfo);
-        }
-        mGameListAdapter = new GameListAdapter(GameListActivity.this, mListInfoData, mSelectNameList);
+        mGameListAdapter = new GameListAdapter(GameListActivity.this, listInfos, mSelectNameList);
         recycle_view.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
         recycle_view.setAdapter(mGameListAdapter);
         mGameListAdapter.setmOnCheckListener((listFile, pos) -> {
@@ -243,15 +214,9 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void netError() {
 
     }
-
 
 }
 
