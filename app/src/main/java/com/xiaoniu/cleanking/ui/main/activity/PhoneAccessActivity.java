@@ -467,9 +467,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         super.onResume();
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
         NiuDataAPI.onPageStart("one_click_acceleration_page", "一键加速页浏览");
-        NotificationEvent event = new NotificationEvent();
-        event.setType("speed");
-        EventBus.getDefault().post(event);
 //        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
         if (isFromProtect) {
             isFromProtect = false;

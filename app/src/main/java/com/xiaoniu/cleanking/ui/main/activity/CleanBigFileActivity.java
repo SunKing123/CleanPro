@@ -292,9 +292,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     protected void onResume() {
         super.onResume();
         NiuDataAPI.onPageStart("cell_phone_clean_click_view", "手机清理页面浏览");
-        NotificationEvent event = new NotificationEvent();
-        event.setType("clean");
-        EventBus.getDefault().post(event);
+
 
     }
 

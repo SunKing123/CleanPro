@@ -650,10 +650,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        NotificationEvent event = new NotificationEvent();
-        event.setType("cooling");
-        EventBus.getDefault().post(event);
-
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         if (mRunningProcess != null) {
             showProcess(mRunningProcess);

@@ -162,10 +162,10 @@ public class NotificationService extends Service {
         NiuDataAPI.onPageEnd("toggle_page_view_page", "常驻通知栏成功创建");
 
         //8.0以上版本或者未获取权限
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || PermissionUtils.isUsageAccessAllowed(context)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || !PermissionUtils.isUsageAccessAllowed(context)) {
             TypedArray speedlist = context.getResources().obtainTypedArray(R.array.acess_drawale_array);
-            int index = NumberUtils.mathRandomInt(6,9);//中间随机数
-            int id = speedlist.getResourceId(index,-1);
+            int indexRand = NumberUtils.mathRandomInt(6,9);//中间随机数
+            int id = speedlist.getResourceId(indexRand,-1);
             contentView.setImageViewResource(R.id.iv_speed, id);
         }
     }

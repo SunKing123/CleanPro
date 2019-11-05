@@ -74,7 +74,7 @@ public class NotificationUtils extends ContextWrapper {
         //添加自定义视图  activity_notification
         RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.live_notification);
         mRemoteViews.setTextViewText(R.id.title, title);
-        mRemoteViews.setTextViewText(R.id.text,Html.fromHtml(content));
+        mRemoteViews.setTextViewText(R.id.text,content);
         //守护push没有不显示查看
         if (!TextUtils.isEmpty(title)&& title.contains(mContext.getString(R.string.push_content_default_title))){
             mRemoteViews.setViewVisibility(R.id.tv_look_btn, View.GONE);
