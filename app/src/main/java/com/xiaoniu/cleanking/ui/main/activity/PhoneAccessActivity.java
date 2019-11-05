@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,6 +57,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -252,7 +252,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         Intent intent = getIntent();
         addClick(intent);
 
-        if (!isUsageAccessAllowed()) {
+        if (!PermissionUtils.isUsageAccessAllowed(this)) {
             NiuDataAPI.onPageStart("boost_authorization_page_view_page", "用户在加速授权页浏览");
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_page", "boost_authorization_page_view_page", "用户在加速授权页浏览");
             mAlertDialog = mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
@@ -477,7 +477,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
 
         if (isClick) {
-            if (isUsageAccessAllowed()) {
+            if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 if (mAlertDialog != null)
                     mAlertDialog.cancel();
                 startCleanAnim();
@@ -828,18 +828,5 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean isUsageAccessAllowed() {
-        if (Build.VERSION.SDK_INT >= 21) {
-            try {
-                AppOpsManager manager = ((AppOpsManager) this.getSystemService(Context.APP_OPS_SERVICE));
-                if (manager == null) return false;
-                int mode = manager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), this.getPackageName());
-                return mode == AppOpsManager.MODE_ALLOWED;
-            } catch (Throwable ignored) {
-            }
-            return false;
-        }
-        return true;
-    }
 }
 

@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -109,6 +110,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     View viewPhoneThin;
     @BindView(R.id.view_news)
     View viewNews;
+    @BindView(R.id.v_game_clean)
+    View viewGame;
     @BindView(R.id.tv_acc)
     TextView mAccTv;
     @BindView(R.id.tv_noti_clear)
@@ -343,6 +346,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         textWjgl.setEnabled(true);
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
+        viewGame.setEnabled(true);
     }
 
     /**
@@ -691,6 +695,18 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_soft_manager));
         startActivity(intent);
         StatisticsUtils.trackClick("app_manage_click", "用户在首页点击【软件管理】按钮", "home_page", "home_page");
+    }
+
+    /**
+     * 游戏加速
+     */
+    @OnClick(R.id.v_game_clean)
+    public void ViewThinClick() {
+        viewGame.setEnabled(false);
+        Intent intent = new Intent(getActivity(), GameActivity.class);
+        intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.game_quicken));
+        startActivity(intent);
+        StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
     }
 
     /*    *//**

@@ -25,6 +25,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void setData(List<HomeRecommendListEntity> list) {
         mData = list;
+        notifyDataSetChanged();
     }
 
     @Override

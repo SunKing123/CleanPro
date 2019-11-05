@@ -538,7 +538,7 @@
                 android:visibility="gone">
 
                 <RelativeLayout
-                    android:id="@+id/view_qq_clean"
+                    android:id="@+id/v_game_clean"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_12dp"
