@@ -110,7 +110,7 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     public void startScan(PushSettingList.DataBean dataBean, Context mContext) {
         String codeX = dataBean.getCodeX();
-        switch (codeX) {
+            switch (codeX) {
             case "push_1"://垃圾清理
                 startScanAll(dataBean, mContext);
                 break;
@@ -183,7 +183,7 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     public void getBatteryInfo(PushSettingList.DataBean dataBean, Context cxt) {
         NotificationEvent event = new NotificationEvent();
-        event.setType("cooling");
+        event.setType("power");
         if (mBatteryPower < dataBean.getThresholdNum()) {
             event.setFlag(2);
             String push_content = cxt.getString(R.string.push_content_power, 30);
@@ -204,7 +204,7 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     public void getAccessListBelow(PushSettingList.DataBean dataBean, Context cxt) {
         //8.0以下 && 已经开启权限
-        if (Build.VERSION.SDK_INT < 26 && PermissionUtils.isUsageAccessAllowed(cxt)) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && PermissionUtils.isUsageAccessAllowed(cxt)) {
             FileQueryUtils mFileQueryUtils = new FileQueryUtils();
             Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
                 //获取到可以加速的应用名单
@@ -365,7 +365,6 @@ public class TimingReceiver extends BroadcastReceiver {
                 event.setType("clean");
                 if (mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
                     event.setFlag(2);
-
                     String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
                     //cheme跳转路径
                     Map<String, String> actionMap = new HashMap<>();

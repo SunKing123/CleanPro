@@ -163,9 +163,6 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NotificationEvent event = new NotificationEvent();
-        event.setType("power");
-        EventBus.getDefault().post(event);
 
         if (isClick) {
             if (isUsageAccessAllowed()) {

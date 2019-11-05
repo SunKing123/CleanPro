@@ -285,7 +285,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 }
                 //恢复状态栏颜色
                 NotificationEvent event = new NotificationEvent();
-                event.setType("cooling");
+                event.setType("power");
                 event.setFlag(0);
                 EventBus.getDefault().post(event);
 
