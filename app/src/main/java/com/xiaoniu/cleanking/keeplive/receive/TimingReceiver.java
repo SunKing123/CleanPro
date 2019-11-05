@@ -69,12 +69,14 @@ public class TimingReceiver extends BroadcastReceiver {
     private Context mContext;
     private int mBatteryPower = 50;  //当前电量监控
     private int temp = 30;          //当前电池温度
+    private boolean isCharged;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
         mBatteryPower = intent.getIntExtra("battery", 50);
         temp = intent.getIntExtra("temp", 30);
+        isCharged = intent.getBooleanExtra("isCharged",false);
         Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
         for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
             PushSettingList.DataBean dataBean = entry.getValue();
@@ -184,7 +186,7 @@ public class TimingReceiver extends BroadcastReceiver {
     public void getBatteryInfo(PushSettingList.DataBean dataBean, Context cxt) {
         NotificationEvent event = new NotificationEvent();
         event.setType("power");
-        if (mBatteryPower < dataBean.getThresholdNum()) {
+        if (mBatteryPower < dataBean.getThresholdNum() && !isCharged) {  //阀值以下且没有充电
             event.setFlag(2);
             String push_content = cxt.getString(R.string.push_content_power, 30);
             //cheme跳转路径
