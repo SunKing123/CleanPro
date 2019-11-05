@@ -275,6 +275,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         event.setFlag(0);
         EventBus.getDefault().post(event);
 
+        PreferenceUtil.saveCleanAllUsed(true);
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()

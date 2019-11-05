@@ -427,11 +427,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onCreate(savedInstanceState);
         //注册订阅者
         EventBus.getDefault().register(this);
+        PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
         PreferenceUtil.saveCleanNotifyUsed(false);
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
+        PreferenceUtil.saveCleanGameUsed(false);
     }
 
     @Override

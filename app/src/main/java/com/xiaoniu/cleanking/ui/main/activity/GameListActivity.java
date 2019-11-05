@@ -4,12 +4,10 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +28,9 @@ import com.xiaoniu.cleanking.ui.main.presenter.GameListPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -75,6 +76,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     private GameListAdapter mGameListAdapter;
     private ArrayList<FirstJunkInfo> mListInfoData = new ArrayList<>();
     private List<HomeRecommendListEntity> mBannerList;
+    private final String CURRENT_PAGE = "gameboost_add_list_page";
 
     @Override
     public int getLayoutId() {
@@ -88,6 +90,8 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
 
     @Override
     public void initView() {
+        NiuDataAPI.onPageStart("gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
+        NiuDataAPIUtil.onPageEnd("gameboost_add_page", CURRENT_PAGE, "gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
         mSelectNameList = new ArrayList<>();
         mAllList = new ArrayList<>();
         mSelectList = new ArrayList<>();
@@ -108,6 +112,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
+                StatisticsUtils.trackClick("return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
                 EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
                 GameListActivity.this.finish();
                 break;
@@ -131,6 +136,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            StatisticsUtils.trackClick("system_return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
             EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mListInfoData.size()) ? true : false));
             GameListActivity.this.finish();
             return true;
@@ -152,9 +158,6 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
             setAdapter(listInfo);
         }
     }
-
-    //Android O以上的
-    PackageManager packageManager = AppApplication.getInstance().getPackageManager();
 
     public void getAccessListAbove22(List<ActivityManager.RunningAppProcessInfo> listInfo) {
         if (listInfo.size() == 0) {
@@ -207,6 +210,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
         recycle_view.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
         recycle_view.setAdapter(mGameListAdapter);
         mGameListAdapter.setmOnCheckListener((listFile, pos) -> {
+            StatisticsUtils.trackClick("gameboost_choice_click", "游戏加速添加列表页选择框点击", "gameboost_add_page", CURRENT_PAGE);
             mSelectList.clear();
             mNotSelectCount = 0;
             for (int i = 0; i < listFile.size(); i++) {
