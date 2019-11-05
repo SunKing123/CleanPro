@@ -530,8 +530,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(mAdvertId) //暂时注释
-//                .setCodeId("934152381")
+                .setCodeId(mAdvertId)
                 .setSupportDeepLink(true)
                 .setImageAcceptedSize(640, 320)
                 .setAdCount(3)

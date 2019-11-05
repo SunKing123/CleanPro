@@ -1011,6 +1011,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
+                    return;
                 ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
                 ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
             }
@@ -1056,6 +1058,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == getActivity() || null == list || list.size() <= 0) return;
         if (list.get(pos).getLinkType().equals("1")) {
             if (list.get(pos).getName().equals(getString(R.string.game_quicken))) { //游戏加速
+                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
                 if (PreferenceUtil.getGameTime()) {
                     SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
                 } else {
