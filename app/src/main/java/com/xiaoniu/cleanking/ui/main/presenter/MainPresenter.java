@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
@@ -426,6 +427,26 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             public void getData(PushSettingList pushSettingList) {
                 List<PushSettingList.DataBean> list = pushSettingList.getData();
                 if(list!=null&&list.size()>0){
+                    //添加通知栏类型_作为状态栏更新条件
+                    /* /**
+                     * code : push_1
+                     * title : 垃圾清理
+                     * content : 垃圾过多严重影响手机使用
+                     * position : 立即清理页面
+                     * url : cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4
+                     * thresholdSign : 1
+                     * thresholdNum : 200
+                     * interValTime : 2
+                     * dailyLimit : 12
+                     */
+                    PushSettingList.DataBean dataBean = new PushSettingList.DataBean();
+                    dataBean.setCodeX("push10");//通知栏类型
+                    dataBean.setTitle("通知栏");
+                    dataBean.setContent("通知栏");
+                    dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
+                    dataBean.setThresholdNum(60);//每个小时监测
+                    dataBean.setLastTime(0);
+                    pushSettingList.getData().add(dataBean);
                     PreferenceUtil.saveCleanLog(new Gson().toJson(pushSettingList.getData()));
                 }else{//网络配置异常时读取本地
                     PreferenceUtil.saveCleanLog(FileUtils.readJSONFromAsset(mActivity, "action_log.json"));
