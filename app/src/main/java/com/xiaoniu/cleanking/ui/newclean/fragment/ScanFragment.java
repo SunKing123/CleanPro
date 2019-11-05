@@ -247,19 +247,23 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * @param total
      */
     public void showCountNumber(long total) {
-        if (getActivity() == null) {
+        if (getActivity() == null || total <= 0) {
             return;
         }
-        mCountEntity = CleanUtil.formatShortFileSize(total);
-        getActivity().runOnUiThread(() -> {
-            CountEntity countEntity = CleanUtil.formatShortFileSize(total);
-            if (mTextCount == null || mTextUnit == null)
-                return;
-            if (countEntity != null){
-                mTextCount.setText(countEntity.getTotalSize());
-                mTextUnit.setText(countEntity.getUnit());
-            }
-        });
+        try {
+            mCountEntity = CleanUtil.formatShortFileSize(total);
+            getActivity().runOnUiThread(() -> {
+                CountEntity countEntity = CleanUtil.formatShortFileSize(total);
+                if (mTextCount == null || mTextUnit == null)
+                    return;
+                if (countEntity != null){
+                    mTextCount.setText(countEntity.getTotalSize());
+                    mTextUnit.setText(countEntity.getUnit());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public FrameLayout getCleanTopLayout() {

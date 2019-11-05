@@ -109,6 +109,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             @Override
             public void increaseSize(long p0) {
                 total += p0;
+                if (null != mView)
                 mView.showCountNumber(total);
             }
 
@@ -120,6 +121,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             @Override
             public void scanFile(String p0) {
                 Log.v("onAnimationEnd", "scanFile ");
+                if (null != mView)
                 mView.showScanFile(p0);
             }
 
