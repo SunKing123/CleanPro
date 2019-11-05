@@ -394,7 +394,7 @@
 -dontwarn com.xiaomi.push.**
 -keep class com.xiaomi.push.** { *; }
 
-# -ignorewarning  2019/11/5注释掉解决打包报错
+ -ignorewarning # 2019/11/5注释掉解决打包报错
  -keepattributes *Annotation*
  -keepattributes Exceptions
  -keepattributes InnerClasses
