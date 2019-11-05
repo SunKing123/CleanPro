@@ -42,14 +42,13 @@
     <LinearLayout
         android:id="@+id/v_recommend"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/v_open"
         android:layout_below="@+id/tv_hint"
-        android:layout_gravity="center"
         android:layout_margin="@dimen/dimen_12dp"
         android:background="@drawable/bg_finish_rem"
-        android:gravity="center"
         android:orientation="vertical"
-        android:padding="@dimen/dimen_16dp"
+        android:padding="@dimen/dimen_12dp"
         app:layout_constraintTop_toBottomOf="@+id/v_bg">
 
         <android.support.v7.widget.RecyclerView
@@ -61,6 +60,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/v_open"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

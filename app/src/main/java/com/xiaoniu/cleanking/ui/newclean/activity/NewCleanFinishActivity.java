@@ -1098,7 +1098,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             finish();
         });
 
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        /*mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
 
@@ -1108,7 +1108,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onLoadMore() {
                 startLoadData();
             }
-        });
+        });*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -1152,7 +1152,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadData() {
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
-        startLoadData();
+//        startLoadData();
     }
 
     @Override
