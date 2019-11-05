@@ -126,6 +126,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         new MiitHelper(new MiitHelper.AppIdsUpdater() {
             @Override
             public void OnIdsAvalid(@NonNull String oaid) {
+              /*  oaid = (oaid == null)? "" : oaid;
+                NiuDataAPI.setOaid(oaid);*/
                 JSONObject jsonObject = new JSONObject();
                 try {
                     oaid = (oaid == null)? "" : oaid;
@@ -133,6 +135,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 //重置niuSDK
                 NiuDataAPI.init(application, new Configuration()
                         //切换到sdk默认的测试环境地址

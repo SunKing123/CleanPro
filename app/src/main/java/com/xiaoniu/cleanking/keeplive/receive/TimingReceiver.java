@@ -389,11 +389,15 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param actionMap
      */
     public void createNotify(Context conx, String push_content, Map<String, String> actionMap,String btn) {
-        Intent intent = new Intent(conx, JPushReceiver.class);
-        intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
-        //notifyId不关注_跟产品已经确认(100001)
-        intent.putExtra("push_data", new PushMsg(100001, "", push_content, null, null, actionMap));
-        KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
+        try {
+            Intent intent = new Intent(conx, JPushReceiver.class);
+            intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
+            //notifyId不关注_跟产品已经确认(100001)
+            intent.putExtra("push_data", new PushMsg(100001, "", push_content, null, null, actionMap));
+            KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
