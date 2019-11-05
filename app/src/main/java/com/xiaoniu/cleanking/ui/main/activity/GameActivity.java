@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -43,8 +44,11 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.DisplayImageUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,8 +73,16 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
+    @BindView(R.id.v_content)
+    View mContentView;
+    @BindView(R.id.v_open)
+    View mOpenView;
     @BindView(R.id.tv_open)
     TextView mOpenTv;
+    @BindView(R.id.acceview_yindao)
+    LottieAnimationView mLottieAnimationViewY;
+    @BindView(R.id.acceview_yindao2)
+    LottieAnimationView mLottieAnimationViewY2;
     @BindView(R.id.acceview)
     LottieAnimationView mLottieAnimationView;
     @BindView(R.id.acceview2)
@@ -88,6 +100,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
+    private boolean mIsStartClean; //是否开始加速
 
     private static final String TAG = "ChuanShanJia";
 
@@ -106,6 +119,17 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         findViewById(R.id.iv_back).setOnClickListener(this);
         EventBus.getDefault().register(this);
         mOpenTv.setOnClickListener(this);
+        if (!PreferenceUtil.getGameQuikcenStart()) {
+            NiuDataAPI.onPageStart("gameboost_guidance_page_view_page", "游戏加速引导页浏览");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page", "gameboost_guidance_page_view_page", "游戏加速引导页浏览");
+            initLottieYinDao();
+        } else {
+            NiuDataAPI.onPageStart("gameboost_add_page_view_page", "游戏加速添加页浏览");
+            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
+            mContentView.setVisibility(View.VISIBLE);
+            mOpenView.setVisibility(View.VISIBLE);
+        }
+
         mPresenter.getSwitchInfoList();
         initRecyclerView();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -113,6 +137,66 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         }
+    }
+
+    private void initLottieYinDao() {
+        mLottieAnimationViewY.setVisibility(View.VISIBLE);
+        mLottieAnimationViewY.useHardwareAcceleration(true);
+        mLottieAnimationViewY.setAnimation("yindao1.json");
+        mLottieAnimationViewY.setImageAssetsFolder("images_game_yindao");
+        mLottieAnimationViewY.playAnimation();
+        mLottieAnimationViewY.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                initLottieYinDao2();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void initLottieYinDao2() {
+        mLottieAnimationViewY2.setVisibility(View.VISIBLE);
+        mLottieAnimationViewY2.useHardwareAcceleration(true);
+        mLottieAnimationViewY2.setAnimation("yindao2.json");
+        mLottieAnimationViewY2.setImageAssetsFolder("images_game_yindao2");
+        mLottieAnimationViewY2.playAnimation();
+        mLottieAnimationViewY2.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mOpenView.setVisibility(View.VISIBLE);
+                mOpenTv.setEnabled(true);
+                mOpenTv.getBackground().setAlpha(255);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -249,6 +333,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * 初始化穿山甲
      */
     private void initChuanShanJia(String id) {
+        NiuDataAPI.onPageStart("gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
+        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
         //step1:初始化sdk
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
@@ -262,9 +348,29 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                if (!PreferenceUtil.getGameQuikcenStart()) {
+                    StatisticsUtils.trackClick("return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
+                } else if (mIsStartClean) {
+                    StatisticsUtils.trackClick("return_click", "游戏加速动画页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_animation_page");
+                } else {
+                    StatisticsUtils.trackClick("return_click", "游戏加速添加页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_add_page");
+                }
                 finish();
                 break;
             case R.id.tv_open:
+                if (!PreferenceUtil.getGameQuikcenStart()) {
+                    StatisticsUtils.trackClick("game_open_immediately_click", "游戏加速引导页立即开启点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
+                    mLottieAnimationViewY.setVisibility(View.GONE);
+                    mLottieAnimationViewY2.setVisibility(View.GONE);
+                    mOpenTv.setEnabled(false);
+                    mOpenTv.getBackground().setAlpha(75);
+                    mContentView.setVisibility(View.VISIBLE);
+                    PreferenceUtil.saveGameQuikcenStart(true);
+                    return;
+                }
+                NiuDataAPI.onPageStart("gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
+                NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
+                StatisticsUtils.trackClick("gameboost_click", "游戏加速添加页点击加速按钮", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_add_page");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 View view = View.inflate(this, R.layout.dialog_game, null);   // 账号、密码的布局文件，自定义
                 AlertDialog dialog = builder.create();
@@ -272,12 +378,14 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 view.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        StatisticsUtils.trackClick("gameboost_cancel_click", "游戏加速视频弹窗页取消点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_video_popup_page");
                         dialog.dismiss();
                     }
                 });
                 view.findViewById(R.id.btn_open).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_video_popup_page");
                         showChuanShanJia();
                         saveSelectApp();
                         dialog.dismiss();
@@ -292,6 +400,20 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!PreferenceUtil.getGameQuikcenStart()) {
+                StatisticsUtils.trackClick("system_return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
+            } else if (mIsStartClean) {
+                StatisticsUtils.trackClick("system_return_click", "游戏加速动画页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_animation_page");
+            } else {
+                StatisticsUtils.trackClick("system_return_click", "游戏加速添加页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_add_page");
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     /**
      * 加载穿山甲激励视频广告
      *
@@ -299,6 +421,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * @param orientation
      */
     private void loadAd(String codeId, int orientation) {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", codeId, "穿山甲", "success", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_incentive_video_page");
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(codeId)
@@ -332,11 +455,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
                     @Override
                     public void onAdShow() {
+                        StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "1", codeId, "穿山甲", "success", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_incentive_video_page");
                         Log.d(TAG, "rewardVideoAd show");
                     }
 
                     @Override
                     public void onAdVideoBarClick() {
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", codeId, "穿山甲", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_incentive_video_page", "");
                         Log.d(TAG, "rewardVideoAd bar click");
                     }
 
@@ -452,6 +577,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * 开始加速
      */
     private void startClean() {
+        mIsStartClean = true;
+        NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
+        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_animation_page", "gameboost_animation_page_view_page", "游戏加速动画页浏览");
+        PreferenceUtil.saveCleanGameUsed(true);
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
         mLottieAnimationView.setAnimation("huojian1.json");
@@ -499,7 +628,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     private void showAnimal2() {
         if (null == mLottieAnimationView2) return;
-        mLottieAnimationView.setVisibility(View.GONE);
         mLottieAnimationView2.setVisibility(View.VISIBLE);
         mLottieAnimationView2.useHardwareAcceleration(true);
         mLottieAnimationView2.setAnimation("huojian2.json");

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,8 +11,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
-import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
-import com.xiaoniu.cleanking.ui.main.bean.PathData;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
@@ -242,6 +239,25 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存垃圾清理是否已使用
+     */
+    public static void saveCleanAllUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_CLEAN_ALL, isUsed).commit();
+    }
+
+    /**
+     * 获取垃圾清理是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanAllUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_CLEAN_ALL, false);
+    }
+
+    /**
      * 保存一键加速是否已使用
      */
     public static void saveCleanJiaSuUsed(boolean isUsed) {
@@ -315,6 +331,26 @@ public class PreferenceUtil {
         editor.putLong(SpCacheConfig.IS_SAVE_GAME_TIME, System.currentTimeMillis()).commit();
         return true;
     }
+
+    /**
+     * 保存游戏加速是否已使用
+     */
+    public static void saveCleanGameUsed(boolean isUsed) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_USED_GAME, isUsed).commit();
+    }
+
+    /**
+     * 获取游戏加速是否已使用
+     *
+     * @return
+     */
+    public static boolean isCleanGameUsed() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_GAME, false);
+    }
+
 
     /**
      * 是否距离上次游戏加速清理间隔至少3分钟
@@ -671,6 +707,7 @@ public class PreferenceUtil {
         sharedPreferences.getBoolean(SpCacheConfig.IS_HOME_BACK, false);
         return true;
     }
+
     /**
      * 保存垃圾清理完成页点击返回键的次数
      *
@@ -831,16 +868,36 @@ public class PreferenceUtil {
         return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_PHONE_COUNT, 0);
     }
 
+    /**
+     * 保存游戏加速完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickGameCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_GAME_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取游戏加速完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickGameCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_GAME_COUNT, 0);
+    }
+
 
     /**
      * 从后台回到前台的时间是否大于5分钟
      *
-     * @return true 大于5分钟 false 小于5分钟
+     * @return true 大于2分钟 false 小于2分钟
      */
     public static boolean getHomeBackTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_HOME_BACK_TIME, 0);
-        if (System.currentTimeMillis() - time > 5 * 60 * 1000)
+        if (System.currentTimeMillis() - time > 2 * 60 * 1000)
             return true;
         return false;
     }
@@ -883,12 +940,35 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存游戏加速是否已开启
+     *
+     * @return
+     */
+    public static boolean saveGameQuikcenStart(boolean isStart) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_GAME_QUIKCEN_START, isStart).commit();
+        return true;
+    }
+
+    /**
+     * 获取游戏加速是否已开启
+     */
+    public static boolean getGameQuikcenStart() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_GAME_QUIKCEN_START, false);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return
      */
     public static int getShowCount(Context context, String title, int ramScale, int notifSize, int powerSize) {
         int count = 0;
+        if (!title.equals(AppApplication.getInstance().getString(R.string.tool_suggest_clean)) && !PreferenceUtil.isCleanAllUsed()) { // 垃圾清理
+            count++;
+        }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_one_key_speed)) && !PreferenceUtil.isCleanJiaSuUsed()) {  // 一键加速
             if (!PermissionUtils.isUsageAccessAllowed(context)) {
                 count++;
@@ -917,24 +997,28 @@ public class PreferenceUtil {
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_chat_clear)) && !PreferenceUtil.isCleanWechatUsed()) { // 微信专清
             count++;
         }
-        count++; //文件清理
+        if (!title.equals(AppApplication.getInstance().getString(R.string.game_quicken)) && !PreferenceUtil.isCleanGameUsed()) { //游戏加速
+            count++;
+        }
         if (!title.equals(AppApplication.getInstance().getString(R.string.tool_phone_temperature_low)) && !PreferenceUtil.isCleanCoolUsed()) { //手机降温
             count++;
         }
+
+        count++; //文件清理
         return count;
     }
 
 
     //保存最近一次操作记录_map值
-    public static void saveCleanLogMap(Map<String, PushSettingList.DataBean> map){
-        if(map!=null){
+    public static void saveCleanLogMap(Map<String, PushSettingList.DataBean> map) {
+        if (map != null) {
             List<PushSettingList.DataBean> list = new ArrayList<PushSettingList.DataBean>(map.values());
             saveCleanLog(new Gson().toJson(list));
         }
     }
 
     //保存最近一次操作记录
-    public static void saveCleanLog(String cleanlog){
+    public static void saveCleanLog(String cleanlog) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SpCacheConfig.CLEAN_ACTION_LOG, cleanlog).commit();
@@ -942,26 +1026,21 @@ public class PreferenceUtil {
 
 
     //获取最近一次操作记录
-    public static Map<String, PushSettingList.DataBean> getCleanLog(){
+    public static Map<String, PushSettingList.DataBean> getCleanLog() {
         Map<String, PushSettingList.DataBean> map = new HashMap<>();
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);
-        String spString = sharedPreferences.getString(SpCacheConfig.CLEAN_ACTION_LOG,"");
-        if(!TextUtils.isEmpty(spString)){
-            List<PushSettingList.DataBean> logInfos =new Gson().fromJson(spString, new TypeToken<List<PushSettingList.DataBean>>() {}.getType());
-            for(PushSettingList.DataBean info:logInfos){
-                map.put(info.getCodeX(),info);
+        String spString = sharedPreferences.getString(SpCacheConfig.CLEAN_ACTION_LOG, "");
+        if (!TextUtils.isEmpty(spString)) {
+            List<PushSettingList.DataBean> logInfos = new Gson().fromJson(spString, new TypeToken<List<PushSettingList.DataBean>>() {
+            }.getType());
+            for (PushSettingList.DataBean info : logInfos) {
+                map.put(info.getCodeX(), info);
             }
             return map;
-        }else{
+        } else {
             return map;
         }
     }
-
-
-
-
-
-
 
 
 }

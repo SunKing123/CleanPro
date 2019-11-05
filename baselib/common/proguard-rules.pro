@@ -19,9 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-
-#-ignorewarning  2019/11/5注释掉解决打包报错
+-ignorewarning
 -keep class com.xiaoniu.common.hotfix.CleanApplicationLike
 -keep class com.xiaoniu.common.base.** { *; }
 -keep class com.xiaoniu.common.http.** { *; }

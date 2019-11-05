@@ -80,8 +80,10 @@ public class SpCacheConfig {
     public static final  String CLEAN_FINISH_CLICK_COOL_COUNT = "CleanFinishClickCoolCount";
     public static final  String CLEAN_FINISH_CLICK_QQ_COUNT = "CleanFinishClickQQCount";
     public static final  String CLEAN_FINISH_CLICK_PHONE_COUNT = "CleanFinishClickPhoneCount";
+    public static final  String CLEAN_FINISH_CLICK_GAME_COUNT = "CleanFinishClickGameCount";
     public static final  String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
     public static final  String IS_FIRST_HOME_RECOMMEND = "is_first_home_recommend";
+    public static final  String IS_GAME_QUIKCEN_START = "is_game_quikcen_start";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";
@@ -98,10 +100,12 @@ public class SpCacheConfig {
     //瑞狮信息流地址
     public static final String RUISHI_BASEURL = "http://api.viaweb.cn/";
 
+    public static final  String IS_USED_CLEAN_ALL = "is_used_clean_all";
     public static final  String IS_USED_JIASU = "is_used_jiasu";
     public static final  String IS_USED_POWER = "is_used_power";
     public static final  String IS_USED_NOTIFY = "is_used_notify";
     public static final  String IS_USED_WECHAT = "is_used_wechat";
     public static final  String IS_USED_COLL = "is_used_coll";
+    public static final  String IS_USED_GAME = "is_used_game";
 
 }

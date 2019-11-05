@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -116,8 +117,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private boolean mIsRefresh = true;
     private ImageView mBtnLeft;
 
-    public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool;
-    public View line_quicken, line_power, line_notification, line_wechat, line_file;
+    public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool, v_clean_all, v_game;
+    public View line_quicken, line_power, line_notification, line_wechat, line_file, line_clean_all, line_game;
     private ImageView iv_advert_logo, iv_advert, iv_advert_logo2, iv_advert2;
     private TextView tv_advert, tv_advert_content, tv_advert2, tv_advert_content2, tv_download2;
     private View v_advert, v_advert2, mRecommendV;
@@ -222,6 +223,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         tv_advert_content2 = headerTool.findViewById(R.id.tv_advert_content);
         tv_download2 = headerTool.findViewById(R.id.tv_download);
 
+        v_clean_all = headerTool.findViewById(R.id.v_clean_all);
+        v_game = headerTool.findViewById(R.id.v_game);
         v_quicken = headerTool.findViewById(R.id.v_quicken);
         v_power = headerTool.findViewById(R.id.v_power);
         v_notification = headerTool.findViewById(R.id.v_notification);
@@ -233,6 +236,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         line_notification = headerTool.findViewById(R.id.line_notification);
         line_wechat = headerTool.findViewById(R.id.line_wechat);
         line_file = headerTool.findViewById(R.id.line_file);
+        line_clean_all = headerTool.findViewById(R.id.line_clean_all);
+        line_game = headerTool.findViewById(R.id.line_game);
 
         tv_quicken = headerTool.findViewById(R.id.tv_quicken);
         tv_power = headerTool.findViewById(R.id.tv_power);
@@ -328,6 +333,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             createEventCode = "cooling_success_page_custom";
             returnEventName = "用户在降温结果页返回";
             sysReturnEventName = "用户在降温结果页返回";
+        } else if (getString(R.string.game_quicken).contains(mTitle)) {
+            //游戏加速
+            currentPage = "gameboost_success_page";
+            createEventName = "游戏加速结果页创建时";
+            createEventCode = "gameboost_success_page_custom";
+            returnEventName = "游戏加速结果页返回";
+            sysReturnEventName = "游戏加速结果页返回";
         } else {
             currentPage = "clean_up_page_view_immediately";
         }
@@ -347,7 +359,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 createEventName = "直接跳清理结果页创建时";
                 createEventCode = "direct_clean_success_page_custom";
 
-            }  else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
+            } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
                 //超强省电
                 currentPage = "direct_powersave_success_page";
                 createEventName = "直接跳省电结果页创建时";
@@ -359,7 +371,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 createEventName = "直接跳微信结果页创建时";
                 createEventCode = "direct_wxclean_success_page_custom";
 
-            }  else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
+            } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
                 //通知栏清理
                 currentPage = "direct_notification_clean_success_page";
                 createEventName = "直接跳通知结果页创建时";
@@ -701,7 +713,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
-                }else{
+                } else {
                     mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
@@ -711,7 +723,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("手机很干净");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
-                }else{
+                } else {
                     mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
@@ -732,7 +744,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
-                }else{
+                } else {
                     mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
@@ -742,7 +754,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("通知栏很干净");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他炫酷功能");
-                }else{
+                } else {
                     mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
@@ -752,7 +764,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("已清理");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快试试其他功能吧！");
-                }else{
+                } else {
                     mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
@@ -817,6 +829,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     private void showTool() {
         mRecommendV.setVisibility(View.VISIBLE);
+        if (!getString(R.string.tool_suggest_clean).contains(mTitle) && !PreferenceUtil.isCleanAllUsed()) {
+            mShowCount++;
+            v_clean_all.setVisibility(View.VISIBLE);
+            line_clean_all.setVisibility(View.VISIBLE);
+        }
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
@@ -834,23 +851,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
-                line_power.setVisibility(View.VISIBLE);
+                if (mShowCount < 3) {
+                    line_power.setVisibility(View.VISIBLE);
+                }
             } else if (!PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
                     mShowCount++;
                     v_power.setVisibility(View.VISIBLE);
-                    line_power.setVisibility(View.VISIBLE);
+                    if (mShowCount < 3) {
+                        line_power.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }
 
         if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
+            if (mShowCount >= 3) return;
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
                 mShowCount++;
                 v_notification.setVisibility(View.VISIBLE);
-                line_notification.setVisibility(View.VISIBLE);
+                if (mShowCount < 3) {
+                    line_notification.setVisibility(View.VISIBLE);
+                }
             } else if (!PreferenceUtil.isCleanNotifyUsed()) {
                 if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     // 通知栏清理间隔时间至少3分钟 否则隐藏
@@ -862,9 +886,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             }
         }
-
         if (!getString(R.string.tool_chat_clear).contains(mTitle)) {
-//            if (PreferenceUtil.getWeChatCleanTime() && !PreferenceUtil.isCleanWechatUsed()) {
             if (!PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
                 if (mShowCount >= 3) return;
@@ -875,6 +897,18 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             }
         }
+        if (!getString(R.string.game_quicken).contains(mTitle) && !PreferenceUtil.isCleanGameUsed()) {
+            if (mShowCount >= 3) return;
+            mShowCount++;
+            v_game.setVisibility(View.VISIBLE);
+            line_game.setVisibility(View.VISIBLE);
+        }
+        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
+            // 手机降温间隔时间至少3分钟 否则隐藏
+            if (mShowCount >= 3) return;
+            mShowCount++;
+            v_cool.setVisibility(View.VISIBLE);
+        }
 
         //文件清理
         if (mShowCount >= 3) return;
@@ -883,15 +917,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (mShowCount < 3) {
             line_file.setVisibility(View.VISIBLE);
         }
-
-//        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && PreferenceUtil.getCoolingCleanTime() && !PreferenceUtil.isCleanCoolUsed()) {
-        if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
-            // 手机降温间隔时间至少3分钟 否则隐藏
-            if (mShowCount >= 3) return;
-            mShowCount++;
-            v_cool.setVisibility(View.VISIBLE);
-        }
-
     }
 
     @Override
@@ -909,43 +934,55 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         String functionName = "";
         String functionPosition = "";
         switch (v.getId()) {
+            case R.id.v_clean_all:
+                functionName = "建议清理";
+                functionPosition = "1";
+                allClean();
+                break;
             case R.id.v_quicken:
                 //一键加速
                 functionName = "一键加速";
-                functionPosition = "1";
+                functionPosition = "2";
                 speedClean();
                 break;
             case R.id.v_power:
                 //超强省电
                 v_power.setEnabled(false);
                 functionName = "超强省电";
-                functionPosition = "2";
+                functionPosition = "3";
                 powerClean();
                 break;
             case R.id.v_notification:
                 //通知栏清理
                 functionName = "通知栏清理";
-                functionPosition = "3";
+                functionPosition = "4";
                 notificationClean();
                 break;
             case R.id.v_wechat:
                 //微信专清
                 functionName = "微信专清";
-                functionPosition = "4";
+                functionPosition = "5";
                 weChatClean();
                 break;
-            case R.id.v_file:
-                //文件清理
-                functionName = "文件清理";
-                functionPosition = "5";
-                fileClean();
+            case R.id.v_game:
+                functionName = "游戏加速";
+                functionPosition = "6";
+                gameClean();
                 break;
             case R.id.v_cool:
                 //手机降温
                 functionName = "手机降温";
-                functionPosition = "6";
+                functionPosition = "7";
                 coolingClean();
                 break;
+            case R.id.v_file:
+                //文件清理
+                functionName = "文件清理";
+                functionPosition = "8";
+                fileClean();
+                break;
+
+
         }
         //1.21 版本推荐清理_标识sourcePage,其他""
         StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage, functionName, functionPosition);
@@ -959,6 +996,24 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void finishCleanFinishActivityEvent(FinishCleanFinishActivityEvent event) {
         Log.d("XiLei", "完成页finish");
         finish();
+    }
+
+    /**
+     * 建议清理
+     */
+    public void allClean() {
+        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+        startActivity(NowCleanActivity.class);
+    }
+
+    /**
+     * 游戏加速
+     */
+    public void gameClean() {
+        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+        startActivity(GameActivity.class);
     }
 
     /**
@@ -1036,6 +1091,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         v_wechat.setOnClickListener(this);
         v_file.setOnClickListener(this);
         v_cool.setOnClickListener(this);
+        v_game.setOnClickListener(this);
+        v_clean_all.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
@@ -1068,6 +1125,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
                     count = PreferenceUtil.getCleanFinishClickPhoneCount();
                     isClick = (PreferenceUtil.getCleanFinishClickPhoneCount() % mScreenShowCount == 0);
+                } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
+                    count = PreferenceUtil.getCleanFinishClickGameCount();
+                    isClick = (PreferenceUtil.getCleanFinishClickGameCount() % mScreenShowCount == 0);
                 } else { //建议清理
                     count = PreferenceUtil.getCleanFinishClickCount();
                     isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
@@ -1092,6 +1152,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 PreferenceUtil.saveCleanFinishClickQQCount(PreferenceUtil.getCleanFinishClickQQCount() + 1);
             } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
                 PreferenceUtil.saveCleanFinishClickPhoneCount(PreferenceUtil.getCleanFinishClickPhoneCount() + 1);
+            } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
+                PreferenceUtil.saveCleanFinishClickGameCount(PreferenceUtil.getCleanFinishClickGameCount() + 1);
             } else { //建议清理
                 PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
             }
@@ -1165,7 +1227,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
+        if (getString(R.string.tool_one_key_speed).contains(mTitle) || getString(R.string.game_quicken).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_back_click", sysReturnEventName, sourcePage, currentPage);
         } else {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
@@ -1200,6 +1262,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
                 count = PreferenceUtil.getCleanFinishClickPhoneCount();
                 isClick = (PreferenceUtil.getCleanFinishClickPhoneCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
+                count = PreferenceUtil.getCleanFinishClickGameCount();
+                isClick = (PreferenceUtil.getCleanFinishClickGameCount() % mScreenShowCount == 0);
             } else { //建议清理
                 count = PreferenceUtil.getCleanFinishClickCount();
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
@@ -1223,6 +1288,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             PreferenceUtil.saveCleanFinishClickQQCount(PreferenceUtil.getCleanFinishClickQQCount() + 1);
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) { //手机清理
             PreferenceUtil.saveCleanFinishClickPhoneCount(PreferenceUtil.getCleanFinishClickPhoneCount() + 1);
+        } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
+            PreferenceUtil.saveCleanFinishClickGameCount(PreferenceUtil.getCleanFinishClickGameCount() + 1);
         } else { //建议清理
             PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
         }
@@ -1250,7 +1317,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
-
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
@@ -1267,6 +1333,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
             NiuDataAPI.onPageStart("cooling_success_page_view_page", "降温结果页出现时");
+        } else if (getString(R.string.game_quicken).contains(mTitle)) {
+            //游戏加速
+            NiuDataAPI.onPageStart("gameboost_success_page_view_page", "游戏加速结果页展示浏览");
         } else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
@@ -1315,6 +1384,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
+        } else if (getString(R.string.game_quicken).contains(mTitle)) {
+            //游戏加速
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "gameboost_success_page_view_page", "游戏加速结果页展示浏览");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
