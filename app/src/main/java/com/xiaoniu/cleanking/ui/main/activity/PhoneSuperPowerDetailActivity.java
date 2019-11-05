@@ -22,10 +22,12 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -39,10 +41,14 @@ import com.xiaoniu.common.widget.xrecyclerview.MultiItemInfo;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -277,6 +283,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                         CleanUtil.killAppProcesses(childInfo.packageName, 0);
                     }
                 }
+                //恢复状态栏颜色
+                NotificationEvent event = new NotificationEvent();
+                event.setType("cooling");
+                event.setFlag(0);
+                EventBus.getDefault().post(event);
+
                 PreferenceUtil.saveLengthenAwaitTime(String.valueOf(tvMini.getText().toString()));
                 Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
                 intent.putExtra("processNum", sSelectedList.size());
