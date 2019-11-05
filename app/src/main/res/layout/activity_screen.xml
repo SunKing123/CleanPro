@@ -38,12 +38,11 @@
                             android:layout_marginRight="@dimen/dimen_12dp"
                             android:background="@drawable/bg_ad_video">
 
-
                             <!-- 穿山甲视频组件 -->
                             <FrameLayout
                                 android:id="@+id/v_video_chuanshanjia"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/dimen_230dp"
+                                android:layout_height="@dimen/dimen_200dp"
                                 android:layout_centerVertical="true"
                                 android:scaleType="centerCrop"
                                 android:visibility="gone" />
@@ -52,11 +51,13 @@
                             <com.qq.e.ads.nativ.MediaView
                                 android:id="@+id/gdt_media_view"
                                 android:layout_width="match_parent"
+                                android:layout_centerVertical="true"
                                 android:layout_height="wrap_content" />
 
                             <ImageView
                                 android:id="@+id/iv_advert"
                                 android:layout_width="match_parent"
+                                android:layout_centerVertical="true"
                                 android:layout_height="wrap_content" />
 
                             <ImageView

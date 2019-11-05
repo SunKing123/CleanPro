@@ -695,13 +695,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     cleanEvent.setCleanAminOver(true);
                     EventBus.getDefault().post(cleanEvent);
                 }
-                mTvSize.setText(num);
                 //建议清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
+                }else{
+                    mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
                 //QQ专清
@@ -710,6 +711,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("手机很干净");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
+                }else{
+                    mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 //一键加速
@@ -718,9 +721,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("已加速");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快试试其他功能吧！");
+                } else {
+                    mTvSize.setText(num);
+                    mTvQl.setText("垃圾已清理");
                 }
-
-
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
                 //超强省电
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
@@ -728,8 +732,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("已达到最佳状态");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
+                }else{
+                    mTvSize.setText(num);
                 }
-
             } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
                 //通知栏清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
@@ -737,6 +742,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("通知栏很干净");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他炫酷功能");
+                }else{
+                    mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
                 //微信专情
@@ -745,6 +752,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setText("已清理");
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快试试其他功能吧！");
+                }else{
+                    mTvSize.setText(num);
                 }
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
                 //手机降温
@@ -753,6 +762,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvGb.setText("成功降温" + tem + "°C");
                 mTvGb.setTextSize(20);
                 mTvQl.setText("60s后达到最佳降温效果");
+                mTvSize.setText(num);
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
                 //游戏加速
                 mTvGb.setText("%");

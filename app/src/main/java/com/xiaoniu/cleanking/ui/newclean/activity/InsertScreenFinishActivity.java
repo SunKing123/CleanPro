@@ -48,9 +48,6 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import cn.jzvd.Jzvd;
 
@@ -211,6 +208,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * 优量汇广告
      */
     private void initNativeUnifiedAD() {
+        mCloseIv.setVisibility(View.VISIBLE);
         mAdManager = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertId, new NativeADUnifiedListener() {
 
             @Override
@@ -316,6 +314,9 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         if (mNativeUnifiedADData != null) {
             // 必须要在Actiivty.destroy()时通知到广告数据，以便释放内存
             mNativeUnifiedADData.destroy();
+        }
+        if (null != mTimeHandler) {
+            mTimeHandler.removeCallbacksAndMessages(null);
         }
     }
 
@@ -529,7 +530,8 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(mAdvertId)
+                .setCodeId(mAdvertId) //暂时注释
+//                .setCodeId("934152381")
                 .setSupportDeepLink(true)
                 .setImageAcceptedSize(640, 320)
                 .setAdCount(3)
@@ -608,7 +610,9 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                     mProgressBar.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-
+                            if (null != mTimeHandler) {
+                                mTimeHandler.sendEmptyMessageDelayed(0, 1000);
+                            }
                         }
 
                         @Override
@@ -672,5 +676,22 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             }
         });
     }
+
+    /**
+     * 3秒倒计时
+     */
+    private int time = 3;
+    private Handler mTimeHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            time--;
+            mProgressBar.setProgressStr(time + "s");
+            if (time < 0) {
+                mTimeHandler.removeMessages(0);
+            }
+            mTimeHandler.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
 
 }
