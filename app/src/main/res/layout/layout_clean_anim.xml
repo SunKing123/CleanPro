@@ -70,7 +70,7 @@
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/color_FD6F46"
+                android:background="@color/color_FF6862"
                 android:descendantFocusability="blocksDescendants"
                 android:minHeight="50dp"
                 app:contentInsetStart="0dp"
@@ -103,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dimen_56dp"
-        android:background="@color/color_FD6F46"
+        android:background="@color/color_FF6862"
         android:orientation="vertical"
         android:visibility="visible">
 

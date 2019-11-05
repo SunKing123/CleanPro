@@ -183,6 +183,11 @@ public class NewsFragment extends BaseFragment {
             mFragments.get(0).startLoadData();
             NiuDataAPI.onPageStart("information_page_view_page", "信息页面浏览");
             StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page",0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
+            }
         }else {
             NiuDataAPI.onPageEnd("information_page_view_page", "信息页面浏览");
         }

@@ -434,13 +434,13 @@ public class CleanAnimView extends RelativeLayout {
     /**
      * 第一阶段  红色
      */
-    private static final int FirstLevel = 0xffFD6F46;
+    private static final int FirstLevel = 0xffFF6862;
 
-    private static final int SecondLevel = 0xffF1D53B;
+    private static final int SecondLevel = 0xffFFB231;
     /**
      * 第三阶段 绿色
      */
-    private static final int ThirdLevel = 0xff06C581;
+    private static final int ThirdLevel = 0xff29CABC;
 
     /**
      * 开始加速旋转
