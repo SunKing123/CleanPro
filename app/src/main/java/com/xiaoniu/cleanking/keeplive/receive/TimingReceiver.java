@@ -29,6 +29,11 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanDetailActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -118,8 +123,33 @@ public class TimingReceiver extends BroadcastReceiver {
             case "push_4"://手机降温
                 phoneCooling(dataBean, mContext);
                 break;
+            case "push10"://状态栏更新
+                refNotify(dataBean, mContext);
+                break;
 
         }
+    }
+
+    /**
+     * 状态栏更新操作（只做状态栏更新）
+     * @param dataBean
+     * @param cxt
+     */
+    public void refNotify(PushSettingList.DataBean dataBean, Context cxt){
+        int mNotifySize = 0;
+        NotificationEvent event = new NotificationEvent();
+        event.setType("notification");
+        if (NotifyUtils.isNotificationListenerEnabled()) {//已获得通知栏权限
+            if (null != NotifyCleanManager.getInstance().getAllNotifications()) {
+                mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+            }
+            if(mNotifySize>=5){
+                event.setFlag(2);
+            }else{
+                event.setFlag(0);
+            }
+        }
+        EventBus.getDefault().post(event);
     }
 
     /**

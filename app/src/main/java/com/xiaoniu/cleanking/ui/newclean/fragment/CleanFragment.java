@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -33,6 +34,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -266,6 +268,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             PreferenceUtil.saveNowCleanTime();
         }
+
+        //状态栏恢复正常
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        event.setFlag(0);
+        EventBus.getDefault().post(event);
 
         boolean isOpen = false;
         //solve umeng error --> SwitchInfoList.getData()' on a null object reference

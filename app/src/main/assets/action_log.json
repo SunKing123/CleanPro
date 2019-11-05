@@ -8,7 +8,8 @@
     "thresholdSign": 1,
     "thresholdNum": 200,
     "interValTime": 2,
-    "dailyLimit": 12
+    "dailyLimit": 12,
+    "lastTime": 0
   },
   {
     "code": "push_2",
@@ -19,7 +20,8 @@
     "thresholdSign": 1,
     "thresholdNum": 20,
     "interValTime": 2,
-    "dailyLimit": 12
+    "dailyLimit": 12,
+    "lastTime": 0
   },
   {
     "code": "push_3",
@@ -30,7 +32,8 @@
     "thresholdSign": 2,
     "thresholdNum": 30,
     "interValTime": 1,
-    "dailyLimit": 24
+    "dailyLimit": 24,
+    "lastTime": 0
   },
   {
     "code": "push_4",
@@ -41,7 +44,8 @@
     "thresholdSign": 1,
     "thresholdNum": 37,
     "interValTime": 1,
-    "dailyLimit": 24
+    "dailyLimit": 24,
+    "lastTime": 0
   },
   {
     "code": "push_7",
@@ -52,7 +56,8 @@
     "thresholdSign": 1,
     "thresholdNum": 17,
     "interValTime": 2,
-    "dailyLimit": 12
+    "dailyLimit": 12,
+    "lastTime": 0
   },
   {
     "code": "push_8",
@@ -63,6 +68,7 @@
     "thresholdSign": 1,
     "thresholdNum": 17,
     "interValTime": 2,
-    "dailyLimit": 12
+    "dailyLimit": 12,
+    "lastTime": 0
   }
 ]

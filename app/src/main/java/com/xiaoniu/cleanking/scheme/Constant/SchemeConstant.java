@@ -31,6 +31,8 @@ public class SchemeConstant {
      * 本地push scheme
      */
     public static class LocalPushScheme{
+        //通知栏清理
+        public static final String SCHEME_NOTIFY_ACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "tool.notify.activity.NotifyCleanGuideActivity";
 
         //一键清理
         public static final String SCHEME_NOWCLEANACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "newclean.activity.NowCleanActivity";

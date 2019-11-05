@@ -352,9 +352,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     private void showCleanFinishUI(String num, String unit) {
-        //清理完成 更新通知栏一键清理icon颜色状态
+        //加速完成 更新通知栏状态
         NotificationEvent event = new NotificationEvent();
-        event.setType("clean");
+        event.setType("speed");
+        event.setAppendValue(2);
         EventBus.getDefault().post(event);
 
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟

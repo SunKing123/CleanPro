@@ -42,6 +42,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
@@ -71,6 +72,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -789,6 +792,14 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                         }
                     }
                 }
+
+
+                //恢复状态栏状态
+                NotificationEvent event = new NotificationEvent();
+                event.setType("cooling");
+                event.setFlag(0);
+                EventBus.getDefault().post(event);
+
                 AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
                 Log.d("Xilei", "手机降温结束");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
