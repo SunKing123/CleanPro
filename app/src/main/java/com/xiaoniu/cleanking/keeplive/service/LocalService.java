@@ -48,6 +48,7 @@ public final class LocalService extends Service {
     private KeepAliveRuning mKeepAliveRuning;
     private int mBatteryPower = 50;  //当前电量监控
     private int temp = 30;
+    private boolean isCharged =false;
 
     @Override
     public void onCreate() {
@@ -129,8 +130,18 @@ public final class LocalService extends Service {
             };
         }
         //注册接收器以获取电量信息
-        registerReceiver(batteryReceiver, iFilter);
-
+        Intent powerIntent = registerReceiver(batteryReceiver, iFilter);
+        //----判断是否为充电状态-------------------------------
+        int chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);
+        boolean usb = chargePlug ==BatteryManager.BATTERY_PLUGGED_USB;//usb充电
+        boolean ac = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;//交流电
+        //无线充电---API>=17
+        boolean wireless = false;
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+        }
+        isCharged = usb||ac||wireless;
+        //----判断是否为充电状态---结束-------------------------------
 
         //开启一个前台通知，用于提升服务进程优先级
         shouDefNotify();
@@ -247,6 +258,7 @@ public final class LocalService extends Service {
         Intent i = new Intent(this, TimingReceiver.class);
         i.putExtra("battery",mBatteryPower);
         i.putExtra("temp",temp);
+        i.putExtra("isCharged",isCharged);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
