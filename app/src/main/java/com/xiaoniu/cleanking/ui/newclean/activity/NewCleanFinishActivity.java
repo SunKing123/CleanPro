@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -933,43 +934,55 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         String functionName = "";
         String functionPosition = "";
         switch (v.getId()) {
+            case R.id.v_clean_all:
+                functionName = "建议清理";
+                functionPosition = "1";
+                allClean();
+                break;
             case R.id.v_quicken:
                 //一键加速
                 functionName = "一键加速";
-                functionPosition = "1";
+                functionPosition = "2";
                 speedClean();
                 break;
             case R.id.v_power:
                 //超强省电
                 v_power.setEnabled(false);
                 functionName = "超强省电";
-                functionPosition = "2";
+                functionPosition = "3";
                 powerClean();
                 break;
             case R.id.v_notification:
                 //通知栏清理
                 functionName = "通知栏清理";
-                functionPosition = "3";
+                functionPosition = "4";
                 notificationClean();
                 break;
             case R.id.v_wechat:
                 //微信专清
                 functionName = "微信专清";
-                functionPosition = "4";
+                functionPosition = "5";
                 weChatClean();
                 break;
-            case R.id.v_file:
-                //文件清理
-                functionName = "文件清理";
-                functionPosition = "5";
-                fileClean();
+            case R.id.v_game:
+                functionName = "游戏加速";
+                functionPosition = "6";
+                gameClean();
                 break;
             case R.id.v_cool:
                 //手机降温
                 functionName = "手机降温";
-                functionPosition = "6";
+                functionPosition = "7";
                 coolingClean();
                 break;
+            case R.id.v_file:
+                //文件清理
+                functionName = "文件清理";
+                functionPosition = "8";
+                fileClean();
+                break;
+
+
         }
         //1.21 版本推荐清理_标识sourcePage,其他""
         StatisticsUtils.trackFunctionClickItem("recommendation_function_click", functionName, getIntent().hasExtra("home") ? "home_page" : sourcePage, currentPage, functionName, functionPosition);
@@ -983,6 +996,24 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void finishCleanFinishActivityEvent(FinishCleanFinishActivityEvent event) {
         Log.d("XiLei", "完成页finish");
         finish();
+    }
+
+    /**
+     * 建议清理
+     */
+    public void allClean() {
+        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+        startActivity(NowCleanActivity.class);
+    }
+
+    /**
+     * 游戏加速
+     */
+    public void gameClean() {
+        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+        startActivity(GameActivity.class);
     }
 
     /**
@@ -1060,6 +1091,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         v_wechat.setOnClickListener(this);
         v_file.setOnClickListener(this);
         v_cool.setOnClickListener(this);
+        v_game.setOnClickListener(this);
+        v_clean_all.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {

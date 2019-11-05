@@ -27,7 +27,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_yjjs_clean" />
+                android:src="@drawable/icon_clean_all" />
 
             <TextView
                 android:id="@+id/tv_clean_all_title"
@@ -63,7 +63,7 @@
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingRight="@dimen/dimen_11dp"
                 android:paddingBottom="@dimen/dimen_5dp"
-                android:text="@string/quicken_now"
+                android:text="@string/tool_now_clean"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
@@ -411,7 +411,7 @@
                 android:layout_width="@dimen/dimen_32dp"
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_yjjs_clean" />
+                android:src="@drawable/icon_clean_game" />
 
             <TextView
                 android:id="@+id/tv_game_title"
@@ -419,7 +419,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_toRightOf="@+id/iv_game"
-                android:text="@string/tool_suggest_clean"
+                android:text="@string/game_quicken"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_17sp" />
 
@@ -431,7 +431,7 @@
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginTop="@dimen/dimen_3dp"
                 android:layout_toRightOf="@+id/iv_game"
-                android:text="@string/clean_all_hint"
+                android:text="@string/clean_game_hint"
                 android:textColor="@color/color_B3B3B3"
                 android:textSize="@dimen/dimen_14sp" />
 

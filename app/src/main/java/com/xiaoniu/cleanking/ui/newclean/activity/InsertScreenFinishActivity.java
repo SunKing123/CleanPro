@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdManager;
@@ -58,9 +59,10 @@ import cn.jzvd.Jzvd;
 public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishPresenter> implements View.OnClickListener {
 
     private ImageView iv_advert_logo, iv_advert, mCloseIv;
-    private TextView tv_advert, tv_advert_content, mBtnDownload;
+    private TextView tv_advert, tv_advert_content;
     private View mViewDownload, mViewContent, mErrorV, v_advert;
     private RoundProgressBar mProgressBar;
+    private LottieAnimationView mLottieAd;
 
     private NativeUnifiedADData mNativeUnifiedADData;
     private NativeUnifiedAD mAdManager;
@@ -105,7 +107,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         tv_advert = findViewById(R.id.tv_advert);
         tv_advert_content = findViewById(R.id.tv_advert_content);
         mViewDownload = findViewById(R.id.v_download);
-        mBtnDownload = findViewById(R.id.tv_download);
+        mLottieAd = findViewById(R.id.tv_download);
         mViewContent = findViewById(R.id.v_content);
         mErrorV = findViewById(R.id.v_error);
         v_advert = findViewById(R.id.v_advert);
@@ -121,6 +123,35 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         params.height = height * 2 / 3;
         v_advert.setLayoutParams(params);
         initChuanShanJia();
+        initLottie();
+    }
+
+    private void initLottie() {
+        mLottieAd.useHardwareAcceleration(true);
+        mLottieAd.setAnimation("clean_finish_download.json");
+        mLottieAd.setImageAssetsFolder("images_clean_download");
+        mLottieAd.playAnimation();
+        mLottieAd.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLottieAd.playAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     /**
@@ -387,10 +418,10 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void onADStatusChanged() {
                 Log.d(TAG, "广告状态变化");
-                updateAdAction(mBtnDownload, ad);
+//                updateAdAction(mBtnDownload, ad);
             }
         });
-        updateAdAction(mBtnDownload, ad);
+//        updateAdAction(mBtnDownload, ad);
         if (ad.getAdPatternType() == AdPatternType.NATIVE_VIDEO) { //视频类型
             mHandler.sendEmptyMessage(MSG_VIDEO_START);
 
@@ -550,7 +581,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                 if (null == ads || ads.isEmpty()) return;
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
                 mChuanShanJiaVideo.setVisibility(View.VISIBLE);
-                mBtnDownload.setText(getString(R.string.download));
+//                mBtnDownload.setText(getString(R.string.download));
                 tv_advert.setText(ads.get(0).getTitle());
                 tv_advert_content.setText(ads.get(0).getDescription());
 
@@ -643,7 +674,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                 clickViewList.add(mViewDownload);
                 //触发创意广告的view（点击下载或拨打电话）
                 List<View> creativeViewList = new ArrayList<>();
-                creativeViewList.add(mBtnDownload);
+                creativeViewList.add(mLottieAd);
                 //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
 //            creativeViewList.add(convertView);
                 //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
