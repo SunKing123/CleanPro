@@ -2,9 +2,9 @@ package com.xiaoniu.cleanking.ui.main.bean;
 
 public enum NewsType {
     VIDEO("视频", ""),
-    TOUTIAO("推荐", "tuijian"),
-    SHEHUI("热点", "redian"),
-    GUONEI("社会", "shehui"),
+    TOUTIAO("头条", "toutiao"),
+    SHEHUI("社会", "shehui"),
+    GUONEI("国内", "guonei"),
     GUOJI("国际", "guoji"),
     YULE("娱乐", "yule");
 
