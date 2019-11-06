@@ -474,7 +474,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
 
         if (isClick) {
-            if (!PermissionUtils.isUsageAccessAllowed(this)) {
+            if (PermissionUtils.isUsageAccessAllowed(this)) {
                 if (mAlertDialog != null)
                     mAlertDialog.cancel();
                 startCleanAnim();

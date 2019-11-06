@@ -635,7 +635,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mLottieAnimationView2.useHardwareAcceleration(true);
         mLottieAnimationView2.setAnimation("huojian2.json");
         mLottieAnimationView2.setImageAssetsFolder("images_game_two");
-        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
+//        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
         mLottieAnimationView2.playAnimation();
         mLottieAnimationView2.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
