@@ -14,9 +14,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/acceview_yindao2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone" />
 
     <RelativeLayout
@@ -97,6 +96,13 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/acceview2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/icon_scaning_bg02"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/acceview3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/icon_scaning_bg01"
