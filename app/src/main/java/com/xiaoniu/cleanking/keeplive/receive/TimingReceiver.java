@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -96,7 +97,7 @@ public class TimingReceiver extends BroadcastReceiver {
 
     //检测是否达到扫描时间
     public boolean isStartScan(PushSettingList.DataBean dataBean) {
-        long lastTime = dataBean.getLastTime();
+ /*       long lastTime = dataBean.getLastTime();
         long currentTime = System.currentTimeMillis();
         if(lastTime==0){
             Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
@@ -107,8 +108,8 @@ public class TimingReceiver extends BroadcastReceiver {
         }
         if (lastTime>0&&(currentTime - lastTime) >= dataBean.getInterValTime() * 60 * 1000) {
             return true;
-        }
-        return false;
+        }*/
+        return true;
 
     }
 
@@ -253,7 +254,9 @@ public class TimingReceiver extends BroadcastReceiver {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(list -> {
                         int computeTotalSize = mFileQueryUtils.computeTotalSize(list);
+
                         if (computeTotalSize > dataBean.getThresholdNum()) {
+//                            String value = String.format("%d%% %n", computeTotalSize);
                             String push_content = mContext.getString(R.string.push_content_access, computeTotalSize);
                             //cheme跳转路径
                             Map<String, String> actionMap = new HashMap<>();
@@ -400,8 +403,10 @@ public class TimingReceiver extends BroadcastReceiver {
         try {
             Intent intent = new Intent(conx, JPushReceiver.class);
             intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
-            //notifyId不关注_跟产品已经确认(100001)
-            intent.putExtra("push_data", new PushMsg(100001, "悟空清理", push_content, null, null, actionMap));
+            //notifyId不关注_跟产品已经确认()
+            intent.putExtra("push_data", new PushMsg((100001+ NumberUtils.mathRandomInt(1,100000)), "悟空清理", push_content, null, null, actionMap));
+            intent.addCategory(mContext.getPackageName());
+            intent.setPackage(mContext.getPackageName());
             KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
         } catch (Exception e) {
             e.printStackTrace();
