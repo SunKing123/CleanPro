@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
@@ -96,6 +97,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     TextView tvCleanUnit;
     @BindView(R.id.layout_show_list)
     RelativeLayout layoutShowList;
+    @BindView(R.id.clean_toolbar)
+    Toolbar cleanToolbar;
     View mHeadView;
     ImageView[] ivs;
     TextView tvCheckedSize;
@@ -310,6 +313,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         //清理动画
         mCleanAnimView.startCleanAnim(false);*/
 //        layoutShowList.setVisibility(View.GONE);
+        cleanToolbar.setVisibility(View.GONE);
         relCleanContent.setVisibility(View.VISIBLE);
         ivCleanBg01.setVisibility(View.VISIBLE);
         ivCleanBg02.setVisibility(View.VISIBLE);
