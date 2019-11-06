@@ -98,7 +98,14 @@ public class TimingReceiver extends BroadcastReceiver {
     public boolean isStartScan(PushSettingList.DataBean dataBean) {
         long lastTime = dataBean.getLastTime();
         long currentTime = System.currentTimeMillis();
-        if ((currentTime - lastTime) >= dataBean.getInterValTime() * 60 * 1000) {
+        if(lastTime==0){
+            Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
+            dataBean.setLastTime(currentTime);
+            map.put(dataBean.getCodeX(), dataBean);
+            PreferenceUtil.saveCleanLogMap(map);
+            return false;
+        }
+        if (lastTime>0&&(currentTime - lastTime) >= dataBean.getInterValTime() * 60 * 1000) {
             return true;
         }
         return false;
@@ -188,7 +195,7 @@ public class TimingReceiver extends BroadcastReceiver {
         event.setType("power");
         if (mBatteryPower < dataBean.getThresholdNum() && !isCharged) {  //阀值以下且没有充电
             event.setFlag(2);
-            String push_content = cxt.getString(R.string.push_content_power, 30);
+            String push_content = cxt.getString(R.string.push_content_power, dataBean.getThresholdNum());
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY);
@@ -389,12 +396,12 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param push_content
      * @param actionMap
      */
-    public void createNotify(Context conx, String push_content, Map<String, String> actionMap,String btn) {
+    public void createNotify(Context conx, String push_content, final Map<String, String> actionMap,String btn) {
         try {
             Intent intent = new Intent(conx, JPushReceiver.class);
             intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
             //notifyId不关注_跟产品已经确认(100001)
-            intent.putExtra("push_data", new PushMsg(100001, "", push_content, null, null, actionMap));
+            intent.putExtra("push_data", new PushMsg(100001, "悟空清理", push_content, null, null, actionMap));
             KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
         } catch (Exception e) {
             e.printStackTrace();
