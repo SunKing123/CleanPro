@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
@@ -96,6 +97,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     TextView tvCleanUnit;
     @BindView(R.id.layout_show_list)
     RelativeLayout layoutShowList;
+    @BindView(R.id.clean_toolbar)
+    Toolbar cleanToolbar;
     View mHeadView;
     ImageView[] ivs;
     TextView tvCheckedSize;
@@ -310,6 +313,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         //清理动画
         mCleanAnimView.startCleanAnim(false);*/
 //        layoutShowList.setVisibility(View.GONE);
+        cleanToolbar.setVisibility(View.GONE);
         relCleanContent.setVisibility(View.VISIBLE);
         ivCleanBg01.setVisibility(View.VISIBLE);
         ivCleanBg02.setVisibility(View.VISIBLE);
@@ -368,13 +372,17 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float animatedValue = (float) animation.getAnimatedFraction();
-                if (animatedValue <= 0.4f) {
-                    float currentValue = Float.valueOf(checkCountEntity.getTotalSize()) * (0.4f - animatedValue);
+                if (animatedValue <= 0.74f) {
+                    float currentValue = Float.valueOf(checkCountEntity.getTotalSize()) * (0.74f - animatedValue);
                     tvCleanCount.setText(String.format("%s", Math.round(currentValue)));
                     tvCleanUnit.setText(checkCountEntity.getUnit());
-                }else{
+                }else if(animatedValue > 0.76f && animatedValue < 0.76f){
                     tvCleanCount.setText("0");
                     tvCleanUnit.setText(checkCountEntity.getUnit());
+                }else{
+                    tvCleanCount.setVisibility(View.GONE);
+                    tvCleanUnit.setVisibility(View.GONE);
+
                 }
             }
         });

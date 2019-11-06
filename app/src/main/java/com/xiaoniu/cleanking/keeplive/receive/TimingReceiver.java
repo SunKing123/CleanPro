@@ -70,7 +70,7 @@ public class TimingReceiver extends BroadcastReceiver {
     private Context mContext;
     private int mBatteryPower = 50;  //当前电量监控
     private int temp = 30;          //当前电池温度
-    private boolean isCharged;
+    private boolean isCharged = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -97,19 +97,19 @@ public class TimingReceiver extends BroadcastReceiver {
 
     //检测是否达到扫描时间
     public boolean isStartScan(PushSettingList.DataBean dataBean) {
- /*       long lastTime = dataBean.getLastTime();
+        long lastTime = dataBean.getLastTime();
         long currentTime = System.currentTimeMillis();
-        if(lastTime==0){
+        if (lastTime == 0) {
             Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
             dataBean.setLastTime(currentTime);
             map.put(dataBean.getCodeX(), dataBean);
             PreferenceUtil.saveCleanLogMap(map);
             return false;
         }
-        if (lastTime>0&&(currentTime - lastTime) >= dataBean.getInterValTime() * 60 * 1000) {
+        if (lastTime > 0 && (currentTime - lastTime) >= dataBean.getInterValTime() * 60 * 1000) {
             return true;
-        }*/
-        return true;
+        }
+        return false;
 
     }
 

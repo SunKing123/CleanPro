@@ -112,35 +112,8 @@ public final class LocalService extends Service {
         }
 
 
-        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        if (batteryReceiver == null) {
-            batteryReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    //获取当前电量，如未获取具体数值，则默认为0
-                    int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                    //获取最大电量，如未获取到具体数值，则默认为100
-                    int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-                    mBatteryPower = (batteryLevel * 100 / batteryScale);
-                    //获取当前电池温度
-                    temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-                    int i = temp / 10;
-                    temp = i > 0 ? i : 30;
-                }
-            };
-        }
-        //注册接收器以获取电量信息
-        Intent powerIntent = registerReceiver(batteryReceiver, iFilter);
-        //----判断是否为充电状态-------------------------------
-        int chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);
-        boolean usb = chargePlug ==BatteryManager.BATTERY_PLUGGED_USB;//usb充电
-        boolean ac = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;//交流电
-        //无线充电---API>=17
-        boolean wireless = false;
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
-        }
-        isCharged = usb||ac||wireless;
+
+
         //----判断是否为充电状态---结束-------------------------------
 
         //开启一个前台通知，用于提升服务进程优先级
@@ -252,8 +225,39 @@ public final class LocalService extends Service {
 
     //启动定时器
     public void sendTimingReceiver(){
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        if (batteryReceiver == null) {
+            batteryReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //获取当前电量，如未获取具体数值，则默认为0
+                    int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                    //获取最大电量，如未获取到具体数值，则默认为100
+                    int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+                    mBatteryPower = (batteryLevel * 100 / batteryScale);
+                    //获取当前电池温度
+                    temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+                    int i = temp / 10;
+                    temp = i > 0 ? i : 30;
+                }
+            };
+        }
+        //注册接收器以获取电量信息
+        Intent powerIntent = registerReceiver(batteryReceiver, iFilter);
+        //----判断是否为充电状态-------------------------------
+        int chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);
+        boolean usb = chargePlug ==BatteryManager.BATTERY_PLUGGED_USB;//usb充电
+        boolean ac = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;//交流电
+        //无线充电---API>=17
+        boolean wireless = false;
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+        }
+        isCharged = usb||ac||wireless;
+
+
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long spacelong = SCAN_SPACE_LONG * 10 * 1000;
+        long spacelong = SCAN_SPACE_LONG * 15 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + spacelong;
         Intent i = new Intent(this, TimingReceiver.class);
         i.putExtra("battery",mBatteryPower);

@@ -25,6 +25,7 @@ import android.widget.RemoteViews;
 
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.ui.main.bean.InstalledApp;
+import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanDetailActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
@@ -32,6 +33,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
 import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationCleanEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.PackageUtils;
@@ -109,7 +111,15 @@ public class NotificationCleanService extends NotificationListenerService {
                     if (notification != null) {
                         startForeground(NOTIFICATION_RERIDENT, notification);
                     }
-
+                    //更新状态栏图标状态
+                    NotificationEvent event = new NotificationEvent();
+                    event.setType("notification");
+                    if(count>5){
+                        event.setFlag(2);
+                    }else{
+                        event.setFlag(0);
+                    }
+                    EventBus.getDefault().post(event);
 
                 } else {
                     stopForeground(true);
