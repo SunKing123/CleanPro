@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 
 public class NotificationUtils extends ContextWrapper {
     private NotificationManager manager;
@@ -55,7 +56,8 @@ public class NotificationUtils extends ContextWrapper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Notification.Builder getChannelNotification(String title, String content, int icon, Intent intent,String btnString) {
         //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        int requestCode = NumberUtils.mathRandomInt(0,1000);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,requestCode , intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (TextUtils.isEmpty(title)) {
             title = mContext.getString(R.string.app_name);
         }
@@ -88,7 +90,8 @@ public class NotificationUtils extends ContextWrapper {
 
     public NotificationCompat.Builder getNotification_25(String title, String content, int icon, Intent intent) {
         //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        int requestCode = NumberUtils.mathRandomInt(0,1000);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return new NotificationCompat.Builder(mContext, id)
                 .setContentTitle(title)
                 .setContentText(content)

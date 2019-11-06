@@ -122,12 +122,12 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         });
 
-        //设置oaid到埋点公共参数
+     /*   //设置oaid到埋点公共参数
         new MiitHelper(new MiitHelper.AppIdsUpdater() {
             @Override
             public void OnIdsAvalid(@NonNull String oaid) {
-              /*  oaid = (oaid == null)? "" : oaid;
-                NiuDataAPI.setOaid(oaid);*/
+              *//*  oaid = (oaid == null)? "" : oaid;
+                NiuDataAPI.setOaid(oaid);*//*
                 JSONObject jsonObject = new JSONObject();
                 try {
                     oaid = (oaid == null)? "" : oaid;
@@ -149,7 +149,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                         .channel(ChannelUtil.getChannel())
                 );
             }
-        }).getDeviceIds(application);
+        }).getDeviceIds(application);*/
     }
 
     private void initRoom(Application application) {
