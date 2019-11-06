@@ -373,7 +373,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 }
             }
         }
-        Log.d("XiLei", "一键加速结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
@@ -529,28 +528,21 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         } else { //8.0以上内存[200M,2G]随机数
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            Log.d("XiLei", "lastCheckTime=" + lastCheckTime);
-            Log.d("XiLei", "timeTemp=" + timeTemp);
-            Log.d("XiLei", "sdsdsds=" + SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0));
             if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
-                Log.d("XiLei", "aaaaaaaaa");
                 long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 totalSizes = (long) (cacheSize * 0.3);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
             } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
-                Log.d("XiLei", "bbbbbbbbb");
                 long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 totalSizes = (long) (cacheSize * 0.6);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
             } else {
-                Log.d("XiLei", "cccccccc");
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 totalSizes = Long.valueOf(NumberUtils.mathRandom(200 * 1024 * 1024, 2 * 1024 * 1024 * 1024));
             }
 
         }
-        Log.d("XiLei", "扫描  totalSizes=" + totalSizes);
         setCleanSize(totalSizes, true);
         this.totalSizesCleaned = totalSizes;
     }
@@ -568,7 +560,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         } else {
             totalSizes = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
         }
-        Log.d("XiLei", "清理后  totalSizes=" + totalSizes);
         setCleanSize(totalSizes, false);
         this.totalSizesCleaned = totalSizes;
     }

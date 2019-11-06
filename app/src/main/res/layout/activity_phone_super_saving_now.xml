@@ -9,9 +9,9 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_power_saving_bar_layout"
         android:layout_width="match_parent"
-        app:expanded="false"
         android:layout_height="wrap_content"
-        app:elevation="0dp">
+        app:elevation="0dp"
+        app:expanded="false">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -25,8 +25,8 @@
                 android:layout_marginTop="@dimen/dimen_56dp"
                 android:background="#06C581"
                 android:gravity="center"
-                android:visibility="gone"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/viewt_finish"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="@id/viewt_finish"
@@ -112,11 +112,11 @@
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/n_scroll_view"
-        android:fadingEdge="none"
-        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fadingEdge="none"
         android:fillViewport="true"
+        android:overScrollMode="never"
         android:scrollbarStyle="outsideOverlay"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -128,8 +128,8 @@
                 android:id="@+id/web_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_result"
@@ -141,17 +141,17 @@
                     android:id="@+id/ll_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/dimen_60dp"
                     android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:paddingLeft="@dimen/dimen_15dp"
-                    android:layout_centerHorizontal="true">
+                    android:paddingTop="@dimen/dimen_60dp">
 
                     <TextView
                         android:id="@+id/tv_num"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="0"
                         android:gravity="bottom"
+                        android:text="0"
                         android:textColor="@color/white"
                         android:textSize="70sp" />
 
@@ -160,8 +160,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
-                        android:text=""
                         android:paddingBottom="@dimen/dimen_16dp"
+                        android:text=""
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_16dp" />
                 </LinearLayout>
@@ -171,9 +171,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ll_num"
                     android:layout_centerHorizontal="true"
-                    android:textSize="12sp"
                     android:text="正在休眠应用减少耗电..."
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/view_lottie_super_saving_sleep"
@@ -181,35 +181,35 @@
                     android:layout_height="220dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dimen_50dp"
-                    android:background="@drawable/super_power_top"/>
+                    android:background="@drawable/super_power_top" />
 
                 <FrameLayout
                     android:id="@+id/layIconAnim"
                     android:layout_width="220dp"
                     android:layout_height="220dp"
                     android:layout_centerHorizontal="true"
-                    android:visibility="gone"
-                    android:layout_marginTop="@dimen/dimen_50dp">
+                    android:layout_marginTop="@dimen/dimen_50dp"
+                    android:visibility="gone">
 
                     <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
                         android:id="@+id/ivIcon1"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:riv_corner_radius="25dp"
-                        app:riv_border_width="5dp"
-                        app:riv_border_color="#06C581"
                         android:layout_gravity="center"
-                        android:scaleType="fitXY" />
+                        android:scaleType="fitXY"
+                        app:riv_border_color="#06C581"
+                        app:riv_border_width="5dp"
+                        app:riv_corner_radius="25dp" />
 
                     <com.xiaoniu.common.widget.roundedimageview.RoundedImageView
                         android:id="@+id/ivIcon2"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:riv_corner_radius="25dp"
-                        app:riv_border_width="5dp"
-                        app:riv_border_color="#06C581"
                         android:layout_gravity="center"
-                        android:scaleType="fitXY" />
+                        android:scaleType="fitXY"
+                        app:riv_border_color="#06C581"
+                        app:riv_border_width="5dp"
+                        app:riv_corner_radius="25dp" />
 
                 </FrameLayout>
 
@@ -217,24 +217,25 @@
                 <TextView
                     android:id="@+id/btn_cancel"
                     android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_46dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/dimen_16dp"
                     android:layout_marginRight="@dimen/dimen_16dp"
                     android:layout_marginBottom="@dimen/dimen_12dp"
+                    android:background="@drawable/btn_white_bg"
                     android:gravity="center"
+                    android:text="@string/tool_cancel"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:text="@string/tool_cancel"
-                    android:background="@drawable/btn_white_bg"
-                    android:layout_height="@dimen/dimen_46dp"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/layout_not_net"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/dimen_80dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dimen_80dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
@@ -254,11 +255,12 @@
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
+
     <FrameLayout
         android:id="@+id/fl_anim"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie"

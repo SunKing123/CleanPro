@@ -295,7 +295,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             }
         }
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
-        Log.d("XiLei", "通知栏清理结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
