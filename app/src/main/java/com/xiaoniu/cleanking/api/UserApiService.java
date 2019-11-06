@@ -58,7 +58,7 @@ public interface UserApiService {
      *
      * @return
      */
-    @GET("/screen/switch")
+    @GET("/screen/v3/switch")
     Flowable<SwitchInfoList> getScreentSwitch();
 
     /**

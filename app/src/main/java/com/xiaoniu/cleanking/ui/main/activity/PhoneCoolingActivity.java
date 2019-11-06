@@ -797,7 +797,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 EventBus.getDefault().post(event);
 
                 AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
-                Log.d("Xilei", "手机降温结束");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(PhoneCoolingActivity.this, getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();

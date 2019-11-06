@@ -116,7 +116,6 @@ public class WechatCleanResultActivity extends SimpleActivity {
             if (mTitle.equals(getString(R.string.tool_chat_clear))) {
                 PreferenceUtil.saveCleanWechatUsed(true);
             }
-            Log.d("XiLei", mTitle + "清理结束");
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             boolean isOpen = false;
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()

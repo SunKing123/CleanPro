@@ -173,8 +173,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private void initLottieYinDao2() {
         mLottieAnimationViewY2.setVisibility(View.VISIBLE);
         mLottieAnimationViewY2.useHardwareAcceleration(true);
-        mLottieAnimationViewY2.setAnimation("yindao2.json");
-        mLottieAnimationViewY2.setImageAssetsFolder("images_game_yindao2");
+        mLottieAnimationViewY2.setAnimation("yindao3.json");
+        mLottieAnimationViewY2.setImageAssetsFolder("images_game_yindao3");
         mLottieAnimationViewY2.playAnimation();
         mLottieAnimationViewY2.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -184,9 +184,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                mLottieAnimationViewY.setVisibility(View.GONE);
+                mLottieAnimationViewY2.setVisibility(View.GONE);
                 mOpenView.setVisibility(View.VISIBLE);
-                mOpenTv.setEnabled(true);
-                mOpenTv.getBackground().setAlpha(255);
+                mContentView.setVisibility(View.VISIBLE);
+                PreferenceUtil.saveGameQuikcenStart(true);
             }
 
             @Override
@@ -218,14 +220,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             Observable<List<GameSelectEntity>> observable = Observable.create(new ObservableOnSubscribe<List<GameSelectEntity>>() {
                 @Override
                 public void subscribe(ObservableEmitter<List<GameSelectEntity>> emitter) throws Exception {
-                    Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
                     emitter.onNext(ApplicationDelegate.getAppDatabase().gameSelectDao().getAll());
                 }
             });
             Consumer<List<GameSelectEntity>> consumer = new Consumer<List<GameSelectEntity>>() {
                 @Override
                 public void accept(List<GameSelectEntity> list) throws Exception {
-                    Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
                     if (null == mSelectList || null == mSelectNameList || null == list || list.size() <= 0)
                         return;
                     for (int i = 0; i < list.size(); i++) {
@@ -238,7 +238,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
                     firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
                     mSelectList.add(firstJunkInfo);
-                    Log.d("XiLei", "缓存的--mSelectList=" + mSelectList.size());
                     mGameSelectAdapter.setData(mSelectList);
                 }
             };
@@ -276,9 +275,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (null == mSelectList) {
             mSelectList = new ArrayList<>();
         }
-        Log.d("XiLei", "mSelectList=" + mSelectList.size());
-        Log.d("XiLei", "mAllList=" + mAllList.size());
-        Log.d("XiLei", "event.getList()=" + event.getList().size());
         if (null == event || null == event.getList() || event.getList().size() <= 0) {
             if (null != mSelectList && mSelectList.size() > 1 && event.isNotSelectAll()) {
                 mOpenTv.setEnabled(false);
@@ -365,12 +361,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             case R.id.tv_open:
                 if (!PreferenceUtil.getGameQuikcenStart()) {
                     StatisticsUtils.trackClick("game_open_immediately_click", "游戏加速引导页立即开启点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
-                    mLottieAnimationViewY.setVisibility(View.GONE);
-                    mLottieAnimationViewY2.setVisibility(View.GONE);
-                    mOpenTv.setEnabled(false);
-                    mOpenTv.getBackground().setAlpha(75);
-                    mContentView.setVisibility(View.VISIBLE);
-                    PreferenceUtil.saveGameQuikcenStart(true);
                     return;
                 }
                 NiuDataAPI.onPageStart("gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
@@ -541,14 +531,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     private void saveSelectApp() {
         mSelectList.remove(mSelectList.size() - 1);
-        Log.d("XiLei", "mSelectList------333=" + mSelectList.size());
         ArrayList<GameSelectEntity> selectSaveList = new ArrayList<>();
         for (int i = 0; i < mSelectList.size(); i++) {
             if (null != mSelectList.get(i).getGarbageIcon() && mSelectList.get(i).getGarbageIcon().getIntrinsicWidth() > 0) {
                 selectSaveList.add(new GameSelectEntity(i, mSelectList.get(i).getAppName(), DisplayImageUtils.drawableToBytes(mSelectList.get(i).getGarbageIcon())));
             }
         }
-        Log.d("XiLei", "selectSaveList=" + selectSaveList.size());
         if (null == selectSaveList || selectSaveList.size() <= 0) return;
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -612,12 +600,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             }
         });
-
+        Log.d("XiLei", "mAllList=" + mAllList.size());
+        Log.d("XiLei", "mSelectList=" + mSelectList.size());
         if (null == mAllList || null == mSelectList || mAllList.size() <= 0 || mSelectList.size() <= 0)
             return;
         mSelectList.remove(mSelectList.size() - 1);
-        Log.d("XiLei", "开始清理  mSelectList=" + mSelectList.size());
-        Log.d("XiLei", "mAllList=" + mAllList.size());
         for (int i = 0; i < mAllList.size(); i++) {
             for (int j = 0; j < mSelectList.size(); j++) {
                 if (mAllList.get(i).getAppName().equals(mSelectList.get(j).getAppName())) {
@@ -625,7 +612,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 }
             }
         }
-        Log.d("XiLei", "mAllList222=" + mAllList.size());
+        Log.d("XiLei", "mAllList222222=" + mAllList.size());
         for (FirstJunkInfo info : mAllList) {
             CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
         }

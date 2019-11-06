@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -591,7 +592,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADLoaded(List<NativeUnifiedADData> ads) {
                 Log.d(TAG, "ads.size()=" + ads.size());
-
+                Toast.makeText(NewCleanFinishActivity.this, "优量汇---id=" + mSecondAdvertId, Toast.LENGTH_SHORT).show();
                 if (ads != null && ads.size() > 0) {
                     mContainer.setVisibility(View.VISIBLE);
                     Message msg = Message.obtain();
@@ -994,7 +995,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     @Subscribe
     public void finishCleanFinishActivityEvent(FinishCleanFinishActivityEvent event) {
-        Log.d("XiLei", "完成页finish");
         finish();
     }
 
@@ -1196,13 +1196,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    Log.d("XiLei", "onScrolled");
                     LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                     //获取第一个完全显示的ItemPosition
                     int lastVisibleItem = manager.findFirstVisibleItemPosition();
                     int totalItemCount = manager.getItemCount();
                     //recyclerView滑动到底部再滑动回顶部后重新执行动画
-                    Log.d("XiLei", "lastVisibleItem=" + lastVisibleItem);
                     if (null != mLottieAd && lastVisibleItem == 1) {
                         mLottieAd.playAnimation();
                     }
@@ -1896,7 +1894,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载穿山甲广告位1
      */
     private void loadListAd() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -1918,8 +1915,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onFeedAdLoad(List<TTFeedAd> ads) {
                 //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
                 if (null == ads || ads.isEmpty()) return;
+                Toast.makeText(NewCleanFinishActivity.this, "穿山甲---id=" + mAdvertId, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
-
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
                 mLottieAd.useHardwareAcceleration(true);
                 mLottieAd.setAnimation("clean_finish_download.json");
                 mLottieAd.setImageAssetsFolder("images_clean_download");
@@ -2030,7 +2028,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载穿山甲广告位2
      */
     private void loadListAd2() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId2)
@@ -2051,7 +2048,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
                 if (null == ads || ads.isEmpty()) return;
                 Log.d(TAG, "穿山甲2----广告请求成功--ads.size()=" + ads.size());
-
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
                 mContainer2.setVisibility(View.VISIBLE);
                 tv_advert2.setText(ads.get(0).getTitle());
                 tv_advert_content2.setText(ads.get(0).getDescription());

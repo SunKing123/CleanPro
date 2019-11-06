@@ -286,7 +286,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 }
             }
         }
-        Log.d("XiLei", "垃圾清理结束");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {

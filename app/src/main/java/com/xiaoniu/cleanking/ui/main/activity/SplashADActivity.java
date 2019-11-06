@@ -139,7 +139,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @param auditSwitch
      */
     public void getAuditSwitch(AuditSwitch auditSwitch) {
-        Log.d("XiLei", "getAuditSwitch");
         if (auditSwitch == null) {
             //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
@@ -415,6 +414,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
+        initChuanShanJia();
         if (NetworkUtils.isNetConnected()) {
             mPresenter.getAuditSwitch();
         } else {
@@ -430,7 +430,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
         initNiuData();
         initFileRelation();
-        initChuanShanJia();
         skipView.setOnClickListener(v -> {
             JSONObject extension = new JSONObject();
             try {
@@ -451,7 +450,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        Log.d("XiLei", "getSwitchInfoListSuccess");
         if (null != list && null != list.getData() && list.getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
                 if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition()) && PositionId.SPLASH_ID.equals(switchInfoList.getConfigKey())) {
