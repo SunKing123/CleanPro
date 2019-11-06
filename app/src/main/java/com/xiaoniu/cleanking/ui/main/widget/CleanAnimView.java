@@ -405,8 +405,8 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutScan.setVisibility(GONE);
         mTvAnimTitle.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
-        mAnimationView.setAnimation("data_clean_finish.json");
-        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("yindao2.json");
+        mAnimationView.setImageAssetsFolder("images_game_yindao2");
         mAnimationView.playAnimation();
         mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override

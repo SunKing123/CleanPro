@@ -70,7 +70,7 @@ public class TimingReceiver extends BroadcastReceiver {
     private Context mContext;
     private int mBatteryPower = 50;  //当前电量监控
     private int temp = 30;          //当前电池温度
-    private boolean isCharged;
+    private boolean isCharged = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
