@@ -109,6 +109,7 @@
         android:visibility="gone" />
 
     <RelativeLayout
+        android:id="@+id/v_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_55dp">
 

@@ -321,6 +321,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         }
         initChuanShanJia();
         skipView.setOnClickListener(v -> {
+            skipView.clearAnimation();
             JSONObject extension = new JSONObject();
             try {
                 extension.put("ad_id", mSecondAdvertId);
@@ -329,6 +330,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                 e.printStackTrace();
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
+            jumpActivity();
         });
 
 
@@ -443,6 +445,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                 if (ad == null) {
                     return;
                 }
+                showProgressBar();
                 //获取SplashView
                 View view = ad.getSplashView();
                 if (view != null) {
@@ -450,7 +453,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                     //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
                     container.addView(view);
                     //设置不开启开屏广告倒计时功能以及不显示跳过按钮,如果这么设置，您需要自定义倒计时逻辑
-                    //ad.setNotAllowSdkCountdown();
+                    ad.setNotAllowSdkCountdown();
                 } else {
                     jumpActivity();
                 }
@@ -541,6 +544,30 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                 jumpActivity();
             }
         }
+    }
+
+    private void showProgressBar() {
+        skipView.setVisibility(View.VISIBLE);
+        skipView.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                jumpActivity();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
     }
 
     @Override

@@ -71,6 +71,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class GameActivity extends BaseActivity<GamePresenter> implements View.OnClickListener, GameSelectAdapter.onCheckListener {
 
+    @BindView(R.id.v_title)
+    View mTitleView;
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
     @BindView(R.id.v_content)
@@ -188,7 +190,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 mLottieAnimationViewY2.setVisibility(View.GONE);
                 mOpenView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.VISIBLE);
-                PreferenceUtil.saveGameQuikcenStart(true);
             }
 
             @Override
@@ -359,10 +360,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 finish();
                 break;
             case R.id.tv_open:
-                if (!PreferenceUtil.getGameQuikcenStart()) {
-                    StatisticsUtils.trackClick("game_open_immediately_click", "游戏加速引导页立即开启点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
-                    return;
-                }
                 NiuDataAPI.onPageStart("gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                 NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                 StatisticsUtils.trackClick("gameboost_click", "游戏加速添加页点击加速按钮", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_add_page");
@@ -574,6 +571,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
         NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_animation_page", "gameboost_animation_page_view_page", "游戏加速动画页浏览");
         PreferenceUtil.saveCleanGameUsed(true);
+        mTitleView.setVisibility(View.GONE);
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
         mLottieAnimationView.setAnimation("huojian1.json");
@@ -600,10 +598,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             }
         });
-        Log.d("XiLei", "mAllList=" + mAllList.size());
-        Log.d("XiLei", "mSelectList=" + mSelectList.size());
         if (null == mAllList || null == mSelectList || mAllList.size() <= 0 || mSelectList.size() <= 0)
             return;
+        Log.d("XiLei", "mAllList=" + mAllList.size());
+        Log.d("XiLei", "mSelectList=" + mSelectList.size());
         mSelectList.remove(mSelectList.size() - 1);
         for (int i = 0; i < mAllList.size(); i++) {
             for (int j = 0; j < mSelectList.size(); j++) {
@@ -612,7 +610,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 }
             }
         }
-        Log.d("XiLei", "mAllList222222=" + mAllList.size());
+        Log.d("XiLei", "mAllList2222=" + mAllList.size());
         for (FirstJunkInfo info : mAllList) {
             CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
         }
@@ -670,6 +668,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 if (PreferenceUtil.getGameTime()) {
                     PreferenceUtil.saveGameTime();
                 }
+                PreferenceUtil.saveGameQuikcenStart(true);
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();

@@ -70,6 +70,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -141,6 +142,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
+    private long mTotalSizesCleaned = 0; //扫描的总大小
 
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
@@ -456,7 +458,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
         if (Build.VERSION.SDK_INT >= 26) {
             SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
-            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, total);
+            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, mTotalSizesCleaned);
         }
         computeTotalSizeDeleteClick(junkTemp);
     }
@@ -516,8 +518,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
     }
 
-    long totalSizesCleaned = 0;
-
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
         long totalSizes = 0;
@@ -544,7 +544,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
         }
         setCleanSize(totalSizes, true);
-        this.totalSizesCleaned = totalSizes;
+        this.mTotalSizesCleaned = totalSizes;
     }
 
     /**
@@ -561,7 +561,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             totalSizes = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
         }
         setCleanSize(totalSizes, false);
-        this.totalSizesCleaned = totalSizes;
+        this.mTotalSizesCleaned = totalSizes;
     }
 
     public void setCleanSize(long totalSizes, boolean canPlayAnim) {
@@ -677,7 +677,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      */
     public boolean isCacheWhite(String packageName) {
         SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
-        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+//        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        if (null != sets && sets.size() > 0) {
+            Iterator<String> it = sets.iterator();
+            while (it.hasNext()) {
+                String str = it.next();
+            }
+        }
         return sets.contains(packageName);
     }
 
@@ -689,7 +696,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
                 listInfoData.add(firstJunkInfo);
         }
-
         belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);
@@ -747,7 +753,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void setHasCleaned(long sized) {
-        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(totalSizesCleaned);
+        String str_totalSize = CleanAllFileScanUtil.byte2FitSize(mTotalSizesCleaned);
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             sizeMb = NumberUtils.getInteger(str_totalSize.substring(0, str_totalSize.length() - 2));

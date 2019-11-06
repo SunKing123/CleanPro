@@ -122,13 +122,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
 
             if (PreferenceUtil.isNoFirstOpenApp()) {
-                if (Build.VERSION.SDK_INT >= 23) {
+              /*  if (Build.VERSION.SDK_INT >= 23) { //穿山甲广告在冷启动时不需要获取权限
                     checkAndRequestPermission();
-                } else {
-                    if (mIsOpen) {
-                        loadSplashAd();
-                    }
+                } else {*/
+                if (mIsOpen) {
+                    loadSplashAd();
                 }
+//                }
             }
         });
     }
@@ -431,6 +431,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         initNiuData();
         initFileRelation();
         skipView.setOnClickListener(v -> {
+            skipView.clearAnimation();
             JSONObject extension = new JSONObject();
             try {
                 extension.put("ad_id", mSecondAdvertId);
@@ -439,6 +440,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 e.printStackTrace();
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
+            jumpActivity();
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
@@ -523,7 +525,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         mTTAdNative = TTAdManagerHolder.get().createAdNative(this);
         //在合适的时机申请权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题
         //在开屏时候申请不太合适，因为该页面倒计时结束或者请求超时会跳转，在该页面申请权限，体验不好
-        // TTAdManagerHolder.getInstance(this).requestPermissionIfNecessary(this);
+//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
         //定时，AD_TIME_OUT时间到时执行，如果开屏广告没有加载则跳转到主页面
         mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, AD_TIME_OUT);
     }
@@ -570,6 +572,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 if (ad == null) {
                     return;
                 }
+                showProgressBar();
                 //获取SplashView
                 View view = ad.getSplashView();
                 if (view != null) {
@@ -577,7 +580,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                     //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
                     container.addView(view);
                     //设置不开启开屏广告倒计时功能以及不显示跳过按钮,如果这么设置，您需要自定义倒计时逻辑
-                    //ad.setNotAllowSdkCountdown();
+                    ad.setNotAllowSdkCountdown();
                 } else {
                     jumpActivity();
                 }
@@ -668,5 +671,29 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 jumpActivity();
             }
         }
+    }
+
+    private void showProgressBar() {
+        skipView.setVisibility(View.VISIBLE);
+        skipView.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                jumpActivity();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
     }
 }

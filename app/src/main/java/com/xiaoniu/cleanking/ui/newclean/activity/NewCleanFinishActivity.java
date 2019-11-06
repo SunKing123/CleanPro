@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -592,7 +591,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADLoaded(List<NativeUnifiedADData> ads) {
                 Log.d(TAG, "ads.size()=" + ads.size());
-                Toast.makeText(NewCleanFinishActivity.this, "优量汇---id=" + mSecondAdvertId, Toast.LENGTH_SHORT).show();
                 if (ads != null && ads.size() > 0) {
                     mContainer.setVisibility(View.VISIBLE);
                     Message msg = Message.obtain();
@@ -1908,14 +1906,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 Log.d(TAG, "穿山甲加载失败=" + message);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", sourcePage, currentPage);
                 initNativeUnifiedAD();
-                initNativeUnifiedAD2();
             }
 
             @Override
             public void onFeedAdLoad(List<TTFeedAd> ads) {
                 //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
                 if (null == ads || ads.isEmpty()) return;
-                Toast.makeText(NewCleanFinishActivity.this, "穿山甲---id=" + mAdvertId, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
                 mLottieAd.useHardwareAcceleration(true);
@@ -2041,6 +2037,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onError(int code, String message) {
                 Log.d(TAG, "穿山甲2加载失败=" + message);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "fail", sourcePage, currentPage);
+                initNativeUnifiedAD2();
             }
 
             @Override

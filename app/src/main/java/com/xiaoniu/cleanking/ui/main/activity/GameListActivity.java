@@ -1,11 +1,8 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
@@ -24,7 +20,6 @@ import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.GameListPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -36,9 +31,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 
@@ -108,7 +101,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
      * 获取手机安装的所有应用列表
      */
     private void allApp() {
-        PackageManager pm = AppApplication.getInstance().getPackageManager();
+       /* PackageManager pm = AppApplication.getInstance().getPackageManager();
         Intent launcherIntent = new Intent(Intent.ACTION_MAIN, null);
         launcherIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> list = pm.queryIntentActivities(launcherIntent, 0);
@@ -121,6 +114,19 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
             mInfo.setGarbageIcon(icon);
             mInfo.setAppName(name);
             aboveListInfo.add(mInfo);
+        }*/
+
+        ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
+        List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            PackageInfo packageInfo = packages.get(i);
+            //判断是否系统应用
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { //非系统应用
+                FirstJunkInfo tmpInfo = new FirstJunkInfo();
+                tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+                tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
+                aboveListInfo.add(tmpInfo);
+            }
         }
         setAdapter(aboveListInfo);
     }
