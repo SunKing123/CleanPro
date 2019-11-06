@@ -87,6 +87,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     LottieAnimationView mLottieAnimationView;
     @BindView(R.id.acceview2)
     LottieAnimationView mLottieAnimationView2;
+    @BindView(R.id.acceview3)
+    LottieAnimationView mLottieAnimationView3;
 
     private List<FirstJunkInfo> mAllList; //所有应用列表
     private ArrayList<String> mSelectNameList;
@@ -638,6 +640,38 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 //        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
         mLottieAnimationView2.playAnimation();
         mLottieAnimationView2.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                showAnimal3();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+    }
+
+    private void showAnimal3() {
+        if (null == mLottieAnimationView3) return;
+        mLottieAnimationView3.setVisibility(View.VISIBLE);
+        mLottieAnimationView3.useHardwareAcceleration(true);
+        mLottieAnimationView3.setAnimation("yindao2.json");
+        mLottieAnimationView3.setImageAssetsFolder("images_game_yindao2");
+//        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
+        mLottieAnimationView3.playAnimation();
+        mLottieAnimationView3.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
