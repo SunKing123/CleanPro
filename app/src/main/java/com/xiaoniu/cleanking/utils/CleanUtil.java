@@ -219,7 +219,7 @@ public class CleanUtil {
     //计算当前一级总数
     public static long getTotalSize(HashMap<Integer, JunkGroup> mJunkGroups) {
         long size = 0L;
-        if (CollectionUtils.isEmpty(mJunkGroups)){
+        if (CollectionUtils.isEmpty(mJunkGroups)) {
             return size;
         }
         try {
@@ -237,7 +237,7 @@ public class CleanUtil {
                 }
 
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         return size;

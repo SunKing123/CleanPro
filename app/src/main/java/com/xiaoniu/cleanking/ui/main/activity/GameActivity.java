@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.utils.DisplayImageUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -606,9 +607,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             }
         });
-        if (null == mAllList || null == mSelectList || mAllList.size() <= 0 || mSelectList.size() <= 0)
+        if (null == mAllList || null == mSelectNameList || mAllList.size() <= 0 || mSelectNameList.size() <= 0)
             return;
-        mSelectList.remove(mSelectList.size() - 1);
         for (int i = 0; i < mAllList.size(); i++) {
             for (int j = 0; j < mSelectNameList.size(); j++) {
                 if (mAllList.get(i).getAppName().equals(mSelectNameList.get(j))) {
@@ -683,6 +683,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.game_quicken));
+                    bundle.putString("num", NumberUtils.mathRandom(25, 50));
                     startActivity(NewCleanFinishActivity.class, bundle);
                 }
                 finish();

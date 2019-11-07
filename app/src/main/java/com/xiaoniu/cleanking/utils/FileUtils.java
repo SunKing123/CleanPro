@@ -35,7 +35,11 @@ public class FileUtils {
         }
     }
 
-
+    /**
+     * 是否系统应用
+     * @param str
+     * @return
+     */
     public static boolean isSystemApK(String str) {
         try {
             if ((AppApplication.getInstance().getPackageManager().getPackageInfo(str, 0).applicationInfo.flags & 1) > 0) {

@@ -388,28 +388,6 @@ public class PreferenceUtil {
     }
 
     /**
-     * 保存已进入清理完成页面
-     *
-     * @return
-     */
-    public static boolean saveFirstOpenCLeanFinishApp() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP, true).commit();
-        return true;
-    }
-
-    /**
-     * 是否是首次进入清理完成页面
-     *
-     * @return
-     */
-    public static boolean isNoFirstOpenCLeanFinishApp() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP, false);
-    }
-
-    /**
      * 保存立即清理清理时间
      *
      * @return

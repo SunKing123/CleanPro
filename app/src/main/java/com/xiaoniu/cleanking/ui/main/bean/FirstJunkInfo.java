@@ -17,6 +17,7 @@ public class FirstJunkInfo implements Serializable {
     private int position;
     private String appGarbageName;
     private String appPackageName;
+    private String appProcessName;
     private String appName;
     private String descp;
     private String garbageCatalog;
@@ -35,6 +36,14 @@ public class FirstJunkInfo implements Serializable {
     private boolean isSelect;
     private boolean isLock;
     private String sdPath;
+
+    public String getAppProcessName() {
+        return appProcessName;
+    }
+
+    public void setAppProcessName(String appProcessName) {
+        this.appProcessName = appProcessName;
+    }
 
     public boolean isSelect() {
         return isSelect;

@@ -181,12 +181,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
         EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-        if (PreferenceUtil.isNoFirstOpenCLeanFinishApp()) {
-            mPresenter.getSwitchInfoList();
-        } else {
-            PreferenceUtil.saveFirstOpenCLeanFinishApp();
-        }
-
+        mPresenter.getSwitchInfoList();
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -807,7 +802,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
                 //游戏加速
                 mTvGb.setText("%");
-                mTvSize.setText(NumberUtils.mathRandom(25, 50));
+                mTvSize.setText(num);
                 mTvQl.setText("已提速");
             }
 

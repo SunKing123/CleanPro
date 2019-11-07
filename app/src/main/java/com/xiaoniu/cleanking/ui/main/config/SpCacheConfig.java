@@ -66,7 +66,6 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_POWER_TIME = "power_time";
     public static final  String IS_SAVE_COOLINF_TIME = "cooling_time";
     public static final  String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
-    public static final  String IS_SAVE_FIRST_OPEN_CLEAN_FINISH_APP = "first_open_clean_finish_app";
     public static final  String IS_SAVE_GAME_TIME = "game_time";
 
     public static final  String IS_SAVE_FIRST_HOME_ICON = "first_home_icon";

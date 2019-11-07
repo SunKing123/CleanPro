@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -36,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 
 import static android.view.View.VISIBLE;
+import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
 
 /**
  * @author XiLei
@@ -125,6 +127,8 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
                 FirstJunkInfo tmpInfo = new FirstJunkInfo();
                 tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
                 tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
+                tmpInfo.setAppPackageName(packageInfo.applicationInfo.packageName);
+                tmpInfo.setAppProcessName(packageInfo.applicationInfo.processName);
                 aboveListInfo.add(tmpInfo);
             }
         }
