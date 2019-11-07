@@ -158,6 +158,8 @@ public class TimingReceiver extends BroadcastReceiver {
             }else{
                 event.setFlag(0);
             }
+        }else{
+            event.setFlag(0);
         }
         EventBus.getDefault().post(event);
     }
@@ -173,7 +175,7 @@ public class TimingReceiver extends BroadcastReceiver {
         event.setType("cooling");
         if (temp > dataBean.getThresholdNum()) {
             event.setFlag(2);
-            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp);
+            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp+"°C");
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY);

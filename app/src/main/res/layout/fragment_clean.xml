@@ -10,7 +10,6 @@
         layout="@layout/content_junk_clean"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dimen_80dp"
         />
 
     <!--  <com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView
@@ -59,7 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:layout_marginTop="24dp"
             android:scaleType="centerCrop" />
 
         <LinearLayout
