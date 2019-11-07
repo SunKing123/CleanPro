@@ -28,24 +28,24 @@
         android:gravity="center" >
 
 
-            <ImageView
+            <TextView
                 android:id="@+id/iv_clean_bg01"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="1"
-                android:background="@drawable/icon_scaning_bg01"></ImageView>
-            <ImageView
+                android:background="@drawable/icon_clean_bg01"></TextView>
+            <TextView
                 android:id="@+id/iv_clean_bg02"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="1"
-                android:background="@drawable/icon_scaning_bg02"></ImageView>
-            <ImageView
+                android:background="@drawable/icon_clean_bg02"></TextView>
+            <TextView
                 android:id="@+id/iv_clean_bg03"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="1"
-                android:background="@drawable/icon_scaning_bg03"></ImageView>
+                android:background="@drawable/icon_clean_bg03"></TextView>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie_bottom"
@@ -59,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:layout_marginTop="24dp"
             android:scaleType="centerCrop" />
 
         <LinearLayout

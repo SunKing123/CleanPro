@@ -127,28 +127,26 @@ public class ApplicationDelegate implements IApplicationDelegate {
             new MiitHelper(new MiitHelper.AppIdsUpdater() {
                 @Override
                 public void OnIdsAvalid(@NonNull String oaid) {
-                  //*  oaid = (oaid == null)? "" : oaid;
-                    NiuDataAPI.setOaid(oaid);
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        oaid = (oaid == null)? "" : oaid;
-                        jsonObject.put("oaid",oaid);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    //重置niuSDK
-                    NiuDataAPI.init(application, new Configuration()
-                            //切换到sdk默认的测试环境地址
-                            .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
-                            .serverUrl(AppConstants.BIGDATA_MD)
-                            .setHeartbeatUrl(AppConstants.BIGDATA_MD)
-                            .setCommonParams(jsonObject)
-                            //打开sdk日志信息
-                            .logOpen()
-                            .setHeartbeatInterval(5000)
-                            .channel(ChannelUtil.getChannel())
-                    );
+                    NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
+                        //添加到默认事件
+                        @Override
+                        public void onTrackAutoCollectEvent(String eventCode, JSONObject eventProperties) {
+                            try {
+                                eventProperties.put("oaid", oaid);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        //添加到其他事件
+                        @Override
+                        public void onTrackEvent(String eventCode, JSONObject eventProperties) {
+                            try {
+                                eventProperties.put("oaid", oaid);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }).getDeviceIds(application);
         } catch (Exception e) {
