@@ -11,15 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
-
+import android.support.v7.widget.Toolbar;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -27,7 +24,6 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -78,11 +74,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     TextView doJunkClean;
 
     @BindView(R.id.iv_clean_bg03)
-    ImageView ivCleanBg03;
+    TextView ivCleanBg03;
     @BindView(R.id.iv_clean_bg02)
-    ImageView ivCleanBg02;
+    TextView ivCleanBg02;
     @BindView(R.id.iv_clean_bg01)
-    ImageView ivCleanBg01;
+    TextView ivCleanBg01;
     @BindView(R.id.rel_clean_content)
     RelativeLayout relCleanContent;
     @BindView(R.id.view_lottie_bottom)
@@ -100,7 +96,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     @BindView(R.id.clean_toolbar)
     Toolbar cleanToolbar;
     View mHeadView;
-    ImageView[] ivs;
+    TextView[] ivs;
     TextView tvCheckedSize;
     private DockingExpandableListViewAdapter mAdapter;
     private CountEntity totalCountEntity;
@@ -318,7 +314,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         ivCleanBg01.setVisibility(View.VISIBLE);
         ivCleanBg02.setVisibility(View.VISIBLE);
         ivCleanBg03.setVisibility(View.VISIBLE);
-        ivs = new ImageView[]{ivCleanBg01,ivCleanBg02,ivCleanBg03};
+        ivs = new TextView[]{ivCleanBg01,ivCleanBg02,ivCleanBg03};
         viewLottieBottom.useHardwareAcceleration();
         viewLottieBottom.setAnimation("cleanbottom.json");
         viewLottieBottom.setImageAssetsFolder("cleanbottom");
@@ -522,7 +518,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     }
 
 
-    public void showColorChange(ImageView[] ivs, int index) {
+    public void showColorChange(TextView[] ivs, int index) {
         if (ivs.length == 3 && index <= 2 && index > 0) {
             Drawable drawable = ivs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

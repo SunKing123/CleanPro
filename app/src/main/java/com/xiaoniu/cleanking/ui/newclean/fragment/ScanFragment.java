@@ -301,11 +301,12 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     public void stopScan() {
         mPresenter.setIsFinish(true);
-        if (mPresenter.getCleanScanAnimator() != null)
-            mPresenter.getCleanScanAnimator().cancel();
-        lottieRipple.setVisibility(GONE);
+    /*    if (mPresenter.getCleanScanAnimator() != null)
+            mPresenter.getCleanScanAnimator().cancel();*/
+
     /*    mCircleOuter2.setVisibility(GONE);
         mCircleOuter.setVisibility(GONE);*/
+        lottieRipple.pauseAnimation();
         showHomeLottieView(true);
     }
 
@@ -314,7 +315,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     public void endScanAnimation() {
         if (lottieRipple != null ) {
-            lottieRipple.setVisibility(GONE);
+            lottieRipple.pauseAnimation();
+//            lottieRipple.setVisibility(GONE);
         }
         showHomeLottieView(true);
     }

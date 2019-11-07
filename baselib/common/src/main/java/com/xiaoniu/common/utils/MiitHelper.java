@@ -40,7 +40,7 @@ public class MiitHelper implements IIdentifierListener {
         }else if(nres == ErrorCode.INIT_HELPER_CALL_ERROR){//反射调用出错
 
         }
-        Log.d(getClass().getSimpleName(),"return value: "+String.valueOf(nres));
+//        Log.d(getClass().getSimpleName(),"return value: "+String.valueOf(nres));
 
     }
 
@@ -79,7 +79,7 @@ public class MiitHelper implements IIdentifierListener {
         builder.append("VAID: ").append(vaid).append("\n");
         builder.append("AAID: ").append(aaid).append("\n");
         String idstext=builder.toString();
-        LogUtils.i("zzz","----"+idstext);
+//        LogUtils.i("zzz","----"+idstext);
         _supplier.shutDown();
         if(_listener!=null){
             _listener.OnIdsAvalid(oaid);

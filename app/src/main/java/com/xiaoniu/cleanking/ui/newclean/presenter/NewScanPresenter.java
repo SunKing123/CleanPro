@@ -371,11 +371,11 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         });
     }*/
 
-    AnimatorSet cleanScanAnimator;
+  /*  AnimatorSet cleanScanAnimator;
 
     public AnimatorSet getCleanScanAnimator() {
         return cleanScanAnimator;
-    }
+    }*/
 
 
     /**
@@ -393,7 +393,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
      * @param circleOuter
      * @param circleOuter2
      */
-    public void startCleanScanAnimation(ImageView iconOuter, View circleOuter, View circleOuter2) {
+   /* public void startCleanScanAnimation(ImageView iconOuter, View circleOuter, View circleOuter2) {
         try {
             ObjectAnimator rotation = ObjectAnimator.ofFloat(iconOuter, "rotation", 0, 360);
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconOuter, "scaleX", 1f, 1.3f, 1f);
@@ -429,22 +429,22 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             initAnim(scaleY3, 2000, ValueAnimator.RESTART, -1);
             initAnim(scaleX3, 2000, ValueAnimator.RESTART, -1);
 
-            cleanScanAnimator = new AnimatorSet();
+            cleanScanAnimator = new AnimatorSet new AnimatorSet();
 
             cleanScanAnimator.playTogether(scaleX, scaleY, rotation, alpha, scaleX2, scaleY2, alpha2, scaleX3, scaleY3, alpha3);
             cleanScanAnimator.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * 扫描结束
      */
     public void stopCleanScanAnimation() {
-        if (cleanScanAnimator != null) {
+       /* if (cleanScanAnimator != null) {
             cleanScanAnimator.end();
-        }
+        }*/
         if (mFileQueryUtils != null && !mFileQueryUtils.isFinish() && mView != null)
             mView.endScanAnimation();
     }
