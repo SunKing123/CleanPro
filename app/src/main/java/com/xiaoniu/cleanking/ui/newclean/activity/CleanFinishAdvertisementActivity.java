@@ -807,7 +807,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 .setCodeId(mAdvertId)
                 .setSupportDeepLink(true)
                 .setImageAcceptedSize(640, 320)
-                .setAdCount(3)
+                .setAdCount(1)
                 .build();
         //调用feed广告异步请求接口
         mTTAdNative.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {

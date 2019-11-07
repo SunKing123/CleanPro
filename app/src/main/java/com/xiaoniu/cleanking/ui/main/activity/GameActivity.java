@@ -105,6 +105,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
     private boolean mIsStartClean; //是否开始加速
+    private boolean mIsAdError; //激励视频加载失败
 
     private static final String TAG = "ChuanShanJia";
 
@@ -272,11 +273,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     @Subscribe
     public void selectGameEvent(SelectGameEvent event) {
+        if (null == event || null == event.getList()) return;
         mAllList = event.getAllList();
         if (null == mSelectList) {
             mSelectList = new ArrayList<>();
         }
-        if (null == event || null == event.getList() || event.getList().size() <= 0) {
+        if (event.getList().size() <= 0) {
             if (null != mSelectList && mSelectList.size() > 1 && event.isNotSelectAll()) {
                 mOpenTv.setEnabled(false);
                 mOpenTv.getBackground().setAlpha(75);
@@ -291,13 +293,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             mOpenTv.getBackground().setAlpha(255);
             mSelectList.clear();
             mSelectNameList.clear();
+            for (int i = 0; i < event.getList().size(); i++) {
+                mSelectNameList.add(event.getList().get(i).getAppName());
+            }
+            mSelectList.addAll(event.getList());
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
-            mSelectList.addAll(event.getList());
             mSelectList.add(firstJunkInfo);
-            for (int i = 0; i < mSelectList.size(); i++) {
-                mSelectNameList.add(mSelectList.get(i).getAppName());
-            }
         }
         mGameSelectAdapter.setData(mSelectList);
     }
@@ -377,9 +379,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 view.findViewById(R.id.btn_open).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_video_popup_page");
-                        showChuanShanJia();
-                        saveSelectApp();
+                        if (mIsAdError) {
+                            startClean();
+                        } else {
+                            StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_video_popup_page");
+                            showChuanShanJia();
+                            saveSelectApp();
+                        }
                         dialog.dismiss();
                     }
                 });
@@ -430,6 +436,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "message=" + message);
+                mIsAdError = true;
             }
 
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
@@ -472,6 +479,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     @Override
                     public void onVideoError() {
                         Log.d(TAG, "rewardVideoAd error");
+                        mIsAdError = true;
                     }
 
                     //视频播放完成后，奖励验证回调，rewardVerify：是否有效，rewardAmount：奖励梳理，rewardName：奖励名称
@@ -600,17 +608,14 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         });
         if (null == mAllList || null == mSelectList || mAllList.size() <= 0 || mSelectList.size() <= 0)
             return;
-        Log.d("XiLei", "mAllList=" + mAllList.size());
-        Log.d("XiLei", "mSelectList=" + mSelectList.size());
         mSelectList.remove(mSelectList.size() - 1);
         for (int i = 0; i < mAllList.size(); i++) {
-            for (int j = 0; j < mSelectList.size(); j++) {
-                if (mAllList.get(i).getAppName().equals(mSelectList.get(j).getAppName())) {
+            for (int j = 0; j < mSelectNameList.size(); j++) {
+                if (mAllList.get(i).getAppName().equals(mSelectNameList.get(j))) {
                     mAllList.remove(i);
                 }
             }
         }
-        Log.d("XiLei", "mAllList2222=" + mAllList.size());
         for (FirstJunkInfo info : mAllList) {
             CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
         }
