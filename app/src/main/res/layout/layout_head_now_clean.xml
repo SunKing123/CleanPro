@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/icon_scaning_bg06"
     android:gravity="center"
-    android:paddingTop="@dimen/dimen_23dp"
+    android:paddingTop="@dimen/dimen_48dp"
     android:paddingBottom="@dimen/dimen_23dp"
     android:orientation="vertical">
 
