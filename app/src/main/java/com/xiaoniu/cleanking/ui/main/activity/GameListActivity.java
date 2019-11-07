@@ -86,7 +86,6 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     @Override
     public void initView() {
         NiuDataAPI.onPageStart("gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
-        NiuDataAPIUtil.onPageEnd("gameboost_add_page", CURRENT_PAGE, "gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
         mSelectNameList = new ArrayList<>();
         mAllList = new ArrayList<>();
         mSelectList = new ArrayList<>();
@@ -216,5 +215,10 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPIUtil.onPageEnd("gameboost_add_page", CURRENT_PAGE, "gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
+    }
 }
 

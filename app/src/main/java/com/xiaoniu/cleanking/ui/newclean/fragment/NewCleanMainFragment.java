@@ -704,6 +704,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.v_game_clean)
     public void ViewThinClick() {
         viewGame.setEnabled(false);
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         Intent intent = new Intent(getActivity(), GameActivity.class);
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.game_quicken));
         startActivity(intent);
@@ -1078,6 +1079,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (list.get(pos).getName().equals(getString(R.string.game_quicken))) { //游戏加速
                 StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
                 if (PreferenceUtil.getGameTime()) {
+                    AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
                     SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
                 } else {
                     boolean isOpen = false;
