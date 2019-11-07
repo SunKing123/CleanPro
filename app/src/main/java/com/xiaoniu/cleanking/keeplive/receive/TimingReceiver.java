@@ -158,6 +158,8 @@ public class TimingReceiver extends BroadcastReceiver {
             }else{
                 event.setFlag(0);
             }
+        }else{
+            event.setFlag(0);
         }
         EventBus.getDefault().post(event);
     }
