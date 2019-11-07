@@ -65,7 +65,10 @@ public class JzvdStd extends Jzvd {
     protected Dialog mBrightnessDialog;
     protected ProgressBar mDialogBrightnessProgressBar;
     protected TextView mDialogBrightnessTextView;
-
+    public interface ThumbImageClickCallBack {
+         abstract void clickCall();
+    }
+    public ThumbImageClickCallBack mCallBack;
 
     public JzvdStd(Context context) {
         super(context);
@@ -98,7 +101,9 @@ public class JzvdStd extends Jzvd {
         clarity.setOnClickListener(this);
         mRetryBtn.setOnClickListener(this);
     }
-
+    public void setCallBack(ThumbImageClickCallBack callBack) {
+        this.mCallBack = callBack;
+    }
     public void setUp(JZDataSource jzDataSource, int screen, Class mediaInterfaceClass) {
         super.setUp(jzDataSource, screen, mediaInterfaceClass);
         titleTextView.setText(jzDataSource.title);
@@ -214,6 +219,9 @@ public class JzvdStd extends Jzvd {
         super.onClick(v);
         int i = v.getId();
         if (i == R.id.thumb) {
+            if (null != mCallBack) {
+                mCallBack.clickCall();
+            }
             if (jzDataSource == null || jzDataSource.urlsMap.isEmpty() || jzDataSource.getCurrentUrl() == null) {
                 Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;

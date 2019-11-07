@@ -45,6 +45,13 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             jzvdStd.setUp(itemInfo.url, itemInfo.title, Jzvd.SCREEN_NORMAL);
             jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageUtil.display(itemInfo.coverImage, jzvdStd.thumbImageView);
+            jzvdStd.setCallBack(new JzvdStd.ThumbImageClickCallBack(){
+                @Override
+                public void clickCall() {
+                    StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.title, itemInfo.videoId, position + 1);
+                }
+            });
+
         } else {
             final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
             ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
