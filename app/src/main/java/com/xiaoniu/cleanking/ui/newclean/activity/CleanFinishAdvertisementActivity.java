@@ -794,7 +794,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
         //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
     }
 
     /**

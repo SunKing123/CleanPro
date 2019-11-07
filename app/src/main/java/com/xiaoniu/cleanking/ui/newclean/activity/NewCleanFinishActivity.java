@@ -1171,6 +1171,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
 
                 if (count == 0 || isClick) {
+                    Log.d("XiLei", "fffffffffffffffffffff");
                     startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
                 }
             }
@@ -1307,6 +1308,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
             }
             if (count == 0 || isClick) {
+                Log.d("XiLei","gggggggggggggggggggg");
                 startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }
         }
@@ -1917,7 +1919,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
         //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
     }
 
     /**
@@ -1927,7 +1929,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         mTTAdNative2 = ttAdManager.createAdNative(getApplicationContext());
         //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
     }
 
     /**
@@ -2197,7 +2199,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         mTTAdNativeScreen = ttAdManager.createAdNative(getApplicationContext());
         //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
     }
 
     /**

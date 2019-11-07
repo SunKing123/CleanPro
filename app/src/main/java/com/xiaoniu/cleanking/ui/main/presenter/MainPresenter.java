@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geek.push.GeekPush;
@@ -18,7 +16,6 @@ import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -26,11 +23,9 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -54,15 +49,12 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.geek.push.core.PushResultCode.TYPE_DEL_TAG;
 
 /**
  * Created by tie on 2017/5/15.
@@ -426,7 +418,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void getData(PushSettingList pushSettingList) {
                 List<PushSettingList.DataBean> list = pushSettingList.getData();
-                if(list!=null&&list.size()>0){
+                if (list != null && list.size() > 0) {
                     //添加通知栏类型_作为状态栏更新条件
                     /* /**
                      * code : push_1
@@ -445,17 +437,18 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     dataBean.setContent("通知栏");
                     dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
                     //todo
-                    dataBean.setThresholdNum(BuildConfig.DEBUG?1:60);//每个小时监测
+                    dataBean.setThresholdNum(BuildConfig.DEBUG ? 1 : 1);//每个小时监测
                     dataBean.setInterValTime(60);
                     dataBean.setLastTime(0);
                     pushSettingList.getData().add(dataBean);
                     PreferenceUtil.saveCleanLog(new Gson().toJson(pushSettingList.getData()));
-                }else{//网络配置异常时读取本地
+                } else {//网络配置异常时读取本地
                     PreferenceUtil.saveCleanLog(FileUtils.readJSONFromAsset(mActivity, "action_log.json"));
                 }
                 //启动保活进程
                 mView.start();
             }
+
             @Override
             public void showExtraOp(String message) {
 

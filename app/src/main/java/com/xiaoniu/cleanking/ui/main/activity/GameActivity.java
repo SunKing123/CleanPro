@@ -402,6 +402,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 finish();
                 break;
             case R.id.tv_open:
+                if (PreferenceUtil.getGameQuikcenStart()) {
+                    NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
+                    StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", "gameboost_add_page", "gameboost_video_popup_page");
+                    showChuanShanJia();
+                    saveSelectApp();
+                    return;
+                }
                 NiuDataAPI.onPageStart("gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                 StatisticsUtils.trackClick("gameboost_click", "游戏加速添加页点击加速按钮", "gameboost_guidance_page", "gameboost_add_page");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -419,7 +426,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 view.findViewById(R.id.btn_open).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (mIsAdError || PreferenceUtil.getGameQuikcenStart()) {
+                        if (mIsAdError) {
                             startClean();
                         } else {
                             NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");

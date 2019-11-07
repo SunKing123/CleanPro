@@ -293,11 +293,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-    }
-
-    @Override
     public void onClick(View v) {
         String functionName = "";
         String functionPosition = "";
@@ -322,6 +317,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     @Override
     protected void onResume() {
+        Log.d("XiLei", "插屏--onResume");
         NiuDataAPI.onPageStart("screen_advertising_view_page", "插屏广告浏览");
         super.onResume();
         if (mNativeUnifiedADData != null) {
@@ -333,10 +329,10 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     @Override
     protected void onPause() {
+        super.onPause();
+        Log.d("XiLei", "插屏--onPause");
         Jzvd.releaseAllVideos();
         NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "插屏广告浏览");
-        super.onPause();
-
     }
 
     @Override
@@ -551,7 +547,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
         //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
+//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
     }
 
     /**

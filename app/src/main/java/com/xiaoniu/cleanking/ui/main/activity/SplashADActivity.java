@@ -120,15 +120,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      */
     public void skip() {
         this.mSubscription = Observable.timer(800, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-
             if (PreferenceUtil.isNoFirstOpenApp()) {
-              /*  if (Build.VERSION.SDK_INT >= 23) { //穿山甲广告在冷启动时不需要获取权限
-                    checkAndRequestPermission();
-                } else {*/
                 if (mIsOpen) {
                     loadSplashAd();
                 }
-//                }
             }
         });
     }
@@ -549,8 +544,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 mHasLoaded = true;
                 Log.d(TAG, "穿山甲加载失败=" + message);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "clod_splash_page", "clod_splash_page");
-                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    checkAndRequestPermission();
+                } else {
+                    // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                    fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
+                }
             }
 
             @Override
@@ -559,8 +558,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 mHasLoaded = true;
                 Log.d(TAG, "穿山甲----开屏广告加载超时");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "clod_splash_page", "clod_splash_page");
-                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    checkAndRequestPermission();
+                } else {
+                    // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                    fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
+                }
             }
 
             @Override
