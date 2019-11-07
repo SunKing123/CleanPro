@@ -275,9 +275,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
                     mSelectList.add(firstJunkInfo);
                     mGameSelectAdapter.setData(mSelectList);
-
-                    Log.d("XiLei", "缓存 mSelectList=" + mSelectList.size());
-                    Log.d("XiLei", "缓存 mSelectNameList=" + mSelectNameList.size());
                 }
             };
             observable.subscribeOn(Schedulers.newThread())
@@ -722,7 +719,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Log.d("XiLei", "onAnimationEnd");
                 //保存本次清理完成时间 保证每次清理时间间隔为3分钟
                 if (PreferenceUtil.getGameTime()) {
                     PreferenceUtil.saveGameTime();

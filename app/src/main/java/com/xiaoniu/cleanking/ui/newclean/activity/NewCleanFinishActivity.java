@@ -289,7 +289,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
-        Log.d("XiLei", "ddddd=" + sourcePage);
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             currentPage = "clean_success_page";
@@ -1171,7 +1170,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
 
                 if (count == 0 || isClick) {
-                    Log.d("XiLei", "fffffffffffffffffffff");
                     startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
                 }
             }
@@ -1308,7 +1306,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
             }
             if (count == 0 || isClick) {
-                Log.d("XiLei","gggggggggggggggggggg");
                 startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }
         }
@@ -1338,7 +1335,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("XiLei", "onResume");
         v_power.setEnabled(true);
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
@@ -2206,7 +2202,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载穿山甲广告(插屏广告)
      */
     private void loadListAdScreen() {
-        Log.d("XiLei", "mAdvertScreenId=" + mAdvertScreenId);
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertScreenId)
@@ -2237,7 +2232,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 优量汇广告(插屏广告)
      */
     private void initNativeUnifiedADScreen() {
-        Log.d("XiLei", "mSecondAdvertScreenId=" + mSecondAdvertScreenId);
         mAdManagerScreen = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertScreenId, new NativeADUnifiedListener() {
 
             @Override

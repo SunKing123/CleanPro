@@ -317,7 +317,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     @Override
     protected void onResume() {
-        Log.d("XiLei", "插屏--onResume");
         NiuDataAPI.onPageStart("screen_advertising_view_page", "插屏广告浏览");
         super.onResume();
         if (mNativeUnifiedADData != null) {
@@ -330,7 +329,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("XiLei", "插屏--onPause");
         Jzvd.releaseAllVideos();
         NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "插屏广告浏览");
     }

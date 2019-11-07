@@ -488,7 +488,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 startCleanAnim();
                 EventBus.getDefault().post(new InternalStoragePremEvent());
             } else {
-                Log.d("XiLei", "ssssssssssss=" + AppHolder.getInstance().getCleanFinishSourcePageId());
                 NiuDataAPI.onPageStart("boost_scan_page_view_page", "加速授权失败页浏览");
                 NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_fail_page", "boost_authorization_fail_page_view_page", "加速授权失败页浏览");
                 ToastUtils.showShort(getString(R.string.tool_get_premis));
