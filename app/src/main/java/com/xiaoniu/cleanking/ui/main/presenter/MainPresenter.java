@@ -444,7 +444,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     dataBean.setTitle("通知栏");
                     dataBean.setContent("通知栏");
                     dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
-                    dataBean.setThresholdNum(5);//每个小时监测
+                    //todo
+                    dataBean.setThresholdNum(BuildConfig.DEBUG?1:60);//每个小时监测
                     dataBean.setInterValTime(60);
                     dataBean.setLastTime(0);
                     pushSettingList.getData().add(dataBean);
