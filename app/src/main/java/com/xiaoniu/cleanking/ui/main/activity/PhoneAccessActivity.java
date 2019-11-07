@@ -143,6 +143,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
     private long mTotalSizesCleaned = 0; //扫描的总大小
+    private boolean mIsFinish; //是否点击了返回键
 
     public void setFromProtect(boolean fromProtect) {
         isFromProtect = fromProtect;
@@ -283,12 +284,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         }
 
         iv_back.setOnClickListener(v -> {
+            mIsFinish = true;
             if (!isShowListInfo) {
                 StatisticsUtils.trackClick("return_click", "用户在加速扫描页点击返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_page");
             } else if (isStartClean) {
-                StatisticsUtils.trackClick("return_click", "加速动画页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_animation_page");
+                StatisticsUtils.trackClick("return_click", "加速动画页返回", "boost_scan_result_page", "boost_animation_page");
             } else {
-                StatisticsUtils.trackClick("return_click", "用户在加速诊断页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_result_page");
+                StatisticsUtils.trackClick("return_click", "用户在加速诊断页返回", "boost_scan_page", "boost_scan_result_page");
             }
             finish();
         });
@@ -309,13 +311,15 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             acceview.setVisibility(View.GONE);
         });*/
         icon_more.setOnClickListener(v -> {
-            StatisticsUtils.trackClick("whitelist_click", "用户在加速诊断页点击白名单", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_result_page");
+            StatisticsUtils.trackClick("whitelist_click", "用户在加速诊断页点击白名单", "boost_scan_page", "boost_scan_result_page");
             mPresenter.showPopupWindow(icon_more);
         });
         acceview.setListener(new AccessAnimView.onAnimEndListener() {
             @Override
             public void onAnimEnd() {
-                showCleanFinishUI(strNum, strUnit);
+                if (!mIsFinish) {
+                    showCleanFinishUI(strNum, strUnit);
+                }
             }
 
             @Override
@@ -328,7 +332,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 strNum = "";
                 strUnit = "";
             }
-            showCleanFinishUI(strNum, strUnit);
+            if (!mIsFinish) {
+                showCleanFinishUI(strNum, strUnit);
+            }
         });
 
     }
@@ -376,6 +382,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         }
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.tool_one_key_speed));
@@ -433,7 +440,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 //        mTvSpeed.setVisibility(View.GONE);
 //        mLineAccess.setCompoundDrawables(null, null, null, null);
 //        mLineAccess.setText(getString(R.string.tool_speed_now));
-        StatisticsUtils.trackClick("accelerate_clean_button_click", "用户在加速诊断页点击【一键清理】按钮", AppHolder.getInstance().getSourcePageId(), "boost_scan_result_page");
+        StatisticsUtils.trackClick("accelerate_clean_button_click", "用户在加速诊断页点击【一键清理】按钮", "boost_scan_page", "boost_scan_result_page");
         ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
         for (FirstJunkInfo info : belowAdapter.getListImage()) {
             if (info.isSelect()) {
@@ -445,7 +452,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.startTopAnim(b);
         isStartClean = true;
         NiuDataAPI.onPageStart("boost_animation_page_view_page", "加速动画页浏览");
-        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_animation_page", "boost_animation_page_view_page", "加速动画页浏览");
+        NiuDataAPIUtil.onPageEnd("boost_scan_result_page", "boost_animation_page", "boost_animation_page_view_page", "加速动画页浏览");
 
         long total = 0;
         for (FirstJunkInfo info : junkTemp) {
@@ -481,6 +488,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 startCleanAnim();
                 EventBus.getDefault().post(new InternalStoragePremEvent());
             } else {
+                Log.d("XiLei", "ssssssssssss=" + AppHolder.getInstance().getCleanFinishSourcePageId());
                 NiuDataAPI.onPageStart("boost_scan_page_view_page", "加速授权失败页浏览");
                 NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_fail_page", "boost_authorization_fail_page_view_page", "加速授权失败页浏览");
                 ToastUtils.showShort(getString(R.string.tool_get_premis));
@@ -726,7 +734,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         mPresenter.runLayoutAnimation(recycle_view, animationItem);
 
         NiuDataAPI.onPageStart("boost_scan_result_page_view_page", "用户在加速诊断页浏览");
-        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_result_page", "boost_scan_result_page_view_page", "用户在加速诊断页浏览");
+        NiuDataAPIUtil.onPageEnd("boost_scan_page", "boost_scan_result_page", "boost_scan_result_page_view_page", "用户在加速诊断页浏览");
         isShowListInfo = true;
     }
 
@@ -790,12 +798,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            mIsFinish = true;
             if (!isShowListInfo) {
                 StatisticsUtils.trackClick("system_return_click", "用户在加速扫描页点击返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_page");
             } else if (isStartClean) {
-                StatisticsUtils.trackClick("system_return_click", "加速动画页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_animation_page");
+                StatisticsUtils.trackClick("system_return_click", "加速动画页返回", "boost_scan_result_page", "boost_animation_page");
             } else {
-                StatisticsUtils.trackClick("system_return_back_click", "用户在加速诊断页返回", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_result_page");
+                StatisticsUtils.trackClick("system_return_back_click", "用户在加速诊断页返回", "boost_scan_page", "boost_scan_result_page");
             }
            /* if (keyBack())
                 return true;*/

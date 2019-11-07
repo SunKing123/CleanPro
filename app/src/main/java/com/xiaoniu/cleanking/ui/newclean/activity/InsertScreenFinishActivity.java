@@ -245,7 +245,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
+                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", mSecondAdvertId, "优量汇", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
                 /*mViewContent.setVisibility(View.GONE);
                 mBtnDownload.setVisibility(View.GONE);
                 mErrorV.setVisibility(View.VISIBLE);*/
@@ -399,7 +399,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
+                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", mSecondAdvertId, "优量汇", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mSecondAdvertId, "优量汇", NewCleanFinishActivity.currentPage, "screen_advertising", ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
@@ -558,7 +558,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * 加载穿山甲广告
      */
     private void loadListAd() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
+        StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", mAdvertId, "穿山甲", "success", NewCleanFinishActivity.currentPage, "screen_advertising");
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -571,7 +571,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "穿山甲加载失败=" + message);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
+                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", mAdvertId, "穿山甲", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
                 initNativeUnifiedAD();
             }
 

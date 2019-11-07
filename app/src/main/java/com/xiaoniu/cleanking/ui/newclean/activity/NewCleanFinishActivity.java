@@ -109,6 +109,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private TextView mTvSize;
     private TextView mTvGb;
     private TextView mTvQl;
+    private TextView mTvPer;
 
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;
@@ -207,6 +208,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
+        mTvPer = header.findViewById(R.id.tv_per);
 
         mContainer = header.findViewById(R.id.native_ad_container);
         mMediaView = header.findViewById(R.id.gdt_media_view);
@@ -287,6 +289,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
+        Log.d("XiLei", "ddddd=" + sourcePage);
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             currentPage = "clean_success_page";
@@ -388,7 +391,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 currentPage = "direct_cooling_success_page";
                 createEventName = "直接跳降温结果页创建时";
                 createEventCode = "direct_cooling_success_page_custom";
-
+            } else if (getString(R.string.game_quicken).contains(mTitle)) {
+                //游戏加速
+                currentPage = "direct_game_success_page";
+                createEventName = "直接跳游戏加速结果页创建时";
+                createEventCode = "direct_game_success_page_custom";
             }
 
         }
@@ -739,6 +746,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvQl.setText("快去体验其他功能");
                 } else {
                     mTvSize.setText(num);
+                    mTvQl.setText("已清理");
                 }
             } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
                 //QQ专清
@@ -801,9 +809,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvSize.setText(num);
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
                 //游戏加速
-                mTvGb.setText("%");
                 mTvSize.setText(num);
                 mTvQl.setText("已提速");
+                mTvPer.setVisibility(View.VISIBLE);
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
@@ -1124,7 +1132,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
 
-            //插屏广告老去失败禁止跳转到插屏广告页
+            //插屏广告拉取失败禁止跳转到插屏广告页
             if (mIsScreenAdSuccess) {
                 finish();
                 return;
@@ -1327,6 +1335,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void onResume() {
+        super.onResume();
+        Log.d("XiLei", "onResume");
         v_power.setEnabled(true);
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
@@ -1387,34 +1397,34 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "boost_success_page_view_page", "加速结果出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "boost_success_page_view_page", "加速结果出现时");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_phone_clean).contains(mTitle)) {
             //手机清理
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
             //超强省电
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "powersave_success_page_view_page", "省电结果出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "powersave_success_page_view_page", "省电结果出现时");
         } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "wxclean_success_page_view_page", "微信清理结果页出现时");
         } else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
             //QQ专清
 //            NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
             //通知栏清理
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "notification_clean_success_page_view_page", "通知栏清理结果页出现时");
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
         } else if (getString(R.string.game_quicken).contains(mTitle)) {
             //游戏加速
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage, "gameboost_success_page_view_page", "游戏加速结果页展示浏览");
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "gameboost_success_page_view_page", "游戏加速结果页展示浏览");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
@@ -1714,7 +1724,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override
             public void onADExposed() {
-                StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mSecondAdvertId2, "优量汇", "success", sourcePage, currentPage);
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", mSecondAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
                 Log.d(TAG, "广告曝光");
             }
 

@@ -111,7 +111,8 @@
     <RelativeLayout
         android:id="@+id/v_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_55dp">
+        android:layout_height="@dimen/dimen_55dp"
+        android:layout_marginTop="@dimen/dimen_20dp">
 
         <ImageView
             android:id="@+id/iv_back"

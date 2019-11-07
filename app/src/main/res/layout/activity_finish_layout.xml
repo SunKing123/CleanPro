@@ -23,9 +23,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
             android:gravity="center"
-            android:text=""
             android:textColor="#ffffff"
             android:textSize="18sp" />
 

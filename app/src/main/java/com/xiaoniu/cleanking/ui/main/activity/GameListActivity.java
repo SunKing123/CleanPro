@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jaredrummler.android.processes.models.AndroidAppProcess;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -27,6 +26,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,7 +37,6 @@ import java.util.List;
 import butterknife.BindView;
 
 import static android.view.View.VISIBLE;
-import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
 
 /**
  * @author XiLei
@@ -85,6 +84,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
 
     @Override
     public void initView() {
+        StatusBarUtil.setTransparentForWindow(this);
         NiuDataAPI.onPageStart("gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
         mSelectNameList = new ArrayList<>();
         mAllList = new ArrayList<>();

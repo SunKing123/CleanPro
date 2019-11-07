@@ -1098,6 +1098,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     } else {
                         Bundle bundle = new Bundle();
                         bundle.putString("title", getString(R.string.game_quicken));
+                        bundle.putString("num", NumberUtils.mathRandom(25, 50));
                         startActivity(NewCleanFinishActivity.class, bundle);
                     }
                 }

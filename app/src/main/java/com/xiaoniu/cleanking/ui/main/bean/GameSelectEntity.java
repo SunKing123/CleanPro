@@ -19,12 +19,10 @@ public class GameSelectEntity implements Serializable {
     @PrimaryKey
     private int position;
     private String appName;
-    private byte[] garbageIcon;
 
-    public GameSelectEntity(int position, String appName, byte[] garbageIcon) {
+    public GameSelectEntity(int position, String appName) {
         this.position = position;
         this.appName = appName;
-        this.garbageIcon = garbageIcon;
     }
 
     public int getPosition() {
@@ -43,11 +41,4 @@ public class GameSelectEntity implements Serializable {
         this.appName = appName;
     }
 
-    public byte[] getGarbageIcon() {
-        return garbageIcon;
-    }
-
-    public void setGarbageIcon(byte[] garbageIcon) {
-        this.garbageIcon = garbageIcon;
-    }
 }
