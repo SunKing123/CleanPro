@@ -768,7 +768,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        ((MainActivity) getActivity()).commitJpushClickTime(9);
+        ((MainActivity) getActivity()).commitJpushClickTime(8);
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
