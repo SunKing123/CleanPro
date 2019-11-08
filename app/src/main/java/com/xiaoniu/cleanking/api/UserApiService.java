@@ -159,4 +159,13 @@ public interface UserApiService {
      */
     @GET("/operate/list")
     Flowable<HomeRecommendEntity> getRecommendList(@Query("positionCode") String positionCode);
+
+    /**
+     * 上报Device_info Alias
+     *
+     * @param body
+     * @return
+     */
+    @POST("/device/save")
+    Flowable<BaseEntity> pushDeviceInfo(@Body RequestBody body);
 }

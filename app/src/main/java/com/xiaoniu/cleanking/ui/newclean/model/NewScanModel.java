@@ -68,6 +68,8 @@ public class NewScanModel extends BaseModel {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getSwitchInfoList(body).compose(RxUtil.rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
     }
+
+
     /**
      * 互动式广告开关
      *

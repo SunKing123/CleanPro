@@ -69,7 +69,7 @@ public class MiitHelper implements IIdentifierListener {
             return;
         }
         String oaid=_supplier.getOAID();
-        String vaid=_supplier.getVAID();
+   /*     String vaid=_supplier.getVAID();
         String aaid=_supplier.getAAID();
         String udid=_supplier.getUDID();
         StringBuilder builder=new StringBuilder();
@@ -78,7 +78,7 @@ public class MiitHelper implements IIdentifierListener {
         builder.append("OAID: ").append(oaid).append("\n");
         builder.append("VAID: ").append(vaid).append("\n");
         builder.append("AAID: ").append(aaid).append("\n");
-        String idstext=builder.toString();
+        String idstext=builder.toString();*/
 //        LogUtils.i("zzz","----"+idstext);
         _supplier.shutDown();
         if(_listener!=null){

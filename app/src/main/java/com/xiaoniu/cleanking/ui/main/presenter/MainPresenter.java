@@ -21,12 +21,14 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -452,6 +454,34 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void showExtraOp(String message) {
 
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
+
+    /**
+     * 上报设备信息
+     * @param deviceInfo
+     */
+    public void pushDeviceInfo(DeviceInfo deviceInfo){
+        mModel.pushDeviceInfo(deviceInfo,new Common4Subscriber<BaseEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+                LogUtils.i("--zzh---"+message);
+            }
+
+            @Override
+            public void getData(BaseEntity baseEntity) {
+                LogUtils.i("--zzh---"+baseEntity.code);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+                LogUtils.i("--zzh---"+message);
             }
 
             @Override
