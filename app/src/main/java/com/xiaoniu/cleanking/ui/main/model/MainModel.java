@@ -7,10 +7,13 @@ import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
@@ -165,5 +168,16 @@ public class MainModel extends BaseModel {
      */
     public void getRecommendList(Common4Subscriber<HomeRecommendEntity> commonSubscriber) {
         mService.getRecommendList("opearte_page_add_game").compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+    /**
+     * 上报Device消息
+     * @param commonSubscriber
+     */
+    public void pushDeviceInfo(DeviceInfo deviceInfo,Common4Subscriber<BaseEntity> commonSubscriber) {
+        Gson gson = new Gson();
+        String json = gson.toJson(deviceInfo);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.pushDeviceInfo(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 }

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
@@ -52,6 +54,7 @@ import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +62,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -208,6 +212,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.commitJPushAlias();
         //获取本地推送配置
         mPresenter.getPushSetList();
+        //上报设备信息
+        getDeviceInfo();
 
 
         //开启定时扫面缓存
@@ -569,6 +575,44 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             e.printStackTrace();
         }
 
+    }
+    //获取设备信息
+    public void getDeviceInfo(){
+        try {
+            int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE);
+            DeviceInfo deviceInfo = new DeviceInfo();
+            deviceInfo.setAndroidId(DeviceUtil.getAndroidId(mContext));
+            deviceInfo.setWlanMac(DeviceUtil.getWLANMAC(mContext) + ", " + DeviceUtil.getWLANMACShell());
+            deviceInfo.setBtMac(DeviceUtil.getBTMAC());
+            deviceInfo.setUdId(DeviceUtil.getPseudoID());
+            deviceInfo.setBoard(Build.BOARD);
+            deviceInfo.setBrand(Build.BRAND);
+            deviceInfo.setCpuAbi(Build.CPU_ABI);
+            deviceInfo.setDevice(Build.DEVICE);
+            deviceInfo.setDisplay(Build.DISPLAY);
+            deviceInfo.setHost(Build.HOST);
+            deviceInfo.setPhoneId(Build.ID);
+            deviceInfo.setManufacturer(Build.MANUFACTURER);
+            deviceInfo.setModel(Build.MODEL);
+            deviceInfo.setProduct(Build.PRODUCT);
+            deviceInfo.setTags(Build.TAGS);
+            deviceInfo.setType(Build.TYPE);
+            deviceInfo.setSerial(Build.SERIAL);
+            deviceInfo.setUser(Build.USER);
+            deviceInfo.setSystemVersion(String.valueOf(Build.VERSION.SDK_INT));
+            deviceInfo.setSystemLanguage(Locale.getDefault().getDisplayLanguage());
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                deviceInfo.setDeviceId( DeviceUtil.getDeviceId(mContext));
+                deviceInfo.setDeviceId2(DeviceUtil.getDeviceId2(mContext));
+            } else {
+    //            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
+                deviceInfo.setDeviceId("");
+                deviceInfo.setDeviceId2("");
+            }
+            mPresenter.pushDeviceInfo(deviceInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

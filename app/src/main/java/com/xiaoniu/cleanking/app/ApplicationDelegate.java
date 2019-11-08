@@ -49,15 +49,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     @Override
     public void onCreate(Application application) {
-        JLibrary.InitEntry(application);
-        initNiuData(application);
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
         PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
         Bugly.init(application, "bdd6fe23ab", false);
-
         UMShareAPI.get(application);
-
         initInjector(application);
 
         //初始化sdk
@@ -77,6 +73,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         TTAdManagerHolder.init(application);
         initRoom(application);
     }
+
 
     private static AppComponent mAppComponent;
 
@@ -100,59 +97,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         JPushNotificationManager.customPushNotification(application, 1, R.layout.layout_notivition, R.id.image, R.id.title, R.id.text, R.mipmap.applogo, R.mipmap.applogo);
     }
 
-    public void initNiuData(Application application) {
 
-        //测试环境
-        NiuDataAPI.init(application, new Configuration()
-                //切换到sdk默认的测试环境地址
-                .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
-                .serverUrl(AppConstants.BIGDATA_MD)
-                .setHeartbeatUrl(AppConstants.BIGDATA_MD)
-                //打开sdk日志信息
-                .logOpen()
-                .setHeartbeatInterval(5000)
-                .channel(ChannelUtil.getChannel())
-        );
-
-        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
-            @Override
-            public void onHeartbeatStart(JSONObject eventProperties) {
-                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
-                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
-            }
-        });
-
-       //设置oaid到埋点公共参数
-        try {
-            new MiitHelper(new MiitHelper.AppIdsUpdater() {
-                @Override
-                public void OnIdsAvalid(@NonNull String oaid) {
-                    NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
-                        //添加到默认事件
-                        @Override
-                        public void onTrackAutoCollectEvent(String eventCode, JSONObject eventProperties) {
-                            try {
-                                eventProperties.put("oaid", oaid);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        //添加到其他事件
-                        @Override
-                        public void onTrackEvent(String eventCode, JSONObject eventProperties) {
-                            try {
-                                eventProperties.put("oaid", oaid);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }).getDeviceIds(application);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void initRoom(Application application) {
         mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "wukong_cleanking.db")
