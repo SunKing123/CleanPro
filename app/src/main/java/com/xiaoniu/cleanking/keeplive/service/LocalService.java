@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
@@ -238,7 +239,7 @@ public final class LocalService extends Service {
                     //获取当前电池温度
                     temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
                     int i = temp / 10;
-                    temp = i > 0 ? i : 30;
+                    temp = i > 0 ? i : 30+ NumberUtils.mathRandomInt(1,3);
                 }
             };
         }
