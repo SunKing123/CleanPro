@@ -596,6 +596,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * 保存加速的应用
      */
     private void saveSelectApp() {
+        if (null == mSelectList || mSelectList.size() <= 0) return;
         mSelectList.remove(mSelectList.size() - 1);
         ArrayList<GameSelectEntity> selectSaveList = new ArrayList<>();
         for (int i = 0; i < mSelectList.size(); i++) {

@@ -68,8 +68,8 @@ public class FileQueryUtils {
     private ScanFileListener mScanFileListener;
     HashMap<String, PathData> pathMap;//json定义的关联扫描文件
     HashMap<String, FirstJunkInfo> outJunkMap; //根目录筛选出来的文件，文件名key
-
     List<PackageInfo> installedList; //已经安装的应用信息
+    private boolean isService =false;
 
     /**
      * 是否终止标识符， 如果停止，结束查询数据
@@ -92,6 +92,9 @@ public class FileQueryUtils {
 
     }
 
+    public void setIsService(boolean isServiceScan){
+        isService = isServiceScan;
+    }
 
     public void setFinish(boolean finish) {
         isFinish = finish;
@@ -214,6 +217,7 @@ public class FileQueryUtils {
                 junkInfo.setAllchecked(true);
                 junkInfo.setAppName(pData.getAppName());
                 junkInfo.setAppPackageName(pData.getPackName());
+                if(!isService)
                 junkInfo.setGarbageIcon(mContext.getResources().getDrawable(R.drawable.icon_other_cache));
                 junkInfo.setGarbageType("TYPE_LEAVED");
                 junkInfo.setSdPath(pData.getFileList().get(0).getFolderName());
@@ -383,6 +387,7 @@ public class FileQueryUtils {
             //一级目（私有目录）
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
+            if(!isService)
             firstJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
             firstJunkInfo.setAllchecked(true);
             firstJunkInfo.setGarbageType("TYPE_CACHE");
@@ -591,6 +596,7 @@ public class FileQueryUtils {
                                 onelevelGarbageInfo.setPid(i2);
                                 onelevelGarbageInfo.setAllchecked(true);
                                 onelevelGarbageInfo.setAppName(loadLabel.toString().trim());
+                                if(!isService)
                                 onelevelGarbageInfo.setGarbageIcon(getAppIcon(mPackageManager.getPackageInfo(str, 0).applicationInfo));
                                 PackageInfo packageInfo = mPackageManager.getPackageInfo(str, 0);
 //                                if (!(memoryUncheckedList == null || memoryUncheckedList.getList() == null || memoryUncheckedList.getList().size() <= 0)) {
@@ -666,6 +672,7 @@ public class FileQueryUtils {
                                 junkInfo.setAllchecked(true);
                                 junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
                                 junkInfo.setAppPackageName(packageName);
+                                if(!isService)
                                 junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
                                 long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
                                 if (mScanFileListener != null) {
@@ -725,6 +732,7 @@ public class FileQueryUtils {
                         junkInfo.setAllchecked(true);
                         junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
                         junkInfo.setAppPackageName(packageName);
+                        if(!isService)
                         junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
                         long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
                         if (mScanFileListener != null) {
@@ -824,6 +832,7 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setPid(appMemoryInfo2.getId());
                         onelevelGarbageInfo.setTotalSize(totalPss);
                         onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
+                        if(!isService)
                         onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
                         if (mScanFileListener != null) {
                             mScanFileListener.increaseSize(totalPss);
@@ -910,6 +919,7 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setGarbageType("TYPE_PROCESS");
                         onelevelGarbageInfo.setAppPackageName(name);
                         onelevelGarbageInfo.setAppName(getAppName(packageManager.getApplicationInfo(name, 0)));
+                        if(isService)
                         onelevelGarbageInfo.setGarbageIcon(getAppIcon(packageManager.getApplicationInfo(name, 0)));
 //                        onelevelGarbageInfo.setDescp(CleanAppApplication.getInstance().getString(R.string.clean_suggested));
                         boolean isIgore = false;
@@ -1006,6 +1016,7 @@ public class FileQueryUtils {
                                     onelevelGarbageInfo.setVersionName(packageArchiveInfo.versionName);
                                     onelevelGarbageInfo.setVersionCode(packageArchiveInfo.versionCode);
                                     onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
+                                    if(!isService)
                                     onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
                                     onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
                                    /* if (mScanFileListener != null) {
