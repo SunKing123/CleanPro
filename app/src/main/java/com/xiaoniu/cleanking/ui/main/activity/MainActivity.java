@@ -216,6 +216,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if(!PreferenceUtil.getIsPushDeviceInfo()){//第一次启动上报
             getDeviceInfo();
         }
+
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }
@@ -328,7 +329,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void onResume() {
         super.onResume();
         //开启常驻通知栏服务
-        if (NotificationsUtils.isNotificationEnabled(this)){
+        if (NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()){
             try {
                 startService(new Intent(this, NotificationService.class));
             }catch (RuntimeException e){

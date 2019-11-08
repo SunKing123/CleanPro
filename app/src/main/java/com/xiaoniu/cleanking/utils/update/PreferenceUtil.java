@@ -1033,6 +1033,22 @@ public class PreferenceUtil {
 
     }
 
+    //通知栏权限开关是否开启
+    public static void saveIsNotificationEnabled(boolean isEnable) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, isEnable).commit();
+    }
+    //通知栏权限开关是否开启
+    public static boolean getIsNotificationEnabled() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
+
+    }
+
+
+
+
 
 
 

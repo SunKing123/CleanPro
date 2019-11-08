@@ -46,16 +46,18 @@ public class WhiteListSettingActivity extends BaseActivity {
 
         mSbtnNotificationTag.setOnCheckedChangeListener((view, isChecked) -> {
             if (isChecked) {
-                if (!NotificationsUtils.isNotificationEnabled(this))
+                if (!NotificationsUtils.isNotificationEnabled(this)){
                     NotificationsUtils.showDialogGetNotificationPremission(WhiteListSettingActivity.this);
+                }
             }
+            PreferenceUtil.saveIsNotificationEnabled(isChecked);
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSbtnNotificationTag.setChecked(NotificationsUtils.isNotificationEnabled(this));
+        mSbtnNotificationTag.setChecked((NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()));
         if (mSbtnNotificationTag.isChecked()){
             //开启常驻通知栏服务
             startService(new Intent(this, NotificationService.class));
