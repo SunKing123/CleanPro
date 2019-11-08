@@ -409,6 +409,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
+        PreferenceUtil.saveCleanAllUsed(false);
+        PreferenceUtil.saveCleanJiaSuUsed(false);
+        PreferenceUtil.saveCleanPowerUsed(false);
+        PreferenceUtil.saveCleanNotifyUsed(false);
+        PreferenceUtil.saveCleanWechatUsed(false);
+        PreferenceUtil.saveCleanCoolUsed(false);
+        PreferenceUtil.saveCleanGameUsed(false);
         initChuanShanJia();
         if (NetworkUtils.isNetConnected()) {
             mPresenter.getAuditSwitch();

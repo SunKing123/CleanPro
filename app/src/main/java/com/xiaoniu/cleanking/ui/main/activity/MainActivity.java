@@ -56,6 +56,7 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -213,7 +214,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取本地推送配置
         mPresenter.getPushSetList();
         //上报设备信息
-        if(!PreferenceUtil.getIsPushDeviceInfo()){//第一次启动上报
+        if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
             getDeviceInfo();
         }
 
@@ -329,10 +330,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void onResume() {
         super.onResume();
         //开启常驻通知栏服务
-        if (NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()){
+        if (NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()) {
             try {
                 startService(new Intent(this, NotificationService.class));
-            }catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
@@ -434,13 +435,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onCreate(savedInstanceState);
         //注册订阅者
         EventBus.getDefault().register(this);
-        PreferenceUtil.saveCleanAllUsed(false);
-        PreferenceUtil.saveCleanJiaSuUsed(false);
-        PreferenceUtil.saveCleanPowerUsed(false);
-        PreferenceUtil.saveCleanNotifyUsed(false);
-        PreferenceUtil.saveCleanWechatUsed(false);
-        PreferenceUtil.saveCleanCoolUsed(false);
-        PreferenceUtil.saveCleanGameUsed(false);
     }
 
     @Override
@@ -558,7 +552,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
-
     public void start() {
         try {
             //启动保活服务
@@ -577,8 +570,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
 
     }
+
     //获取设备信息
-    public void getDeviceInfo(){
+    public void getDeviceInfo() {
         try {
             int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE);
             DeviceInfo deviceInfo = new DeviceInfo();
@@ -600,13 +594,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             deviceInfo.setType(Build.TYPE);
             deviceInfo.setSerial(Build.SERIAL);
             deviceInfo.setUser(Build.USER);
-            deviceInfo.setSystemVersion( DeviceUtil.getSystemVersion());
+            deviceInfo.setSystemVersion(DeviceUtil.getSystemVersion());
             deviceInfo.setSystemLanguage(Locale.getDefault().getDisplayLanguage());
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                deviceInfo.setDeviceId( DeviceUtil.getDeviceId(mContext));
+                deviceInfo.setDeviceId(DeviceUtil.getDeviceId(mContext));
                 deviceInfo.setDeviceId2(DeviceUtil.getDeviceId2(mContext));
             } else {
-    //            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
+                //            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
                 deviceInfo.setDeviceId("");
                 deviceInfo.setDeviceId2("");
             }

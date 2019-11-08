@@ -12,13 +12,6 @@
         android:scaleType="centerCrop"
         android:visibility="gone" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/acceview_yindao2"
-        android:layout_width="match_parent"
-        android:scaleType="centerCrop"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <RelativeLayout
         android:id="@+id/v_content"
         android:layout_width="match_parent"

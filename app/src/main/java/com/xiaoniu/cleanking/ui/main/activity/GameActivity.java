@@ -87,8 +87,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     TextView mOpenTv;
     @BindView(R.id.acceview_yindao)
     LottieAnimationView mLottieAnimationViewY;
-    @BindView(R.id.acceview_yindao2)
-    LottieAnimationView mLottieAnimationViewY2;
     @BindView(R.id.acceview)
     LottieAnimationView mLottieAnimationView;
     @BindView(R.id.acceview2)
@@ -166,40 +164,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                initLottieYinDao2();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-    }
-
-    private void initLottieYinDao2() {
-        mLottieAnimationViewY2.setVisibility(View.VISIBLE);
-        mLottieAnimationViewY2.useHardwareAcceleration(true);
-        mLottieAnimationViewY2.setAnimation("yindao3.json");
-        mLottieAnimationViewY2.setImageAssetsFolder("images_game_yindao3");
-        mLottieAnimationViewY2.playAnimation();
-        mLottieAnimationViewY2.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
                 NiuDataAPI.onPageStart("gameboost_add_page_view_page", "游戏加速添加页浏览");
                 NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
                 mIsYinDaoFinish = true;
                 mLottieAnimationViewY.setVisibility(View.GONE);
-                mLottieAnimationViewY2.setVisibility(View.GONE);
                 mOpenView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.VISIBLE);
             }
