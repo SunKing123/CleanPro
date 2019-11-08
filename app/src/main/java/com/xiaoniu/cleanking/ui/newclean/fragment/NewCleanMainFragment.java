@@ -73,6 +73,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -315,6 +316,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
+        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
         mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -348,6 +350,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
     }
 
     /**

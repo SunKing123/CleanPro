@@ -1,22 +1,8 @@
-[{
-		"packName": "com.tencent.mm",
-		"appName": "微信",
-		"fileList": [{
-			"folderName": "Tencent",
-			"type": 1
-		}]
-	}, {
+[ {
 		"packName": "com.kugou.android",
 		"appName": "酷狗音乐",
 		"fileList": [{
 			"folderName": "kugou",
-			"type": 1
-		}]
-	}, {
-		"packName": "com.tencent.mobileqq",
-		"appName": "QQ",
-		"fileList": [{
-			"folderName": "Tencent",
 			"type": 1
 		}]
 	}, {
