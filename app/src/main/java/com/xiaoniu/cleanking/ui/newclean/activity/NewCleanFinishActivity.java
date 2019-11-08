@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -284,6 +285,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initChuanShanJia();
         initChuanShanJia2();
         initChuanShanJiaScreen();
+
+       /* View ad_bg = header.findViewById(R.id.v_ad_anim);
+        final AnimationDrawable background = (AnimationDrawable) ad_bg.getBackground();
+        background.start();*/
     }
 
     //获取埋点参数
@@ -1451,6 +1456,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             Glide.get(this).clearMemory();
         }
         //Umeng ---
+        if (null != mHandler) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+        if (null != mHandlerScreen) {
+            mHandlerScreen.removeCallbacksAndMessages(null);
+        }
     }
 
     public void startLoadData() {

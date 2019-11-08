@@ -45,7 +45,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             jzvdStd.setUp(itemInfo.url, itemInfo.title, Jzvd.SCREEN_NORMAL);
             jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageUtil.display(itemInfo.coverImage, jzvdStd.thumbImageView);
-            jzvdStd.setCallBack(new JzvdStd.ThumbImageClickCallBack(){
+            jzvdStd.setCallBack(new JzvdStd.ThumbImageClickCallBack() {
                 @Override
                 public void clickCall() {
                     StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.title, itemInfo.videoId, position + 1);
@@ -93,8 +93,8 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 return 0;
             } else if (itemData instanceof NewsItemInfo) {
                 int size = 0;
-                if(itemData!=null){
-                    ArrayList<NewsPicInfo> list= ((NewsItemInfo) itemData).miniimg;
+                if (itemData != null) {
+                    ArrayList<NewsPicInfo> list = ((NewsItemInfo) itemData).miniimg;
                     if (list != null) {
                         size = list.size();
                     }
