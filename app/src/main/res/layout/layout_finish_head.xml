@@ -27,7 +27,6 @@
             android:id="@+id/tv_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="554"
             android:textColor="@color/white"
             android:textSize="69sp"
             android:visibility="visible" />
@@ -45,8 +44,7 @@
                 android:id="@+id/tv_clear_finish_gb_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_10dp"
-                android:text="MB"
+                android:layout_marginBottom="@dimen/dimen_7dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_20sp" />
 
@@ -68,7 +66,6 @@
                     android:id="@+id/tv_ql"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="已清理"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -81,15 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish" />
-
-    <!-- <LinearLayout
-         android:id="@+id/v_ad_anim"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_marginLeft="@dimen/dimen_8dp"
-         android:layout_marginTop="-60dp"
-         android:layout_marginRight="@dimen/dimen_8dp"
-         android:background="@drawable/anim_ad">-->
 
     <com.qq.e.ads.nativ.widget.NativeAdContainer
         android:id="@+id/native_ad_container"
@@ -142,7 +130,8 @@
             <RelativeLayout
                 android:id="@+id/v_video"
                 android:layout_width="match_parent"
-                android:layout_height="208dp"
+                android:layout_height="188dp"
+                android:background="@drawable/anim_ad"
                 android:layout_below="@+id/tv_advert_content"
                 android:layout_marginTop="@dimen/dimen_8dp">
 
@@ -150,7 +139,7 @@
                 <FrameLayout
                     android:id="@+id/v_video_chuanshanjia"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_200dp"
+                    android:layout_height="180dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_4dp"
                     android:layout_marginRight="@dimen/dimen_4dp"
@@ -160,7 +149,7 @@
                 <com.qq.e.ads.nativ.MediaView
                     android:id="@+id/gdt_media_view"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_200dp"
+                    android:layout_height="180dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_4dp"
                     android:layout_marginRight="@dimen/dimen_4dp" />
@@ -168,7 +157,7 @@
                 <ImageView
                     android:id="@+id/iv_advert"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_200dp"
+                    android:layout_height="180dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_4dp"
                     android:layout_marginRight="@dimen/dimen_4dp"
@@ -183,5 +172,5 @@
                 android:layout_marginTop="@dimen/dimen_8dp" />
         </RelativeLayout>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
-    <!--    </LinearLayout>-->
+
 </LinearLayout>

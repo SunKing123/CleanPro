@@ -75,9 +75,9 @@
             android:layout_marginRight="@dimen/dimen_16dp"
             android:background="@drawable/icon_clean_btn_bg"
             android:gravity="center"
-            android:textSize="@dimen/dimen_18sp"
             android:text="@string/open_quicken"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_18sp" />
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
@@ -85,6 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/icon_scaning_bg03"
+        android:scaleType="centerCrop"
         android:visibility="gone" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -92,6 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/icon_scaning_bg02"
+        android:scaleType="centerCrop"
         android:visibility="gone" />
 
     <com.airbnb.lottie.LottieAnimationView

@@ -52,6 +52,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
+    private boolean mIsFinish; //是否点击了返回键
 
     @Override
     protected int getLayoutId() {
@@ -88,6 +89,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
 
     @Override
     public void onBackPressed() {
+        mIsFinish = true;
         StatisticsUtils.trackClick("system_return_click", "微信清理完成动画展示页返回", "wxclean_animation_page", "wxclean_finish_annimation_page");
         super.onBackPressed();
     }
@@ -112,6 +114,8 @@ public class WechatCleanResultActivity extends SimpleActivity {
         mCleanAnimView.setListener(() -> finish());
 
         mCleanAnimView.setAnimationEnd(() -> {
+            Log.d("XiLei", "dddddddddddddddddd");
+            if (mIsFinish) return;
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
             if (mTitle.equals(getString(R.string.tool_chat_clear))) {
                 PreferenceUtil.saveCleanWechatUsed(true);

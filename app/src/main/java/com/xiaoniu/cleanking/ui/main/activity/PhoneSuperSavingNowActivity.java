@@ -105,6 +105,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     String viewPageEventCode = "";
     String viewPageEventName = "";
+    private boolean mIsFinish; //是否点击了返回键
 
     private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
@@ -395,6 +396,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     }
 
     private void showCleanFinishUI() {
+        if (mIsFinish) return;
         //保存超强省电 省电完成时间
         if (PreferenceUtil.getPowerCleanTime()) {
             PreferenceUtil.savePowerCleanTime();
@@ -455,6 +457,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         switch (v.getId()) {
             case R.id.iv_back:
                 //省电完成 返回点击
+                mIsFinish = true;
                 if (isFinish)
                     StatisticsUtils.trackClick("Super_Power_Saving_Completion_Return_click", "\"超强省电完成返回\"点击", "Super_Power_Saving_page", "Super_Power_Saving_Completion_page");
             case R.id.btn_cancel:
@@ -469,6 +472,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
     @Override
     public void onBackPressed() {
+        mIsFinish = true;
         StatisticsUtils.trackClick("system_return_click", returnEventName, sourcePage, currentPage);
         super.onBackPressed();
     }

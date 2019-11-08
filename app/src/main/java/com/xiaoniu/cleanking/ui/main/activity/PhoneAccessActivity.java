@@ -19,7 +19,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -719,7 +718,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
 //            tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.icon_clean_btn_bg);
             tv_delete.setSelected(selectCount == 0 ? false : true);
-            if (selectCount <= 0) {
+            if (selectCount <= 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 tv_delete.getBackground().setAlpha(75);
                 tv_delete.setText(getString(R.string.tool_one_key_speed));
             } else if (selectCount == listFile.size()) {

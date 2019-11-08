@@ -603,6 +603,29 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * 开始加速
      */
     private void startClean() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+            if (PreferenceUtil.getGameTime()) {
+                PreferenceUtil.saveGameTime();
+            }
+            PreferenceUtil.saveGameQuikcenStart(true);
+            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+            AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
+            if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.game_quicken));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.game_quicken));
+                bundle.putString("num", NumberUtils.mathRandom(25, 50));
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+            finish();
+            return;
+        }
+
         mIsStartClean = true;
         NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
         NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_end_page", "gameboost_animation_page", "gameboost_animation_page_view_page", "游戏加速动画页浏览");

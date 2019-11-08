@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -287,9 +288,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initChuanShanJia2();
         initChuanShanJiaScreen();
 
-       /* View ad_bg = header.findViewById(R.id.v_ad_anim);
+        View ad_bg = header.findViewById(R.id.v_video);
         final AnimationDrawable background = (AnimationDrawable) ad_bg.getBackground();
-        background.start();*/
+        background.start();
     }
 
     //获取埋点参数

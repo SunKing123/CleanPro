@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +19,6 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
-import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
@@ -69,8 +67,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private ImageView mIvSet;
     private boolean isCleanFinish = false;
     private int mNotifySize = 0; //通知条数
-    private int mPowerSize= 0; //耗电应用数
-    private int mRamScale= 0; //所有应用所占内存大小
+    private int mPowerSize = 0; //耗电应用数
+    private int mRamScale = 0; //所有应用所占内存大小
 
     String sourcePage = "";
     String currentPage = "";
@@ -78,6 +76,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     String pageviewEventName = "";
     String returnEventName = "";
     String sysReturnEventName = "";
+    private boolean mIsFinish; //是否点击了返回键
 
     public static void startNotificationCleanActivity(Context context) {
         if (context != null) {
@@ -174,6 +173,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     @Override
     protected void setListener() {
         mIvBack.setOnClickListener(v -> {
+            mIsFinish = true;
             finish();
             //通知栏清理返回 点击"
             StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
@@ -269,6 +269,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        mIsFinish = true;
         StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         super.onBackPressed();
     }
@@ -282,6 +283,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         //通知栏清理完成浏览
 //        StatisticsUtils.trackClick("Notice_Bar_Cleaning_Completed_view_page", "\"通知栏清理完成\"浏览", "Notice_Bar_Cleaning_page", "Notice_Bar_Cleaning_Completed_page");
 
+
+        if (mIsFinish) return;
         //保存通知栏清理完成时间
         if (PreferenceUtil.getNotificationCleanTime()) {
             PreferenceUtil.saveNotificationCleanTime();

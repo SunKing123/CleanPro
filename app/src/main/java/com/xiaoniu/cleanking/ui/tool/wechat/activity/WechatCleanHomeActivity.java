@@ -218,8 +218,6 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
             NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
             NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
-
-
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 PreferenceUtil.saveCleanWechatUsed(true);
                 boolean isOpen = false;
