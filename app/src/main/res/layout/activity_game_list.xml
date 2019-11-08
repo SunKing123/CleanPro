@@ -41,7 +41,7 @@
             android:paddingBottom="@dimen/dimen_8dp"
             android:text="@string/game_list_hint"
             android:textColor="@color/color_666666"
-            android:textSize="@dimen/dimen_14sp" />
+            android:textSize="@dimen/dimen_12sp" />
 
         <RelativeLayout
             android:id="@+id/v_banner"

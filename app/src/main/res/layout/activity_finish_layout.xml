@@ -15,8 +15,8 @@
             android:id="@+id/btnLeft"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="16dp"
-            android:scaleType="fitXY"
+            android:paddingLeft="@dimen/dimen_16dp"
+            android:paddingRight="@dimen/dimen_8dp"
             android:src="@drawable/common_icon_back_arrow_white" />
 
         <TextView

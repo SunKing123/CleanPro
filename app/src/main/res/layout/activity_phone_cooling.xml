@@ -30,7 +30,7 @@
                     android:layout_width="49dp"
                     android:layout_height="49dp"
                     android:layout_marginTop="38dp"
-                    android:src="@mipmap/icon_dun" />
+                    android:src="@drawable/icon_dun" />
 
                 <LinearLayout
                     android:id="@+id/layout_right_cooling"

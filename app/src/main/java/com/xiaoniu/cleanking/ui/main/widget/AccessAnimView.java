@@ -8,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -113,6 +114,7 @@ public class AccessAnimView extends RelativeLayout {
         line_hj = v.findViewById(R.id.line_hj);
         iv_bot = v.findViewById(R.id.iv_bot);
         tv_size = v.findViewById(R.id.tv_size_show);
+        tv_size.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         tv_gb = v.findViewById(R.id.tv_gb);
 //        line_access = v.findViewById(R.id.line_access);
         line_size = v.findViewById(R.id.line_size);

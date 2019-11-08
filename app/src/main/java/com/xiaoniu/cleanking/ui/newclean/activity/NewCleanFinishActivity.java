@@ -181,7 +181,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initView() {
         EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
-        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
+        if (!getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
+        }
         mPresenter.getSwitchInfoList();
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
@@ -394,7 +396,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 createEventName = "直接跳降温结果页创建时";
                 createEventCode = "direct_cooling_success_page_custom";
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
-                Log.d("XiLei", "sourcePage=" + sourcePage);
                 //游戏加速
                 currentPage = "direct_gameboots_success_page";
                 createEventName = "直接跳游戏加速结果页创建时";

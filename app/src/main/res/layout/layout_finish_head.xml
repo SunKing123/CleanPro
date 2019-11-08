@@ -17,15 +17,17 @@
 
         <ImageView
             android:id="@+id/iv_dun"
-            android:layout_width="47dp"
-            android:layout_height="54dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginRight="@dimen/dimen_15dp"
-            android:src="@mipmap/icon_dun" />
+            android:src="@drawable/icon_dun" />
 
         <TextView
             android:id="@+id/tv_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="554"
             android:textColor="@color/white"
             android:textSize="69sp"
             android:visibility="visible" />
@@ -35,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_4dp"
+            android:layout_marginTop="@dimen/dimen_4dp"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -42,7 +45,8 @@
                 android:id="@+id/tv_clear_finish_gb_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_5dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:text="MB"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_20sp" />
 
@@ -64,8 +68,9 @@
                     android:id="@+id/tv_ql"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="已清理"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
         </LinearLayout>

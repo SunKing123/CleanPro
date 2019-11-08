@@ -225,6 +225,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
                     }
                 } else {
+                    mShowCount++;
                     mElectricityFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power_gif, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
@@ -320,13 +321,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
         //有通知时改变通知栏清理状态
-        if (mNotifySize > 0 && !PreferenceUtil.isCleanNotifyUsed() && mShowCount < 2) {
+       /* if (mNotifySize > 0 && !PreferenceUtil.isCleanNotifyUsed() && mShowCount < 2) {
             mShowCount++;
             mNotiClearFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
-        }
+        }*/
 
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > 2) {
@@ -357,8 +358,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
         if (null == event || TextUtils.isEmpty(event.getTitle())) return;
+        mShowCount = 0;
         if (getString(R.string.tool_one_key_speed).contains(event.getTitle())) { //一键加速
-            mShowCount--;
+//            mShowCount--;
             mAccFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -383,7 +385,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.tool_notification_clean);
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
-                    mShowCount--;
+//                    mShowCount--;
                     mNotiClearFinishIv.setVisibility(View.VISIBLE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -400,7 +402,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
                 } else {
-                    mShowCount--;
+//                    mShowCount--;
                     mElectricityFinishIv.setVisibility(View.VISIBLE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -412,7 +414,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         } else if (getString(R.string.tool_notification_clean).contains(event.getTitle())) {//通知栏清理
-            mShowCount--;
+//            mShowCount--;
             mNotiClearFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -446,7 +448,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mElectricityTv.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
                 } else {
-                    mShowCount--;
+//                    mShowCount--;
                     mElectricityFinishIv.setVisibility(View.VISIBLE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
                     mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -459,7 +461,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
         } else if (getString(R.string.tool_super_power_saving).contains(event.getTitle())) { //超强省电
-            mShowCount--;
+//            mShowCount--;
             mElectricityFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_power, mElectricityIv);
             mElectricityTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -501,7 +503,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.tool_notification_clean);
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
-                    mShowCount--;
+//                    mShowCount--;
                     mNotiClearFinishIv.setVisibility(View.VISIBLE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
@@ -509,7 +511,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
-
+        if (mShowCount <= 0) {
+            mTvCleanType01.setText(getString(R.string.recommend_count_hint_all));
+        } else {
+            mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
+        }
     }
 
     /**
@@ -525,6 +531,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
+        Log.d("XiLei", "changeLifecyEvent");
         if (lifecycEvent.isActivity()) {
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setVisibility(VISIBLE);

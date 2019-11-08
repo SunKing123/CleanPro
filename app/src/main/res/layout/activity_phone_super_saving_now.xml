@@ -37,7 +37,7 @@
                     android:layout_width="49dp"
                     android:layout_height="49dp"
                     android:layout_marginRight="@dimen/dimen_8dp"
-                    android:src="@mipmap/icon_dun" />
+                    android:src="@drawable/icon_dun" />
 
                 <TextView
                     android:id="@+id/tv_size"
