@@ -471,17 +471,19 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         mModel.pushDeviceInfo(deviceInfo,new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
-                LogUtils.i("--zzh---"+message);
+//                LogUtils.i("--zzh---"+message);
+                PreferenceUtil.saveIsPushDeviceInfo();
+
             }
 
             @Override
             public void getData(BaseEntity baseEntity) {
-                LogUtils.i("--zzh---"+baseEntity.code);
+//                LogUtils.i("--zzh---"+baseEntity.code);
             }
 
             @Override
             public void showExtraOp(String message) {
-                LogUtils.i("--zzh---"+message);
+//                LogUtils.i("--zzh---"+message);
             }
 
             @Override

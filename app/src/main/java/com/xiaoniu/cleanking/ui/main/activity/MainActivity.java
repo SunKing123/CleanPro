@@ -213,9 +213,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取本地推送配置
         mPresenter.getPushSetList();
         //上报设备信息
-        getDeviceInfo();
-
-
+        if(!PreferenceUtil.getIsPushDeviceInfo()){//第一次启动上报
+            getDeviceInfo();
+        }
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }

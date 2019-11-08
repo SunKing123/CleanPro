@@ -23,6 +23,8 @@ public class SpCacheConfig {
 
     public static final String CLEAN_ACTION_LOG = "clean_action_log";
 
+    public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
+
     /**
      * 安装包白名单文件缓存配置
      */

@@ -1020,5 +1020,20 @@ public class PreferenceUtil {
         }
     }
 
+    //是否上报device_info
+    public static void saveIsPushDeviceInfo() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_PUSH_DEVICE_INFO, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_PUSH_DEVICE_INFO, true).commit();
+    }
+    //获取是否上报
+    public static boolean getIsPushDeviceInfo() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_PUSH_DEVICE_INFO, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_PUSH_DEVICE_INFO, false);
+
+    }
+
+
+
 
 }
