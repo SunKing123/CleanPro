@@ -836,6 +836,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     View video = ads.get(0).getAdView();
                     if (video != null) { //展示视频
                         if (video.getParent() == null) {
+                            mChuanShanJiaVideo.setVisibility(View.VISIBLE);
                             mChuanShanJiaVideo.removeAllViews();
                             mChuanShanJiaVideo.addView(video);
                         }
