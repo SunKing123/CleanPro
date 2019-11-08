@@ -13,7 +13,7 @@
         android:background="@drawable/bg_gradient_clean_finish"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/dimen_30dp">
+        android:paddingBottom="@dimen/dimen_35dp">
 
         <ImageView
             android:id="@+id/iv_dun"
