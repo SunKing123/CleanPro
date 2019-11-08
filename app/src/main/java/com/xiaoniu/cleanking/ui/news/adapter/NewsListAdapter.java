@@ -48,7 +48,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             jzvdStd.setCallBack(new JzvdStd.ThumbImageClickCallBack() {
                 @Override
                 public void clickCall() {
-                    StatisticsUtils.trackClickNewsItem("information_page_news_click", "资讯页新闻点击", "selected_page", "information_page", itemInfo.title, itemInfo.videoId, position + 1);
+                    StatisticsUtils.trackClickNewsItem("information_page_video_click", "资讯页视频点击", "selected_page", "information_page", itemInfo.title, itemInfo.videoId, position + 1);
                 }
             });
 

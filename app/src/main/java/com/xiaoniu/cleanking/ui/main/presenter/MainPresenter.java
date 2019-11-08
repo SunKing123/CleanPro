@@ -438,9 +438,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     dataBean.setTitle("通知栏");
                     dataBean.setContent("通知栏");
                     dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
-                    //todo
-                    dataBean.setThresholdNum(BuildConfig.DEBUG ? 1 : 1);//每个小时监测
-                    dataBean.setInterValTime(60);
+
+                    dataBean.setThresholdNum(60);
+                    dataBean.setInterValTime(60);//每个小时监测
                     dataBean.setLastTime(0);
                     pushSettingList.getData().add(dataBean);
                     PreferenceUtil.saveCleanLog(new Gson().toJson(pushSettingList.getData()));
@@ -471,17 +471,19 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         mModel.pushDeviceInfo(deviceInfo,new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
-                LogUtils.i("--zzh---"+message);
+//                LogUtils.i("--zzh---"+message);
+                PreferenceUtil.saveIsPushDeviceInfo();
+
             }
 
             @Override
             public void getData(BaseEntity baseEntity) {
-                LogUtils.i("--zzh---"+baseEntity.code);
+//                LogUtils.i("--zzh---"+baseEntity.code);
             }
 
             @Override
             public void showExtraOp(String message) {
-                LogUtils.i("--zzh---"+message);
+//                LogUtils.i("--zzh---"+message);
             }
 
             @Override

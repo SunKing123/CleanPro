@@ -213,8 +213,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取本地推送配置
         mPresenter.getPushSetList();
         //上报设备信息
-        getDeviceInfo();
-
+        if(!PreferenceUtil.getIsPushDeviceInfo()){//第一次启动上报
+            getDeviceInfo();
+        }
 
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
@@ -328,7 +329,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void onResume() {
         super.onResume();
         //开启常驻通知栏服务
-        if (NotificationsUtils.isNotificationEnabled(this)){
+        if (NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()){
             try {
                 startService(new Intent(this, NotificationService.class));
             }catch (RuntimeException e){
@@ -599,7 +600,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             deviceInfo.setType(Build.TYPE);
             deviceInfo.setSerial(Build.SERIAL);
             deviceInfo.setUser(Build.USER);
-            deviceInfo.setSystemVersion(String.valueOf(Build.VERSION.SDK_INT));
+            deviceInfo.setSystemVersion( DeviceUtil.getSystemVersion());
             deviceInfo.setSystemLanguage(Locale.getDefault().getDisplayLanguage());
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
                 deviceInfo.setDeviceId( DeviceUtil.getDeviceId(mContext));

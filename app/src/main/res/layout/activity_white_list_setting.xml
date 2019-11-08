@@ -132,7 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="开启通知栏权限"
+            android:text="开启常驻通知栏"
             android:textColor="@color/color_333333"
             android:textSize="@dimen/dimen_15sp" />
 
