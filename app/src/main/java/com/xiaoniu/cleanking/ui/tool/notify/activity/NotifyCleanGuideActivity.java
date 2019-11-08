@@ -93,10 +93,8 @@ public class NotifyCleanGuideActivity extends BaseActivity {
     protected void setListener() {
         mTvClean.setOnClickListener(v -> {
             if (NotifyUtils.isNotificationListenerEnabled()) {
-                Log.d("XiLei", "111111111");
                 startNodifyDetail();
             } else {
-                Log.d("XiLei", "22222222");
                 NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
                 currentPage = "notification_clean_authorization_page";
                 pageviewEventName = "用户在通知授权页浏览";
