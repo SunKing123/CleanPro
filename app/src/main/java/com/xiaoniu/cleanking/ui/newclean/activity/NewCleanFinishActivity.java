@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -357,7 +356,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             currentPage = "clean_up_page_view_immediately";
         }
 
-
         //首页三分钟以内直接进入当前页情况
         if (sourcePage != null && sourcePage.equals("home_page")) {
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
@@ -396,8 +394,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 createEventName = "直接跳降温结果页创建时";
                 createEventCode = "direct_cooling_success_page_custom";
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
+                Log.d("XiLei", "sourcePage=" + sourcePage);
                 //游戏加速
-                currentPage = "direct_game_success_page";
+                currentPage = "direct_gameboots_success_page";
                 createEventName = "直接跳游戏加速结果页创建时";
                 createEventCode = "direct_game_success_page_custom";
             }

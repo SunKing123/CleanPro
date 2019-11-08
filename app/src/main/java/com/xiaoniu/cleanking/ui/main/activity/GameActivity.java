@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -110,7 +111,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private boolean mIsStartClean; //是否开始加速
     private boolean mIsAdError; //激励视频加载失败
     private boolean mIsYinDaoFinish; //引导动画是否结束
-    private boolean mIsShowDialog;
 
     private static final String TAG = "ChuanShanJia";
 
@@ -137,16 +137,14 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             NiuDataAPI.onPageStart("gameboost_add_page_view_page", "游戏加速添加页浏览");
             NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
         }
-
+        initRecyclerView();
         if (!PreferenceUtil.getGameQuikcenStart()) {
             initLottieYinDao();
         } else {
             mContentView.setVisibility(View.VISIBLE);
             mOpenView.setVisibility(View.VISIBLE);
         }
-
         mPresenter.getSwitchInfoList();
-        initRecyclerView();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         if (Build.VERSION.SDK_INT < 26) {
@@ -391,9 +389,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             case R.id.iv_back:
                 if (!mIsYinDaoFinish && !PreferenceUtil.getGameQuikcenStart()) {
                     StatisticsUtils.trackClick("return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
-                } else if (mIsShowDialog) {
-                    NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
-                    StatisticsUtils.trackClick("return_click", "游戏加速视频弹窗页返回", "gameboost_add_page", "gameboost_video_popup_page");
                 } else if (mIsStartClean) {
                     StatisticsUtils.trackClick("return_click", "游戏加速动画页返回", "gameboost_incentive_video_end_page", "gameboost_animation_page");
                 } else {
@@ -446,7 +441,16 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 dialogWindow.setGravity(Gravity.BOTTOM);//设置对话框位置
                 dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);//设置横向全屏
                 dialogWindow.setWindowAnimations(R.style.share_animation);//设置动画
-                mIsShowDialog = true;
+                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getRepeatCount() == 0) {
+                            NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
+                            StatisticsUtils.trackClick("return_click", "游戏加速视频弹窗页返回", "gameboost_add_page", "gameboost_video_popup_page");
+                        }
+                        return false;
+                    }
+                });
                 break;
         }
     }
@@ -456,9 +460,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!mIsYinDaoFinish && !PreferenceUtil.getGameQuikcenStart()) {
                 StatisticsUtils.trackClick("system_return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
-            } else if (mIsShowDialog) {
-                NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
-                StatisticsUtils.trackClick("system_return_click", "游戏加速视频弹窗页返回", "gameboost_add_page", "gameboost_video_popup_page");
             } else if (mIsStartClean) {
                 StatisticsUtils.trackClick("system_return_click", "游戏加速动画页返回", "gameboost_incentive_video_end_page", "gameboost_animation_page");
             } else {
@@ -510,7 +511,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
                     @Override
                     public void onAdShow() {
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", codeId, "穿山甲", "gameboost_add_page", "gameboost_incentive_video_page", "");
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", codeId, "穿山甲", "gameboost_add_page", "gameboost_incentive_video_page", " ");
                         Log.d(TAG, "rewardVideoAd show");
                     }
 
@@ -524,6 +525,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     public void onAdClose() {
                         Log.d(TAG, "rewardVideoAd close");
                         StatisticsUtils.trackClick("close_click", "游戏加速激励视频结束页关闭点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
+                        NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
                         startClean();
                     }
 
@@ -531,7 +533,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     @Override
                     public void onVideoComplete() {
                         NiuDataAPI.onPageStart("gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
-                        NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
                         Log.d(TAG, "rewardVideoAd complete");
                     }
 
@@ -560,10 +561,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
                     @Override
                     public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
-                        StatisticsUtils.trackClick("download_click", "游戏加速激励视频结束页下载点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
                         if (!mHasShowDownloadActive) {
                             mHasShowDownloadActive = true;
                             Log.d(TAG, "下载中，点击下载区域暂停");
+                            StatisticsUtils.trackClick("download_click", "游戏加速激励视频结束页下载点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
                         }
                     }
 
