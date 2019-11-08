@@ -937,6 +937,26 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_GAME_QUIKCEN_START, false);
     }
 
+
+    /**
+     * 保存有游戏加速的百分比
+     *
+     * @return
+     */
+    public static void saveGameCleanPer(String count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.GAME_QUIKCEN_NUM, count).commit();
+    }
+
+    /**
+     * 保存有游戏加速的百分比
+     */
+    public static String getGameCleanPer() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.GAME_QUIKCEN_NUM, "");
+    }
+
     /**
      * 判断6大功能在清理完成页需要展示的数量
      *
@@ -1026,6 +1046,7 @@ public class PreferenceUtil {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SpCacheConfig.IS_PUSH_DEVICE_INFO, true).commit();
     }
+
     //获取是否上报
     public static boolean getIsPushDeviceInfo() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_PUSH_DEVICE_INFO, Context.MODE_PRIVATE);
@@ -1039,17 +1060,13 @@ public class PreferenceUtil {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, isEnable).commit();
     }
+
     //通知栏权限开关是否开启
     public static boolean getIsNotificationEnabled() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
-
-
-
-
-
 
 
 }

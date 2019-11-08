@@ -423,12 +423,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             //一键加速
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
+                mShowCount++;
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs_o, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mAccTv.setText(getString(R.string.tool_one_key_speed));
             } else if (!PreferenceUtil.isCleanJiaSuUsed() && PreferenceUtil.getCleanTime()) {
                 Log.d("XiLei", "22222222");
+                mShowCount++;
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
@@ -474,12 +476,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
             //一键加速
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
+                mShowCount++;
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs_o, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mAccTv.setText(getString(R.string.tool_one_key_speed));
             } else if (!PreferenceUtil.isCleanJiaSuUsed() && PreferenceUtil.getCleanTime()) {
                 Log.d("XiLei", "111111");
+                mShowCount++;
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));

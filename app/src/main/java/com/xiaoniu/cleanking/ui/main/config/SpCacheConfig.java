@@ -86,6 +86,7 @@ public class SpCacheConfig {
     public static final  String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
     public static final  String IS_FIRST_HOME_RECOMMEND = "is_first_home_recommend";
     public static final  String IS_GAME_QUIKCEN_START = "is_game_quikcen_start";
+    public static final  String GAME_QUIKCEN_NUM = "game_quikcen_num";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";
