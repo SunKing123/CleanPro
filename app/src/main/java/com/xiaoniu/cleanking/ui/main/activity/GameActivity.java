@@ -363,8 +363,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     public void getSwitchInfoListFail() {
         ToastUtils.showShort(getString(R.string.net_error));
-        mOpenTv.setEnabled(false);
-        mOpenTv.getBackground().setAlpha(75);
+        if (null == mSelectNameList || mSelectNameList.size() <= 0) {
+            mOpenTv.setEnabled(false);
+            mOpenTv.getBackground().setAlpha(75);
+        }
+        mIsAdError = true;
     }
 
     /**
@@ -399,6 +402,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 finish();
                 break;
             case R.id.tv_open:
+                if (mIsAdError) {
+                    startClean();
+                    return;
+                }
                 if (PreferenceUtil.getGameQuikcenStart()) {
                     NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                     StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", "gameboost_add_page", "gameboost_video_popup_page");
@@ -516,7 +523,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     @Override
                     public void onAdClose() {
                         Log.d(TAG, "rewardVideoAd close");
-                        StatisticsUtils.clickAD("close_click", "游戏加速激励视频结束页关闭点击", "1", codeId, "穿山甲", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "");
+                        StatisticsUtils.trackClick("close_click", "游戏加速激励视频结束页关闭点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
                         startClean();
                     }
 
@@ -553,7 +560,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
                     @Override
                     public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
-                        StatisticsUtils.clickAD("download_click", "游戏加速激励视频结束页下载点击", "1", codeId, "穿山甲", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "");
+                        StatisticsUtils.trackClick("download_click", "游戏加速激励视频结束页下载点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
                         if (!mHasShowDownloadActive) {
                             mHasShowDownloadActive = true;
                             Log.d(TAG, "下载中，点击下载区域暂停");

@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -9,25 +8,22 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -97,8 +93,10 @@ public class NotifyCleanGuideActivity extends BaseActivity {
     protected void setListener() {
         mTvClean.setOnClickListener(v -> {
             if (NotifyUtils.isNotificationListenerEnabled()) {
+                Log.d("XiLei", "111111111");
                 startNodifyDetail();
             } else {
+                Log.d("XiLei", "22222222");
                 NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);
                 currentPage = "notification_clean_authorization_page";
                 pageviewEventName = "用户在通知授权页浏览";
@@ -120,7 +118,7 @@ public class NotifyCleanGuideActivity extends BaseActivity {
                             Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
                             NotifyCleanGuideActivity.this.startActivity(intent);
                             NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
-                        }catch (ActivityNotFoundException exception){
+                        } catch (ActivityNotFoundException exception) {
                             exception.printStackTrace();
                             Intent intent = new Intent();
                             NotifyCleanGuideActivity.this.startActivity(intent);

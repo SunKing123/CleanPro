@@ -56,9 +56,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="%"
-                    android:visibility="gone"
                     android:textColor="@color/white"
-                    android:textSize="35sp" />
+                    android:textSize="35sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_ql"
@@ -76,6 +76,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish" />
+
+    <!-- <LinearLayout
+         android:id="@+id/v_ad_anim"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="@dimen/dimen_8dp"
+         android:layout_marginTop="-60dp"
+         android:layout_marginRight="@dimen/dimen_8dp"
+         android:background="@drawable/anim_ad">-->
 
     <com.qq.e.ads.nativ.widget.NativeAdContainer
         android:id="@+id/native_ad_container"
@@ -128,7 +137,7 @@
             <RelativeLayout
                 android:id="@+id/v_video"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="208dp"
                 android:layout_below="@+id/tv_advert_content"
                 android:layout_marginTop="@dimen/dimen_8dp">
 
@@ -138,18 +147,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_200dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:layout_marginRight="@dimen/dimen_4dp"
                     android:scaleType="centerCrop" />
 
                 <!-- 原生广告的视频组件 -->
                 <com.qq.e.ads.nativ.MediaView
                     android:id="@+id/gdt_media_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/dimen_200dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:layout_marginRight="@dimen/dimen_4dp" />
 
                 <ImageView
                     android:id="@+id/iv_advert"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dimen_200dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:layout_marginRight="@dimen/dimen_4dp"
                     android:scaleType="fitXY" />
             </RelativeLayout>
 
@@ -161,4 +178,5 @@
                 android:layout_marginTop="@dimen/dimen_8dp" />
         </RelativeLayout>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
+    <!--    </LinearLayout>-->
 </LinearLayout>
