@@ -599,7 +599,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             deviceInfo.setType(Build.TYPE);
             deviceInfo.setSerial(Build.SERIAL);
             deviceInfo.setUser(Build.USER);
-            deviceInfo.setSystemVersion(String.valueOf(Build.VERSION.SDK_INT));
+            deviceInfo.setSystemVersion( DeviceUtil.getSystemVersion());
             deviceInfo.setSystemLanguage(Locale.getDefault().getDisplayLanguage());
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
                 deviceInfo.setDeviceId( DeviceUtil.getDeviceId(mContext));
