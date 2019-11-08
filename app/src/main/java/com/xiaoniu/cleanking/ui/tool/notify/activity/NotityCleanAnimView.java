@@ -409,8 +409,8 @@ public class NotityCleanAnimView extends RelativeLayout {
         mLayoutScan.setVisibility(GONE);
         mTvAnimTitle.setVisibility(VISIBLE);
         mAnimationView.useHardwareAcceleration();
-        mAnimationView.setAnimation("data_clean_finish.json");
-        mAnimationView.setImageAssetsFolder("images");
+        mAnimationView.setAnimation("yindao2.json");
+        mAnimationView.setImageAssetsFolder("images_game_yindao2");
         mAnimationView.playAnimation();
         mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -441,13 +441,13 @@ public class NotityCleanAnimView extends RelativeLayout {
     /**
      * 第一阶段  红色
      */
-    private static final int FirstLevel = 0xff06C581;
+    private static final int FirstLevel = 0xffFF6862;
 
-    private static final int SecondLevel = 0xff06C581;
+    private static final int SecondLevel = 0xffFFB231;
     /**
      * 第三阶段 绿色
      */
-    private static final int ThirdLevel = 0xff06C581;
+    private static final int ThirdLevel = 0xff29CABC;
 
     /**
      * 开始加速旋转

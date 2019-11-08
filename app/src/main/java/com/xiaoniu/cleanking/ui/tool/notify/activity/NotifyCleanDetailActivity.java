@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.widget.xrecyclerview.XRecyclerView;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -105,6 +106,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtil.setTransparentForWindow(this);
     }
 
     @Override
@@ -192,7 +194,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             EventBus.getDefault().post(new ResidentUpdateEvent(true));
             mNotifyCleanAdapter.clear();
 
-            mCleanAnimView.setData(CleanUtil.formatShortFileSize(100), CleanAnimView.page_junk_clean);
+            mCleanAnimView.setData(CleanUtil.formatShortFileSize(100), NotityCleanAnimView.page_junk_clean);
             mCleanAnimView.setVisibility(View.VISIBLE);
             //清理动画
             mCleanAnimView.startTopAnim(false);
@@ -222,6 +224,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
      */
     public void showBarColor(int animatedValue) {
         mTitleBar.setBackgroundColor(animatedValue);
+        mTitleBar.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, animatedValue, true);
         } else {
