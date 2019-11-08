@@ -892,11 +892,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
             }
+        }else{
+            NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
     }
 

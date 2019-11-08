@@ -919,7 +919,7 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setGarbageType("TYPE_PROCESS");
                         onelevelGarbageInfo.setAppPackageName(name);
                         onelevelGarbageInfo.setAppName(getAppName(packageManager.getApplicationInfo(name, 0)));
-                        if(isService)
+                        if(!isService)
                         onelevelGarbageInfo.setGarbageIcon(getAppIcon(packageManager.getApplicationInfo(name, 0)));
 //                        onelevelGarbageInfo.setDescp(CleanAppApplication.getInstance().getString(R.string.clean_suggested));
                         boolean isIgore = false;
