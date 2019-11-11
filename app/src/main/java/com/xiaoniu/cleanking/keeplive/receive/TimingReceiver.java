@@ -218,7 +218,7 @@ public class TimingReceiver extends BroadcastReceiver {
         //8.0以下 && 已经开启权限
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && PermissionUtils.isUsageAccessAllowed(cxt)) {
             FileQueryUtils mFileQueryUtils = new FileQueryUtils();
-            mFileQueryUtils.setIsService(true);
+            mFileQueryUtils.setIsService(false);
             Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
                 //获取到可以加速的应用名单
                 //文件加载进度回调
@@ -283,7 +283,7 @@ public class TimingReceiver extends BroadcastReceiver {
     public void startScanAll(PushSettingList.DataBean dataBean, Context mContext) {
         HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
-        mFileQueryUtils.setIsService(true);
+        mFileQueryUtils.setIsService(false);
         Observable.create(e -> {
             //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
