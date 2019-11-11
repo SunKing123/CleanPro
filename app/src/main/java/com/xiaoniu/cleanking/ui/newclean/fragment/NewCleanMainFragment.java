@@ -365,7 +365,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-        Log.d("XiLei", "fromHomeCleanFinishEvent");
         if (null == event || TextUtils.isEmpty(event.getTitle())) return;
         mShowCount = 0;
         if (getString(R.string.tool_one_key_speed).contains(event.getTitle())) { //一键加速
@@ -437,7 +436,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mAccTv.setText(getString(R.string.tool_one_key_speed));
             } else if (!PreferenceUtil.isCleanJiaSuUsed() && PreferenceUtil.getCleanTime()) {
-                Log.d("XiLei", "22222222");
                 mShowCount++;
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
@@ -490,7 +488,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mAccTv.setText(getString(R.string.tool_one_key_speed));
             } else if (!PreferenceUtil.isCleanJiaSuUsed() && PreferenceUtil.getCleanTime()) {
-                Log.d("XiLei", "111111");
                 mShowCount++;
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
@@ -538,7 +535,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Subscribe
     public void internalStoragePremEvent(InternalStoragePremEvent event) {
         if (!PreferenceUtil.isCleanJiaSuUsed()) {
-            Log.d("XiLei", "internalStoragePremEvent");
             mAccFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
@@ -548,7 +544,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
-        Log.d("XiLei", "changeLifecyEvent");
         if (lifecycEvent.isActivity()) {
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setVisibility(VISIBLE);
@@ -1123,7 +1118,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         bundle.putString("title", getString(R.string.game_quicken));
                         startActivity(CleanFinishAdvertisementActivity.class, bundle);
                     } else {
-                        Log.d("XiLei", "PreferenceUtil.getGameCleanPer()=" + PreferenceUtil.getGameCleanPer());
                         Bundle bundle = new Bundle();
                         bundle.putString("title", getString(R.string.game_quicken));
                         bundle.putString("num", PreferenceUtil.getGameCleanPer());
