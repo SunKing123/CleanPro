@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,7 +60,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private NotifyCleanAdapter mNotifyCleanAdapter;
     private boolean mIsClearNotification;
     private TextView mTvDelete;
-
+    private LinearLayout ll_list;
     private NotityCleanAnimView mCleanAnimView;
 
     private LinearLayout mTitleBar;
@@ -102,10 +103,11 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtil.setTransparentForWindow(this);
+        StatusBarUtil.setTransparentForWindow(NotifyCleanDetailActivity.this);
     }
 
     @Override
@@ -123,11 +125,17 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             mPowerSize = new FileQueryUtils().getRunningProcess().size();
         }
         getAccessListBelow();
+
+
         mTitleBar = findViewById(R.id.title_bar);
+        ll_list = findViewById(R.id.ll_list);
         mRecyclerView = findViewById(R.id.notify_recyclerView);
         mTvDelete = findViewById(R.id.tv_delete);
         mIvBack = findViewById(R.id.iv_back_notity);
         mIvSet = findViewById(R.id.iv_set);
+        StatusBarUtil.setPaddingTop(mContext,mTitleBar);
+        StatusBarUtil.setPaddingTop(mContext,ll_list);
+
         mHeaderView = mInflater.inflate(R.layout.layout_notification_clean_header, null);
         mTvNotificationCount = mHeaderView.findViewById(R.id.tvNotificationCount);
         mTvNotificationCount.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
@@ -144,6 +152,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
             @Override
             public void onAnimationStart() {
+
                 currentPage = "notification_clean_success_page";
                 pageviewEventName = "通知清理结果页展示页浏览";
                 pageviewEventCode = "notification_clean_success_page_view_page";
