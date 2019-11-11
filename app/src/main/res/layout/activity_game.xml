@@ -80,28 +80,55 @@
             android:textSize="@dimen/dimen_18sp" />
     </LinearLayout>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/acceview"
+    <RelativeLayout
+        android:id="@+id/v_bg_lottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/icon_scaning_bg03"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
+        android:gravity="center"
+        android:visibility="gone">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/acceview2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/icon_scaning_bg02"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
+        <ImageView
+            android:id="@+id/iv_scan_bg01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg01" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/acceview3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/icon_scaning_bg01"
-        android:visibility="gone" />
+        <ImageView
+            android:id="@+id/iv_scan_bg02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg02" />
+
+        <ImageView
+            android:id="@+id/iv_scan_bg03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg03" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/acceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/v_acceview3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/acceview3"
+                android:layout_width="370dp"
+                android:layout_height="288dp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/v_title"

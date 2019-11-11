@@ -1,10 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -89,10 +93,18 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     LottieAnimationView mLottieAnimationViewY;
     @BindView(R.id.acceview)
     LottieAnimationView mLottieAnimationView;
-    @BindView(R.id.acceview2)
-    LottieAnimationView mLottieAnimationView2;
     @BindView(R.id.acceview3)
     LottieAnimationView mLottieAnimationView3;
+    @BindView(R.id.v_acceview3)
+    View mView3;
+    @BindView(R.id.v_bg_lottie)
+    View mViewBgLottie;
+    @BindView(R.id.iv_scan_bg03)
+    ImageView ivScanBg03;
+    @BindView(R.id.iv_scan_bg02)
+    ImageView ivScanBg02;
+    @BindView(R.id.iv_scan_bg01)
+    ImageView ivScanBg01;
 
     private List<FirstJunkInfo> mAllList; //所有应用列表
     private ArrayList<String> mSelectNameList;
@@ -110,6 +122,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private boolean mIsAdError; //激励视频加载失败
     private boolean mIsYinDaoFinish; //引导动画是否结束
 
+    private ImageView[] ivs;
     private static final String TAG = "ChuanShanJia";
 
     @Override
@@ -148,6 +161,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         }
+        ivs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
     }
 
     private void initLottieYinDao() {
@@ -607,38 +621,17 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     private void startClean() {
 
-      /*  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            //保存本次清理完成时间 保证每次清理时间间隔为3分钟
-            if (PreferenceUtil.getGameTime()) {
-                PreferenceUtil.saveGameTime();
-            }
-            PreferenceUtil.saveGameQuikcenStart(true);
-            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
-            if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.game_quicken));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.game_quicken));
-                String num = NumberUtils.mathRandom(25, 50);
-                bundle.putString("num", num);
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
-            finish();
-            return;
-        }*/
-
         mIsStartClean = true;
         NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
         NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_end_page", "gameboost_animation_page", "gameboost_animation_page_view_page", "游戏加速动画页浏览");
         PreferenceUtil.saveCleanGameUsed(true);
+        mViewBgLottie.setVisibility(View.VISIBLE);
+        showColorChange01(2);
         mTitleView.setVisibility(View.GONE);
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
-        mLottieAnimationView.setAnimation("huojian1.json");
-        mLottieAnimationView.setImageAssetsFolder("images_game_one");
+        mLottieAnimationView.setAnimation("youxijiasu.json");
+        mLottieAnimationView.setImageAssetsFolder("images_game_jiasu");
         mLottieAnimationView.playAnimation();
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -648,7 +641,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                showAnimal2();
+                showAnimal3();
             }
 
             @Override
@@ -675,45 +668,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         }
     }
 
-    private void showAnimal2() {
-        if (null == mLottieAnimationView2) return;
-        mLottieAnimationView2.setVisibility(View.VISIBLE);
-        mLottieAnimationView2.useHardwareAcceleration(true);
-        mLottieAnimationView2.setAnimation("huojian2.json");
-        mLottieAnimationView2.setImageAssetsFolder("images_game_two");
-//        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
-        mLottieAnimationView2.playAnimation();
-        mLottieAnimationView2.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                showAnimal3();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-    }
-
     private void showAnimal3() {
         if (null == mLottieAnimationView3) return;
-        mLottieAnimationView3.setVisibility(View.VISIBLE);
+        mView3.setVisibility(View.VISIBLE);
         mLottieAnimationView3.useHardwareAcceleration(true);
         mLottieAnimationView3.setAnimation("yindao2.json");
         mLottieAnimationView3.setImageAssetsFolder("images_game_yindao2");
-//        mLottieAnimationView2.setRepeatCount(1); //动画再次执行的次数
         mLottieAnimationView3.playAnimation();
         mLottieAnimationView3.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -782,5 +742,52 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     public void netError() {
 
     }
+    //背景颜色是否已变为红色
+    private boolean isChangeRed = false;
+    public void showColorChange01(int index) {
+        if (ivs.length == 3 && index <= 2 && index > 0) {
+            Drawable drawable = ivs[index].getBackground();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                if (drawable.getAlpha() == 255) {
+                ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
+                animator.setTarget(drawable);
+                animator.setDuration(2000);
+                if (!animator.isRunning()) {
+                    animator.start();
+                }
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (index == 1) {
+                            isChangeRed = true;
+                            Log.v("onAnimationEnd", "onAnimationEnd ");
+//                            mView.setColorChange(true);
+                            if (animator != null)
+                                animator.cancel();
+                        } else {
+                            showColorChange01((index - 1));
+                        }
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+//                }
+            }
+        }
+
+    }
 }
