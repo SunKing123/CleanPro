@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.scwang.smartrefresh.layout.util.DensityUtil;
+
+import com.lzy.imagepicker.util.Utils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -24,6 +25,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
@@ -95,7 +97,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new GrideManagerWrapper(DensityUtil.dp2px(8)));
+        mRecyclerView.addItemDecoration(new GrideManagerWrapper(Utils.dp2px(mContext,8)));
         mAdapter.setOnCheckListener(this);
 
         mLLCheckAll.setOnClickListener(v -> {
