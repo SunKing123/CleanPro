@@ -13,14 +13,15 @@
         android:background="@drawable/bg_gradient_clean_finish"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/dimen_35dp">
+        android:paddingBottom="@dimen/dimen_40dp">
 
         <ImageView
             android:id="@+id/iv_dun"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="@dimen/dimen_15dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="@dimen/dimen_13dp"
             android:src="@drawable/icon_dun" />
 
         <TextView
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_5dp"
                 android:textColor="@color/white"
+                android:text=""
                 android:textSize="@dimen/dimen_20sp" />
 
             <TextView
