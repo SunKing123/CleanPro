@@ -208,7 +208,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             //清理动画
             mCleanAnimView.startTopAnim(false);
             //title bar
-            showBarColor(getResources().getColor(R.color.color_06C581));
+//            showBarColor(getResources().getColor(R.color.color_06C581));
 
             //----进入动画页
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, pageviewEventCode, pageviewEventName);

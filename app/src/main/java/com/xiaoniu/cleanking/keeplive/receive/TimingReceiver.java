@@ -405,13 +405,16 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     public void createNotify(Context conx, String push_content, final Map<String, String> actionMap,String btn) {
         try {
-            Intent intent = new Intent(conx, JPushReceiver.class);
-            intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
-            //notifyId不关注_跟产品已经确认()
-            intent.putExtra("push_data", new PushMsg((100001+ NumberUtils.mathRandomInt(1,100000)), "悟空清理", push_content, null, null, actionMap));
-            intent.addCategory(mContext.getPackageName());
-            intent.setPackage(mContext.getPackageName());
-            KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
+            if (null != mContext) {
+                Intent intent = new Intent(conx, JPushReceiver.class);
+                intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
+                //notifyId不关注_跟产品已经确认()
+                intent.putExtra("push_data", new PushMsg((100001+ NumberUtils.mathRandomInt(1,100000)), "悟空清理", push_content, null, null, actionMap));
+                intent.addCategory(mContext.getPackageName());
+                intent.setPackage(mContext.getPackageName());
+                KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

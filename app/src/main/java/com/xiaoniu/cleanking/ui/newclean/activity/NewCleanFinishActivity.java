@@ -293,6 +293,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
 
         View ad_bg = header.findViewById(R.id.v_video);
+        ad_bg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
         if (ad_bg.getBackground() instanceof AnimationDrawable) {
             mAnimationDrawable = (AnimationDrawable) ad_bg.getBackground();
         }
