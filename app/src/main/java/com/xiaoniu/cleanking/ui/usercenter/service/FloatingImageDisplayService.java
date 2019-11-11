@@ -133,10 +133,13 @@ public class FloatingImageDisplayService extends Service {
             displayView.setVisibility(View.GONE);
             stopService(new Intent(FloatingImageDisplayService.this, FloatingImageDisplayService.class));
         });
+
         try {
-            if (displayView.isAttachedToWindow())
-                windowManager.removeViewImmediate(displayView);
-            windowManager.addView(displayView, layoutParams);
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+                if (displayView.isAttachedToWindow())
+                    windowManager.removeViewImmediate(displayView);
+                windowManager.addView(displayView, layoutParams);
+            }
         }catch (NoSuchMethodError error){
             error.printStackTrace();
         }
