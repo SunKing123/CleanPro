@@ -102,7 +102,7 @@ dependencies {
     api project(':otherlib:imagepicker')
     api project(':otherlib:videoplayer')
 
-
+    //优量汇
     api files('libs\\GDTSDK.union.4.90.960.aar')
 
     //穿山甲
