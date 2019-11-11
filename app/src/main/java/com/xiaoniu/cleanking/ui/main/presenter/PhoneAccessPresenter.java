@@ -174,7 +174,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         }
     }
 
-    public AlertDialog alertBanLiveDialog(Context context, int deleteNum, final ClickListener okListener) {
+    /*public AlertDialog alertBanLiveDialog(Context context, int deleteNum, final ClickListener okListener) {
         final AlertDialog dlg = new AlertDialog.Builder(context).create();
         if (((Activity) context).isFinishing()) {
             return dlg;
@@ -203,7 +203,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             okListener.cancelBtn();
         });
         return dlg;
-    }
+    }*/
 
     //Android O以上用这个方法获取最近使用情况
     @TargetApi(22)

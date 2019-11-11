@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
@@ -96,6 +97,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
     @Override
     protected void initView() {
+        StatusBarUtil.setTransparentForWindow(this);
         mTitle = getIntent().getStringExtra("title");
         mPresenter.getScreentSwitch();
 

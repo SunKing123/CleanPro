@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.widget.AppCompatTextView;
@@ -26,12 +25,10 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -91,7 +88,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     ImageView[] ivs;
 
 
-/*    *//**
+    /*    */
+    /**
      * 清理的分类列表
      *//*
     public static HashMap<Integer, JunkGroup> mJunkGroups;*/
@@ -170,7 +168,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     @Override
     protected void initView() {
         tvScanLeftTitle.setText(getString(R.string.scaning));
-        ivs = new ImageView[]{ivScanBg01,ivScanBg02,ivScanBg03};
+        ivs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
 
         lottieRipple.setVisibility(View.VISIBLE);
         lottieRipple.useHardwareAcceleration();
@@ -181,21 +179,18 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             mPresenter.checkPermission();
             mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
             mTextUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
     }
 
 
-
-
-
     @OnClick({R.id.btn_left_scan})
-    public void viewClick(View view){
-        switch (view.getId()){
+    public void viewClick(View view) {
+        switch (view.getId()) {
             case R.id.btn_left_scan:
-                ((NowCleanActivity)getActivity()).backClick(true);
+                ((NowCleanActivity) getActivity()).backClick(true);
                 break;
         }
     }
@@ -256,7 +251,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                 CountEntity countEntity = CleanUtil.formatShortFileSize(total);
                 if (mTextCount == null || mTextUnit == null)
                     return;
-                if (countEntity != null){
+                if (countEntity != null) {
                     mTextCount.setText(countEntity.getTotalSize());
                     mTextUnit.setText(countEntity.getUnit());
                 }
@@ -314,7 +309,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * 扫描动画结束
      */
     public void endScanAnimation() {
-        if (lottieRipple != null ) {
+        if (lottieRipple != null) {
             lottieRipple.pauseAnimation();
 //            lottieRipple.setVisibility(GONE);
         }
@@ -412,7 +407,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      /*   if (rotate == null) {
             mIconOuter.setAnimation(rotate);
         }*/
-        if(mLottieHomeView==null)
+        if (mLottieHomeView == null)
             return;
         mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");

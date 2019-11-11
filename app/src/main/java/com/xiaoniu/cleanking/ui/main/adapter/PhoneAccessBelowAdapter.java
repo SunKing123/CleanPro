@@ -68,7 +68,7 @@ public class PhoneAccessBelowAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        return listImage.size();
+        return listImage == null ? 0 : listImage.size();
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {

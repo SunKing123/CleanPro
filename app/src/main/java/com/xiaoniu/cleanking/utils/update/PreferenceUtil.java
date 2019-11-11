@@ -333,6 +333,19 @@ public class PreferenceUtil {
     }
 
     /**
+     * 是否距离上次游戏加速清理间隔至少3分钟
+     *
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getGameTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_GAME_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+    /**
      * 保存游戏加速是否已使用
      */
     public static void saveCleanGameUsed(boolean isUsed) {
@@ -349,20 +362,6 @@ public class PreferenceUtil {
     public static boolean isCleanGameUsed() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_USED_GAME, false);
-    }
-
-
-    /**
-     * 是否距离上次游戏加速清理间隔至少3分钟
-     *
-     * @return true 3分钟以上 false 小于3分钟
-     */
-    public static boolean getGameTime() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_GAME_TIME, 0);
-        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
-            return true;
-        return false;
     }
 
     /**
@@ -944,7 +943,7 @@ public class PreferenceUtil {
      * @return
      */
     public static void saveGameCleanPer(String count) {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SpCacheConfig.GAME_QUIKCEN_NUM, count).commit();
     }
@@ -953,7 +952,7 @@ public class PreferenceUtil {
      * 保存有游戏加速的百分比
      */
     public static String getGameCleanPer() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
         return sharedPreferences.getString(SpCacheConfig.GAME_QUIKCEN_NUM, "");
     }
 

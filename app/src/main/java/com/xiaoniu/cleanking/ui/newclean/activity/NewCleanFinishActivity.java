@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -110,7 +111,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private TextView mTvSize;
     private TextView mTvGb;
     private TextView mTvQl;
-    private TextView mTvPer;
 
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;
@@ -168,6 +168,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private boolean mIsScreenAdSuccess; //插屏广告是否拉取成功
     //插屏广告相关 end
 
+    private AnimationDrawable mAnimationDrawable;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -182,7 +184,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initView() {
         EventBus.getDefault().register(this);
         mTitle = getIntent().getStringExtra("title");
-        if (!getString(R.string.tool_suggest_clean).contains(mTitle)) {
+        if (getString(R.string.tool_one_key_speed).contains(mTitle)
+                || getString(R.string.tool_notification_clean).contains(mTitle)
+                || getString(R.string.tool_super_power_saving).contains(mTitle)) {
             EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         }
         mPresenter.getSwitchInfoList();
@@ -211,7 +215,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
-        mTvPer = header.findViewById(R.id.tv_per);
 
         mContainer = header.findViewById(R.id.native_ad_container);
         mMediaView = header.findViewById(R.id.gdt_media_view);
@@ -288,9 +291,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initChuanShanJia2();
         initChuanShanJiaScreen();
 
+
         View ad_bg = header.findViewById(R.id.v_video);
-        final AnimationDrawable background = (AnimationDrawable) ad_bg.getBackground();
-        background.start();
+        if (ad_bg.getBackground() instanceof AnimationDrawable) {
+            mAnimationDrawable = (AnimationDrawable) ad_bg.getBackground();
+        }
+    }
+
+    private int[] getRes() {
+        TypedArray typedArray = getResources().obtainTypedArray(R.array.acess_drawale_array);
+        int len = typedArray.length();
+        int[] resId = new int[len];
+        for (int i = 0; i < len; i++) {
+            resId[i] = typedArray.getResourceId(i, -1);
+        }
+        typedArray.recycle();
+        return resId;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (null != mAnimationDrawable && !mAnimationDrawable.isRunning()) { //判断是否在运行
+            mAnimationDrawable.start();
+        }
     }
 
     //获取埋点参数
@@ -815,8 +839,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
                 //游戏加速
                 mTvSize.setText(num);
+                mTvGb.setText("%");
                 mTvQl.setText("已提速");
-                mTvPer.setVisibility(View.VISIBLE);
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
@@ -1394,6 +1418,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
 
+        if (null != mAnimationDrawable) {
+            mAnimationDrawable.start();
+        }
     }
 
     @Override
@@ -1432,6 +1459,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
+
+        if (null != mAnimationDrawable) {
+            mAnimationDrawable.stop();
+        }
         super.onPause();
     }
 
@@ -1462,6 +1493,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         if (null != mHandlerScreen) {
             mHandlerScreen.removeCallbacksAndMessages(null);
+        }
+        if (null != mAnimationDrawable && mAnimationDrawable.isRunning()) {
+            mAnimationDrawable.stop();
         }
     }
 
@@ -2307,12 +2341,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                                     .getPictureWidth(),
                             ad.getPictureHeight()));
                     initAdScreen(ad);
-                    Log.d(TAG, "eCPM = " + mNativeUnifiedADData.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData.getECPMLevel());
+                    Log.d(TAG, "eCPM = " + mNativeUnifiedADDataScreen.getECPM() + " , eCPMLevel = " + mNativeUnifiedADDataScreen.getECPMLevel());
                     break;
                 case MSG_VIDEO_START:
                     Log.d("AD_DEMO", "handleMessage");
-                    iv_advert.setVisibility(View.GONE);
-                    mMediaView.setVisibility(View.VISIBLE);
+//                    iv_advert.setVisibility(View.GONE);
+//                    mMediaView.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -2331,22 +2365,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onADExposed() {
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", mSecondAdvertScreenId, "优量汇", "success", sourcePage, currentPage);
-                Log.d(TAG, "广告曝光");
+                Log.d(TAG, "插屏---广告曝光");
             }
 
             @Override
             public void onADClicked() {
-                Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
             }
 
             @Override
             public void onADError(AdError error) {
-                Log.d(TAG, "错误回调 error code :" + error.getErrorCode() + "  error msg: " + error.getErrorMsg());
+                Log.d(TAG, "插屏---错误回调 error code :" + error.getErrorCode() + "  error msg: " + error.getErrorMsg());
             }
 
             @Override
             public void onADStatusChanged() {
-                Log.d(TAG, "广告状态变化");
             }
         });
     }

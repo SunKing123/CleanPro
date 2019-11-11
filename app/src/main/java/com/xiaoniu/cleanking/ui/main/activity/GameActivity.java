@@ -404,11 +404,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                         dialog.dismiss();
                     }
                 });
-                dialog.show();
-                Window dialogWindow = dialog.getWindow();//获取window对象
-                dialogWindow.setGravity(Gravity.BOTTOM);//设置对话框位置
-                dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);//设置横向全屏
-                dialogWindow.setWindowAnimations(R.style.share_animation);//设置动画
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
                     public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
@@ -419,6 +414,14 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                         return false;
                     }
                 });
+                // umeng --  android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@1cb2817 is not valid; is your activity running?
+                if (!isFinishing()) {
+                    dialog.show();
+                    Window dialogWindow = dialog.getWindow();//获取window对象
+                    dialogWindow.setGravity(Gravity.BOTTOM);//设置对话框位置
+                    dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);//设置横向全屏
+                    dialogWindow.setWindowAnimations(R.style.share_animation);//设置动画
+                }
                 break;
         }
     }
@@ -732,9 +735,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     bundle.putString("title", getString(R.string.game_quicken));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
                 } else {
+                    String num = NumberUtils.mathRandom(25, 50);
+                    PreferenceUtil.saveGameCleanPer(num);
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.game_quicken));
-                    bundle.putString("num", NumberUtils.mathRandom(25, 50));
+                    bundle.putString("num", num);
                     startActivity(NewCleanFinishActivity.class, bundle);
                 }
                 finish();

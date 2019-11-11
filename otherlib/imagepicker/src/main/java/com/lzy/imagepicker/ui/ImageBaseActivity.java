@@ -31,7 +31,7 @@ public class ImageBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && !isFinishing()) {
             setTranslucentStatus(true);
         }
         tintManager = new SystemBarTintManager(this);

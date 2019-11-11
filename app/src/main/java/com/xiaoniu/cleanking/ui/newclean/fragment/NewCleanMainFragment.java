@@ -898,7 +898,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
             }
-        }else{
+        } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
     }
@@ -1123,9 +1123,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         bundle.putString("title", getString(R.string.game_quicken));
                         startActivity(CleanFinishAdvertisementActivity.class, bundle);
                     } else {
+                        Log.d("XiLei", "PreferenceUtil.getGameCleanPer()=" + PreferenceUtil.getGameCleanPer());
                         Bundle bundle = new Bundle();
                         bundle.putString("title", getString(R.string.game_quicken));
-                        bundle.putString("num", NumberUtils.mathRandom(25, 50));
+                        bundle.putString("num", PreferenceUtil.getGameCleanPer());
                         startActivity(NewCleanFinishActivity.class, bundle);
                     }
                 }
