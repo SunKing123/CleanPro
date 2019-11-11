@@ -12,7 +12,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bun.miitmdid.core.JLibrary;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-import com.tencent.bugly.Bugly;
+//import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -54,7 +54,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
         PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
-        Bugly.init(application, "bdd6fe23ab", false);
+//        Bugly.init(application, "bdd6fe23ab", false);
         UMShareAPI.get(application);
         initInjector(application);
 

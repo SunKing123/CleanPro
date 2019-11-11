@@ -101,9 +101,9 @@
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
 
-##bugly混淆
--dontwarn com.tencent.bugly.**
--keep public class com.tencent.bugly.**{*;}
+###bugly混淆
+#-dontwarn com.tencent.bugly.**
+#-keep public class com.tencent.bugly.**{*;}
 
 
 -keep class com.xiaoniu.cleanking.ui.main.bean.**{ *; }  #Bean类不参与混淆
