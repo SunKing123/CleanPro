@@ -621,6 +621,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     private void startClean() {
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            clean();
+            return;
+        }
+
         mIsStartClean = true;
         NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
         NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_end_page", "gameboost_animation_page", "gameboost_animation_page_view_page", "游戏加速动画页浏览");
@@ -630,8 +635,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mTitleView.setVisibility(View.GONE);
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
-        mLottieAnimationView.setAnimation("youxijiasu.json");
-        mLottieAnimationView.setImageAssetsFolder("images_game_jiasu");
+        mLottieAnimationView.setAnimation("huojian1.json");
+        mLottieAnimationView.setImageAssetsFolder("images_game_one");
         mLottieAnimationView.playAnimation();
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -670,6 +675,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     private void showAnimal3() {
         if (null == mLottieAnimationView3) return;
+        mLottieAnimationView.setVisibility(View.GONE);
         mView3.setVisibility(View.VISIBLE);
         mLottieAnimationView3.useHardwareAcceleration(true);
         mLottieAnimationView3.setAnimation("yindao2.json");
@@ -683,26 +689,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                //保存本次清理完成时间 保证每次清理时间间隔为3分钟
-                if (PreferenceUtil.getGameTime()) {
-                    PreferenceUtil.saveGameTime();
-                }
-                PreferenceUtil.saveGameQuikcenStart(true);
-                EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
-                if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.game_quicken));
-                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
-                } else {
-                    String num = NumberUtils.mathRandom(25, 50);
-                    PreferenceUtil.saveGameCleanPer(num);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.game_quicken));
-                    bundle.putString("num", num);
-                    startActivity(NewCleanFinishActivity.class, bundle);
-                }
-                finish();
+                clean();
             }
 
             @Override
@@ -716,6 +703,29 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             }
         });
 
+    }
+
+    private void clean() {
+        //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+        if (PreferenceUtil.getGameTime()) {
+            PreferenceUtil.saveGameTime();
+        }
+        PreferenceUtil.saveGameQuikcenStart(true);
+        EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
+        if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.game_quicken));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else {
+            String num = NumberUtils.mathRandom(25, 50);
+            PreferenceUtil.saveGameCleanPer(num);
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.game_quicken));
+            bundle.putString("num", num);
+            startActivity(NewCleanFinishActivity.class, bundle);
+        }
+        finish();
     }
 
     //低于Android O
@@ -742,8 +752,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     public void netError() {
 
     }
+
     //背景颜色是否已变为红色
     private boolean isChangeRed = false;
+
     public void showColorChange01(int index) {
         if (ivs.length == 3 && index <= 2 && index > 0) {
             Drawable drawable = ivs[index].getBackground();
