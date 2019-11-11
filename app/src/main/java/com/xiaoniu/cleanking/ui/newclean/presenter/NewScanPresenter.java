@@ -98,8 +98,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     if (mView.getActivity() == null) {
                         return;
                     }
-                   /* mView.getActivity().runOnUiThread(() -> {
-                       *//* if (!mScanTranlateColor.isRunning()) {
+                    /* mView.getActivity().runOnUiThread(() -> {
+                     *//* if (!mScanTranlateColor.isRunning()) {
 //                            mScanTranlateColor.start();
                         }*//*
                     });*/
@@ -110,7 +110,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             public void increaseSize(long p0) {
                 total += p0;
                 if (null != mView)
-                mView.showCountNumber(total);
+                    mView.showCountNumber(total);
             }
 
             @Override
@@ -122,7 +122,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             public void scanFile(String p0) {
                 Log.v("onAnimationEnd", "scanFile ");
                 if (null != mView)
-                mView.showScanFile(p0);
+                    mView.showScanFile(p0);
             }
 
             @Override
@@ -274,8 +274,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     }
 
 
-
-
     public void showColorChange01(ImageView[] ivs, int index) {
         if (ivs.length == 3 && index <= 2 && index > 0) {
             Drawable drawable = ivs[index].getBackground();
@@ -295,13 +293,13 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if(index==1){
+                        if (index == 1) {
                             isChangeRed = true;
                             Log.v("onAnimationEnd", "onAnimationEnd ");
                             mView.setColorChange(true);
                             if (animator != null)
                                 animator.cancel();
-                        }else{
+                        } else {
                             showColorChange01(ivs, (index - 1));
                         }
 
@@ -380,7 +378,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     /**
      * 波纹扫描动画
-     *
      */
     public void startCleanScanAnimation01(LottieAnimationView lottieAnimationView) {
 
@@ -550,7 +547,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
     private static boolean hasPermissionDeniedForever(Activity activity, String permission) {
         boolean hasDeniedForever = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!activity.shouldShowRequestPermissionRationale(permission)) {
+            if (null != activity && !activity.shouldShowRequestPermissionRationale(permission)) {
                 hasDeniedForever = true;
             }
         }

@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -106,6 +107,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     @Override
     protected void initView() {
+        StatusBarUtil.setTransparentForWindow(this);
         mPresenter.getSwitchInfoList();
         findViewById(R.id.btnLeft).setOnClickListener(this);
         mViewContent = findViewById(R.id.v_content);

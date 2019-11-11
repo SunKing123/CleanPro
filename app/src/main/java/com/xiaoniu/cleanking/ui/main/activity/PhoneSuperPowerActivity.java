@@ -41,8 +41,8 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     String currentPage = "";
     String sysReturnEventName = "";
 
-    String viewPageEventCode ="";
-    String viewPageEventName ="";
+    String viewPageEventCode = "";
+    String viewPageEventName = "";
 
 
     @Override
@@ -76,18 +76,18 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     @Override
     protected void initView() {
         currentPage = "powersave_guidance_page";
-        sysReturnEventName ="用户在省电引导页页浏览返回";
+        sysReturnEventName = "用户在省电引导页页浏览返回";
         String preName = AppManager.getAppManager().preActivityName();
         sourcePage = preName.contains("MainActivity") ? "home_page" : "";
-        viewPageEventCode ="powersave_guidance_page_view_page";
+        viewPageEventCode = "powersave_guidance_page_view_page";
         viewPageEventName = "用户在省电引导页浏览";
 
         Intent intent = getIntent();
         addNotification(intent);
         mTvClean = findViewById(R.id.tv_clean);
         mTvClean.setOnClickListener(v -> {
-            StatisticsUtils.trackClick("powersave_guidance_page_clean_click", "用户在省电引导页点击【立即清理】",sourcePage, currentPage);
-            if (!isUsageAccessAllowed()) {
+            StatisticsUtils.trackClick("powersave_guidance_page_clean_click", "用户在省电引导页点击【立即清理】", sourcePage, currentPage);
+            if (!isUsageAccessAllowed() && !isFinishing()) {
                 showPermissionDialog();
             } else {
                 startActivity(PhoneSuperPowerDetailActivity.class);
@@ -99,13 +99,13 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     public void showPermissionDialog() {
         currentPage = "powersave_authorization_page";
         sourcePage = "powersave_guidance_page";
-        sysReturnEventName ="用户在省电授权页返回";
-        viewPageEventCode ="powersave_authorization_page_view_page";
+        sysReturnEventName = "用户在省电授权页返回";
+        viewPageEventCode = "powersave_authorization_page_view_page";
         viewPageEventName = "用户在省电授权页浏览";
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, viewPageEventCode, viewPageEventName);
 
-        if(null == mAlertDialog ){
+        if (null == mAlertDialog) {
             mAlertDialog = new AlertDialog.Builder(this).create();
         }
 
@@ -114,7 +114,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         }
         mAlertDialog.setCancelable(true);
         mAlertDialog.setCanceledOnTouchOutside(false);
-        if(!mAlertDialog.isShowing()){
+        if (!mAlertDialog.isShowing()) {
             mAlertDialog.show();
         }
         Window window = mAlertDialog.getWindow();
@@ -177,7 +177,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
 
                 currentPage = "powersave_fail_page";
                 sourcePage = "powersave_authorization_page";
-                viewPageEventCode ="powersave_fail_page_view_page";
+                viewPageEventCode = "powersave_fail_page_view_page";
                 viewPageEventName = "省电授权失败页浏览";
                 NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
                 NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, viewPageEventCode, viewPageEventName);
@@ -214,7 +214,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if(null!=mAlertDialog){
+            if (null != mAlertDialog) {
                 mAlertDialog.cancel();
                 mAlertDialog.dismiss();
                 mAlertDialog = null;

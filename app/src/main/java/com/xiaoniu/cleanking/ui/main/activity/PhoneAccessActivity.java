@@ -259,6 +259,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (!PermissionUtils.isUsageAccessAllowed(this)) {
             NiuDataAPI.onPageStart("boost_authorization_page_view_page", "用户在加速授权页浏览");
             NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_page", "boost_authorization_page_view_page", "用户在加速授权页浏览");
+            //umeng --  android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@bb09a5f is not valid; is your activity running?
+            if (isFinishing()) return;
             mAlertDialog = mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
@@ -608,6 +610,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     public void getAccessListAbove22(List<ActivityManager.RunningAppProcessInfo> listInfo) {
         if (listInfo.size() == 0) {
+            //umeng --  android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@bb09a5f is not valid; is your activity running?
+            if (isFinishing()) return;
             mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
                 @Override
                 public void clickOKBtn() {
