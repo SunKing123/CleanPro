@@ -2051,7 +2051,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                         @Override
                         public void onProgressUpdate(long current, long duration) {
-                            Log.d(TAG, "穿山甲视频---- onProgressUpdate");
+//                            Log.d(TAG, "穿山甲视频---- onProgressUpdate");
                         }
 
                         @Override
@@ -2096,15 +2096,19 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                     @Override
                     public void onAdShow(TTNativeAd ad) {
-                        if (ad != null) {
-                            Log.d(TAG, "广告" + ad.getTitle() + "展示");
+                        if (ad != null && !isShowOne) {
+                            Log.d(TAG, "广告----" + ad.getTitle() + "----展示");
                             StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
+                            isShowOne = true;
                         }
                     }
                 });
             }
         });
     }
+
+    private boolean isShowOne; //广告位1的广告是否已展示曝光
+    private boolean isShowTwo; //广告位1的广告是否已展示曝光
 
     /**
      * 加载穿山甲广告位2
@@ -2179,7 +2183,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                         @Override
                         public void onProgressUpdate(long current, long duration) {
-                            Log.d(TAG, "穿山甲2视频---- onProgressUpdate");
+//                            Log.d(TAG, "穿山甲2视频---- onProgressUpdate");
                         }
 
                         @Override
@@ -2224,9 +2228,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                     @Override
                     public void onAdShow(TTNativeAd ad) {
-                        if (ad != null) {
-                            Log.d(TAG, "广告2" + ad.getTitle() + "展示");
+                        if (ad != null && !isShowTwo) {
+                            Log.d(TAG, "广告2---" + ad.getTitle() + "----展示");
                             StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
+                            isShowTwo = true;
                         }
                     }
                 });

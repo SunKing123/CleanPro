@@ -114,7 +114,6 @@ public class WechatCleanResultActivity extends SimpleActivity {
         mCleanAnimView.setListener(() -> finish());
 
         mCleanAnimView.setAnimationEnd(() -> {
-            Log.d("XiLei", "dddddddddddddddddd");
             if (mIsFinish) return;
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
             if (mTitle.equals(getString(R.string.tool_chat_clear))) {

@@ -77,7 +77,7 @@
         android:paddingLeft="@dimen/dimen_20dp"
         android:paddingTop="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_20dp"
-        android:paddingBottom="@dimen/dimen_24dp"
+        android:paddingBottom="@dimen/dimen_16dp"
         android:visibility="gone">
 
         <RelativeLayout
@@ -156,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_60dp"
                 android:layout_below="@+id/v_video"
-                android:layout_marginTop="@dimen/dimen_16dp" />
+                android:layout_marginTop="@dimen/dimen_8dp" />
         </RelativeLayout>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
 
