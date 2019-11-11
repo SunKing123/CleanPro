@@ -48,6 +48,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     private static final String TAG = "Tinker.ApplicationDelegate";
     private static AppDataBase mAppDatabase;
 
+
     @Override
     public void onCreate(Application application) {
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
@@ -73,8 +74,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
         initRoom(application);
-//        initNiuData(application);
-
+        initNiuData(application);
+        initOaid(application);
     }
 
 
@@ -157,8 +158,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
             }
         });
-//        isInited = true;
-//        initOaid(application);
+
     }
 
     private String oaId ="";
@@ -171,9 +171,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 new MiitHelper(new MiitHelper.AppIdsUpdater() {
                     @Override
                     public void OnIdsAvalid(@NonNull String mOaid) {
-                     /*   if (!isInited) {
-                            initNiuData(sInstance);
-                        }*/
                         oaId = mOaid;
                         NiuDataAPI.setOaid(oaId);
                         NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
