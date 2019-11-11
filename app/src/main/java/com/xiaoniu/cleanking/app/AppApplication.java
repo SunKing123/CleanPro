@@ -53,11 +53,6 @@ public class AppApplication extends BaseApplication {
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-    }
-
-    @Override
     public void onCreate() {
         sInstance = this;
         super.onCreate();

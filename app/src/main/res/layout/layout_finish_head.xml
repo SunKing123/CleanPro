@@ -119,8 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="188dp"
                 android:layout_below="@+id/tv_advert_content"
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:background="@drawable/anim_ad">
+                android:layout_marginTop="@dimen/dimen_8dp">
 
                 <!-- 穿山甲视频组件 -->
                 <FrameLayout
