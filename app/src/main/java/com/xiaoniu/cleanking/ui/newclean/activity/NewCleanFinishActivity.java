@@ -2023,6 +2023,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                             mChuanShanJiaVideo.addView(video);
                         }
                     }
+
                     //视频播放监听
                     ads.get(0).setVideoAdListener(new TTFeedAd.VideoAdListener() {
                         @Override
