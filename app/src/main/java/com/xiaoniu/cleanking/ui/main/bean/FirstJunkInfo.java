@@ -1,10 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.bean;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.graphics.drawable.Drawable;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;

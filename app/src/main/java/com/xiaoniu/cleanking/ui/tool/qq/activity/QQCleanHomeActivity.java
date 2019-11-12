@@ -11,14 +11,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -228,7 +228,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
                     mNotifySize = getIntent().getIntExtra("mNotifySize", 0);
                     mPowerSize = getIntent().getIntExtra("mPowerSize", 0);
                 }
-                if (isOpen && PreferenceUtil.getShowCount(this,getString(R.string.tool_qq_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_qq_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_qq_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);

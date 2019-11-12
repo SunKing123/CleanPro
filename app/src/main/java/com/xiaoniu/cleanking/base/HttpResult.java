@@ -1,7 +1,8 @@
 package com.xiaoniu.cleanking.base;
 
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.xiaoniu.cleanking.app.Constant;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

@@ -3,8 +3,6 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -88,17 +89,13 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
             });
 
             viewHolder.mLLPlay.setOnClickListener(v -> {
-                if(null!=onCheckListener){
+                if (null != onCheckListener) {
                     onCheckListener.play(appInfoBean);
                 }
 
             });
         }
     }
-
-
-
-
 
 
     /**
@@ -177,7 +174,7 @@ public class CleanVideoManageAdapter extends RecyclerView.Adapter {
             mTxtSize = itemView.findViewById(R.id.txt_size_file);
             mCheckSelect = itemView.findViewById(R.id.check_select);
             mImgFrame = itemView.findViewById(R.id.img);
-            mLLPlay=itemView.findViewById(R.id.ll_play);
+            mLLPlay = itemView.findViewById(R.id.ll_play);
         }
     }
 

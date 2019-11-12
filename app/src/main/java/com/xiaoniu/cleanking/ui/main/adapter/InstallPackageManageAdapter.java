@@ -1,8 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
@@ -37,7 +39,7 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
     private OnCheckListener onCheckListener;
 
     //是否显示子标题 默认显示
-    private boolean mIsShowSubTitle=true;
+    private boolean mIsShowSubTitle = true;
 
     public InstallPackageManageAdapter(Context context) {
         this.mContext = context;
@@ -59,15 +61,15 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             Glide.with(mContext).load(appInfoBean.icon).into(viewHolder.mImgIcon);
             viewHolder.mTxtName.setText(appInfoBean.name);
-            if(appInfoBean.packageSize==0){
+            if (appInfoBean.packageSize == 0) {
                 viewHolder.mTxtSize.setVisibility(View.INVISIBLE);
-            }else {
+            } else {
                 viewHolder.mTxtTime.setVisibility(View.VISIBLE);
                 viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
             }
-            if(mIsShowSubTitle==false){
+            if (mIsShowSubTitle == false) {
                 viewHolder.mTxtTime.setVisibility(View.GONE);
-            }else {
+            } else {
                 viewHolder.mTxtTime.setVisibility(View.VISIBLE);
                 if (mTabType == 0) {
                     viewHolder.mTxtTime.setText(DateUtils.timestampToPatternTime(appInfoBean.installTime, "yyyy-MM-dd HH:mm"));
@@ -108,8 +110,8 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
         return mLists.size();
     }
 
-    public interface  OnCheckListener{
-        void onCheck(String id,boolean  isChecked);
+    public interface OnCheckListener {
+        void onCheck(String id, boolean isChecked);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -128,11 +130,11 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
         public ViewHolder(View itemView) {
             super(itemView);
             mImgIcon = itemView.findViewById(R.id.img_icon);
-            mTxtTime=itemView.findViewById(R.id.txt_time);
+            mTxtTime = itemView.findViewById(R.id.txt_time);
             mTxtName = itemView.findViewById(R.id.txt_name);
             mTxtSize = itemView.findViewById(R.id.txt_size);
             mCheckSelect = itemView.findViewById(R.id.check_select);
-            mLLCheckSelect=itemView.findViewById(R.id.ll_check_select);
+            mLLCheckSelect = itemView.findViewById(R.id.ll_check_select);
         }
     }
 

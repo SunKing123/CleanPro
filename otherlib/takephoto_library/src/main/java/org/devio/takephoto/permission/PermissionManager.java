@@ -3,11 +3,12 @@ package org.devio.takephoto.permission;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.model.InvokeParam;
@@ -50,8 +51,8 @@ public class PermissionManager {
 
 
     private final static String[] methodNames =
-        {"onPickFromCapture", "onPickFromCaptureWithCrop", "onPickMultiple", "onPickMultipleWithCrop", "onPickFromDocuments",
-            "onPickFromDocumentsWithCrop", "onPickFromGallery", "onPickFromGalleryWithCrop", "onCrop"};
+            {"onPickFromCapture", "onPickFromCaptureWithCrop", "onPickMultiple", "onPickMultipleWithCrop", "onPickFromDocuments",
+                    "onPickFromDocumentsWithCrop", "onPickFromGallery", "onPickFromGalleryWithCrop", "onCrop"};
 
     /**
      * 检查当前应用是否被授予相应权限
@@ -74,12 +75,12 @@ public class PermissionManager {
         }
 
         boolean cameraGranted = true, storageGranted =
-            ContextCompat.checkSelfPermission(contextWrap.getActivity(), TPermission.STORAGE.stringValue())
-                == PackageManager.PERMISSION_GRANTED ? true : false;
+                ContextCompat.checkSelfPermission(contextWrap.getActivity(), TPermission.STORAGE.stringValue())
+                        == PackageManager.PERMISSION_GRANTED ? true : false;
 
         if (TextUtils.equals(methodName, "onPickFromCapture") || TextUtils.equals(methodName, "onPickFromCaptureWithCrop")) {
             cameraGranted = ContextCompat.checkSelfPermission(contextWrap.getActivity(), TPermission.CAMERA.stringValue())
-                == PackageManager.PERMISSION_GRANTED ? true : false;
+                    == PackageManager.PERMISSION_GRANTED ? true : false;
         }
 
         boolean granted = storageGranted && cameraGranted;
@@ -133,7 +134,7 @@ public class PermissionManager {
     }
 
     public static void handlePermissionsResult(Activity activity, TPermissionType type, InvokeParam invokeParam,
-        TakePhoto.TakeResultListener listener) {
+                                               TakePhoto.TakeResultListener listener) {
         String tip = null;
         switch (type) {
             case DENIED:

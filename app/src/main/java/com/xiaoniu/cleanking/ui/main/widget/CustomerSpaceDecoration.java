@@ -1,8 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.widget;
 
 import android.graphics.Rect;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoniu.common.utils.DisplayUtils;
 
@@ -20,7 +21,7 @@ public class CustomerSpaceDecoration extends RecyclerView.ItemDecoration {
         int position = parent.getChildAdapterPosition(view);
         if (position == 0) {
             outRect.left = DisplayUtils.dip2px(16);
-        }else {
+        } else {
             outRect.left = 0;
         }
         outRect.right = DisplayUtils.dip2px(27);

@@ -2,14 +2,15 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -58,17 +59,17 @@ public class CleanBigFileAdapter extends RecyclerView.Adapter<CleanBigFileAdapte
         BigFileInfoEntity infoEntity = mList.get(position);
 
         //头像
-        FileUtils.showIconByFile(holder.mAppLogo,infoEntity.getFile());
+        FileUtils.showIconByFile(holder.mAppLogo, infoEntity.getFile());
         //名称
         holder.mTextAppName.setText(infoEntity.getFile().getName());
         //大小
-        holder.mJunkSize.setText(CleanUtil.formatShortFileSize(AppApplication.getInstance(),infoEntity.getFile().length()));
+        holder.mJunkSize.setText(CleanUtil.formatShortFileSize(AppApplication.getInstance(), infoEntity.getFile().length()));
         //描述
         holder.mTextVersion.setText(infoEntity.getContent());
 
         holder.mIconCheck.setSelected(infoEntity.isChecked());
 
-        holder.mIconCheck.setOnClickListener(v->{
+        holder.mIconCheck.setOnClickListener(v -> {
             boolean checked = infoEntity.isChecked();
             if (checked) {
                 //取消勾选
@@ -77,7 +78,7 @@ public class CleanBigFileAdapter extends RecyclerView.Adapter<CleanBigFileAdapte
                 if (mOnItemSelectListener != null) {
                     mOnItemSelectListener.onCount();
                 }
-            }else {
+            } else {
                 showConfirmDialog(infoEntity);
             }
         });
@@ -87,34 +88,34 @@ public class CleanBigFileAdapter extends RecyclerView.Adapter<CleanBigFileAdapte
      * 确认勾选弹窗
      */
     public void showConfirmDialog(BigFileInfoEntity entity) {
-            //提示对话框
-            final Dialog dialog = new Dialog(mContext, R.style.custom_dialog);
-            View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_select_confirm, null);
+        //提示对话框
+        final Dialog dialog = new Dialog(mContext, R.style.custom_dialog);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_select_confirm, null);
 
-            TextView mTextSize = view.findViewById(R.id.text_size);
-            TextView mTextTrace = view.findViewById(R.id.text_trace);
-            TextView mTextConfirm = view.findViewById(R.id.text_confirm);
-            TextView mTextCancel = view.findViewById(R.id.text_cancel);
+        TextView mTextSize = view.findViewById(R.id.text_size);
+        TextView mTextTrace = view.findViewById(R.id.text_trace);
+        TextView mTextConfirm = view.findViewById(R.id.text_confirm);
+        TextView mTextCancel = view.findViewById(R.id.text_cancel);
 
-            //大小
-            mTextSize.setText("大小：" + CleanUtil.formatShortFileSize(mContext, entity.getFile().length()));
-            //路径
-            mTextTrace.setText("来自：" + entity.getContent());
+        //大小
+        mTextSize.setText("大小：" + CleanUtil.formatShortFileSize(mContext, entity.getFile().length()));
+        //路径
+        mTextTrace.setText("来自：" + entity.getContent());
 
-            mTextCancel.setOnClickListener(v -> dialog.dismiss());
-            mTextConfirm.setOnClickListener(v->{
-                entity.setChecked(true);
-                dialog.dismiss();
-                notifyDataSetChanged();
-                if (mOnItemSelectListener != null) {
-                    mOnItemSelectListener.onCount();
-                }
-            });
-            dialog.setContentView(view);
-            if (dialog.isShowing()) {
-                return;
+        mTextCancel.setOnClickListener(v -> dialog.dismiss());
+        mTextConfirm.setOnClickListener(v -> {
+            entity.setChecked(true);
+            dialog.dismiss();
+            notifyDataSetChanged();
+            if (mOnItemSelectListener != null) {
+                mOnItemSelectListener.onCount();
             }
-            dialog.show();
+        });
+        dialog.setContentView(view);
+        if (dialog.isShowing()) {
+            return;
+        }
+        dialog.show();
     }
 
     @Override
@@ -123,7 +124,7 @@ public class CleanBigFileAdapter extends RecyclerView.Adapter<CleanBigFileAdapte
     }
 
     static
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.app_logo)
         ImageView mAppLogo;
         @BindView(R.id.text_app_name)

@@ -7,20 +7,22 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
 import com.darsh.multipleimageselect.models.Image;
+import com.soundcloud.android.crop.Crop;
+
+import org.devio.takephoto.R;
 import org.devio.takephoto.model.CropOptions;
+import org.devio.takephoto.model.TContextWrap;
 import org.devio.takephoto.model.TException;
 import org.devio.takephoto.model.TExceptionType;
 import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TIntentWap;
-import org.devio.takephoto.R;
-import org.devio.takephoto.model.TContextWrap;
-import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -99,7 +101,7 @@ public class TUtils {
      * @throws TException
      */
     public static void sendIntentBySafely(TContextWrap contextWrap, List<TIntentWap> intentWapList, int defaultIndex, boolean isCrop)
-        throws TException {
+            throws TException {
         if (defaultIndex + 1 > intentWapList.size()) {
             throw new TException(isCrop ? TExceptionType.TYPE_NO_MATCH_PICK_INTENT : TExceptionType.TYPE_NO_MATCH_CROP_INTENT);
         }
@@ -119,7 +121,7 @@ public class TUtils {
         List result = contextWrap.getActivity().getPackageManager().queryIntentActivities(intentWap.getIntent(), PackageManager.MATCH_ALL);
         if (result.isEmpty()) {
             Toast.makeText(contextWrap.getActivity(), contextWrap.getActivity().getResources().getText(R.string.tip_no_camera),
-                Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             throw new TException(TExceptionType.TYPE_NO_CAMERA);
         } else {
             startActivityForResult(contextWrap, intentWap);
@@ -146,7 +148,7 @@ public class TUtils {
             //                e.printStackTrace();
             //            }
             startActivityForResult(contextWrap,
-                new TIntentWap(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri, options), TConstant.RC_CROP));
+                    new TIntentWap(IntentUtils.getCropIntentWithOtherApp(imageUri, outPutUri, options), TConstant.RC_CROP));
         }
     }
 
@@ -162,16 +164,16 @@ public class TUtils {
         if (options.getAspectX() * options.getAspectY() > 0) {
             if (contextWrap.getFragment() != null) {
                 Crop.of(imageUri, outPutUri)
-                    .withAspect(options.getAspectX(), options.getAspectY())
-                    .start(contextWrap.getActivity(), contextWrap.getFragment());
+                        .withAspect(options.getAspectX(), options.getAspectY())
+                        .start(contextWrap.getActivity(), contextWrap.getFragment());
             } else {
                 Crop.of(imageUri, outPutUri).withAspect(options.getAspectX(), options.getAspectY()).start(contextWrap.getActivity());
             }
         } else if (options.getOutputX() * options.getOutputY() > 0) {
             if (contextWrap.getFragment() != null) {
                 Crop.of(imageUri, outPutUri)
-                    .withMaxSize(options.getOutputX(), options.getOutputY())
-                    .start(contextWrap.getActivity(), contextWrap.getFragment());
+                        .withMaxSize(options.getOutputX(), options.getOutputY())
+                        .start(contextWrap.getActivity(), contextWrap.getFragment());
             } else {
                 Crop.of(imageUri, outPutUri).withMaxSize(options.getOutputX(), options.getOutputY()).start(contextWrap.getActivity());
             }

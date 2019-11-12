@@ -3,7 +3,8 @@ package com.xiaoniu.cleanking.keeplive.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.keeplive.pro_sp.PreferenceUtil;

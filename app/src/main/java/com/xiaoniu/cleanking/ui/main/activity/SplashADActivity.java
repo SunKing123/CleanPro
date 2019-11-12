@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.annotation.MainThread;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
+
+import androidx.annotation.MainThread;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
@@ -536,7 +537,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
      * 加载穿山甲开屏广告
      */
     private void loadSplashAd() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", "clod_splash_page", "clod_splash_page");
         //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertId)
@@ -576,6 +576,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             @Override
             @MainThread
             public void onSplashAdLoad(TTSplashAd ad) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", "clod_splash_page", "clod_splash_page");
                 mHasLoaded = true;
                 Log.d(TAG, "穿山甲----开屏广告请求成功");
                 mHandler.removeCallbacksAndMessages(null);

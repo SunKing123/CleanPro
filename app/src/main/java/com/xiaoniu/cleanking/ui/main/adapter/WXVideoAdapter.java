@@ -1,13 +1,14 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -27,11 +28,11 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<FileChildEntity> mLists;
 
-    private  OnSelectListener onSelectListener;
+    private OnSelectListener onSelectListener;
 
     public WXVideoAdapter(Context context, List<FileChildEntity> lists) {
         this.mContext = context;
-        this.mLists=lists;
+        this.mLists = lists;
     }
 
     @NonNull
@@ -60,19 +61,19 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
 
 
         viewHolder.mLLSelect.setOnClickListener(v -> {
-            if(fileChildEntity.isSelect){
-                fileChildEntity.isSelect=false;
-            }else {
-                fileChildEntity.isSelect=true;
+            if (fileChildEntity.isSelect) {
+                fileChildEntity.isSelect = false;
+            } else {
+                fileChildEntity.isSelect = true;
             }
-            if(null!=onSelectListener){
-                onSelectListener.select(position,fileChildEntity.isSelect);
+            if (null != onSelectListener) {
+                onSelectListener.select(position, fileChildEntity.isSelect);
             }
 
         });
 
         viewHolder.mImg.setOnClickListener(v -> {
-            if(null!=onSelectListener){
+            if (null != onSelectListener) {
                 onSelectListener.onClickImg(position);
             }
         });
@@ -85,8 +86,8 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
         return mLists.size();
     }
 
-    public  void modifyData(List<FileChildEntity> lists){
-        if(null!=lists){
+    public void modifyData(List<FileChildEntity> lists) {
+        if (null != lists) {
             this.mLists.addAll(lists);
             notifyDataSetChanged();
         }
@@ -102,8 +103,8 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
             super(itemView);
             mImg = itemView.findViewById(R.id.img);
             mImgSelect = itemView.findViewById(R.id.check_select);
-            mLLSelect=itemView.findViewById(R.id.ll_check_select);
-            mImgLayer=itemView.findViewById(R.id.img_check);
+            mLLSelect = itemView.findViewById(R.id.ll_check_select);
+            mImgLayer = itemView.findViewById(R.id.img_check);
         }
     }
 
@@ -111,7 +112,7 @@ public class WXVideoAdapter extends RecyclerView.Adapter {
         this.onSelectListener = onSelectListener;
     }
 
-    interface   OnSelectListener{
+    interface OnSelectListener {
         void select(int position, boolean isSelect);
 
         void onClickImg(int position);

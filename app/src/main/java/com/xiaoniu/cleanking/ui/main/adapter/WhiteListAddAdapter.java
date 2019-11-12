@@ -1,8 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
@@ -98,12 +99,13 @@ public class WhiteListAddAdapter extends RecyclerView.Adapter {
         private ImageButton mImgCheck;
         //
         private LinearLayout mLLCheck;
+
         public ViewHolder(View itemView) {
             super(itemView);
             mImgIcon = itemView.findViewById(R.id.img_icon);
             mTxtName = itemView.findViewById(R.id.txt_name);
             mImgCheck = itemView.findViewById(R.id.check_select);
-            mLLCheck=itemView.findViewById(R.id.ll_check);
+            mLLCheck = itemView.findViewById(R.id.ll_check);
         }
     }
 

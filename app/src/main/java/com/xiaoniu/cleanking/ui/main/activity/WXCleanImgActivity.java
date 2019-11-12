@@ -3,12 +3,13 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -52,7 +53,7 @@ import butterknife.OnClick;
  * <p>
  * 3.数据组装和渲染
  */
-public class WXCleanImgActivity extends BaseActivity{
+public class WXCleanImgActivity extends BaseActivity {
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -93,9 +94,9 @@ public class WXCleanImgActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        SharedPreferences sharedPreferences =getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_IMG,0);
+        SharedPreferences sharedPreferences = getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG, 0);
         editor.commit();
         mFragments.add(WXImgChatFragment.newInstance());
         mFragments.add(WXImgCameraFragment.newInstance());
@@ -168,8 +169,8 @@ public class WXCleanImgActivity extends BaseActivity{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
-                StatisticsUtils.trackClick("Chat_pictures_Return_click","\"聊天图片返回\"点击"
-                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+                StatisticsUtils.trackClick("Chat_pictures_Return_click", "\"聊天图片返回\"点击"
+                        , "wechat_cleaning_page", "wechat_picture_cleaning_page");
                 finish();
                 break;
             case R.id.ll_img_chat:
@@ -190,8 +191,8 @@ public class WXCleanImgActivity extends BaseActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        StatisticsUtils.trackClick("Chat_pictures_Return_click","\"聊天图片返回\"点击"
-                ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+        StatisticsUtils.trackClick("Chat_pictures_Return_click", "\"聊天图片返回\"点击"
+                , "wechat_cleaning_page", "wechat_picture_cleaning_page");
 
     }
 
@@ -204,13 +205,13 @@ public class WXCleanImgActivity extends BaseActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("wechat_picture_Cleaning_view_page","图片清理页面浏览");
+        NiuDataAPI.onPageStart("wechat_picture_Cleaning_view_page", "图片清理页面浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("wechat_picture_Cleaning_view_page","图片清理页面浏览");
+        NiuDataAPI.onPageEnd("wechat_picture_Cleaning_view_page", "图片清理页面浏览");
 
     }
 
@@ -224,7 +225,6 @@ public class WXCleanImgActivity extends BaseActivity{
     public void emptyEvent(EmptyEvent emptyEvent) {
 
     }
-
 
 
 }

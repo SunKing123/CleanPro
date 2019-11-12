@@ -8,11 +8,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -55,7 +56,7 @@ import butterknife.OnClick;
 public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
 
 
-    private  static  final  int REQUEST_CODE_IMG_VIEW=0x1021;
+    private static final int REQUEST_CODE_IMG_VIEW = 0x1021;
     @BindView(R.id.list_view)
     ExpandableListView mListView;
     private WXVideoChatAdapter mAdapter;
@@ -73,7 +74,7 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
     private CleanFileLoadingDialogFragment mLoading;
     private FileCopyProgressDialogFragment mProgress;
     private CommonLoadingDialogFragment mLoadingProgress;
-    private  int mGroupPosition;
+    private int mGroupPosition;
 
     public static WXVideoChatFragment newInstance() {
         WXVideoChatFragment wxImgChatFragment = new WXVideoChatFragment();
@@ -99,15 +100,15 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
 
     @Override
     protected void initView() {
-        mLoadingProgress=CommonLoadingDialogFragment.newInstance();
-        mLoadingProgress.show(getFragmentManager(),"");
+        mLoadingProgress = CommonLoadingDialogFragment.newInstance();
+        mLoadingProgress.show(getFragmentManager(), "");
 
         mAdapter = new WXVideoChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
         mLoading = CleanFileLoadingDialogFragment.newInstance();
-        String title="聊天视频";
-        String content=getString(R.string.msg_save_video);
-        mProgress = FileCopyProgressDialogFragment.newInstance(title,content);
+        String title = "聊天视频";
+        String content = getString(R.string.msg_save_video);
+        mProgress = FileCopyProgressDialogFragment.newInstance(title, content);
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -139,8 +140,8 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
                 mLLCheckAll.setSelected(mIsCheckAll);
                 setSelectStatus(mIsCheckAll);
                 setDelBtnSize();
-                StatisticsUtils.trackClick("video_cleaning_all_election_click","\"全选\"按钮点击"
-                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
+                StatisticsUtils.trackClick("video_cleaning_all_election_click", "\"全选\"按钮点击"
+                        , "wechat_cleaning_page", "wechat_video_cleaning_page");
             }
         });
 
@@ -153,36 +154,36 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
 
             @Override
             public void onCheckImg(int groupPosition, int position) {
-                mGroupPosition=groupPosition;
+                mGroupPosition = groupPosition;
                 Intent intent = new Intent(mActivity, PreviewImageActivity.class);
                 intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition,position);
+                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition, position);
                 startActivityForResult(intent, REQUEST_CODE_IMG_VIEW);
             }
 
             @Override
             public void onCheckVideo(int groupPosition, int position) {
-               List<FileTitleEntity> lists= mAdapter.getList();
-               if(groupPosition<lists.size()){
-                   FileTitleEntity fileTitleEntity=lists.get(groupPosition);
-                   //获取子集
-                   List<FileChildEntity> flieChilds=fileTitleEntity.lists;
-                    if(position<flieChilds.size()){
-                        FileChildEntity fileChildEntity=flieChilds.get(position);
-                        play(fileChildEntity.name,fileChildEntity.path,fileChildEntity.size);
+                List<FileTitleEntity> lists = mAdapter.getList();
+                if (groupPosition < lists.size()) {
+                    FileTitleEntity fileTitleEntity = lists.get(groupPosition);
+                    //获取子集
+                    List<FileChildEntity> flieChilds = fileTitleEntity.lists;
+                    if (position < flieChilds.size()) {
+                        FileChildEntity fileChildEntity = flieChilds.get(position);
+                        play(fileChildEntity.name, fileChildEntity.path, fileChildEntity.size);
                     }
-               }
+                }
             }
         });
 
     }
 
 
-    public void play(String name,String path,long lenth) {
-        VideoPlayFragment videoPlayFragment=VideoPlayFragment.newInstance(name,FileSizeUtils.formatFileSize(lenth)
-                ,"时长: "+ MusicFileUtils.getPlayDuration2(path),"未知");
+    public void play(String name, String path, long lenth) {
+        VideoPlayFragment videoPlayFragment = VideoPlayFragment.newInstance(name, FileSizeUtils.formatFileSize(lenth)
+                , "时长: " + MusicFileUtils.getPlayDuration2(path), "未知");
         FragmentManager fm = getActivity().getFragmentManager();
-        videoPlayFragment.show(fm,"");
+        videoPlayFragment.show(fm, "");
         videoPlayFragment.setDialogClickListener(new VideoPlayFragment.DialogClickListener() {
             @Override
             public void onCancel() {
@@ -216,51 +217,53 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-         super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == REQUEST_CODE_IMG_VIEW) {
-                List<FileEntity> listTemp = new ArrayList<>();
-                listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
-                refreshData(listTemp);
-            }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_IMG_VIEW) {
+            List<FileEntity> listTemp = new ArrayList<>();
+            listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
+            refreshData(listTemp);
+        }
 
     }
 
 
     /**
      * 查看图片后刷新数据
+     *
      * @param fileEntities
      */
-    private  void  refreshData(List<FileEntity> fileEntities){
+    private void refreshData(List<FileEntity> fileEntities) {
 
-            List<FileTitleEntity> lists=mAdapter.getList();
+        List<FileTitleEntity> lists = mAdapter.getList();
 
-            List<FileChildEntity> listsNew=new ArrayList<>();
-            if(lists.size()>0){
-              List<FileChildEntity> fileChildEntities=  lists.get(mGroupPosition).lists;
+        List<FileChildEntity> listsNew = new ArrayList<>();
+        if (lists.size() > 0) {
+            List<FileChildEntity> fileChildEntities = lists.get(mGroupPosition).lists;
 
-              for(FileChildEntity fileChildEntity:fileChildEntities){
+            for (FileChildEntity fileChildEntity : fileChildEntities) {
 
-                  boolean isAdd=false;
-                  for(FileEntity fileEntity:fileEntities){
-                      if(fileEntity.path.equals(fileChildEntity.path)){
-                          fileChildEntity.isSelect=fileEntity.isSelect;
-                          isAdd=true;
-                      }
-                  }
-                  if(isAdd){
-                      listsNew.add(fileChildEntity);
-                  }
-              }
-                fileChildEntities.clear();;
-
-                fileChildEntities.addAll(listsNew);
-                mPresenter.totalFileSize(lists);
-                mAdapter.notifyDataSetChanged();
-                setSelectChildStatus(mGroupPosition);
-                setDelBtnSize();
-
-
+                boolean isAdd = false;
+                for (FileEntity fileEntity : fileEntities) {
+                    if (fileEntity.path.equals(fileChildEntity.path)) {
+                        fileChildEntity.isSelect = fileEntity.isSelect;
+                        isAdd = true;
+                    }
+                }
+                if (isAdd) {
+                    listsNew.add(fileChildEntity);
+                }
             }
+            fileChildEntities.clear();
+            ;
+
+            fileChildEntities.addAll(listsNew);
+            mPresenter.totalFileSize(lists);
+            mAdapter.notifyDataSetChanged();
+            setSelectChildStatus(mGroupPosition);
+            setDelBtnSize();
+
+
+        }
     }
 
     /**
@@ -274,17 +277,16 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         List<FileEntity> wrapperLists = new ArrayList<>();
 
         List<FileTitleEntity> lists = mAdapter.getList();
-        if(lists.size()>0){
-            List<FileChildEntity> listChilds=lists.get(groupPosition).lists;
-            for(FileChildEntity fileChildEntity: listChilds){
-                FileEntity fileEntity=new FileEntity(String.valueOf(fileChildEntity.size),fileChildEntity.path);
-                fileEntity.isSelect=fileChildEntity.isSelect;
+        if (lists.size() > 0) {
+            List<FileChildEntity> listChilds = lists.get(groupPosition).lists;
+            for (FileChildEntity fileChildEntity : listChilds) {
+                FileEntity fileEntity = new FileEntity(String.valueOf(fileChildEntity.size), fileChildEntity.path);
+                fileEntity.isSelect = fileChildEntity.isSelect;
                 wrapperLists.add(fileEntity);
             }
         }
         return wrapperLists;
     }
-
 
 
     /**
@@ -299,11 +301,11 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
                 //是否选择所有
                 boolean isCheckAll = true;
                 FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                if(fileTitleEntity.lists.size()==0){
+                if (fileTitleEntity.lists.size() == 0) {
                     fileTitleEntity.isSelect = false;
                     mAdapter.notifyDataSetChanged();
                     break;
-                }else {
+                } else {
                     for (FileChildEntity file : fileTitleEntity.lists) {
                         if (file.isSelect == false) {
                             isCheckAll = false;
@@ -418,33 +420,34 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         setDelBtnSize();
         setSelectChildStatus();
 
-        if(totalFileSize(lists)==0){
+        if (totalFileSize(lists) == 0) {
             mLLEmptyView.setVisibility(View.VISIBLE);
         }
 
         FragmentManager fm = getActivity().getFragmentManager();
-        long delSize=getDelTotalFileSize(paths);
-        String totalSize=FileSizeUtils.formatFileSize(delSize);
-        String fileSize=String.valueOf(paths.size());
-        DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+        long delSize = getDelTotalFileSize(paths);
+        String totalSize = FileSizeUtils.formatFileSize(delSize);
+        String fileSize = String.valueOf(paths.size());
+        DelFileSuccessFragment.newInstance(totalSize, fileSize).show(fm, "");
 
         //保存缓存
-        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long totalSizeCache=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,0L);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,(totalSizeCache-delSize));
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSizeCache = sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO, 0L);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO, (totalSizeCache - delSize));
         editor.commit();
 
     }
 
-    public long getDelTotalFileSize(List<FileChildEntity> paths){
-        long size=0L;
-        for(FileChildEntity fileChildEntity:paths){
-            size+=fileChildEntity.size;
+    public long getDelTotalFileSize(List<FileChildEntity> paths) {
+        long size = 0L;
+        for (FileChildEntity fileChildEntity : paths) {
+            size += fileChildEntity.size;
 
         }
-        return  size;
+        return size;
     }
+
     /**
      * 获取选中删除的元素
      *
@@ -468,11 +471,11 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         int ids = view.getId();
         switch (ids) {
             case R.id.btn_del:
-                StatisticsUtils.trackClick("video_cleaning_delete_click","\"删除\"按钮点击"
-                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
+                StatisticsUtils.trackClick("video_cleaning_delete_click", "\"删除\"按钮点击"
+                        , "wechat_cleaning_page", "wechat_video_cleaning_page");
                 String title = String.format("确定删除这%s个视频?", getSelectSize());
-                String content=getString(R.string.msg_del_video);
-                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title,content);
+                String content = getString(R.string.msg_del_video);
+                DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title, content);
                 FragmentManager fm = getActivity().getFragmentManager();
                 dialogFragment.show(fm, "");
                 dialogFragment.setDialogClickListener(new DelDialogStyleFragment.DialogClickListener() {
@@ -492,8 +495,8 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
                 break;
             //保存到手机
             case R.id.btn_save:
-                StatisticsUtils.trackClick("Save_to_cell_phone_click","\"保存到手机\"点击"
-                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
+                StatisticsUtils.trackClick("Save_to_cell_phone_click", "\"保存到手机\"点击"
+                        , "wechat_cleaning_page", "wechat_video_cleaning_page");
                 List<File> lists = getSelectFiles();
                 if (lists.size() == 0) {
                     ToastUtils.showShort("未选中照片");
@@ -523,12 +526,12 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
         }
     }
 
-    public void onCopyFaile(){
-        if(null!=mProgress){
+    public void onCopyFaile() {
+        if (null != mProgress) {
             mProgress.dismissAllowingStateLoss();
         }
         FragmentManager fm = getActivity().getFragmentManager();
-        MFullDialogStyleFragment.newInstance().show(fm,"");
+        MFullDialogStyleFragment.newInstance().show(fm, "");
     }
 
 
@@ -568,50 +571,49 @@ public class WXVideoChatFragment extends BaseFragment<WXCleanVideoPresenter> {
      * @param lists
      */
     public void updateImgChat(List<FileTitleEntity> lists) {
-        if(null!=mLoadingProgress){
+        if (null != mLoadingProgress) {
             mLoadingProgress.dismissAllowingStateLoss();
         }
         mAdapter.modifyData(lists);
         if (lists.size() > 0) {
-            mListView.expandGroup(lists.size()-1);
+            mListView.expandGroup(lists.size() - 1);
             mListView.setSelectedGroup(0);
         }
 
-        if(totalFileSize(lists)==0){
+        if (totalFileSize(lists) == 0) {
             mLLEmptyView.setVisibility(View.VISIBLE);
         }
         //保存缓存
-        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO,totalFileSize(lists));
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,(totalSize+totalFileSize(lists)));
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize = sharedPreferences.getLong(Constant.WX_CACHE_SIZE_VIDEO, totalFileSize(lists));
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO, (totalSize + totalFileSize(lists)));
         editor.commit();
 
     }
 
 
-
-
-    public   long totalFileSize(List<FileTitleEntity> lists){
-        if(null==lists ||  lists.size()==0){
+    public long totalFileSize(List<FileTitleEntity> lists) {
+        if (null == lists || lists.size() == 0) {
             return 0L;
         }
 
-        long size=0L;
+        long size = 0L;
 
-        for(FileTitleEntity fileTitleEntity: lists) {
-            size+=fileTitleEntity.size;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            size += fileTitleEntity.size;
 
         }
 
-        return  size;
+        return size;
     }
 
     /**
      * 更新系统相册
+     *
      * @param file
      */
-    public void updateDIM(File file){
+    public void updateDIM(File file) {
         mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
 
     }

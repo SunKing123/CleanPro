@@ -1,15 +1,11 @@
 package com.xiaoniu.cleanking.ui.main.widget;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -19,6 +15,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -63,8 +62,8 @@ public class BottomBarTab extends FrameLayout {
             icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
             iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
         } else {
-            icons = new int[]{R.drawable.clean_normal,R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
-            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select,R.drawable.msg_select, R.drawable.me_select};
+            icons = new int[]{R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
+            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
         }
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
@@ -215,7 +214,7 @@ public class BottomBarTab extends FrameLayout {
         mBadgeView.setVisibility(GONE);
     }
 
-    public boolean isBadgeViewShow(){
+    public boolean isBadgeViewShow() {
         return mBadgeView.getVisibility() == VISIBLE;
     }
 }

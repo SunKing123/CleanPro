@@ -1,7 +1,8 @@
 package com.xiaoniu.common.base;
 
 import android.app.Application;
-import android.support.annotation.Keep;
+
+import androidx.annotation.Keep;
 
 /**
  * Manifest文件中配置如下信息，必须继承BaseApplication

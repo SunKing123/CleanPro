@@ -9,18 +9,19 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import androidx.core.app.NotificationCompat;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.common.utils.ContextUtils;
 
 import static android.app.Notification.VISIBILITY_SECRET;
-import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
+import static androidx.core.app.NotificationCompat.PRIORITY_DEFAULT;
 
 public class NotificationUtils {
 

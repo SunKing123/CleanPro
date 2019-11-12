@@ -1,15 +1,14 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 添加 ViewPager Fragment
-
  */
 
 public class CommonFragmentPageAdapter extends FragmentStatePagerAdapter {

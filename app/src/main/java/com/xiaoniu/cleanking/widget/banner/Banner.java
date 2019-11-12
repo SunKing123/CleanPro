@@ -2,8 +2,6 @@ package com.xiaoniu.cleanking.widget.banner;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -13,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -140,8 +140,8 @@ public class Banner extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
-    private OnPageChangeListener createOnPagerChangeListener() {
-        return new OnPageChangeListener() {
+    private ViewPager.OnPageChangeListener createOnPagerChangeListener() {
+        return new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (mPagerAdapter != null) {

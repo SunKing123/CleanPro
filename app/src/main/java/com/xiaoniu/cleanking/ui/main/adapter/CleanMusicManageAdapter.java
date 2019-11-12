@@ -3,14 +3,15 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.MusciInfoBean;
@@ -55,7 +56,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.mTxtName.setText(appInfoBean.name);
             viewHolder.mTxtSize.setText(FileSizeUtils.formatFileSize(appInfoBean.packageSize));
-            viewHolder.mTxtTime.setText(String.format("时长:%s",appInfoBean.time));
+            viewHolder.mTxtTime.setText(String.format("时长:%s", appInfoBean.time));
             if (appInfoBean.isSelect) {
                 viewHolder.mCheckSelect.setSelected(true);
             } else {
@@ -67,7 +68,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
                 }
             });
             viewHolder.mLLContent.setOnClickListener(v -> {
-                if(null!=onCheckListener){
+                if (null != onCheckListener) {
                     onCheckListener.play(appInfoBean);
                 }
             });
@@ -129,7 +130,7 @@ public class CleanMusicManageAdapter extends RecyclerView.Adapter {
             mTxtSize = itemView.findViewById(R.id.txt_size);
             mCheckSelect = itemView.findViewById(R.id.check_select);
             mLLContent = itemView.findViewById(R.id.ll_content);
-            mLLCheckSelect=itemView.findViewById(R.id.ll_check_select);
+            mLLCheckSelect = itemView.findViewById(R.id.ll_check_select);
         }
     }
 

@@ -24,21 +24,19 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.FileProvider;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
@@ -55,8 +53,6 @@ import com.xiaoniu.cleanking.utils.update.listener.OnFailureListener;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
-
-import io.reactivex.functions.Consumer;
 
 public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
@@ -378,7 +374,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
         public DefaultDialogDownloadListener(Activity activity) {
             mActivity = activity;
-            LogUtils.e("DefaultDialogDownloadListener --下载开始----"+mActivity);
+            LogUtils.e("DefaultDialogDownloadListener --下载开始----" + mActivity);
         }
 
         /**
@@ -391,7 +387,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 mDialog = new UpgradingDialog(mActivity);
                 mDialog.setCancelable(false);
                 mDialog.show();
-            }else {
+            } else {
                 LogUtils.e("onStart --下载开始无弹窗----");
             }
         }
@@ -404,10 +400,10 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         @Override
         public void onProgress(int i) {
             if (mDialog != null) {
-                if (mDialog.getPgBar() != null){
+                if (mDialog.getPgBar() != null) {
                     mDialog.getPgBar().setProgress(i);
                 }
-                if (mDialog.getTvPg() != null){
+                if (mDialog.getTvPg() != null) {
                     mDialog.getTvPg().setText(i + "%");
                 }
             }

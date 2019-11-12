@@ -4,14 +4,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
@@ -57,9 +58,10 @@ public class NewsFragment extends BaseFragment {
         return mIvBack;
     }
 
-    public void showIvBack(boolean show){
+    public void showIvBack(boolean show) {
         isShowBack = show;
     }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.fragment_news;
@@ -130,7 +132,7 @@ public class NewsFragment extends BaseFragment {
                     mTabIndicator.setBackgroundColor(Color.WHITE);
                     mFLTopNav.setBackgroundColor(Color.WHITE);
                     mIvBack.setColorFilter(Color.BLACK);
-                }else {
+                } else {
                     textView.setTextColor(Color.WHITE);
                 }
                 return textView;
@@ -178,17 +180,17 @@ public class NewsFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             mTabIndicator.setCurrentTab(0);
             mFragments.get(0).startLoadData();
             NiuDataAPI.onPageStart("information_page_view_page", "信息页面浏览");
-            StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page",0);
+            StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", 0);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), true);
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
             }
-        }else {
+        } else {
             NiuDataAPI.onPageEnd("information_page_view_page", "信息页面浏览");
         }
     }

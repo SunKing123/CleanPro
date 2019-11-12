@@ -13,8 +13,6 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -27,6 +25,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.ShareAction;
@@ -603,7 +604,7 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
                     StatisticsUtils.trackClick(eventQZoneCode, "\"QQ空间\"点击", sourcePage, currentPage);
                 } else if (SHARE_MEDIA.QQ == share_media) {
                     StatisticsUtils.trackClick(eventQQCode, "\"qq好友\"点击", sourcePage, currentPage);
-                }  else if (SHARE_MEDIA.SINA == share_media) {
+                } else if (SHARE_MEDIA.SINA == share_media) {
                     StatisticsUtils.trackClick(eventSinaCode, "\"微博分享\"点击", sourcePage, currentPage);
                 }
             }

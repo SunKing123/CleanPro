@@ -58,7 +58,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

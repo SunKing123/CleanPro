@@ -3,16 +3,13 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-
-import butterknife.BindView;
 
 /**
  * 权限列表页面

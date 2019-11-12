@@ -11,13 +11,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.os.Build;
 import android.os.RemoteException;
-import android.os.StatFs;
-import android.os.UserHandle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -30,9 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -138,7 +133,7 @@ public class PhoneThinResultPresenter extends RxPresenter<PhoneThinResultActivit
         StorageManager storageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
         //获取所有应用的StorageVolume列表
         List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
-        UUID uuid=null;
+        UUID uuid = null;
         for (StorageVolume item : storageVolumes) {
             String uuidStr = item.getUuid();
 
@@ -163,6 +158,7 @@ public class PhoneThinResultPresenter extends RxPresenter<PhoneThinResultActivit
         }
 
     }
+
     /**
      * 根据应用包名获取对应uid
      */

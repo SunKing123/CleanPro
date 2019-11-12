@@ -78,7 +78,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_weight="315">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_clean_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/clean_toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -145,6 +145,6 @@
         </FrameLayout>
 
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 </FrameLayout>

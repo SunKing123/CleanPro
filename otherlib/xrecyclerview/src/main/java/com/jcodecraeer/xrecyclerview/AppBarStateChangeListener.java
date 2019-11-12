@@ -1,6 +1,6 @@
 package com.jcodecraeer.xrecyclerview;
 
-import android.support.design.widget.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout;
 
 /**
  * Created by jianghejie on 16/6/19.
@@ -35,6 +35,7 @@ public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffset
             mCurrentState = State.IDLE;
         }
     }
+
     public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
 }
 

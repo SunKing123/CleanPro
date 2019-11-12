@@ -1,7 +1,8 @@
 package com.xiaoniu.cleanking.keeplive.pro_sp;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;

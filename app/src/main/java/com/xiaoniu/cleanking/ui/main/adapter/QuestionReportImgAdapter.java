@@ -1,12 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
@@ -70,12 +71,12 @@ public class QuestionReportImgAdapter extends RecyclerView.Adapter {
                         mOnItemImgClickListener.onSelectImg();
                     }
                 });
-            }else {
+            } else {
                 mViewHolder.mImg.setOnClickListener(null);
                 mViewHolder.mImgClose.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(new File(bean.path)).into(mViewHolder.mImg);
                 mViewHolder.mImgClose.setOnClickListener(v -> {
-                    if(null!=mOnItemImgClickListener){
+                    if (null != mOnItemImgClickListener) {
                         mOnItemImgClickListener.onDelImg(position);
                     }
                 });
@@ -110,7 +111,7 @@ public class QuestionReportImgAdapter extends RecyclerView.Adapter {
         public ViewHolder(View itemView) {
             super(itemView);
             mImg = itemView.findViewById(R.id.img);
-            mImgClose=itemView.findViewById(R.id.img_close);
+            mImgClose = itemView.findViewById(R.id.img_close);
         }
     }
 }

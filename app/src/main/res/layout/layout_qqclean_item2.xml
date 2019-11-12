@@ -9,7 +9,7 @@
     android:visibility="gone"
     tools:visibility="visible">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -38,7 +38,7 @@
             app:layout_constraintLeft_toRightOf="@id/tv1_top"
             app:layout_constraintTop_toTopOf="@id/tv1_top" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cons_gabcache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,11 +96,11 @@
                 app:layout_constraintBottom_toBottomOf="@id/iv_icon_wxg"
                 app:layout_constraintRight_toLeftOf="@id/tv_select1"
                 app:layout_constraintTop_toTopOf="@id/iv_icon_wxg" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_8dp"
@@ -130,7 +130,7 @@
             app:layout_constraintLeft_toRightOf="@id/tv1_file"
             app:layout_constraintTop_toTopOf="@id/tv1_file" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cons_allfiles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv1_file">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cons_wxsp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,7 +214,7 @@
                         android:textSize="@dimen/dimen_11sp"
                         />
                 </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/view_wxsp"
@@ -227,7 +227,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cons_wxsp" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cons_pic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -302,7 +302,7 @@
                         android:textColor="#FD6F46"
                         android:textSize="@dimen/dimen_11sp" />
                 </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/view_pic"
@@ -315,7 +315,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cons_pic" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cons_file"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -390,7 +390,7 @@
                         android:textColor="#FD6F46"
                         android:textSize="@dimen/dimen_11sp" />
                 </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/view_file"
@@ -403,7 +403,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cons_file" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cons_aud"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -480,7 +480,7 @@
                         android:textColor="#FD6F46"
                         android:textSize="@dimen/dimen_11sp" />
                 </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

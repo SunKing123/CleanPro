@@ -2,12 +2,13 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;

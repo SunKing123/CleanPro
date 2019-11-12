@@ -1,12 +1,13 @@
 package com.xiaoniu.cleanking.ui.tool.qq.adapter;
 
 import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
@@ -86,7 +87,7 @@ public class QQCleanAudAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ImageViewHolder(View itemView) {
             super(itemView);
-            tv_select =  itemView.findViewById(R.id.tv_select);
+            tv_select = itemView.findViewById(R.id.tv_select);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_size = itemView.findViewById(R.id.tv_size);
             tv_time = itemView.findViewById(R.id.tv_time);

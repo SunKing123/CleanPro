@@ -1,14 +1,15 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
@@ -32,9 +33,9 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
     private ViewHolderChild mViewChild;
 
     private WXVideoAdapter mWXVideoAdapter;
-    private WXImgAdapter  mWXImgAdapter;
+    private WXImgAdapter mWXImgAdapter;
 
-    private  OnCheckListener onCheckListener;
+    private OnCheckListener onCheckListener;
 
     public WXVideoChatAdapter(Context context) {
         this.mContext = context;
@@ -63,9 +64,10 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
         return mLists.size();
     }
 
-    public void clear(){
+    public void clear() {
         mLists.clear();
     }
+
     public List<FileTitleEntity> getList() {
         return mLists;
     }
@@ -113,9 +115,9 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
         }
         FileTitleEntity fileTitleEntity = mLists.get(groupPosition);
 
-        if(fileTitleEntity.size==0){
+        if (fileTitleEntity.size == 0) {
             mViewParent.mTxtSize.setText("");
-        }else {
+        } else {
             mViewParent.mTxtSize.setText(FileSizeUtils.formatFileSize(fileTitleEntity.size));
         }
         if (fileTitleEntity.isExpand) {
@@ -138,8 +140,8 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
                 for (FileChildEntity childEntity : listChild) {
                     childEntity.isSelect = fileTitleEntity.isSelect;
                 }
-                if(null!=onCheckListener){
-                    onCheckListener.onCheck(groupPosition,-1,fileTitleEntity.isSelect);
+                if (null != onCheckListener) {
+                    onCheckListener.onCheck(groupPosition, -1, fileTitleEntity.isSelect);
                 }
                 notifyDataSetChanged();
             }
@@ -158,54 +160,54 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
             mViewChild = (ViewHolderChild) convertView.getTag();
         }
         List<FileChildEntity> lists = mLists.get(groupPosition).lists;
-        int fileType=lists.get(childPosition).fileType;
+        int fileType = lists.get(childPosition).fileType;
 
-        if(fileType==0){
-            mWXImgAdapter=new WXImgAdapter(mContext,lists);
-        }else if(fileType==1){
+        if (fileType == 0) {
+            mWXImgAdapter = new WXImgAdapter(mContext, lists);
+        } else if (fileType == 1) {
             mWXVideoAdapter = new WXVideoAdapter(mContext, lists);
         }
 
-        if(null!=mWXVideoAdapter){
+        if (null != mWXVideoAdapter) {
             mWXVideoAdapter.setOnSelectListener(new WXVideoAdapter.OnSelectListener() {
                 @Override
                 public void select(int position, boolean isSelect) {
-                    if(null!=onCheckListener){
-                        onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                    if (null != onCheckListener) {
+                        onCheckListener.onCheck(groupPosition, childPosition, isSelect);
                     }
                 }
 
                 @Override
                 public void onClickImg(int position) {
-                    if(null!=onCheckListener){
+                    if (null != onCheckListener) {
 
-                        onCheckListener.onCheckVideo(groupPosition,position);
+                        onCheckListener.onCheckVideo(groupPosition, position);
                     }
                 }
             });
         }
-        if(null!=mWXImgAdapter){
+        if (null != mWXImgAdapter) {
             mWXImgAdapter.setOnSelectListener(new WXImgAdapter.OnSelectListener() {
                 @Override
                 public void select(int position, boolean isSelect) {
-                    if(null!=onCheckListener){
-                        onCheckListener.onCheck(groupPosition,childPosition,isSelect);
+                    if (null != onCheckListener) {
+                        onCheckListener.onCheck(groupPosition, childPosition, isSelect);
                     }
                 }
 
                 @Override
                 public void onClickImg(int position) {
-                    if(null!=onCheckListener){
-                        onCheckListener.onCheckImg(groupPosition,position);
+                    if (null != onCheckListener) {
+                        onCheckListener.onCheckImg(groupPosition, position);
                     }
                 }
             });
 
         }
         //显示图片
-        if(fileType==0){
+        if (fileType == 0) {
             mViewChild.mRecyclerView.setAdapter(mWXImgAdapter);
-        }else {
+        } else {
             //显示视频
             mViewChild.mRecyclerView.setAdapter(mWXVideoAdapter);
 
@@ -248,7 +250,7 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
             mRecyclerView = view.findViewById(R.id.recycle_view);
 
 
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3){
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3) {
 
                 @Override
                 public boolean canScrollVertically() {
@@ -264,8 +266,8 @@ public class WXVideoChatAdapter extends BaseExpandableListAdapter {
         this.onCheckListener = onCheckListener;
     }
 
-    public interface OnCheckListener{
-        void  onCheck(int groupPosition, int position, boolean isCheck);
+    public interface OnCheckListener {
+        void onCheck(int groupPosition, int position, boolean isCheck);
 
         void onCheckImg(int groupPosition, int position);
 

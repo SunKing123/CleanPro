@@ -27,9 +27,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.core.content.FileProvider;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.encypt.rsa.MD5Utils;
@@ -211,7 +212,7 @@ public class UpdateUtil {
         return new File(file, "xiaoniu_v" + getAppVersionName(context) + ".apk");
     }
 
-    public static File makeFile(String fileName,boolean isTemp) {
+    public static File makeFile(String fileName, boolean isTemp) {
         File file = new File(AppApplication.getInstance().getExternalCacheDir(), File.separator + "clean_ad_download");
 //        String fileDirs = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "flashloan";
 //        File file = new File(fileDirs);
@@ -220,7 +221,7 @@ public class UpdateUtil {
         }
         if (isTemp) {
             return new File(file, fileName);
-        }else{
+        } else {
             return new File(file, fileName + ".apk");
         }
     }

@@ -1,21 +1,9 @@
 package com.xiaoniu.cleanking.app;
 
-import android.app.Application;
-import android.content.Context;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.utils.ContextUtils;
-import com.xiaoniu.common.utils.MiitHelper;
-import com.xiaoniu.statistic.Configuration;
-import com.xiaoniu.statistic.HeartbeatCallBack;
-import com.xiaoniu.statistic.NiuDataAPI;
-import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.Set;

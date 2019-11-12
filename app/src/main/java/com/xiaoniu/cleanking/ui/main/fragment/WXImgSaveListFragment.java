@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -129,8 +130,8 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                 mLLCheckAll.setSelected(mIsCheckAll);
                 setSelectStatus(mIsCheckAll);
                 setDelBtnSize();
-                StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
-                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+                StatisticsUtils.trackClick("picture_cleaning_all_election_click", "\"全选\"按钮点击"
+                        , "wechat_cleaning_page", "wechat_picture_cleaning_page");
 
 
             }
@@ -195,9 +196,9 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
                 //是否选择所有
                 boolean isCheckAll = true;
                 FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                if(fileTitleEntity.lists.size()==0){
+                if (fileTitleEntity.lists.size() == 0) {
                     fileTitleEntity.isSelect = false;
-                }else {
+                } else {
                     for (FileChildEntity file : fileTitleEntity.lists) {
                         if (file.isSelect == false) {
                             isCheckAll = false;
@@ -252,30 +253,32 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
     /**
      * 查看图片后刷新数据
+     *
      * @param fileEntities
      */
-    private  void  refreshData(List<FileEntity> fileEntities){
+    private void refreshData(List<FileEntity> fileEntities) {
 
-        List<FileTitleEntity> lists=mAdapter.getList();
+        List<FileTitleEntity> lists = mAdapter.getList();
 
-        List<FileChildEntity> listsNew=new ArrayList<>();
-        if(lists.size()>0){
-            List<FileChildEntity> fileChildEntities=  lists.get(mGroupPosition).lists;
+        List<FileChildEntity> listsNew = new ArrayList<>();
+        if (lists.size() > 0) {
+            List<FileChildEntity> fileChildEntities = lists.get(mGroupPosition).lists;
 
-            for(FileChildEntity fileChildEntity:fileChildEntities){
+            for (FileChildEntity fileChildEntity : fileChildEntities) {
 
-                boolean isAdd=false;
-                for(FileEntity fileEntity:fileEntities){
-                    if(fileEntity.path.equals(fileChildEntity.path)){
-                        fileChildEntity.isSelect=fileEntity.isSelect;
-                        isAdd=true;
+                boolean isAdd = false;
+                for (FileEntity fileEntity : fileEntities) {
+                    if (fileEntity.path.equals(fileChildEntity.path)) {
+                        fileChildEntity.isSelect = fileEntity.isSelect;
+                        isAdd = true;
                     }
                 }
-                if(isAdd){
+                if (isAdd) {
                     listsNew.add(fileChildEntity);
                 }
             }
-            fileChildEntities.clear();;
+            fileChildEntities.clear();
+            ;
 
             fileChildEntities.addAll(listsNew);
             mPresenter.totalFileSize(lists);
@@ -357,34 +360,33 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         setDelBtnSize();
         setSelectChildStatus();
 
-        if(totalFileSizeL(mAdapter.getList())==0){
+        if (totalFileSizeL(mAdapter.getList()) == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
 
 
         FragmentManager fm = getActivity().getFragmentManager();
-        long delSize=getDelTotalFileSize(paths);
-        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
-        String fileSize=String.valueOf(paths.size());
-        DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+        long delSize = getDelTotalFileSize(paths);
+        String totalSize = FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        String fileSize = String.valueOf(paths.size());
+        DelFileSuccessFragment.newInstance(totalSize, fileSize).show(fm, "");
 
         //更新缓存
-        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long totalSizeCache=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,0l);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSizeCache-delSize));
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSizeCache = sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG, 0l);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG, (totalSizeCache - delSize));
         editor.commit();
     }
 
 
-
-    public long getDelTotalFileSize(List<FileChildEntity> paths){
-        long size=0L;
-        for(FileChildEntity fileChildEntity:paths){
-            size+=fileChildEntity.size;
+    public long getDelTotalFileSize(List<FileChildEntity> paths) {
+        long size = 0L;
+        for (FileChildEntity fileChildEntity : paths) {
+            size += fileChildEntity.size;
 
         }
-        return  size;
+        return size;
     }
 
     /**
@@ -410,8 +412,8 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         int ids = view.getId();
         switch (ids) {
             case R.id.btn_del:
-                StatisticsUtils.trackClick("picture_cleaning_delete_click","\"删除\"按钮点击"
-                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+                StatisticsUtils.trackClick("picture_cleaning_delete_click", "\"删除\"按钮点击"
+                        , "wechat_cleaning_page", "wechat_picture_cleaning_page");
                 String title = String.format("确定删除这%s个图片?", getSelectSize());
                 DelDialogStyleFragment dialogFragment = DelDialogStyleFragment.newInstance(title);
                 FragmentManager fm = getActivity().getFragmentManager();
@@ -432,8 +434,8 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
 
                 break;
             case R.id.btn_save:
-                StatisticsUtils.trackClick("Save_to_cell_phone_click","\"保存到手机\"点击"
-                        ,"wechat_cleaning_page","wechat_picture_cleaning_page");
+                StatisticsUtils.trackClick("Save_to_cell_phone_click", "\"保存到手机\"点击"
+                        , "wechat_cleaning_page", "wechat_picture_cleaning_page");
 
                 List<File> lists = getSelectFiles();
                 if (lists.size() == 0) {
@@ -467,14 +469,13 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
     /**
      * 导出失败
      */
-    public void onCopyFaile(){
-        if(null!=mProgress){
+    public void onCopyFaile() {
+        if (null != mProgress) {
             mProgress.dismissAllowingStateLoss();
         }
         FragmentManager fm = getActivity().getFragmentManager();
-        MFullDialogStyleFragment.newInstance().show(fm,"");
+        MFullDialogStyleFragment.newInstance().show(fm, "");
     }
-
 
 
     private List<File> getSelectFiles() {
@@ -514,59 +515,59 @@ public class WXImgSaveListFragment extends BaseFragment<WXCleanSaveListPresenter
         mAdapter.modifyData(lists);
         if (lists.size() > 0) {
             //默认展开最后一条
-            mListView.expandGroup(lists.size()-1);
+            mListView.expandGroup(lists.size() - 1);
             mListView.setSelectedGroup(0);
         }
 
-        if(totalFileSizeL(lists)==0){
+        if (totalFileSizeL(lists) == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
 
-        SharedPreferences sharedPreferences =getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long totalSize=sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG,totalFileSize(lists));
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_IMG,(totalSize+totalFileSize(lists)));
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long totalSize = sharedPreferences.getLong(Constant.WX_CACHE_SIZE_IMG, totalFileSize(lists));
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_IMG, (totalSize + totalFileSize(lists)));
         editor.commit();
     }
 
 
-
-    public   long totalFileSizeL(List<FileTitleEntity> lists){
-        if(null==lists ||  lists.size()==0){
+    public long totalFileSizeL(List<FileTitleEntity> lists) {
+        if (null == lists || lists.size() == 0) {
             return 0L;
         }
 
-        long size=0L;
+        long size = 0L;
 
-        for(FileTitleEntity fileTitleEntity: lists) {
-            size+=fileTitleEntity.size;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            size += fileTitleEntity.size;
 
         }
 
-        return  size;
+        return size;
     }
 
 
-    public   long totalFileSize(List<FileTitleEntity> lists){
-        if(null==lists ||  lists.size()==0){
+    public long totalFileSize(List<FileTitleEntity> lists) {
+        if (null == lists || lists.size() == 0) {
             return 0L;
         }
-        long size=0L;
+        long size = 0L;
 
-        for(FileTitleEntity fileTitleEntity: lists) {
-            size+=fileTitleEntity.size;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            size += fileTitleEntity.size;
 
         }
 
-        return  size;
+        return size;
     }
 
 
     /**
      * 更新系统相册
+     *
      * @param file
      */
-    public void updateDIM(File file){
+    public void updateDIM(File file) {
         mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
 
     }

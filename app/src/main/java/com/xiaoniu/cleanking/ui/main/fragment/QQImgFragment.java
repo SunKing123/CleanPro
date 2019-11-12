@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -11,6 +10,8 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -51,7 +52,7 @@ import butterknife.OnClick;
 public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
 
-    private  static  final  int REQUEST_CODE_IMG_VIEW=0x1022;
+    private static final int REQUEST_CODE_IMG_VIEW = 0x1022;
     @BindView(R.id.list_view_camera)
     ExpandableListView mListView;
     private WXImgChatAdapter mAdapter;
@@ -66,15 +67,17 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
     TextView mTxtEmptyTilte;
 
 
-    private  boolean mIsCheckAll;
+    private boolean mIsCheckAll;
 
-    private  int mGroupPosition;
+    private int mGroupPosition;
 
-    private  int mOfferY=0;
+    private int mOfferY = 0;
 
     private CleanFileLoadingDialogFragment mLoading;
-    private FileCopyProgressDialogFragment mProgress;;
+    private FileCopyProgressDialogFragment mProgress;
+    ;
     private CommonLoadingDialogFragment mLoadingProgress;
+
     public static QQImgFragment newInstance() {
         QQImgFragment instance = new QQImgFragment();
 
@@ -100,12 +103,12 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     @Override
     protected void initView() {
-        mLoadingProgress=CommonLoadingDialogFragment.newInstance();
-        mLoadingProgress.show(getFragmentManager(),"");
+        mLoadingProgress = CommonLoadingDialogFragment.newInstance();
+        mLoadingProgress.show(getFragmentManager(), "");
 
-        mLoading=CleanFileLoadingDialogFragment.newInstance();
-        mProgress=FileCopyProgressDialogFragment.newInstance();
-        mAdapter=new WXImgChatAdapter(getContext());
+        mLoading = CleanFileLoadingDialogFragment.newInstance();
+        mProgress = FileCopyProgressDialogFragment.newInstance();
+        mAdapter = new WXImgChatAdapter(getContext());
         mListView.setAdapter(mAdapter);
 
         mListView.setOnGroupExpandListener(groupPosition -> {
@@ -120,7 +123,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
                         fileTitleEntity.isExpand = true;
                     }
                     isExpand = fileTitleEntity.isExpand;
-                }else {
+                } else {
                     mListView.collapseGroup(i);
                 }
             }
@@ -130,7 +133,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
             mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    if(scrollState== SCROLL_STATE_IDLE || scrollState==SCROLL_STATE_FLING && mOfferY>0){
+                    if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING && mOfferY > 0) {
                         scollPage(groupPosition);
 
 
@@ -140,10 +143,10 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
                 @Override
                 public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                    if(firstVisibleItem+visibleItemCount==totalItemCount){
-                        mOfferY=1;
-                    }else {
-                        mOfferY=-1;
+                    if (firstVisibleItem + visibleItemCount == totalItemCount) {
+                        mOfferY = 1;
+                    } else {
+                        mOfferY = -1;
                     }
 
                 }
@@ -173,16 +176,16 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
 
         mLLCheckAll.setOnClickListener(v -> {
-            if(mIsCheckAll){
-                mIsCheckAll=false;
-            }else {
-                mIsCheckAll=true;
+            if (mIsCheckAll) {
+                mIsCheckAll = false;
+            } else {
+                mIsCheckAll = true;
             }
             mLLCheckAll.setSelected(mIsCheckAll);
             setSelectStatus(mIsCheckAll);
             setDelBtnSize();
-            StatisticsUtils.trackClick("picture_cleaning_all_election_click","\"全选\"按钮点击"
-                    ,"qq_cleaning_page","qq_picture_cleaning_page");
+            StatisticsUtils.trackClick("picture_cleaning_all_election_click", "\"全选\"按钮点击"
+                    , "qq_cleaning_page", "qq_picture_cleaning_page");
 
         });
 
@@ -196,11 +199,11 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
             @Override
             public void onCheckAll(int groupPosition, int position, boolean isCheck) {
                 //更新副本
-                List<FileTitleEntity>  lists= mPresenter.listsCamera;
-                for(int i=0;i<lists.size();i++){
-                    List<FileChildEntity> files= lists.get(groupPosition).lists;
-                    for(FileChildEntity fileChildEntity:files){
-                        fileChildEntity.isSelect=isCheck;
+                List<FileTitleEntity> lists = mPresenter.listsCamera;
+                for (int i = 0; i < lists.size(); i++) {
+                    List<FileChildEntity> files = lists.get(groupPosition).lists;
+                    for (FileChildEntity fileChildEntity : files) {
+                        fileChildEntity.isSelect = isCheck;
                     }
 
                 }
@@ -210,10 +213,10 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
             @Override
             public void onCheckImg(int groupPosition, int position) {
-                mGroupPosition=groupPosition;
+                mGroupPosition = groupPosition;
                 Intent intent = new Intent(mActivity, PreviewImageActivity.class);
                 intent.putExtra(ExtraConstant.PREVIEW_IMAGE_POSITION, position);
-                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition,position);
+                CleanAllFileScanUtil.clean_image_list = wrapperImg(groupPosition, position);
                 startActivityForResult(intent, REQUEST_CODE_IMG_VIEW);
             }
         });
@@ -229,14 +232,14 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         }
         mIsLoading = true;
 
-        Log.i("test","scollPage()");
+        Log.i("test", "scollPage()");
         List<FileTitleEntity> adaterLists = mAdapter.getList();
         List<FileChildEntity> fileChildEntities = mPresenter.listsCamera.get(groupPosition).lists;
         int startSize = mAdapter.getList().get(groupPosition).lists.size();
         if (startSize < fileChildEntities.size()) {
 
             for (int i = startSize; i < fileChildEntities.size(); i++) {
-                if (i <= startSize +29) {
+                if (i <= startSize + 29) {
                     adaterLists.get(groupPosition).lists.add(fileChildEntities.get(i));
                 } else {
                     break;
@@ -244,7 +247,7 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
             }
 
             int itemCount = adaterLists.get(groupPosition).lists.size();
-            mAdapter.getWXImgAdapter().notifyItemRangeChanged(startSize+1, itemCount,"");
+            mAdapter.getWXImgAdapter().notifyItemRangeChanged(startSize + 1, itemCount, "");
             mIsLoading = false;
         }
     }
@@ -260,11 +263,11 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         List<FileEntity> wrapperLists = new ArrayList<>();
 
         List<FileTitleEntity> lists = mAdapter.getList();
-        if(lists.size()>0){
-            List<FileChildEntity> listChilds=lists.get(groupPosition).lists;
-            for(FileChildEntity fileChildEntity: listChilds){
-                FileEntity fileEntity=new FileEntity(String.valueOf(fileChildEntity.size),fileChildEntity.path);
-                fileEntity.isSelect=fileChildEntity.isSelect;
+        if (lists.size() > 0) {
+            List<FileChildEntity> listChilds = lists.get(groupPosition).lists;
+            for (FileChildEntity fileChildEntity : listChilds) {
+                FileEntity fileEntity = new FileEntity(String.valueOf(fileChildEntity.size), fileChildEntity.path);
+                fileEntity.isSelect = fileChildEntity.isSelect;
                 wrapperLists.add(fileEntity);
             }
         }
@@ -286,30 +289,32 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     /**
      * 查看图片后刷新数据
+     *
      * @param fileEntities
      */
-    private  void  refreshData(List<FileEntity> fileEntities){
+    private void refreshData(List<FileEntity> fileEntities) {
 
-        List<FileTitleEntity> lists=mAdapter.getList();
+        List<FileTitleEntity> lists = mAdapter.getList();
 
-        List<FileChildEntity> listsNew=new ArrayList<>();
-        if(lists.size()>0){
-            List<FileChildEntity> fileChildEntities=  lists.get(mGroupPosition).lists;
+        List<FileChildEntity> listsNew = new ArrayList<>();
+        if (lists.size() > 0) {
+            List<FileChildEntity> fileChildEntities = lists.get(mGroupPosition).lists;
 
-            for(FileChildEntity fileChildEntity:fileChildEntities){
+            for (FileChildEntity fileChildEntity : fileChildEntities) {
 
-                boolean isAdd=false;
-                for(FileEntity fileEntity:fileEntities){
-                    if(fileEntity.path.equals(fileChildEntity.path)){
-                        fileChildEntity.isSelect=fileEntity.isSelect;
-                        isAdd=true;
+                boolean isAdd = false;
+                for (FileEntity fileEntity : fileEntities) {
+                    if (fileEntity.path.equals(fileChildEntity.path)) {
+                        fileChildEntity.isSelect = fileEntity.isSelect;
+                        isAdd = true;
                     }
                 }
-                if(isAdd){
+                if (isAdd) {
                     listsNew.add(fileChildEntity);
                 }
             }
-            fileChildEntities.clear();;
+            fileChildEntities.clear();
+            ;
 
 
             fileChildEntities.addAll(listsNew);
@@ -335,11 +340,11 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
                 //是否选择所有
                 boolean isCheckAll = true;
                 FileTitleEntity fileTitleEntity = lists.get(groupPosition);
-                if(fileTitleEntity.lists.size()==0){
+                if (fileTitleEntity.lists.size() == 0) {
                     fileTitleEntity.isSelect = false;
                     mAdapter.notifyDataSetChanged();
                     break;
-                }else {
+                } else {
                     for (FileChildEntity file : fileTitleEntity.lists) {
                         if (file.isSelect == false) {
                             isCheckAll = false;
@@ -384,15 +389,15 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
     }
 
 
-    private void setSelectStatus(boolean isCheck){
+    private void setSelectStatus(boolean isCheck) {
         List<FileTitleEntity> lists = mAdapter.getList();
-        List<FileTitleEntity> listsLocal=mPresenter.listsCamera;
-        for(FileTitleEntity fileTitleEntity :lists){
-            if(fileTitleEntity.lists.size()>0){
-                fileTitleEntity.isSelect=isCheck;
+        List<FileTitleEntity> listsLocal = mPresenter.listsCamera;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            if (fileTitleEntity.lists.size() > 0) {
+                fileTitleEntity.isSelect = isCheck;
 
-                for(FileChildEntity file: fileTitleEntity.lists){
-                    file.isSelect=isCheck;
+                for (FileChildEntity file : fileTitleEntity.lists) {
+                    file.isSelect = isCheck;
                 }
             }
 
@@ -413,24 +418,24 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     private long totalSelectSize() {
         long size = 0L;
-        List<FileTitleEntity> lists=mPresenter.listsCamera;
-        for(FileTitleEntity fileTitleEntity :lists){
-            for(FileChildEntity file:fileTitleEntity.lists){
-                if(file.isSelect){
-                    size+=file.size;
+        List<FileTitleEntity> lists = mPresenter.listsCamera;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            for (FileChildEntity file : fileTitleEntity.lists) {
+                if (file.isSelect) {
+                    size += file.size;
                 }
             }
         }
         return size;
     }
 
-    private  void setDelBtnSize(){
-        long size=totalSelectSize();
-        if(size>0){
+    private void setDelBtnSize() {
+        long size = totalSelectSize();
+        if (size > 0) {
             mBtnDel.setSelected(true);
             mBtnDel.setEnabled(true);
-            mBtnDel.setText("选中"+ FileSizeUtils.formatFileSize(size));
-        }else {
+            mBtnDel.setText("选中" + FileSizeUtils.formatFileSize(size));
+        } else {
             mBtnDel.setSelected(false);
             mBtnDel.setEnabled(false);
             mBtnDel.setText("未选中");
@@ -440,25 +445,26 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
     /**
      * 移除列表中元素
+     *
      * @param paths 根据路径和父类id是否相等
      */
-    public void updateDelFileView(List<FileChildEntity> paths){
+    public void updateDelFileView(List<FileChildEntity> paths) {
 
         mPresenter.listsCamera.removeAll(paths);
-        List<FileTitleEntity> listsNew=new ArrayList<>();
+        List<FileTitleEntity> listsNew = new ArrayList<>();
 
-        List<FileTitleEntity> lists=mAdapter.getList();
-        for(int i=0;i<lists.size();i++){
-            FileTitleEntity fileTitleEntity=lists.get(i);
+        List<FileTitleEntity> lists = mAdapter.getList();
+        for (int i = 0; i < lists.size(); i++) {
+            FileTitleEntity fileTitleEntity = lists.get(i);
 
-            FileTitleEntity fileTitle=FileTitleEntity.copyObject(fileTitleEntity.id,fileTitleEntity.title
-                    ,fileTitleEntity.type,fileTitleEntity.size,fileTitleEntity.isExpand,fileTitleEntity.isSelect);
-            for(FileChildEntity fileChildEntity: fileTitleEntity.lists){
-                if(fileChildEntity.isSelect==false){
+            FileTitleEntity fileTitle = FileTitleEntity.copyObject(fileTitleEntity.id, fileTitleEntity.title
+                    , fileTitleEntity.type, fileTitleEntity.size, fileTitleEntity.isExpand, fileTitleEntity.isSelect);
+            for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
+                if (fileChildEntity.isSelect == false) {
                     fileTitle.lists.add(fileChildEntity);
                 }
             }
-            if(fileTitleEntity.size !=0) {
+            if (fileTitleEntity.size != 0) {
                 listsNew.add(fileTitle);
             }
         }
@@ -469,55 +475,57 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
         setDelBtnSize();
         setSelectChildStatus();
 
-        if(totalFileSizeL(mAdapter.getList())==0){
+        if (totalFileSizeL(mAdapter.getList()) == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
         FragmentManager fm = getActivity().getFragmentManager();
-        String totalSize=FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
-        String fileSize=String.valueOf(paths.size());
-        DelFileSuccessFragment.newInstance(totalSize,fileSize).show(fm,"");
+        String totalSize = FileSizeUtils.formatFileSize(getDelTotalFileSize(paths));
+        String fileSize = String.valueOf(paths.size());
+        DelFileSuccessFragment.newInstance(totalSize, fileSize).show(fm, "");
 
     }
 
-    public long getDelTotalFileSize(List<FileChildEntity> paths){
-        long size=0L;
-        for(FileChildEntity fileChildEntity:paths){
-            size+=fileChildEntity.size;
+    public long getDelTotalFileSize(List<FileChildEntity> paths) {
+        long size = 0L;
+        for (FileChildEntity fileChildEntity : paths) {
+            size += fileChildEntity.size;
 
         }
-        return  size;
+        return size;
     }
+
     /**
      * 获取选中删除的元素
+     *
      * @return
      */
-    public List<FileChildEntity> getDelFile(){
-        List<FileChildEntity> files=new ArrayList<>();
-        List<FileTitleEntity> lists=mAdapter.getList();
-        for(FileTitleEntity fileTitleEntity:lists){
-            for(FileChildEntity file:fileTitleEntity.lists){
-                if(file.isSelect){
+    public List<FileChildEntity> getDelFile() {
+        List<FileChildEntity> files = new ArrayList<>();
+        List<FileTitleEntity> lists = mAdapter.getList();
+        for (FileTitleEntity fileTitleEntity : lists) {
+            for (FileChildEntity file : fileTitleEntity.lists) {
+                if (file.isSelect) {
                     files.add(file);
                 }
             }
         }
-        return  files;
+        return files;
     }
 
-    @OnClick({R.id.btn_del,R.id.btn_save})
-    public void onClickView(View view){
-        int ids=view.getId();
-        switch (ids){
+    @OnClick({R.id.btn_del, R.id.btn_save})
+    public void onClickView(View view) {
+        int ids = view.getId();
+        switch (ids) {
             case R.id.btn_del:
-                StatisticsUtils.trackClick("confirm_the_selection_click","\"确认选中\"点击"
-                        ,"qq_cleaning_page","qq_picture_cleaning_page");
+                StatisticsUtils.trackClick("confirm_the_selection_click", "\"确认选中\"点击"
+                        , "qq_cleaning_page", "qq_picture_cleaning_page");
 
-                ArrayList<FileTitleEntity> lists=(ArrayList<FileTitleEntity>) mPresenter.listsCamera;
-                Bundle bundle=new Bundle();
+                ArrayList<FileTitleEntity> lists = (ArrayList<FileTitleEntity>) mPresenter.listsCamera;
+                Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.PARAMS_QQ_IMG_LIST, lists);
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 intent.putExtras(bundle);
-                getActivity().setResult(0x11,intent);
+                getActivity().setResult(0x11, intent);
                 getActivity().finish();
 
                 break;
@@ -536,52 +544,51 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
     }
 
 
-
-    private  int getSelectSize(){
+    private int getSelectSize() {
         int size = 0;
         List<FileTitleEntity> lists = mAdapter.getList();
 
-        for(FileTitleEntity fileTitleEntity: lists){
-            for(FileChildEntity file:fileTitleEntity.lists){
-                if(file.isSelect){
-                    size+=1;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            for (FileChildEntity file : fileTitleEntity.lists) {
+                if (file.isSelect) {
+                    size += 1;
                 }
             }
         }
-        return  size;
+        return size;
     }
 
-    private  List<File> getSelectFiles(){
-        List<File> files=new ArrayList<>();
+    private List<File> getSelectFiles() {
+        List<File> files = new ArrayList<>();
         List<FileTitleEntity> lists = mAdapter.getList();
 
-        for(FileTitleEntity fileTitleEntity: lists){
-            for(FileChildEntity fileChildEntity:fileTitleEntity.lists){
-                if(fileChildEntity.isSelect){
-                    File File =new File(fileChildEntity.path);
+        for (FileTitleEntity fileTitleEntity : lists) {
+            for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
+                if (fileChildEntity.isSelect) {
+                    File File = new File(fileChildEntity.path);
                     files.add(File);
                 }
             }
         }
-        return  files;
+        return files;
     }
 
 
-
     @Subscribe
-    public void onEnvent(WXImgCameraEvent wxImgCameraEvent){
-        List<FileTitleEntity> lists=(List<FileTitleEntity>)wxImgCameraEvent.object;
+    public void onEnvent(WXImgCameraEvent wxImgCameraEvent) {
+        List<FileTitleEntity> lists = (List<FileTitleEntity>) wxImgCameraEvent.object;
         mAdapter.modifyData(lists);
     }
 
     /**
      * 导入成功
+     *
      * @param progress
      */
-    public void copySuccess(int progress){
+    public void copySuccess(int progress) {
 
         mProgress.setValue(progress);
-        if(progress>=100){
+        if (progress >= 100) {
             ToastUtils.showShort("保存成功，请至手机相册查看");
             mProgress.dismissAllowingStateLoss();
         }
@@ -591,34 +598,34 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
     /**
      * 导出失败
      */
-    public void onCopyFaile(){
-        if(null!=mProgress){
+    public void onCopyFaile() {
+        if (null != mProgress) {
             mProgress.dismissAllowingStateLoss();
         }
         FragmentManager fm = getActivity().getFragmentManager();
-        MFullDialogStyleFragment.newInstance().show(fm,"");
+        MFullDialogStyleFragment.newInstance().show(fm, "");
     }
 
 
-    public void updateImgCamera(List<FileTitleEntity> lists){
-        if(null!=mLoadingProgress){
+    public void updateImgCamera(List<FileTitleEntity> lists) {
+        if (null != mLoadingProgress) {
             mLoadingProgress.dismissAllowingStateLoss();
         }
-        List<FileTitleEntity> fileCopyEntitys=new ArrayList<>();
-        for(int i=0;i<lists.size();i++){
-            FileTitleEntity fileParent=lists.get(i);
-            FileTitleEntity fileTitleEntity=FileTitleEntity.copyObject(fileParent.id,fileParent.title,fileParent.type
-                    ,fileParent.size,fileParent.isExpand,fileParent.isSelect);
+        List<FileTitleEntity> fileCopyEntitys = new ArrayList<>();
+        for (int i = 0; i < lists.size(); i++) {
+            FileTitleEntity fileParent = lists.get(i);
+            FileTitleEntity fileTitleEntity = FileTitleEntity.copyObject(fileParent.id, fileParent.title, fileParent.type
+                    , fileParent.size, fileParent.isExpand, fileParent.isSelect);
 
-            List<FileChildEntity> listsNew=new ArrayList<>();
-            int count=0;
-            if(fileParent.lists.size()>30){
-                count=30;
-            }else {
-                count=fileParent.lists.size();
+            List<FileChildEntity> listsNew = new ArrayList<>();
+            int count = 0;
+            if (fileParent.lists.size() > 30) {
+                count = 30;
+            } else {
+                count = fileParent.lists.size();
             }
-            for(int j=0;j<count;j++){
-                FileChildEntity childEntity=fileParent.lists.get(j);
+            for (int j = 0; j < count; j++) {
+                FileChildEntity childEntity = fileParent.lists.get(j);
                 listsNew.add(childEntity);
             }
             fileTitleEntity.lists.addAll(listsNew);
@@ -627,29 +634,29 @@ public class QQImgFragment extends BaseFragment<QQImgPresenter> {
 
         mAdapter.modifyData(fileCopyEntitys);
         if (fileCopyEntitys.size() > 0) {
-            mListView.expandGroup(fileCopyEntitys.size()-1);
+            mListView.expandGroup(fileCopyEntitys.size() - 1);
             mListView.setSelectedGroup(0);
         }
 
-        if(totalFileSizeL(lists)==0){
+        if (totalFileSizeL(lists) == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
             mTxtEmptyTilte.setText("暂无图片~");
         }
     }
 
-    public   long totalFileSizeL(List<FileTitleEntity> lists){
-        if(null==lists ||  lists.size()==0){
+    public long totalFileSizeL(List<FileTitleEntity> lists) {
+        if (null == lists || lists.size() == 0) {
             return 0L;
         }
 
-        long size=0L;
+        long size = 0L;
 
-        for(FileTitleEntity fileTitleEntity: lists) {
-            size+=fileTitleEntity.size;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            size += fileTitleEntity.size;
 
         }
 
-        return  size;
+        return size;
     }
 
 

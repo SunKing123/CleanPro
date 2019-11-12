@@ -3,12 +3,13 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -52,7 +53,7 @@ import butterknife.OnClick;
  * <p>
  * 3.数据组装和渲染
  */
-public class WXCleanVideoActivity extends BaseActivity{
+public class WXCleanVideoActivity extends BaseActivity {
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
@@ -95,9 +96,9 @@ public class WXCleanVideoActivity extends BaseActivity{
 
     @Override
     protected void initView() {
-        SharedPreferences sharedPreferences =getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO,0);
+        SharedPreferences sharedPreferences = getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(Constant.WX_CACHE_SIZE_VIDEO, 0);
         editor.commit();
 
         mFragments.add(WXVideoChatFragment.newInstance());
@@ -171,8 +172,8 @@ public class WXCleanVideoActivity extends BaseActivity{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
-                StatisticsUtils.trackClick("wechat_video_return_click","\"聊天视频返回\"点击"
-                        ,"wechat_cleaning_page","wechat_video_cleaning_page");
+                StatisticsUtils.trackClick("wechat_video_return_click", "\"聊天视频返回\"点击"
+                        , "wechat_cleaning_page", "wechat_video_cleaning_page");
                 finish();
                 break;
             case R.id.ll_img_chat:
@@ -193,8 +194,8 @@ public class WXCleanVideoActivity extends BaseActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        StatisticsUtils.trackClick("wechat_video_return_click","\"聊天视频返回\"点击"
-                ,"wechat_cleaning_page","wechat_video_cleaning_page");
+        StatisticsUtils.trackClick("wechat_video_return_click", "\"聊天视频返回\"点击"
+                , "wechat_cleaning_page", "wechat_video_cleaning_page");
     }
 
     @Override
@@ -218,12 +219,12 @@ public class WXCleanVideoActivity extends BaseActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("wechat_video_cleaning_view_page","视频清理页面浏览");
+        NiuDataAPI.onPageStart("wechat_video_cleaning_view_page", "视频清理页面浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("wechat_video_cleaning_view_page","视频清理页面浏览");
+        NiuDataAPI.onPageEnd("wechat_video_cleaning_view_page", "视频清理页面浏览");
     }
 }

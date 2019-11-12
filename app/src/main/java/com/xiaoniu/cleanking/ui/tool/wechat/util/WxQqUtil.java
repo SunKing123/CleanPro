@@ -3,7 +3,8 @@ package com.xiaoniu.cleanking.ui.tool.wechat.util;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.SystemClock;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.xiaoniu.cleanking.app.AppApplication;

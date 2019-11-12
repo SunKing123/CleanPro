@@ -15,8 +15,9 @@ import android.os.Build;
 import android.os.RemoteException;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
+
+import androidx.annotation.RequiresApi;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -84,9 +85,9 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                Set<String> whitePkgs =  sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+                Set<String> whitePkgs = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
 
-                if (packageInfo.packageName.equals("com.xiaoniu.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))){
+                if (packageInfo.packageName.equals("com.xiaoniu.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))) {
                     continue;
                 }
                 apps.add(appInfoBean);

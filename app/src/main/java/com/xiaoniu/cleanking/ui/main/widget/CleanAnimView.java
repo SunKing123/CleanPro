@@ -9,8 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +25,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
@@ -319,7 +320,7 @@ public class CleanAnimView extends RelativeLayout {
                 animatorSet.playTogether(innerAlpha, outerAlpha, scanAlpha, countAlpha, outerY, countY, innerY, scanY);
             }
             animatorSet.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -379,7 +380,7 @@ public class CleanAnimView extends RelativeLayout {
             animatorSet.playTogether(rotation, rotation4);
 
             animatorSet.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -500,7 +501,7 @@ public class CleanAnimView extends RelativeLayout {
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator, colorAnim1,colorAnim2);
+        animatorSetTimer.playTogether(valueAnimator, colorAnim1, colorAnim2);
         animatorSetTimer.start();
 
     }
@@ -521,7 +522,7 @@ public class CleanAnimView extends RelativeLayout {
             mAnimationEnd.onAnimationEnd();
     }
 
-    public void setAnimTitle(String animTitle){
+    public void setAnimTitle(String animTitle) {
         mTvAnimTitle.setText(animTitle);
     }
 

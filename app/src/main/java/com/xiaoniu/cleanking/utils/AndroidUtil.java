@@ -7,11 +7,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -79,7 +80,7 @@ public class AndroidUtil {
                 intent.setDataAndType(Uri.fromFile(file), type);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 

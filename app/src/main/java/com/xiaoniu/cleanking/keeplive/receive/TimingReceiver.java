@@ -1,42 +1,25 @@
 package com.xiaoniu.cleanking.keeplive.receive;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Keep;
-import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.geek.push.entity.PushMsg;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.jpush.JPushReceiver;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
-import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
-import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
-import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
-import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanDetailActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -53,11 +36,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.DEF_ICONS;
-import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
 /**
  * @author zhengzhihao
@@ -77,7 +56,7 @@ public class TimingReceiver extends BroadcastReceiver {
         mContext = context;
         mBatteryPower = intent.getIntExtra("battery", 50);
         temp = intent.getIntExtra("temp", 30);
-        isCharged = intent.getBooleanExtra("isCharged",false);
+        isCharged = intent.getBooleanExtra("isCharged", false);
         Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
         for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
             PushSettingList.DataBean dataBean = entry.getValue();
@@ -120,7 +99,7 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     public void startScan(PushSettingList.DataBean dataBean, Context mContext) {
         String codeX = dataBean.getCodeX();
-            switch (codeX) {
+        switch (codeX) {
             case "push_1"://垃圾清理
                 startScanAll(dataBean, mContext);
                 break;
@@ -142,10 +121,11 @@ public class TimingReceiver extends BroadcastReceiver {
 
     /**
      * 状态栏更新操作（只做状态栏更新）
+     *
      * @param dataBean
      * @param cxt
      */
-    public void refNotify(PushSettingList.DataBean dataBean, Context cxt){
+    public void refNotify(PushSettingList.DataBean dataBean, Context cxt) {
         int mNotifySize = 0;
         NotificationEvent event = new NotificationEvent();
         event.setType("notification");
@@ -153,12 +133,12 @@ public class TimingReceiver extends BroadcastReceiver {
             if (null != NotifyCleanManager.getInstance().getAllNotifications()) {
                 mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
             }
-            if(mNotifySize>=5){
+            if (mNotifySize >= 5) {
                 event.setFlag(2);
-            }else{
+            } else {
                 event.setFlag(0);
             }
-        }else{
+        } else {
             event.setFlag(0);
         }
         EventBus.getDefault().post(event);
@@ -175,12 +155,12 @@ public class TimingReceiver extends BroadcastReceiver {
         event.setType("cooling");
         if (temp > dataBean.getThresholdNum()) {
             event.setFlag(2);
-            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp+"°C");
+            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp + "°C");
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY);
-            createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_cool_btn));
-        }else{
+            createNotify(cxt, push_content, actionMap, cxt.getString(R.string.push_cool_btn));
+        } else {
             event.setFlag(0);
         }
         EventBus.getDefault().post(event);
@@ -202,8 +182,8 @@ public class TimingReceiver extends BroadcastReceiver {
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY);
-            createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_power_btn));
-        }else{
+            createNotify(cxt, push_content, actionMap, cxt.getString(R.string.push_power_btn));
+        } else {
             event.setFlag(0);
         }
         EventBus.getDefault().post(event);
@@ -264,7 +244,7 @@ public class TimingReceiver extends BroadcastReceiver {
                             //cheme跳转路径
                             Map<String, String> actionMap = new HashMap<>();
                             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY);
-                            createNotify(mContext, push_content, actionMap,mContext.getString(R.string.push_btn_access));
+                            createNotify(mContext, push_content, actionMap, mContext.getString(R.string.push_btn_access));
                         }
 
                         NotificationEvent event = new NotificationEvent();
@@ -385,9 +365,9 @@ public class TimingReceiver extends BroadcastReceiver {
                     //cheme跳转路径
                     Map<String, String> actionMap = new HashMap<>();
                     actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
-                    createNotify(mContext, push_content, actionMap,mContext.getString(R.string.tool_now_clean));
+                    createNotify(mContext, push_content, actionMap, mContext.getString(R.string.tool_now_clean));
 
-                }else{
+                } else {
                     event.setFlag(0);
                 }
                 EventBus.getDefault().post(event);
@@ -403,16 +383,16 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param push_content
      * @param actionMap
      */
-    public void createNotify(Context conx, String push_content, final Map<String, String> actionMap,String btn) {
+    public void createNotify(Context conx, String push_content, final Map<String, String> actionMap, String btn) {
         try {
             if (null != mContext) {
                 Intent intent = new Intent(conx, JPushReceiver.class);
                 intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
                 //notifyId不关注_跟产品已经确认()
-                intent.putExtra("push_data", new PushMsg((100001+ NumberUtils.mathRandomInt(1,100000)), "悟空清理", push_content, null, null, actionMap));
+                intent.putExtra("push_data", new PushMsg((100001 + NumberUtils.mathRandomInt(1, 100000)), "悟空清理", push_content, null, null, actionMap));
                 intent.addCategory(mContext.getPackageName());
                 intent.setPackage(mContext.getPackageName());
-                KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
+                KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent, btn);
             }
 
         } catch (Exception e) {

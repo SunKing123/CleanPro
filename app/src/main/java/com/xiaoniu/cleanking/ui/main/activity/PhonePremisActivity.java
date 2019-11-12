@@ -3,8 +3,9 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.MotionEvent;
+
+import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;

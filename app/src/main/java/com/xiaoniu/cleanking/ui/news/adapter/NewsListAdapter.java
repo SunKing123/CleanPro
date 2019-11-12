@@ -1,28 +1,23 @@
 package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
-import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.bean.NewsPicInfo;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.utils.ImageUtil;
-import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.base.SimpleWebActivity;
-import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;

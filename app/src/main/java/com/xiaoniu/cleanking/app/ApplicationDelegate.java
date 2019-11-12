@@ -1,12 +1,13 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
-import android.arch.lifecycle.ProcessLifecycleOwner;
-import android.arch.persistence.room.Room;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.room.Room;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bun.miitmdid.core.JLibrary;

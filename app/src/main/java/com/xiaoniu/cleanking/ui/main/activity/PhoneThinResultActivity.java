@@ -7,11 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -53,6 +54,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     LinearLayout mLlSoft;
     @BindView(R.id.tv_title_name)
     TextView mTvTitleName;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -71,39 +73,39 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     @Override
     protected void initView() {
         Intent intent = getIntent();
-        if(intent != null){
+        if (intent != null) {
             mSize = intent.getStringExtra(PhoneThinActivity.PARAMS_SPACE_SIZE_AVAILABLE);
             mTitleName = intent.getStringExtra(SpCacheConfig.ITEM_TITLE_NAME);
             mTvTitleName.setText(mTitleName);
         }
 
-        if (getString(R.string.tool_phone_thin).equals(mTitleName)){
+        if (getString(R.string.tool_phone_thin).equals(mTitleName)) {
             //视频专清
             mLlVideoFile.setVisibility(View.VISIBLE);
             mLlVideo.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             //软件管理
             mLlSoftTitle.setVisibility(View.VISIBLE);
             mLlSoft.setVisibility(View.VISIBLE);
         }
-       setData();
+        setData();
         ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
 
         //8.0权限判断
-        if (android.os.Build.VERSION.SDK_INT >=Build.VERSION_CODES.O) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!hasUsageStatsPermission(this)) {
                 //没有权限
                 try {
                     //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
                     startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
-                } catch (Exception e){
+                } catch (Exception e) {
                 }
-            }else {
+            } else {
                 //有权限
                 mPresenter.scanData();
 
             }
-        }else {
+        } else {
             mPresenter.scanData();
 
         }
@@ -113,7 +115,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         mTxtVideoSize.setText(FileSizeUtils.formatFileSize(mPresenter.getVideoTotalSize()));
         if (Double.valueOf(mSize) == 0) {
             mTxtSpaceSize.setText("1");
-        }else {
+        } else {
             mTxtSpaceSize.setText(mSize);
         }
     }
@@ -138,7 +140,7 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        StatisticsUtils.trackClick("cell_phone_slimming_return_click","\"手机瘦身返回\"点击"  ,"clean_up_toolbox_page","cell_phone_slimming_page");
+        StatisticsUtils.trackClick("cell_phone_slimming_return_click", "\"手机瘦身返回\"点击", "clean_up_toolbox_page", "cell_phone_slimming_page");
     }
 
 
@@ -147,21 +149,21 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         super.onResume();
         mPresenter.scanData();
         setData();
-        NiuDataAPI.onPageStart("cell_phone_slimming_view_page","手机瘦身页面浏览");
+        NiuDataAPI.onPageStart("cell_phone_slimming_view_page", "手机瘦身页面浏览");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPI.onPageEnd("cell_phone_slimming_view_page","手机瘦身页面浏览");
+        NiuDataAPI.onPageEnd("cell_phone_slimming_view_page", "手机瘦身页面浏览");
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==0x111
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 0x111
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
             //
             mPresenter.scanData();
         }
@@ -171,43 +173,45 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
     public void onViewClick(View view) {
         int ids = view.getId();
         if (ids == R.id.img_back) {
-            StatisticsUtils.trackClick("cell_phone_slimming_return_click","\"手机瘦身返回\"点击"
-                    ,"clean_up_toolbox_page","cell_phone_slimming_page");
+            StatisticsUtils.trackClick("cell_phone_slimming_return_click", "\"手机瘦身返回\"点击"
+                    , "clean_up_toolbox_page", "cell_phone_slimming_page");
             finish();
         } else if (ids == R.id.ll_video) {
-            StatisticsUtils.trackClick("cleanable_video_file_click","\"可清理的视频文件\"点击"
-                    ,"clean_up_toolbox_page","cell_phone_slimming_page");
+            StatisticsUtils.trackClick("cleanable_video_file_click", "\"可清理的视频文件\"点击"
+                    , "clean_up_toolbox_page", "cell_phone_slimming_page");
             startActivity(new Intent(this, CleanVideoManageActivity.class));
         } else if (ids == R.id.ll_soft) {
-            StatisticsUtils.trackClick("Software_uninstaller","\"软件卸载\"点击"
-                    ,"clean_up_toolbox_page","cell_phone_slimming_page");
-            startActivity(new Intent(this,SoftManageActivity.class));
+            StatisticsUtils.trackClick("Software_uninstaller", "\"软件卸载\"点击"
+                    , "clean_up_toolbox_page", "cell_phone_slimming_page");
+            startActivity(new Intent(this, SoftManageActivity.class));
         }
     }
 
     /**
      * 更新软件数据
-     * @param size 安装应用大小
-     * @param totalSize  应用总大小
+     *
+     * @param size      安装应用大小
+     * @param totalSize 应用总大小
      */
-    public void updateData(int size,long totalSize){
+    public void updateData(int size, long totalSize) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(null!=mTxtInstallSize){
-                    mTxtInstallSize.setText(String.format("已安装%s款",size));
+                if (null != mTxtInstallSize) {
+                    mTxtInstallSize.setText(String.format("已安装%s款", size));
                 }
-                if(null!=mTxtSoftSize){
+                if (null != mTxtSoftSize) {
                     mTxtSoftSize.setText(FileSizeUtils.formatFileSize(totalSize));
                 }
 
             }
         });
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK)
-            StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
+            StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
 }

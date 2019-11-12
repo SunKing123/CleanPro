@@ -1,8 +1,9 @@
 package com.xiaoniu.common.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 

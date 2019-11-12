@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.utils.luban;
 
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 final class Preconditions {
 

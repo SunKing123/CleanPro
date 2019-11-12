@@ -2,12 +2,13 @@ package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.OnOutsidePhotoTapListener;
@@ -84,7 +85,7 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
     /**
      * 加载原图
      */
-    public  void loadArtworkImage(ImageView image, String url, int errorHolder, int placeHolder) {
+    public void loadArtworkImage(ImageView image, String url, int errorHolder, int placeHolder) {
         if (image == null) {
             return;
         }
@@ -100,7 +101,8 @@ public class PreviewImagePagerAdapter extends PagerAdapter implements OnOutsideP
                 .into(image);
 
     }
-    public  boolean isValidContextForGlide(final Context context) {
+
+    public boolean isValidContextForGlide(final Context context) {
         if (context == null) {
             return false;
         }

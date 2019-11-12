@@ -6,10 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.NotificationManagerCompat;
 
-import com.xiaoniu.cleanking.ui.main.activity.PhonePremisActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.xiaoniu.common.utils.ContextUtils;
 
 public class NotifyUtils {

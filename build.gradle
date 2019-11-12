@@ -2,14 +2,15 @@
 
 buildscript {
     repositories {
-        maven { url "https://maven.google.com" }
-        jcenter()
         google()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+//        maven { url "https://maven.google.com" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         //添加 牛数 maven 库地址
         maven {
             url 'http://pre.xnshandai.net/nexus/content/repositories/niudata'
         }
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
@@ -34,15 +35,16 @@ ext {
 
 allprojects {
     repositories {
-        maven { url "https://maven.google.com" }
-        jcenter()
         google()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+//        maven { url "https://maven.google.com" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         maven { url "https://jitpack.io" }
         //添加 牛数 maven 库地址
         maven {
             url 'http://pre.xnshandai.net/nexus/content/repositories/niudata'
         }
+        jcenter()
     }
 }
 

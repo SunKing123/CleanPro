@@ -10,9 +10,6 @@ import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -21,6 +18,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -635,8 +636,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mTitleView.setVisibility(View.GONE);
         mLottieAnimationView.setVisibility(View.VISIBLE);
         mLottieAnimationView.useHardwareAcceleration(true);
-        mLottieAnimationView.setAnimation("huojian1.json");
-        mLottieAnimationView.setImageAssetsFolder("images_game_one");
+        mLottieAnimationView.setAnimation("youxijiasu.json");
+        mLottieAnimationView.setImageAssetsFolder("images_game_jiasu");
         mLottieAnimationView.playAnimation();
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override

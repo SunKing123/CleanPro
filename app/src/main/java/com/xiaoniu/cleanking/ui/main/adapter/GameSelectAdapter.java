@@ -1,18 +1,17 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
 import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.utils.GlideUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

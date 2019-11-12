@@ -1,9 +1,10 @@
 package com.xiaoniu.common.widget;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 public class CustomToolbar extends Toolbar {
     public CustomToolbar(Context context) {

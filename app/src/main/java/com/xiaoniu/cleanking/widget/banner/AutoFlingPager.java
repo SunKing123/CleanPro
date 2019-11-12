@@ -3,9 +3,10 @@ package com.xiaoniu.cleanking.widget.banner;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.viewpager.widget.ViewPager;
 
 import java.lang.reflect.Field;
 
@@ -34,14 +35,11 @@ public class AutoFlingPager extends ViewPager {
             FixedSpeedScroller fixedSpeedScroller = new FixedSpeedScroller(getContext());
             fixedSpeedScroller.setDuration(duration);
             field.set(this, fixedSpeedScroller);
-        }
-        catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }

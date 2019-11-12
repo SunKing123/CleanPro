@@ -3,7 +3,6 @@ package com.lzy.imagepicker.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.R;
@@ -50,7 +51,7 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
         mBtnOk = (Button) findViewById(R.id.btn_ok);
         findViewById(R.id.image_button).setVisibility(View.GONE);
 
-        text_num = (TextView)findViewById(R.id.text_num);
+        text_num = (TextView) findViewById(R.id.text_num);
         text_num.setVisibility(View.VISIBLE);
 
         mBtnOk.setVisibility(View.VISIBLE);
@@ -130,7 +131,6 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
                     }
                 });
     }
-
 
 
     /**

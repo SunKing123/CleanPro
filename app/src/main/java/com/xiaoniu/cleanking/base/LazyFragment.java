@@ -1,9 +1,10 @@
 package com.xiaoniu.cleanking.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.injector.component.DaggerFragmentComponent;

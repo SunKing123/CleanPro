@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+
+import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,7 @@ public class BottomBar extends LinearLayout {
                 }
             }
         });
-        tab.setTabPosition(mTabLayout.getChildCount(),mCurrentPosition);
+        tab.setTabPosition(mTabLayout.getChildCount(), mCurrentPosition);
         tab.setLayoutParams(mTabParams);
         mTabLayout.addView(tab);
         mTabs.add(tab);

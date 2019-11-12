@@ -92,7 +92,7 @@
             android:textColor="@color/white" />
 
     </RelativeLayout>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_title"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -149,8 +149,8 @@
             android:textColor="#999999"
             />
 
-    </android.support.constraint.ConstraintLayout>
-    <android.support.v7.widget.RecyclerView
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

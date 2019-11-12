@@ -1,8 +1,9 @@
 package com.xiaoniu.common.utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.bun.miitmdid.core.ErrorCode;
 import com.bun.miitmdid.core.IIdentifierListener;

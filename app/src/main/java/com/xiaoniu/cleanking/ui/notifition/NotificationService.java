@@ -9,12 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
@@ -154,8 +154,8 @@ public class NotificationService extends Service {
         //8.0以上版本或者未获取权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || !PermissionUtils.isUsageAccessAllowed(context)) {
             TypedArray speedlist = context.getResources().obtainTypedArray(R.array.acess_drawale_array);
-            int indexRand = NumberUtils.mathRandomInt(6,9);//中间随机数
-            int id = speedlist.getResourceId(indexRand,-1);
+            int indexRand = NumberUtils.mathRandomInt(6, 9);//中间随机数
+            int id = speedlist.getResourceId(indexRand, -1);
             contentView.setImageViewResource(R.id.iv_speed, id);
         }
 
@@ -197,7 +197,7 @@ public class NotificationService extends Service {
             int addValue = notificationEvent.getAppendValue();
             int imgState = (addValue / 10 + 1) >= 9 ? 9 : addValue / 10;
             TypedArray speedlist = context.getResources().obtainTypedArray(R.array.acess_drawale_array);
-            int id = speedlist.getResourceId(imgState,-1);
+            int id = speedlist.getResourceId(imgState, -1);
             contentView.setImageViewResource(R.id.iv_speed, id);
         } else if ("power".equals(notificationEvent.getType())) {
             if (notificationEvent.getFlag() == 0) {

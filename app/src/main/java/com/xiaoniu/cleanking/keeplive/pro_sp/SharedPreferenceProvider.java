@@ -8,9 +8,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Process;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,9 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class SharedPreferenceProvider extends ContentProvider{
+public class SharedPreferenceProvider extends ContentProvider {
 
     private Map<String, MethodProcess> processerMap = new ArrayMap<>();
+
     @Override
     public boolean onCreate() {
         processerMap.put(PreferenceUtil.METHOD_QUERY_VALUE, methodQueryValues);
@@ -62,7 +64,7 @@ public class SharedPreferenceProvider extends ContentProvider{
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
         MethodProcess processer = processerMap.get(method);
-        return processer == null?null:processer.process(arg, extras);
+        return processer == null ? null : processer.process(arg, extras);
     }
 
 
@@ -93,37 +95,37 @@ public class SharedPreferenceProvider extends ContentProvider{
             SharedPreferences preferences = ctx.getSharedPreferences(arg, Context.MODE_PRIVATE);
             int valueType = extras.getInt(OpEntry.KEY_VALUE_TYPE);
             switch (valueType) {
-                case OpEntry.VALUE_TYPE_BOOLEAN:{
+                case OpEntry.VALUE_TYPE_BOOLEAN: {
                     boolean value = preferences.getBoolean(key, extras.getBoolean(OpEntry.KEY_VALUE));
                     extras.putBoolean(OpEntry.KEY_VALUE, value);
                     return extras;
                 }
-                case OpEntry.VALUE_TYPE_FLOAT:{
+                case OpEntry.VALUE_TYPE_FLOAT: {
                     float value = preferences.getFloat(key, extras.getFloat(OpEntry.KEY_VALUE));
                     extras.putFloat(OpEntry.KEY_VALUE, value);
                     return extras;
                 }
-                case OpEntry.VALUE_TYPE_INT:{
+                case OpEntry.VALUE_TYPE_INT: {
                     int value = preferences.getInt(key, extras.getInt(OpEntry.KEY_VALUE));
                     extras.putInt(OpEntry.KEY_VALUE, value);
                     return extras;
                 }
-                case OpEntry.VALUE_TYPE_LONG:{
+                case OpEntry.VALUE_TYPE_LONG: {
                     long value = preferences.getLong(key, extras.getLong(OpEntry.KEY_VALUE));
                     extras.putLong(OpEntry.KEY_VALUE, value);
                     return extras;
                 }
-                case OpEntry.VALUE_TYPE_STRING:{
+                case OpEntry.VALUE_TYPE_STRING: {
                     String value = preferences.getString(key, extras.getString(OpEntry.KEY_VALUE));
                     extras.putString(OpEntry.KEY_VALUE, value);
                     return extras;
                 }
-                case OpEntry.VALUE_TYPE_STRING_SET:{
+                case OpEntry.VALUE_TYPE_STRING_SET: {
                     Set<String> value = preferences.getStringSet(key, null);
-                    extras.putStringArrayList(OpEntry.KEY_VALUE, value == null?null:new ArrayList<>(value));
+                    extras.putStringArrayList(OpEntry.KEY_VALUE, value == null ? null : new ArrayList<>(value));
                     return extras;
                 }
-                default:{
+                default: {
                     throw new IllegalArgumentException("unknown valueType:" + valueType);
                 }
             }

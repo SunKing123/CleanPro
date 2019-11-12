@@ -1,12 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -46,12 +47,12 @@ public class ProcessInfoAdapter extends RecyclerView.Adapter<ProcessInfoAdapter.
         holder.mIcon.setImageDrawable(junkInfo.getGarbageIcon());
         holder.mTextName.setText(junkInfo.getAppName());
 
-        holder.mTextStop.setOnClickListener(v->{
-            StatisticsUtils.trackClick("Forced_cessation_click","\"强制停止\"点击","temperature_result_display_page","Running_applications_page ");
+        holder.mTextStop.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("Forced_cessation_click", "\"强制停止\"点击", "temperature_result_display_page", "Running_applications_page ");
 
-            CleanUtil.killAppProcesses(junkInfo.getAppPackageName(),junkInfo.getPid());
+            CleanUtil.killAppProcesses(junkInfo.getAppPackageName(), junkInfo.getPid());
             mList.remove(junkInfo);
-            if (mOnItemClickListener != null){
+            if (mOnItemClickListener != null) {
                 mOnItemClickListener.click();
             }
             notifyDataSetChanged();
@@ -59,7 +60,7 @@ public class ProcessInfoAdapter extends RecyclerView.Adapter<ProcessInfoAdapter.
 
         if (position == mList.size() - 1) {
             holder.mViewDivider.setVisibility(View.GONE);
-        }else {
+        } else {
             holder.mViewDivider.setVisibility(View.VISIBLE);
         }
     }

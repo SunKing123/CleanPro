@@ -10,11 +10,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.service.notification.NotificationListenerService;
-import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import androidx.core.app.NotificationCompat;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;

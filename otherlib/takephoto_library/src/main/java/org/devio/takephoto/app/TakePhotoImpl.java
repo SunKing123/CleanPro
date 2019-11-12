@@ -7,32 +7,34 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
+import com.soundcloud.android.crop.Crop;
+
+import org.devio.takephoto.compress.CompressConfig;
 import org.devio.takephoto.compress.CompressImage;
 import org.devio.takephoto.compress.CompressImageImpl;
+import org.devio.takephoto.model.CropOptions;
 import org.devio.takephoto.model.MultipleCrop;
+import org.devio.takephoto.model.TContextWrap;
 import org.devio.takephoto.model.TException;
 import org.devio.takephoto.model.TExceptionType;
 import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TIntentWap;
-import org.devio.takephoto.permission.PermissionManager;
-import org.devio.takephoto.uitl.TUriParse;
-import org.devio.takephoto.compress.CompressConfig;
-import org.devio.takephoto.model.CropOptions;
-import org.devio.takephoto.model.TContextWrap;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.model.TakePhotoOptions;
+import org.devio.takephoto.permission.PermissionManager;
 import org.devio.takephoto.uitl.ImageRotateUtil;
 import org.devio.takephoto.uitl.IntentUtils;
 import org.devio.takephoto.uitl.TConstant;
 import org.devio.takephoto.uitl.TFileUtils;
 import org.devio.takephoto.uitl.TImageFiles;
+import org.devio.takephoto.uitl.TUriParse;
 import org.devio.takephoto.uitl.TUtils;
-import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -126,7 +128,7 @@ public class TakePhotoImpl implements TakePhoto {
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         takeResult(
-                            TResult.of(TImage.of(TUriParse.getFilePathWithUri(data.getData(), contextWrap.getActivity()), fromType)));
+                                TResult.of(TImage.of(TUriParse.getFilePathWithUri(data.getData(), contextWrap.getActivity()), fromType)));
                     } catch (TException e) {
                         takeResult(TResult.of(TImage.of(data.getData(), fromType)), e.getDetailMessage());
                         e.printStackTrace();
@@ -139,7 +141,7 @@ public class TakePhotoImpl implements TakePhoto {
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         takeResult(TResult.of(
-                            TImage.of(TUriParse.getFilePathWithDocumentsUri(data.getData(), contextWrap.getActivity()), fromType)));
+                                TImage.of(TUriParse.getFilePathWithDocumentsUri(data.getData(), contextWrap.getActivity()), fromType)));
                     } catch (TException e) {
                         takeResult(TResult.of(TImage.of(outPutUri, fromType)), e.getDetailMessage());
                         e.printStackTrace();
@@ -240,7 +242,7 @@ public class TakePhotoImpl implements TakePhoto {
                     if (cropOptions != null) {
                         try {
                             onCrop(MultipleCrop.of(TUtils.convertImageToUri(contextWrap.getActivity(), images), contextWrap.getActivity(),
-                                fromType), cropOptions);
+                                    fromType), cropOptions);
                         } catch (TException e) {
                             cropContinue(false);
                             e.printStackTrace();
@@ -264,7 +266,7 @@ public class TakePhotoImpl implements TakePhoto {
             return;
         }
         TUtils.startActivityForResult(contextWrap,
-            new TIntentWap(IntentUtils.getPickMultipleIntent(contextWrap, limit), TConstant.RC_PICK_MULTIPLE));
+                new TIntentWap(IntentUtils.getPickMultipleIntent(contextWrap, limit), TConstant.RC_PICK_MULTIPLE));
     }
 
     @Override
@@ -285,7 +287,7 @@ public class TakePhotoImpl implements TakePhoto {
         this.outPutUri = outPutUri;
         if (!TImageFiles.checkMimeType(contextWrap.getActivity(), TImageFiles.getMimeType(contextWrap.getActivity(), imageUri))) {
             Toast.makeText(contextWrap.getActivity(), contextWrap.getActivity().getResources().getText(org.devio.takephoto.R.string.tip_type_not_image),
-                Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             throw new TException(TExceptionType.TYPE_NOT_IMAGE);
         }
         cropWithNonException(imageUri, outPutUri, options);
@@ -316,7 +318,7 @@ public class TakePhotoImpl implements TakePhoto {
                 takeResult(TResult.of(multipleCrop.gettImages()));
             } else {
                 takeResult(TResult.of(multipleCrop.gettImages()),
-                    outPutUri.getPath() + contextWrap.getActivity().getResources().getString(org.devio.takephoto.R.string.msg_crop_canceled));
+                        outPutUri.getPath() + contextWrap.getActivity().getResources().getString(org.devio.takephoto.R.string.msg_crop_canceled));
             }
         } else {
             cropWithNonException(multipleCrop.getUris().get(index + 1), multipleCrop.getOutUris().get(index + 1), cropOptions);
@@ -344,9 +346,9 @@ public class TakePhotoImpl implements TakePhoto {
         }
         ArrayList<TIntentWap> intentWapList = new ArrayList<>();
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithDocuments(),
-            isCrop ? TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP : TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
+                isCrop ? TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_CROP : TConstant.RC_PICK_PICTURE_FROM_DOCUMENTS_ORIGINAL));
         intentWapList.add(new TIntentWap(IntentUtils.getPickIntentWithGallery(),
-            isCrop ? TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP : TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL));
+                isCrop ? TConstant.RC_PICK_PICTURE_FROM_GALLERY_CROP : TConstant.RC_PICK_PICTURE_FROM_GALLERY_ORIGINAL));
         try {
             TUtils.sendIntentBySafely(contextWrap, intentWapList, defaultIndex, isCrop);
         } catch (TException e) {
@@ -383,7 +385,7 @@ public class TakePhotoImpl implements TakePhoto {
 
         try {
             TUtils.captureBySafely(contextWrap,
-                new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
+                    new TIntentWap(IntentUtils.getCaptureIntent(this.outPutUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE));
         } catch (TException e) {
             takeResult(TResult.of(TImage.of("", fromType)), e.getDetailMessage());
             e.printStackTrace();
@@ -406,7 +408,7 @@ public class TakePhotoImpl implements TakePhoto {
 
         try {
             TUtils.captureBySafely(contextWrap,
-                new TIntentWap(IntentUtils.getCaptureIntent(this.tempUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
+                    new TIntentWap(IntentUtils.getCaptureIntent(this.tempUri), TConstant.RC_PICK_PICTURE_FROM_CAPTURE_CROP));
         } catch (TException e) {
             takeResult(TResult.of(TImage.of("", fromType)), e.getDetailMessage());
             e.printStackTrace();
@@ -435,7 +437,7 @@ public class TakePhotoImpl implements TakePhoto {
         } else {
             if (showCompressDialog) {
                 wailLoadDialog = TUtils.showProgressDialog(contextWrap.getActivity(),
-                    contextWrap.getActivity().getResources().getString(org.devio.takephoto.R.string.tip_compress));
+                        contextWrap.getActivity().getResources().getString(org.devio.takephoto.R.string.tip_compress));
             }
 
             CompressImageImpl.of(contextWrap.getActivity(), compressConfig, result.getImages(), new CompressImage.CompressListener() {
@@ -456,8 +458,8 @@ public class TakePhotoImpl implements TakePhoto {
                         deleteRawFile(images);
                     }
                     handleTakeCallBack(TResult.of(images),
-                        String.format(contextWrap.getActivity().getResources().getString(org.devio.takephoto.R.string.tip_compress_failed),
-                            message.length > 0 ? message[0] : "", msg, result.getImage().getCompressPath()));
+                            String.format(contextWrap.getActivity().getResources().getString(org.devio.takephoto.R.string.tip_compress_failed),
+                                    message.length > 0 ? message[0] : "", msg, result.getImage().getCompressPath()));
                     if (wailLoadDialog != null && !contextWrap.getActivity().isFinishing()) {
                         wailLoadDialog.dismiss();
                     }

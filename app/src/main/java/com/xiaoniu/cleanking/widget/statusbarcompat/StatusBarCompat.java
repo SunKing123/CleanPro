@@ -3,14 +3,16 @@ package com.xiaoniu.cleanking.widget.statusbarcompat;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
  * Utils for status bar
@@ -144,7 +146,9 @@ public class StatusBarCompat {
         return result;
     }
 
-    /** 增加View的paddingTop,增加的值为状态栏高度 (智能判断，并设置高度)*/
+    /**
+     * 增加View的paddingTop,增加的值为状态栏高度 (智能判断，并设置高度)
+     */
     public static void setPaddingSmart(Context context, View view) {
         if (Build.VERSION.SDK_INT >= 19) {
             ViewGroup.LayoutParams lp = view.getLayoutParams();

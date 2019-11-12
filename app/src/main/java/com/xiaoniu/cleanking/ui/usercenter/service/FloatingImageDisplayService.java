@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.xiaoniu.cleanking.R;
 
@@ -135,12 +135,12 @@ public class FloatingImageDisplayService extends Service {
         });
 
         try {
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (displayView.isAttachedToWindow())
                     windowManager.removeViewImmediate(displayView);
                 windowManager.addView(displayView, layoutParams);
             }
-        }catch (NoSuchMethodError error){
+        } catch (NoSuchMethodError error) {
             error.printStackTrace();
         }
 
