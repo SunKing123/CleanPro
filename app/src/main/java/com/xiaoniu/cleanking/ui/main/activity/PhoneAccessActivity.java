@@ -514,7 +514,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null || acceview == null) return;
 
-        //悟空清理app加入默认白名单
+        //清理管家极速版app加入默认白名单
         for (FirstJunkInfo firstJunkInfo : listInfo) {
             if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                 listInfo.remove(firstJunkInfo);
@@ -634,7 +634,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
             if (listInfo.size() < 15) {
                 for (ActivityManager.RunningAppProcessInfo info : listInfo) {
-                    //悟空清理app加入默认白名单
+                    //清理管家极速版app加入默认白名单
                     if (!SpCacheConfig.APP_ID.equals(info.processName)) {
                         FirstJunkInfo mInfo = new FirstJunkInfo();
                         mInfo.setAppPackageName(info.processName);
@@ -644,7 +644,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 }
             } else {
                 for (int i = 0; i < 15; i++) {
-                    //悟空清理app加入默认白名单
+                    //清理管家极速版app加入默认白名单
                     if (!SpCacheConfig.APP_ID.equals(listInfo.get(i).processName)) {
                         FirstJunkInfo mInfo = new FirstJunkInfo();
                         mInfo.setAppPackageName(listInfo.get(i).processName);

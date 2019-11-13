@@ -452,7 +452,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null) return;
-        //悟空清理app加入默认白名单
+        //清理管家极速版app加入默认白名单
         for (FirstJunkInfo firstJunkInfo : listInfo) {
             if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                 listInfo.remove(firstJunkInfo);
