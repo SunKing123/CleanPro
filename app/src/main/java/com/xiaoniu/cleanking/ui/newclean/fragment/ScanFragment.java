@@ -172,7 +172,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         ivs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
 
         lottieRipple.setVisibility(View.VISIBLE);
-        lottieRipple.useHardwareAcceleration();
+//        lottieRipple.useHardwareAcceleration();
         lottieRipple.setAnimation("leida.json");
         lottieRipple.setImageAssetsFolder("ripple");
         lottieRipple.setRepeatCount(5);
@@ -410,7 +410,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }*/
         if (mLottieHomeView == null)
             return;
-        mLottieHomeView.useHardwareAcceleration();
+//        mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");
         mLottieHomeView.setImageAssetsFolder("images");
         if (isMove) {

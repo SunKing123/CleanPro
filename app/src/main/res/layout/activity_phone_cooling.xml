@@ -12,78 +12,81 @@
         android:layout_height="wrap_content"
         app:elevation="0dp"
         tools:ignore="MissingConstraints">
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <!-- <com.google.android.material.appbar.CollapsingToolbarLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            android:background="@color/color_FD6F46"
+            android:descendantFocusability="blocksDescendants"
+            android:minHeight="50dp"
+            app:contentInsetStart="0dp"
+            app:layout_collapseMode="pin">
+
+            <include
+                android:id="@+id/layout_title_bar"
+                layout="@layout/layout_titlebar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_56dp" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/viewt_finish"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="@dimen/dimen_56dp"
+            android:background="@color/color_06C581"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_dun"
+                android:layout_width="49dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="38dp"
+                android:src="@drawable/icon_dun" />
 
             <LinearLayout
-                android:id="@+id/viewt_finish"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="@dimen/dimen_56dp"
-                android:background="@color/color_06C581"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:id="@+id/layout_right_cooling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_38dp"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <ImageView
-                    android:id="@+id/iv_dun"
-                    android:layout_width="49dp"
-                    android:layout_height="49dp"
-                    android:layout_marginTop="38dp"
-                    android:src="@drawable/icon_dun" />
-
-                <LinearLayout
-                    android:id="@+id/layout_right_cooling"
+                <TextView
+                    android:id="@+id/tv_number_cool"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_38dp"
-                    android:orientation="vertical"
-                    android:visibility="visible">
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
 
-                    <TextView
-                        android:id="@+id/tv_number_cool"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textSize="24sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.87"
-                        android:text="60s后达到最佳降温效果"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.87"
+                    android:text="60s后达到最佳降温效果"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
             </LinearLayout>
+        </LinearLayout>
 
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_FD6F46"
-                android:descendantFocusability="blocksDescendants"
-                android:minHeight="50dp"
-                app:contentInsetStart="0dp"
-                app:layout_collapseMode="pin">
 
-                <include
-                    android:id="@+id/layout_title_bar"
-                    layout="@layout/layout_titlebar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_56dp" />
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+        <!--        </com.google.android.material.appbar.CollapsingToolbarLayout>-->
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dimen_55dp"
+        android:background="@color/white"
         android:fillViewport="true"
         android:focusable="true"
-        android:background="@color/white"
         android:focusableInTouchMode="true"
         android:scrollbarStyle="outsideOverlay"
         android:touchscreenBlocksFocus="true"

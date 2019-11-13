@@ -315,11 +315,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         ivCleanBg02.setVisibility(View.VISIBLE);
         ivCleanBg03.setVisibility(View.VISIBLE);
         ivs = new TextView[]{ivCleanBg01, ivCleanBg02, ivCleanBg03};
-        viewLottieBottom.useHardwareAcceleration();
+//        viewLottieBottom.useHardwareAcceleration();
         viewLottieBottom.setAnimation("cleanbottom.json");
         viewLottieBottom.setImageAssetsFolder("cleanbottom");
 
-        viewLottieTop.useHardwareAcceleration();
+//        viewLottieTop.useHardwareAcceleration();
         viewLottieTop.setAnimation("cleantop.json");
         viewLottieTop.setImageAssetsFolder("cleantop");
 

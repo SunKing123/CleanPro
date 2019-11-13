@@ -134,7 +134,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     }
 
     private void initLottie() {
-        mBtnDownload.useHardwareAcceleration(true);
+//        mBtnDownload.useHardwareAcceleration(true);
         mBtnDownload.setAnimation("clean_finish_download.json");
         mBtnDownload.setImageAssetsFolder("images_clean_download");
         mBtnDownload.playAnimation();

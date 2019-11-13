@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -169,6 +168,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private boolean mIsScreenAdSuccess; //插屏广告是否拉取成功
     //插屏广告相关 end
 
+    private View mAdBg;
     private AnimationDrawable mAnimationDrawable;
 
     @Override
@@ -211,6 +211,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mRecyclerView.setAdapter(mNewsAdapter);
         mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
 
+        mAdBg = header.findViewById(R.id.v_video);
         mTvSize = header.findViewById(R.id.tv_size);
         mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
@@ -291,32 +292,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initChuanShanJia();
         initChuanShanJia2();
         initChuanShanJiaScreen();
-
-
-        View ad_bg = header.findViewById(R.id.v_video);
-        ad_bg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-        if (ad_bg.getBackground() instanceof AnimationDrawable) {
-            mAnimationDrawable = (AnimationDrawable) ad_bg.getBackground();
-        }
-    }
-
-    private int[] getRes() {
-        TypedArray typedArray = getResources().obtainTypedArray(R.array.acess_drawale_array);
-        int len = typedArray.length();
-        int[] resId = new int[len];
-        for (int i = 0; i < len; i++) {
-            resId[i] = typedArray.getResourceId(i, -1);
-        }
-        typedArray.recycle();
-        return resId;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (null != mAnimationDrawable && !mAnimationDrawable.isRunning()) { //判断是否在运行
-            mAnimationDrawable.start();
-        }
+
     }
 
     //获取埋点参数
@@ -1419,7 +1400,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
-
         if (null != mAnimationDrawable) {
             mAnimationDrawable.start();
         }
@@ -1919,7 +1899,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
         }
 
-        mLottieAd.useHardwareAcceleration(true);
+//        mLottieAd.useHardwareAcceleration(true);
         mLottieAd.setAnimation("clean_finish_download.json");
         mLottieAd.setImageAssetsFolder("images_clean_download");
         mLottieAd.playAnimation();
@@ -2002,7 +1982,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (null == ads || ads.isEmpty()) return;
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
-                mLottieAd.useHardwareAcceleration(true);
+                mAdBg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
+                if (mAdBg.getBackground() instanceof AnimationDrawable) {
+                    mAnimationDrawable = (AnimationDrawable) mAdBg.getBackground();
+                }
+                if (null != mAnimationDrawable && !mAnimationDrawable.isRunning()) { //判断是否在运行
+                    mAnimationDrawable.start();
+                }
+
+                //                mLottieAd.useHardwareAcceleration(true);
                 mLottieAd.setAnimation("clean_finish_download.json");
                 mLottieAd.setImageAssetsFolder("images_clean_download");
                 mLottieAd.playAnimation();

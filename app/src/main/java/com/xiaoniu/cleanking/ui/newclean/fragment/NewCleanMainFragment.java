@@ -550,7 +550,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mTvCleanType.setVisibility(VISIBLE);
             mTvCleanType01.setVisibility(View.GONE);
             showTextView();
-            mLottieHomeView.useHardwareAcceleration(true);
+//            mLottieHomeView.useHardwareAcceleration(true);
             mLottieHomeView.setAnimation("clean_home_top.json");
             mLottieHomeView.setImageAssetsFolder("images_home");
             mLottieHomeView.playAnimation();
@@ -908,7 +908,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
                 tvNowClean.setVisibility(View.GONE);
-                mLottieHomeView.useHardwareAcceleration(true);
+//                mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
                 mLottieHomeView.playAnimation();
@@ -965,7 +965,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void showHomeLottieView() {
         showTextView();
-        mLottieHomeView.useHardwareAcceleration(true);
+//        mLottieHomeView.useHardwareAcceleration(true);
         mLottieHomeView.setAnimation("clean_home_top.json");
         mLottieHomeView.setImageAssetsFolder("images_home");
         mLottieHomeView.playAnimation();

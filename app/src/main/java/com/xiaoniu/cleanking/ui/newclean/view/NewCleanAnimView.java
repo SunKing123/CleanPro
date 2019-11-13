@@ -261,7 +261,7 @@ public class NewCleanAnimView extends RelativeLayout {
      * 显示吸收动画
      */
     private void showLottieView() {
-        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.useHardwareAcceleration();
         mAnimationView.setAnimation("data2.json");
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.playAnimation();
@@ -276,7 +276,7 @@ public class NewCleanAnimView extends RelativeLayout {
         mLayoutCount.setVisibility(GONE);
         mLayoutScan.setVisibility(GONE);
         mTvAnimTitle.setVisibility(VISIBLE);
-        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.useHardwareAcceleration();
         mAnimationView.setAnimation("data_clean_finish.json");
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.playAnimation();

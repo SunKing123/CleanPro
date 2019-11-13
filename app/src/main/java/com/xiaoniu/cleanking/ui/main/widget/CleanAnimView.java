@@ -390,7 +390,7 @@ public class CleanAnimView extends RelativeLayout {
      * 显示吸收动画
      */
     private void showLottieView() {
-        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.useHardwareAcceleration();
         mAnimationView.setAnimation("data2.json");
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.playAnimation();
@@ -405,7 +405,7 @@ public class CleanAnimView extends RelativeLayout {
         mLayoutCount.setVisibility(GONE);
         mLayoutScan.setVisibility(GONE);
         mTvAnimTitle.setVisibility(VISIBLE);
-        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.useHardwareAcceleration();
         mAnimationView.setAnimation("yindao2.json");
         mAnimationView.setImageAssetsFolder("images_game_yindao2");
         mAnimationView.playAnimation();

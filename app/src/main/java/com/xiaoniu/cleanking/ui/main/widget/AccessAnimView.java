@@ -496,7 +496,7 @@ public class AccessAnimView extends RelativeLayout {
 
     public void startFinishAnimator() {
         mFlAnim.setVisibility(VISIBLE);
-        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data_clean_finish.json");
         mAnimationView.playAnimation();
@@ -537,7 +537,7 @@ public class AccessAnimView extends RelativeLayout {
         line_hj.setVisibility(VISIBLE);
         //小飞机 上升动画
         createStartFadeAnimator();
-        mAnimationCloudView.useHardwareAcceleration();
+//        mAnimationCloudView.useHardwareAcceleration();
         mAnimationCloudView.setImageAssetsFolder("images");
         mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
         mAnimationCloudView.playAnimation();

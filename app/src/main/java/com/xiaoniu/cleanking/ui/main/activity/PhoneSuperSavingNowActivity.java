@@ -366,7 +366,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         if (mIvAnimationStartView != null)
             mIvAnimationStartView.setVisibility(View.INVISIBLE);
 
-        mLottieAnimationFinishView.useHardwareAcceleration();
+//        mLottieAnimationFinishView.useHardwareAcceleration();
         mLottieAnimationFinishView.setImageAssetsFolder("images");
         mLottieAnimationFinishView.setAnimation("data_clean_finish.json");
         mLottieAnimationFinishView.playAnimation();

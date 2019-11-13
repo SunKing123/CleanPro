@@ -149,10 +149,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             NiuDataAPI.onPageStart("gameboost_add_page_view_page", "游戏加速添加页浏览");
             NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
         }
+
         initRecyclerView();
-        if (!PreferenceUtil.getGameQuikcenStart()) {
+        if (!PreferenceUtil.getGameQuikcenStart() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             initLottieYinDao();
         } else {
+            NiuDataAPI.onPageStart("gameboost_add_page_view_page", "游戏加速添加页浏览");
+            NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
             mContentView.setVisibility(View.VISIBLE);
             mOpenView.setVisibility(View.VISIBLE);
         }
@@ -167,7 +170,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     private void initLottieYinDao() {
         mLottieAnimationViewY.setVisibility(View.VISIBLE);
-        mLottieAnimationViewY.useHardwareAcceleration(true);
+//        mLottieAnimationViewY.useHardwareAcceleration(true);
         mLottieAnimationViewY.setAnimation("yindao1.json");
         mLottieAnimationViewY.setImageAssetsFolder("images_game_yindao");
         mLottieAnimationViewY.playAnimation();
@@ -183,6 +186,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
                 mIsYinDaoFinish = true;
                 mLottieAnimationViewY.setVisibility(View.GONE);
+                mLottieAnimationViewY.cancelAnimation();
                 mOpenView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.VISIBLE);
             }
@@ -622,7 +626,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     private void startClean() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             clean();
             return;
         }
@@ -635,7 +639,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         showColorChange01(2);
         mTitleView.setVisibility(View.GONE);
         mLottieAnimationView.setVisibility(View.VISIBLE);
-        mLottieAnimationView.useHardwareAcceleration(true);
+//        mLottieAnimationView.useHardwareAcceleration(true);
         mLottieAnimationView.setAnimation("youxijiasu.json");
         mLottieAnimationView.setImageAssetsFolder("images_game_jiasu");
         mLottieAnimationView.playAnimation();
@@ -647,6 +651,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                mLottieAnimationView.removeAllUpdateListeners();
+                mLottieAnimationView.removeAllAnimatorListeners();
+                mLottieAnimationView.setVisibility(View.GONE);
+                mLottieAnimationView.cancelAnimation();
                 showAnimal3();
             }
 
@@ -675,10 +683,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     }
 
     private void showAnimal3() {
-        if (null == mLottieAnimationView3) return;
-        mLottieAnimationView.setVisibility(View.GONE);
         mView3.setVisibility(View.VISIBLE);
-        mLottieAnimationView3.useHardwareAcceleration(true);
+//        mLottieAnimationView3.useHardwareAcceleration(true);
         mLottieAnimationView3.setAnimation("yindao2.json");
         mLottieAnimationView3.setImageAssetsFolder("images_game_yindao2");
         mLottieAnimationView3.playAnimation();
@@ -690,6 +696,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                mLottieAnimationView3.removeAllUpdateListeners();
+                mLottieAnimationView3.removeAllAnimatorListeners();
+                mLottieAnimationView3.setVisibility(View.GONE);
+                mLottieAnimationView3.cancelAnimation();
                 clean();
             }
 
