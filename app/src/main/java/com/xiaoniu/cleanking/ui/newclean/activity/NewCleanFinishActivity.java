@@ -1982,12 +1982,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (null == ads || ads.isEmpty()) return;
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
-                mAdBg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-                if (mAdBg.getBackground() instanceof AnimationDrawable) {
-                    mAnimationDrawable = (AnimationDrawable) mAdBg.getBackground();
-                }
-                if (null != mAnimationDrawable && !mAnimationDrawable.isRunning()) { //判断是否在运行
-                    mAnimationDrawable.start();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    mAdBg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
+                    if (mAdBg.getBackground() instanceof AnimationDrawable) {
+                        mAnimationDrawable = (AnimationDrawable) mAdBg.getBackground();
+                    }
+                    if (null != mAnimationDrawable && !mAnimationDrawable.isRunning()) { //判断是否在运行
+                        mAnimationDrawable.start();
+                    }
                 }
 
                 //                mLottieAd.useHardwareAcceleration(true);
