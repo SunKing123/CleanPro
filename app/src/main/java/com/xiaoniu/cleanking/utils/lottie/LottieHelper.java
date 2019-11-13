@@ -1,14 +1,14 @@
-package com.geek.jk.weather.main.helper;
+package com.xiaoniu.cleanking.utils.lottie;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 
-import com.agile.frame.utils.LogUtils;
-import com.airbnb.lottie.Cancellable;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieComposition;
 import com.airbnb.lottie.OnCompositionLoadedListener;
+import com.xiaoniu.cleanking.utils.LogUtils;
+
+import androidx.annotation.Nullable;
 
 public class LottieHelper {
 
@@ -54,7 +54,7 @@ public class LottieHelper {
         }
     }
 
-    public void start(Context context,@Nullable int[] marginPixs, String assetName ) {
+    public void start(Context context, @Nullable int[] marginPixs, String assetName ) {
         if(mLottieView == null){
             return;
         }
@@ -77,10 +77,10 @@ public class LottieHelper {
                             mLottieView.setComposition(composition);
                             mLottieView.setProgress(0f);
                             mLottieView.playAnimation();
-                            LogUtils.e("dkk", assetName + " 播放动画....");
+                            LogUtils.i(assetName + " 播放动画....");
                         } catch (Exception e) {
                             e.printStackTrace();
-                            LogUtils.e("dkk", "LottieHelper error " + e.getMessage());
+                            LogUtils.i( "LottieHelper error " + e.getMessage());
                         }
                     }
                 });

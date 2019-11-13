@@ -7,10 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Keep;
-import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.geek.push.entity.PushMsg;
 import com.xiaoniu.cleanking.BuildConfig;
