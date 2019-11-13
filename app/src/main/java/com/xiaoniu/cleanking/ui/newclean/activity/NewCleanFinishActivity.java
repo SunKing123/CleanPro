@@ -323,7 +323,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
         if (getString(R.string.app_name).contains(mTitle)) {
-            //悟空清理
+            //清理管家极速版
             currentPage = "clean_success_page";
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
@@ -756,7 +756,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (TextUtils.isEmpty(mTitle))
                 mTitle = getString(R.string.app_name);
             if (getString(R.string.app_name).contains(mTitle)) {
-                //悟空清理
+                //清理管家极速版
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
@@ -1375,7 +1375,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         /*---------------------------------------- 埋点---------------------------------------------------------------------*/
         if (getString(R.string.app_name).contains(mTitle)) {
-            //悟空清理
+            //清理管家极速版
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
@@ -1429,7 +1429,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void onPause() {
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
-            //悟空清理
+            //清理管家极速版
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
@@ -1943,7 +1943,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null) return;
-        //悟空清理app加入默认白名单
+        //清理管家极速版app加入默认白名单
         for (FirstJunkInfo firstJunkInfo : listInfo) {
             if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                 listInfo.remove(firstJunkInfo);
