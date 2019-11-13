@@ -386,7 +386,7 @@ public class SPUtil {
         whitelist.add("com.tencent.mm");
         whitelist.add("com.tencent.mobileqq");
         whitelist.add("com.tencent.wework");
-        whitelist.add("com.xiaoniu.cleanking");
+        whitelist.add("com.hellogeek.cleanking");
         return whitelist;
     }
 

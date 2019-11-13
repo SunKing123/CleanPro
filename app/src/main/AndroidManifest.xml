@@ -332,7 +332,7 @@
 
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="819597e28ecddae10e2297ad" />
+            android:value="fc9c656366bf05b8e450e719" />
 
         <meta-data
             android:name="XIAOMI_APPKEY"

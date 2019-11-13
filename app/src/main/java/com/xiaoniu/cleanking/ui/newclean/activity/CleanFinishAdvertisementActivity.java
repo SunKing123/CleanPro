@@ -454,7 +454,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             //清理管家极速版
             currentPage = "clean_success_page";
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            //一键加速
+            //清理管家极速版
             currentPage = "boost_success_page";
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面_建议清理
