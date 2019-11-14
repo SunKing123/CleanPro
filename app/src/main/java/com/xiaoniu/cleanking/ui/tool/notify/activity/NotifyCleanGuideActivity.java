@@ -118,8 +118,9 @@ public class NotifyCleanGuideActivity extends BaseActivity {
                             NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
                         } catch (ActivityNotFoundException exception) {
                             exception.printStackTrace();
-                            Intent intent = new Intent();
-                            NotifyCleanGuideActivity.this.startActivity(intent);
+                            //umeng --  android.content.ActivityNotFoundException: No Activity found to handle Intent { }
+//                            Intent intent = new Intent();
+//                            NotifyCleanGuideActivity.this.startActivity(intent);
                             NotifyCleanGuideActivity.this.startActivity(PhonePremisActivity.class);
                         }
                     }

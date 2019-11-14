@@ -293,22 +293,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
 
         View ad_bg = header.findViewById(R.id.v_video);
-        ad_bg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-        if (ad_bg.getBackground() instanceof AnimationDrawable) {
-            mAnimationDrawable = (AnimationDrawable) ad_bg.getBackground();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ad_bg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
+            if (ad_bg.getBackground() instanceof AnimationDrawable) {
+                mAnimationDrawable = (AnimationDrawable) ad_bg.getBackground();
+            }
         }
     }
 
-    private int[] getRes() {
-        TypedArray typedArray = getResources().obtainTypedArray(R.array.acess_drawale_array);
-        int len = typedArray.length();
-        int[] resId = new int[len];
-        for (int i = 0; i < len; i++) {
-            resId[i] = typedArray.getResourceId(i, -1);
-        }
-        typedArray.recycle();
-        return resId;
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -1941,16 +1933,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-        //悟空清理app加入默认白名单
-        for (FirstJunkInfo firstJunkInfo : listInfo) {
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                listInfo.remove(firstJunkInfo);
-            }
-        }
-        if (listInfo.size() != 0) {
-            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-        }
+        if (listInfo == null || listInfo.size() <= 0) return;
+        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
         changeUI(getIntent());
     }
 

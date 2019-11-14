@@ -110,6 +110,7 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
+        getAccessListBelow();
     }
 
 
@@ -174,7 +175,6 @@ public class ToolFragment extends SimpleFragment {
     public void onResume() {
         setData();
         super.onResume();
-        getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
     }
@@ -384,23 +384,14 @@ public class ToolFragment extends SimpleFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
                     if (mView == null) return;
-//                    mView.cancelLoadingDialog();
                     getAccessListBelowSize(strings);
                 });
     }
 
     //低于Android O
     public void getAccessListBelowSize(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-        //悟空清理app加入默认白名单
-        for (FirstJunkInfo firstJunkInfo : listInfo) {
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                listInfo.remove(firstJunkInfo);
-            }
-        }
-        if (listInfo.size() != 0) {
-            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-        }
+        if (listInfo == null || listInfo.size() <= 0) return;
+        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
 }
