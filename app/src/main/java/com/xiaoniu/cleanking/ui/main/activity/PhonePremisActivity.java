@@ -33,7 +33,7 @@ public class PhonePremisActivity extends Activity {
 
     private void initViews() {
         mLottieAnimationView = findViewById(R.id.view_lottie);
-        mLottieAnimationView.useHardwareAcceleration();
+//        mLottieAnimationView.useHardwareAcceleration();
         mLottieAnimationView.setAnimation("data_premis.json");
         mLottieAnimationView.setImageAssetsFolder("images");
         mLottieAnimationView.playAnimation();

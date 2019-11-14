@@ -34,7 +34,7 @@ public class LoadingDialog {
             spaceshipImage.setAnimation("data_loading.json");
             // 提示文字
             mContentText = v.findViewById(R.id.tipTextView);
-            spaceshipImage.useHardwareAcceleration();
+//            spaceshipImage.useHardwareAcceleration();
             spaceshipImage.setRepeatCount(-1);
             // 加载动画
             spaceshipImage.playAnimation();

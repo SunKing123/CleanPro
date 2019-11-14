@@ -1915,7 +1915,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
         }
 
-        mLottieAd.useHardwareAcceleration(true);
+//        mLottieAd.useHardwareAcceleration(true);
         mLottieAd.setAnimation("clean_finish_download.json");
         mLottieAd.setImageAssetsFolder("images_clean_download");
         mLottieAd.playAnimation();
@@ -1992,7 +1992,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (null == ads || ads.isEmpty()) return;
                 Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
-                mLottieAd.useHardwareAcceleration(true);
+//                mLottieAd.useHardwareAcceleration(true);
                 mLottieAd.setAnimation("clean_finish_download.json");
                 mLottieAd.setImageAssetsFolder("images_clean_download");
                 mLottieAd.playAnimation();

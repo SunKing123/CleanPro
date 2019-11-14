@@ -39,6 +39,7 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
@@ -577,7 +578,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mTvCleanType.setVisibility(VISIBLE);
             mTvCleanType01.setVisibility(View.GONE);
             showTextView();
-            mLottieHomeView.useHardwareAcceleration(true);
+//            mLottieHomeView.useHardwareAcceleration(true);
             mLottieHomeView.setAnimation("clean_home_top.json");
             mLottieHomeView.setImageAssetsFolder("images_home");
             mLottieHomeView.playAnimation();
@@ -645,6 +646,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         if (null != mVirusList && mVirusList.size() > 0) {
             switch (mVirusPoistion) {
+                case 0:
+                    startActivity(VirusKillActivity.class);
+                    break;
                 case 2:
                     if (PreferenceUtil.getGameTime()) {
                         startActivity(GameActivity.class);
@@ -940,7 +944,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
                 tvNowClean.setVisibility(View.GONE);
-                mLottieHomeView.useHardwareAcceleration(true);
+//                mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
                 mLottieHomeView.playAnimation();
@@ -996,7 +1000,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void showHomeLottieView() {
         showTextView();
-        mLottieHomeView.useHardwareAcceleration(true);
+//        mLottieHomeView.useHardwareAcceleration(true);
         mLottieHomeView.setAnimation("clean_home_top.json");
         mLottieHomeView.setImageAssetsFolder("images_home");
         mLottieHomeView.playAnimation();
