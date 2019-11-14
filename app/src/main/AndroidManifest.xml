@@ -432,7 +432,7 @@
 
         <provider
             android:name=".keeplive.pro_sp.SharedPreferenceProvider"
-            android:authorities="com.xiaoniu.preference"
+            android:authorities="${applicationId}.preference"
             android:exported="false"
             android:process=":remote" />
     </application>
