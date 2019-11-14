@@ -10,6 +10,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -469,6 +470,10 @@ public class NotityCleanAnimView extends RelativeLayout {
             @Override
             public void onAnimationStart(Animator animation) {
 
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {//不走对勾动画
+                    if (animationStateListener != null)
+                        animationStateListener.onAnimationStart();
+                     }
             }
 
             @Override
@@ -476,8 +481,12 @@ public class NotityCleanAnimView extends RelativeLayout {
                 if (animatorSet != null) {
                     animatorSet.end();
                 }
-                showFinishLottieView();
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//对勾动画7.0以上走对勾动画
+                    showFinishLottieView();
+                } else {
+                    if (animationStateListener != null)
+                        animationStateListener.onAnimationEnd();
+                }
             }
 
             @Override

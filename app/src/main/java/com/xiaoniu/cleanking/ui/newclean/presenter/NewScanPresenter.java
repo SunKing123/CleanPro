@@ -474,6 +474,8 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         String permissionsHint = "需要打开文件读写权限";
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        //umeng -- Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'android.app.FragmentManager android.app.Activity.getFragmentManager()' on a null object reference
+        if (null == mView || null == mView.getActivity()) return;
         new RxPermissions(mView.getActivity()).request(permissions).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {

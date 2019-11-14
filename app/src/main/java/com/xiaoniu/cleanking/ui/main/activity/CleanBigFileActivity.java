@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -317,15 +318,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-        //清理管家极速版app加入默认白名单
-       /* for (FirstJunkInfo firstJunkInfo : listInfo) {
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                listInfo.remove(firstJunkInfo);
-            }
-        }*/
-        if (listInfo.size() != 0) {
-            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-        }
+        if (listInfo == null || listInfo.size() <= 0) return;
+        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 }

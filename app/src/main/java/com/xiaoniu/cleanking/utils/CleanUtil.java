@@ -100,8 +100,10 @@ public class CleanUtil {
             value = String.format("%.0f", result);
         }
         countEntity.setTotalSize(value);
-        countEntity.setUnit(AppApplication.getInstance().getString(suffix));
-        countEntity.setResultSize(value + AppApplication.getInstance().getString(suffix));
+        if (null != AppApplication.getInstance()) {
+            countEntity.setUnit(AppApplication.getInstance().getString(suffix));
+            countEntity.setResultSize(value + AppApplication.getInstance().getString(suffix));
+        }
         countEntity.setNumber(number);
         return countEntity;
     }

@@ -181,6 +181,8 @@ public class NotificationService extends Service {
     @Subscribe
     public void cleanFinish(NotificationEvent notificationEvent) {
         Log.d("cleanFinish", "cleanFinish: " + notificationEvent);
+        if(null == contentView)
+            return;
         if ("clean".equals(notificationEvent.getType())) {
             if (notificationEvent.getFlag() == 0) {
                 contentView.setImageViewResource(R.id.iv_clean, R.drawable.icon_notifi_clean_nor);

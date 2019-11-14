@@ -41,7 +41,6 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.GameSelectEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.GamePresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -150,12 +149,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
         }
         initRecyclerView();
-        if (!PreferenceUtil.getGameQuikcenStart()) {
+       /* if (!PreferenceUtil.getGameQuikcenStart() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             initLottieYinDao();
-        } else {
-            mContentView.setVisibility(View.VISIBLE);
-            mOpenView.setVisibility(View.VISIBLE);
-        }
+        } else {*/
+        mContentView.setVisibility(View.VISIBLE);
+        mOpenView.setVisibility(View.VISIBLE);
+//        }
         mPresenter.getSwitchInfoList();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
@@ -622,7 +621,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     private void startClean() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             clean();
             return;
         }
@@ -731,16 +730,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-        //清理管家极速版app加入默认白名单
-    /*    for (FirstJunkInfo firstJunkInfo : listInfo) {
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                listInfo.remove(firstJunkInfo);
-            }
-        }*/
-        if (listInfo.size() != 0) {
-            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-        }
+        if (listInfo == null || listInfo.size() <= 0) return;
+        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
     @Override

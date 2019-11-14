@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -470,7 +471,11 @@ public class CleanAnimView extends RelativeLayout {
                 if (animatorSet != null) {
                     animatorSet.end();
                 }
-                showFinishLottieView();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//对勾动画7.0以上
+                    showFinishLottieView();
+                }else{
+                    setViewTrans();
+                }
 
             }
 

@@ -172,6 +172,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
+        mPresenter.getAccessListBelow();
         if (PreferenceUtil.isFirstForHomeIcon()) {
             PreferenceUtil.saveFirstForHomeIcon(false);
         } else {
@@ -242,7 +243,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
-        mPresenter.getAccessListBelow();
     }
 
     private void initRecyclerView() {
@@ -857,21 +857,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-        try {
-            //清理管家极速版app加入默认白名单
-          /*  for (FirstJunkInfo firstJunkInfo : listInfo) {
-                if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                    listInfo.remove(firstJunkInfo);
-                }
-            }*/
-            if (listInfo.size() != 0) {
-                mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (listInfo == null || listInfo.size() <= 0) return;
+        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
     public void onKeyBack() {
@@ -956,7 +943,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             bundle.putString(Constant.URL, downloadUrl);
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);*/
-
             Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEW");
             Uri content_url = Uri.parse(downloadUrl);

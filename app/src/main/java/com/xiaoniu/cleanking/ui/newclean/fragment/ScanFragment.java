@@ -249,12 +249,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         try {
             mCountEntity = CleanUtil.formatShortFileSize(total);
             getActivity().runOnUiThread(() -> {
-                CountEntity countEntity = CleanUtil.formatShortFileSize(total);
                 if (mTextCount == null || mTextUnit == null)
                     return;
-                if (countEntity != null) {
-                    mTextCount.setText(countEntity.getTotalSize());
-                    mTextUnit.setText(countEntity.getUnit());
+                if (mCountEntity != null) {
+                    mTextCount.setText(mCountEntity.getTotalSize());
+                    mTextUnit.setText(mCountEntity.getUnit());
                 }
             });
         } catch (Exception e) {
