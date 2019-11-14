@@ -33,7 +33,6 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
-import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
@@ -46,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.VirusLlistEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -152,11 +152,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
-    private int mInteractionPoistion; //互动式广告position、
+    private int mInteractionPoistion; //互动式广告position
     private int mShowCount;
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
     private HomeRecommendAdapter mRecommendAdapter;
+
+    private List<VirusLlistEntity> mVirusList;
+    private int mVirusPoistion;
 
     @Override
     protected int getLayoutId() {
@@ -242,6 +245,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
+        initVirus();
+    }
+
+    /**
+     * 病毒查杀、网络加速、游戏加速轮播
+     */
+    private void initVirus() {
+        mVirusList = new ArrayList<>();
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game,getString(R.string.virus_kill)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game,getString(R.string.network_quicken)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game,getString(R.string.game_quicken)));
     }
 
     private void initRecyclerView() {
@@ -607,14 +621,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 文件管理
+     * 病毒查杀
      */
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
         textWjgl.setEnabled(false);
-        ((MainActivity) getActivity()).commitJpushClickTime(4);
+        /*((MainActivity) getActivity()).commitJpushClickTime(4);
         StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
-        startActivity(FileManagerHomeActivity.class);
+        startActivity(FileManagerHomeActivity.class);*/
+
+        if (mVirusPoistion > 2) {
+            mVirusPoistion = 0;
+        }
+        if (null != mVirusList && mVirusList.size() > 0) {
+
+            if (mVirusList.size() - 1 >= mVirusPoistion) {
+
+            }
+            mVirusPoistion++;
+        }
     }
 
     /**

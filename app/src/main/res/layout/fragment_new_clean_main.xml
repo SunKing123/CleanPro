@@ -415,7 +415,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:src="@drawable/icon_line_ver" />
-                    <!--文件清理-->
+
                     <LinearLayout
                         android:id="@+id/text_wjgl"
                         android:layout_width="0px"
@@ -436,7 +436,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/dimen_12dp"
-                            android:text="文件清理"
+                            android:text="@string/virus_kill"
                             android:textColor="@color/color_323232"
                             android:textSize="13sp" />
 

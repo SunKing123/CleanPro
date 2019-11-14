@@ -151,6 +151,8 @@
     <string name="scaning">扫描中</string>
     <string name="clean_all_hint">已检测到大量残留垃圾</string>
     <string name="clean_game_hint">一键加速畅玩游戏</string>
+    <string name="virus_kill">病毒查杀</string>
+    <string name="network_quicken">网络加速</string>
 
 
 
