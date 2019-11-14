@@ -17,8 +17,6 @@ import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.text.TextUtils;
 
-import androidx.annotation.RequiresApi;
-
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
@@ -35,6 +33,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Created by lang.chen on 2019/7/4
@@ -85,9 +85,9 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.icon = packageInfo.applicationInfo.loadIcon(mContext.getPackageManager());
                 //appInfoBean.installTime = packageInfo.firstInstallTime;
                 appInfoBean.packageName = packageInfo.packageName;
-                Set<String> whitePkgs = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+                Set<String> whitePkgs =  sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
 
-                if (packageInfo.packageName.equals("com.xiaoniu.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))) {
+                if (packageInfo.packageName.equals("com.hellogeek.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))){
                     continue;
                 }
                 apps.add(appInfoBean);

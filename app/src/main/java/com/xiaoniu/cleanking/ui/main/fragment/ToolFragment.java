@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -47,6 +45,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -89,7 +88,7 @@ public class ToolFragment extends SimpleFragment {
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
-    private int mRamScale; //使用内存占总RAM的比例
+    private int mRamScale = 20; //使用内存占总RAM的比例
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -109,6 +108,7 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
+        getAccessListBelow();
     }
 
 
@@ -172,7 +172,7 @@ public class ToolFragment extends SimpleFragment {
     public void onResume() {
         setData();
         super.onResume();
-        getAccessListBelow();
+
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
     }
@@ -203,7 +203,7 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -245,7 +245,7 @@ public class ToolFragment extends SimpleFragment {
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_one_key_speed));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -280,7 +280,7 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -337,7 +337,7 @@ public class ToolFragment extends SimpleFragment {
         }
     }
 
-    /**
+    /*
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
      */
     @SuppressLint("CheckResult")
@@ -392,11 +392,11 @@ public class ToolFragment extends SimpleFragment {
         if (listInfo == null) return;
         //清理管家极速版app加入默认白名单
         try {
-            for (FirstJunkInfo firstJunkInfo : listInfo) {
+        /*    for (FirstJunkInfo firstJunkInfo : listInfo) {
                 if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                     listInfo.remove(firstJunkInfo);
                 }
-            }
+            }*/
             if (listInfo.size() != 0) {
                 mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             }
