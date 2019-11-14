@@ -554,17 +554,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     public void start() {
         try {
-            //启动保活服务
-            KeepAliveManager.toKeepAlive(
-                    getApplication()
-                    , HIGH_POWER_CONSUMPTION,
-                    mContext.getString(R.string.push_content_default_title),
-                    mContext.getString(R.string.push_content_default_content),
-                    R.mipmap.applogo,
-                    new ForegroundNotification(
-                            //定义前台服务的通知点击事件
-                            (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
-            );
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                //启动保活服务
+                KeepAliveManager.toKeepAlive(
+                        getApplication()
+                        , HIGH_POWER_CONSUMPTION,
+                        mContext.getString(R.string.push_content_default_title),
+                        mContext.getString(R.string.push_content_default_content),
+                        R.mipmap.applogo,
+                        new ForegroundNotification(
+                                //定义前台服务的通知点击事件
+                                (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
+                );
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
