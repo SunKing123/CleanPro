@@ -229,7 +229,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
             if (mIsOpen) {
-                loadSplashAd();
+                fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
             } else {
                 jumpActivity();
             }
@@ -552,7 +552,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 Log.d(TAG, "穿山甲加载失败=" + message);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "clod_splash_page", "clod_splash_page");
                 // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    checkAndRequestPermission();
+                } else {
+                    fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
+                }
             }
 
             @Override

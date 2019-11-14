@@ -250,7 +250,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
-        mPresenter.getAccessListBelow();
         initVirus();
     }
 
@@ -259,8 +258,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void initVirus() {
         mVirusList = new ArrayList<>();
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_news, getString(R.string.virus_kill)));
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_wjql, getString(R.string.network_quicken)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_virus, getString(R.string.virus_kill)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_network, getString(R.string.network_quicken)));
         mVirusList.add(new VirusLlistEntity(R.drawable.icon_game, getString(R.string.game_quicken)));
     }
 
@@ -654,6 +653,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     }
                     break;
             }
+            mVirusPoistion++;
         }
     }
 
