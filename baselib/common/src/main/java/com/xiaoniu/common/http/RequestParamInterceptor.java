@@ -90,6 +90,7 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("timestamp", System.currentTimeMillis());
         mapHeader.put("uid", "");
         mapHeader.put("versionCode", AppUtils.getVersionCode(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
+        mapHeader.put("appName", "wk_clean");
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
         if (original.body() instanceof FormBody) {
 
