@@ -51,6 +51,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     @Override
     public void onCreate(Application application) {
+
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
         PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
@@ -70,12 +71,13 @@ public class ApplicationDelegate implements IApplicationDelegate {
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
 
-        //穿山甲SDK初始化
-        //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
-        TTAdManagerHolder.init(application);
+
         initRoom(application);
         initNiuData(application);
         initOaid(application);
+        //穿山甲SDK初始化
+        //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
+        TTAdManagerHolder.init(application);
     }
 
 

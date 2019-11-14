@@ -148,12 +148,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
         }
         initRecyclerView();
-        if (!PreferenceUtil.getGameQuikcenStart() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+       /* if (!PreferenceUtil.getGameQuikcenStart() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             initLottieYinDao();
-        } else {
-            mContentView.setVisibility(View.VISIBLE);
-            mOpenView.setVisibility(View.VISIBLE);
-        }
+        } else {*/
+        mContentView.setVisibility(View.VISIBLE);
+        mOpenView.setVisibility(View.VISIBLE);
+//        }
         mPresenter.getSwitchInfoList();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
