@@ -942,7 +942,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             bundle.putString(Constant.URL, downloadUrl);
             bundle.putBoolean(Constant.NoTitle, false);
             startActivity(UserLoadH5Activity.class, bundle);*/
-
             Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEW");
             Uri content_url = Uri.parse(downloadUrl);
