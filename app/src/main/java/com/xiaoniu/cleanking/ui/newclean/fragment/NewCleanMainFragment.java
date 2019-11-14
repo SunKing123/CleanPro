@@ -148,6 +148,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     NestedScrollView mNestedScrollView;
     @BindView(R.id.v_no_net)
     View mNoNetView;
+    @BindView(R.id.virus_tv)
+    TextView mVirusTv;
+    @BindView(R.id.virus_iv)
+    ImageView mVirusIv;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -254,9 +258,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void initVirus() {
         mVirusList = new ArrayList<>();
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game,getString(R.string.virus_kill)));
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game,getString(R.string.network_quicken)));
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game,getString(R.string.game_quicken)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_news, getString(R.string.virus_kill)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_wjql, getString(R.string.network_quicken)));
+        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game, getString(R.string.game_quicken)));
     }
 
     private void initRecyclerView() {
@@ -357,6 +361,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
                 }
 
+            }
+        }
+        if (null != mVirusList && mVirusList.size() > 0) {
+            if (mVirusPoistion > 2) {
+                mVirusPoistion = 0;
+            }
+            if (mVirusList.size() - 1 >= mVirusPoistion) {
+                mVirusTv.setText(mVirusList.get(mVirusPoistion).getName());
+                mVirusIv.setImageResource(mVirusList.get(mVirusPoistion).getIcon());
             }
         }
 
@@ -621,7 +634,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 病毒查杀
+     * 病毒查杀、网络加速、游戏加速轮播
      */
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
@@ -630,15 +643,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
         startActivity(FileManagerHomeActivity.class);*/
 
-        if (mVirusPoistion > 2) {
-            mVirusPoistion = 0;
-        }
         if (null != mVirusList && mVirusList.size() > 0) {
-
-            if (mVirusList.size() - 1 >= mVirusPoistion) {
-
+            switch (mVirusPoistion) {
+                case 2:
+                    if (PreferenceUtil.getGameTime()) {
+                        startActivity(GameActivity.class);
+                    } else {
+                        goFinishActivity();
+                    }
+                    break;
             }
-            mVirusPoistion++;
         }
     }
 
@@ -1135,25 +1149,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (PreferenceUtil.getGameTime()) {
                     SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
                 } else {
-                    boolean isOpen = false;
-                    if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                            && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                            if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                                isOpen = switchInfoList.isOpen();
-                            }
-                        }
-                    }
-                    if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", getString(R.string.game_quicken));
-                        startActivity(CleanFinishAdvertisementActivity.class, bundle);
-                    } else {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", getString(R.string.game_quicken));
-                        bundle.putString("num", PreferenceUtil.getGameCleanPer());
-                        startActivity(NewCleanFinishActivity.class, bundle);
-                    }
+                    goFinishActivity();
                 }
                 return;
             } else if (list.get(pos).getName().equals(getString(R.string.tool_one_key_speed))) {
@@ -1169,6 +1165,28 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             Uri content_url = Uri.parse(list.get(pos).getLinkUrl());
             intent.setData(content_url);
             startActivity(intent);
+        }
+    }
+
+    private void goFinishActivity() {
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.game_quicken));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.game_quicken));
+            bundle.putString("num", PreferenceUtil.getGameCleanPer());
+            startActivity(NewCleanFinishActivity.class, bundle);
         }
     }
 }
