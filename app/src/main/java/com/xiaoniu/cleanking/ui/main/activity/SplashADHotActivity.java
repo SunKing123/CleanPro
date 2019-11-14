@@ -97,11 +97,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
      * 延迟跳转
      */
     public void skip() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkAndRequestPermission();
-        } else {
-            loadSplashAd();
-        }
+        loadSplashAd();
     }
 
     public void jumpActivity() {
@@ -141,7 +137,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-            loadSplashAd();
+            // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+            fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -163,7 +160,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
-            loadSplashAd();
+            // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+            fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -422,8 +420,12 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                 Log.d(TAG, "穿山甲加载失败=" + message);
                 mHasLoaded = true;
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "hot_splash_page", "hot_splash_page");
-                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    checkAndRequestPermission();
+                } else {
+                    // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                    fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
+                }
             }
 
             @Override
@@ -432,8 +434,12 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                 mHasLoaded = true;
                 Log.d(TAG, "穿山甲----开屏广告加载超时");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "hot_splash_page", "hot_splash_page");
-                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    checkAndRequestPermission();
+                } else {
+                    // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                    fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
+                }
             }
 
             @Override
