@@ -86,7 +86,7 @@ public class SoftManagePresenter extends RxPresenter<SoftManageActivity, MainMod
                 appInfoBean.packageName = packageInfo.packageName;
                 Set<String> whitePkgs =  sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
 
-                if (packageInfo.packageName.equals("com.xiaoniu.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))){
+                if (packageInfo.packageName.equals("com.hellogeek.cleanking") || (whitePkgs.size() > 0 && whitePkgs.contains(packageInfo.packageName))){
                     continue;
                 }
                 apps.add(appInfoBean);

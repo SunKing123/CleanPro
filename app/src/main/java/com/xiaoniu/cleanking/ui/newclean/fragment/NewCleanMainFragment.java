@@ -241,6 +241,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
+        mPresenter.getAccessListBelow();
     }
 
     private void initRecyclerView() {
@@ -318,7 +319,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         super.onResume();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
-        mPresenter.getAccessListBelow();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
@@ -859,14 +859,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (listInfo == null) return;
         try {
             //清理管家极速版app加入默认白名单
-            for (FirstJunkInfo firstJunkInfo : listInfo) {
+          /*  for (FirstJunkInfo firstJunkInfo : listInfo) {
                 if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                     listInfo.remove(firstJunkInfo);
                 }
-            }
+            }*/
             if (listInfo.size() != 0) {
                 mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

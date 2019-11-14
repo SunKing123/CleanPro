@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,7 +39,6 @@ import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.FileUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -90,7 +88,7 @@ public class ToolFragment extends SimpleFragment {
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
-    private int mRamScale; //使用内存占总RAM的比例
+    private int mRamScale = 20; //使用内存占总RAM的比例
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -110,8 +108,8 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
+        getAccessListBelow();
     }
-
 
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
@@ -174,7 +172,7 @@ public class ToolFragment extends SimpleFragment {
     public void onResume() {
         setData();
         super.onResume();
-        getAccessListBelow();
+
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
     }
@@ -339,7 +337,7 @@ public class ToolFragment extends SimpleFragment {
         }
     }
 
-    /**
+    /*
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
      */
     @SuppressLint("CheckResult")
@@ -394,11 +392,11 @@ public class ToolFragment extends SimpleFragment {
         if (listInfo == null) return;
         //清理管家极速版app加入默认白名单
         try {
-            for (FirstJunkInfo firstJunkInfo : listInfo) {
+        /*    for (FirstJunkInfo firstJunkInfo : listInfo) {
                 if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
                     listInfo.remove(firstJunkInfo);
                 }
-            }
+            }*/
             if (listInfo.size() != 0) {
                 mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             }

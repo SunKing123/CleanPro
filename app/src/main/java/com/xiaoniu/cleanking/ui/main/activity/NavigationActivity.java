@@ -51,7 +51,7 @@ public class NavigationActivity extends SimpleActivity {
         TextView tv_delete = vlast.findViewById(R.id.tv_delete);
         TextView tv_qx = vlast.findViewById(R.id.tv_qx);
         tv_qx.setOnClickListener(v -> {
-            jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+            jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree1.html");
             StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
         });
         initLastClick(cb_checkall, tv_delete);

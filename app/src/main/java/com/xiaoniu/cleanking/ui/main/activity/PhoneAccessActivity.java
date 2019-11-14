@@ -514,17 +514,21 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null || acceview == null) return;
 
-        //清理管家极速版app加入默认白名单
-        for (FirstJunkInfo firstJunkInfo : listInfo) {
-            if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                listInfo.remove(firstJunkInfo);
+        try {
+            //清理管家极速版app加入默认白名单
+          /*  for (FirstJunkInfo firstJunkInfo : new ArrayList<FirstJunkInfo>(listInfo)) {
+                if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
+                    listInfo.remove(firstJunkInfo);
+                }
+            }*/
+            acceview.setListInfoSize(listInfo.size());
+            if (listInfo.size() != 0) {
+                mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+                computeTotalSize(listInfo);
+                setAdapter(listInfo);
             }
-        }
-        acceview.setListInfoSize(listInfo.size());
-        if (listInfo.size() != 0) {
-            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-            computeTotalSize(listInfo);
-            setAdapter(listInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
