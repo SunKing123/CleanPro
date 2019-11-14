@@ -169,7 +169,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //插屏广告相关 end
 
     private AnimationDrawable mAnimationDrawable;
+    FileQueryUtils fileQueryUtils ;
 
+    int processNum = 0 ;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -183,6 +185,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        fileQueryUtils = new FileQueryUtils();
+        processNum = fileQueryUtils.getRunningProcess().size();
         mTitle = getIntent().getStringExtra("title");
         if (getString(R.string.tool_one_key_speed).contains(mTitle)
                 || getString(R.string.tool_notification_clean).contains(mTitle)
@@ -860,7 +864,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     tv_power.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
                 } else {
-                    tv_power.setText(getString(R.string.power_consumption_num, new FileQueryUtils().getRunningProcess().size() + ""));
+                    tv_power.setText(getString(R.string.power_consumption_num, processNum + ""));
                 }
             }
 
@@ -910,7 +914,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             } else if (!PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || new FileQueryUtils().getRunningProcess().size() > 0) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || processNum > 0) {
                     mShowCount++;
                     v_power.setVisibility(View.VISIBLE);
                     if (mShowCount < 3) {
@@ -1934,7 +1938,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null || listInfo.size() <= 0) return;
-        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+        if (null == fileQueryUtils)
+            fileQueryUtils = new FileQueryUtils();
+        mRamScale = fileQueryUtils.computeTotalSize(listInfo);
         changeUI(getIntent());
     }
 
