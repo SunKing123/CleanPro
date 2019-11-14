@@ -143,12 +143,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
             PreferenceUtil.saveFirstOpenApp();
-            jumpActivity();
+//            jumpActivity();
+            startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
         } else if (auditSwitch.getData().equals("0")) {
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
+            initChuanShanJia();
             mPresenter.getSwitchInfoList();
         }
     }
@@ -169,12 +171,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     }
 
     public void jumpActivity() {
-        final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+       /* final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
         if (isFirst) {
             startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
-        } else {
+        } else {*/
             startActivity(new Intent(SplashADActivity.this, MainActivity.class));
-        }
+//        }
         finish();
     }
 
@@ -229,6 +231,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
             if (mIsOpen) {
+                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
                 fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
             } else {
                 jumpActivity();
@@ -255,7 +258,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
             if (mIsOpen) {
-                loadSplashAd();
+                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                fetchSplashAD(this, container, skipView, PositionId.APPID, mAdvertId, this, 0);
             }
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
@@ -417,7 +421,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
-        initChuanShanJia();
         if (NetworkUtils.isNetConnected()) {
             mPresenter.getAuditSwitch();
         } else {

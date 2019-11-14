@@ -501,7 +501,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      */
     private void startAnimation() {
         if (!isDestroyed()) {
-            mLottieAnimationView.useHardwareAcceleration();
+//            mLottieAnimationView.useHardwareAcceleration();
             mLottieAnimationView.setImageAssetsFolder("images");
             mLottieAnimationView.setAnimation("data_cool.json");
             mLottieAnimationView.playAnimation();
@@ -764,7 +764,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
         mFlAnim.setVisibility(VISIBLE);
-        mAnimationView.useHardwareAcceleration();
+//        mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data_clean_finish.json");
         mAnimationView.playAnimation();

@@ -440,8 +440,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
      * 显示正在分析动画...
      */
     private void showStartAnim() {
-        mLottieAnimationStartView.useHardwareAcceleration();
-        mLottieAnimationStartView.useHardwareAcceleration();
+//        mLottieAnimationStartView.useHardwareAcceleration();
+//        mLottieAnimationStartView.useHardwareAcceleration();
         mLottieAnimationStartView.setImageAssetsFolder("images");
         mLottieAnimationStartView.setAnimation("data_super_power_saving.json");
         mLottieAnimationStartView.playAnimation();
@@ -472,8 +472,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
      * 电池动画
      */
     private void showPowerAnim() {
-        mPowerLottieAnimationView.useHardwareAcceleration();
-        mPowerLottieAnimationView.useHardwareAcceleration();
+//        mPowerLottieAnimationView.useHardwareAcceleration();
+//        mPowerLottieAnimationView.useHardwareAcceleration();
         mPowerLottieAnimationView.setImageAssetsFolder("images");
         mPowerLottieAnimationView.setAnimation("data_plan.json");
         mPowerLottieAnimationView.playAnimation();

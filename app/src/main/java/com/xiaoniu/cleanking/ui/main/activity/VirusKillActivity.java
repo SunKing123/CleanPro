@@ -74,10 +74,10 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author XiLei
- * @date 2019/10/18.
- * description：游戏加速
+ * @date 2019/11/14.
+ * description：病毒查杀
  */
-public class GameActivity extends BaseActivity<GamePresenter> implements View.OnClickListener, GameSelectAdapter.onCheckListener {
+public class VirusKillActivity extends BaseActivity<GamePresenter> implements View.OnClickListener, GameSelectAdapter.onCheckListener {
 
     @BindView(R.id.v_title)
     View mTitleView;
@@ -127,7 +127,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_game;
+        return R.layout.activity_virus_kill;
     }
 
     @Override
@@ -609,7 +609,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             //该方法直接展示广告
 //                    mttRewardVideoAd.showRewardVideoAd(RewardVideoActivity.this);
             //展示广告，并传入广告展示的场景
-            mttRewardVideoAd.showRewardVideoAd(GameActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "GameActivity");
+            mttRewardVideoAd.showRewardVideoAd(VirusKillActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "GameActivity");
             mttRewardVideoAd = null;
         } else {
             Log.d(TAG, "请先加载广告");
@@ -713,7 +713,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         PreferenceUtil.saveGameQuikcenStart(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
-        if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (mIsOpen && PreferenceUtil.getShowCount(VirusKillActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.game_quicken));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

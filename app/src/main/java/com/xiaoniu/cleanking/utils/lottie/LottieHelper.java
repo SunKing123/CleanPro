@@ -16,7 +16,7 @@ public class LottieHelper {
 
     public LottieHelper(LottieAnimationView lottieView) {
         this.mLottieView = lottieView;
-        mLottieView.useHardwareAcceleration();
+//        mLottieView.useHardwareAcceleration();
     }
 
     public void playAnimation() {

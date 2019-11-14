@@ -129,7 +129,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     }
 
     private void initLottie() {
-        mLottieAd.useHardwareAcceleration(true);
+//        mLottieAd.useHardwareAcceleration(true);
         mLottieAd.setAnimation("clean_finish_download.json");
         mLottieAd.setImageAssetsFolder("images_clean_download");
         mLottieAd.playAnimation();

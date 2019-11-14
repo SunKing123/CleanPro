@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/acceview_yindao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/v_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/v_open"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/v_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_game">
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v_bg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-145dp"
+            android:text="@string/game_add_hint"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <LinearLayout
+            android:id="@+id/v_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_hint"
+            android:layout_margin="@dimen/dimen_12dp"
+            android:background="@drawable/bg_game_select"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/v_bg">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/v_open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:paddingTop="@dimen/dimen_4dp"
+        android:paddingBottom="@dimen/dimen_4dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_open"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/icon_clean_btn_bg"
+            android:gravity="center"
+            android:text="@string/open_quicken"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_18sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/v_bg_lottie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_scan_bg01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg01" />
+
+        <ImageView
+            android:id="@+id/iv_scan_bg02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg02" />
+
+        <ImageView
+            android:id="@+id/iv_scan_bg03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg03" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/acceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/v_acceview3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/acceview3"
+                android:layout_width="370dp"
+                android:layout_height="288dp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/v_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_55dp"
+        android:layout_marginTop="@dimen/dimen_20dp">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            style="@style/top_iv_back"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            style="@style/top_tv_title"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_back"
+            android:text="@string/game_quicken" />
+    </RelativeLayout>
+</RelativeLayout>

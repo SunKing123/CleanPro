@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "06c8e227392b2f1a4c06bb3590d041b2",
+    "identityHash": "08be93602e14c9df6213aa53b4355d1f",
     "entities": [
       {
         "tableName": "HomeRecommend",
@@ -74,7 +74,7 @@
       },
       {
         "tableName": "GameSelect",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER NOT NULL, `appName` TEXT, `garbageIcon` BLOB, PRIMARY KEY(`position`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER NOT NULL, `appName` TEXT, PRIMARY KEY(`position`))",
         "fields": [
           {
             "fieldPath": "position",
@@ -86,12 +86,6 @@
             "fieldPath": "appName",
             "columnName": "appName",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "garbageIcon",
-            "columnName": "garbageIcon",
-            "affinity": "BLOB",
             "notNull": false
           }
         ],
@@ -107,7 +101,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"06c8e227392b2f1a4c06bb3590d041b2\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"08be93602e14c9df6213aa53b4355d1f\")"
     ]
   }
 }

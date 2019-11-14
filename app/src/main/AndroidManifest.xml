@@ -293,6 +293,10 @@
             android:name=".ui.main.activity.GameListActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.VirusKillActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
 
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->

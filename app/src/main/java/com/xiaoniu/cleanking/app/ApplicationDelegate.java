@@ -109,7 +109,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private void initRoom(Application application) {
-        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "wukong_cleanking.db")
+        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "guanjia_cleanking.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
