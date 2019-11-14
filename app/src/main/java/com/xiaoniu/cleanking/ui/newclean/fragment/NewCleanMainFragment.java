@@ -920,7 +920,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mLottieHomeView.playAnimation();
+                        if (null != mLottieHomeView) {
+                            mLottieHomeView.playAnimation();
+                        }
                     }
 
                     @Override
