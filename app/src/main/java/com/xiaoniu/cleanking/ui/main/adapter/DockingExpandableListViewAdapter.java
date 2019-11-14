@@ -62,8 +62,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
     }
 
 
-
-
     @Override
     public int getGroupCount() {
         return mJunkGroups.size();
@@ -71,7 +69,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
 
     @Override
     public int getChildrenCount(int i) {
-        if (mJunkGroups.get(i).mChildren != null) {
+        if (null != mJunkGroups && null != mJunkGroups.get(i) && null != mJunkGroups.get(i).mChildren) {
             return mJunkGroups.get(i).mChildren.size();
         } else {
             return 0;

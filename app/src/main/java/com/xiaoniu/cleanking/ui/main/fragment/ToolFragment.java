@@ -112,6 +112,7 @@ public class ToolFragment extends SimpleFragment {
     }
 
 
+
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
         Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{FileUtils.getFreeSpace(), FileUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
@@ -172,7 +173,6 @@ public class ToolFragment extends SimpleFragment {
     public void onResume() {
         setData();
         super.onResume();
-
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
     }
@@ -337,7 +337,7 @@ public class ToolFragment extends SimpleFragment {
         }
     }
 
-    /*
+    /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
      */
     @SuppressLint("CheckResult")
@@ -382,27 +382,14 @@ public class ToolFragment extends SimpleFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
                     if (mView == null) return;
-//                    mView.cancelLoadingDialog();
                     getAccessListBelowSize(strings);
                 });
     }
 
     //低于Android O
     public void getAccessListBelowSize(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null) return;
-        //清理管家极速版app加入默认白名单
-        try {
-        /*    for (FirstJunkInfo firstJunkInfo : listInfo) {
-                if (SpCacheConfig.APP_ID.equals(firstJunkInfo.getAppPackageName())) {
-                    listInfo.remove(firstJunkInfo);
-                }
-            }*/
-            if (listInfo.size() != 0) {
-                mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (listInfo == null || listInfo.size() <= 0) return;
+        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
 }
