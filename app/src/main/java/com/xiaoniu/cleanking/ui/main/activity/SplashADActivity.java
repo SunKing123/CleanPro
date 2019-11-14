@@ -228,7 +228,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
             if (mIsOpen) {
-                loadSplashAd();
+                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
             } else {
                 jumpActivity();
             }
@@ -254,7 +255,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
             if (mIsOpen) {
-                loadSplashAd();
+                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
+                fetchSplashAD(SplashADActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADActivity.this, 0);
             }
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
