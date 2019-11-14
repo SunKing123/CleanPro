@@ -153,7 +153,11 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 .subscribe(strings -> {
                     if (mView == null) return;
 //                    mView.cancelLoadingDialog();
-                    mView.getAccessListBelow(strings);
+                    try {
+                        mView.getAccessListBelow(strings);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
     }
 
