@@ -1,0 +1,158 @@
+ext {
+    compileSdkVersion = 28
+    minSdkVersion = 17
+    targetSdkVersion = 26
+    versionCode = 1
+    versionName = "1.0.0_dev"
+    buildToolsVersion = '27.0.3'
+    supportLibVersion = "27.1.1"
+
+    dependencies = [
+            "support":[
+                    "appcompat-v7":"com.android.support:appcompat-v7:$supportLibVersion",
+                    "support-v4":"com.android.support:support-v4:$supportLibVersion",
+                    "percent":"com.android.support:percent:$supportLibVersion",
+                    "design":"com.android.support:design:$supportLibVersion",
+                    "recyclerview-v7":"com.android.support:recyclerview-v7:$supportLibVersion",
+                    "cardview-v7":"com.android.support:cardview-v7:$supportLibVersion",
+                    "dynamic-animation":"com.android.support:support-dynamic-animation:$supportLibVersion"
+            ],
+            "retrofit2":[
+                    "retrofit":'com.squareup.retrofit2:retrofit:2.2.0',
+                    "converter-gson":'com.squareup.retrofit2:converter-gson:2.2.0',
+                    "adapter-rxjava2":'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+            ]
+
+         /*   "gson":"com.google.code.gson:gson:2.8.2",
+            "eventbus": 'org.greenrobot:eventbus:3.0.0',
+            "multidex" :'com.android.support:multidex:1.0.3',
+            "annotation":'org.glassfish:javax.annotation:10.0-b28',
+
+       *//*     api 'com.squareup.retrofit2:retrofit:2.2.0'
+            api 'com.squareup.retrofit2:converter-gson:2.2.0'
+            api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'*//*
+            "rxandroid": 'io.reactivex.rxjava2:rxandroid:2.0.1',
+            "rxjava":'io.reactivex.rxjava2:rxjava:2.1.0',
+
+            "okhttp":'com.squareup.okhttp3:okhttp:3.8.0',
+            "interceptor": 'com.squareup.okhttp3:logging-interceptor:3.8.0',
+
+            "tablayout": 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar',
+            "rxpermissions": 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar',
+
+            "rxlifecycle": 'com.trello.rxlifecycle2:rxlifecycle:2.1.0',
+            "rxlifecycle-components": 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0',
+            "glide": 'com.github.bumptech.glide:glide:4.6.1',
+            "tinker-android-lib":'com.tencent.tinker:tinker-android-lib:1.9.9',
+            "tinker-android-anno":"com.tencent.tinker:tinker-android-anno:1.9.9",
+//            api('com.tencent.tinker:tinker-android-lib:1.9.9') { changing = true }
+//            annotationProcessor("com.tencent.tinker:tinker-android-anno:1.9.9") { changing = true }
+//            api('com.tencent.tinker:tinker-android-anno:1.9.9') { changing = true }
+
+            "fastjson":'com.alibaba:fastjson:1.2.46',
+            "constraint-layout" :'com.android.support.constraint:constraint-layout:1.1.3',
+            "oss-android-sdk": 'com.aliyun.dpa:oss-android-sdk:2.4.5',
+            "PhotoView": 'com.github.chrisbanes:PhotoView:2.1.3',
+            "SmartRefreshLayout":'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19',
+
+            //腾讯多渠道打包
+            "channel":'com.leon.channel:helper:2.0.1',
+            "umsdk":'com.umeng.umsdk:analytics:8.0.0',
+            "filedownloader":'com.liulishuo.filedownloader:library:1.7.2',
+            "NiuData":'com.xiaoniu.statistic:NiuData:1.2.3',
+
+            //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+            // sdk版本分发布版 1.x.x 和 测试版 1.x.x-alpha
+//            api('com.xiaoniu.statistic:NiuData:1.2.3') { changing = true }
+
+            "arouter": 'com.alibaba:arouter-api:1.4.1',
+            "arouter-compiler": 'com.alibaba:arouter-compiler:latest.release',
+            "android-processes" :'com.jaredrummler:android-processes:1.1.1',
+            "BaseRecyclerViewAdapterHelper": 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46',
+            "lottie": 'com.airbnb.android:lottie:3.1.0',
+            //WebView
+            "agentweb" :'com.just.agentweb:agentweb:4.1.2',
+            "filechooser" :'com.just.agentweb:filechooser:4.1.2',
+            "Downloader" :'com.download.library:Downloader:4.1.2',
+
+            api 'se.emilsjolander:stickylistheaders:2.5.2'*/
+
+    ]
+    /* api "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
+    api "com.android.support:support-v4:$rootProject.ext.supportLibVersion"
+    api "com.android.support:percent:$rootProject.ext.supportLibVersion"
+    api "com.android.support:design:$rootProject.ext.supportLibVersion"
+    api "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
+    api "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
+    api "com.android.support:support-dynamic-animation:$rootProject.ext.supportLibVersion"
+    api "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
+
+    api 'com.google.code.gson:gson:2.8.2'
+    api 'org.greenrobot:eventbus:3.0.0'
+    api 'com.android.support:multidex:1.0.3'
+
+    api 'org.glassfish:javax.annotation:10.0-b28'
+    api 'com.squareup.retrofit2:retrofit:2.2.0'
+    api 'com.squareup.retrofit2:converter-gson:2.2.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.0'
+    api 'com.squareup.okhttp3:okhttp:3.8.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
+    api 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
+
+    api 'com.trello.rxlifecycle2:rxlifecycle:2.1.0'
+    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
+    api 'com.github.bumptech.glide:glide:4.6.1'
+    api('com.tencent.tinker:tinker-android-lib:1.9.9') { changing = true }
+    annotationProcessor("com.tencent.tinker:tinker-android-anno:1.9.9") { changing = true }
+    api('com.tencent.tinker:tinker-android-anno:1.9.9') { changing = true }
+
+    api 'com.alibaba:fastjson:1.2.46'
+    api 'com.android.support.constraint:constraint-layout:1.1.3'
+    api 'com.aliyun.dpa:oss-android-sdk:2.4.5'
+    api 'com.github.chrisbanes:PhotoView:2.1.3'
+//    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'
+    // Android 阴影的实现
+//    api 'com.github.JuHonggang:ShadowDrawable:0.1'
+    //腾讯多渠道打包
+    api 'com.leon.channel:helper:2.0.1'
+    api 'com.umeng.umsdk:analytics:8.0.0'
+    api 'com.liulishuo.filedownloader:library:1.7.2'
+//    api 'com.tencent.bugly:crashreport:3.0.0'
+//    api 'com.tencent.bugly:nativecrashreport:3.7.1'
+    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+    // sdk版本分发布版 1.x.x 和 测试版 1.x.x-alpha
+    api('com.xiaoniu.statistic:NiuData:1.2.3') { changing = true }
+
+    api 'com.alibaba:arouter-api:1.4.1'
+    annotationProcessor 'com.alibaba:arouter-compiler:latest.release'
+    api 'com.jaredrummler:android-processes:1.1.1'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
+    api 'com.airbnb.android:lottie:3.1.0'
+    //WebView
+    api 'com.just.agentweb:agentweb:4.1.2' // (必选)
+    api 'com.just.agentweb:filechooser:4.1.2'// (可选)
+    api 'com.download.library:Downloader:4.1.2'// (可选)
+
+    api 'se.emilsjolander:stickylistheaders:2.5.2'
+
+    api project(path: ':otherlib:takephoto_library')
+    api project(':otherlib:imagepicker')
+    api project(':otherlib:videoplayer')
+
+    //优量汇
+    api files('libs\\GDTSDK.union.4.90.960.aar')
+
+    //穿山甲
+    api files('libs\\open_ad_sdk.aar')
+
+    //oaid  sdk
+    api files('libs\\miit_mdid_1.0.9.aar')
+    api 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+
+    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50'
+    api 'org.jetbrains.kotlin:kotlin-reflect:1.3.50'*/
+}
