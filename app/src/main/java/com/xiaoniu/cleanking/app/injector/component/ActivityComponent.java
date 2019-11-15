@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameListActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneCoolingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
@@ -120,5 +121,7 @@ public interface ActivityComponent {
     void inject(GameListActivity activity);
 
     void inject(VirusKillActivity activity);
+
+    void inject(NetWorkActivity activity);
 }
 

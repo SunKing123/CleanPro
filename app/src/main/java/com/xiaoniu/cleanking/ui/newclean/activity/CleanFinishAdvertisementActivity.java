@@ -306,6 +306,16 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     mAdvertId = switchInfoList.getAdvertId();
                     mSecondAdvertId = switchInfoList.getSecondAdvertId();
                 }
+            } else if (getString(R.string.virus_kill).contains(mTitle)) { //病毒查杀
+                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+            } else if (getString(R.string.network_quicken).contains(mTitle)) { //网络加速
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
             } else { //立即清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();

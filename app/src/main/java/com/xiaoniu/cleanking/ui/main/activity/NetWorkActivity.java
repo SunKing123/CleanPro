@@ -1,10 +1,16 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
@@ -14,11 +20,13 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.presenter.VirusKillPresenter;
+import com.xiaoniu.cleanking.ui.main.presenter.NetWorkPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NetWorkSpeedUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
@@ -28,22 +36,27 @@ import butterknife.BindView;
 
 /**
  * @author XiLei
- * @date 2019/11/14.
- * description：病毒查杀
+ * @date 2019/11/15.
+ * description：网络加速
  */
-public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implements View.OnClickListener {
+public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements View.OnClickListener {
 
     @BindView(R.id.lottie)
     LottieAnimationView mLottieAnimationView;
+    @BindView(R.id.tv_num)
+    TextView mNumTv;
+    @BindView(R.id.tv_net_num)
+    TextView mNetNumTv;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
     private FileQueryUtils mFileQueryUtils;
+    private ValueAnimator mValueAnimator;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_virus_kill;
+        return R.layout.activity_network;
     }
 
     @Override
@@ -53,6 +66,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
     @Override
     protected void initView() {
+        Log.d("XiLei", "initView");
         StatusBarUtil.setTransparentForWindow(this);
         initLottieYinDao();
         mFileQueryUtils = new FileQueryUtils();
@@ -67,22 +81,45 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
     private void initLottieYinDao() {
         if (!mLottieAnimationView.isAnimating()) {
-            mLottieAnimationView.setAnimation("shadu.json");
-            mLottieAnimationView.setImageAssetsFolder("images_virus");
+            mLottieAnimationView.setAnimation("wangluo.json");
+            mLottieAnimationView.setImageAssetsFolder("images_network");
             mLottieAnimationView.playAnimation();
         }
+        Log.d("XiLei", "mLottieAnimationView.getDuration()=" + mLottieAnimationView.getDuration());
+        mValueAnimator = ValueAnimator.ofInt(1, 101);
+        mValueAnimator.setDuration(2000);
+        mValueAnimator.setInterpolator(new DecelerateInterpolator());
+        mValueAnimator.start();
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int currentValue = (int) valueAnimator.getAnimatedValue();
+                mNumTv.setText(String.valueOf(currentValue));
+            }
+        });
+
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                Log.d("XiLei", "mLottieAnimationView.getDuration()111=" + animation.getDuration());
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                Log.d("XiLei", "mLottieAnimationView.getDuration()222=" + animation.getDuration());
+                if (null != mHandler) {
+                    new NetWorkSpeedUtils(NetWorkActivity.this, mHandler).startShowNetSpeed();
+                }
                 mLottieAnimationView.cancelAnimation();
                 mLottieAnimationView.clearAnimation();
-                goFinishActivity();
-                finish();
+                mValueAnimator.cancel();
+                try {
+                    Thread.sleep(2000);
+                    goFinishActivity();
+                    finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -102,18 +139,19 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();
                 }
             }
         }
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.virus_kill), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.network_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.virus_kill));
+            bundle.putString("title", getString(R.string.network_quicken));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.virus_kill));
+            bundle.putString("title", getString(R.string.network_quicken));
+            bundle.putString("num", NumberUtils.mathRandom(25, 50));
             startActivity(NewCleanFinishActivity.class, bundle);
         }
     }
@@ -124,14 +162,22 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
         mRamScale = mFileQueryUtils.computeTotalSize(listInfo);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (null != mLottieAnimationView) {
-            mLottieAnimationView.cancelAnimation();
-            mLottieAnimationView.clearAnimation();
+    private boolean isShow;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 100:
+                    if (!isShow) {
+                        Log.d("XiLei", "msg.obj.toString()=" + msg.obj.toString());
+                        isShow = true;
+                        mNetNumTv.setText("现网速度： " + msg.obj.toString());
+                    }
+                    break;
+            }
+            super.handleMessage(msg);
         }
-    }
+    };
 
     @Override
     public void onClick(View v) {
@@ -143,6 +189,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+
            /* if (!mIsYinDaoFinish && !PreferenceUtil.getGameQuikcenStart()) {
                 StatisticsUtils.trackClick("system_return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
             } else if (mIsStartClean) {
@@ -152,6 +199,21 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             }*/
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (null != mHandler) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+        if (null != mLottieAnimationView) {
+            mLottieAnimationView.cancelAnimation();
+            mLottieAnimationView.clearAnimation();
+        }
+        if (null != mValueAnimator) {
+            mValueAnimator.cancel();
+        }
     }
 
     @Override

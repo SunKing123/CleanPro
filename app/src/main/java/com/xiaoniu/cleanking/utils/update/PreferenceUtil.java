@@ -957,6 +957,46 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存病毒查杀完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickVirusCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_VIRUS_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取病毒查杀完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickVirusCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_VIRUS_COUNT, 0);
+    }
+
+    /**
+     * 保存网络加速完成页点击返回键的次数
+     *
+     * @return
+     */
+    public static boolean saveCleanFinishClickNetCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.CLEAN_FINISH_CLICK_NET_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取网络加速完成页点击返回键的次数
+     */
+    public static int getCleanFinishClickNetCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.CLEAN_FINISH_CLICK_NET_COUNT, 0);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return

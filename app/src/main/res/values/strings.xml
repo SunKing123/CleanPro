@@ -153,8 +153,8 @@
     <string name="clean_game_hint">一键加速畅玩游戏</string>
     <string name="virus_kill">病毒查杀</string>
     <string name="network_quicken">网络加速</string>
-
-
+    <string name="virus_guard">已开启病毒防御保护</string>
+    <string name="already_quicken">已提速%s</string>
 
 
 </resources>

@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -170,9 +169,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //插屏广告相关 end
 
     private AnimationDrawable mAnimationDrawable;
-    FileQueryUtils fileQueryUtils ;
+    FileQueryUtils fileQueryUtils;
 
-    int processNum = 0 ;
+    int processNum = 0;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -543,6 +543,32 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
                 }
+            } else if (getString(R.string.virus_kill).contains(mTitle)) { //病毒查杀
+                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                }
+                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId2 = switchInfoList.getAdvertId();
+                }
+                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
+                }
+            } else if (getString(R.string.network_quicken).contains(mTitle)) { //网络加速
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                }
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mAdvertId2 = switchInfoList.getAdvertId();
+                }
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                    mSecondAdvertId2 = switchInfoList.getSecondAdvertId();
+                }
             } else { //建议清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     mAdvertId = switchInfoList.getAdvertId();
@@ -625,6 +651,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mAdvertScreenId = switchInfoList.getAdvertId();
                 mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.game_quicken).contains(mTitle) && PositionId.KEY_GAME.equals(switchInfoList.getConfigKey())) { //游戏加速
+                isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
+                mAdvertScreenId = switchInfoList.getAdvertId();
+                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+            } else if (getString(R.string.virus_kill).contains(mTitle) && PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey())) { //病毒查杀
+                isScreenSwitchOpen = switchInfoList.isOpen();
+                mScreenShowCount = switchInfoList.getShowRate();
+                mAdvertScreenId = switchInfoList.getAdvertId();
+                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+            } else if (getString(R.string.network_quicken).contains(mTitle) && PositionId.KEY_NET.equals(switchInfoList.getConfigKey())) { //网络加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
                 mAdvertScreenId = switchInfoList.getAdvertId();
@@ -839,6 +875,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvSize.setText(num);
                 mTvGb.setText("%");
                 mTvQl.setText("已提速");
+            } else if (getString(R.string.virus_kill).contains(mTitle)) {
+                mTvSize.setText(R.string.virus_guard);
+                mTvSize.setTextSize(20);
+            } else if (getString(R.string.network_quicken).contains(mTitle)) {
+                mTvSize.setText(getString(R.string.already_quicken, num)+ "%");
+                mTvSize.setTextSize(20);
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
@@ -1192,6 +1234,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
                     count = PreferenceUtil.getCleanFinishClickGameCount();
                     isClick = (PreferenceUtil.getCleanFinishClickGameCount() % mScreenShowCount == 0);
+                } else if (getString(R.string.virus_kill).contains(mTitle)) { //病毒查杀
+                    count = PreferenceUtil.getCleanFinishClickVirusCount();
+                    isClick = (PreferenceUtil.getCleanFinishClickVirusCount() % mScreenShowCount == 0);
+                } else if (getString(R.string.virus_kill).contains(mTitle)) { //网络加速
+                    count = PreferenceUtil.getCleanFinishClickNetCount();
+                    isClick = (PreferenceUtil.getCleanFinishClickNetCount() % mScreenShowCount == 0);
                 } else { //建议清理
                     count = PreferenceUtil.getCleanFinishClickCount();
                     isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
@@ -1218,6 +1266,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 PreferenceUtil.saveCleanFinishClickPhoneCount(PreferenceUtil.getCleanFinishClickPhoneCount() + 1);
             } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
                 PreferenceUtil.saveCleanFinishClickGameCount(PreferenceUtil.getCleanFinishClickGameCount() + 1);
+            } else if (getString(R.string.virus_kill).contains(mTitle)) { //病毒查杀
+                PreferenceUtil.saveCleanFinishClickVirusCount(PreferenceUtil.getCleanFinishClickVirusCount() + 1);
+            } else if (getString(R.string.network_quicken).contains(mTitle)) { //网络加速
+                PreferenceUtil.saveCleanFinishClickNetCount(PreferenceUtil.getCleanFinishClickNetCount() + 1);
             } else { //建议清理
                 PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
             }
