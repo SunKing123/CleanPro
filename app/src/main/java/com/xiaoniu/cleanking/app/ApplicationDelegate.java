@@ -82,8 +82,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
 
-
-
     private static AppComponent mAppComponent;
 
     private void initInjector(Application application) {

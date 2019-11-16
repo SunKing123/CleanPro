@@ -124,13 +124,13 @@ public class MyPatchListener{
         @Override
         public void onReceive(Context context, Intent intent) {
             action = intent.getAction();
-            if (Intent.ACTION_SCREEN_ON.equals(action)) { // 开屏
+          /*  if (Intent.ACTION_SCREEN_ON.equals(action)) { // 开屏
                 mScreenStateListener.onScreenOn();
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) { // 锁屏
                 mScreenStateListener.onScreenOff();
             } else if (Intent.ACTION_USER_PRESENT.equals(action)) { // 解锁
                 mScreenStateListener.onUserPresent();
-            }
+            }*/
         }
     }
 
@@ -179,7 +179,7 @@ public class MyPatchListener{
      */
     public void registerListener() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_SCREEN_ON);
+//        filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_USER_PRESENT);
         mContext.registerReceiver(mScreenReceiver, filter);

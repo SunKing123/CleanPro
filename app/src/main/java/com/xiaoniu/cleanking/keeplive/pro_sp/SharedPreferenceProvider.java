@@ -25,10 +25,10 @@ public class SharedPreferenceProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        processerMap.put(PreferenceUtil.METHOD_QUERY_VALUE, methodQueryValues);
-        processerMap.put(PreferenceUtil.METHOD_CONTAIN_KEY, methodContainKey);
-        processerMap.put(PreferenceUtil.METHOD_EIDIT_VALUE, methodEditor);
-        processerMap.put(PreferenceUtil.METHOD_QUERY_PID, methodQueryPid);
+        processerMap.put(PreferenceKeepLiveUtil.METHOD_QUERY_VALUE, methodQueryValues);
+        processerMap.put(PreferenceKeepLiveUtil.METHOD_CONTAIN_KEY, methodContainKey);
+        processerMap.put(PreferenceKeepLiveUtil.METHOD_EIDIT_VALUE, methodEditor);
+        processerMap.put(PreferenceKeepLiveUtil.METHOD_QUERY_PID, methodQueryPid);
         return true;
     }
 
@@ -76,7 +76,7 @@ public class SharedPreferenceProvider extends ContentProvider {
         @Override
         public Bundle process(@Nullable String arg, @Nullable Bundle extras) {
             Bundle bundle = new Bundle();
-            bundle.putInt(PreferenceUtil.KEY_VALUES, Process.myPid());
+            bundle.putInt(PreferenceKeepLiveUtil.KEY_VALUES, Process.myPid());
             return bundle;
         }
     };
@@ -144,7 +144,7 @@ public class SharedPreferenceProvider extends ContentProvider {
             }
             String key = extras.getString(OpEntry.KEY_KEY);
             SharedPreferences preferences = ctx.getSharedPreferences(arg, Context.MODE_PRIVATE);
-            extras.putBoolean(PreferenceUtil.KEY_VALUES, preferences.contains(key));
+            extras.putBoolean(PreferenceKeepLiveUtil.KEY_VALUES, preferences.contains(key));
             return extras;
         }
     };
@@ -160,7 +160,7 @@ public class SharedPreferenceProvider extends ContentProvider {
                 throw new IllegalArgumentException("methodQueryValues, ctx is null!");
             }
             SharedPreferences preferences = ctx.getSharedPreferences(arg, Context.MODE_PRIVATE);
-            ArrayList<Bundle> ops = extras.getParcelableArrayList(PreferenceUtil.KEY_VALUES);
+            ArrayList<Bundle> ops = extras.getParcelableArrayList(PreferenceKeepLiveUtil.KEY_VALUES);
             if (ops == null) {
                 ops = new ArrayList<>();
             }
@@ -193,7 +193,7 @@ public class SharedPreferenceProvider extends ContentProvider {
             } else if (applyOrCommit == OpEntry.OP_TYPE_COMMIT) {
                 boolean res = editor.commit();
                 Bundle bundle = new Bundle();
-                bundle.putBoolean(PreferenceUtil.KEY_VALUES, res);
+                bundle.putBoolean(PreferenceKeepLiveUtil.KEY_VALUES, res);
                 return bundle;
             } else {
                 throw new IllegalArgumentException("unknown applyOrCommit:" + applyOrCommit);

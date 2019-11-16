@@ -144,9 +144,10 @@ dependencies {
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 
     implementation project(':baselib:common')
-//    implementation project(':otherlib:live_library')
     implementation project(':otherlib:asmhelp')
     implementation project(':otherlib:xrecyclerview')
+//    implementation project(':otherlib:LockScreenFlowAd')
+
     //推送
     implementation files('libs\\push-core.aar')
     implementation files('libs\\push-jpush.aar')
