@@ -53,6 +53,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     private int mRamScale; //使用内存占总RAM的比例
     private FileQueryUtils mFileQueryUtils;
     private ValueAnimator mValueAnimator;
+    private boolean mIsOpen;
 
     @Override
     protected int getLayoutId() {
@@ -77,6 +78,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             mPowerSize = mFileQueryUtils.getRunningProcess().size();
         }
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPresenter.getSwitchInfoList();
     }
 
     private void initLottieYinDao() {
@@ -199,6 +201,31 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             }*/
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 拉取广告开关成功
+     *
+     * @return
+     */
+    public void getSwitchInfoListSuccess(SwitchInfoList list) {
+        if (null == list || null == list.getData() || list.getData().size() <= 0)
+            return;
+        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+            if (PositionId.KEY_NET_SCREEN.equals(switchInfoList.getConfigKey())) {
+                mIsOpen = switchInfoList.isOpen();
+            }
+        }
+    }
+
+    /**
+     * 拉取广告开关失败
+     *
+     * @return
+     */
+    public void getSwitchInfoListFail() {
+//        ToastUtils.showShort(getString(R.string.net_error));
+
     }
 
     @Override

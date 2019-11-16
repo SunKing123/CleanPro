@@ -53,6 +53,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     private FileQueryUtils mFileQueryUtils;
     private ImageView[] mIvs;
     private ObjectAnimator mObjectAnimator;
+    private boolean mIsOpen;
 
     @Override
     protected int getLayoutId() {
@@ -76,10 +77,14 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             mPowerSize = mFileQueryUtils.getRunningProcess().size();
         }
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPresenter.getSwitchInfoList();
     }
 
     private void initLottie() {
         showColorChange(2);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mLottieAnimationView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
         if (!mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.setAnimation("shadu.json");
             mLottieAnimationView.setImageAssetsFolder("images_virus");
@@ -180,6 +185,30 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                 });
             }
         }
+    }
+
+    /**
+     * 拉取广告开关成功
+     *
+     * @return
+     */
+    public void getSwitchInfoListSuccess(SwitchInfoList list) {
+        if (null == list || null == list.getData() || list.getData().size() <= 0)
+            return;
+        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+            if (PositionId.KEY_VIRUS_SCREEN.equals(switchInfoList.getConfigKey())) {
+                mIsOpen = switchInfoList.isOpen();
+            }
+        }
+    }
+
+    /**
+     * 拉取广告开关失败
+     *
+     * @return
+     */
+    public void getSwitchInfoListFail() {
+//        ToastUtils.showShort(getString(R.string.net_error));
 
     }
 
