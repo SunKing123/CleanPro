@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.MainThread;
@@ -30,8 +32,10 @@ import com.bytedance.sdk.openadsdk.TTSplashAd;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
+import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -41,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.WeakHandler;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -58,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -67,7 +73,7 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 在调用SDK之前，如果您的App的targetSDKVersion >= 23，那么建议动态申请相关权限。
  */
-public class SplashADActivity extends BaseActivity<SplashPresenter> implements SplashADListener, WeakHandler.IHandler {
+public class SplashADActivity extends BaseActivity<SplashPresenter> implements SplashADListener, WeakHandler.IHandler, View.OnClickListener {
     private static final String SKIP_TEXT = "跳过 %d";
     public boolean canJump = false;
     @Inject
@@ -76,6 +82,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private ViewGroup container;
     private RoundProgressBar skipView;
     private boolean needStartDemoList = true;
+
+    @BindView(R.id.v_start)
+    View mStartView;
+    @BindView(R.id.v_content)
+    View mContentView;
+    @BindView(R.id.tv_delete)
+    TextView mBtn;
+    @BindView(R.id.tv_qx)
+    TextView mAgreement;
 
     /**
      * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
@@ -142,14 +157,17 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
-            PreferenceUtil.saveFirstOpenApp();
-//            jumpActivity();
-            startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
+            mStartView.setVisibility(View.VISIBLE);
+            mContentView.setVisibility(View.GONE);
         } else if (auditSwitch.getData().equals("0")) {
+            mStartView.setVisibility(View.GONE);
+            mContentView.setVisibility(View.VISIBLE);
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
+            mStartView.setVisibility(View.GONE);
+            mContentView.setVisibility(View.VISIBLE);
             initChuanShanJia();
             mPresenter.getSwitchInfoList();
         }
@@ -171,12 +189,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     }
 
     public void jumpActivity() {
-       /* final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
-        if (isFirst) {
-            startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
-        } else {*/
-            startActivity(new Intent(SplashADActivity.this, MainActivity.class));
-//        }
+        startActivity(new Intent(SplashADActivity.this, MainActivity.class));
         finish();
     }
 
@@ -414,6 +427,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
+        mBtn.setOnClickListener(this);
+        mAgreement.setOnClickListener(this);
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -709,5 +724,28 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
             public void onAnimationRepeat(Animator animation) {
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_delete:
+                PreferenceUtil.saveFirstOpenApp();
+                startActivity(MainActivity.class);
+                finish();
+                break;
+            case R.id.tv_qx:
+                jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree1.html");
+                StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
+                break;
+        }
+    }
+
+    public void jumpXieyiActivity(String url) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.URL, url);
+        bundle.putString(Constant.Title, "服务协议");
+        bundle.putBoolean(Constant.NoTitle, false);
+        startActivity(UserLoadH5Activity.class, bundle);
     }
 }

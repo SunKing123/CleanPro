@@ -67,7 +67,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
     @Override
     protected void initView() {
-        Log.d("XiLei", "initView");
         StatusBarUtil.setTransparentForWindow(this);
         initLottieYinDao();
         mFileQueryUtils = new FileQueryUtils();

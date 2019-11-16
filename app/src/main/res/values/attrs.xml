@@ -98,8 +98,4 @@
     <declare-styleable name="ArcImageView">
         <attr name="arcHeight" />
     </declare-styleable>
-
-
-
-
 </resources>
