@@ -52,7 +52,6 @@ public class CleanApplicationLike extends DefaultApplicationLike {
         //you must install multiDex whatever tinker is installed!
         sInstance = this;
         ContextUtils.init(base);
-        MultiDex.install(base);
         ApplicationContext.application = getApplication();
         ApplicationContext.context = getApplication();
         TinkerManager.setTinkerApplicationLike(this);

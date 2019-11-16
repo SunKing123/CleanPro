@@ -4,7 +4,7 @@
     package="com.xiaoniu.cleanking">
 
     <application
-        android:name=".app.AppApplication"
+        android:name="com.xiaoniu.cleanking.app.AppApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/applogo"

@@ -1,10 +1,15 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
@@ -35,11 +40,19 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
     @BindView(R.id.lottie)
     LottieAnimationView mLottieAnimationView;
+    @BindView(R.id.iv_scan_bg03)
+    ImageView ivScanBg03;
+    @BindView(R.id.iv_scan_bg02)
+    ImageView ivScanBg02;
+    @BindView(R.id.iv_scan_bg01)
+    ImageView ivScanBg01;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
     private FileQueryUtils mFileQueryUtils;
+    private ImageView[] mIvs;
+    private ObjectAnimator mObjectAnimator;
 
     @Override
     protected int getLayoutId() {
@@ -54,7 +67,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
-        initLottieYinDao();
+        initLottie();
         mFileQueryUtils = new FileQueryUtils();
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
@@ -65,7 +78,8 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
     }
 
-    private void initLottieYinDao() {
+    private void initLottie() {
+        showColorChange(2);
         if (!mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.setAnimation("shadu.json");
             mLottieAnimationView.setImageAssetsFolder("images_virus");
@@ -124,12 +138,60 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
         mRamScale = mFileQueryUtils.computeTotalSize(listInfo);
     }
 
+    public void showColorChange(int index) {
+        mIvs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
+        if (mIvs.length == 3 && index <= 2 && index > 0) {
+            Drawable drawable = mIvs[index].getBackground();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                mObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
+                mObjectAnimator.setTarget(drawable);
+                mObjectAnimator.setDuration(2000);
+                if (!mObjectAnimator.isRunning()) {
+                    mObjectAnimator.start();
+                }
+                mObjectAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (index == 1) {
+                            Log.v("onAnimationEnd", "onAnimationEnd ");
+//                            mView.setColorChange(true);
+                            if (mObjectAnimator != null)
+                                mObjectAnimator.cancel();
+                        } else {
+                            showColorChange((index - 1));
+                        }
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+            }
+        }
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (null != mLottieAnimationView) {
+        if (null != mLottieAnimationView && mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.cancelAnimation();
             mLottieAnimationView.clearAnimation();
+        }
+        if (null != mObjectAnimator && mObjectAnimator.isRunning()) {
+            mObjectAnimator.cancel();
         }
     }
 

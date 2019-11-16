@@ -1,5 +1,9 @@
 package com.xiaoniu.cleanking.app;
 
+import android.content.Context;
+
+import androidx.multidex.MultiDex;
+
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
@@ -52,5 +56,12 @@ public class AppApplication extends BaseApplication {
      */
     public static AppApplication getInstance() {
         return sInstance;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //解决4.4以下手机启动失败
+        MultiDex.install(base);
     }
 }

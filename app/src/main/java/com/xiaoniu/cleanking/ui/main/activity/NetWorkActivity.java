@@ -86,8 +86,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             mLottieAnimationView.playAnimation();
         }
         Log.d("XiLei", "mLottieAnimationView.getDuration()=" + mLottieAnimationView.getDuration());
-        mValueAnimator = ValueAnimator.ofInt(1, 101);
-        mValueAnimator.setDuration(2000);
+        mValueAnimator = ValueAnimator.ofInt(1, 100);
+        mValueAnimator.setDuration(1850);
         mValueAnimator.setInterpolator(new DecelerateInterpolator());
         mValueAnimator.start();
         mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -114,7 +114,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 mLottieAnimationView.clearAnimation();
                 mValueAnimator.cancel();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     goFinishActivity();
                     finish();
                 } catch (InterruptedException e) {
@@ -207,7 +207,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);
         }
-        if (null != mLottieAnimationView) {
+        if (null != mLottieAnimationView && mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.cancelAnimation();
             mLottieAnimationView.clearAnimation();
         }
