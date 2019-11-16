@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.app.injector.module;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -91,6 +93,7 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("uid", "");
         mapHeader.put("versionCode", AppUtils.getVersionCode(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         mapHeader.put("appName", "gj_clean");
+        mapHeader.put("bid", (int) (99 * Math.random()));
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
         if (original.body() instanceof FormBody) {
 
