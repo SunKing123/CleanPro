@@ -293,8 +293,13 @@
             android:name=".ui.main.activity.GameListActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.main.activity.VirusKillActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.NetWorkActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
 

@@ -48,34 +48,35 @@
     <color name="color_7A7B7C">#7A7B7C</color>
     <color name="color_F76580">#F76580</color>
     <color name="color_BDC5CE">#BDC5CE</color>
-    <color name="color_F85054">#F85054 </color>
+    <color name="color_F85054">#F85054</color>
     <color name="color_9B9B9B">#9B9B9B</color>
     <color name="color_FBCD09">#5180EF</color>
     <color name="color_FDEB9D">#FDEB9D</color>
     <color name="color_00DA80">#00DA80</color>
     <color name="color_F3F4F6">#F3F4F6</color>
-    <color name="color_FF6D44">#FF6D44 </color>
-    <color name="color_FFB900">#FFB900 </color>
-    <color name="color_889099">#889099 </color>
-    <color name="color_F74364">#F74364 </color>
-    <color name="color_913BFA">#913BFA </color>
-    <color name="color_00DAE2">#00DAE2 </color>
-    <color name="color_5180EF">#5180EF </color>
-    <color name="color_808080">#808080 </color>
-    <color name="color_5A6572">#5A6572 </color>
-    <color name="color_5A6572_50">#5A65727F </color>
-    <color name="color_89E00F">#89E00F </color>
-    <color name="color_30E900">#30E900 </color>
-    <color name="color_5DDF5D">#5DDF5D </color>
-    <color name="color_E6E6E6">#E6E6E6 </color>
-    <color name="color_FF522F">#FF522F </color>
-    <color name="color_A05A14">#A05A14 </color>
-    <color name="color_794D14">#794D14 </color>
-    <color name="color_CC8C1D">#CC8C1D </color>
-    <color name="color_FFE495">#FFE495 </color>
+    <color name="color_FF6D44">#FF6D44</color>
+    <color name="color_FFB900">#FFB900</color>
+    <color name="color_889099">#889099</color>
+    <color name="color_F74364">#F74364</color>
+    <color name="color_913BFA">#913BFA</color>
+    <color name="color_00DAE2">#00DAE2</color>
+    <color name="color_5180EF">#5180EF</color>
+    <color name="color_808080">#808080</color>
+    <color name="color_5A6572">#5A6572</color>
+    <color name="color_5A6572_50">#5A65727F</color>
+    <color name="color_89E00F">#89E00F</color>
+    <color name="color_30E900">#30E900</color>
+    <color name="color_5DDF5D">#5DDF5D</color>
+    <color name="color_E6E6E6">#E6E6E6</color>
+    <color name="color_FF522F">#FF522F</color>
+    <color name="color_A05A14">#A05A14</color>
+    <color name="color_794D14">#794D14</color>
+    <color name="color_CC8C1D">#CC8C1D</color>
+    <color name="color_FFE495">#FFE495</color>
     <color name="round_corner_progress_bar_background_default">#5f5f5f</color>
     <color name="round_corner_progress_bar_progress_default">#7f7f7f</color>
-    <color name="round_corner_progress_bar_secondary_progress_default">@android:color/transparent</color>
+    <color name="round_corner_progress_bar_secondary_progress_default">@android:color/transparent
+    </color>
     <color name="color_background">#F7F8FA</color>
     <color name="color_white">#B3FFFFFF</color>
     <color name="color_333333">#333333</color>
@@ -116,5 +117,6 @@
     <color name="color_f2f2f2">#F2F2F2</color>
 
 
-
+    　
+    <color name="translucent">#01000000</color>
 </resources>

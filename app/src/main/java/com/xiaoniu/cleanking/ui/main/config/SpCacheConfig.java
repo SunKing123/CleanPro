@@ -83,6 +83,8 @@ public class SpCacheConfig {
     public static final  String CLEAN_FINISH_CLICK_QQ_COUNT = "CleanFinishClickQQCount";
     public static final  String CLEAN_FINISH_CLICK_PHONE_COUNT = "CleanFinishClickPhoneCount";
     public static final  String CLEAN_FINISH_CLICK_GAME_COUNT = "CleanFinishClickGameCount";
+    public static final  String CLEAN_FINISH_CLICK_VIRUS_COUNT = "CleanFinishClickViursCount";
+    public static final  String CLEAN_FINISH_CLICK_NET_COUNT = "CleanFinishClickNetCount";
     public static final  String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
     public static final  String IS_FIRST_HOME_RECOMMEND = "is_first_home_recommend";
     public static final  String IS_GAME_QUIKCEN_START = "is_game_quikcen_start";

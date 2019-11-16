@@ -13,7 +13,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
@@ -45,10 +43,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -500,5 +496,10 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //取消注册接收器以获取电量信息
+        unregisterReceiver(broadcastReceiver);
+    }
 }
