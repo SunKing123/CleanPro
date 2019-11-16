@@ -33,6 +33,8 @@ import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
+import androidx.annotation.NonNull;
+
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
@@ -63,6 +65,7 @@ public final class LocalService extends Service {
         if (handler == null) {
             handler = new Handler();
         }
+//        registerLockerReceiver();
     }
 
     @Override
@@ -111,8 +114,6 @@ public final class LocalService extends Service {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
-
-
 
 
         //----判断是否为充电状态---结束-------------------------------
@@ -170,9 +171,11 @@ public final class LocalService extends Service {
             if (intent.getAction().equals("_ACTION_SCREEN_OFF")) {
                 isPause = false;
                 play();
+                startActivity(context);
             } else if (intent.getAction().equals("_ACTION_SCREEN_ON")) {
                 isPause = true;
                 pause();
+                startActivity(context);
             }
         }
     }
@@ -256,7 +259,6 @@ public final class LocalService extends Service {
         }
         isCharged = usb||ac||wireless;
 
-
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long spacelong = SCAN_SPACE_LONG * 15 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + spacelong;
@@ -280,7 +282,6 @@ public final class LocalService extends Service {
         unbindService(connection);
         unregisterReceiver(mOnepxReceiver);
         unregisterReceiver(screenStateReceiver);
-
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
         }
@@ -307,6 +308,27 @@ public final class LocalService extends Service {
                 Log.d("JOB-->", TAG + "显示通知栏");
             }
         }
+    }
+
+
+    public void startActivity(Context context) {
+        try {
+            Intent screenIntent = getIntent(context);
+            context.startActivity(screenIntent);
+        } catch (Exception e) {
+            Log.e("LockerService", "start lock activity error:" + e.getMessage());
+        }
+    }
+
+    @NonNull
+    private Intent getIntent(Context context) {
+        Intent screenIntent = new Intent();
+        screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.LockActivity");
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        return screenIntent;
     }
 
 

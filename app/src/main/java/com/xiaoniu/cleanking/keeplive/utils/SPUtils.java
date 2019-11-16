@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.keeplive.pro_sp.PreferenceUtil;
+import com.xiaoniu.cleanking.keeplive.pro_sp.PreferenceKeepLiveUtil;
 
 @SuppressLint("ApplySharedPref")
 public final class SPUtils {
@@ -95,7 +95,7 @@ public final class SPUtils {
 
     public static void init(Context context) {
         if (mPreferences == null)
-            mPreferences = PreferenceUtil.getSharedPreference(context, "DEV_YKUN");
+            mPreferences = PreferenceKeepLiveUtil.getSharedPreference(context, "DEV_YKUN");
     }
 
     public static String getS(String key) {

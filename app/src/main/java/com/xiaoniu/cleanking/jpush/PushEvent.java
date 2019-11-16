@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.jpush;
 /**
  * 接收到消息事件<p>
  *
- * @author zixuefei
  * @since 2019/5/15 22:14
  */
 public class PushEvent {

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -15,6 +17,7 @@ import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.util.ArrayList;
@@ -24,6 +27,107 @@ import java.util.Map;
 
 //TODO 待优化
 public class PreferenceUtil {
+
+    public static final String SHAREPREFERENCE_FILENAME = BuildConfig.APPLICATION_ID + "_sp_file";
+
+    private SharedPreferences sp;
+
+    private PreferenceUtil() {
+        sp = ContextUtils.getApplication().getSharedPreferences
+                (SHAREPREFERENCE_FILENAME, Context.MODE_PRIVATE);
+    }
+
+
+    private static class PreferenceSingle {
+        private static final PreferenceUtil instance = new PreferenceUtil();
+    }
+
+    public static PreferenceUtil getInstants() {
+        return PreferenceSingle.instance;
+    }
+
+
+    // 根据键名提取键值
+    public String get(String key) {
+
+        String record = null;
+        try {
+            record = sp.getString(key, "");
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+        } finally {
+
+        }
+        return record;
+    }
+
+    // 根据键名提取键值
+    public int getInt(String key) {
+        int record = 0;
+        try {
+            record = sp.getInt(key, 0);
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+        } finally {
+
+        }
+        return record;
+    }
+
+    // 存储键对
+    public void save(String key, String value) {
+        try {
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putString(key, value);
+            edit.commit();
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+        }
+    }
+
+    // 存储键对
+    public boolean saveForResult(String key, String value) {
+        try {
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putString(key, value);
+            return edit.commit();
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+            return false;
+        }
+    }
+
+    public void saveInt(String key, int value) {
+        try {
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putInt(key, value);
+            edit.commit();
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+        }
+    }
+
+    // 在原有基础上增加值
+    public void saveAndApply(String key, String value) {
+        try {
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putString(key, sp.getString(key, "") + value);
+            edit.commit();
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+        }
+    }
+
+    // 删除存储值
+    public void delete(String key) {
+        try {
+            SharedPreferences.Editor edit = sp.edit();
+            edit.remove(key);
+            edit.commit();
+        } catch (Exception ex) {
+            Log.e("", ex.getMessage());
+        }
+    }
 
     /**
      * 获取WebView URL
@@ -1106,6 +1210,7 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
+
 
 
 }

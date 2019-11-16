@@ -88,11 +88,11 @@ public class SharedPreferenceProxy implements SharedPreferences {
         Bundle input = new Bundle();
         input.putString(OpEntry.KEY_KEY, key);
         try {
-            Bundle res = ctx.getContentResolver().call(PreferenceUtil.URI
-                    , PreferenceUtil.METHOD_CONTAIN_KEY
+            Bundle res = ctx.getContentResolver().call(PreferenceKeepLiveUtil.URI
+                    , PreferenceKeepLiveUtil.METHOD_CONTAIN_KEY
                     , preferName
                     , input);
-            return res.getBoolean(PreferenceUtil.KEY_VALUES);
+            return res.getBoolean(PreferenceKeepLiveUtil.KEY_VALUES);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -116,8 +116,8 @@ public class SharedPreferenceProxy implements SharedPreferences {
 
     private OpEntry getResult(@NonNull OpEntry input) {
         try {
-            Bundle res = ctx.getContentResolver().call(PreferenceUtil.URI
-                    , PreferenceUtil.METHOD_QUERY_VALUE
+            Bundle res = ctx.getContentResolver().call(PreferenceKeepLiveUtil.URI
+                    , PreferenceKeepLiveUtil.METHOD_QUERY_VALUE
                     , preferName
                     , input.getBundle());
             return new OpEntry(res);
@@ -180,27 +180,27 @@ public class SharedPreferenceProxy implements SharedPreferences {
         @Override
         public boolean commit() {
             Bundle input = new Bundle();
-            input.putParcelableArrayList(PreferenceUtil.KEY_VALUES, convertBundleList());
+            input.putParcelableArrayList(PreferenceKeepLiveUtil.KEY_VALUES, convertBundleList());
             input.putInt(OpEntry.KEY_OP_TYPE, OpEntry.OP_TYPE_COMMIT);
             Bundle res = null;
             try {
-                res = ctx.getContentResolver().call(PreferenceUtil.URI, PreferenceUtil.METHOD_EIDIT_VALUE, preferName, input);
+                res = ctx.getContentResolver().call(PreferenceKeepLiveUtil.URI, PreferenceKeepLiveUtil.METHOD_EIDIT_VALUE, preferName, input);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (res == null) {
                 return false;
             }
-            return res.getBoolean(PreferenceUtil.KEY_VALUES, false);
+            return res.getBoolean(PreferenceKeepLiveUtil.KEY_VALUES, false);
         }
 
         @Override
         public void apply() {
             Bundle intput = new Bundle();
-            intput.putParcelableArrayList(PreferenceUtil.KEY_VALUES, convertBundleList());
+            intput.putParcelableArrayList(PreferenceKeepLiveUtil.KEY_VALUES, convertBundleList());
             intput.putInt(OpEntry.KEY_OP_TYPE, OpEntry.OP_TYPE_APPLY);
             try {
-                ctx.getContentResolver().call(PreferenceUtil.URI, PreferenceUtil.METHOD_EIDIT_VALUE, preferName, intput);
+                ctx.getContentResolver().call(PreferenceKeepLiveUtil.URI, PreferenceKeepLiveUtil.METHOD_EIDIT_VALUE, preferName, intput);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -228,10 +228,10 @@ public class SharedPreferenceProxy implements SharedPreferences {
     public static SharedPreferences getSharedPreferences(@NonNull Context ctx, String preferName) {
         //First check if the same process
         if (processFlag.get() == 0) {
-            Bundle bundle = ctx.getContentResolver().call(PreferenceUtil.URI, PreferenceUtil.METHOD_QUERY_PID, "", null);
+            Bundle bundle = ctx.getContentResolver().call(PreferenceKeepLiveUtil.URI, PreferenceKeepLiveUtil.METHOD_QUERY_PID, "", null);
             int pid = 0;
             if (bundle != null) {
-                pid = bundle.getInt(PreferenceUtil.KEY_VALUES);
+                pid = bundle.getInt(PreferenceKeepLiveUtil.KEY_VALUES);
             }
             //Can not get the pid, something wrong!
             if (pid == 0) {
