@@ -35,7 +35,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 //    private TouchToUnLockView mUnlockView;
     private ImageView lockDial;
     private ImageView lockCamera;
-    private ImageView lockSetting;
     private LockExitDialog lockExitDialog;
     private ImageView batteryIcon;
     private TextView mLockTime, mLockDate;
@@ -174,11 +173,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.lock_camera:
                 openCamera();
                 break;
-            case R.id.lock_settings:
+   /*         case R.id.lock_settings:
                 if (lockExitDialog != null && !lockExitDialog.isShowing() && !isFinishing()) {
                     lockExitDialog.show();
                 }
-                break;
+                break;*/
         }
     }
 

@@ -9,8 +9,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-
 import androidx.appcompat.app.AlertDialog;
 
 /**

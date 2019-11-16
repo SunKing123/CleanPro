@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,8 +11,13 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -29,16 +36,19 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
+import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.io.File;
@@ -56,12 +66,13 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by tie on 2017/5/15.
  */
-public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements UpdateUtil.PatchCallback {
+public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements UpdateUtil.PatchCallback , AMapLocationListener {
 
     private final RxAppCompatActivity mActivity;
 
@@ -69,11 +80,14 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     @Inject
     NoClearSPHelper mPreferencesHelper;
     private MyPatchListener mMyPatchListener;
+    private AMapLocationClient mLocationClient = null;
+    private AMapLocationClientOption mLocationOption = null;
 
     @Inject
     public MainPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
     }
+
 
     /**
      * 版本更新
@@ -109,6 +123,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     private boolean isInstalled;
     private String patchVersion;
 
+    //热更新相关代码
     public void queryPatch() {
         isLoaded = Tinker.with(mActivity).isTinkerLoaded();
         isInstalled = Tinker.with(mActivity).isTinkerInstalled();
@@ -493,4 +508,76 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
+    //获取定位权限
+    @SuppressLint("CheckResult")
+    public void requestLocationPermission() {
+        if (mView == null) {
+            return;
+        }
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (null == mView ) return;
+        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始
+                    if (mView == null)
+                        return;
+                    requestLocation();
+                } else {
+                    if (mView == null)
+                        return;
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        //永久拒绝权限
+                    } else {
+                        //拒绝权限
+                    }
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 执行定位操作
+     */
+    public void requestLocation() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(ContextUtils.getApplication());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(MainPresenter.this);
+        mLocationOption = new AMapLocationClientOption();
+
+        AMapLocationClientOption option = new AMapLocationClientOption();
+
+        if (null != mLocationClient) {
+            mLocationClient.setLocationOption(option);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
+
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+
+        //获取一次定位结果：
+        //该方法默认为false。
+        mLocationOption.setOnceLocation(true);
+
+        //获取最近3s内精度最高的一次定位结果：
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        mLocationOption.setOnceLocationLatest(true);
+
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+
+    }
 }
