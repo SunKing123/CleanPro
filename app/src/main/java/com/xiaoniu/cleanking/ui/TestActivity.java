@@ -66,7 +66,7 @@ public class TestActivity extends BaseActivity {
             public void onClick(View v) {
                 ArrayList<GameSelectEntity> selectSaveList = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {
-                    selectSaveList.add(new GameSelectEntity(i, "----zzzz----"+i,""));
+                    selectSaveList.add(new GameSelectEntity(i, "----zzzz----"+i));
                 }
                 ApplicationDelegate.getAppDatabase().gameSelectDao().insertAll(selectSaveList);
             }

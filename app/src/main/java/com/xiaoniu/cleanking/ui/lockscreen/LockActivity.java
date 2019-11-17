@@ -17,14 +17,13 @@ import android.widget.TextView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.ViewUtils;
+import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.ToastUtils;
-
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -32,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
  *
  */
 public class LockActivity extends AppCompatActivity implements View.OnClickListener {
-//    private TouchToUnLockView mUnlockView;
+    private TouchToUnLockView mUnlockView;
     private ImageView lockDial;
     private ImageView lockCamera;
     private LockExitDialog lockExitDialog;
@@ -53,21 +52,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-//        registerLockerReceiver();
-      /*  rxPermissions = new RxPermissions(this);
-        lockExitDialog = new LockExitDialog(this);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
-        lockDial = ViewUtils.get(this, R.id.lock_dial);
-        lockCamera = ViewUtils.get(this, R.id.lock_camera);
-        lockSetting = ViewUtils.get(this, R.id.lock_settings);
-        batteryIcon = ViewUtils.get(this, R.id.lock_battery_icon);
-        mLockTime = ViewUtils.get(this, R.id.lock_time_txt);
-        mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
-//        videoContainer = ViewUtils.get(this, R.id.lock_video_container);
-
-        lockCamera.setOnClickListener(this);
-        lockDial.setOnClickListener(this);
-        lockSetting.setOnClickListener(this);
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
             public void onTouchLockArea() {
@@ -87,6 +72,21 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             public void onSlideAbort() {
             }
         });
+//        registerLockerReceiver();
+      /*  rxPermissions = new RxPermissions(this);
+        lockExitDialog = new LockExitDialog(this);
+        lockDial = ViewUtils.get(this, R.id.lock_dial);
+        lockCamera = ViewUtils.get(this, R.id.lock_camera);
+        lockSetting = ViewUtils.get(this, R.id.lock_settings);
+        batteryIcon = ViewUtils.get(this, R.id.lock_battery_icon);
+        mLockTime = ViewUtils.get(this, R.id.lock_time_txt);
+        mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
+//        videoContainer = ViewUtils.get(this, R.id.lock_video_container);
+
+        lockCamera.setOnClickListener(this);
+        lockDial.setOnClickListener(this);
+        lockSetting.setOnClickListener(this);
+
         batteryIcon.setImageResource(PowerUtil.isCharging(null) ? R.drawable.lock_battery_charging : R.drawable.lock_battery_normal);*/
 
       /*  VideoFlowListFragment videoFlowListFragment = new VideoFlowListFragment();
@@ -136,14 +136,15 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
- /*       mUnlockView.startAnim();
+        mUnlockView.startAnim();
+ /*
         updateTimeUI();*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        mUnlockView.stopAnim();
+        mUnlockView.stopAnim();
 
     }
 
@@ -167,13 +168,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lock_dial:
+         /*     case R.id.lock_dial:
                 emergencyDial();
                 break;
             case R.id.lock_camera:
                 openCamera();
                 break;
-   /*         case R.id.lock_settings:
+          case R.id.lock_settings:
                 if (lockExitDialog != null && !lockExitDialog.isShowing() && !isFinishing()) {
                     lockExitDialog.show();
                 }

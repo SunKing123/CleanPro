@@ -15,4 +15,7 @@ public class KeepAliveRuning implements IKeepAliveRuning {
     public void onStop() {
         Log.e("runing?KeepAliveRuning", "false");
     }
+
+
+
 }

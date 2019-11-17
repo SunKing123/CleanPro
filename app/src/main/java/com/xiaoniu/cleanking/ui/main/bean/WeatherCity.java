@@ -1,3 +1,4 @@
+/*
 package com.xiaoniu.cleanking.ui.main.bean;
 
 import android.os.Parcel;
@@ -14,10 +15,12 @@ import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
+*/
 /**
  * @author xiangzhenbiao
  * @since 2019/4/11 21:34
- */
+ *//*
+
 @Entity(nameInDb = "XNWeatherCityModel", createInDb = false)
 public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
 
@@ -361,3 +364,4 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
         return 0;
     }
 }
+*/

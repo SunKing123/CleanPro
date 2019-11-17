@@ -81,40 +81,10 @@
         app:layout_constraintTop_toBottomOf="@+id/lock_date_time_layout"></FrameLayout>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_80dp"
-        android:background="@drawable/lock_bottom_bg"
-        android:gravity="bottom"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/lock_dial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/dimen_20dp"
-            android:layout_marginBottom="@dimen/dimen_10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/lock_dial" />
-
-        <ImageView
-            android:id="@+id/lock_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="@dimen/dimen_20dp"
-            android:layout_marginBottom="@dimen/dimen_10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/lock_camera" />
-    </RelativeLayout>
-
-<!--    <com.eagle.locker.widget.TouchToUnLockView
+    <com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView
         android:id="@+id/lock_unlock_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />-->
+        android:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

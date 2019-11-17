@@ -94,9 +94,9 @@ public final class JobHandlerService extends JobService {
                 Log.d("JOB-->", " 重新开启了 服务 ");
                 startService(this);
             }
-            if(EXECUTE_COUNT /60 ==0){
+           /* if(EXECUTE_COUNT /60 ==0){
                 testLib();
-            }
+            }*/
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

@@ -314,9 +314,15 @@
             android:theme="@style/common_locker_screen"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
-        <activity android:name=".ui.TestActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ui.lockscreen.PopLayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
@@ -324,7 +330,7 @@
         <activity-alias
             android:name=".splash"
             android:label="@string/app_name"
-            android:targetActivity=".ui.TestActivity">
+            android:targetActivity=".ui.main.activity.SplashADActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

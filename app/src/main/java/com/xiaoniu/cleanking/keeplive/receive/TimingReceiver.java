@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.text.TextUtils;
 
 import com.geek.push.entity.PushMsg;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -18,6 +20,8 @@ import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.TestActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -71,23 +75,39 @@ public class TimingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        mBatteryPower = intent.getIntExtra("battery", 50);
-        temp = intent.getIntExtra("temp", 30);
-        isCharged = intent.getBooleanExtra("isCharged",false);
-        Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
-        for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
-            PushSettingList.DataBean dataBean = entry.getValue();
-            if (isStartScan(dataBean)) { //检测是否达到扫描时间
-                startScan(dataBean, context);
-                //更新本地保存的操作时间
-                dataBean.setLastTime(System.currentTimeMillis());
-                map.put(entry.getKey(), dataBean);
-                PreferenceUtil.saveCleanLogMap(map);
+        if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("scan_heart")){//本地push心跳
+            mBatteryPower = intent.getIntExtra("battery", 50);
+            temp = intent.getIntExtra("temp", 30);
+            isCharged = intent.getBooleanExtra("isCharged",false);
+            Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
+            for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
+                PushSettingList.DataBean dataBean = entry.getValue();
+                if (isStartScan(dataBean)) { //检测是否达到扫描时间
+                    startScan(dataBean, context);
+                    //更新本地保存的操作时间
+                    dataBean.setLastTime(System.currentTimeMillis());
+                    map.put(entry.getKey(), dataBean);
+                    PreferenceUtil.saveCleanLogMap(map);
+                }
             }
+            //重新打开保活service
+            Intent i = new Intent(context, LocalService.class);
+            i.putExtra("action","heartbeat");
+            context.startService(i);
+        }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("unlock_screen")){//锁屏打开页面
+            try {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        context.startActivity(new Intent(context, LockActivity.class));
+                    }
+                },1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
-        //重新打开保活service
-        Intent i = new Intent(context, LocalService.class);
-        context.startService(i);
+
 
     }
 
