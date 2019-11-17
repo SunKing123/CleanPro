@@ -166,10 +166,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
     private void initLottieYinDao() {
         mLottieAnimationViewY.setVisibility(View.VISIBLE);
-//        mLottieAnimationViewY.useHardwareAcceleration(true);
-        mLottieAnimationViewY.setAnimation("yindao1.json");
-        mLottieAnimationViewY.setImageAssetsFolder("images_game_yindao");
-        mLottieAnimationViewY.playAnimation();
+        if (!mLottieAnimationViewY.isAnimating()) {
+            mLottieAnimationViewY.setAnimation("yindao1.json");
+            mLottieAnimationViewY.setImageAssetsFolder("images_game_yindao");
+            mLottieAnimationViewY.playAnimation();
+        }
         mLottieAnimationViewY.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -634,10 +635,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         showColorChange01(2);
         mTitleView.setVisibility(View.GONE);
         mLottieAnimationView.setVisibility(View.VISIBLE);
-//        mLottieAnimationView.useHardwareAcceleration(true);
-        mLottieAnimationView.setAnimation("youxijiasu.json");
-        mLottieAnimationView.setImageAssetsFolder("images_game_jiasu");
-        mLottieAnimationView.playAnimation();
+        if (!mLottieAnimationView.isAnimating()) {
+            mLottieAnimationView.setAnimation("youxijiasu.json");
+            mLottieAnimationView.setImageAssetsFolder("images_game_jiasu");
+            mLottieAnimationView.playAnimation();
+        }
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -677,10 +679,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (null == mLottieAnimationView3) return;
         mLottieAnimationView.setVisibility(View.GONE);
         mView3.setVisibility(View.VISIBLE);
-//        mLottieAnimationView3.useHardwareAcceleration(true);
-        mLottieAnimationView3.setAnimation("yindao2.json");
-        mLottieAnimationView3.setImageAssetsFolder("images_game_yindao2");
-        mLottieAnimationView3.playAnimation();
+        if (!mLottieAnimationView3.isAnimating()) {
+            mLottieAnimationView3.setAnimation("yindao2.json");
+            mLottieAnimationView3.setImageAssetsFolder("images_game_yindao2");
+            mLottieAnimationView3.playAnimation();
+        }
         mLottieAnimationView3.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -738,15 +741,24 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (null != mLottieAnimationViewY && mLottieAnimationViewY.isAnimating()) {
+            mLottieAnimationViewY.cancelAnimation();
+            mLottieAnimationViewY.clearAnimation();
+        }
+        if (null != mLottieAnimationView && mLottieAnimationView.isAnimating()) {
+            mLottieAnimationView.cancelAnimation();
+            mLottieAnimationView.clearAnimation();
+        }
+        if (null != mLottieAnimationView3 && mLottieAnimationView3.isAnimating()) {
+            mLottieAnimationView3.cancelAnimation();
+            mLottieAnimationView3.clearAnimation();
+        }
     }
 
     @Override
     public void netError() {
 
     }
-
-    //背景颜色是否已变为红色
-    private boolean isChangeRed = false;
 
     public void showColorChange01(int index) {
         if (ivs.length == 3 && index <= 2 && index > 0) {
@@ -768,7 +780,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (index == 1) {
-                            isChangeRed = true;
                             Log.v("onAnimationEnd", "onAnimationEnd ");
 //                            mView.setColorChange(true);
                             if (animator != null)

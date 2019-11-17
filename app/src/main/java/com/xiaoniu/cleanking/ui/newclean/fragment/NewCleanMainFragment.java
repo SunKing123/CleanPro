@@ -364,15 +364,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
-        //有通知时改变通知栏清理状态
-       /* if (mNotifySize > 0 && !PreferenceUtil.isCleanNotifyUsed() && mShowCount < 2) {
-            mShowCount++;
-            mNotiClearFinishIv.setVisibility(View.GONE);
-            GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
-            mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
-        }*/
-
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > 2) {
                 mInteractionPoistion = 0;
@@ -1222,17 +1213,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void getSwitchInfoListSuccess(SwitchInfoList switchInfoList) {
 
         if (null != switchInfoList && null != switchInfoList.getData() && switchInfoList.getData().size() > 0) {
-           /* for (SwitchInfoList.DataBean list : switchInfoList.getData()) {
+            for (SwitchInfoList.DataBean list : switchInfoList.getData()) {
                 if (PositionId.KEY_VIRUS_JILI.equals(list.getConfigKey()) && list.isOpen()) {
                     loadAd(list.getAdvertId(), TTAdConstant.VERTICAL);
                 }
                 if (PositionId.KEY_NET_JILI.equals(list.getConfigKey()) && list.isOpen()) {
                     loadAdNet(list.getAdvertId(), TTAdConstant.VERTICAL);
                 }
-            }*/ //暂时注释
+            }
         }
-        loadAd("934152199", TTAdConstant.VERTICAL);
-        loadAdNet("934152199", TTAdConstant.VERTICAL);
     }
 
     /**

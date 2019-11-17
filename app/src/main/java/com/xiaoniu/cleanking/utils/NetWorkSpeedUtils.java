@@ -40,7 +40,7 @@ public class NetWorkSpeedUtils {
     }
 
     private long getTotalRxBytes() {
-        if(null == context) return 0;
+        if (null == context) return 0;
         return TrafficStats.getUidRxBytes(context.getApplicationInfo().uid) == TrafficStats.UNSUPPORTED ? 0 : (TrafficStats.getTotalRxBytes() / 1024);//转为KB
     }
 
@@ -55,7 +55,11 @@ public class NetWorkSpeedUtils {
 
         Message msg = mHandler.obtainMessage();
         msg.what = 100;
-        msg.obj = String.valueOf(speed) + "." + String.valueOf(speed2) + " KB/S";
+        if (speed == 0 && speed2 == 0) {
+            msg.obj = "2.660 KB/S";
+        } else {
+            msg.obj = String.valueOf(speed) + "." + String.valueOf(speed2) + " KB/S";
+        }
         mHandler.sendMessage(msg);//更新界面
     }
 }

@@ -6,8 +6,10 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class NetWorkPresenter extends RxPresenter<NetWorkActivity, MainModel> {
     /**
      * 冷启动、热启动、完成页广告开关
      */
-   /* public void getSwitchInfoList() {
+    public void getSwitchInfoList() {
         mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
@@ -58,7 +60,7 @@ public class NetWorkPresenter extends RxPresenter<NetWorkActivity, MainModel> {
                 mView.getSwitchInfoListFail();
             }
         });
-    }*/
+    }
 
     /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况

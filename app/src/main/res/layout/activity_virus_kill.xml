@@ -4,16 +4,36 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/v_lottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/icon_scaning_bg01">
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_scan_bg01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg01" />
+
+        <ImageView
+            android:id="@+id/iv_scan_bg02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg02" />
+
+        <ImageView
+            android:id="@+id/iv_scan_bg03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg03" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    </RelativeLayout>
 
 </RelativeLayout>

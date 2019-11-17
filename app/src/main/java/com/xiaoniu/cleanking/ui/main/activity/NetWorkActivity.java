@@ -53,6 +53,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     private int mRamScale; //使用内存占总RAM的比例
     private FileQueryUtils mFileQueryUtils;
     private ValueAnimator mValueAnimator;
+    private boolean mIsOpen;
 
     @Override
     protected int getLayoutId() {
@@ -66,7 +67,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
     @Override
     protected void initView() {
-        Log.d("XiLei", "initView");
         StatusBarUtil.setTransparentForWindow(this);
         initLottieYinDao();
         mFileQueryUtils = new FileQueryUtils();
@@ -77,6 +77,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             mPowerSize = mFileQueryUtils.getRunningProcess().size();
         }
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPresenter.getSwitchInfoList();
     }
 
     private void initLottieYinDao() {
@@ -86,8 +87,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             mLottieAnimationView.playAnimation();
         }
         Log.d("XiLei", "mLottieAnimationView.getDuration()=" + mLottieAnimationView.getDuration());
-        mValueAnimator = ValueAnimator.ofInt(1, 101);
-        mValueAnimator.setDuration(2000);
+        mValueAnimator = ValueAnimator.ofInt(1, 100);
+        mValueAnimator.setDuration(1850);
         mValueAnimator.setInterpolator(new DecelerateInterpolator());
         mValueAnimator.start();
         mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -114,7 +115,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 mLottieAnimationView.clearAnimation();
                 mValueAnimator.cancel();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     goFinishActivity();
                     finish();
                 } catch (InterruptedException e) {
@@ -201,13 +202,38 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 拉取广告开关成功
+     *
+     * @return
+     */
+    public void getSwitchInfoListSuccess(SwitchInfoList list) {
+        if (null == list || null == list.getData() || list.getData().size() <= 0)
+            return;
+        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+            if (PositionId.KEY_NET_SCREEN.equals(switchInfoList.getConfigKey())) {
+                mIsOpen = switchInfoList.isOpen();
+            }
+        }
+    }
+
+    /**
+     * 拉取广告开关失败
+     *
+     * @return
+     */
+    public void getSwitchInfoListFail() {
+//        ToastUtils.showShort(getString(R.string.net_error));
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);
         }
-        if (null != mLottieAnimationView) {
+        if (null != mLottieAnimationView && mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.cancelAnimation();
             mLottieAnimationView.clearAnimation();
         }

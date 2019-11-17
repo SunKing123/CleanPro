@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
+            if (TextUtils.isEmpty(mData.get(position).getButtonName())) {
+                ((ImageViewHolder) holder).tv_button.setVisibility(View.GONE);
+            }
 
             GlideUtils.loadImage(mActivity, mData.get(position).getIconUrl(), ((ImageViewHolder) holder).iv_icon);
             ((ImageViewHolder) holder).tv_name.setText(mData.get(position).getName());
