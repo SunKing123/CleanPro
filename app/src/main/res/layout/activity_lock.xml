@@ -3,24 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/lock_bg"
-    android:paddingTop="@dimen/dimen_28dp">
+    android:background="@drawable/lock_bg">
 
 
     <LinearLayout
         android:id="@+id/lock_date_time_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_50dp"
-        android:layout_marginLeft="@dimen/dimen_20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/dimen_60dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/lock_time_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
@@ -46,29 +44,72 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_50dp"
+            android:layout_width="0dp"
+            android:layout_weight="4"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/lock_battery_icon"
-                android:layout_width="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
-                android:longClickable="false"
-                android:scaleType="fitCenter"
-                android:src="@drawable/lock_battery_charging" />
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/iv_weather_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:longClickable="false"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_weather_fine" />
 
-            <TextView
-                android:id="@+id/lock_battery_status"
-                android:layout_width="wrap_content"
+
+                <TextView
+                    android:id="@+id/tv_weather_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:longClickable="false"
+                    android:singleLine="true"
+                    android:paddingLeft="12dp"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="晴"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
-                android:longClickable="false"
-                android:singleLine="true"
-                android:text="电池养护中"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_weather_temp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:longClickable="false"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="24°"
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:longClickable="false"
+                    android:singleLine="true"
+                    android:paddingLeft="12dp"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="上海市"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 
