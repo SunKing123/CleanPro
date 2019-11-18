@@ -311,6 +311,16 @@
             android:theme="@style/common_locker_screen"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
+        <activity android:name=".ui.lockscreen.PopLayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
         <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->

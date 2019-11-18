@@ -37,6 +37,7 @@ public class NewsListFragment extends BaseFragment {
     private NewsType mType;
 
     private static final int PAGE_NUM = 20;//每一页数据
+    private int current_page_no = 0;        //页码索引
     private boolean mIsRefresh = true;
 
     public static NewsListFragment getInstance(NewsType type) {
@@ -163,9 +164,9 @@ public class NewsListFragment extends BaseFragment {
         //请求参数设置：比如一个json字符串
         JSONObject jsonObject = new JSONObject();
         try {
-            String lastId = SPUtil.getLastNewsID(mType.getName());
+//            String lastId = SPUtil.getLastNewsID(mType.getName());
             jsonObject.put("pageSize", PAGE_NUM);
-            jsonObject.put("lastId", lastId);
+            jsonObject.put("pageNo", current_page_no);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -195,7 +196,7 @@ public class NewsListFragment extends BaseFragment {
                 if (result != null && result.size() > 0) {
                     if (mLlNoNet.getVisibility() == View.VISIBLE)
                         mLlNoNet.setVisibility(View.GONE);
-                    SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
+//                    SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result);
                     } else {

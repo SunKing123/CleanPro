@@ -68,7 +68,13 @@ ext {
             "android-gif-drawable"         : "pl.droidsonroids.gif:android-gif-drawable:1.2.6",
             "kotlin-stdlib-jdk7"           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50",
             "kotlin-reflect"               : "org.jetbrains.kotlin:kotlin-reflect:1.3.50",
-
+            "rxerrorhandler"               : "me.jessyan:rxerrorhandler:2.1.1",
+            "butterknife"                  : "com.jakewharton:butterknife:10.0.0",
+            "butterknife-compiler"         : "com.jakewharton:butterknife-compiler:10.0.0",
+            "amap"                         : "com.amap.api:location:latest.integration",
+            "amap2d"                       : "com.amap.api:map2d:latest.integration",
+            "greendao"                     : "org.greenrobot:greendao:3.2.2",
+            "greendao-generator"           : "org.greenrobot:greendao-generator:3.2.2"
 //            "easy-popup"                   : "com.github.zyyoona7:EasyPopup:1.0.1",
 //            "particleview"                 : "com.github.shchurov:particleview:0.9.12",
 //            "hellodaemon"                  : "com.xdandroid:hellodaemon:+",

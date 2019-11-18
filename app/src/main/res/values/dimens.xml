@@ -100,4 +100,8 @@
     <dimen name="dimen_106dp">106dp</dimen>
     <dimen name="dimen_118dp">118dp</dimen>
     <dimen name="dimen_13sp">13sp</dimen>
+
+    <dimen name="swipe_card_offset">20dp</dimen>
+    <dimen name="rippleStrokeWidth">2dp</dimen>
+    <dimen name="rippleRadius">64dp</dimen>
 </resources>

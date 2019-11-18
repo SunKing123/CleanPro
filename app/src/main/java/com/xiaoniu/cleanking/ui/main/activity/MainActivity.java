@@ -221,6 +221,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
             getDeviceInfo();
         }
+        //获取定位权限
+        mPresenter.requestLocationPermission();
+
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }

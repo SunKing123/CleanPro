@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'channel'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -39,6 +40,15 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+    }
+
+    greendao {
+        //数据库版本号，升级时进行修改
+        /**
+         * 2: 增加城市及更新对应的字段
+         * 3：关注城市表增加日出日落字段(2019.09.05)
+         **/
+        schemaVersion 1
     }
 
     aaptOptions {
@@ -90,27 +100,27 @@ android {
         dev {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
-            buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/query\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
 
         }
         btest {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
-            buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-fat-default.fqt188.com/video/query\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
 
         }
         preprod {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
-            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/query\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
         }
         prod {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
-            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/query\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
         }
     }
@@ -135,29 +145,35 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     implementation 'com.google.dagger:dagger:2.11'
 
-    implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
-    testImplementation 'junit:junit:4.12'
+    implementation rootProject.ext.dependencies["butterknife"]
+    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
 
-    api 'com.alibaba:arouter-api:1.4.1'
-    annotationProcessor 'com.alibaba:arouter-compiler:latest.release'
+    implementation rootProject.ext.dependencies["amap"]
+    implementation rootProject.ext.dependencies["amap2d"]
+
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
-
-    implementation project(':baselib:common')
-    implementation project(':otherlib:asmhelp')
-    implementation project(':otherlib:xrecyclerview')
-//    implementation project(':otherlib:LockScreenFlowAd')
-
-    //推送
-    implementation files('libs\\push-core.aar')
-    implementation files('libs\\push-jpush.aar')
+    implementation rootProject.ext.dependencies["rxerrorhandler"]
 
     //Application生命周期管理
     api 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
 
+    api rootProject.ext.dependencies["arouter"]
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+
+    implementation rootProject.ext.dependencies["greendao"]
+    annotationProcessor rootProject.ext.dependencies["greendao-generator"]
+
+    implementation project(':baselib:common')
+    implementation project(':otherlib:asmhelp')
+    implementation project(':otherlib:xrecyclerview')
+    //推送
+    implementation files('libs\\push-core.aar')
+    implementation files('libs\\push-jpush.aar')
+
 }
 
 
