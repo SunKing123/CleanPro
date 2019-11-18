@@ -1101,6 +1101,65 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存红包展示的次数
+     *
+     * @return
+     */
+    public static boolean saveRedPacketShowCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.RED_PACKET_SHOW, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取红包展示的次数
+     */
+    public static int getRedPacketShowCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.RED_PACKET_SHOW, 0);
+    }
+
+    /**
+     * 保存红包循环展示时展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveRedPacketForCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.RED_PACKET_FOR, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取红包循环展示时展示到第几个
+     */
+    public static int getRedPacketForCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.RED_PACKET_FOR, 0);
+    }
+    /**
+     * 保存红包循环展示频次
+     *
+     * @return
+     */
+    public static boolean saveRedPacketShowTrigger(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.RED_PACKET_SHOW_TRIGGER, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取红包循环展示时展示到第几个
+     */
+    public static int getRedPacketShowTrigger() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.RED_PACKET_SHOW_TRIGGER, 0);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return

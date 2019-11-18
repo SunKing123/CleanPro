@@ -98,8 +98,10 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mLottieAnimationView.cancelAnimation();
-                mLottieAnimationView.clearAnimation();
+                if (null != mLottieAnimationView) {
+                    mLottieAnimationView.cancelAnimation();
+                    mLottieAnimationView.clearAnimation();
+                }
                 goFinishActivity();
                 finish();
             }
@@ -165,7 +167,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                         if (index == 1) {
                             Log.v("onAnimationEnd", "onAnimationEnd ");
 //                            mView.setColorChange(true);
-                            if (mObjectAnimator != null)
+                            if (null != mObjectAnimator)
                                 mObjectAnimator.cancel();
                         } else {
                             showColorChange((index - 1));

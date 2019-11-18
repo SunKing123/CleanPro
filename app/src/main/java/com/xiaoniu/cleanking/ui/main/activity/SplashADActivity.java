@@ -436,6 +436,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
+        PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         if (NetworkUtils.isNetConnected()) {
             mPresenter.getAuditSwitch();
         } else {

@@ -74,6 +74,8 @@ ext {
 //            "hellodaemon"                  : "com.xdandroid:hellodaemon:+",
 //            "klog"                         : "com.github.zhaokaiqiang.klog:library:1.6.0"
 
+            "annotations"              : "androidx.annotation:annotation:1.0.0",
+
     ]
 
 

@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 
@@ -34,8 +35,8 @@ public interface UserApiService {
      *
      * @return
      */
-    @POST("/appVersion/query")
-    Flowable<AppVersion> queryAppVersion(@Body RequestBody body);
+    @GET("/app/upgrade")
+    Flowable<AppVersion> queryAppVersion();
 
     /**
      * 过审开关
@@ -68,6 +69,14 @@ public interface UserApiService {
      */
     @GET("/pushLocal/list")
     Flowable<PushSettingList> getPushLocalSet();
+
+    /**
+     * 红包
+     *
+     * @return
+     */
+    @POST("/popup/v2/query")
+    Flowable<RedPacketEntity> getRedPacketList();
 
     /**
      * 互动式广告开关

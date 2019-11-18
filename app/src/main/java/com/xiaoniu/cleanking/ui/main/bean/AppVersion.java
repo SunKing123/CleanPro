@@ -22,110 +22,51 @@ public class AppVersion extends BaseEntity {
     }
 
     public static class DataBean {
-        public String appType;
-        public String changeDesc;
-        public String changeLog;
-        public String code;
+        public int alertTime; //	提示周期，0-每次，1-一天一次，2-两天一次，3-三天一次
+        public boolean doubleCheck; //是否二次挽留
+        public int downloadEnv; //静默下载环境，0-WIFI，1-WIFI+G网
         public String downloadUrl;
-        /**
-         * 是否需要强制更新      值为1 强制更新
-         */
-        public String changeProperties;
-        public String md5;
-        public String popup;
-        public String state;
+        public boolean isPopup; //是否弹窗
+        public String upgradeType; //更新类型，1-常规更新，2-强制更新
+        public String content;
+        public String remark;
+        public String versionNumber;
 
-        public String getAppType() {
-            return appType;
+        public String getVersionNumber() {
+            return versionNumber;
         }
 
-        public void setAppType(String appType) {
-            this.appType = appType;
+        public int getAlertTime() {
+            return alertTime;
         }
 
-        public String getChangeDesc() {
-            return changeDesc;
+        public boolean isDoubleCheck() {
+            return doubleCheck;
         }
 
-        public void setChangeDesc(String changeDesc) {
-            this.changeDesc = changeDesc;
-        }
-
-        public String getChangeLog() {
-            return changeLog;
-        }
-
-        public void setChangeLog(String changeLog) {
-            this.changeLog = changeLog;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
+        public int getDownloadEnv() {
+            return downloadEnv;
         }
 
         public String getDownloadUrl() {
             return downloadUrl;
         }
 
-        public void setDownloadUrl(String downloadUrl) {
-            this.downloadUrl = downloadUrl;
+        public boolean isPopup() {
+            return isPopup;
         }
 
-        public String getChangeProperties() {
-            return changeProperties;
+        public String getUpgradeType() {
+            return upgradeType;
         }
 
-        public void setChangeProperties(String changeProperties) {
-            this.changeProperties = changeProperties;
+        public String getContent() {
+            return content;
         }
 
-        public String getMd5() {
-            return md5;
+        public String getRemark() {
+            return remark;
         }
-
-        public void setMd5(String md5) {
-            this.md5 = md5;
-        }
-
-        public String getPopup() {
-            return popup;
-        }
-
-        public void setPopup(String popup) {
-            this.popup = popup;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        public String getTag() {
-            return tag;
-        }
-
-        public void setTag(String tag) {
-            this.tag = tag;
-        }
-
-        public String getVersionNumber() {
-            return versionNumber;
-        }
-
-        public void setVersionNumber(String versionNumber) {
-            this.versionNumber = versionNumber;
-        }
-
-        public String tag;
-        public String versionNumber;
-
     }
 
 

@@ -24,11 +24,11 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -40,6 +40,7 @@ import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -83,18 +84,18 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(AppVersion updateInfoEntity) {
-
                 setAppVersion(updateInfoEntity);
             }
 
             @Override
             public void showExtraOp(String code, String message) {
                 Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
-
+                getRedPacketList();
             }
 
             @Override
             public void showExtraOp(String message) {
+                getRedPacketList();
             }
 
             @Override
@@ -395,7 +396,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     public void setAppVersion(AppVersion result) {
         if (result != null && result.getData() != null) {
-            if (TextUtils.equals("1", result.getData().popup))
+            if (result.getData().isPopup) {
                 if (mUpdateAgent == null) {
                     mUpdateAgent = new UpdateAgent(mActivity, result, () -> {
                     });
@@ -403,6 +404,11 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {
                     mUpdateAgent.check();
                 }
+            } else {
+                getRedPacketList();
+            }
+        } else {
+            getRedPacketList();
         }
     }
 
@@ -464,11 +470,43 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
     /**
+     * 红包
+     */
+    public void getRedPacketList() {
+        if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
+                || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
+                || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
+            return;
+        mModel.getRedPacketList(new Common4Subscriber<RedPacketEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(RedPacketEntity pushSettingList) {
+                mView.getRedPacketListSuccess(pushSettingList);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
+
+    /**
      * 上报设备信息
+     *
      * @param deviceInfo
      */
-    public void pushDeviceInfo(DeviceInfo deviceInfo){
-        mModel.pushDeviceInfo(deviceInfo,new Common4Subscriber<BaseEntity>() {
+    public void pushDeviceInfo(DeviceInfo deviceInfo) {
+        mModel.pushDeviceInfo(deviceInfo, new Common4Subscriber<BaseEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
 //                LogUtils.i("--zzh---"+message);

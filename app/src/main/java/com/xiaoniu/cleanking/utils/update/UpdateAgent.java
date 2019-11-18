@@ -100,7 +100,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         mOnFailureListener = new DefaultFailureListener(activity);
         mOnDownloadListener = new DefaultDialogDownloadListener(activity);
         //是否强更
-        mForce = "1".equals(updateInfo.getData().changeProperties);
+        mForce = "2".equals(updateInfo.getData().getUpgradeType());
         //mOnNotificationDownloadListener = new DefaultNotificationDownloadListener(mContext, 1);
 
     }
@@ -297,7 +297,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
             //设置title
             //update_title.setText("当前版本:" + mInfo.getOldVersionNumber() + ",最新版本:" + mInfo.getVersionNumber());
             //设置内容
-            String temp = mInfo.getData().changeDesc.replace("\\n", "\n");
+            String temp = mInfo.getData().getContent().replace("\\n", "\n");
             update_content.setText(temp);
             update_version_num.setText("V " + mInfo.getData().versionNumber);
             //设置点击监听

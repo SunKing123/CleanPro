@@ -81,9 +81,10 @@ public class AboutPresenter extends RxPresenter<AboutActivity, MainModel> {
 
     public void setAppVersion(AppVersion result) {
         if (result != null && result.getData() != null) {
-            if (TextUtils.equals("1", result.getData().popup))
+            if (result.getData().isPopup)
                 if (mUpdateAgent == null) {
-                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {});
+                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {
+                    });
                     mUpdateAgent.check();
                 } else {
                     mUpdateAgent.check();

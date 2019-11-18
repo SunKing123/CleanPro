@@ -119,4 +119,5 @@ dependencies {
     //oaid  sdk
     api files('libs\\miit_mdid_1.0.9.aar')
 
+    api project(':geekWebpage')
 }
