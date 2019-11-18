@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -44,7 +45,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
     private RxPermissions rxPermissions;
-    //    private FrameLayout videoContainer;
+    private LinearLayout linAdLayout;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
@@ -59,6 +60,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mLockTime = ViewUtils.get(this, R.id.lock_time_txt);
         mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
+        linAdLayout = ViewUtils.get(this,R.id.lock_ad_container);
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
             public void onTouchLockArea() {
@@ -155,7 +157,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateTimeUI() {
         mLockTime.setText(DateUtils.getHourString(this, System.currentTimeMillis()));
-        mLockDate.setText(monthFormat.format(GregorianCalendar.getInstance().getTime()) + " " + weekFormat.format(GregorianCalendar.getInstance().getTime()));
+        mLockDate.setText(monthFormat.format(GregorianCalendar.getInstance().getTime()) + "  " + weekFormat.format(GregorianCalendar.getInstance().getTime()));
     }
 
     private void setLockerWindow(Window window) {

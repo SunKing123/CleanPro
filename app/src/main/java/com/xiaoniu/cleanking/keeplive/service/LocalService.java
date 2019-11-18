@@ -219,7 +219,7 @@ public final class LocalService extends Service {
      * @param islaunched  判断是否已经启动
      */
     public void sendTimingReceiver(Intent intent,boolean islaunched) {
-        if (!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("heartbeat"))) {
+        if (!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("heartbeat"))) {//心跳action
             checkCharge();
             watchingBattery();
             try {
@@ -241,7 +241,7 @@ public final class LocalService extends Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("unlock_screen")))){ //解锁操作
+        }else if((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("unlock_screen")))){ //解锁操作action
 
 
         }
