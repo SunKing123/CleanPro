@@ -1,11 +1,10 @@
-/*
+
 package com.xiaoniu.cleanking.ui.main.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.geek.jk.weather.utils.G;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -15,11 +14,7 @@ import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
-*/
-/**
- * @author xiangzhenbiao
- * @since 2019/4/11 21:34
- *//*
+
 
 @Entity(nameInDb = "XNWeatherCityModel", createInDb = false)
 public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
@@ -285,7 +280,7 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
     @Override
     public boolean equals(Object o) {
       WeatherCity a= (WeatherCity) o;
-      return !G.isEmpty(this.getAreaCode())&&this.getAreaCode().equals(a.getAreaCode());
+      return !TextUtils.isEmpty(this.getAreaCode())&&this.getAreaCode().equals(a.getAreaCode());
     }
 
 
@@ -364,4 +359,4 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
         return 0;
     }
 }
-*/
+
