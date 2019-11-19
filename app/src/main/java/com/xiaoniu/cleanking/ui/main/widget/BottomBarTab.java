@@ -107,7 +107,6 @@ public class BottomBarTab extends FrameLayout {
         }
         lLContainer.addView(mIcon);
         mTvTitle = new TextView(context);
-        Log.d("XiLei", "orderNum=" + orderNum);
         if (orderNum == 3 && !TextUtils.isEmpty(iconString) && TextUtils.equals(auditSwitch, "1")) {
             mTvTitle.setVisibility(GONE);
         }

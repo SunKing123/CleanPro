@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity
 
+import android.util.Log
 import com.geek.webpage.web.model.WebDialogManager
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
@@ -14,7 +15,7 @@ import java.util.*
  * @date 2019/11/19.
  * description：热启动红包
  */
-class RedPacketHotActivity : BaseActivity<MainPresenter>() {
+class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.FinishInterface {
     override fun getLayoutId(): Int {
         return R.layout.activity_hot_redpacket
     }
@@ -49,10 +50,15 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>() {
             }
         }
         if (!isFinishing()) {
-            WebDialogManager.getInstance().showWebDialog(this, this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[count])
+            WebDialogManager.getInstance().showWebDialog(this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[count])
+            WebDialogManager.getInstance().setFinishInterface(this)
         }
     }
 
     override fun netError() {
+    }
+
+    override fun finishActivity() {
+        finish()
     }
 }

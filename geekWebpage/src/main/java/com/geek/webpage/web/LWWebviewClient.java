@@ -47,7 +47,6 @@ public class LWWebviewClient extends WebViewClient {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Log.d("XiLei", "url=" + url);
         if (url.startsWith(WebView.SCHEME_TEL) || url.startsWith("sms:") ||
                 url.startsWith(WebView.SCHEME_MAILTO)) {
             try {

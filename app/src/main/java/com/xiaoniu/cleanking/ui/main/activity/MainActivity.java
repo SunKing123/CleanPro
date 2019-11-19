@@ -200,7 +200,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
                     return;
                 if (!mShowRedFirst && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-                    Log.d("XiLei", "mShowRedFirst--111111111=" + mShowRedFirst);
                     showRedPacket(AppHolder.getInstance().getRedPacketEntityList(), mCurrentPosition);
                 }
             }
@@ -361,8 +360,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d("XiLei", "onRestart--111111111");
-        Log.d("XiLei", "mCurrentPosition=" + mCurrentPosition);
         if (null == AppHolder.getInstance().getRedPacketEntityList()
                 || null == AppHolder.getInstance().getRedPacketEntityList().getData()
                 || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
@@ -370,7 +367,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
             return;
         if (mIsBack && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-            Log.d("XiLei", "mIsBack--111111111=" + mIsBack);
             showRedPacket(AppHolder.getInstance().getRedPacketEntityList(), mCurrentPosition);
             mIsBack = false;
         }
@@ -387,7 +383,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             return;
         if (!AppLifecycleUtil.isAppOnForeground(this)
                 && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-            Log.d("XiLei", "onStop--111111111");
             //app 进入后台
             mIsBack = true;
         }
@@ -667,20 +662,23 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @param redPacketEntity
      */
     public void getRedPacketListSuccess(RedPacketEntity redPacketEntity) {
-        showRedPacket(redPacketEntity, mCurrentPosition);
+        if (null == redPacketEntity || null == redPacketEntity.getData()
+                || redPacketEntity.getData().size() <= 0 || null == redPacketEntity.getData().get(0).getImgUrls()
+                || redPacketEntity.getData().get(0).getImgUrls().size() <= 0)
+            return;
+        if (redPacketEntity.getData().get(0).getLocation() == 1
+                || redPacketEntity.getData().get(0).getLocation() == 5) {
+            showRedPacket(redPacketEntity, mCurrentPosition);
+        }
     }
 
     /**
      * 展示红包
      */
     private void showRedPacket(RedPacketEntity redPacketEntity, int position) {
-        if (null == redPacketEntity || null == redPacketEntity.getData()
-                || redPacketEntity.getData().size() <= 0 || null == redPacketEntity.getData().get(0).getImgUrls()
-                || redPacketEntity.getData().get(0).getImgUrls().size() <= 0)
-            return;
         if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
-            if (redPacketEntity.getData().get(0).getLocation() != position)
-                return;
+//            if (redPacketEntity.getData().get(0).getLocation() != position)
+//                return;
             mShowRedFirst = true;
             int count;
             if (redPacketEntity.getData().get(0).getShowType() == 1) { //循环
@@ -702,7 +700,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
             }
             if (!isFinishing()) {
-                WebDialogManager.getInstance().showWebDialog(null, this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+                WebDialogManager.getInstance().showWebDialog(this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
             }
         }
     }
@@ -715,7 +713,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void getIconListSuccess(IconsEntity iconsEntity) {
         if (null == iconsEntity || null == iconsEntity.getData() || iconsEntity.getData().size() <= 0)
             return;
-        Log.d("XiLei", "getIconListSuccess");
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar

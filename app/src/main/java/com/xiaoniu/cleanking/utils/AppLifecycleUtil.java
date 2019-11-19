@@ -46,7 +46,6 @@ public class AppLifecycleUtil {
         if (null == context) return "";
         ActivityManager manager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
-        Log.d("XiLei", " (runningTaskInfos.get(0).topActivity).toString()=" + (runningTaskInfos.get(0).topActivity).toString());
         return (runningTaskInfos.get(0).topActivity).toString();
     }
 }

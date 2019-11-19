@@ -1,9 +1,9 @@
 package com.geek.webpage.web.model;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 
@@ -29,7 +29,7 @@ public class WebDialogManager {
 
     private LWWebViewDialog dialog;
 
-    public void showWebDialog(final Activity activity, Context context, String urlStr) {
+    public void showWebDialog(Context context, String urlStr) {
         if (context == null || TextUtils.isEmpty(urlStr))
             return;
         dismissWebDialog();
@@ -60,14 +60,13 @@ public class WebDialogManager {
             }
         });
 
-        if (null == activity) return;
         DialogInterface.OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
             public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
+                    dismissWebDialog();
+                    if (null != mFinishInterface) {
+                        mFinishInterface.finishActivity();
                     }
-                    activity.finish();
                     return true;
                 }
                 return false;
@@ -80,5 +79,15 @@ public class WebDialogManager {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
+    }
+
+    public interface FinishInterface {
+        void finishActivity();
+    }
+
+    FinishInterface mFinishInterface;
+
+    public void setFinishInterface(FinishInterface finishInterface) {
+        mFinishInterface = finishInterface;
     }
 }

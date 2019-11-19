@@ -40,6 +40,8 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.WeakHandler;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.json.JSONObject;
@@ -101,7 +103,39 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     }
 
     public void jumpActivity() {
+        showRedPacket();
         finish();
+    }
+
+    /**
+     * 展示红包
+     */
+    private void showRedPacket() {
+        PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
+        if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
+                || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
+                || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
+            return;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_RED_JILI.equals(switchInfoList.getConfigKey()) && switchInfoList.isOpen()) {  //展示红包
+                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getRedPacketEntityList()
+                            || null == AppHolder.getInstance().getRedPacketEntityList().getData()
+                            || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
+                            || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
+                            || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+                        return;
+                    if (PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
+                        switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+                            case 5: //所有页面展示红包
+                                startActivity(new Intent(this, RedPacketHotActivity.class));
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
    /* private String getPosId() {
@@ -157,7 +191,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
             loadSplashAd();
@@ -181,7 +216,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
      * @param adListener    广告状态监听器
      * @param fetchDelay    拉取广告的超时时长：取值范围[3000, 5000]，设为0表示使用广点通SDK默认的超时时长。
      */
-    private void fetchSplashAD(Activity activity, ViewGroup adContainer, View skipContainer, String appId, String posId, SplashADListener adListener, int fetchDelay) {
+    private void fetchSplashAD(Activity activity, ViewGroup adContainer, View
+            skipContainer, String appId, String posId, SplashADListener adListener, int fetchDelay) {
         fetchSplashADTime = System.currentTimeMillis();
 
         //后台控制是否显示开关
@@ -328,7 +364,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
                 e.printStackTrace();
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
-            jumpActivity();
         });
 
 

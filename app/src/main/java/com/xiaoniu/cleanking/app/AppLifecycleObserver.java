@@ -35,7 +35,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
         if (null == mContext || !mIsBack) return;
-        PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
@@ -45,28 +44,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
                     intent.setClass(mContext, SplashADHotActivity.class);
                     mContext.startActivity(intent);
                     mIsBack = false;
-                    return;  //热启动有广告时不展示红包
-                }
-
-                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
-                        || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
-                        || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
-                    return;
-                if (PositionId.KEY_RED_JILI.equals(switchInfoList.getConfigKey()) && switchInfoList.isOpen()) {  //展示红包
-                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getRedPacketEntityList()
-                            || null == AppHolder.getInstance().getRedPacketEntityList().getData()
-                            || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
-                            || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
-                            || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
-                        return;
-                    if (PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
-                        switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-                            case 5: //所有页面展示红包
-                                mContext.startActivity(new Intent(mContext, RedPacketHotActivity.class));
-                                mIsBack = false;
-                                break;
-                        }
-                    }
                 }
             }
         }

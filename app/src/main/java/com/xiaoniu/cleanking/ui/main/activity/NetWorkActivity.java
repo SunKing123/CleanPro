@@ -86,7 +86,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             mLottieAnimationView.setImageAssetsFolder("images_network");
             mLottieAnimationView.playAnimation();
         }
-        Log.d("XiLei", "mLottieAnimationView.getDuration()=" + mLottieAnimationView.getDuration());
         mValueAnimator = ValueAnimator.ofInt(1, 100);
         mValueAnimator.setDuration(1850);
         mValueAnimator.setInterpolator(new DecelerateInterpolator());
@@ -102,12 +101,10 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         mLottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Log.d("XiLei", "mLottieAnimationView.getDuration()111=" + animation.getDuration());
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Log.d("XiLei", "mLottieAnimationView.getDuration()222=" + animation.getDuration());
                 if (null != mHandler) {
                     new NetWorkSpeedUtils(NetWorkActivity.this, mHandler).startShowNetSpeed();
                 }
@@ -174,7 +171,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             switch (msg.what) {
                 case 100:
                     if (!isShow) {
-                        Log.d("XiLei", "msg.obj.toString()=" + msg.obj.toString());
                         isShow = true;
                         mNetNumTv.setText("现网速度： " + msg.obj.toString());
                     }
