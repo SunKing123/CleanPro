@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.geek.webpage.web.model.WebDialogManager;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -40,6 +41,7 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
@@ -67,6 +69,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -618,6 +621,44 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取红包成功
+     *
+     * @param pushSettingList
+     */
+    public void getRedPacketListSuccess(RedPacketEntity pushSettingList) {
+        if (null == pushSettingList || null == pushSettingList.getData() || pushSettingList.getData().size() <= 0)
+            return;
+        //暂时注释
+//        if (PreferenceUtil.getRedPacketShowCount() % pushSettingList.getData().get(0).getTrigger() == 0) {
+        int count;
+        if (pushSettingList.getData().get(0).getShowType() == 1) { //循环
+            if (PreferenceUtil.getRedPacketShowTrigger() != pushSettingList.getData().get(0).getTrigger()) {
+                PreferenceUtil.saveRedPacketForCount(0);
+            }
+            PreferenceUtil.saveRedPacketShowTrigger(pushSettingList.getData().get(0).getTrigger());
+            count = PreferenceUtil.getRedPacketForCount();
+            WebDialogManager.getInstance().showWebDialog(this, "http://testwlqlapph5.fqt188.com/popBox.html?url=" + pushSettingList.getData().get(0).getImgUrls().get(count));
+            if (count >= pushSettingList.getData().get(0).getImgUrls().size() - 1) {
+                PreferenceUtil.saveRedPacketForCount(0);
+            } else {
+                PreferenceUtil.saveRedPacketForCount(PreferenceUtil.getRedPacketForCount() + 1);
+            }
+        } else { //随机
+            if (pushSettingList.getData().get(0).getImgUrls().size() == 1) {
+                count = 0;
+            } else {
+                count = new Random().nextInt(pushSettingList.getData().get(0).getImgUrls().size() - 1);
+            }
+            Log.d("XiLei", "count=" + count);
+            Log.d("XiLei", "new Random().nextInt11=" + new Random().nextInt(1));
+            Log.d("XiLei", "new Random().nextInt22=" + new Random().nextInt(2));
+        }
+        WebDialogManager.getInstance().showWebDialog(this, "http://testwlqlapph5.fqt188.com/popBox.html?url=" + pushSettingList.getData().get(0).getImgUrls().get(count));
+
+//        }
     }
 
 }

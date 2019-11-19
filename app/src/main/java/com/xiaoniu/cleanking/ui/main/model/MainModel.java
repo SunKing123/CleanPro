@@ -7,8 +7,6 @@ import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.api.UserApiService;
-import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
@@ -17,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -49,15 +48,7 @@ public class MainModel extends BaseModel {
     }
 
     public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
-        Gson gson = new Gson();
-        Map<String, Object> map = new HashMap<>();
-        map.put("os", "android");
-        map.put("platform", "1");
-        map.put("versionCode", AppUtils.getVersionCode(mActivity, mActivity.getPackageName()));
-        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
-        String json = gson.toJson(map);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {
@@ -163,6 +154,11 @@ public class MainModel extends BaseModel {
         mService.getPushLocalSet().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
+    public void getRedPacketList(Common4Subscriber<RedPacketEntity> commonSubscriber) {
+
+        mService.getRedPacketList().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
     /**
      * 游戏加速列表顶部广告
      */
@@ -172,9 +168,10 @@ public class MainModel extends BaseModel {
 
     /**
      * 上报Device消息
+     *
      * @param commonSubscriber
      */
-    public void pushDeviceInfo(DeviceInfo deviceInfo,Common4Subscriber<BaseEntity> commonSubscriber) {
+    public void pushDeviceInfo(DeviceInfo deviceInfo, Common4Subscriber<BaseEntity> commonSubscriber) {
         Gson gson = new Gson();
         String json = gson.toJson(deviceInfo);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);

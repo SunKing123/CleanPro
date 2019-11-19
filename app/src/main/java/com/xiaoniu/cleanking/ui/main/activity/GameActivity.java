@@ -149,12 +149,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
         }
         initRecyclerView();
-       /* if (!PreferenceUtil.getGameQuikcenStart() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            initLottieYinDao();
-        } else {*/
-        mContentView.setVisibility(View.VISIBLE);
-        mOpenView.setVisibility(View.VISIBLE);
-//        }
+        //暂时注释
+//        if (!PreferenceUtil.getGameQuikcenStart() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        initLottieYinDao();
+       /* } else {
+            mContentView.setVisibility(View.VISIBLE);
+            mOpenView.setVisibility(View.VISIBLE);
+        }*/
         mPresenter.getSwitchInfoList();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
@@ -182,7 +183,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 NiuDataAPI.onPageStart("gameboost_add_page_view_page", "游戏加速添加页浏览");
                 NiuDataAPIUtil.onPageEnd("gameboost_guidance_page", "gameboost_add_page", "gameboost_add_page_view_page", "游戏加速添加页浏览");
                 mIsYinDaoFinish = true;
-                mLottieAnimationViewY.setVisibility(View.GONE);
+                if (null != mLottieAnimationViewY) {
+                    mLottieAnimationViewY.cancelAnimation();
+                    mLottieAnimationViewY.clearAnimation();
+                    mLottieAnimationViewY.setVisibility(View.GONE);
+                }
                 mOpenView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.VISIBLE);
             }
@@ -622,10 +627,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      */
     private void startClean() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) { //暂时注释
             clean();
             return;
-        }
+        }*/
 
         mIsStartClean = true;
         NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
@@ -648,6 +653,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (null != mLottieAnimationView) {
+                    mLottieAnimationView.cancelAnimation();
+                    mLottieAnimationView.clearAnimation();
+                }
                 showAnimal3();
             }
 
@@ -692,6 +701,10 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (null != mLottieAnimationView3) {
+                    mLottieAnimationView3.cancelAnimation();
+                    mLottieAnimationView3.clearAnimation();
+                }
                 clean();
             }
 

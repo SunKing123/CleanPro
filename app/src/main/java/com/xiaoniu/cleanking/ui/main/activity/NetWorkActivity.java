@@ -111,9 +111,13 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 if (null != mHandler) {
                     new NetWorkSpeedUtils(NetWorkActivity.this, mHandler).startShowNetSpeed();
                 }
-                mLottieAnimationView.cancelAnimation();
-                mLottieAnimationView.clearAnimation();
-                mValueAnimator.cancel();
+                if (null != mLottieAnimationView) {
+                    mLottieAnimationView.cancelAnimation();
+                    mLottieAnimationView.clearAnimation();
+                }
+                if (null != mValueAnimator) {
+                    mValueAnimator.cancel();
+                }
                 try {
                     Thread.sleep(1000);
                     goFinishActivity();

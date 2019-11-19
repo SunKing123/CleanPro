@@ -74,11 +74,13 @@ ext {
             "amap"                         : "com.amap.api:location:latest.integration",
             "amap2d"                       : "com.amap.api:map2d:latest.integration",
             "greendao"                     : "org.greenrobot:greendao:3.2.2",
-            "greendao-generator"           : "org.greenrobot:greendao-generator:3.2.2"
+            "greendao-generator"           : "org.greenrobot:greendao-generator:3.2.2",
 //            "easy-popup"                   : "com.github.zyyoona7:EasyPopup:1.0.1",
 //            "particleview"                 : "com.github.shchurov:particleview:0.9.12",
 //            "hellodaemon"                  : "com.xdandroid:hellodaemon:+",
 //            "klog"                         : "com.github.zhaokaiqiang.klog:library:1.6.0"
+
+            "annotations"              : "androidx.annotation:annotation:1.0.0",
 
     ]
 

@@ -1,0 +1,155 @@
+/*
+ * Copyright (C) 2017 MINDORKS NEXTGEN PRIVATE LIMITED
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://mindorks.com/license/apache-v2
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License
+ */
+
+package com.geek.webpage.utils;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+/**
+ * @Title NetWorkUtil
+ * @Description 是检测网络的一个工具包
+ */
+public class NetkUtils {
+
+    public static enum NetType {
+        WIFI, CMNET, CMWAP, NoneNet
+    }
+
+    /**
+     * 网络是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isNetworkAvailable(Context context) {
+
+        ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] info = mgr.getAllNetworkInfo();
+        if (info != null) {
+            for (int i = 0; i < info.length; i++) {
+                if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否有网络连接
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    public static boolean isConnected(Context context) {
+        ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = conn.getActiveNetworkInfo();
+        return (info != null && info.isConnected());
+    }
+
+    /**
+     * 判断WIFI网络是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isWifiConnected(Context context) {
+
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWiFiNetworkInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (mWiFiNetworkInfo != null) {
+                return mWiFiNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断 MOBILE 网络是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isMobileConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mMobileNetworkInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (mMobileNetworkInfo != null) {
+                return mMobileNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取当前网络连接的类型信息
+     *
+     * @param context
+     * @return
+     */
+    public static int getConnectedType(Context context) {
+
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null && mNetworkInfo.isAvailable()) {
+                return mNetworkInfo.getType();
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 获取当前的网络状态 -1：没有网络 1：WIFI网络2：wap 网络3：net网络
+     *
+     * @param context
+     * @return
+     */
+    public static NetType getAPNType(Context context) {
+
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo == null) {
+            return NetType.NoneNet;
+        }
+        int nType = networkInfo.getType();
+
+        if (nType == ConnectivityManager.TYPE_MOBILE) {
+            if (networkInfo.getExtraInfo().toLowerCase().equals("cmnet")) {
+                return NetType.CMNET;
+            } else {
+                return NetType.CMWAP;
+            }
+        } else if (nType == ConnectivityManager.TYPE_WIFI) {
+            return NetType.WIFI;
+        }
+        return NetType.NoneNet;
+
+    }
+}

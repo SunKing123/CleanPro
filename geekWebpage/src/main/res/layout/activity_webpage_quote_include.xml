@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.geek.webpage.web.webview.LWWebView
+        android:id="@+id/jsbridge_lw_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.geek.webpage.web.webview.LWWebView>
+
+    <com.geek.webpage.web.coolindicator.CoolIndicator
+        android:id="@+id/jsbridge_cool_indicator"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:progressDrawable="@drawable/default_drawable_indicator" />
+
+</FrameLayout>

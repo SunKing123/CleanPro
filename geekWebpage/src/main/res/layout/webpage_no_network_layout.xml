@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:src="@mipmap/ic_no_network" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="59dp"
+        android:text="网络好像断开了"
+        android:textColor="#8D8A82"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/refresh_net"
+        android:layout_width="140dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/tv"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_refresh_networks"
+        android:text="重新加载"
+        android:textColor="#FF6C23"
+        android:textSize="16sp" />
+
+</RelativeLayout>
