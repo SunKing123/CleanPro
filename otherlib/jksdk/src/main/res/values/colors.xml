@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="white">#FFFFFF</color>
+    <color name="returncolor">#8D8A82</color>
+    <color name="black">#dd000000</color>
+    <color name="home_page_1a_white_bg">#1AFFFFFF</color>
+    <color name="insert_screen_ad_bg">#F7F8FA</color>
+
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--注：必须保证NativeAdContainer所有子view的可见性-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_ad_item_root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/common_ad_item_height_82dp"
+    android:background="@color/home_page_1a_white_bg"
+    android:paddingLeft="12dp"
+    tools:background="@color/black"
+    android:visibility="gone">
+
+
+    <include layout="@layout/ad_left_img_right_two_text_item_layout" />
+
+
+    <TextView
+        android:id="@+id/tv_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimen_13dp"
+        android:background="@drawable/home_down_load_bg"
+        android:paddingLeft="@dimen/dimen_8dp"
+        android:paddingTop="@dimen/dimen_4dp"
+        android:paddingRight="@dimen/dimen_8dp"
+        android:paddingBottom="@dimen/dimen_4dp"
+        android:text="立即下载"
+        android:textColor="#99FFFFFF"
+        android:textSize="@dimen/dp_12"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
+
+    <TextView
+        android:id="@+id/tv_ad_browse_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/dimen_12dp"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:text="87672人浏览"
+        android:textColor="#7DFFFFFF"
+        android:textSize="@dimen/dp_10" />
+
+</RelativeLayout>
