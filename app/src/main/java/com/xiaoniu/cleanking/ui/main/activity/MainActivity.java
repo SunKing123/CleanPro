@@ -26,8 +26,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.geek.webpage.web.model.WebDialogManager;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -239,7 +241,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
         //获取定位权限
         mPresenter.requestLocationPermission();
-
+        //测试入口
+        if(BuildConfig.DEBUG){
+            AppConfig.showDebugWindow(mContext);
+        }
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }

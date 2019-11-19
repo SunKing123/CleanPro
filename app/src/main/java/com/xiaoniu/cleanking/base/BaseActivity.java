@@ -7,9 +7,16 @@ import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * MVP activity基类
@@ -55,4 +62,5 @@ public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivi
             ToastUtils.showShort(msg);
         }
     }
+
 }

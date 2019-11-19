@@ -1,9 +1,12 @@
 package com.xiaoniu.cleanking.app;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ProcessLifecycleOwner;
@@ -28,6 +31,7 @@ import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -78,6 +82,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
+        initProcess(application);
     }
 
 
@@ -111,6 +116,17 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
+    }
+
+    /*Andriod P多进程访问webviwe;
+     在对应的WebView数据目录后缀*/
+    private void initProcess(Application application) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            String processName = getProcessName(application);
+            if (!(BuildConfig.APPLICATION_ID + ":pushcore").equals(processName)) {
+                WebView.setDataDirectorySuffix(processName);
+            }
+        }
     }
 
     public static AppDataBase getAppDatabase() {
@@ -200,6 +216,19 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 e.printStackTrace();
             }
         }
+    }
+    //获取当前进程名称
+    public String getProcessName(Context context) {
+        if (context == null) {
+            return "";
+        }
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == android.os.Process.myPid()) {
+                return processInfo.processName;
+            }
+        }
+        return "";
     }
 
 }

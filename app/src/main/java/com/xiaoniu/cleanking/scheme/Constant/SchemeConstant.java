@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.scheme.Constant;
 
+import com.xiaoniu.cleanking.BuildConfig;
+
 /**
  * deprecation:协议常量
  * author:ayb
@@ -8,7 +10,7 @@ package com.xiaoniu.cleanking.scheme.Constant;
 public class SchemeConstant {
     //协议SCHEME和协议HOST
     public static String SCHEME = "cleanking";
-    public static String HOST = "com.xiaoniu.cleanking";
+    public static String HOST = BuildConfig.APPLICATION_ID;
     //公共协议类型
     public static final String JUMP = "/jump";
     public static final String NATIVE = "/native";
