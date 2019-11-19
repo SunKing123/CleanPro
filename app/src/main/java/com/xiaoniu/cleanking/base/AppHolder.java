@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.base;
 
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 
 /**
@@ -55,6 +56,16 @@ public class AppHolder {
 
     public SwitchInfoList getSwitchInfoList() {
         return switchInfoList;
+    }
+
+    private RedPacketEntity mRedPacketEntity;
+
+    public void setRedPacketEntityList(RedPacketEntity redPacketEntity) {
+        this.mRedPacketEntity = redPacketEntity;
+    }
+
+    public RedPacketEntity getRedPacketEntityList() {
+        return mRedPacketEntity;
     }
 
     private String cleanFinishSourcePageId = "";

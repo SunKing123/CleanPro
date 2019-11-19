@@ -23,6 +23,7 @@ import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -36,7 +37,6 @@ import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -44,7 +44,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
-import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.hotfix.listener.MyPatchListener;
 import com.xiaoniu.common.hotfix.log.HotfixLogcat;
 import com.xiaoniu.common.utils.AppUtils;
@@ -74,7 +73,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by tie on 2017/5/15.
  */
-public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements UpdateUtil.PatchCallback , AMapLocationListener {
+public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements UpdateUtil.PatchCallback, AMapLocationListener {
 
     private final RxAppCompatActivity mActivity;
 
@@ -500,6 +499,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(RedPacketEntity pushSettingList) {
+                AppHolder.getInstance().setRedPacketEntityList(pushSettingList);
                 mView.getRedPacketListSuccess(pushSettingList);
             }
 
@@ -553,7 +553,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         }
         String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
-        if (null == mView ) return;
+        if (null == mView) return;
         new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {

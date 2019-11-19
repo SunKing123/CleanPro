@@ -55,6 +55,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -122,6 +123,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     //判断重新启动
     boolean isFirstCreate = false;
+    private int mCurrentPosition = 1;
+    private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
+    private boolean mShowRedFirst; //红包是否已经展示
 
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
@@ -182,6 +186,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
             @Override
             public void onTabSelected(int position, int prePosition) {
+                mCurrentPosition = position + 1;
                 showHideFragment(position, prePosition);
                 //如果没有选中头条，开始10分钟记时
                 if (position == 2) {
@@ -194,6 +199,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         mHandler.removeCallbacksAndMessages(null);
                         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
                     }
+                }
+
+                if (null == AppHolder.getInstance().getRedPacketEntityList()
+                        || null == AppHolder.getInstance().getRedPacketEntityList().getData()
+                        || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
+                        || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
+                        || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+                    return;
+                if (!mShowRedFirst && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+                    Log.d("XiLei", "mShowRedFirst--111111111=" + mShowRedFirst);
+                    showRedPacket(AppHolder.getInstance().getRedPacketEntityList(), mCurrentPosition);
                 }
             }
 
@@ -351,8 +367,38 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("XiLei", "onRestart--111111111");
+        Log.d("XiLei", "mCurrentPosition=" + mCurrentPosition);
+        if (null == AppHolder.getInstance().getRedPacketEntityList()
+                || null == AppHolder.getInstance().getRedPacketEntityList().getData()
+                || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
+                || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
+                || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+            return;
+        if (mIsBack && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+            Log.d("XiLei", "mIsBack--111111111=" + mIsBack);
+            showRedPacket(AppHolder.getInstance().getRedPacketEntityList(), mCurrentPosition);
+            mIsBack = false;
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        if (null == AppHolder.getInstance().getRedPacketEntityList()
+                || null == AppHolder.getInstance().getRedPacketEntityList().getData()
+                || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
+                || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
+                || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+            return;
+        if (!AppLifecycleUtil.isAppOnForeground(this)
+                && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+            Log.d("XiLei", "onStop--111111111");
+            //app 进入后台
+            mIsBack = true;
+        }
     }
 
     @Override
@@ -626,39 +672,47 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 获取红包成功
      *
-     * @param pushSettingList
+     * @param redPacketEntity
      */
-    public void getRedPacketListSuccess(RedPacketEntity pushSettingList) {
-        if (null == pushSettingList || null == pushSettingList.getData() || pushSettingList.getData().size() <= 0)
+    public void getRedPacketListSuccess(RedPacketEntity redPacketEntity) {
+        showRedPacket(redPacketEntity, mCurrentPosition);
+    }
+
+    /**
+     * 展示红包
+     */
+    private void showRedPacket(RedPacketEntity redPacketEntity, int position) {
+        if (null == redPacketEntity || null == redPacketEntity.getData()
+                || redPacketEntity.getData().size() <= 0 || null == redPacketEntity.getData().get(0).getImgUrls()
+                || redPacketEntity.getData().get(0).getImgUrls().size() <= 0)
             return;
         //暂时注释
-//        if (PreferenceUtil.getRedPacketShowCount() % pushSettingList.getData().get(0).getTrigger() == 0) {
+//        if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
+        if (redPacketEntity.getData().get(0).getLocation() != position)
+            return;
+        mShowRedFirst = true;
         int count;
-        if (pushSettingList.getData().get(0).getShowType() == 1) { //循环
-            if (PreferenceUtil.getRedPacketShowTrigger() != pushSettingList.getData().get(0).getTrigger()) {
+        if (redPacketEntity.getData().get(0).getShowType() == 1) { //循环
+            if (PreferenceUtil.getRedPacketShowTrigger() != redPacketEntity.getData().get(0).getTrigger()) {
                 PreferenceUtil.saveRedPacketForCount(0);
             }
-            PreferenceUtil.saveRedPacketShowTrigger(pushSettingList.getData().get(0).getTrigger());
+            PreferenceUtil.saveRedPacketShowTrigger(redPacketEntity.getData().get(0).getTrigger());
             count = PreferenceUtil.getRedPacketForCount();
-            WebDialogManager.getInstance().showWebDialog(this, "http://testwlqlapph5.fqt188.com/popBox.html?url=" + pushSettingList.getData().get(0).getImgUrls().get(count));
-            if (count >= pushSettingList.getData().get(0).getImgUrls().size() - 1) {
+            if (count >= redPacketEntity.getData().get(0).getImgUrls().size() - 1) {
                 PreferenceUtil.saveRedPacketForCount(0);
             } else {
                 PreferenceUtil.saveRedPacketForCount(PreferenceUtil.getRedPacketForCount() + 1);
             }
         } else { //随机
-            if (pushSettingList.getData().get(0).getImgUrls().size() == 1) {
+            if (redPacketEntity.getData().get(0).getImgUrls().size() == 1) {
                 count = 0;
             } else {
-                count = new Random().nextInt(pushSettingList.getData().get(0).getImgUrls().size() - 1);
+                count = new Random().nextInt(redPacketEntity.getData().get(0).getImgUrls().size() - 1);
             }
-            Log.d("XiLei", "count=" + count);
-            Log.d("XiLei", "new Random().nextInt11=" + new Random().nextInt(1));
-            Log.d("XiLei", "new Random().nextInt22=" + new Random().nextInt(2));
         }
-        WebDialogManager.getInstance().showWebDialog(this, "http://testwlqlapph5.fqt188.com/popBox.html?url=" + pushSettingList.getData().get(0).getImgUrls().get(count));
-
+        if (!isFinishing()) {
+            WebDialogManager.getInstance().showWebDialog(null, this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+        }
 //        }
     }
-
 }
