@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><!--注：必须保证NativeAdContainer所有子view的可见性-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_native_ad_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_img"
+        android:layout_width="@dimen/common_ad_img_width_98dp"
+        android:layout_height="@dimen/common_ad_img_height_66dp"
+        android:scaleType="centerCrop"
+         />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_7"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxWidth="138dp"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_15"
+            tools:text="广告文案广告文案广告文案广告文" />
+
+        <TextView
+            android:id="@+id/tv_subTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:ellipsize="end"
+            android:maxWidth="185dp"
+            android:maxLines="1"
+            android:textColor="#99FFFFFF"
+            android:textSize="@dimen/dp_12"
+            tools:text="广告内容广告内容广告内容广告内容广告内容广告内容" />
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+

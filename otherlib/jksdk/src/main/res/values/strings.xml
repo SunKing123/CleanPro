@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="ExtraTranslation">AdSdkDemo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">slogan</string>
+
+</resources>
