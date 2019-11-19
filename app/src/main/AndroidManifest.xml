@@ -280,6 +280,7 @@
         <activity
             android:name=".ui.main.activity.AgentWebViewActivity"
             android:configChanges="orientation|screenSize"
+            android:process=":gj_webview"
             android:screenOrientation="portrait" />
 
         <activity
@@ -464,9 +465,9 @@
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission
-        android:name="com.xiaoniu.cleanking.permission.JPUSH_MESSAGE"
+        android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
-
+    <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
