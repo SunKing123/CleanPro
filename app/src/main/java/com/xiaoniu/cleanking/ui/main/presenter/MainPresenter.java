@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
+import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
@@ -511,6 +512,34 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void netConnectError() {
 
+            }
+        });
+    }
+
+    /**
+     * 底部icon
+     */
+    public void getIconList() {
+        mModel.getIconList(new Common4Subscriber<IconsEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+                mView.getIconListFail();
+            }
+
+            @Override
+            public void getData(IconsEntity iconsEntity) {
+                AppHolder.getInstance().setIconsEntityList(iconsEntity);
+                mView.getIconListSuccess(iconsEntity);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+                mView.getIconListFail();
+            }
+
+            @Override
+            public void netConnectError() {
+                mView.getIconListFail();
             }
         });
     }

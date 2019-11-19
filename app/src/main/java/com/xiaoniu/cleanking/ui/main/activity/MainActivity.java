@@ -41,6 +41,7 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
+import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
@@ -61,6 +62,7 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -157,24 +159,14 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
+        if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
+            getIconListFail();
+        } else {
+            mPresenter.getIconList();
+        }
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
         isFirstCreate = true;
         initFragments();
-//        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "0")) {
-            mBottomBar
-                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
-        } else {
-            mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, getString(R.string.top));
-            mBottomBar
-                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.drawable.tool_normal, getString(R.string.tool)))
-                    .addItem(mBottomBarTab)
-                    .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
-        }
-
         mBottomBar.setCurrentItem(0);
         CLEAN = 0;
         TOOL = 1;
@@ -242,7 +234,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取定位权限
         mPresenter.requestLocationPermission();
         //测试入口
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
         //开启定时扫面缓存
@@ -686,33 +678,88 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 || redPacketEntity.getData().size() <= 0 || null == redPacketEntity.getData().get(0).getImgUrls()
                 || redPacketEntity.getData().get(0).getImgUrls().size() <= 0)
             return;
-        //暂时注释
-//        if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
-        if (redPacketEntity.getData().get(0).getLocation() != position)
+        if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
+            if (redPacketEntity.getData().get(0).getLocation() != position)
+                return;
+            mShowRedFirst = true;
+            int count;
+            if (redPacketEntity.getData().get(0).getShowType() == 1) { //循环
+                if (PreferenceUtil.getRedPacketShowTrigger() != redPacketEntity.getData().get(0).getTrigger()) {
+                    PreferenceUtil.saveRedPacketForCount(0);
+                }
+                PreferenceUtil.saveRedPacketShowTrigger(redPacketEntity.getData().get(0).getTrigger());
+                count = PreferenceUtil.getRedPacketForCount();
+                if (count >= redPacketEntity.getData().get(0).getImgUrls().size() - 1) {
+                    PreferenceUtil.saveRedPacketForCount(0);
+                } else {
+                    PreferenceUtil.saveRedPacketForCount(PreferenceUtil.getRedPacketForCount() + 1);
+                }
+            } else { //随机
+                if (redPacketEntity.getData().get(0).getImgUrls().size() == 1) {
+                    count = 0;
+                } else {
+                    count = new Random().nextInt(redPacketEntity.getData().get(0).getImgUrls().size() - 1);
+                }
+            }
+            if (!isFinishing()) {
+                WebDialogManager.getInstance().showWebDialog(null, this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+            }
+        }
+    }
+
+    /**
+     * 获取底部icon成功
+     *
+     * @param iconsEntity
+     */
+    public void getIconListSuccess(IconsEntity iconsEntity) {
+        if (null == iconsEntity || null == iconsEntity.getData() || iconsEntity.getData().size() <= 0)
             return;
-        mShowRedFirst = true;
-        int count;
-        if (redPacketEntity.getData().get(0).getShowType() == 1) { //循环
-            if (PreferenceUtil.getRedPacketShowTrigger() != redPacketEntity.getData().get(0).getTrigger()) {
-                PreferenceUtil.saveRedPacketForCount(0);
-            }
-            PreferenceUtil.saveRedPacketShowTrigger(redPacketEntity.getData().get(0).getTrigger());
-            count = PreferenceUtil.getRedPacketForCount();
-            if (count >= redPacketEntity.getData().get(0).getImgUrls().size() - 1) {
-                PreferenceUtil.saveRedPacketForCount(0);
-            } else {
-                PreferenceUtil.saveRedPacketForCount(PreferenceUtil.getRedPacketForCount() + 1);
-            }
-        } else { //随机
-            if (redPacketEntity.getData().get(0).getImgUrls().size() == 1) {
-                count = 0;
-            } else {
-                count = new Random().nextInt(redPacketEntity.getData().get(0).getImgUrls().size() - 1);
-            }
+        Log.d("XiLei", "getIconListSuccess");
+        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "0")) {
+            mBottomBar
+                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
+                            , iconsEntity.getData().get(0).getTabName()
+                            , iconsEntity.getData().get(0).getOrderNum()))
+                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
+                            , iconsEntity.getData().get(1).getTabName()
+                            , iconsEntity.getData().get(1).getOrderNum()));
+        } else {
+            mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(2).getIconImgUrl()
+                    , iconsEntity.getData().get(2).getTabName()
+                    , iconsEntity.getData().get(2).getOrderNum());
+            mBottomBar
+                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
+                            , iconsEntity.getData().get(0).getTabName()
+                            , iconsEntity.getData().get(0).getOrderNum()))
+                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
+                            , iconsEntity.getData().get(1).getTabName()
+                            , iconsEntity.getData().get(1).getOrderNum()))
+                    .addItem(mBottomBarTab)
+                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
+                            , iconsEntity.getData().get(3).getTabName()
+                            , iconsEntity.getData().get(3).getOrderNum()));
         }
-        if (!isFinishing()) {
-            WebDialogManager.getInstance().showWebDialog(null, this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+    }
+
+    /**
+     * 获取底部icon失败
+     */
+    public void getIconListFail() {
+        //        状态（0=隐藏，1=显示）
+        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "0")) {
+            mBottomBar
+                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, "", getString(R.string.clean), 0))
+                    .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
+        } else {
+            mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, "", getString(R.string.top), 0);
+            mBottomBar
+                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, "", getString(R.string.clean), 0))
+                    .addItem(new BottomBarTab(this, R.drawable.tool_normal, "", getString(R.string.tool), 0))
+                    .addItem(mBottomBarTab)
+                    .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         }
-//        }
     }
 }

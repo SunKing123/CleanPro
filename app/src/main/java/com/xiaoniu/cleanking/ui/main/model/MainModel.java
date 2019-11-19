@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
+import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
@@ -150,13 +151,25 @@ public class MainModel extends BaseModel {
      * @param commonSubscriber
      */
     public void getLocalPushSet(Common4Subscriber<PushSettingList> commonSubscriber) {
-
         mService.getPushLocalSet().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
+    /**
+     * 红包
+     *
+     * @param commonSubscriber
+     */
     public void getRedPacketList(Common4Subscriber<RedPacketEntity> commonSubscriber) {
-
         mService.getRedPacketList().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+    /**
+     * 底部icon
+     *
+     * @param commonSubscriber
+     */
+    public void getIconList(Common4Subscriber<IconsEntity> commonSubscriber) {
+        mService.getIconList().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     /**

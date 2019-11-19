@@ -1,13 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.widget;
 
-import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -21,7 +21,12 @@ import androidx.core.content.ContextCompat;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,36 +40,47 @@ public class BottomBarTab extends FrameLayout {
 
     private int[] iconsSelect = {R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
     private int[] icons = {R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
+    private List<String> iconsSelectNet = new ArrayList<>();
+    private List<String> iconsNet = new ArrayList<>();
 
-
-    private TextView mTvUnreadCount;
-    private ObjectAnimator mObjectAnimator;
     private TextView mBadgeView;
 
-    public BottomBarTab(Context context, @DrawableRes int icon, CharSequence title) {
-        this(context, null, icon, title);
+    public BottomBarTab(Context context, @DrawableRes int icon, String iconString, CharSequence title, int orderNum) {
+        this(context, null, icon, iconString, title, orderNum);
     }
 
-    public BottomBarTab(Context context, AttributeSet attrs, int icon, CharSequence title) {
-        this(context, attrs, 0, icon, title);
+    public BottomBarTab(Context context, AttributeSet attrs, int icon, String iconString, CharSequence title, int orderNum) {
+        this(context, attrs, 0, icon, iconString, title, orderNum);
     }
 
-    public BottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int icon, CharSequence title) {
+    public BottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int icon, String iconString, CharSequence title, int orderNum) {
         super(context, attrs, defStyleAttr);
-        init(context, icon, title);
+        init(context, icon, iconString, title, orderNum);
     }
 
-    private void init(Context context, int icon, CharSequence title) {
+    private void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
         mContext = context;
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(getContext(), AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "0")) {
-            icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
-            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
+
+        if (null == AppHolder.getInstance().getIconsEntityList()
+                || null == AppHolder.getInstance().getIconsEntityList().getData()
+                || AppHolder.getInstance().getIconsEntityList().getData().size() <= 0) {
+            if (TextUtils.equals(auditSwitch, "0")) {
+                icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
+                iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
+            } else {
+                icons = new int[]{R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
+                iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
+            }
         } else {
-            icons = new int[]{R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
-            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
+            for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
+                iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
+                iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
+            }
         }
+
+
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
         setBackgroundDrawable(drawable);
@@ -78,14 +94,23 @@ public class BottomBarTab extends FrameLayout {
         lLContainer.setLayoutParams(paramsContainer);
 
         mIcon = new ImageView(context);
-        //int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 27, getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mIcon.setImageResource(icon);
-        mIcon.setLayoutParams(params);
-        //mIcon.setColorFilter(ContextCompat.getColor(context, R.color.tab_unselect));
+        LinearLayout.LayoutParams params;
+        if (null == mContext || TextUtils.isEmpty(iconString)) {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mIcon.setImageResource(icon);
+        } else {
+            params = new LinearLayout.LayoutParams(orderNum == 3 ? 110 : 70, orderNum == 3 ? 110 : 70);
+            GlideUtils.loadImage((Activity) mContext, iconString, mIcon);
+        }
+        if (null != params) {
+            mIcon.setLayoutParams(params);
+        }
         lLContainer.addView(mIcon);
-
         mTvTitle = new TextView(context);
+        Log.d("XiLei", "orderNum=" + orderNum);
+        if (orderNum == 3 && !TextUtils.isEmpty(iconString) && TextUtils.equals(auditSwitch, "1")) {
+            mTvTitle.setVisibility(GONE);
+        }
         mTvTitle.setText(title);
         LinearLayout.LayoutParams paramsTv = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
@@ -108,64 +133,26 @@ public class BottomBarTab extends FrameLayout {
         mBadgeView.setBackgroundResource(R.drawable.icon_bottom_badge);
         mBadgeView.setVisibility(GONE);
         addView(mBadgeView, badgeParams);
-//        int min = dip2px(context, 20);
-//        int padding = dip2px(context, 5);
-//        mTvUnreadCount = new TextView(context);
-//        mTvUnreadCount.setBackgroundResource(R.drawable.bg_msg_bubble);
-//        mTvUnreadCount.setMinWidth(min);
-//        mTvUnreadCount.setTextColor(Color.WHITE);
-//        mTvUnreadCount.setPadding(padding, 0, padding, 0);
-//        mTvUnreadCount.setGravity(Gravity.CENTER);
-//        LayoutParams tvUnReadParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, min);
-//        tvUnReadParams.gravity = Gravity.CENTER;
-//        tvUnReadParams.leftMargin = dip2px(context, 17);
-//        tvUnReadParams.bottomMargin = dip2px(context, 14);
-//        mTvUnreadCount.setLayoutParams(tvUnReadParams);
-//        mTvUnreadCount.setVisibility(GONE);
-//
-//        addView(mTvUnreadCount);
     }
 
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
         if (selected) {
-//            if (mTabPosition == MAIN_ACTIVITY.ACTION) {
-//                mTvTitle.setVisibility(VISIBLE);
-//                if (mObjectAnimator != null) {
-//                    mObjectAnimator.cancel();
-//                }
-//                mIcon.setImageResource(R.mipmap.make_money_select);
-//                mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_252222));
-//            } else {
-//                showAnimation(mIcon,animations[mTabPosition]);
-            mIcon.setImageResource(iconsSelect[mTabPosition]);
-//                mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_29D69F));
+            if (null == mContext || iconsSelectNet.isEmpty()) {
+                mIcon.setImageResource(iconsSelect[mTabPosition]);
+            } else {
+                GlideUtils.loadImage((Activity) mContext, iconsSelectNet.get(mTabPosition), mIcon);
+            }
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_29D69F));
-//            }
         } else {
-//            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_999999));
-            mIcon.setImageResource(icons[mTabPosition]);
-            // mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_5A6572_50));
+            if (null == mContext || iconsNet.isEmpty()) {
+                mIcon.setImageResource(icons[mTabPosition]);
+            }else{
+                GlideUtils.loadImage((Activity) mContext, iconsNet.get(mTabPosition), mIcon);
+            }
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_999999));
-//            if (mTabPosition == MAIN_ACTIVITY.ACTION) {
-//                mIcon.setImageResource(R.mipmap.icon_action);
-//                mTvTitle.setVisibility(GONE);
-//                if (mObjectAnimator != null) {
-//                    mObjectAnimator.cancel();
-//                    mObjectAnimator.start();
-//                } else {
-//                    startActionAnim();
-//                }
-//            }
         }
-    }
-
-    public void setRejectIcon(int iconRes) {
-        mIcon.setImageResource(iconRes);
-//        iconsSelect[MAIN_ACTIVITY.LIFE] = R.mipmap.activity_select;
-//        icons[MAIN_ACTIVITY.LIFE] = R.mipmap.activity_normal;
-//        mTvTitle.setText("活动");
     }
 
     public void setTabPosition(int position, int currentPosition) {
@@ -173,40 +160,15 @@ public class BottomBarTab extends FrameLayout {
         if (position == currentPosition) {
             setSelected(true);
         }
-//        if (mTabPosition == MAIN_ACTIVITY.ACTION) {
-//            mIcon.setImageResource(R.mipmap.icon_action);
-//            mTvTitle.setVisibility(GONE);
-//            if (mObjectAnimator != null) {
-//                mObjectAnimator.cancel();
-//                mObjectAnimator.start();
-//            } else {
-//                startActionAnim();
-//            }
-//        }
     }
 
     public int getTabPosition() {
         return mTabPosition;
     }
 
-    /**
-     * 加载帧动画
-     *
-     * @param imageView
-     * @param resourceId 帧动画
-     */
-    private void showAnimation(ImageView imageView, int resourceId) {
-        imageView.setImageResource(resourceId);
-        AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
-        //执行一次
-        animationDrawable.setOneShot(true);
-        animationDrawable.start();
-    }
-
     public void showBadgeView(String content) {
         if (!TextUtils.isEmpty(content)) {
             mBadgeView.setVisibility(VISIBLE);
-//            mBadgeView.setText(content);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.base;
 
+import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 
@@ -66,6 +67,16 @@ public class AppHolder {
 
     public RedPacketEntity getRedPacketEntityList() {
         return mRedPacketEntity;
+    }
+
+    private IconsEntity mIconsEntity;
+
+    public void setIconsEntityList(IconsEntity iconsEntity) {
+        this.mIconsEntity = iconsEntity;
+    }
+
+    public IconsEntity getIconsEntityList() {
+        return mIconsEntity;
     }
 
     private String cleanFinishSourcePageId = "";

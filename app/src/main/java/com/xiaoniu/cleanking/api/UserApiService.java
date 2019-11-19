@@ -6,6 +6,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
+import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
@@ -72,11 +73,15 @@ public interface UserApiService {
 
     /**
      * 红包
-     *
-     * @return
      */
     @POST("/popup/v2/query")
     Flowable<RedPacketEntity> getRedPacketList();
+
+    /**
+     * 底部icon
+     */
+    @GET("/bottomIcon/query")
+    Flowable<IconsEntity> getIconList();
 
     /**
      * 互动式广告开关

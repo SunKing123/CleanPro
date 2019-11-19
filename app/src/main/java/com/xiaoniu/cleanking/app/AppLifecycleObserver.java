@@ -59,15 +59,14 @@ public class AppLifecycleObserver implements LifecycleObserver {
                             || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
                             || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
                         return;
-                    //暂时注释
-//        if (PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
-                    switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-                        case 5: //所有页面展示红包
-                            mContext.startActivity(new Intent(mContext, RedPacketHotActivity.class));
-                            mIsBack = false;
-                            break;
+                    if (PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
+                        switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+                            case 5: //所有页面展示红包
+                                mContext.startActivity(new Intent(mContext, RedPacketHotActivity.class));
+                                mIsBack = false;
+                                break;
+                        }
                     }
-//        }
                 }
             }
         }
