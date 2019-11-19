@@ -23,12 +23,17 @@ public class RedPacketEntity extends BaseEntity {
         private String id;
         private String title;
         private int trigger;
-        private String location;
+        private int location;
         private String remark;
         private String appName;
+        private String htmlUrl;
         private int showType;
         private List<String> imgUrls;
         private List<String> jumpUrls;
+
+        public String getHtmlUrl() {
+            return htmlUrl;
+        }
 
         public String getId() {
             return id;
@@ -42,7 +47,7 @@ public class RedPacketEntity extends BaseEntity {
             return trigger;
         }
 
-        public String getLocation() {
+        public int getLocation() {
             return location;
         }
 

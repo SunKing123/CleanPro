@@ -754,19 +754,6 @@ public class PreferenceUtil {
     }
 
     /**
-     * 保存点击home键退居后台时间
-     *
-     * @return
-     */
-    public static boolean saveHomeBackTime() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(SpCacheConfig.IS_HOME_BACK_TIME, System.currentTimeMillis()).commit();
-        return true;
-    }
-
-
-    /**
      * 保存是否后台
      *
      * @return
@@ -981,6 +968,19 @@ public class PreferenceUtil {
         if (System.currentTimeMillis() - time > 2 * 60 * 1000)
             return true;
         return false;
+    }
+
+
+    /**
+     * 保存点击home键退居后台时间
+     *
+     * @return
+     */
+    public static boolean saveHomeBackTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_HOME_BACK_TIME, System.currentTimeMillis()).commit();
+        return true;
     }
 
     /**

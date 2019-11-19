@@ -299,6 +299,12 @@
             android:name=".ui.main.activity.NetWorkActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.activity.RedPacketHotActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/activityBgTranslucent" />
 
         <activity
             android:name=".ui.lockscreen.LockActivity"
@@ -311,7 +317,8 @@
             android:theme="@style/common_locker_screen"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
-        <activity android:name=".ui.lockscreen.PopLayerActivity"
+        <activity
+            android:name=".ui.lockscreen.PopLayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:hardwareAccelerated="true"

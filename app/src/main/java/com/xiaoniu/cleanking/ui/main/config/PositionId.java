@@ -42,6 +42,7 @@ public class PositionId {
     public static final String KEY_NET = "page_net_speed_complete";
     public static final String KEY_VIRUS_SCREEN = "page_virus_kill_screen";
     public static final String KEY_NET_SCREEN = "page_net_speed_screen";
+    public static final String KEY_RED_JILI = "page_pop_up_encourag";
 
 
     public static final String DRAW_ONE_CODE = "advert_position_advert1";

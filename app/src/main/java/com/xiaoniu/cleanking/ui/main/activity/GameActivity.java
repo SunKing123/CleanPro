@@ -430,6 +430,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                         if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getRepeatCount() == 0) {
                             NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                             StatisticsUtils.trackClick("return_click", "游戏加速视频弹窗页返回", "gameboost_add_page", "gameboost_video_popup_page");
+                            return true;
                         }
                         return false;
                     }
