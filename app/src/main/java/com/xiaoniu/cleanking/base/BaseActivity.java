@@ -63,23 +63,4 @@ public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivi
         }
     }
 
-    List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        fragList.add(new WeakReference(fragment));
-    }
-
-    public List<Fragment> getActiveFragments() {
-        ArrayList<Fragment> ret = new ArrayList<Fragment>();
-        for (WeakReference<Fragment> ref : fragList) {
-            Fragment f = ref.get();
-            if (f != null) {
-                if (f.isVisible()) {
-                    ret.add(f);
-                }
-            }
-        }
-        return ret;
-    }
 }
