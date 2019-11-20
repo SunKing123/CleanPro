@@ -8,14 +8,12 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.activity.RedPacketHotActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.NetworkUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.dependencies["annotations"]
+    api rootProject.ext.dependencies.androidx["annotations"]
+    api rootProject.ext.dependencies.androidx["constraintlayout"]
 }
 

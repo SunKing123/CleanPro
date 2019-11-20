@@ -4,7 +4,6 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
 
@@ -13,11 +12,11 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.room.Room;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-//import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -30,9 +29,9 @@ import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
+import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -86,9 +85,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initProcess(application);
         //商业sdk初始化
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
+        initJsBridge();
     }
-
-
 
     private static AppComponent mAppComponent;
 
@@ -101,6 +99,13 @@ public class ApplicationDelegate implements IApplicationDelegate {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver(application.getApplicationContext()));
     }
 
+    /**
+     * js回调
+     */
+    private void initJsBridge() {
+        JsBridgeConfig.getSetting().setProtocol("JWTJSBridge").registerDefaultModule(JsBridgeModule.class).debugMode(true);
+    }
+
     private void initGeekPush(Application application) {
         GeekPush.setDebug(false);
 
@@ -111,7 +116,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
         GeekPush.register();
         JPushNotificationManager.customPushNotification(application, 1, R.layout.layout_notivition, R.id.image, R.id.title, R.id.text, R.mipmap.applogo, R.mipmap.applogo);
     }
-
 
 
     private void initRoom(Application application) {
@@ -180,7 +184,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     }
 
-    private String oaId ="";
+    private String oaId = "";
+
     public void initOaid(Application application) {
         //设置oaid到埋点公共参数
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) { //4.4以上版本oaid
@@ -220,6 +225,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         }
     }
+
     //获取当前进程名称
     public String getProcessName(Context context) {
         if (context == null) {

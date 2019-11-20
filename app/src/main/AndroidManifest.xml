@@ -303,6 +303,7 @@
         <activity
             android:name=".ui.main.activity.RedPacketHotActivity"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/activityBgTranslucent" />
 
@@ -473,6 +474,7 @@
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />

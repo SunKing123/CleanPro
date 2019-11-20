@@ -8,6 +8,8 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.comm.jksdk.R;
 
 import androidx.appcompat.widget.AppCompatImageView;

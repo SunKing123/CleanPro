@@ -3,7 +3,6 @@ package com.geek.webpage.web.model;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 
@@ -32,7 +31,9 @@ public class WebDialogManager {
     public void showWebDialog(Context context, String urlStr) {
         if (context == null || TextUtils.isEmpty(urlStr))
             return;
-        dismissWebDialog();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         dialog = new LWWebViewDialog(context);
         dialog.loadUrl(urlStr);
         dialog.getWebView().setWebViewListener(new WebViewListener() {
@@ -78,6 +79,9 @@ public class WebDialogManager {
     public void dismissWebDialog() {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
+        }
+        if (null != mFinishInterface) {
+            mFinishInterface.finishActivity();
         }
     }
 

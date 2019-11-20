@@ -25,8 +25,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':jsbridge')
-    implementation rootProject.ext.dependencies["annotations"]
+    api project(':jsbridge')
     implementation rootProject.ext.dependencies.support["appcompat-v7"]
-    implementation 'org.simple:androideventbus:1.0.5.1'
+    api 'org.simple:androideventbus:1.0.5.1'
 }

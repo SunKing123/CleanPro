@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JsBridge Demo</title>
+    <script type="text/javascript" src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/2.5.1/vconsole.min.js"></script>
+</head>
+<body>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    ul > li {
+        display: block;
+        text-align: center;
+        list-style: none;
+        background: #ccc;
+        margin: 10px;
+        padding: 8px;
+    }
+
+    #image-preview {
+        max-width: 200px;
+    }
+</style>
+<ul id="ul">
+    <li>获取头部信息</li>
+    <li>token过期</li>
+    <li>分享</li>
+    <li>打开红包弹窗</li>
+    <li>关闭红包弹窗</li>
+    <li>刷新人民币和金币</li>
+    <li>登录界面</li>
+    <li>打开一个正常网页</li>
+
+</ul>
+<img id="image-preview"/>
+<script type="text/javascript">
+    var ul = document.getElementById("ul");
+    var li = ul.getElementsByTagName("li");
+    for (var i = 0; i < li.length; i++) {
+        li[i].index = i;
+        li[i].onclick = function () {
+            switch (this.index) {
+                case 0:
+                    JWTJSBridge.jsToNative.doAction('{"action":"headers","data":null}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                case 1:
+                    JWTJSBridge.jsToNative.doAction('{"action":"token_overdue","data":null}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                case 2:
+                     JWTJSBridge.jsToNative.doAction('{"action":"share","data":{"shareType":1,"title":"","desc":"","link":"","imgsUrl":"dddd"}}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+
+                case 3:
+                    JWTJSBridge.jsToNative.doAction('{"action":"opne_dialog_webview","data":{"url":"http://testwlqlapph5.fqt188.com/popBox.html?url=https://getvideo-test.oss-cn-shanghai.aliyuncs.com/clean/banner/image/763aa1afa0f54193b9aa973a1ac3734c.png"}}', function(ret){
+                      alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                case 4:
+                   JWTJSBridge.jsToNative.doAction('{"action":"close_dialog_webview","data":null}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                case 5:
+                   JWTJSBridge.jsToNative.doAction('{"action":"refresh_rmb_coin","data":{"rmb":"100","coin":"8999"}}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                case 6:
+                   JWTJSBridge.jsToNative.doAction('{"action":"login","data":null}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                case 7:
+                   JWTJSBridge.jsToNative.doAction('{"action":"open_webview","data":{"title":"百度一下","url":"https://www.baidu.com/"}}', function(ret){
+                        alert('menu click，return data is ' + ret)
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+     window.test = function() {
+       return 5;
+    }
+
+    window.onload = function() {
+        window.startTime = new Date().getTime();
+    }
+
+     window.onMyBridgeReady = function () {
+        console.log("JsBridge load finish, cost:" + (new Date().getTime() - window.startTime) + "ms");
+     }
+
+</script>
+</body>
+</html>
