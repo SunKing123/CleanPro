@@ -51,7 +51,7 @@ public class KeepAliveManager {
                 } else {
 
                     Intent localIntent = new Intent(application, LocalService.class);
-
+                    localIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     //启动守护进程
                     Intent guardIntent = new Intent(application, RemoteService.class);
                     if (Build.VERSION.SDK_INT >= 26) {

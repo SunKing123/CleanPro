@@ -8,11 +8,14 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,7 +35,8 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
-        if (null == mContext || !mIsBack) return;
+//        LogUtils.i("zzh===="+mIsBack);
+        if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)) return;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
