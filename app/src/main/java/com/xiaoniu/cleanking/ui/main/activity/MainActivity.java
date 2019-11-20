@@ -24,8 +24,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.geek.webpage.entity.WebPageEntity;
-import com.geek.webpage.utils.WebPageConstants;
 import com.geek.webpage.web.model.WebDialogManager;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -723,7 +721,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             , iconsEntity.getData().get(1).getTabName()
                             , iconsEntity.getData().get(1).getOrderNum()));
         } else {
-            if(iconsEntity.getData().size()>=4){
+            if (iconsEntity.getData().size() >= 4) {
                 mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(2).getIconImgUrl()
                         , iconsEntity.getData().get(2).getTabName()
                         , iconsEntity.getData().get(2).getOrderNum());
@@ -738,7 +736,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
                                 , iconsEntity.getData().get(3).getTabName()
                                 , iconsEntity.getData().get(3).getOrderNum()));
-            }else{
+            } else {
                 getIconListFail();
             }
 
