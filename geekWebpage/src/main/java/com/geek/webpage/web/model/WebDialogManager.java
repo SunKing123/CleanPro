@@ -31,7 +31,9 @@ public class WebDialogManager {
     public void showWebDialog(Context context, String urlStr) {
         if (context == null || TextUtils.isEmpty(urlStr))
             return;
-//        dismissWebDialog();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         dialog = new LWWebViewDialog(context);
         dialog.loadUrl(urlStr);
         dialog.getWebView().setWebViewListener(new WebViewListener() {
