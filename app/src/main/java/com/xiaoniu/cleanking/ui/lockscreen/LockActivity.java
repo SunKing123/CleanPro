@@ -14,14 +14,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +36,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -41,6 +48,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView lockCamera;
     private LockExitDialog lockExitDialog;
     private ImageView batteryIcon;
+    private RelativeLayout relAd;
     private TextView mLockTime, mLockDate;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
@@ -53,6 +61,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setLockerWindow(getWindow());
         setContentView(R.layout.activity_lock);
+        ActivityCollector.addActivity(this,LockActivity.class);
         initView();
     }
 
@@ -61,6 +70,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
         linAdLayout = ViewUtils.get(this,R.id.lock_ad_container);
+        relAd = ViewUtils.get(this,R.id.rel_ad);
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
             public void onTouchLockArea() {
@@ -81,6 +91,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         registerLockerReceiver();
+        LogUtils.i("-----"+ SystemUtils.getProcessName(this));
+
+
 //
       /*  rxPermissions = new RxPermissions(this);
         lockExitDialog = new LockExitDialog(this);
@@ -104,6 +117,37 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 .add(R.id.lock_video_container, videoFlowListFragment)
                 .commitAllowingStateLoss();*/
 //        checkLockState();
+    }
+
+
+
+    public void adInit(){
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this,"success_page_ad_1", new AdListener() {
+            @Override
+            public void adSuccess() {
+                View adView = adManager.getAdView();
+                if (adView != null) {
+                    relAd.removeAllViews();
+                    relAd.addView(adView);
+                }
+            }
+
+            @Override
+            public void adExposed() {
+                LogUtils.e("adExposed");
+            }
+
+            @Override
+            public void adClicked() {
+
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+
+            }
+        });
     }
 
     private String content = null;
@@ -146,6 +190,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         mUnlockView.startAnim();
         updateTimeUI();
+        adInit();
     }
 
     @Override
@@ -274,6 +319,27 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
     }
+
+
+
+
+    public static void startActivity(Context context) {
+        Intent screenIntent = getIntent(context);
+        context.startActivity(screenIntent);
+    }
+
+
+    @NonNull
+    private static Intent getIntent(Context context) {
+        Intent screenIntent = new Intent();
+        screenIntent.setClass(context, LockActivity.class);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        return screenIntent;
+    }
+
 }

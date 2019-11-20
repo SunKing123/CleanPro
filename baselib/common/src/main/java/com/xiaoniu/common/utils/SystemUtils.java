@@ -78,4 +78,20 @@ public class SystemUtils {
         return true;
     }
 
+
+
+    //获取当前进程名称
+    public static String getProcessName(Context context) {
+        if (context == null) {
+            return "";
+        }
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == android.os.Process.myPid()) {
+                return processInfo.processName;
+            }
+        }
+        return "";
+    }
+
 }

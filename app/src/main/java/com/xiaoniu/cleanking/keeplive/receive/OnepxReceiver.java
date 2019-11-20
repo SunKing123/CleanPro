@@ -22,10 +22,12 @@ public final class OnepxReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {    //屏幕关闭的时候接受到广播
             appIsForeground = KeepAliveUtils.IsForeground(context);
             try {
+              /*
+              //todo 锁屏功能解锁后进入应用，1px暂时关闭
                 Intent it = new Intent(context, OnePixelActivity.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 it.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                context.startActivity(it);
+                context.startActivity(it);*/
             } catch (Exception e) {
                 e.printStackTrace();
             }

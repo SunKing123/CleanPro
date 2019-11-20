@@ -119,7 +119,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="27dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lock_date_time_layout">
 
         <LinearLayout
@@ -250,7 +249,7 @@
                     android:id="@+id/tv_virus_size"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
-                    android:text="50"
+                    android:text=""
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:layout_below="@id/iv_virus_tag"
@@ -272,16 +271,19 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/rel_ad"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </RelativeLayout>
-
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/rel_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_12dp"
+        android:background="@drawable/ad_container_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lock_ad_container" >
 
+    </RelativeLayout>
     <com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView
         android:id="@+id/lock_unlock_view"
         android:layout_width="match_parent"
