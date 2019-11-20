@@ -3,10 +3,9 @@ package com.comm.jksdk.ad.view.chjview;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.comm.jksdk.R;
@@ -16,6 +15,8 @@ import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
 
 import java.util.List;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * 穿山甲自渲染插屏广告<p>
@@ -66,6 +67,7 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
                 LogUtils.e(TAG, "loadNativeAd code:" + code + " message:" + message);
                 adError(code, message);
                 firstAdError(code, message);
+                Toast.makeText(mContext, "loadCustomInsertScreenAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
 
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -91,18 +93,34 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
         LogUtils.d(TAG, "showAdDialog:" + isFullScreen + " showTimeSeconds:" + showTimeSeconds);
         if (isFullScreen) {
             InsertScreenAdFullDownloadDialog fullDownloadDialog = new InsertScreenAdFullDownloadDialog(activity, showTimeSeconds);
+            fullDownloadDialog.setListenr(new InsertScreenAdFullDownloadDialog.OnClickListenr() {
+                @Override
+                public void onClick() {
+                    adClicked();
+                }
+
+                @Override
+                public void onAdShow() {
+                    adExposed();
+                }
+            });
             fullDownloadDialog.show();
             fullDownloadDialog.loadAd(ttNativeAd);
         } else {
-            if (ttNativeAd.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
-                InsertScreenAdNormalDownloadDialog normalDownloadDialog = new InsertScreenAdNormalDownloadDialog(activity, showTimeSeconds);
-                normalDownloadDialog.show();
-                normalDownloadDialog.loadAd(ttNativeAd);
-            } else {
-                InsertScreenAdNormalBrowseDialog browseDialog = new InsertScreenAdNormalBrowseDialog(activity, showTimeSeconds);
-                browseDialog.show();
-                browseDialog.loadAd(ttNativeAd);
-            }
+            InsertScreenAdNormalDownloadDialog normalDownloadDialog = new InsertScreenAdNormalDownloadDialog(activity, showTimeSeconds);
+            normalDownloadDialog.setListenr(new InsertScreenAdNormalDownloadDialog.OnClickListenr() {
+                @Override
+                public void onClick() {
+                    adClicked();
+                }
+
+                @Override
+                public void onAdShow() {
+                    adExposed();
+                }
+            });
+            normalDownloadDialog.show();
+            normalDownloadDialog.loadAd(ttNativeAd);
         }
     }
 }

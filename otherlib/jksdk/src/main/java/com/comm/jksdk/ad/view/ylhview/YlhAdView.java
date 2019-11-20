@@ -5,7 +5,6 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.comm.jksdk.ad.view.CommAdView;
-import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.AdsUtils;
@@ -50,7 +49,7 @@ public class YlhAdView extends CommAdView {
         this.style = style;
         this.mContext = context;
         this.mAppId = appId;
-
+        LogUtils.d(TAG, "广告样式------->style:" + style);
         if (Constants.AdStyle.BIG_IMG.equals(style)) {
             mAdView = new YlhBIgImgAdView(mContext);
         } else if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style)) { // 大图_带icon文字按钮
@@ -79,7 +78,8 @@ public class YlhAdView extends CommAdView {
             //all
             //所有样式都支持 随机展示
             int num = AdsUtils.getRandomNum(2);
-            LogUtils.w("------->num:", num + "");
+            LogUtils.w(TAG, "随机显示样式------->style:" + style + " getRandomNum:" + num);
+            Toast.makeText(mContext, "发现未定义样式:" + style + "正试图随机显示样式" + num, Toast.LENGTH_SHORT).show();
             switch (num) {
                 case 0:
                     mAdView = new YlhLeftImgRightTwoTextAdView(mContext);
@@ -122,6 +122,7 @@ public class YlhAdView extends CommAdView {
 //        if(TextUtils.isEmpty(ylhAppid)){
 //            ylhAppid=Constants.YLH_APPID;
 //        }
+        LogUtils.d(TAG, "--------开始请求广告-------------广告样式------->style:" + style);
         if (Constants.AdStyle.BIG_IMG.equals(style) || Constants.AdStyle.DATU_ICON_TEXT.equals(style) || Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style)
                 || Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style) || Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style) || Constants.AdStyle.BIG_IMG_BUTTON_LAMP.equals(style)
                 || Constants.AdStyle.BIG_IMG_BUTTON.equals(style) || Constants.AdStyle.BIG_IMG_NEST.equals(style) || Constants.AdStyle.BIG_IMG_NEST_LAMP.equals(style) || Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style)) {

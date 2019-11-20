@@ -1,8 +1,8 @@
 package com.comm.jksdk.ad.view.chjview;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
@@ -11,6 +11,8 @@ import com.comm.jksdk.R;
 import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * 穿山甲开屏广告view<p>
@@ -51,6 +53,7 @@ public class ChjSplashAdView extends CHJAdView {
                 LogUtils.d(TAG, "csj errorCode:" + errorCode + " errorMsg:" + errorMsg);
                 adError(errorCode, errorMsg);
                 firstAdError(errorCode, errorMsg);
+                Toast.makeText(mContext, "loadSplashAd error:" + errorCode + " message:" + errorMsg, Toast.LENGTH_SHORT).show();
             }
 
             @Override

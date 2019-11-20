@@ -190,4 +190,11 @@ public class MainModel extends BaseModel {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.pushDeviceInfo(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
+
+
+
+
+
+
+
 }

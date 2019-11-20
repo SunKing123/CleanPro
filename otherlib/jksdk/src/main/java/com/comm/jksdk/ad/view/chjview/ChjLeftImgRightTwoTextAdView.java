@@ -232,7 +232,7 @@ public class ChjLeftImgRightTwoTextAdView extends CommAdView {
     }
     private void bindDownLoadStatusController( final TTFeedAd ad) {
         final DownloadStatusController controller = ad.getDownloadStatusController();
-        nativeAdContainer.setOnClickListener(new View.OnClickListener() {
+        nativeAdContainer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (controller != null) {

@@ -1,4 +1,4 @@
-//package com.comm.jksdk.ad.admanager;
+package com.comm.jksdk.ad.admanager;//package com.comm.jksdk.ad.admanager;
 //
 //import android.content.Context;
 //import android.text.TextUtils;

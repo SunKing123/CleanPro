@@ -427,6 +427,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
+
         mBtn.setOnClickListener(this);
         mAgreement.setOnClickListener(this);
         PreferenceUtil.saveCleanAllUsed(false);
@@ -438,6 +439,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         PreferenceUtil.saveCleanGameUsed(false);
         PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         if (NetworkUtils.isNetConnected()) {
+            mPresenter.geekAdSDKConfig();//加载广告配置
             mPresenter.getAuditSwitch();
         } else {
             getAuditSwitchFail();

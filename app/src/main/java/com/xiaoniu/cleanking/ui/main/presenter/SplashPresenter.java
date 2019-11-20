@@ -2,6 +2,10 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.util.Log;
 
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.bean.ConfigBean;
+import com.comm.jksdk.config.listener.ConfigListener;
+import com.comm.jksdk.utils.JsonUtils;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -9,8 +13,11 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -80,6 +87,24 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             @Override
             public void netConnectError() {
                 mView.getAuditSwitchFail();
+            }
+        });
+    }
+
+    //获取广告配置
+    public void geekAdSDKConfig(){
+        GeekAdSdk.requestConfig(new ConfigListener() {
+            @Override
+            public void adSuccess(List<ConfigBean.AdListBean> configList) {
+                String config = JsonUtils.encode(configList);
+                LogUtils.i("config:" + config.substring(0, config.length() / 2));
+                LogUtils.i( "config-------:" + config.substring(config.length() / 2));
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                LogUtils.i(errorCode+"----config--error---:" + errorMsg);
+
             }
         });
     }

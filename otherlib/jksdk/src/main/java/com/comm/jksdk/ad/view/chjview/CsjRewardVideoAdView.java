@@ -2,6 +2,7 @@ package com.comm.jksdk.ad.view.chjview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
@@ -71,6 +72,7 @@ public class CsjRewardVideoAdView extends CHJAdView {
                 LogUtils.e(TAG, "rewardVideoAd error:" + code + " message:" + message);
                 adError(code, message);
                 firstAdError(code, message);
+                Toast.makeText(mContext, "rewardVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
 
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。

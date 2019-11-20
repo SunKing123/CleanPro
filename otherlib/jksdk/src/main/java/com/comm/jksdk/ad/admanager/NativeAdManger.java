@@ -308,9 +308,10 @@ public class NativeAdManger implements AdManager {
         adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
         adsInfoslist.clear();
         adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
-
+        LogUtils.d(TAG, "-----loadCustomInsertScreenAd--------");
         againRequest();
     }
+
 
     /**
      * 轮询请求
@@ -333,5 +334,43 @@ public class NativeAdManger implements AdManager {
         mAdId = mAdsInfosBean.getAdId();
         mAppId = mAdsInfosBean.getAdsAppId();
         createAdView(mActivity, adUnion, mAppId, mAdId);
+    }
+
+    /**
+     * 请求插屏广告
+     * @param activity
+     * @param adType
+     * @param appId
+     * @param mAdId
+     */
+    protected void requsetInteractionScreenn(Activity activity, String adType, String appId, String mAdId){
+        if (Constants.AdType.ChuanShanJia.equals(adType)) {
+            mAdView = new CHJAdView(GeekAdSdk.getContext(), activity, adStyle, appId, mAdId);
+            ((CHJAdView) mAdView).setOrientation(orientation);
+            if (!TextUtils.isEmpty(userId)) {
+                ((CHJAdView) mAdView).setUserId(userId);
+            }
+            ((CHJAdView) mAdView).setFullScreen(isFullScreen);
+            ((CHJAdView) mAdView).setShowTimeSeconds(showTimeSeconds);
+        } else if (Constants.AdType.YouLiangHui.equals(adType)) {
+            mAdView = new YlhAdView(GeekAdSdk.getContext(), activity, adStyle, appId, mAdId);
+        } else {
+            // 暂不处理
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+            return;
+        }
+
+        if (mAdView != null && mAdListener != null) {
+            //向客户端提供接口
+            mAdView.setAdListener(mAdListener);
+            //ylh请求失败请求chj广告接口回掉
+            mAdView.setYlhAdListener(mFirstAdListener);
+        }
+
+        adParentView.removeAllViews();
+        adParentView.addView(mAdView);
+        requestAd();
     }
 }

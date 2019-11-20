@@ -9,7 +9,6 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.qq.e.comm.util.Md5Util;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

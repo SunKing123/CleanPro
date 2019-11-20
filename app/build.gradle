@@ -7,8 +7,8 @@ apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-//        applicationId "com.hellogeek.cleanking" //暂时注释
-        applicationId "com.xiaoniu.cleanking"
+        applicationId "com.hellogeek.cleanking" //暂时注释
+//        applicationId "com.xiaoniu.cleanking"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName rootProject.ext.versionName
@@ -103,6 +103,8 @@ android {
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
+            buildConfigField "String", "SYSTEM_EN", "\"dev\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
 
         }
         btest {
@@ -110,6 +112,8 @@ android {
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
+            buildConfigField "String", "SYSTEM_EN", "\"btest\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
 
         }
         preprod {
@@ -117,12 +121,16 @@ android {
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
+            buildConfigField "String", "SYSTEM_EN", "\"preprod\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
         }
         prod {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
+            buildConfigField "String", "SYSTEM_EN", "\"prod\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
         }
     }
     compileOptions {
@@ -174,6 +182,7 @@ dependencies {
     //推送
     implementation files('libs\\push-core.aar')
     implementation files('libs\\push-jpush.aar')
+    implementation project(path: ':otherlib:jksdk')
 
 }
 

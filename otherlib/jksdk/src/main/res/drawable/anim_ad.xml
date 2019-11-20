@@ -55,4 +55,7 @@
     <item
         android:drawable="@mipmap/caideng0018"
         android:duration="60"></item>
+    <item
+        android:drawable="@mipmap/caideng0019"
+        android:duration="60"></item>
 </animation-list>

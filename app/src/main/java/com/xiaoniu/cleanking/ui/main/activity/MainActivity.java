@@ -231,13 +231,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             getDeviceInfo();
         }
         //获取定位权限
-        mPresenter.requestLocationPermission();
+//        mPresenter.requestLocationPermission();
         //测试入口
         if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
-        //开启定时扫面缓存
-//        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
     }
 
     @Override
@@ -714,7 +712,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (null == iconsEntity || null == iconsEntity.getData() || iconsEntity.getData().size() <= 0)
             return;
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "0")) {
+        if (false) {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
                             , iconsEntity.getData().get(0).getTabName()
@@ -723,20 +721,25 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             , iconsEntity.getData().get(1).getTabName()
                             , iconsEntity.getData().get(1).getOrderNum()));
         } else {
-            mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(2).getIconImgUrl()
-                    , iconsEntity.getData().get(2).getTabName()
-                    , iconsEntity.getData().get(2).getOrderNum());
-            mBottomBar
-                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
-                            , iconsEntity.getData().get(0).getTabName()
-                            , iconsEntity.getData().get(0).getOrderNum()))
-                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
-                            , iconsEntity.getData().get(1).getTabName()
-                            , iconsEntity.getData().get(1).getOrderNum()))
-                    .addItem(mBottomBarTab)
-                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
-                            , iconsEntity.getData().get(3).getTabName()
-                            , iconsEntity.getData().get(3).getOrderNum()));
+            if(iconsEntity.getData().size()>=4){
+                mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(2).getIconImgUrl()
+                        , iconsEntity.getData().get(2).getTabName()
+                        , iconsEntity.getData().get(2).getOrderNum());
+                mBottomBar
+                        .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
+                                , iconsEntity.getData().get(0).getTabName()
+                                , iconsEntity.getData().get(0).getOrderNum()))
+                        .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
+                                , iconsEntity.getData().get(1).getTabName()
+                                , iconsEntity.getData().get(1).getOrderNum()))
+                        .addItem(mBottomBarTab)
+                        .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
+                                , iconsEntity.getData().get(3).getTabName()
+                                , iconsEntity.getData().get(3).getOrderNum()));
+            }else{
+                getIconListFail();
+            }
+
         }
     }
 

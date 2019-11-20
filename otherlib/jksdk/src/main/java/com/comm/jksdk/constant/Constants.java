@@ -25,9 +25,17 @@ public class Constants {
     public interface AdStyle {
 
         /**
-         * 自渲染插屏
+         * 模板插屏
          */
-        String CUSTOM_CP = "CUSTOM_CP";
+        String CP = "CP";
+        /**
+         * 自渲染全屏插屏
+         */
+        String FULLSCREEN_CP_01 = "FULLSCREEN_CP_01";
+        /**
+         * 自定义插屏_01
+         */
+        String CUSTOM_CP = "CUSTOM_CP_01";
         /**
          * 开屏
          */

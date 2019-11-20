@@ -2,6 +2,7 @@ package com.comm.jksdk.ad.view.chjview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
@@ -59,6 +60,7 @@ public class CsjFullScreenVideoView extends CHJAdView {
                 LogUtils.e(TAG, "loadFullScreenVideoAd error:" + code + " message:" + message);
                 adError(code, message);
                 firstAdError(code, message);
+                Toast.makeText(mContext, "loadFullScreenVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
 
             @Override

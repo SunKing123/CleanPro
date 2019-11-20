@@ -15,6 +15,10 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.bean.ConfigBean;
+import com.comm.jksdk.config.listener.ConfigListener;
+import com.comm.jksdk.utils.JsonUtils;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -38,6 +42,7 @@ import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -647,4 +652,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void onLocationChanged(AMapLocation aMapLocation) {
 
     }
+
+
 }

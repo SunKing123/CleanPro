@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -60,16 +61,21 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation files('libs/android-query-full.0.26.7.jar')
+
+//    优量汇
+    api files('libs\\GDTSDK.tbs.4.90.960.aar')
+//    穿山甲
+    api files('libs\\open_ad_sdk.aar')
 //    implementation 'com.novoda:bintray-release:0.2.7'
 }
 
 //publishing {
 //    publications {
 //        maven(MavenPublication) {
-//            groupId 'com.xxx.im'
-//            artifactId 'IMLib'
-//            version '0.0.2-SNAPSHOT'
-//            artifact "$buildDir/outputs/aar/app-release.aar"
+//            groupId 'com.comm.jksdk'
+//            artifactId 'GeekSdk'
+//            version '1.1.0'
+//            artifact "$buildDir/outputs/aar/jksdk-release.aar"
 //            pom.withXml {
 //                def dependenciesNode = asNode().appendNode('dependencies')
 //                configurations .implementation.allDependencies.each { dependency ->
@@ -84,6 +90,10 @@ dependencies {
 //        }
 //    }
 //
-//    repositories { maven { url "$buildDir/repo" } }
+//    repositories {
+//        maven {
+//            url "$buildDir/repo"
+//        }
+//    }
 //}
 

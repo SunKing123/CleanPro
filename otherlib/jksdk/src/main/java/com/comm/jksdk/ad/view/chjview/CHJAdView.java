@@ -2,6 +2,7 @@ package com.comm.jksdk.ad.view.chjview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
@@ -71,7 +72,7 @@ public class CHJAdView extends CommAdView {
         this.mActivity = activity;
         this.style = style;
         this.mAppId = appId;
-
+        LogUtils.d(TAG, "广告样式------->style:" + style);
         if (Constants.AdStyle.BIG_IMG.equals(style)) {
             mAdView = new ChjBigImgAdView(mContext);
         } else if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style)) { // 大图_带icon文字按钮
@@ -90,7 +91,7 @@ public class CHJAdView extends CommAdView {
             mAdView = new ChjBigImgNestPlayLampView(mContext, true);
         } else if (Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style)) { //假视频大图_01
             mAdView = new ChjBigImgFakeVideoAdView(mContext);
-        }else if (Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style)) {
+        } else if (Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style)) {
             mAdView = new ChjLeftImgRightTwoTextAdView(mContext);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) {
             mAdView = new ChjSplashAdView(mContext);
@@ -98,14 +99,17 @@ public class CHJAdView extends CommAdView {
             mAdView = new CsjFullScreenVideoView(mContext);
         } else if (Constants.AdStyle.REWARD_VIDEO.equals(style)) {
             mAdView = new CsjRewardVideoAdView(mContext);
-        } else if (Constants.AdStyle.CUSTOM_CP.equals(style)) {
+        } else if (Constants.AdStyle.CP.equals(style)) { //模板插屏
+            mAdView = new CsjTemplateInsertScreenAdView(mContext);
+        } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) { //自定义插屏
             mAdView = new CsjCustomInsertScreenAdView(mContext);
         } else {
             //  all
             //所有样式都支持 随机展示
             //所有样式都支持 随机展示
             int num = AdsUtils.getRandomNum(2);
-            LogUtils.w("------->num:", num + "");
+            LogUtils.w(TAG, "随机显示样式------->style:" + style + " getRandomNum:" + num);
+            Toast.makeText(mContext, "发现未定义样式:" + style + "正试图随机显示样式" + num, Toast.LENGTH_SHORT).show();
             switch (num) {
                 case 0:
                     mAdView = new ChjLeftImgRightTwoTextAdView(mContext);
@@ -166,6 +170,7 @@ public class CHJAdView extends CommAdView {
 //        if(TextUtils.isEmpty(ylhAppid)){
 //            ylhAppid=Constants.YLH_APPID;
 //        }
+        LogUtils.d(TAG, "--------开始请求广告-------------广告样式------->style:" + style);
         if (Constants.AdStyle.BIG_IMG.equals(style) || Constants.AdStyle.DATU_ICON_TEXT.equals(style) || Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style)
                 || Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style) || Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style) || Constants.AdStyle.BIG_IMG_BUTTON_LAMP.equals(style)
                 || Constants.AdStyle.BIG_IMG_BUTTON.equals(style) || Constants.AdStyle.BIG_IMG_NEST.equals(style) || Constants.AdStyle.BIG_IMG_NEST_LAMP.equals(style) || Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style)) {
@@ -180,8 +185,10 @@ public class CHJAdView extends CommAdView {
             getFullScreenVideoAd();
         } else if (Constants.AdStyle.REWARD_VIDEO.equals(style)) {
             getRewardVideoAd();
-        } else if (Constants.AdStyle.CUSTOM_CP.equals(style)) {
+        } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) {
             getCustomInsertScreenAd();
+        } else if (Constants.AdStyle.CP.equals(style)) {
+            getTemplateInsertScreenAd();
         }
     }
 
@@ -298,6 +305,20 @@ public class CHJAdView extends CommAdView {
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((CsjCustomInsertScreenAdView) mAdView).loadCustomInsertScreenAd(mActivity, isFullScreen, showTimeSeconds, mAdId);
+        }
+    }
+
+    protected void getTemplateInsertScreenAd(){
+        if (mAdView == null) {
+            return;
+        }
+
+        //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
+        TTAdManagerHolder.get(mAppId).requestPermissionIfNecessary(mContext);
+        if (mAdView instanceof CsjTemplateInsertScreenAdView) {
+            mAdView.setAdListener(mAdListener);
+            mAdView.setYlhAdListener(mFirstAdListener);
+            ((CsjTemplateInsertScreenAdView) mAdView).loadTemplateInsertScreenAd(mActivity, isFullScreen, showTimeSeconds, mAdId);
         }
     }
 }

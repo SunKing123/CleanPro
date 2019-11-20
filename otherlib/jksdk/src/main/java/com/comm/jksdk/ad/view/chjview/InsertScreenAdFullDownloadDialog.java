@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.constraint.ConstraintLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +22,8 @@ import com.comm.jksdk.widget.RoundImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 /**
  * 全屏插屏广告弹窗<p>
  *
@@ -37,6 +38,12 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
     private CountDownTimer countDownTimer;
     private ConstraintLayout adContainer;
     private int showTimeSecond;
+
+    private OnClickListenr mListenr;
+
+    public void setListenr(OnClickListenr listenr) {
+        this.mListenr = listenr;
+    }
 
     protected InsertScreenAdFullDownloadDialog(Context context, int showTimeSecond) {
         super(context, R.style.InsertScreenAdDialog);
@@ -131,6 +138,9 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
                 if (ad != null) {
                     LogUtils.d(TAG, "广告" + ad.getTitle() + "被点击");
                 }
+                if (mListenr != null) {
+                    mListenr.onClick();
+                }
             }
 
             @Override
@@ -138,12 +148,18 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
                 if (ad != null) {
                     LogUtils.d(TAG, "广告" + ad.getTitle() + "被创意按钮被点击");
                 }
+                if (mListenr != null) {
+                    mListenr.onClick();
+                }
             }
 
             @Override
             public void onAdShow(TTNativeAd ad) {
                 if (ad != null) {
                     LogUtils.d(TAG, "广告" + ad.getTitle() + "展示");
+                }
+                if (mListenr != null) {
+                    mListenr.onAdShow();
                 }
             }
         });
@@ -154,5 +170,13 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
         if (v.getId() == R.id.full_screen_insert_ad_close) {
             dismiss();
         }
+    }
+
+    /**
+     * 模板广告点击回调(内部使用)
+     */
+    public interface OnClickListenr {
+        void onClick();
+        void onAdShow();
     }
 }

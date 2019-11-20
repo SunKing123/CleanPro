@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.constraint.ConstraintLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +20,8 @@ import com.comm.jksdk.widget.RoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * 半屏广告浏览类<p>

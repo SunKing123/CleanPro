@@ -37,7 +37,7 @@ public final class GeekAdSdk {
      * @param isFormal 是否是正式环境 true对应生产环境
      */
     public static void init(Context context, String productName, String channel, boolean isFormal){
-        mContext = context;
+        mContext = context.getApplicationContext();
         mRroductName = productName;
         mChannel = channel;
         mIsFormal = isFormal;

@@ -14,6 +14,7 @@ import androidx.room.Room;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bun.miitmdid.core.JLibrary;
+import com.comm.jksdk.GeekAdSdk;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 //import com.tencent.bugly.Bugly;
@@ -83,6 +84,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
         initProcess(application);
+        //商业sdk初始化
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
     }
 
 
