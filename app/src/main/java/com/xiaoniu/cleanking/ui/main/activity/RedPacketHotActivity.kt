@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.activity
 
-import android.util.Log
 import com.geek.webpage.web.model.WebDialogManager
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
@@ -8,6 +7,7 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
+import com.xiaoniu.common.utils.StatusBarUtil
 import java.util.*
 
 /**
@@ -24,6 +24,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     }
 
     override fun initView() {
+        StatusBarUtil.setTransparentForWindow(this)
         if (null == AppHolder.getInstance() || null == AppHolder.getInstance().redPacketEntityList
                 || null == AppHolder.getInstance().redPacketEntityList.data
                 || AppHolder.getInstance().redPacketEntityList.data.size <= 0

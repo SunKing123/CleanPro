@@ -1,8 +1,9 @@
 package com.comm.jksdk.ad.view.chjview;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
