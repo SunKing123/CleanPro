@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -17,6 +18,7 @@ import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -37,7 +39,7 @@ public class NewsListFragment extends BaseFragment {
     private NewsType mType;
 
     private static final int PAGE_NUM = 20;//每一页数据
-    private int current_page_no = 0;        //页码索引
+    private int current_page_no = 1;        //页码索引
     private boolean mIsRefresh = true;
 
     public static NewsListFragment getInstance(NewsType type) {
@@ -160,23 +162,27 @@ public class NewsListFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 视频类型咨询列表请求
+     */
     private void loadVideoData() {
         //请求参数设置：比如一个json字符串
+        if(mIsRefresh)
+            current_page_no = 1;
         JSONObject jsonObject = new JSONObject();
         try {
-//            String lastId = SPUtil.getLastNewsID(mType.getName());
             jsonObject.put("pageSize", PAGE_NUM);
             jsonObject.put("pageNo", current_page_no);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        LogUtils.i("zz=="+new Gson().toJson(jsonObject));
         HttpRequest request = new HttpRequest.Builder()
                 .addBodyParams(jsonObject.toString())
                 .build();
 
         EHttp.post(this, BuildConfig.VIDEO_BASE_URL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
-
             @Override
             public void onComplete() {
                 if (mIsRefresh) {
@@ -196,7 +202,9 @@ public class NewsListFragment extends BaseFragment {
                 if (result != null && result.size() > 0) {
                     if (mLlNoNet.getVisibility() == View.VISIBLE)
                         mLlNoNet.setVisibility(View.GONE);
-//                    SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
+//                    if (result.size() >= PAGE_NUM) { //数据加载中
+                        current_page_no++;
+//                    }
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result);
                     } else {
