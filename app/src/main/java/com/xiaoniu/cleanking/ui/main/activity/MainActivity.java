@@ -24,7 +24,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.geek.webpage.web.model.WebDialogManager;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -62,7 +61,6 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
-import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,7 +70,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -160,15 +157,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void initView() {
         Log.d("XiLei", "main_initview");
-        if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-            getIconListFail();
-        } else {
-            mPresenter.getIconList();
-        }
+        getIconListFail();
+        mPresenter.getIconList();
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
         isFirstCreate = true;
         initFragments();
-        mBottomBar.setCurrentItem(0);
         CLEAN = 0;
         TOOL = 1;
         NEWS = 2;
@@ -201,7 +194,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
                     return;
                 if (!mShowRedFirst && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-                    showRedPacket(AppHolder.getInstance().getRedPacketEntityList(), mCurrentPosition);
+                    showRedPacket(AppHolder.getInstance().getRedPacketEntityList());
                 }
             }
 
@@ -293,6 +286,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @param intent
      */
     private void changeTab(Bundle intent) {
+        Log.d("XiLei", "changeTab");
         String type = intent.getString("type");
         String home = intent.getString("NotificationService");
         if ("shangcheng".equals(type)) {
@@ -366,7 +360,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
             return;
         if (mIsBack && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-            showRedPacket(AppHolder.getInstance().getRedPacketEntityList(), mCurrentPosition);
+            showRedPacket(AppHolder.getInstance().getRedPacketEntityList());
             mIsBack = false;
         }
     }
@@ -667,19 +661,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             return;
         if (redPacketEntity.getData().get(0).getLocation() == 1
                 || redPacketEntity.getData().get(0).getLocation() == 5) {
-            showRedPacket(redPacketEntity, mCurrentPosition);
+            showRedPacket(redPacketEntity);
         }
     }
 
     /**
      * 展示红包
      */
-    private void showRedPacket(RedPacketEntity redPacketEntity, int position) {
+    private void showRedPacket(RedPacketEntity redPacketEntity) {
         if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
 //            if (redPacketEntity.getData().get(0).getLocation() != position)
 //                return;
             mShowRedFirst = true;
-            int count;
+            /*int count;
             if (redPacketEntity.getData().get(0).getShowType() == 1) { //循环
                 if (PreferenceUtil.getRedPacketShowTrigger() != redPacketEntity.getData().get(0).getTrigger()) {
                     PreferenceUtil.saveRedPacketForCount(0);
@@ -697,9 +691,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 } else {
                     count = new Random().nextInt(redPacketEntity.getData().get(0).getImgUrls().size() - 1);
                 }
-            }
+            }*/
             if (!isFinishing()) {
-                WebDialogManager.getInstance().showWebDialog(this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+//                WebDialogManager.getInstance().showWebDialog(this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+                startActivity(new Intent(this, RedPacketHotActivity.class));
             }
         }
     }
@@ -712,6 +707,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void getIconListSuccess(IconsEntity iconsEntity) {
         if (null == iconsEntity || null == iconsEntity.getData() || iconsEntity.getData().size() <= 0)
             return;
+        mBottomBar.removeAllTabs();
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
@@ -721,8 +717,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
                             , iconsEntity.getData().get(1).getTabName()
                             , iconsEntity.getData().get(1).getOrderNum()));
+            mBottomBar.setCurrentItem(0);
         } else {
             if (iconsEntity.getData().size() >= 4) {
+                Log.d("XiLei", "getIconListSuccess");
                 mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(2).getIconImgUrl()
                         , iconsEntity.getData().get(2).getTabName()
                         , iconsEntity.getData().get(2).getOrderNum());
@@ -737,10 +735,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
                                 , iconsEntity.getData().get(3).getTabName()
                                 , iconsEntity.getData().get(3).getOrderNum()));
-            } else {
-                getIconListFail();
+                mBottomBar.setCurrentItem(0);
             }
-
         }
     }
 
@@ -748,6 +744,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * 获取底部icon失败
      */
     public void getIconListFail() {
+        Log.d("XiLei", "getIconListFail");
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
@@ -762,5 +759,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .addItem(mBottomBarTab)
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         }
+        mBottomBar.setCurrentItem(0);
     }
 }

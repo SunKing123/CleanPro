@@ -528,7 +528,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         mModel.getIconList(new Common4Subscriber<IconsEntity>() {
             @Override
             public void showExtraOp(String code, String message) {
-                mView.getIconListFail();
             }
 
             @Override
@@ -539,12 +538,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void showExtraOp(String message) {
-                mView.getIconListFail();
             }
 
             @Override
             public void netConnectError() {
-                mView.getIconListFail();
             }
         });
     }

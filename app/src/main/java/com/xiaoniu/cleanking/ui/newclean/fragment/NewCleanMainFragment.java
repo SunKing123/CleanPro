@@ -683,6 +683,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (lifecycEvent.isActivity()) {
             mIsAllClean = false;
             mTopContentView.setVisibility(VISIBLE);
+            mTopAdFramelayout.removeAllViews();
             mTopAdFramelayout.setVisibility(View.GONE);
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setVisibility(VISIBLE);
