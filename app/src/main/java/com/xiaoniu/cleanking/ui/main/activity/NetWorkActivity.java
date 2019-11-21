@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -68,6 +70,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
+        mNumTv.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         initLottieYinDao();
         mFileQueryUtils = new FileQueryUtils();
         if (Build.VERSION.SDK_INT < 26) {
@@ -81,6 +84,9 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     }
 
     private void initLottieYinDao() {
+        if (null != mHandler) {
+            new NetWorkSpeedUtils(NetWorkActivity.this, mHandler).startShowNetSpeed();
+        }
         if (!mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.setAnimation("wangluo.json");
             mLottieAnimationView.setImageAssetsFolder("images_network");
@@ -105,9 +111,9 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (null != mHandler) {
-                    new NetWorkSpeedUtils(NetWorkActivity.this, mHandler).startShowNetSpeed();
-                }
+                Log.d("XiLei", "mStartNetNumber=" + mStartNetNumber);
+                mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)) + " KB/S");
+                Log.d("XiLei", "mStartNetNumber2222=" + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)));
                 if (null != mLottieAnimationView) {
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
@@ -164,6 +170,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         mRamScale = mFileQueryUtils.computeTotalSize(listInfo);
     }
 
+    private String mStartNetNumber;
     private boolean isShow;
     private Handler mHandler = new Handler() {
         @Override
@@ -172,7 +179,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 case 100:
                     if (!isShow) {
                         isShow = true;
-                        mNetNumTv.setText("现网速度： " + msg.obj.toString());
+                        mStartNetNumber = msg.obj.toString();
+                        mNetNumTv.setText("现网速度： " + mStartNetNumber);
                     }
                     break;
             }

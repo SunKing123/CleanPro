@@ -879,8 +879,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvSize.setText(R.string.virus_guard);
                 mTvSize.setTextSize(20);
             } else if (getString(R.string.network_quicken).contains(mTitle)) {
-                mTvSize.setText(getString(R.string.already_quicken, num)+ "%");
-                mTvSize.setTextSize(20);
+
+                mTvSize.setText(num);
+                mTvGb.setText("%");
+                mTvQl.setText("已提速");
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
