@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.ui.main.activity
 import android.os.Build
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.listener.AdManager
@@ -96,33 +98,33 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
      * 初始化广告sdk
      */
     private fun initGeekAdSdk() {
-        mAdManager = GeekAdSdk.getAdsManger()
+        mAdManager =GeekAdSdk.getAdsManger()
         mFrameLayout.removeAllViews()
         //暂时这样
-        mAdManager.loadRewardVideoAd(this, "red_envelopes_ad", "user123", 1, object : VideoAdListener {
+        /*mAdManager.loadRewardVideoAd(this, "red_envelopes_ad", "user123", 1, object : VideoAdListener {
             override fun onVideoResume() {}
             override fun onVideoRewardVerify(rewardVerify: Boolean, rewardAmount: Int, rewardName: String) {
-                Log.d(TAG, "rewardName + rewardAmount=" + rewardName + rewardAmount)
+                Toast.makeText(this@RedPacketHotActivity, rewardName + rewardAmount, Toast.LENGTH_SHORT).show()
             }
 
-            override fun adSuccess() {
+            fun adSuccess(info: AdInfo?) {
                 Log.d(TAG, "-----adSuccess-----")
                 mIsAdSusscss = true
             }
 
-            override fun adExposed() {
+            fun adExposed(info: AdInfo?) {
                 Log.d(TAG, "-----adExposed-----")
             }
 
-            override fun adClicked() {
+            fun adClicked(info: AdInfo?) {
                 Log.d(TAG, "-----adClicked-----")
             }
 
             override fun adError(errorCode: Int, errorMsg: String) {
-                Log.d(TAG, "-----adError-----$errorCode$errorMsg")
+                Log.d(TAG, "-----adError-----$errorMsg")
                 mFrameLayout.removeAllViews()
             }
-        })
+        })*/
     }
 
     /**
