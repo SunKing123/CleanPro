@@ -26,17 +26,17 @@ import java.util.List;
 import java.util.Random;
 
 /**
-  *
-  * @ProjectName:    ${PROJECT_NAME}
-  * @Package:        ${PACKAGE_NAME}
-  * @ClassName:      ${NAME}
-  * @Description:     大图_带icon文字按钮
-  * @Author:         fanhailong
-  * @CreateDate:     ${DATE} ${TIME}
-  * @UpdateUser:     更新者：
-  * @UpdateDate:     ${DATE} ${TIME}
-  * @UpdateRemark:   更新说明：
-  * @Version:        1.0
+ *
+ * @ProjectName:    ${PROJECT_NAME}
+ * @Package:        ${PACKAGE_NAME}
+ * @ClassName:      ${NAME}
+ * @Description:     大图_带icon文字按钮
+ * @Author:         fanhailong
+ * @CreateDate:     ${DATE} ${TIME}
+ * @UpdateUser:     更新者：
+ * @UpdateDate:     ${DATE} ${TIME}
+ * @UpdateRemark:   更新说明：
+ * @Version:        1.0
  */
 
 
@@ -162,17 +162,17 @@ public class YlhBigImgIcTvBtAdView extends CommAdView {
         ad.setNativeAdEventListener(new NativeADEventListener(){
             @Override
             public void onADExposed() {
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
             public void onADClicked() {
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
             public void onADError(AdError adError) {
-
+                firstAdError(adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override
