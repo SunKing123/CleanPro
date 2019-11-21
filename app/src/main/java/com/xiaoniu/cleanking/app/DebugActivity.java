@@ -98,6 +98,8 @@ public class DebugActivity extends BaseActivity {
     public void toWeChatClean(View view) {
         //原生不带参数 native_no_params协议
 //        "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=包名.ui.后面的路径"
+
+//        SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "tool.notify.activity.NotifyCleanGuideActivity";
         String packagePath = "tool.wechat.activity.WechatCleanHomeActivity";
         String schemeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE_NO_PARAMS +

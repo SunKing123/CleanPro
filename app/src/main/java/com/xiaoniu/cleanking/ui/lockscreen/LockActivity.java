@@ -21,10 +21,16 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
@@ -52,6 +58,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView batteryIcon;
     private RelativeLayout relAd;
     private TextView mLockTime, mLockDate;
+    private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
     private RxPermissions rxPermissions;
@@ -63,16 +70,24 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setLockerWindow(getWindow());
         setContentView(R.layout.activity_lock);
-        ActivityCollector.addActivity(this,LockActivity.class);
+        ActivityCollector.addActivity(this, LockActivity.class);
         initView();
     }
 
     private void initView() {
+        rel_clean_file = ViewUtils.get(this, R.id.rel_clean_file);
+        rel_clean_ram = ViewUtils.get(this, R.id.rel_clean_ram);
+        rel_clean_virus = ViewUtils.get(this, R.id.rel_clean_virus);
+
+        rel_clean_file.setOnClickListener(this::onClick);
+        rel_clean_ram.setOnClickListener(this::onClick);
+        rel_clean_virus.setOnClickListener(this::onClick);
+
         mLockTime = ViewUtils.get(this, R.id.lock_time_txt);
         mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
-        linAdLayout = ViewUtils.get(this,R.id.lock_ad_container);
-        relAd = ViewUtils.get(this,R.id.rel_ad);
+        linAdLayout = ViewUtils.get(this, R.id.lock_ad_container);
+        relAd = ViewUtils.get(this, R.id.rel_ad);
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
             public void onTouchLockArea() {
@@ -88,7 +103,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 //todo_zzh
                 //todo 兼容性优化——重新打开保活service
                 Intent i = new Intent(LockActivity.this, LocalService.class);
-                i.putExtra("action","unlock_screen");
+                i.putExtra("action", "unlock_screen");
                 LockActivity.this.startService(i);
                 finish();
             }
@@ -98,7 +113,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         registerLockerReceiver();
-        LogUtils.i("-----"+ SystemUtils.getProcessName(this));
+        LogUtils.i("-----" + SystemUtils.getProcessName(this));
 
 
 //
@@ -127,10 +142,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-    public void adInit(){
+    public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this,"success_page_ad_1", new AdListener() {
+        adManager.loadAd(this, "success_page_ad_1", new AdListener() {
             @Override
             public void adSuccess() {
                 View adView = adManager.getAdView();
@@ -227,17 +241,26 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-         /*     case R.id.lock_dial:
-                emergencyDial();
+            case R.id.rel_clean_file: //清理
+                Intent intentClean = new Intent(this, NowCleanActivity.class);
+                intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intentClean.putExtra("NotificationService", "clean");
+                startActivity(intentClean);
+
                 break;
-            case R.id.lock_camera:
-                openCamera();
+            case R.id.rel_clean_ram://一键加速
+                Intent phoneAccessIntent = new Intent(this, PhoneAccessActivity.class);
+                phoneAccessIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                phoneAccessIntent.putExtra("NotificationService", "clean");
+                startActivity(phoneAccessIntent);
                 break;
-          case R.id.lock_settings:
-                if (lockExitDialog != null && !lockExitDialog.isShowing() && !isFinishing()) {
-                    lockExitDialog.show();
-                }
-                break;*/
+            case R.id.rel_clean_virus://病毒查杀
+                Intent virusIntent = new Intent(this, VirusKillActivity.class);
+                virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                virusIntent.putExtra("NotificationService", "clean");
+                startActivity(virusIntent);
+                break;
+
         }
     }
 
@@ -328,8 +351,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
 
     }
-
-
 
 
     public static void startActivity(Context context) {
