@@ -85,7 +85,7 @@ public class DispatcherController {
         } else if (TextUtils.equals(SchemeConstant.NATIVE_NO_PARAMS, path)) {
             String activityName = parameters.getParameter(SchemeConstant.ANDROID_NAME);
             try {
-                String className = activity.getPackageName() + ".ui." + activityName;
+                String className = SchemeConstant.XIAONIU_HOST + ".ui." + activityName;
                 final Class clazz = Class.forName(className);
                 final Bundle bundle = new Bundle();
                 if (keys != null) {

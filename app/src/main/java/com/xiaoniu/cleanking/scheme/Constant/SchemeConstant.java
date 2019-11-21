@@ -11,6 +11,7 @@ public class SchemeConstant {
     //协议SCHEME和协议HOST
     public static String SCHEME = "cleanking";
     public static String HOST = BuildConfig.APPLICATION_ID;
+    public  static String XIAONIU_HOST = "com.xiaoniu.cleanking";//java代码路径
     //公共协议类型
     public static final String JUMP = "/jump";
     public static final String NATIVE = "/native";
