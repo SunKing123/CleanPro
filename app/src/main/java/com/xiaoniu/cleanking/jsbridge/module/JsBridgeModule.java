@@ -9,11 +9,15 @@ import com.apkfuns.jsbridge.module.JBCallback;
 import com.apkfuns.jsbridge.module.JSBridgeMethod;
 import com.apkfuns.jsbridge.module.JsModule;
 import com.geek.webpage.entity.WebPageEntity;
+import com.geek.webpage.eventbus.BaseEventBus;
+import com.geek.webpage.eventbus.BaseEventBusConstant;
 import com.geek.webpage.web.model.WebDialogManager;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.jsbridge.JsBridgeEnums;
 import com.xiaoniu.cleanking.jsbridge.entity.JsBridgeEntity;
 import com.xiaoniu.cleanking.jsbridge.entity.RedEntity;
+
+import org.simple.eventbus.EventBus;
 
 /**
  * 代码描述<p>
@@ -145,6 +149,11 @@ public class JsBridgeModule extends JsModule {
                         break;
                     case START_INVITECODE://直接打开邀请码
 //                        InviteCodeActivity.startInviteCodeActivity(getContext());
+                        break;
+                    case WEB_REDPACKET_AD://点击红包播放激励视频
+                        BaseEventBus baseEvent = new BaseEventBus();
+                        baseEvent.setAction(BaseEventBusConstant.WEB_REDPACKET_AD);
+                        EventBus.getDefault().post(baseEvent);
                         break;
 
                 }

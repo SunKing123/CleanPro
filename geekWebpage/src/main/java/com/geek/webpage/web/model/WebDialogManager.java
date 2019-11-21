@@ -79,9 +79,9 @@ public class WebDialogManager {
     public void dismissWebDialog() {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
-        }
-        if (null != mFinishInterface) {
-            mFinishInterface.finishActivity();
+            if (null != mFinishInterface) {
+                mFinishInterface.finishActivity();
+            }
         }
     }
 

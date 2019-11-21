@@ -8,15 +8,15 @@ package com.xiaoniu.cleanking.jsbridge;
  */
 public enum JsBridgeEnums {
     /**
-     *  获取http 头部信息
+     * 获取http 头部信息
      */
     HEADERS("headers"),
     /**
-     *  token 过期
+     * token 过期
      */
     TOKEN_OVERDUA("token_overdue"),
     /**
-     *  分享
+     * 分享
      */
     SHARE("share"),
 
@@ -55,18 +55,25 @@ public enum JsBridgeEnums {
     /**
      * start invitecode
      */
-    START_INVITECODE("start_invitecode");
+    START_INVITECODE("start_invitecode"),
+    /**
+     * 点击红包播放激励视频
+     */
+    WEB_REDPACKET_AD("web_redpacket_ad");
 
     private String operate;
+
     private JsBridgeEnums(String operate) {
         this.operate = operate;
     }
+
     private String getOperate() {
         return operate;
     }
+
     public static JsBridgeEnums val(String operate) {
-        for(JsBridgeEnums s : values()) {    //values()方法返回enum实例的数组
-            if(operate.equals(s.getOperate()))
+        for (JsBridgeEnums s : values()) {    //values()方法返回enum实例的数组
+            if (operate.equals(s.getOperate()))
                 return s;
         }
         return null;
