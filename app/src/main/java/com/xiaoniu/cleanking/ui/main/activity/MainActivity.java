@@ -713,7 +713,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (null == iconsEntity || null == iconsEntity.getData() || iconsEntity.getData().size() <= 0)
             return;
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
-        if (false) {
+        if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
                             , iconsEntity.getData().get(0).getTabName()

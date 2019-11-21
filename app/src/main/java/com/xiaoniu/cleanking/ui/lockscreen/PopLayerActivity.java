@@ -55,30 +55,6 @@ public class PopLayerActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
     }
-   /* @Override
-    protected int getLayoutResId() {
-        return
-    }
-
-    @Override
-    protected void initVariable(Intent intent) {
-
-    }
-
-    @Override
-    protected void initViews(Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    protected void setListener() {
-
-    }
-
-    @Override
-    protected void loadData() {
-
-    }*/
 
 
     /**
