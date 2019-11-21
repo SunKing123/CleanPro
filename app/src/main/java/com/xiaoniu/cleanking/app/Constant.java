@@ -45,5 +45,8 @@ public class Constant {
     //全局心跳间隔（秒）
     public static final int SCAN_SPACE_LONG = 20;
 
+    //手势解锁后_悬浮页面（秒）
+    public static final int UNLOCK_SPACE_LONG = 3;
+
 }
 

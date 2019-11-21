@@ -3,6 +3,7 @@ package com.comm.jksdk.ad.view.chjview;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import androidx.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -16,8 +17,6 @@ import com.comm.jksdk.utils.CollectionUtils;
 
 import java.util.List;
 
-import androidx.annotation.RequiresApi;
-
 /**
  * 穿山甲自渲染插屏广告<p>
  *
@@ -27,9 +26,15 @@ import androidx.annotation.RequiresApi;
 public class CsjCustomInsertScreenAdView extends CHJAdView {
     private Activity activity;
     private TTAdNative mTTAdNative;
+    protected boolean isFullScreen;
 
     public CsjCustomInsertScreenAdView(Context context) {
+        this(context, false);
+    }
+
+    public CsjCustomInsertScreenAdView(Context context, boolean isFullScreen) {
         super(context);
+        this.isFullScreen = isFullScreen;
     }
 
     @Override
@@ -44,7 +49,7 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
     /**
      * 获取插屏广告并展示
      */
-    public void loadCustomInsertScreenAd(final Activity activity, final boolean isFullScreen, final int showTimeSeconds, String adId) {
+    public void loadCustomInsertScreenAd(final Activity activity, final int showTimeSeconds, String adId) {
         if (activity == null) {
             throw new NullPointerException("loadCustomInsertScreenAd activity is null");
         }

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+   android:id="@+id/flayout_ad_container"
+    >
 
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:minHeight="121dp"
+        android:visibility="gone"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="66dp"
@@ -34,6 +36,16 @@
             />
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rel_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_12dp"
+         >
+
+    </RelativeLayout>
+-->
 
 
-</LinearLayout>
+</FrameLayout>

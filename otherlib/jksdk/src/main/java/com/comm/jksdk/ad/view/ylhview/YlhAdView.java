@@ -5,6 +5,9 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.comm.jksdk.ad.view.CommAdView;
+import com.comm.jksdk.ad.view.chjview.CsjCustomInsertScreenAdView;
+import com.comm.jksdk.ad.view.chjview.CsjTemplateInsertScreenAdView;
+import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.AdsUtils;
@@ -74,6 +77,8 @@ public class YlhAdView extends CommAdView {
             mAdView = new YlhSplashAdView(mContext);
         } else if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) {
             mAdView = new YlhFullScreenVideoAdView(mContext);
+        } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style) || Constants.AdStyle.CP.equals(style)) { //优量汇插屏
+            mAdView = new YlhTemplateInsertScreenAdView(mContext);
         } else {
             //all
             //所有样式都支持 随机展示
@@ -135,6 +140,22 @@ public class YlhAdView extends CommAdView {
             getAdBySplashAd();
         } else if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) {
             getFullScreenVideoAd();
+        } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style) || Constants.AdStyle.CP.equals(style)) {
+            getCustomInsertScreenAd();
+        }
+    }
+
+    /**
+     * 优量汇模板插屏（只有模板插屏）
+     */
+    protected void getCustomInsertScreenAd() {
+        if (mAdView == null) {
+            return;
+        }
+        if (mAdView instanceof YlhTemplateInsertScreenAdView) {
+            mAdView.setAdListener(mAdListener);
+            mAdView.setYlhAdListener(mFirstAdListener);
+            ((YlhTemplateInsertScreenAdView) mAdView).loadTemplateInsertScreenAd(mActivity, mAppId, mAdId);
         }
     }
 

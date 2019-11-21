@@ -127,6 +127,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <RelativeLayout
+                android:id="@+id/rel_clean_file"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -174,6 +175,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rel_clean_ram"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -222,6 +224,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/rel_clean_virus"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

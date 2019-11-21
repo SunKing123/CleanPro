@@ -48,6 +48,11 @@ public class SchemeConstant {
         //手机降温
         public static final String SCHEME_PHONECOOLINGACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.PhoneCoolingActivity";
 
+
+        //病毒查杀
+        public static final String SCHEME_VIRUSKILLACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.VirusKillActivity";
+
+
     }
 
 }

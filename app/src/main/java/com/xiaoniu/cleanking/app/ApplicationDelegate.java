@@ -84,7 +84,10 @@ public class ApplicationDelegate implements IApplicationDelegate {
         TTAdManagerHolder.init(application);
         initProcess(application);
         //商业sdk初始化
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
+        /*this, "18", "5036430", "jinritoutiao",   false*/
+//        Context context, String productName, String csjAppId, String channel, boolean isFormal
+        //todo_zzh
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,"5036430", ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
         initJsBridge();
     }
 
