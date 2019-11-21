@@ -69,6 +69,11 @@ public class BottomBar extends LinearLayout {
         mTabParams.weight = 1;
     }
 
+    public void removeAllTabs() {
+        mTabs.clear();
+        mTabLayout.removeAllViews();
+    }
+
     public BottomBar addItem(final BottomBarTab tab) {
         tab.setOnClickListener(new OnClickListener() {
             @Override
@@ -102,6 +107,7 @@ public class BottomBar extends LinearLayout {
         mTabLayout.post(new Runnable() {
             @Override
             public void run() {
+                if (null == mTabLayout || null == mTabLayout.getChildAt(position)) return;
                 mTabLayout.getChildAt(position).performClick();
             }
         });

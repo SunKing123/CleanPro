@@ -98,7 +98,8 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     private fun initGeekAdSdk() {
         mAdManager = GeekAdSdk.getAdsManger()
         mFrameLayout.removeAllViews()
-        mAdManager.loadRewardVideoAd(this, "click_virus_killing_ad", "user123", 1, object : VideoAdListener {
+        //暂时这样
+        mAdManager.loadRewardVideoAd(this, "red_envelopes_ad", "user123", 1, object : VideoAdListener {
             override fun onVideoResume() {}
             override fun onVideoRewardVerify(rewardVerify: Boolean, rewardAmount: Int, rewardName: String) {
                 Log.d(TAG, "rewardName + rewardAmount=" + rewardName + rewardAmount)
