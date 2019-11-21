@@ -9,8 +9,10 @@ import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.config.TTAdManagerHolder;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 
@@ -48,6 +50,10 @@ public class CsjRewardVideoAdView extends CHJAdView {
         if (activity == null) {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
+        mAdInfo.setAdAppid(mAppId);
+        mAdInfo.setAdId(adId);
         LogUtils.d(TAG, "adId:" + adId + " userId:" + userId + " orientation:" + orientation);
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
@@ -70,7 +76,7 @@ public class CsjRewardVideoAdView extends CHJAdView {
             @Override
             public void onError(int code, String message) {
                 LogUtils.e(TAG, "rewardVideoAd error:" + code + " message:" + message);
-                adError(code, message);
+//                adError(code, message);
                 firstAdError(code, message);
                 Toast.makeText(mContext, "rewardVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
@@ -87,23 +93,24 @@ public class CsjRewardVideoAdView extends CHJAdView {
                 if (mttRewardVideoAd != null) {
                     //step6:在获取到广告后展示
                     mttRewardVideoAd.showRewardVideoAd(activity);
-                    adSuccess();
+                    adSuccess(mAdInfo);
 
                     mttRewardVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
 
                         @Override
                         public void onAdShow() {
-                            adExposed();
+                            adExposed(mAdInfo);
                         }
 
                         @Override
                         public void onAdVideoBarClick() {
                             LogUtils.d(TAG, "rewardVideoAd bar click");
-                            adClicked();
+                            adClicked(mAdInfo);
                         }
 
                         @Override
                         public void onAdClose() {
+                            adClose(mAdInfo);
                             LogUtils.d(TAG, "rewardVideoAd close");
                         }
 

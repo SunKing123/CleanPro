@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.comm.jksdk.GeekAdSdk
+import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdManager
 import com.comm.jksdk.ad.listener.VideoAdListener
 import com.geek.webpage.eventbus.BaseEventBus

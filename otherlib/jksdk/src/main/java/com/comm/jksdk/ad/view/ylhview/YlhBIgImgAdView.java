@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.comm.jksdk.R;
+import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.NativeADEventListener;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
@@ -91,6 +92,7 @@ public class YlhBIgImgAdView extends YlhAdView {
         int index = new Random().nextInt(size);
         NativeUnifiedADData adData = nativeAdList.get(index);
         if (adData == null) {
+            adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
             return;
         }
 
@@ -137,17 +139,17 @@ public class YlhBIgImgAdView extends YlhAdView {
         adData.setNativeAdEventListener(new NativeADEventListener(){
             @Override
             public void onADExposed() {
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
             public void onADClicked() {
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
             public void onADError(AdError adError) {
-
+                firstAdError(adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override

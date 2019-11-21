@@ -13,7 +13,7 @@ public interface VideoAdListener extends AdListener {
     void onVideoResume();
 
     /**
-     * 激励视频获得激励回调
+     * 激励视频获得激励回调(视频播放完成后，奖励验证回调，rewardVerify：是否有效，rewardAmount：奖励梳理，rewardName：奖励名称)
      */
     void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName);
 }

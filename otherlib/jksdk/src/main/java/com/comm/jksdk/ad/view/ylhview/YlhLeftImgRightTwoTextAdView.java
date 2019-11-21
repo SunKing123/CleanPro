@@ -161,18 +161,18 @@ public class YlhLeftImgRightTwoTextAdView extends YlhAdView {
             @Override
             public void onADExposed() {
                 LogUtils.w(TAG, "Ad onADExposed");
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
             public void onADClicked() {
                 LogUtils.w(TAG, "Ad onADClicked");
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
             public void onADError(AdError adError) {
-
+                firstAdError(adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override

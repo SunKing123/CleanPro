@@ -13,7 +13,9 @@ import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.config.TTAdManagerHolder;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 
 import java.util.List;
@@ -52,6 +54,11 @@ public class CsjTemplateInsertScreenAdView extends CHJAdView {
         LogUtils.d(TAG, "isFullScreen:" + isFullScreen + " adId:" + adId + " showTimeSeconds:" + showTimeSeconds);
         //step3:创建TTAdNative对象,用于调用广告请求接口
         this.activity = activity;
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
+        mAdInfo.setAdAppid(mAppId);
+        mAdInfo.setAdId(adId);
+
         mTTAdNative = TTAdManagerHolder.get(mAppId).createAdNative(activity.getApplicationContext());
 
         float expressViewWidth = 300;
@@ -90,18 +97,19 @@ public class CsjTemplateInsertScreenAdView extends CHJAdView {
             @Override
             public void onAdDismiss() {
 //                TToast.show(mContext, "广告关闭");
+                adClose(mAdInfo);
             }
 
             @Override
             public void onAdClicked(View view, int type) {
 //                TToast.show(mContext, "广告被点击");
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
             public void onAdShow(View view, int type) {
 //                TToast.show(mContext, "广告展示");
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
@@ -116,7 +124,7 @@ public class CsjTemplateInsertScreenAdView extends CHJAdView {
 //                Log.e("ExpressView","render suc:"+(System.currentTimeMillis() - startTime));
 //                //返回view的宽高 单位 dp
 //                TToast.show(mContext, "渲染成功");
-                adSuccess();
+                adSuccess(mAdInfo);
                 mTTAd.showInteractionExpressAd(activity);
 
             }

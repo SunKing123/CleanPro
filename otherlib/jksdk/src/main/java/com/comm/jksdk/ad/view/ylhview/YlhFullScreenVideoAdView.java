@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
@@ -70,6 +72,11 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
      * 获取全屏视屏广告并加载
      */
     public void loadFullScreenVideoAd(String appId, String adId) {
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
+        mAdInfo.setAdAppid(appId);
+        mAdInfo.setAdId(adId);
+
         nativeUnifiedAD = new NativeUnifiedAD(mContext, appId, adId, this);
         nativeUnifiedAD.setMaxVideoDuration(MAX_DURATION);
 
@@ -108,10 +115,10 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
     @Override
     public void onADLoaded(List<NativeUnifiedADData> list) {
         if (!CollectionUtils.isEmpty(list)) {
-            adSuccess();
+            adSuccess(mAdInfo);
             initAd(list.get(0));
         } else {
-            adError(CodeFactory.UNKNOWN, "请求广告数据为空");
+            firstAdError(CodeFactory.UNKNOWN, "请求广告数据为空");
         }
     }
 
@@ -119,10 +126,10 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
     public void onNoAD(AdError adError) {
         LogUtils.e(TAG, "--------YLH VIDEO ERROR--------");
         if (adError != null) {
-            adError(adError.getErrorCode(), adError.getErrorMsg());
+//            adError(adError.getErrorCode(), adError.getErrorMsg());
             firstAdError(adError.getErrorCode(), adError.getErrorMsg());
         } else {
-            adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+//            adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
             firstAdError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
         }
     }
@@ -140,13 +147,13 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
             @Override
             public void onADExposed() {
                 LogUtils.d(TAG, "onADExposed: ");
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
             public void onADClicked() {
                 LogUtils.d(TAG, "onADClicked: " + " clickUrl: ");
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
@@ -234,7 +241,7 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
                 @Override
                 public void onVideoClicked() {
                     LogUtils.d(TAG, "onVideoClicked");
-                    adClicked();
+                    adClicked(mAdInfo);
                 }
 
                 private void removeTimeText() {

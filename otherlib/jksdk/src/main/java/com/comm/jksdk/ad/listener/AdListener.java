@@ -1,5 +1,7 @@
 package com.comm.jksdk.ad.listener;
 
+import com.comm.jksdk.ad.entity.AdInfo;
+
 /**
  * @author: docking
  * @date: 2019/9/7 12:09
@@ -10,17 +12,25 @@ public interface AdListener {
     /**
      * 广告请求成功
      */
-    void adSuccess();
+    void adSuccess(AdInfo info);
 
     /**
      * 广告展示
      */
-    void adExposed();
+    void adExposed(AdInfo info);
 
     /**
      * 广告点击
      */
-    void adClicked();
+    void adClicked(AdInfo info);
+
+    /**
+     * 广告关闭
+     * @param info
+     */
+    default void adClose(AdInfo info){
+
+    }
 
     /**
      * 广告失败
@@ -28,5 +38,6 @@ public interface AdListener {
      * @param errorMsg
      */
     void adError(int errorCode, String errorMsg);
+
 
 }

@@ -167,6 +167,9 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
     public void onClick(View v) {
         if (v.getId() == R.id.full_screen_insert_ad_close) {
             dismiss();
+            if (mListenr != null) {
+                mListenr.onClose();
+            }
         }
     }
 
@@ -176,5 +179,6 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
     public interface OnClickListenr {
         void onClick();
         void onAdShow();
+        void onClose();
     }
 }

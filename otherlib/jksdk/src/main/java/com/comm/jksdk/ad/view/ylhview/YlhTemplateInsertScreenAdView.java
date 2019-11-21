@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.view.chjview.CHJAdView;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
@@ -52,13 +54,17 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
             iad.destroy();
             iad = null;
         }
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
+        mAdInfo.setAdAppid(mAppId);
+        mAdInfo.setAdId(mAdId);
         if (iad == null) {
             iad = new UnifiedInterstitialAD(activity, appId, UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
                 @Override
                 public void onADReceive() {
                     //广告加载成功
                     if (iad != null) {
-                        adSuccess();
+                        adSuccess(mAdInfo);
                         iad.showAsPopupWindow();
                     }
                 }
@@ -75,12 +81,12 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
 
                 @Override
                 public void onADExposure() {
-                    adExposed();
+                    adExposed(mAdInfo);
                 }
 
                 @Override
                 public void onADClicked() {
-                    adClicked();
+                    adClicked(mAdInfo);
                 }
 
                 @Override
@@ -90,7 +96,7 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
 
                 @Override
                 public void onADClosed() {
-
+                    adClicked(mAdInfo);
                 }
             });
             iad.loadAD();
