@@ -2,6 +2,7 @@ package com.comm.jksdk.ad.view.ylhview;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.view.CommAdView;
+import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.comm.jksdk.widget.TopRoundImageView;
 import com.qq.e.ads.nativ.NativeADEventListener;
@@ -77,9 +79,11 @@ public class YlhBigImgAdPlayLampView extends CommAdView {
             return;
         }
         if (isLamp) {
-            animationView.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-            if (animationView.getBackground() instanceof AnimationDrawable) {
-                mAnimationDrawable = (AnimationDrawable) animationView.getBackground();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                animationView.setBackground(getResources().getDrawable(R.drawable.anim_ad));
+                if (animationView.getBackground() instanceof AnimationDrawable) {
+                    mAnimationDrawable = (AnimationDrawable) animationView.getBackground();
+                }
             }
         }
     }
@@ -127,6 +131,7 @@ public class YlhBigImgAdPlayLampView extends CommAdView {
         int index = new Random().nextInt(size);
         NativeUnifiedADData adData = nativeAdList.get(index);
         if (adData == null) {
+            adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
             return;
         }
 
@@ -188,17 +193,17 @@ public class YlhBigImgAdPlayLampView extends CommAdView {
         ad.setNativeAdEventListener(new NativeADEventListener(){
             @Override
             public void onADExposed() {
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
             public void onADClicked() {
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
             public void onADError(AdError adError) {
-
+                firstAdError(adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override

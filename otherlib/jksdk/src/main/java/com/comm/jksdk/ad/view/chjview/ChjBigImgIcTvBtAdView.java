@@ -332,7 +332,7 @@ public class ChjBigImgIcTvBtAdView extends CommAdView {
         public void onAdClicked(View view, TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "deployAditem onAdClicked");
-                adClicked();
+                adClicked(mAdInfo);
             }
         }
 
@@ -340,7 +340,7 @@ public class ChjBigImgIcTvBtAdView extends CommAdView {
         public void onAdCreativeClick(View view, TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "deployAditem onAdCreativeClick");
-                adClicked();
+                adClicked(mAdInfo);
             }
         }
 
@@ -348,7 +348,7 @@ public class ChjBigImgIcTvBtAdView extends CommAdView {
         public void onAdShow(TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "广告" + ad.getTitle() + "展示");
-                adExposed();
+                adExposed(mAdInfo);
             }
         }
     };

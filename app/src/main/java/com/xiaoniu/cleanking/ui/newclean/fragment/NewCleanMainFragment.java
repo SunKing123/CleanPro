@@ -32,6 +32,7 @@ import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
@@ -419,7 +420,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
             @Override
-            public void adSuccess() {
+            public void adSuccess(AdInfo info) {
 //                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "穿山甲", "success", "", "home_page");
                 if (null != adManager && null != adManager.getAdView()) {
                     mTopContentView.setVisibility(View.GONE);
@@ -430,12 +431,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void adExposed() {
+            public void adExposed(AdInfo info) {
 
             }
 
             @Override
-            public void adClicked() {
+            public void adClicked(AdInfo info) {
 
             }
 
@@ -455,7 +456,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), "homepage_ad_2", new AdListener() { //暂时这样
             @Override
-            public void adSuccess() {
+            public void adSuccess(AdInfo info) {
 //                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "穿山甲", "success", "", "home_page");
                 if (null != adManager && null != adManager.getAdView()) {
                     mCenterAdFramelayout.setVisibility(VISIBLE);
@@ -465,12 +466,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void adExposed() {
+            public void adExposed(AdInfo info) {
 
             }
 
             @Override
-            public void adClicked() {
+            public void adClicked(AdInfo info) {
 
             }
 

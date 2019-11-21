@@ -162,17 +162,17 @@ public class YlhBigImgIcTvBtCenterAdView extends CommAdView {
         ad.setNativeAdEventListener(new NativeADEventListener(){
             @Override
             public void onADExposed() {
-                adExposed();
+                adExposed(mAdInfo);
             }
 
             @Override
             public void onADClicked() {
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
             public void onADError(AdError adError) {
-
+                firstAdError(adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override

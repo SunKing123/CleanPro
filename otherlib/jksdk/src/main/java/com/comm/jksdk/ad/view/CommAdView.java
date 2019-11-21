@@ -3,6 +3,7 @@ package com.comm.jksdk.ad.view;
 import android.content.Context;
 
 import com.bytedance.sdk.openadsdk.TTFeedAd;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.FirstAdListener;
 import com.comm.jksdk.http.utils.LogUtils;
@@ -20,6 +21,12 @@ public class CommAdView extends AbsAdView {
 
     protected AdListener mAdListener = null;
     protected FirstAdListener mFirstAdListener = null;
+    //广告信息
+    protected AdInfo mAdInfo;
+
+    public void setAdInfo(AdInfo info){
+        this.mAdInfo = info;
+    }
 
     public CommAdView(Context context, String style, String adPositionId) {
         super(context, style, adPositionId);
@@ -80,10 +87,10 @@ public class CommAdView extends AbsAdView {
     /**
      * 广告请求i成功
      */
-    protected void adSuccess() {
+    protected void adSuccess(AdInfo adInfo) {
         if (mAdListener != null) {
             LogUtils.d(TAG, "---------adSuccess------");
-            mAdListener.adSuccess();
+            mAdListener.adSuccess(adInfo);
         } else {
             LogUtils.d(TAG, "---------mAdListener is null------");
         }
@@ -92,19 +99,29 @@ public class CommAdView extends AbsAdView {
     /**
      * 广告展示
      */
-    protected void adExposed() {
+    protected void adExposed(AdInfo adInfo) {
         if (mAdListener != null) {
             LogUtils.w(TAG, "adExposed()");
-            mAdListener.adExposed();
+            mAdListener.adExposed(adInfo);
         }
     }
 
     /**
      * 广告点击
      */
-    protected void adClicked() {
+    protected void adClicked(AdInfo adInfo) {
         if (mAdListener != null) {
-            mAdListener.adClicked();
+            mAdListener.adClicked(adInfo);
+        }
+    }
+
+    /**
+     * 广告被关闭
+     * @param adInfo
+     */
+    protected void adClose(AdInfo adInfo){
+        if (mAdListener != null) {
+            mAdListener.adClose(adInfo);
         }
     }
 
@@ -119,6 +136,4 @@ public class CommAdView extends AbsAdView {
             mAdListener.adError(errorCode, errorMsg);
         }
     }
-
-
 }

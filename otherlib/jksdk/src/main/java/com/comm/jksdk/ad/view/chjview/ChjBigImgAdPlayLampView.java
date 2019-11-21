@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,9 +82,11 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
             return;
         }
         if (isLamp) {
-            animationView.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-            if (animationView.getBackground() instanceof AnimationDrawable) {
-                mAnimationDrawable = (AnimationDrawable) animationView.getBackground();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                animationView.setBackground(getResources().getDrawable(R.drawable.anim_ad));
+                if (animationView.getBackground() instanceof AnimationDrawable) {
+                    mAnimationDrawable = (AnimationDrawable) animationView.getBackground();
+                }
             }
         }
     }
@@ -166,32 +169,6 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
         bindData(nativeAdContainer,adData);
 
     }
-
-
-    private int getRandowNum() {
-        //为2000到10000的随机数
-        int num = (int) (Math.random() * 8000 + 2000);
-        return num;
-    }
-
-    /**
-     * 更新浏览人数量
-     *
-     * @param downloadCount
-     * @return
-     */
-    private String getBrowseDesc(long downloadCount) {
-        String desc = "";
-        if (downloadCount <= 0) {
-            desc = getRandowNum() + "人浏览";
-        } else if (0 < downloadCount && downloadCount < 10000) {
-            desc = downloadCount + "人浏览";
-        } else {
-            desc = downloadCount / 10000 + "w+人浏览";
-        }
-        return desc;
-    }
-
 
     private void bindData(View convertView, TTFeedAd ad) {
         TTImage icon = ad.getIcon();
@@ -351,7 +328,7 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
         public void onAdClicked(View view, TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "deployAditem onAdClicked");
-                adClicked();
+                adClicked(mAdInfo);
             }
         }
 
@@ -359,7 +336,7 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
         public void onAdCreativeClick(View view, TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "deployAditem onAdCreativeClick");
-                adClicked();
+                adClicked(mAdInfo);
             }
         }
 
@@ -367,7 +344,7 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
         public void onAdShow(TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "广告" + ad.getTitle() + "展示");
-                adExposed();
+                adExposed(mAdInfo);
             }
         }
     };

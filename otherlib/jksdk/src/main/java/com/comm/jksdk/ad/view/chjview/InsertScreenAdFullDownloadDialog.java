@@ -168,6 +168,9 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
     public void onClick(View v) {
         if (v.getId() == R.id.full_screen_insert_ad_close) {
             dismiss();
+            if (mListenr != null) {
+                mListenr.onClose();
+            }
         }
     }
 
@@ -177,5 +180,6 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
     public interface OnClickListenr {
         void onClick();
         void onAdShow();
+        void onClose();
     }
 }

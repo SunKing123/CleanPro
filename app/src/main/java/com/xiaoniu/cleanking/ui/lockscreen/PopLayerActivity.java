@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
@@ -38,7 +39,7 @@ public class PopLayerActivity extends AppCompatActivity {
         flayoutAdContainer = (FrameLayout)findViewById(R.id.flayout_ad_container);
         adManager = GeekAdSdk.getAdsManger();
         //todo_zzh
-        loadCustomInsertScreenAd2("external_advertising_ad_1");
+//        loadCustomInsertScreenAd2("external_advertising_ad_1");
     }
 
 
@@ -65,23 +66,31 @@ public class PopLayerActivity extends AppCompatActivity {
         try {
             adManager.loadCustomInsertScreenAd(this, position, 3, new AdListener() {
                 @Override
-                public void adSuccess() {
-                }
+                public void adClose(AdInfo info) {
+                    ActivityCollector.removeActivity(PopLayerActivity.this);
+                    PopLayerActivity.this.finish();
 
-                @Override
-                public void adExposed() {
-                    LogUtils.d("-----adExposed-----");
-                }
-
-                @Override
-                public void adClicked() {
-                    LogUtils.d("-----adClicked-----");
                 }
 
                 @Override
                 public void adError(int errorCode, String errorMsg) {
                     LogUtils.d("-----adError-----" + errorMsg);
 
+                }
+
+                @Override
+                public void adSuccess(AdInfo info) {
+
+                }
+
+                @Override
+                public void adExposed(AdInfo info) {
+                    LogUtils.d("-----adExposed-----");
+                }
+
+                @Override
+                public void adClicked(AdInfo info) {
+                    LogUtils.d("-----adClicked-----");
                 }
             });
         } catch (Exception e) {

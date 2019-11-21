@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.qq.e.ads.splash.SplashAD;
@@ -41,6 +43,10 @@ public class YlhSplashAdView extends YlhAdView {
         if (activity == null) {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
+        mAdInfo.setAdAppid(appId);
+        mAdInfo.setAdId(adId);
         LogUtils.d(TAG, "YLH appId:" + appId + " adId:" + adId);
         SplashAD splashAD = new SplashAD(activity, appId, adId, new SplashADListener() {
             @Override
@@ -52,10 +58,10 @@ public class YlhSplashAdView extends YlhAdView {
             public void onNoAD(AdError adError) {
                 LogUtils.d(TAG, "YLH onNoAD:");
                 if (adError != null) {
-                    adError(adError.getErrorCode(), adError.getErrorMsg());
+//                    adError(adError.getErrorCode(), adError.getErrorMsg());
                     firstAdError(adError.getErrorCode(), adError.getErrorMsg());
                 } else {
-                    adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+//                    adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     firstAdError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                 }
             }
@@ -67,7 +73,7 @@ public class YlhSplashAdView extends YlhAdView {
             @Override
             public void onADClicked() {
                 LogUtils.d(TAG, "YLH onADClicked:");
-                adClicked();
+                adClicked(mAdInfo);
             }
 
             @Override
@@ -78,8 +84,8 @@ public class YlhSplashAdView extends YlhAdView {
             @Override
             public void onADExposure() {
                 LogUtils.d(TAG, "YLH onADClicked:");
-                adSuccess();
-                adExposed();
+                adSuccess(mAdInfo);
+                adExposed(mAdInfo);
             }
         });
         splashAD.fetchAndShowIn(splashContainer);

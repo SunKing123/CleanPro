@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,9 +83,11 @@ public class ChjBigImgNestPlayLampView extends CommAdView {
             return;
         }
         if (isLamp) {
-            animationView.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-            if (animationView.getBackground() instanceof AnimationDrawable) {
-                mAnimationDrawable = (AnimationDrawable) animationView.getBackground();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                animationView.setBackground(getResources().getDrawable(R.drawable.anim_ad));
+                if (animationView.getBackground() instanceof AnimationDrawable) {
+                    mAnimationDrawable = (AnimationDrawable) animationView.getBackground();
+                }
             }
         }
     }
@@ -349,7 +352,7 @@ public class ChjBigImgNestPlayLampView extends CommAdView {
         public void onAdClicked(View view, TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "deployAditem onAdClicked");
-                adClicked();
+                adClicked(mAdInfo);
             }
         }
 
@@ -357,7 +360,7 @@ public class ChjBigImgNestPlayLampView extends CommAdView {
         public void onAdCreativeClick(View view, TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "deployAditem onAdCreativeClick");
-                adClicked();
+                adClicked(mAdInfo);
             }
         }
 
@@ -365,7 +368,7 @@ public class ChjBigImgNestPlayLampView extends CommAdView {
         public void onAdShow(TTNativeAd ad) {
             if (ad != null) {
                 LogUtils.w(TAG, "广告" + ad.getTitle() + "展示");
-                adExposed();
+                adExposed(mAdInfo);
             }
         }
     };

@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -145,8 +146,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, "success_page_ad_1", new AdListener() {
+
             @Override
-            public void adSuccess() {
+            public void adSuccess(AdInfo info) {
                 View adView = adManager.getAdView();
                 if (adView != null) {
                     relAd.removeAllViews();
@@ -155,12 +157,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void adExposed() {
+            public void adExposed(AdInfo info) {
                 LogUtils.e("adExposed");
             }
 
             @Override
-            public void adClicked() {
+            public void adClicked(AdInfo info) {
 
             }
 

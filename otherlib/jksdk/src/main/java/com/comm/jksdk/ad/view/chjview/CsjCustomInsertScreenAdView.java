@@ -10,7 +10,9 @@ import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.config.TTAdManagerHolder;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
@@ -56,6 +58,10 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
         LogUtils.d(TAG, "isFullScreen:" + isFullScreen + " adId:" + adId + " showTimeSeconds:" + showTimeSeconds);
         //step3:创建TTAdNative对象,用于调用广告请求接口
         this.activity = activity;
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
+        mAdInfo.setAdAppid(mAppId);
+        mAdInfo.setAdId(adId);
         mTTAdNative = TTAdManagerHolder.get(mAppId).createAdNative(activity.getApplicationContext());
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(adId)
@@ -70,7 +76,7 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
             @Override
             public void onError(int code, String message) {
                 LogUtils.e(TAG, "loadNativeAd code:" + code + " message:" + message);
-                adError(code, message);
+//                adError(code, message);
                 firstAdError(code, message);
                 Toast.makeText(mContext, "loadCustomInsertScreenAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
@@ -79,13 +85,14 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
             @Override
             public void onNativeAdLoad(List<TTNativeAd> ads) {
                 if (!CollectionUtils.isEmpty(ads)) {
-                    adSuccess();
+                    adSuccess(mAdInfo);
                     if (activity.isFinishing() || activity.isDestroyed()) {
                         return;
                     }
                     showAdDialog(ads.get(0), isFullScreen, showTimeSeconds);
                 } else {
-                    adError(CodeFactory.UNKNOWN, "请求广告数据为空");
+//                    adError(CodeFactory.UNKNOWN, "请求广告数据为空");
+                    firstAdError(CodeFactory.UNKNOWN, "请求广告数据为空");
                 }
             }
         });
@@ -101,12 +108,17 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
             fullDownloadDialog.setListenr(new InsertScreenAdFullDownloadDialog.OnClickListenr() {
                 @Override
                 public void onClick() {
-                    adClicked();
+                    adClicked(mAdInfo);
                 }
 
                 @Override
                 public void onAdShow() {
-                    adExposed();
+                    adExposed(mAdInfo);
+                }
+
+                @Override
+                public void onClose() {
+                    adClose(mAdInfo);
                 }
             });
             fullDownloadDialog.show();
@@ -116,12 +128,17 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
             normalDownloadDialog.setListenr(new InsertScreenAdNormalDownloadDialog.OnClickListenr() {
                 @Override
                 public void onClick() {
-                    adClicked();
+                    adClicked(mAdInfo);
                 }
 
                 @Override
                 public void onAdShow() {
-                    adExposed();
+                    adExposed(mAdInfo);
+                }
+
+                @Override
+                public void onClose() {
+                    adClose(mAdInfo);
                 }
             });
             normalDownloadDialog.show();

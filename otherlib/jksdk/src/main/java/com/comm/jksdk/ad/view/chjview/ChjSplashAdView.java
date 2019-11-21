@@ -9,7 +9,9 @@ import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTSplashAd;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.config.TTAdManagerHolder;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 
@@ -41,6 +43,10 @@ public class ChjSplashAdView extends CHJAdView {
      */
     public void loadSplashAd(String appId, String adId) {
         LogUtils.d(TAG, "csj appId:" + appId + " adId:" + adId);
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
+        mAdInfo.setAdAppid(appId);
+        mAdInfo.setAdId(adId);
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(adId)
                 .setSupportDeepLink(true)
@@ -50,21 +56,22 @@ public class ChjSplashAdView extends CHJAdView {
             @Override
             public void onError(int errorCode, String errorMsg) {
                 LogUtils.e(TAG, "csj errorCode:" + errorCode + " errorMsg:" + errorMsg);
-                adError(errorCode, errorMsg);
+//                adError(errorCode, errorMsg);
                 firstAdError(errorCode, errorMsg);
                 Toast.makeText(mContext, "loadSplashAd error:" + errorCode + " message:" + errorMsg, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onTimeout() {
-                adError(CodeFactory.UNKNOWN, "请求广告超时");
+//                adError(CodeFactory.UNKNOWN, "请求广告超时");
+                firstAdError(CodeFactory.UNKNOWN, "请求广告超时");
             }
 
             @Override
             public void onSplashAdLoad(TTSplashAd ttSplashAd) {
                 if (ttSplashAd != null) {
                     LogUtils.d(TAG, "csj onSplashAdLoad:" + ttSplashAd.getInteractionType());
-                    adSuccess();
+                    adSuccess(mAdInfo);
                     splashContainer.removeAllViews();
                     splashContainer.addView(ttSplashAd.getSplashView());
                     ttSplashAd.setNotAllowSdkCountdown();
@@ -73,13 +80,13 @@ public class ChjSplashAdView extends CHJAdView {
                         @Override
                         public void onAdClicked(View view, int type) {
                             LogUtils.d(TAG, "onAdClicked");
-                            adClicked();
+                            adClicked(mAdInfo);
                         }
 
                         @Override
                         public void onAdShow(View view, int type) {
                             LogUtils.d(TAG, "onAdShow");
-                            adExposed();
+                            adExposed(mAdInfo);
                         }
 
                         @Override
@@ -95,7 +102,7 @@ public class ChjSplashAdView extends CHJAdView {
                         }
                     });
                 } else {
-                    adError(CodeFactory.UNKNOWN, "请求广告为空");
+                    firstAdError(CodeFactory.UNKNOWN, "请求广告为空");
                 }
             }
         });

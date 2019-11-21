@@ -9,11 +9,13 @@ import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdManager;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTFeedAd;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.AdsUtils;
+import com.comm.jksdk.utils.CodeFactory;
 
 import java.util.List;
 
@@ -59,6 +61,7 @@ public class CHJAdView extends CommAdView {
     private int showTimeSeconds = 3;
 
     private CommAdView mAdView = null;
+
 
     public CHJAdView(Context context, String style, String appId, String mAdId) {
         this(context, null, style, appId, mAdId);
@@ -152,6 +155,9 @@ public class CHJAdView extends CommAdView {
 
     @Override
     public void requestAd(int requestType, int adRequestTimeOut) {
+        if (mAdView != null) {
+            mAdView.setAdListener(mAdListener);
+        }
         if (mContext == null) {
             return;
         }
@@ -230,15 +236,23 @@ public class CHJAdView extends CommAdView {
                 LogUtils.d(TAG, "onADLoaded->请求穿山甲成功");
                 Boolean requestAdOverTime = AdsUtils.requestAdOverTime(adRequestTimeOut);
                 if (requestAdOverTime) {
+                    adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     return;
                 }
                 if (list == null || list.isEmpty()) {
+                    firstAdError(1, "请求结果为空");
                     return;
                 }
                 if (mAdView == null) {
+                    onError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     return;
                 }
-                adSuccess();
+                mAdInfo = new AdInfo();
+                mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
+                mAdInfo.setAdAppid(mAppId);
+                mAdInfo.setAdId(mAdId);
+                adSuccess(mAdInfo);
+                mAdView.setAdInfo(mAdInfo);
                 mAdView.parseChjAd(list);
             }
         });

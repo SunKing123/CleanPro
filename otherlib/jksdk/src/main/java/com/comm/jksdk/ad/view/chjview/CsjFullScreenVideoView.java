@@ -8,7 +8,9 @@ import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.config.TTAdManagerHolder;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 
@@ -46,6 +48,10 @@ public class CsjFullScreenVideoView extends CHJAdView {
         if (activity == null) {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
+        mAdInfo = new AdInfo();
+        mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
+        mAdInfo.setAdAppid(mAppId);
+        mAdInfo.setAdId(adId);
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(adId)
@@ -66,24 +72,24 @@ public class CsjFullScreenVideoView extends CHJAdView {
             @Override
             public void onFullScreenVideoAdLoad(TTFullScreenVideoAd ad) {
                 if (ad != null) {
-                    adSuccess();
+                    adSuccess(mAdInfo);
                     //step6:在获取到广告后展示
                     ad.showFullScreenVideoAd(activity);
                     ad.setFullScreenVideoAdInteractionListener(new TTFullScreenVideoAd.FullScreenVideoAdInteractionListener() {
 
                         @Override
                         public void onAdShow() {
-                            adExposed();
+                            adExposed(mAdInfo);
                         }
 
                         @Override
                         public void onAdVideoBarClick() {
-                            adClicked();
+                            adClicked(mAdInfo);
                         }
 
                         @Override
                         public void onAdClose() {
-
+                            adClose(mAdInfo);
                         }
 
                         @Override

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
@@ -67,7 +68,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                     //todo_zzh
                     adManager.loadAd(mActivity, "success_page_ad_1", new AdListener() {
                         @Override
-                        public void adSuccess() {
+                        public void adSuccess(AdInfo info) {
                             View adView = adManager.getAdView();
                             if (adView != null) {
                                 linAdContainer.removeAllViews();
@@ -77,12 +78,12 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                         }
 
                         @Override
-                        public void adExposed() {
+                        public void adExposed(AdInfo info) {
 
                         }
 
                         @Override
-                        public void adClicked() {
+                        public void adClicked(AdInfo info) {
 
                         }
 

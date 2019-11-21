@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.ad.view.chjview.CsjCustomInsertScreenAdView;
+import com.comm.jksdk.ad.view.chjview.CsjRewardVideoAdView;
 import com.comm.jksdk.ad.view.chjview.CsjTemplateInsertScreenAdView;
 import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.AdsUtils;
+import com.comm.jksdk.utils.CodeFactory;
 import com.qq.e.ads.nativ.NativeADUnifiedListener;
 import com.qq.e.ads.nativ.NativeUnifiedAD;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
@@ -33,6 +37,11 @@ public class YlhAdView extends CommAdView {
      */
     protected String mAppId = "";
 
+    /**
+     * 视频广告方向横屏、竖屏
+     */
+    protected int orientation = 1;
+
     protected Activity mActivity;
 
     // 广告请求数量
@@ -40,6 +49,10 @@ public class YlhAdView extends CommAdView {
 
 
     protected CommAdView mAdView = null;
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
 
     public YlhAdView(Context context, String style, String appId, String mAdId) {
         this(context, null, style, appId, mAdId);
@@ -79,7 +92,9 @@ public class YlhAdView extends CommAdView {
             mAdView = new YlhFullScreenVideoAdView(mContext);
         } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style) || Constants.AdStyle.CP.equals(style)) { //优量汇插屏
             mAdView = new YlhTemplateInsertScreenAdView(mContext);
-        } else {
+        } else if (Constants.AdStyle.REWARD_VIDEO.equals(style)) {
+            mAdView = new YlhRewardVideoAdView(mContext);
+        }else {
             //all
             //所有样式都支持 随机展示
             int num = AdsUtils.getRandomNum(2);
@@ -98,6 +113,7 @@ public class YlhAdView extends CommAdView {
             }
 
         }
+        mAdView.setAdListener(mAdListener);
         this.addView(mAdView);
 
     }
@@ -123,10 +139,6 @@ public class YlhAdView extends CommAdView {
      * 通过SDK获取广告
      */
     protected void getAdBySdk(final int adRequestTimeOut) {
-//        String ylhAppid= SpUtils.getString(Constants.SPUtils.YLH_APPID,"");
-//        if(TextUtils.isEmpty(ylhAppid)){
-//            ylhAppid=Constants.YLH_APPID;
-//        }
         LogUtils.d(TAG, "--------开始请求广告-------------广告样式------->style:" + style);
         if (Constants.AdStyle.BIG_IMG.equals(style) || Constants.AdStyle.DATU_ICON_TEXT.equals(style) || Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style)
                 || Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style) || Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style) || Constants.AdStyle.BIG_IMG_BUTTON_LAMP.equals(style)
@@ -142,6 +154,8 @@ public class YlhAdView extends CommAdView {
             getFullScreenVideoAd();
         } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style) || Constants.AdStyle.CP.equals(style)) {
             getCustomInsertScreenAd();
+        } else if (Constants.AdStyle.REWARD_VIDEO.equals(style)) {
+            getRewardVideoAd();
         }
     }
 
@@ -175,16 +189,24 @@ public class YlhAdView extends CommAdView {
 
                 Boolean requestAdOverTime = AdsUtils.requestAdOverTime(adRequestTimeOut);
                 if (requestAdOverTime) {
+                    adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     return;
                 }
 
                 if (nativeAdList == null || nativeAdList.isEmpty()) {
+                    firstAdError(1, "请求结果为空");
                     return;
                 }
                 if (mAdView == null) {
+                    adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     return;
                 }
-                adSuccess();
+                mAdInfo = new AdInfo();
+                mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
+                mAdInfo.setAdAppid(mAppId);
+                mAdInfo.setAdId(mAdId);
+                adSuccess(mAdInfo);
+                mAdView.setAdInfo(mAdInfo);
                 mAdView.parseYlhAd(nativeAdList);
             }
 
@@ -226,6 +248,20 @@ public class YlhAdView extends CommAdView {
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((YlhFullScreenVideoAdView) mAdView).loadFullScreenVideoAd(mAppId, mAdId);
+        }
+    }
+
+    /**
+     * 请求激励视频广告
+     */
+    protected void getRewardVideoAd() {
+        if (mAdView == null) {
+            return;
+        }
+        if (mAdView instanceof YlhRewardVideoAdView) {
+            mAdView.setAdListener(mAdListener);
+            mAdView.setYlhAdListener(mFirstAdListener);
+            ((YlhRewardVideoAdView) mAdView).loadRewardVideoAd(mActivity, mAdId, orientation);
         }
     }
 

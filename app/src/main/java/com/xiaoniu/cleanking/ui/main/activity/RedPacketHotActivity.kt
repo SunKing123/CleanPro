@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.comm.jksdk.GeekAdSdk
+import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdManager
 import com.comm.jksdk.ad.listener.VideoAdListener
 import com.geek.webpage.eventbus.BaseEventBus
@@ -104,16 +105,16 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 Log.d(TAG, "rewardName + rewardAmount=" + rewardName + rewardAmount)
             }
 
-            override fun adSuccess() {
+            override fun adSuccess(info : AdInfo) {
                 Log.d(TAG, "-----adSuccess-----")
                 mIsAdSusscss = true
             }
 
-            override fun adExposed() {
+            override fun adExposed(info : AdInfo) {
                 Log.d(TAG, "-----adExposed-----")
             }
 
-            override fun adClicked() {
+            override fun adClicked(info : AdInfo) {
                 Log.d(TAG, "-----adClicked-----")
             }
 
