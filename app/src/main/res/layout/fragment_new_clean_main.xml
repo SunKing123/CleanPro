@@ -154,13 +154,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <RelativeLayout
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_home">
 
                 <LinearLayout
+                    android:id="@+id/v_top_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -234,7 +235,16 @@
 
                 </LinearLayout>
 
-            </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/framelayout_top_ad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_18dp"
+                    android:layout_marginRight="@dimen/dimen_18dp"
+                    android:layout_marginBottom="120dp"
+                    android:background="@drawable/ad_container_white_bg"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/v_recommend"
@@ -511,6 +521,16 @@
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_14dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:id="@+id/framelayout_center_ad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_18dp"
+                android:layout_marginRight="@dimen/dimen_18dp"
+                android:background="@drawable/ad_container_white_bg"
+                android:layout_marginBottom="@dimen/dimen_16dp"
                 android:visibility="gone" />
 
             <TextView

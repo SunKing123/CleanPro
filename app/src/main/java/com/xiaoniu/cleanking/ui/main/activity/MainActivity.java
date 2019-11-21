@@ -159,6 +159,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
+        Log.d("XiLei", "main_initview");
         if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
             getIconListFail();
         } else {
