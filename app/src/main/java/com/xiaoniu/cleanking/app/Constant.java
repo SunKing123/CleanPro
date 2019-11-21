@@ -48,5 +48,8 @@ public class Constant {
     //手势解锁后_悬浮页面（秒）
     public static final int UNLOCK_SPACE_LONG = 3;
 
+    //点击Home_悬浮页面（秒）
+    public static final int HOME_SPACE_LONG = 1;
+
 }
 

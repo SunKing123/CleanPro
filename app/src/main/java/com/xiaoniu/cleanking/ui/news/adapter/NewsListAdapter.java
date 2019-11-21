@@ -1,12 +1,16 @@
 package com.xiaoniu.cleanking.ui.news.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsPicInfo;
@@ -26,8 +30,16 @@ import cn.jzvd.JzvdStd;
  * 头条资讯适配器
  */
 public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
+    AdManager adManager;
+    Activity mActivity;
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
+    }
+
+    public NewsListAdapter(Context context,AdManager am,Activity ac) {
+        super(context, new NewsItemTypeSupport());
+        adManager = am;
+        mActivity = ac;
     }
 
     @Override
@@ -37,6 +49,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         if (viewType == 0) {//视频
             VideoItemInfo itemInfo = (VideoItemInfo) itemData;
             JzvdStd jzvdStd = commonHolder.getView(R.id.videoplayer);
+            FrameLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);
             jzvdStd.setUp(itemInfo.url, itemInfo.title, Jzvd.SCREEN_NORMAL);
             jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageUtil.display(itemInfo.coverImage, jzvdStd.thumbImageView);
@@ -47,6 +60,41 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 }
             });
 
+
+
+            if ((position + 1) % 3 == 0) {
+                if (null != adManager && null != mActivity) {
+                    //todo_zzh
+                    adManager.loadAd(mActivity, "success_page_ad_1", new AdListener() {
+                        @Override
+                        public void adSuccess() {
+                            View adView = adManager.getAdView();
+                            if (adView != null) {
+                                linAdContainer.removeAllViews();
+                                linAdContainer.addView(adView);
+                                linAdContainer.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void adExposed() {
+
+                        }
+
+                        @Override
+                        public void adClicked() {
+
+                        }
+
+                        @Override
+                        public void adError(int errorCode, String errorMsg) {
+
+                        }
+                    });
+                }
+            }else{
+                linAdContainer.setVisibility(View.GONE);
+            }
         } else {
             final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
             ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);

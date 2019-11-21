@@ -86,28 +86,30 @@ public class PopLayerActivity extends AppCompatActivity {
      */
     private void loadCustomInsertScreenAd2(String position) {
         LogUtils.d("position:" + position + " isFullScreen:");
-        adManager.loadCustomInsertScreenAd(this, position, 3, new AdListener() {
-            @Override
-            public void adSuccess() {
-//                LogUtils.d("-----adSuccess-----");
-//                statePoint.setText("state:adSuccess");
-            }
+        try {
+            adManager.loadCustomInsertScreenAd(this, position, 3, new AdListener() {
+                @Override
+                public void adSuccess() {
+                }
 
-            @Override
-            public void adExposed() {
-                LogUtils.d("-----adExposed-----");
-            }
+                @Override
+                public void adExposed() {
+                    LogUtils.d("-----adExposed-----");
+                }
 
-            @Override
-            public void adClicked() {
-                LogUtils.d("-----adClicked-----");
-            }
+                @Override
+                public void adClicked() {
+                    LogUtils.d("-----adClicked-----");
+                }
 
-            @Override
-            public void adError(int errorCode, String errorMsg) {
-                LogUtils.d("-----adError-----" + errorMsg);
-//                statePoint.setText("error:" + errorCode + " errorMsg:" + errorMsg);
-            }
-        });
+                @Override
+                public void adError(int errorCode, String errorMsg) {
+                    LogUtils.d("-----adError-----" + errorMsg);
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

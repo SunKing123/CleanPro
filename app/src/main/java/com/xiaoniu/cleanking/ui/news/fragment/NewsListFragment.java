@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.comm.jksdk.GeekAdSdk;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -57,7 +58,7 @@ public class NewsListFragment extends BaseFragment {
 
     @Override
     protected void initVariable(Bundle arguments) {
-        mNewsAdapter = new NewsListAdapter(getContext());
+        mNewsAdapter = new NewsListAdapter(getContext(), GeekAdSdk.getAdsManger(),getActivity());
         if (arguments != null) {
             mType = (NewsType) arguments.getSerializable(KEY_TYPE);
 

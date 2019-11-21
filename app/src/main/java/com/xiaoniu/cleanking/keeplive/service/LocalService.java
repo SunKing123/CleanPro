@@ -41,6 +41,7 @@ public final class LocalService extends Service {
     private OnepxReceiver mOnepxReceiver;
     private ScreenStateReceiver screenStateReceiver;
     private BroadcastReceiver batteryReceiver;
+    private InnerReceiver innerReceiver;
     private boolean isPause = true;//控制暂停
     private MediaPlayer mediaPlayer;
     private LocalBinder mBilder;
@@ -106,6 +107,13 @@ public final class LocalService extends Service {
         intentFilter2.addAction("_ACTION_SCREEN_OFF");
         intentFilter2.addAction("_ACTION_SCREEN_ON");
         registerReceiver(screenStateReceiver, intentFilter2);
+
+
+        if(innerReceiver ==null){
+            innerReceiver = new InnerReceiver();
+        }
+        IntentFilter mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        registerReceiver(innerReceiver, mFilter);
 
         //开启一个前台通知，用于提升服务进程优先级
         shouDefNotify();
@@ -368,12 +376,60 @@ public final class LocalService extends Service {
         unbindService(connection);
         unregisterReceiver(mOnepxReceiver);
         unregisterReceiver(screenStateReceiver);
+        unregisterReceiver(innerReceiver);
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
         }
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer = null;
+        }
+    }
+
+
+    class InnerReceiver extends BroadcastReceiver {
+        final String SYSTEM_DIALOG_REASON_KEY = "reason";
+        final String SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS = "globalactions";
+        final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
+        final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
+                if (reason != null) {
+                    Log.e(TAG, "action:" + action + ",reason:" + reason);
+                    if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {//home键点击
+                        try {
+                            AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.HOME_SPACE_LONG * 1000);
+                            Intent inten = new Intent(context, TimingReceiver.class);
+                            inten.putExtra("action","unlock_screen");
+                            inten.putExtra("temp", temp);
+                            inten.putExtra("battery", mBatteryPower);
+                            inten.putExtra("isCharged", isCharged);
+                            PendingIntent pi = PendingIntent.getBroadcast(context, NumberUtils.mathRandomInt(0,100), inten, 0);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+                            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+                            } else {
+                                manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                  /*  if (mListener != null) {
+                        if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
+
+                        } else if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
+
+                        }
+                    }*/
+                }
+            }
         }
     }
 
