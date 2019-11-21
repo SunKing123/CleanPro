@@ -145,7 +145,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, "success_page_ad_1", new AdListener() {
+        adManager.loadAd(this, "lock_screen_advertising", new AdListener() {
 
             @Override
             public void adSuccess(AdInfo info) {

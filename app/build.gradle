@@ -13,7 +13,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName rootProject.ext.versionName
         versionCode rootProject.ext.versionCode
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
         buildConfigField "String", "MESSAGE", "\"I am the base apk\""
         buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""
@@ -185,7 +184,7 @@ dependencies {
     //推送
     implementation files('libs\\push-core.aar')
     implementation files('libs\\push-jpush.aar')
-    implementation project(path: ':otherlib:jksdk')
+    implementation project(':otherlib:jksdk')
 
 }
 
