@@ -13,6 +13,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +31,9 @@ import com.bytedance.sdk.openadsdk.TTAdManager;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -161,6 +165,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     TextView mVirusTv;
     @BindView(R.id.virus_iv)
     ImageView mVirusIv;
+    @BindView(R.id.v_top_view)
+    View mTopContentView;
+    @BindView(R.id.framelayout_top_ad)
+    FrameLayout mTopAdFramelayout;
+    @BindView(R.id.framelayout_center_ad)
+    FrameLayout mCenterAdFramelayout;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -191,6 +201,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     protected void initView() {
+        Log.d("XiLei", "fragment_initview");
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
@@ -392,6 +403,82 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
+        Log.d("XiLei", "onResume");
+        if (mIsAllClean) {
+            initGeekSdkTop();
+        }
+        initGeekSdkCenter();
+    }
+
+    /**
+     * 顶部广告 样式---大图嵌套图片_01_跑马灯
+     */
+    private void initGeekSdkTop() {
+        Log.d("XiLei", "initGeekSdkTop");
+        if (null == getActivity() || null == mTopAdFramelayout) return;
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
+            @Override
+            public void adSuccess() {
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "穿山甲", "success", "", "home_page");
+                if (null != adManager && null != adManager.getAdView()) {
+                    mTopContentView.setVisibility(View.GONE);
+                    mTopAdFramelayout.setVisibility(VISIBLE);
+                    mTopAdFramelayout.removeAllViews();
+                    mTopAdFramelayout.addView(adManager.getAdView());
+                }
+            }
+
+            @Override
+            public void adExposed() {
+
+            }
+
+            @Override
+            public void adClicked() {
+
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+
+            }
+        });
+    }
+
+    /**
+     * 更多推荐上方广告 样式---大图_下载播放按钮_跑马灯
+     */
+    private void initGeekSdkCenter() {
+        Log.d("XiLei", "initGeekSdkCenter");
+        if (null == getActivity() || null == mCenterAdFramelayout) return;
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(getActivity(), "homepage_ad_2", new AdListener() { //暂时这样
+            @Override
+            public void adSuccess() {
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "穿山甲", "success", "", "home_page");
+                if (null != adManager && null != adManager.getAdView()) {
+                    mCenterAdFramelayout.setVisibility(VISIBLE);
+                    mCenterAdFramelayout.removeAllViews();
+                    mCenterAdFramelayout.addView(adManager.getAdView());
+                }
+            }
+
+            @Override
+            public void adExposed() {
+
+            }
+
+            @Override
+            public void adClicked() {
+
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+
+            }
+        });
     }
 
     @Override
@@ -584,9 +671,18 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+    /**
+     * 热启动回调
+     *
+     * @param lifecycEvent
+     */
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
+        Log.d("XiLei", "changeLifecyEvent");
         if (lifecycEvent.isActivity()) {
+            mIsAllClean = false;
+            mTopContentView.setVisibility(VISIBLE);
+            mTopAdFramelayout.setVisibility(View.GONE);
             tvNowClean.setVisibility(VISIBLE);
             mTvCleanType.setVisibility(VISIBLE);
             mTvCleanType01.setVisibility(View.GONE);
@@ -959,6 +1055,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+    private boolean mIsAllClean; //是否已使用垃圾清理
+
     /**
      * EventBus 立即清理完成后，更新首页显示文案
      */
@@ -966,6 +1064,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
+                Log.d("XiLei", "onEventClean");
+                mIsAllClean = true;
                 showTextView01();
                 tvNowClean.setVisibility(View.GONE);
 //                mLottieHomeView.useHardwareAcceleration(true);

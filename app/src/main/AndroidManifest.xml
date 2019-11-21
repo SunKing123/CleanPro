@@ -17,8 +17,8 @@
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppLauncher" />
+<!--        android:screenOrientation="portrait"-->
         <!--        android:screenOrientation="portrait"-->
         <activity
             android:name=".scheme.ui.DispatcherActivity"
@@ -302,9 +302,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.RedPacketHotActivity"
-            android:configChanges="orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/activityBgTranslucent" />
 
         <activity
