@@ -166,25 +166,32 @@ public class NativeAdManger implements AdManager {
 
     @Override
     public void loadAd(Activity activity, String position, AdListener listener) {
-        mActivity = activity;
         mAdListener = listener;
-        //创建view
-        adParentView = new RelativeLayout(GeekAdSdk.getContext());
-        //获取本地配置信息
-        ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
-        if (mConfigInfoBean == null) {
-            if (mAdListener != null) {
-                mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+        try {
+            mActivity = activity;
+            //创建view
+            adParentView = new RelativeLayout(GeekAdSdk.getContext());
+            //获取本地配置信息
+            ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
+            if (mConfigInfoBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                }
+                return;
             }
-            return;
-        }
-        //当前广告位所对应的配置信息 存储到curAdlist
-        adStyle = mConfigInfoBean.getAdStyle();
-        adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
-        adsInfoslist.clear();
-        adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
+            //当前广告位所对应的配置信息 存储到curAdlist
+            adStyle = mConfigInfoBean.getAdStyle();
+            adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
+            adsInfoslist.clear();
+            adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
 
-        againRequest();
+            againRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+        }
     }
 
     /**
@@ -197,24 +204,31 @@ public class NativeAdManger implements AdManager {
     @Override
     public void loadSplashAd(Activity activity, String position, AdListener listener) {
         mAdListener = listener;
-        mActivity = activity;
-        //创建view
-        adParentView = new RelativeLayout(GeekAdSdk.getContext());
-        //获取本地配置信息
-        ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
-        if (mConfigInfoBean == null) {
-            if (mAdListener != null) {
-                mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+        try {
+            mActivity = activity;
+            //创建view
+            adParentView = new RelativeLayout(GeekAdSdk.getContext());
+            //获取本地配置信息
+            ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
+            if (mConfigInfoBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                }
+                return;
             }
-            return;
-        }
-        //当前广告位所对应的配置信息 存储到curAdlist
-        adStyle = mConfigInfoBean.getAdStyle();
-        adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
-        adsInfoslist.clear();
-        adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
+            //当前广告位所对应的配置信息 存储到curAdlist
+            adStyle = mConfigInfoBean.getAdStyle();
+            adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
+            adsInfoslist.clear();
+            adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
 
-        againRequest();
+            againRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+        }
     }
 
     /**
@@ -227,25 +241,32 @@ public class NativeAdManger implements AdManager {
     @Override
     public void loadVideoAd(Activity activity, String position, AdListener listener) {
         mAdListener = listener;
-        mActivity = activity;
-        orientation = 1;
-        //创建view
-        adParentView = new RelativeLayout(GeekAdSdk.getContext());
-        //获取本地配置信息
-        ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
-        if (mConfigInfoBean == null) {
-            if (mAdListener != null) {
-                mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+        try {
+            mActivity = activity;
+            orientation = 1;
+            //创建view
+            adParentView = new RelativeLayout(GeekAdSdk.getContext());
+            //获取本地配置信息
+            ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
+            if (mConfigInfoBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                }
+                return;
             }
-            return;
-        }
-        //当前广告位所对应的配置信息 存储到curAdlist
-        adStyle = mConfigInfoBean.getAdStyle();
-        adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
-        adsInfoslist.clear();
-        adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
+            //当前广告位所对应的配置信息 存储到curAdlist
+            adStyle = mConfigInfoBean.getAdStyle();
+            adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
+            adsInfoslist.clear();
+            adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
 
-        againRequest();
+            againRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+        }
     }
 
     /**
@@ -258,26 +279,33 @@ public class NativeAdManger implements AdManager {
     @Override
     public void loadRewardVideoAd(Activity activity, String position, String userId, int orientation, AdListener listener) {
         mAdListener = listener;
-        mActivity = activity;
-        this.orientation = orientation;
-        this.userId = userId;
-        //创建view
-        adParentView = new RelativeLayout(GeekAdSdk.getContext());
-        //获取本地配置信息
-        ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
-        if (mConfigInfoBean == null) {
-            if (mAdListener != null) {
-                mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+        try {
+            mActivity = activity;
+            this.orientation = orientation;
+            this.userId = userId;
+            //创建view
+            adParentView = new RelativeLayout(GeekAdSdk.getContext());
+            //获取本地配置信息
+            ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
+            if (mConfigInfoBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                }
+                return;
             }
-            return;
-        }
-        //当前广告位所对应的配置信息 存储到curAdlist
-        adStyle = mConfigInfoBean.getAdStyle();
-        adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
-        adsInfoslist.clear();
-        adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
+            //当前广告位所对应的配置信息 存储到curAdlist
+            adStyle = mConfigInfoBean.getAdStyle();
+            adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
+            adsInfoslist.clear();
+            adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
 
-        againRequest();
+            againRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+        }
     }
 
     /**
@@ -288,28 +316,35 @@ public class NativeAdManger implements AdManager {
      * @param listener
      */
     @Override
-    public void loadCustomInsertScreenAd(Activity activity, String position, boolean isFullScreen, int showTimeSeconds, AdListener listener) {
+    public void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener) {
         mAdListener = listener;
-        mActivity = activity;
-        this.isFullScreen = isFullScreen;
-        this.showTimeSeconds = showTimeSeconds;
-        //创建view
-        adParentView = new RelativeLayout(GeekAdSdk.getContext());
-        //获取本地配置信息
-        ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
-        if (mConfigInfoBean == null) {
-            if (mAdListener != null) {
-                mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+        try {
+            mActivity = activity;
+            this.isFullScreen = isFullScreen;
+            this.showTimeSeconds = showTimeSeconds;
+            //创建view
+            adParentView = new RelativeLayout(GeekAdSdk.getContext());
+            //获取本地配置信息
+            ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
+            if (mConfigInfoBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                }
+                return;
             }
-            return;
+            //当前广告位所对应的配置信息 存储到curAdlist
+            adStyle = mConfigInfoBean.getAdStyle();
+            adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
+            adsInfoslist.clear();
+            adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
+            LogUtils.d(TAG, "-----loadCustomInsertScreenAd--------");
+            againRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
         }
-        //当前广告位所对应的配置信息 存储到curAdlist
-        adStyle = mConfigInfoBean.getAdStyle();
-        adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
-        adsInfoslist.clear();
-        adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
-        LogUtils.d(TAG, "-----loadCustomInsertScreenAd--------");
-        againRequest();
     }
 
 

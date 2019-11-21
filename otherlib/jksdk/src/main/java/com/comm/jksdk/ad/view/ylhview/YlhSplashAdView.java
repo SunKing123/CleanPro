@@ -2,6 +2,7 @@ package com.comm.jksdk.ad.view.ylhview;
 
 import android.app.Activity;
 import android.content.Context;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.comm.jksdk.R;
 import com.comm.jksdk.http.utils.LogUtils;
@@ -9,8 +10,6 @@ import com.comm.jksdk.utils.CodeFactory;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * 开屏广告view<p>

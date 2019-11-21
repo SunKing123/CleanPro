@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
@@ -219,11 +220,11 @@ public final class LocalService extends Service {
      * @param islaunched  判断是否已经启动
      */
     public void sendTimingReceiver(Intent intent,boolean islaunched) {
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("heartbeat"))) {//心跳action
             checkCharge();
             watchingBattery();
             try {
-                AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 long triggerAtTime = SystemClock.elapsedRealtime() + (SCAN_SPACE_LONG * 1000);
                 Intent i = new Intent(this, TimingReceiver.class);
                 i.putExtra("action","scan_heart");
@@ -242,7 +243,24 @@ public final class LocalService extends Service {
                 e.printStackTrace();
             }
         }else if((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("unlock_screen")))){ //解锁操作action
-
+            try {
+                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 1000);
+                Intent inten = new Intent(this, TimingReceiver.class);
+                inten.putExtra("action","unlock_screen");
+                inten.putExtra("temp", temp);
+                inten.putExtra("battery", mBatteryPower);
+                inten.putExtra("isCharged", isCharged);
+                PendingIntent pi = PendingIntent.getBroadcast(this, NumberUtils.mathRandomInt(0,100), inten, 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+                } else {
+                    manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }

@@ -2,6 +2,7 @@ package com.comm.jksdk.config;
 
 import android.content.Context;
 
+import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.Api;
 import com.comm.jksdk.http.Constant;
 import com.comm.jksdk.http.utils.ApiManage;
@@ -63,8 +64,9 @@ public class InitBaseConfig {
         AppEnvironment.init(new AppEnvironment.ServerEnvironmentStub() {
             @Override
             public int getServerEnvironment() {
-                //判断应用环境：release 且不为mt_test 渠道时候使用正式环境
-                boolean product = !Constant.CHANNEL_TEST.equals(ChannelUtil.getChannel());
+//                //判断应用环境：release 且不为mt_test 渠道时候使用正式环境
+//                boolean product = !Constant.CHANNEL_TEST.equals(ChannelUtil.getChannel());
+                boolean product = GeekAdSdk.isFormal();
                 int defEnvironment = product? AppEnvironment.ServerEnvironment.Product.ordinal():AppEnvironment.ServerEnvironment.Test.ordinal();
                 return SpUtils.getInt(SERVER_ENVIRONMENT,defEnvironment);
             }

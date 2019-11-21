@@ -22,6 +22,8 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
+import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
@@ -83,6 +85,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onSlideToUnlock() {
+                //todo_zzh
+                //todo 兼容性优化——重新打开保活service
+                Intent i = new Intent(LockActivity.this, LocalService.class);
+                i.putExtra("action","unlock_screen");
+                LockActivity.this.startService(i);
                 finish();
             }
 
@@ -319,7 +326,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
     }
 
 

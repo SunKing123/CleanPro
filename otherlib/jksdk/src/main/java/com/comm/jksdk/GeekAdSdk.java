@@ -36,14 +36,14 @@ public final class GeekAdSdk {
      * @param channel 渠道名称
      * @param isFormal 是否是正式环境 true对应生产环境
      */
-    public static void init(Context context, String productName, String channel, boolean isFormal){
+    public static void init(Context context, String productName, String csjAppId, String channel, boolean isFormal){
         mContext = context.getApplicationContext();
         mRroductName = productName;
         mChannel = channel;
         mIsFormal = isFormal;
         //初始化基本配置信息
         InitBaseConfig.getInstance().init(mContext);
-//        InitBaseConfig.getInstance().initChjAd(mContext, csjAppId);
+        InitBaseConfig.getInstance().initChjAd(mContext, csjAppId);
         AdsConfig.setProductName(mRroductName);
         mIsInit = true;
     }

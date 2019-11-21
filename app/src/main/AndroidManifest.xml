@@ -325,7 +325,7 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task"
+            android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
 

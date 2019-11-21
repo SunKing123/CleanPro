@@ -25,7 +25,7 @@ public interface AdManager {
 
     void loadRewardVideoAd(Activity activity, String position, String userId, int orientation, AdListener listener);
 
-    void loadCustomInsertScreenAd(Activity activity, String position, boolean isFullScreen, int showTimeSeconds, AdListener listener);
+    void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener);
 
     ViewGroup getAdView();
 }

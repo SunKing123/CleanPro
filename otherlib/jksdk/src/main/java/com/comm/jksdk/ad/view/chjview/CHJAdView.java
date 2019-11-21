@@ -101,9 +101,11 @@ public class CHJAdView extends CommAdView {
             mAdView = new CsjRewardVideoAdView(mContext);
         } else if (Constants.AdStyle.CP.equals(style)) { //模板插屏
             mAdView = new CsjTemplateInsertScreenAdView(mContext);
-        } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) { //自定义插屏
+        } else if (Constants.AdStyle.CUSTOM_CP.equals(style) ) { //自定义插屏
             mAdView = new CsjCustomInsertScreenAdView(mContext);
-        } else {
+        } else if (Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) { //自定义全屏插屏
+            mAdView = new CsjCustomInsertScreenAdView(mContext, true);
+        }  else {
             //  all
             //所有样式都支持 随机展示
             //所有样式都支持 随机展示
@@ -304,10 +306,13 @@ public class CHJAdView extends CommAdView {
         if (mAdView instanceof CsjCustomInsertScreenAdView) {
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
-            ((CsjCustomInsertScreenAdView) mAdView).loadCustomInsertScreenAd(mActivity, isFullScreen, showTimeSeconds, mAdId);
+            ((CsjCustomInsertScreenAdView) mAdView).loadCustomInsertScreenAd(mActivity, showTimeSeconds, mAdId);
         }
     }
 
+    /**
+     * 模板插屏
+     */
     protected void getTemplateInsertScreenAd(){
         if (mAdView == null) {
             return;
