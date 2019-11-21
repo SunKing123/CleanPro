@@ -252,7 +252,6 @@
 
         <activity
             android:name=".ui.main.activity.PhonePremisActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/transparent_activity" />
 
         <activity
