@@ -126,10 +126,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         mAdManager = GeekAdSdk.getAdsManger()
         //暂时这样
         mAdManager.loadRewardVideoAd(this, "red_envelopes_ad", "user123", 1, object : VideoAdListener {
-            override fun onVideoResume() {}
-            override fun onVideoRewardVerify(rewardVerify: Boolean, rewardAmount: Int, rewardName: String) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount")
-            }
 
             override fun adSuccess(info: AdInfo?) {
                 Log.d(TAG, "-----adSuccess-----")
@@ -139,6 +135,10 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
             override fun adExposed(info: AdInfo?) {
                 Log.d(TAG, "-----adExposed-----")
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", " ")
+            }
+
+            override fun onVideoResume(info: AdInfo?) {
+
             }
 
             override fun adClicked(info: AdInfo?) {
@@ -161,6 +161,14 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
             override fun adError(errorCode: Int, errorMsg: String) {
                 Log.d(TAG, "-----adError-----$errorMsg")
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "red_envelopes_page_video_page")
+            }
+
+            override fun onVideoRewardVerify(info: AdInfo?, rewardVerify: Boolean, rewardAmount: Int, rewardName: String?) {
+
+            }
+
+            override fun onVideoComplete(info: AdInfo?) {
+
             }
         })
     }

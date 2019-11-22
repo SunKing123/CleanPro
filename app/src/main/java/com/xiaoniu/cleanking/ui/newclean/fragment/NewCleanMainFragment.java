@@ -1318,16 +1318,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == getActivity() || null == mAdManager) return;
         NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
         NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
-        mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {//暂时这样
-
+        mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {
             @Override
-            public void onVideoResume() {
+            public void onVideoResume(AdInfo info) {
 
             }
 
             @Override
-            public void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount");
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+                Log.d(TAG, "-----onVideoComplete-----");
+                NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频结束页浏览");
             }
 
             @Override
@@ -1351,6 +1356,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
+                NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
                 StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
                 startActivity(VirusKillActivity.class);
             }
@@ -1372,16 +1378,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == getActivity() || null == mAdManager) return;
         NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
         NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_page", "view_page", "网络加速励视频页浏览");
-        mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {//暂时这样
-
+        mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {
             @Override
-            public void onVideoResume() {
+            public void onVideoResume(AdInfo info) {
 
             }
 
             @Override
-            public void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount");
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+                Log.d(TAG, "-----onVideoComplete-----");
+                NiuDataAPI.onPageStart("view_page", "网络加速激励视频结束页浏览");
             }
 
             @Override
@@ -1405,6 +1416,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
+                NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_end_page", "view_page", "网络加速激励视频结束页浏览");
                 StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
                 startActivity(VirusKillActivity.class);
             }

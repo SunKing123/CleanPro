@@ -3,9 +3,9 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,23 +13,16 @@ import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.VirusKillPresenter;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -113,7 +106,8 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
                 }
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra("title", getString(R.string.virus_kill)));
+              /*  for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                     if (PositionId.KEY_VIRUS_SCREEN.equals(switchInfoList.getConfigKey())) {
                         if (switchInfoList.isOpen()) {
                             loadGeekAd();
@@ -121,7 +115,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                             goFinishActivity();
                         }
                     }
-                }
+                }*/
             }
 
             @Override
@@ -139,7 +133,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     /**
      * 全屏插屏广告
      */
-    private void loadGeekAd() {
+/*    private void loadGeekAd() {
         if (null == mAdManager) return;
         mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, new AdListener() { //暂时这样
             @Override
@@ -168,9 +162,9 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                 Log.d(TAG, "-----adError-----" + errorMsg);
             }
         });
-    }
+    }*/
 
-    private void goFinishActivity() {
+   /* private void goFinishActivity() {
         boolean isOpen = false;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
@@ -190,7 +184,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             startActivity(NewCleanFinishActivity.class, bundle);
         }
         finish();
-    }
+    }*/
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
