@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
@@ -161,9 +162,9 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      *
      * @return
      */
-    public void getSwitchInfoListSuccess(SwitchInfoList list) {
+    public void getSwitchInfoListSuccess(InsertAdSwitchInfoList list) {
         if (null == list || null == list.getData() || list.getData().size() <= 0) return;
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+        for (InsertAdSwitchInfoList.DataBean switchInfoList : list.getData()) {
 
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
                 if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) {

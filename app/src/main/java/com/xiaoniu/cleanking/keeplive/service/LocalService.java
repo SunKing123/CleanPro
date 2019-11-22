@@ -109,11 +109,11 @@ public final class LocalService extends Service {
         registerReceiver(screenStateReceiver, intentFilter2);
 
 
-        if(innerReceiver ==null){
+  /*      if(innerReceiver ==null){
             innerReceiver = new InnerReceiver();
         }
         IntentFilter mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        registerReceiver(innerReceiver, mFilter);
+        registerReceiver(innerReceiver, mFilter);*/
 
         //开启一个前台通知，用于提升服务进程优先级
         shouDefNotify();
@@ -376,7 +376,7 @@ public final class LocalService extends Service {
         unbindService(connection);
         unregisterReceiver(mOnepxReceiver);
         unregisterReceiver(screenStateReceiver);
-        unregisterReceiver(innerReceiver);
+//        unregisterReceiver(innerReceiver);
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
         }

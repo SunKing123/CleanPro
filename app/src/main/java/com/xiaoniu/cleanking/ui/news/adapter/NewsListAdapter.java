@@ -1,10 +1,14 @@
 package com.xiaoniu.cleanking.ui.news.adapter;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,19 +17,25 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsPicInfo;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
+import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ImageUtil;
+import com.xiaoniu.cleanking.widget.CountDownView;
 import com.xiaoniu.common.base.SimpleWebActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
+import kotlin.reflect.jvm.internal.impl.resolve.constants.StringValue;
 
 /**
  * 头条资讯适配器
@@ -49,8 +59,17 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         int viewType = getItemViewType(position);
         if (viewType == 0) {//视频
             VideoItemInfo itemInfo = (VideoItemInfo) itemData;
+            RelativeLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);//广告加载
+            TextView tv_viewed_num =commonHolder.getView(R.id.tv_viewed_num);//观看数量
+            TextView  tv_zan_num = commonHolder.getView(R.id.tv_zan_num);//点赞数量
+            TextView tv_collection_num = commonHolder.getView(R.id.tv_collection_num);//收藏数量
+            CountDownView closeBtn = commonHolder.getView(R.id.rp_close_view);
+
+            tv_collection_num.setText(String.valueOf(itemInfo.collectTimes));
+            tv_viewed_num.setText(mContext.getString(R.string.watch_times,String.valueOf(itemInfo.watchedTimes)));
+            tv_zan_num.setText(String.valueOf(itemInfo.starTimes));
+
             JzvdStd jzvdStd = commonHolder.getView(R.id.videoplayer);
-            FrameLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);
             jzvdStd.setUp(itemInfo.url, itemInfo.title, Jzvd.SCREEN_NORMAL);
             jzvdStd.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageUtil.display(itemInfo.coverImage, jzvdStd.thumbImageView);
@@ -59,42 +78,26 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 public void clickCall() {
                     StatisticsUtils.trackClickNewsItem("information_page_video_click", "资讯页视频点击", "selected_page", "information_page", itemInfo.title, itemInfo.videoId, position + 1);
                 }
+
+                @Override
+                public void completed() {
+                    //newlist_2_1   第二屏幕广告样式
+                    insertAd(linAdContainer,"newlist_2_1",closeBtn,View.VISIBLE);
+                }
             });
 
-
-
-            if ((position + 1) % 3 == 0) {
-                if (null != adManager && null != mActivity) {
-                    //todo_zzh
-                    adManager.loadAd(mActivity, "success_page_ad_1", new AdListener() {
-                        @Override
-                        public void adSuccess(AdInfo info) {
-                            View adView = adManager.getAdView();
-                            if (adView != null) {
-                                linAdContainer.removeAllViews();
-                                linAdContainer.addView(adView);
-                                linAdContainer.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        @Override
-                        public void adExposed(AdInfo info) {
-
-                        }
-
-                        @Override
-                        public void adClicked(AdInfo info) {
-
-                        }
-
-                        @Override
-                        public void adError(int errorCode, String errorMsg) {
-
-                        }
-                    });
-                }
+            int showRate = 3;   //间隔几条展示；
+            if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
+                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+                showRate = null != map.get("page_video_end_screen") ? 3 : map.get("page_video_end_screen").getShowRate();
+            }
+            if ((position + 1) % showRate == 0) {//每间隔showRate播放
+                //newlist_2_1   第二屏幕广告样式
+                insertAd(linAdContainer,"newlist_2_1",closeBtn,View.GONE);
             }else{
+                linAdContainer.removeAllViews();
                 linAdContainer.setVisibility(View.GONE);
+                closeBtn.setVisibility(View.GONE);
             }
         } else {
             final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
@@ -172,4 +175,72 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             return 0;
         }
     }
+
+
+    /**
+     * 插入广告
+     */
+    public void insertAd(RelativeLayout container,String positionId,CountDownView closeBtn,int visiable){
+
+        if (null != container && null != adManager && null != mActivity) {
+            adManager.loadAd(mActivity,positionId , new AdListener() {
+                @Override
+                public void adSuccess(AdInfo info) {
+                    if (null != container && null != closeBtn) {
+
+                        View adView = adManager.getAdView();
+                        if (adView != null) {
+                            if (adView.getParent() != null) {
+                                ((ViewGroup) adView.getParent()).removeView(adView);
+                            }
+                            container.removeAllViews();
+                            container.addView(adView);
+                            container.setVisibility(View.VISIBLE);
+                            if (visiable == View.VISIBLE) {
+                                closeBtn.setMillis(15000,1000);
+                                closeBtn.setVisibility(visiable);
+                                closeBtn.start();
+                                closeBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if(closeBtn!=null)
+                                            closeBtn.setVisibility(View.GONE);
+                                        if(container!=null)
+                                            container.setVisibility(View.GONE);
+                                    }
+                                });
+                                closeBtn.setOnCountDownListener(new CountDownView.OnCountDownListener() {
+                                    @Override
+                                    public void onCountDownFinish() {
+                                        if(closeBtn!=null)
+                                            closeBtn.setVisibility(View.GONE);
+                                        if(container!=null)
+                                            container.setVisibility(View.GONE);
+                                    }
+                                });
+
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void adExposed(AdInfo info) {
+
+                }
+
+                @Override
+                public void adClicked(AdInfo info) {
+
+                }
+
+                @Override
+                public void adError(int errorCode, String errorMsg) {
+
+                }
+            });
+        }
+    }
+
+
 }

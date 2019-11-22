@@ -35,9 +35,11 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -648,6 +650,34 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
 
+    }
+
+
+    /**
+     * 插屏广告开关
+     */
+    public void getScreentSwitch() {
+        mModel.getScreentSwitch(new Common4Subscriber<InsertAdSwitchInfoList>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(InsertAdSwitchInfoList switchInfoList) {
+                AppHolder.getInstance().setInsertAdSwitchInfoList(switchInfoList);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
     }
 
 

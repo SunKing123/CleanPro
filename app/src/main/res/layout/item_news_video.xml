@@ -1,22 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
-
-    <cn.jzvd.JzvdStd
-        android:id="@+id/videoplayer"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="@dimen/dimen_2dp" />
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <cn.jzvd.JzvdStd
+            android:id="@+id/videoplayer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="@dimen/dimen_2dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
 
-    <FrameLayout
+            <TextView
+                android:id="@+id/tv_viewed_num"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dp"
+                android:text="1.36万次观看"
+                android:textColor="#ff404040"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_zan_num"
+                android:layout_width="@dimen/dimen_19dp"
+                android:layout_height="@dimen/dimen_19dp"
+                android:src="@drawable/icon_video_zan"></ImageView>
+            <TextView
+                android:id="@+id/tv_zan_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3.5dp"
+                android:text="1500"
+                android:textColor="#ff404040"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_collection_num"
+                android:layout_width="@dimen/dimen_19dp"
+                android:layout_height="@dimen/dimen_19dp"
+                android:layout_marginLeft="7dp"
+                android:src="@drawable/icon_video_collection"></ImageView>
+
+            <TextView
+                android:id="@+id/tv_collection_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3.5dp"
+                android:layout_marginRight="12.5dp"
+                android:text="1500"
+                android:textColor="#ff404040"
+                android:textSize="12sp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <RelativeLayout
         android:id="@+id/lin_ad_container"
-        android:visibility="gone"
         android:background="@color/white"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-    </FrameLayout>
-</FrameLayout>
+        android:layout_height="243dp">
+
+    </RelativeLayout>
+
+
+    <com.xiaoniu.cleanking.widget.CountDownView
+        android:id="@+id/rp_close_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:background="@drawable/ad_close_btn_bg"
+        app:suffixText="s|关闭视频"
+        app:unClickText=""
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>

@@ -89,7 +89,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     String createEventName = "";
     String returnEventName = "";
     String sysReturnEventName = "";
-
     //穿山甲相关 begin
     private FrameLayout mChuanShanJiaVideo;
     private TTAdNative mTTAdNative;

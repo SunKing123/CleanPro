@@ -224,6 +224,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
             getDeviceInfo();
         }
+        //初始插屏广告开关
+        mPresenter.getScreentSwitch();
         //获取定位权限
 //        mPresenter.requestLocationPermission();
         //测试入口

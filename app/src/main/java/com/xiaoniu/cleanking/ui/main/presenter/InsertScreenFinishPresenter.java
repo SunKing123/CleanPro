@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.InsertScreenFinishActivity;
@@ -28,14 +29,14 @@ public class InsertScreenFinishPresenter extends RxPresenter<InsertScreenFinishA
      * 插屏广告开关
      */
     public void getScreentSwitch() {
-        mModel.getScreentSwitch(new Common4Subscriber<SwitchInfoList>() {
+        mModel.getScreentSwitch(new Common4Subscriber<InsertAdSwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
 
             }
 
             @Override
-            public void getData(SwitchInfoList switchInfoList) {
+            public void getData(InsertAdSwitchInfoList switchInfoList) {
                 mView.getSwitchInfoListSuccess(switchInfoList);
             }
 
