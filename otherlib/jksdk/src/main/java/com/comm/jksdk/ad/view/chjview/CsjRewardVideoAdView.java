@@ -92,9 +92,6 @@ public class CsjRewardVideoAdView extends CHJAdView {
                 LogUtils.d(TAG, "rewardVideoAd loaded");
                 if (mttRewardVideoAd != null) {
                     //step6:在获取到广告后展示
-                    mttRewardVideoAd.showRewardVideoAd(activity);
-                    adSuccess(mAdInfo);
-
                     mttRewardVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
 
                         @Override
@@ -170,6 +167,8 @@ public class CsjRewardVideoAdView extends CHJAdView {
                             LogUtils.d(TAG, "安装完成，点击下载区域打开");
                         }
                     });
+                    mttRewardVideoAd.showRewardVideoAd(activity);
+                    adSuccess(mAdInfo);
                 } else {
                     onError(CodeFactory.UNKNOWN, "加载激励视频数据为空");
                 }

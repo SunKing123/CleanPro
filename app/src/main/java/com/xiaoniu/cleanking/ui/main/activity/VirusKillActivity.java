@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -24,8 +28,11 @@ import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivi
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 
@@ -53,7 +60,9 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     private FileQueryUtils mFileQueryUtils;
     private ImageView[] mIvs;
     private ObjectAnimator mObjectAnimator;
-    private boolean mIsOpen;
+    private AdManager mAdManager;
+
+    private String TAG = "GeekSdk";
 
     @Override
     protected int getLayoutId() {
@@ -68,6 +77,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
+        mAdManager = GeekAdSdk.getAdsManger();
         initLottie();
         mFileQueryUtils = new FileQueryUtils();
         if (Build.VERSION.SDK_INT < 26) {
@@ -77,10 +87,11 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             mPowerSize = mFileQueryUtils.getRunningProcess().size();
         }
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPresenter.getSwitchInfoList();
     }
 
     private void initLottie() {
+        NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "病毒查杀动画页浏览");
+        NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_animation_page", "virus_killing_animation_page_view_page", "病毒查杀动画页浏览");
         showColorChange(2);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mLottieAnimationView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -102,8 +113,15 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
                 }
-                goFinishActivity();
-                finish();
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_VIRUS_SCREEN.equals(switchInfoList.getConfigKey())) {
+                        if (switchInfoList.isOpen()) {
+                            loadGeekAd();
+                        } else {
+                            goFinishActivity();
+                        }
+                    }
+                }
             }
 
             @Override
@@ -114,6 +132,40 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             @Override
             public void onAnimationRepeat(Animator animation) {
 
+            }
+        });
+    }
+
+    /**
+     * 全屏插屏广告
+     */
+    private void loadGeekAd() {
+        if (null == mAdManager) return;
+        mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, new AdListener() { //暂时这样
+            @Override
+            public void adSuccess(AdInfo info) {
+                Log.d(TAG, "-----adSuccess-----");
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                Log.d(TAG, "-----adExposed-----");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "-----adClicked-----");
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                Log.d(TAG, "-----adClose-----");
+                goFinishActivity();
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                Log.d(TAG, "-----adError-----" + errorMsg);
             }
         });
     }
@@ -137,6 +189,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             bundle.putString("title", getString(R.string.virus_kill));
             startActivity(NewCleanFinishActivity.class, bundle);
         }
+        finish();
     }
 
     //低于Android O
@@ -190,31 +243,6 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
         }
     }
 
-    /**
-     * 拉取广告开关成功
-     *
-     * @return
-     */
-    public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (null == list || null == list.getData() || list.getData().size() <= 0)
-            return;
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            if (PositionId.KEY_VIRUS_SCREEN.equals(switchInfoList.getConfigKey())) {
-                mIsOpen = switchInfoList.isOpen();
-            }
-        }
-    }
-
-    /**
-     * 拉取广告开关失败
-     *
-     * @return
-     */
-    public void getSwitchInfoListFail() {
-//        ToastUtils.showShort(getString(R.string.net_error));
-
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -237,13 +265,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-           /* if (!mIsYinDaoFinish && !PreferenceUtil.getGameQuikcenStart()) {
-                StatisticsUtils.trackClick("system_return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
-            } else if (mIsStartClean) {
-                StatisticsUtils.trackClick("system_return_click", "游戏加速动画页返回", "gameboost_incentive_video_end_page", "gameboost_animation_page");
-            } else {
-                StatisticsUtils.trackClick("system_return_click", "游戏加速添加页返回", "gameboost_guidance_page", "gameboost_add_page");
-            }*/
+            StatisticsUtils.trackClick("system_return_click", "病毒查杀动画页返回", "home_page", "virus_killing_animation_page");
         }
         return super.onKeyDown(keyCode, event);
     }

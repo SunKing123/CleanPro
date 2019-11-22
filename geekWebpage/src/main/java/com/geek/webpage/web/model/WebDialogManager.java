@@ -84,6 +84,11 @@ public class WebDialogManager {
             }
         }
     }
+    public void dismissDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
 
     public interface FinishInterface {
         void finishActivity();

@@ -15,9 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseAgentWebActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * @author XiLei
@@ -27,12 +30,13 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 public class AgentWebViewActivity extends BaseAgentWebActivity {
 
     private TextView mTitleTextView;
+    private String sourcePage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-
+        sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
         LinearLayout mLinearLayout = (LinearLayout) this.findViewById(R.id.container);
         Toolbar mToolbar = (Toolbar) this.findViewById(R.id.toolbar);
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -45,12 +49,23 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatisticsUtils.trackClick("Interaction_ad_return_click", "用户在首页点击互动式广告返回", "home_page", "Interaction_ad_page");
+                StatisticsUtils.trackClick("close_click", "互动式广告关闭点击", sourcePage, "interactive_advertising_page");
                 finish();
             }
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("interactive_advertising_page_view_page","互动式广告页浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPIUtil.onPageEnd(sourcePage, "interactive_advertising_page", "interactive_advertising_page_view_page", "互动式广告页浏览");
+    }
 
     @NonNull
     @Override
@@ -60,9 +75,8 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Interaction_ad_return_click", "用户在首页点击互动式广告返回", "home_page", "Interaction_ad_page");
+        StatisticsUtils.trackClick("system_return_click", "互动式广告关闭点击", sourcePage, "interactive_advertising_page");
         super.onBackPressed();
-
     }
 
     @Override

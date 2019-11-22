@@ -199,6 +199,16 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                     mAdvertId = switchInfoList.getAdvertId();
                     mSecondAdvertId = switchInfoList.getSecondAdvertId();
                 }
+            } else if (getString(R.string.virus_kill).contains(mTitle)) {
+                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey())) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
+            }else if (getString(R.string.network_quicken).contains(mTitle)) {
+                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey())) {
+                    mAdvertId = switchInfoList.getAdvertId();
+                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+                }
             } else { //立即清理
                 if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) {
                     mAdvertId = switchInfoList.getAdvertId();

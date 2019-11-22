@@ -35,33 +35,6 @@ public class GamePresenter extends RxPresenter<GameActivity, MainModel> {
         mActivity = activity;
     }
 
-    /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList() {
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                mView.getSwitchInfoListSuccess(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getSwitchInfoListFail();
-            }
-        });
-    }
-
     //获取到可以加速的应用名单Android O以下的获取最近使用情况
     @SuppressLint("CheckResult")
     public void getAccessListBelow() {

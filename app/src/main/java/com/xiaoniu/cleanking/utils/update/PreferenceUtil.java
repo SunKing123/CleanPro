@@ -1152,7 +1152,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 获取红包循环展示时展示到第几个
+     * 获取红包循环展示频次
      */
     public static int getRedPacketShowTrigger() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);

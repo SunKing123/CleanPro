@@ -423,6 +423,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 currentPage = "direct_gameboots_success_page";
                 createEventName = "直接跳游戏加速结果页创建时";
                 createEventCode = "direct_game_success_page_custom";
+            } else if (getString(R.string.virus_kill).contains(mTitle)) {
+                //病毒查杀
+                currentPage = "virus_killing_success_page";
+                createEventName = "病毒查杀结果页创建时";
+                createEventCode = "virus_killing_success_page_custom";
+            } else if (getString(R.string.network_quicken).contains(mTitle)) {
+                //网络加速
+                currentPage = "network_acceleration_success_page";
+                createEventName = "网络加速结果页创建时";
+                createEventCode = "network_acceleration_success_page_custom";
             }
 
         }
@@ -879,7 +889,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvSize.setText(R.string.virus_guard);
                 mTvSize.setTextSize(20);
             } else if (getString(R.string.network_quicken).contains(mTitle)) {
-
                 mTvSize.setText(num);
                 mTvGb.setText("%");
                 mTvQl.setText("已提速");
@@ -1383,6 +1392,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
                 count = PreferenceUtil.getCleanFinishClickGameCount();
                 isClick = (PreferenceUtil.getCleanFinishClickGameCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.virus_kill).contains(mTitle)) { //病毒查杀
+                count = PreferenceUtil.getCleanFinishClickVirusCount();
+                isClick = (PreferenceUtil.getCleanFinishClickVirusCount() % mScreenShowCount == 0);
+            } else if (getString(R.string.network_quicken).contains(mTitle)) { //网络加速
+                count = PreferenceUtil.getCleanFinishClickNetCount();
+                isClick = (PreferenceUtil.getCleanFinishClickNetCount() % mScreenShowCount == 0);
             } else { //建议清理
                 count = PreferenceUtil.getCleanFinishClickCount();
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
@@ -1408,6 +1423,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             PreferenceUtil.saveCleanFinishClickPhoneCount(PreferenceUtil.getCleanFinishClickPhoneCount() + 1);
         } else if (getString(R.string.game_quicken).contains(mTitle)) { //游戏加速
             PreferenceUtil.saveCleanFinishClickGameCount(PreferenceUtil.getCleanFinishClickGameCount() + 1);
+        } else if (getString(R.string.virus_kill).contains(mTitle)) { //病毒查杀
+            PreferenceUtil.saveCleanFinishClickVirusCount(PreferenceUtil.getCleanFinishClickVirusCount() + 1);
+        } else if (getString(R.string.network_quicken).contains(mTitle)) { //网络加速
+            PreferenceUtil.saveCleanFinishClickNetCount(PreferenceUtil.getCleanFinishClickNetCount() + 1);
         } else { //建议清理
             PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
         }
@@ -1454,6 +1473,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.game_quicken).contains(mTitle)) {
             //游戏加速
             NiuDataAPI.onPageStart("gameboost_success_page_view_page", "游戏加速结果页展示浏览");
+        } else if (getString(R.string.virus_kill).contains(mTitle)) {
+            NiuDataAPI.onPageStart("virus_killing_success_page_view_page", "病毒查杀结果页展示浏览");
+        } else if (getString(R.string.network_quicken).contains(mTitle)) {
+            NiuDataAPI.onPageStart("network_acceleration_success_page_view_page", "网络加速结果页展示浏览");
         } else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
@@ -1508,6 +1531,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.game_quicken).contains(mTitle)) {
             //游戏加速
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "gameboost_success_page_view_page", "游戏加速结果页展示浏览");
+        } else if (getString(R.string.virus_kill).contains(mTitle)) {
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "virus_killing_success_page_view_page", "病毒查杀结果页展示浏览");
+        } else if (getString(R.string.network_quicken).contains(mTitle)) {
+            NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "network_acceleration_success_page_view_page", "网络加速结果页展示浏览");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }

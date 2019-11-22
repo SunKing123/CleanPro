@@ -58,32 +58,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     }
 
     /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList() {
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-                mView.getSwitchInfoListSuccess(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-            }
-
-            @Override
-            public void netConnectError() {
-            }
-        });
-    }
-
-    /**
      * 互动式广告开关
      */
     public void getInteractionSwitch() {
