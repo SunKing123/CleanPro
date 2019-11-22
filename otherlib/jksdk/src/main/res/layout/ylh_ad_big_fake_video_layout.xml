@@ -15,7 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
-
+        <ImageView
+            android:background="@mipmap/ad_mask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/ad_describe_tv"
             android:lines="1"

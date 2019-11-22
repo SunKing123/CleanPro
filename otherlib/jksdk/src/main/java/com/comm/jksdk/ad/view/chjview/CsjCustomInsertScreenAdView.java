@@ -78,7 +78,7 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
                 LogUtils.e(TAG, "loadNativeAd code:" + code + " message:" + message);
 //                adError(code, message);
                 firstAdError(code, message);
-                Toast.makeText(mContext, "loadCustomInsertScreenAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "loadCustomInsertScreenAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
 
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

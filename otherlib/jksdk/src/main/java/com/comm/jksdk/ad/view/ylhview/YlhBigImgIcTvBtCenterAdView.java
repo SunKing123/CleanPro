@@ -98,9 +98,7 @@ public class YlhBigImgIcTvBtCenterAdView extends CommAdView {
             firstAdError(1, "请求结果为空");
             return;
         }
-        int size = nativeAdList.size();
-        int index = new Random().nextInt(size);
-        NativeUnifiedADData adData = nativeAdList.get(index);
+        NativeUnifiedADData adData = nativeAdList.get(0);
         if (adData == null) {
             firstAdError(1, "请求结果为空");
             return;

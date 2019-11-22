@@ -98,4 +98,16 @@
     <declare-styleable name="ArcImageView">
         <attr name="arcHeight" />
     </declare-styleable>
+
+
+    <declare-styleable name="CountDown">
+        <attr name="millisInFuture" format="integer"/>
+        <attr name="countDownInterval" format="integer"/>
+        <attr name="unClickColor" format="color"/>
+        <attr name="clickedNumColor" format="color"/>
+        <attr name="suffixColor" format="color"/>
+        <attr name="unClickText" format="string"/>
+        <attr name="suffixText" format="string"/>
+
+    </declare-styleable>
 </resources>

@@ -36,7 +36,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
-
         if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) ||ActivityCollector.isActivityExist(PopLayerActivity.class)) return;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {

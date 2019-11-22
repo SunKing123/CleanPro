@@ -8,6 +8,10 @@ public class VideoItemInfo implements Serializable {
     public String coverImage = "";;//视频封面
     public String duration = "";;//视频时长
     public String url = "";//视频文件地址
+    public long watchedTimes = 1000;  //观看次数
+    public long starTimes = 2500;      //点赞数
+    public long collectTimes = 3000;    //收藏数
+
 //    public String watchMode;
 //    public String bizCode;
 //    public String status;

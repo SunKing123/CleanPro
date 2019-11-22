@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
@@ -61,7 +62,7 @@ public interface UserApiService {
      * @return
      */
     @GET("/screen/v3/switch")
-    Flowable<SwitchInfoList> getScreentSwitch();
+    Flowable<InsertAdSwitchInfoList> getScreentSwitch();
 
     /**
      * 本地Push阀值配置

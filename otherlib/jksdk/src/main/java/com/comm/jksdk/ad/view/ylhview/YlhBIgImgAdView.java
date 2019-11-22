@@ -88,9 +88,7 @@ public class YlhBIgImgAdView extends YlhAdView {
         if (nativeAdList == null || nativeAdList.isEmpty()) {
             return;
         }
-        int size = nativeAdList.size();
-        int index = new Random().nextInt(size);
-        NativeUnifiedADData adData = nativeAdList.get(index);
+        NativeUnifiedADData adData = nativeAdList.get(0);
         if (adData == null) {
             adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
             return;

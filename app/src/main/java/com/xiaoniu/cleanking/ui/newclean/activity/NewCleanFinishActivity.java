@@ -56,6 +56,7 @@ import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -616,8 +617,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      *
      * @return
      */
-    public void getScreentSwitchSuccess(SwitchInfoList list) {
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
+    public void getScreentSwitchSuccess(InsertAdSwitchInfoList list) {
+        for (InsertAdSwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();

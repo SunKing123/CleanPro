@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
@@ -134,7 +135,7 @@ public class MainModel extends BaseModel {
      *
      * @param commonSubscriber
      */
-    public void getScreentSwitch(Common4Subscriber<SwitchInfoList> commonSubscriber) {
+    public void getScreentSwitch(Common4Subscriber<InsertAdSwitchInfoList> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("channel", ChannelUtil.getChannel());

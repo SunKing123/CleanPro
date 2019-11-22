@@ -66,7 +66,8 @@ public class JzvdStd extends Jzvd {
     protected ProgressBar mDialogBrightnessProgressBar;
     protected TextView mDialogBrightnessTextView;
     public interface ThumbImageClickCallBack {
-         abstract void clickCall();
+         void clickCall();
+         void completed();
     }
     public ThumbImageClickCallBack mCallBack;
 
@@ -161,6 +162,7 @@ public class JzvdStd extends Jzvd {
         changeUiToComplete();
         cancelDismissControlViewTimer();
         bottomProgressBar.setProgress(100);
+        mCallBack.completed();
     }
 
     @Override
