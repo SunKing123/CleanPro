@@ -629,14 +629,20 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
         mAdManager.loadRewardVideoAd(this, "gameboost_video_ad", "user123", 1, new VideoAdListener() {//暂时这样
 
+
             @Override
-            public void onVideoResume() {
+            public void onVideoResume(AdInfo info) {
 
             }
 
             @Override
-            public void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount");
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+
             }
 
             @Override

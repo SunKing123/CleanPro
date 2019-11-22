@@ -126,9 +126,16 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         mAdManager = GeekAdSdk.getAdsManger()
         //暂时这样
         mAdManager.loadRewardVideoAd(this, "red_envelopes_ad", "user123", 1, object : VideoAdListener {
-            override fun onVideoResume() {}
-            override fun onVideoRewardVerify(rewardVerify: Boolean, rewardAmount: Int, rewardName: String) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount")
+            override fun onVideoRewardVerify(info: AdInfo?, rewardVerify: Boolean, rewardAmount: Int, rewardName: String?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onVideoResume(info: AdInfo?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onVideoComplete(info: AdInfo?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun adSuccess(info: AdInfo?) {

@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsPicInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ImageUtil;
@@ -43,14 +44,16 @@ import kotlin.reflect.jvm.internal.impl.resolve.constants.StringValue;
 public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     AdManager adManager;
     Activity mActivity;
+    String pageName="";
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
     }
 
-    public NewsListAdapter(Context context,AdManager am,Activity ac) {
+    public NewsListAdapter(Context context,AdManager am,Activity ac,String name) {
         super(context, new NewsItemTypeSupport());
         adManager = am;
         mActivity = ac;
+        pageName = name;
     }
 
     @Override
@@ -101,18 +104,30 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             }
         } else {
             final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
-            ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
-            ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
-            ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
+
             if (viewType == 1) {//一张图
                 ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
+                ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
+                ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
+                ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
             } else if (viewType == 2) {//两张图
                 ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
                 ImageUtil.display(itemInfo.miniimg.get(1).src, (commonHolder.getView(R.id.ivPic2)));
+                ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
+                ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
+                ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
             } else if (viewType == 3) {//三张图
                 ImageUtil.display(itemInfo.miniimg.get(0).src, (commonHolder.getView(R.id.ivPic1)));
                 ImageUtil.display(itemInfo.miniimg.get(1).src, (commonHolder.getView(R.id.ivPic2)));
                 ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
+                ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
+                ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
+                ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
+            }else if(viewType == 4){
+                RelativeLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);//广告加载
+                //newlist_2_1   第二屏幕广告样式
+                String positionId = pageName.equals(NewsType.TOUTIAO.getValue())?"newlist_1_1":"newlist_other_1";
+                insertAd(linAdContainer,positionId,null,View.GONE);
             }
 
             commonHolder.itemView.setOnClickListener(v -> {
@@ -139,14 +154,19 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             if (itemData instanceof VideoItemInfo) {
                 return 0;
             } else if (itemData instanceof NewsItemInfo) {
-                int size = 0;
-                if (itemData != null) {
-                    ArrayList<NewsPicInfo> list = ((NewsItemInfo) itemData).miniimg;
-                    if (list != null) {
-                        size = list.size();
+                if(((NewsItemInfo) itemData).isAd){
+                    return 4;
+                }else{
+                    int size = 0;
+                    if (itemData != null) {
+                        ArrayList<NewsPicInfo> list = ((NewsItemInfo) itemData).miniimg;
+                        if (list != null) {
+                            size = list.size();
+                        }
                     }
+                    return size <= 3 ? size : 3;
                 }
-                return size <= 3 ? size : 3;
+
             }
             return -1;
         }
@@ -161,6 +181,8 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 return R.layout.item_news_two_pic;
             } else if (viewType == 3) {//三张图
                 return R.layout.item_news_three_pic;
+            } else if(viewType ==4){ //广告显示
+                return R.layout.item_news_insert_ad;
             }
             return -1;
         }
@@ -186,7 +208,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             adManager.loadAd(mActivity,positionId , new AdListener() {
                 @Override
                 public void adSuccess(AdInfo info) {
-                    if (null != container && null != closeBtn) {
+                    if (null != container ) {
 
                         View adView = adManager.getAdView();
                         if (adView != null) {
@@ -196,30 +218,33 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                             container.removeAllViews();
                             container.addView(adView);
                             container.setVisibility(View.VISIBLE);
-                            if (visiable == View.VISIBLE) {
-                                closeBtn.setMillis(15000,1000);
-                                closeBtn.setVisibility(visiable);
-                                closeBtn.start();
-                                closeBtn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if(closeBtn!=null)
-                                            closeBtn.setVisibility(View.GONE);
-                                        if(container!=null)
-                                            container.setVisibility(View.GONE);
-                                    }
-                                });
-                                closeBtn.setOnCountDownListener(new CountDownView.OnCountDownListener() {
-                                    @Override
-                                    public void onCountDownFinish() {
-                                        if(closeBtn!=null)
-                                            closeBtn.setVisibility(View.GONE);
-                                        if(container!=null)
-                                            container.setVisibility(View.GONE);
-                                    }
-                                });
+                            if(null != closeBtn){
+                                if (visiable == View.VISIBLE) {
+                                    closeBtn.setMillis(15000,1000);
+                                    closeBtn.setVisibility(visiable);
+                                    closeBtn.start();
+                                    closeBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if(closeBtn!=null)
+                                                closeBtn.setVisibility(View.GONE);
+                                            if(container!=null)
+                                                container.setVisibility(View.GONE);
+                                        }
+                                    });
+                                    closeBtn.setOnCountDownListener(new CountDownView.OnCountDownListener() {
+                                        @Override
+                                        public void onCountDownFinish() {
+                                            if(closeBtn!=null)
+                                                closeBtn.setVisibility(View.GONE);
+                                            if(container!=null)
+                                                container.setVisibility(View.GONE);
+                                        }
+                                    });
 
+                                }
                             }
+
                         }
                     }
                 }

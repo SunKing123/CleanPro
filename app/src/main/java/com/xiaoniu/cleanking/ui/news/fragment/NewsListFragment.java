@@ -13,6 +13,9 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
@@ -31,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class NewsListFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
@@ -58,11 +62,12 @@ public class NewsListFragment extends BaseFragment {
 
     @Override
     protected void initVariable(Bundle arguments) {
-        mNewsAdapter = new NewsListAdapter(getContext(), GeekAdSdk.getAdsManger(),getActivity());
         if (arguments != null) {
             mType = (NewsType) arguments.getSerializable(KEY_TYPE);
 
         }
+        mNewsAdapter = new NewsListAdapter(getContext(), GeekAdSdk.getAdsManger(),getActivity(),mType.getName());
+
         setSupportLazy(true);
     }
 
@@ -145,9 +150,9 @@ public class NewsListFragment extends BaseFragment {
                         mLlNoNet.setVisibility(View.GONE);
                     SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
                     if (mIsRefresh) {
-                        mNewsAdapter.setData(result.data);
+                        mNewsAdapter.setData(insertNewsAd(result.data));
                     } else {
-                        mNewsAdapter.addData(result.data);
+                        mNewsAdapter.addData(insertNewsAd(result.data));
                     }
                 }
             }
@@ -214,5 +219,32 @@ public class NewsListFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+
+    /**
+     * 插入广告
+     * @param newsItemInfos
+     * @return
+     */
+    public ArrayList<NewsItemInfo> insertNewsAd(ArrayList<NewsItemInfo> newsItemInfos){
+        int showRate = 3;   //间隔几条展示；
+        if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
+            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+            showRate = null != map.get("page_news_screen") ? 3 : map.get("page_news_screen").getShowRate();
+            showRate = showRate <= 2 ? 2 : showRate;
+        }
+
+        ArrayList<NewsItemInfo> newdata = new ArrayList<>();
+        for(int i=0;i<newsItemInfos.size();i++){
+            newdata.add(newsItemInfos.get(i));
+            if ((i + 1) % (showRate-1) == 0) {//每间隔showRate播放
+                NewsItemInfo newsItemInfo = new NewsItemInfo();
+                newsItemInfo.isAd = true;
+                newdata.add(newsItemInfo);
+            }
+        }
+        return newdata;
+
     }
 }

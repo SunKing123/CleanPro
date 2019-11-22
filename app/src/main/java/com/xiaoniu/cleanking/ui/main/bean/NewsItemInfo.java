@@ -13,5 +13,6 @@ public class NewsItemInfo implements Serializable {
     public String source = "";
     public int miniimg_size;
     public String rowkey = "";
+    public boolean isAd = false;
     public ArrayList<NewsPicInfo> miniimg;
 }

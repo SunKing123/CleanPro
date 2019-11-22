@@ -1320,14 +1320,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
         mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {//暂时这样
 
+
             @Override
-            public void onVideoResume() {
+            public void onVideoResume(AdInfo info) {
 
             }
 
             @Override
-            public void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount");
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+
             }
 
             @Override
@@ -1374,14 +1380,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_page", "view_page", "网络加速励视频页浏览");
         mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {//暂时这样
 
+
             @Override
-            public void onVideoResume() {
+            public void onVideoResume(AdInfo info) {
 
             }
 
             @Override
-            public void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                Log.d(TAG, "onVideoRewardVerify---- rewardName + rewardAmount");
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+
             }
 
             @Override
