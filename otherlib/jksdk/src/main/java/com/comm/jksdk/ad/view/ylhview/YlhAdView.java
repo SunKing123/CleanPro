@@ -5,6 +5,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.ad.view.chjview.CsjCustomInsertScreenAdView;
@@ -29,13 +30,6 @@ import java.util.List;
  */
 public class YlhAdView extends CommAdView {
     private String style;
-    // 广告位ID
-    protected String mAdId = "";
-
-    /**
-     * 广告appid
-     */
-    protected String mAppId = "";
 
     /**
      * 视频广告方向横屏、竖屏
@@ -99,7 +93,7 @@ public class YlhAdView extends CommAdView {
             //所有样式都支持 随机展示
             int num = AdsUtils.getRandomNum(2);
             LogUtils.w(TAG, "随机显示样式------->style:" + style + " getRandomNum:" + num);
-            Toast.makeText(mContext, "发现未定义样式:" + style + "正试图随机显示样式" + num, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, "发现未定义样式:" + style + "正试图随机显示样式" + num, Toast.LENGTH_SHORT).show();
             switch (num) {
                 case 0:
                     mAdView = new YlhLeftImgRightTwoTextAdView(mContext);
@@ -167,6 +161,7 @@ public class YlhAdView extends CommAdView {
             return;
         }
         if (mAdView instanceof YlhTemplateInsertScreenAdView) {
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((YlhTemplateInsertScreenAdView) mAdView).loadTemplateInsertScreenAd(mActivity, mAppId, mAdId);
@@ -205,6 +200,11 @@ public class YlhAdView extends CommAdView {
                 mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
                 mAdInfo.setAdAppid(mAppId);
                 mAdInfo.setAdId(mAdId);
+                NativeUnifiedADData nativeUnifiedADData = nativeAdList.get(0);
+                if (nativeUnifiedADData != null) {
+                    String title = nativeUnifiedADData.getTitle();
+                    mAdInfo.setAdTitle(title);
+                }
                 adSuccess(mAdInfo);
                 mAdView.setAdInfo(mAdInfo);
                 mAdView.parseYlhAd(nativeAdList);
@@ -231,6 +231,9 @@ public class YlhAdView extends CommAdView {
             return;
         }
         if (mAdView instanceof YlhSplashAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((YlhSplashAdView) mAdView).loadSplashAd(mActivity, mAppId, mAdId);
@@ -245,6 +248,9 @@ public class YlhAdView extends CommAdView {
             return;
         }
         if (mAdView instanceof YlhFullScreenVideoAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((YlhFullScreenVideoAdView) mAdView).loadFullScreenVideoAd(mAppId, mAdId);
@@ -259,6 +265,9 @@ public class YlhAdView extends CommAdView {
             return;
         }
         if (mAdView instanceof YlhRewardVideoAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((YlhRewardVideoAdView) mAdView).loadRewardVideoAd(mActivity, mAdId, orientation);

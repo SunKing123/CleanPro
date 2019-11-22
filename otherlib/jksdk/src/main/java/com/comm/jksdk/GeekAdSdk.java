@@ -2,6 +2,7 @@ package com.comm.jksdk;
 
 import android.content.Context;
 
+import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.comm.jksdk.ad.factory.NativeManagerFactory;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.config.AdsConfig;

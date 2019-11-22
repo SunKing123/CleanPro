@@ -3,26 +3,15 @@ package com.comm.jksdk.ad.view.ylhview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.widget.Toast;
 
-import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
-import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.ad.view.chjview.CHJAdView;
-import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
-import com.comm.jksdk.http.utils.LogUtils;
-import com.comm.jksdk.utils.CodeFactory;
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
 import com.qq.e.ads.rewardvideo.RewardVideoADListener;
 import com.qq.e.comm.util.AdError;
-
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 /**
  * 优量汇激励视频广告<p>
@@ -106,7 +95,9 @@ public class YlhRewardVideoAdView extends CHJAdView {
 
             @Override
             public void onVideoComplete() {
-
+                if (mAdListener != null && mAdListener instanceof VideoAdListener) {
+                    ((VideoAdListener) mAdListener).onVideoComplete(mAdInfo);
+                }
             }
 
             @Override

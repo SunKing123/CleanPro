@@ -18,6 +18,11 @@
             android:scaleType="centerCrop"
             app:fillet="@dimen/dimen_12dp" />
 
+        <ImageView
+            android:background="@mipmap/ad_mask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <TextView
             android:id="@+id/ad_describe_tv"
             android:lines="1"
@@ -29,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <ImageView
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_80dp"
             android:src="@mipmap/ad_big_img_paly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

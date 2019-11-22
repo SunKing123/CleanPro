@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
@@ -219,6 +220,9 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
                 public void onVideoCompleted() {
                     LogUtils.d(TAG, "onVideoCompleted: ");
                     removeTimeText();
+                    if (mAdListener != null && mAdListener instanceof VideoAdListener) {
+                        ((VideoAdListener) mAdListener).onVideoComplete(mAdInfo);
+                    }
                 }
 
                 @Override
@@ -236,6 +240,9 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
                 public void onVideoStop() {
                     LogUtils.d(TAG, "onVideoStop");
                     removeTimeText();
+                    if (mAdListener != null && mAdListener instanceof VideoAdListener) {
+                        ((VideoAdListener) mAdListener).onVideoComplete(mAdInfo);
+                    }
                 }
 
                 @Override
@@ -343,4 +350,5 @@ public class YlhFullScreenVideoAdView extends YlhAdView implements NativeADUnifi
             mAdData.destroy();
         }
     }
+
 }

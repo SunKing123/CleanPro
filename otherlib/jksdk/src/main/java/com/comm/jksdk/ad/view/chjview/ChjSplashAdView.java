@@ -58,7 +58,7 @@ public class ChjSplashAdView extends CHJAdView {
                 LogUtils.e(TAG, "csj errorCode:" + errorCode + " errorMsg:" + errorMsg);
 //                adError(errorCode, errorMsg);
                 firstAdError(errorCode, errorMsg);
-                Toast.makeText(mContext, "loadSplashAd error:" + errorCode + " message:" + errorMsg, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "loadSplashAd error:" + errorCode + " message:" + errorMsg, Toast.LENGTH_SHORT).show();
             }
 
             @Override

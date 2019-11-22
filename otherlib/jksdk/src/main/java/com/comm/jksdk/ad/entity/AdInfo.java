@@ -27,7 +27,12 @@ public class AdInfo extends BaseEntity{
     /**
      * 广告源
      */
-    private String AdSource;
+    private String adSource;
+
+    /**
+     * 广告title（有些有，有些没有）
+     */
+    private String adTitle;
 
     public String getAdAppid() {
         return adAppid;
@@ -46,12 +51,21 @@ public class AdInfo extends BaseEntity{
     }
 
     public String getAdSource() {
-        return AdSource;
+        return adSource;
     }
 
     public void setAdSource(String adSource) {
-        AdSource = adSource;
+        this.adSource = adSource;
     }
+
+    public String getAdTitle() {
+        return adTitle;
+    }
+
+    public void setAdTitle(String adTitle) {
+        this.adTitle = adTitle;
+    }
+
 
     @Override
     public int describeContents() {
@@ -62,7 +76,8 @@ public class AdInfo extends BaseEntity{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.adAppid);
         dest.writeString(this.adId);
-        dest.writeString(this.AdSource);
+        dest.writeString(this.adSource);
+        dest.writeString(this.adTitle);
     }
 
     public AdInfo() {
@@ -71,7 +86,8 @@ public class AdInfo extends BaseEntity{
     protected AdInfo(Parcel in) {
         this.adAppid = in.readString();
         this.adId = in.readString();
-        this.AdSource = in.readString();
+        this.adSource = in.readString();
+        this.adTitle = in.readString();
     }
 
     public static final Creator<AdInfo> CREATOR = new Creator<AdInfo>() {
@@ -91,7 +107,8 @@ public class AdInfo extends BaseEntity{
         return "AdInfo{" +
                 "adAppid='" + adAppid + '\'' +
                 ", adId='" + adId + '\'' +
-                ", AdSource='" + AdSource + '\'' +
+                ", adSource='" + adSource + '\'' +
+                ", adTitle='" + adTitle + '\'' +
                 '}';
     }
 }

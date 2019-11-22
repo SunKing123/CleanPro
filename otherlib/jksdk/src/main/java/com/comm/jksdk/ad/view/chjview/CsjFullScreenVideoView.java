@@ -9,6 +9,7 @@ import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
@@ -64,17 +65,15 @@ public class CsjFullScreenVideoView extends CHJAdView {
             @Override
             public void onError(int code, String message) {
                 LogUtils.e(TAG, "loadFullScreenVideoAd error:" + code + " message:" + message);
-                adError(code, message);
+//                adError(code, message);
                 firstAdError(code, message);
-                Toast.makeText(mContext, "loadFullScreenVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "loadFullScreenVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFullScreenVideoAdLoad(TTFullScreenVideoAd ad) {
                 if (ad != null) {
                     adSuccess(mAdInfo);
-                    //step6:在获取到广告后展示
-                    ad.showFullScreenVideoAd(activity);
                     ad.setFullScreenVideoAdInteractionListener(new TTFullScreenVideoAd.FullScreenVideoAdInteractionListener() {
 
                         @Override
@@ -94,7 +93,9 @@ public class CsjFullScreenVideoView extends CHJAdView {
 
                         @Override
                         public void onVideoComplete() {
-
+                            if (mAdListener != null && mAdListener instanceof VideoAdListener) {
+                                ((VideoAdListener) mAdListener).onVideoComplete(mAdInfo);
+                            }
                         }
 
                         @Override
@@ -102,8 +103,10 @@ public class CsjFullScreenVideoView extends CHJAdView {
 
                         }
                     });
+                    //step6:在获取到广告后展示
+                    ad.showFullScreenVideoAd(activity);
                 } else {
-                    adError(CodeFactory.UNKNOWN, "视频广告数据为空");
+                    firstAdError(CodeFactory.UNKNOWN, "视频广告数据为空");
                 }
             }
 

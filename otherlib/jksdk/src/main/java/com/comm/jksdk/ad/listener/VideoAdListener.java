@@ -1,5 +1,7 @@
 package com.comm.jksdk.ad.listener;
 
+import com.comm.jksdk.ad.entity.AdInfo;
+
 /**
  * 视频广告回调器<p>
  *
@@ -10,10 +12,12 @@ public interface VideoAdListener extends AdListener {
     /**
      * 视频恢复
      */
-    void onVideoResume();
+    void onVideoResume(AdInfo info);
 
     /**
      * 激励视频获得激励回调(视频播放完成后，奖励验证回调，rewardVerify：是否有效，rewardAmount：奖励梳理，rewardName：奖励名称)
      */
-    void onVideoRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName);
+    void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName);
+
+    void onVideoComplete(AdInfo info);
 }

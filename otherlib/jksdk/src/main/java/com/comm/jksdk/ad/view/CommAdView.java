@@ -21,11 +21,28 @@ public class CommAdView extends AbsAdView {
 
     protected AdListener mAdListener = null;
     protected FirstAdListener mFirstAdListener = null;
+
+    // 广告位ID
+    protected String mAdId = "";
+
+    /**
+     * 广告appid
+     */
+    protected String mAppId = "";
+
     //广告信息
     protected AdInfo mAdInfo;
 
     public void setAdInfo(AdInfo info){
         this.mAdInfo = info;
+    }
+
+    public void setAdId(String mAdId) {
+        this.mAdId = mAdId;
+    }
+
+    public void setAppId(String mAppId) {
+        this.mAppId = mAppId;
     }
 
     public CommAdView(Context context, String style, String adPositionId) {

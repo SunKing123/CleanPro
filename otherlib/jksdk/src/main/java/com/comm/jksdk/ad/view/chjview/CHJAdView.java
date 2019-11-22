@@ -28,14 +28,14 @@ import java.util.List;
 public class CHJAdView extends CommAdView {
     private String style;
 
-    /**
-     * 广告位ID
-     */
-    protected String mAdId = "";
-    /**
-     * 广告appid
-     */
-    protected String mAppId = "";
+//    /**
+//     * 广告位ID
+//     */
+//    protected String mAdId = "";
+//    /**
+//     * 广告appid
+//     */
+//    protected String mAppId = "";
     // 广告请求数量
     private final static int REQUEST_AD_COUNTS = 1;
 
@@ -114,7 +114,7 @@ public class CHJAdView extends CommAdView {
             //所有样式都支持 随机展示
             int num = AdsUtils.getRandomNum(2);
             LogUtils.w(TAG, "随机显示样式------->style:" + style + " getRandomNum:" + num);
-            Toast.makeText(mContext, "发现未定义样式:" + style + "正试图随机显示样式" + num, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, "发现未定义样式:" + style + "正试图随机显示样式" + num, Toast.LENGTH_SHORT).show();
             switch (num) {
                 case 0:
                     mAdView = new ChjLeftImgRightTwoTextAdView(mContext);
@@ -251,6 +251,11 @@ public class CHJAdView extends CommAdView {
                 mAdInfo.setAdSource(Constants.AdType.ChuanShanJia);
                 mAdInfo.setAdAppid(mAppId);
                 mAdInfo.setAdId(mAdId);
+                TTFeedAd ttFeedAd = list.get(0);
+                if (ttFeedAd != null) {
+                    String title = ttFeedAd.getTitle();
+                    mAdInfo.setAdTitle(title);
+                }
                 adSuccess(mAdInfo);
                 mAdView.setAdInfo(mAdInfo);
                 mAdView.parseChjAd(list);
@@ -267,6 +272,9 @@ public class CHJAdView extends CommAdView {
         }
         TTAdManagerHolder.get(mAppId);
         if (mAdView instanceof ChjSplashAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((ChjSplashAdView) mAdView).loadSplashAd(mAppId, mAdId);
@@ -283,6 +291,9 @@ public class CHJAdView extends CommAdView {
         //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
         TTAdManagerHolder.get(mAppId).requestPermissionIfNecessary(mContext);
         if (mAdView instanceof CsjFullScreenVideoView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((CsjFullScreenVideoView) mAdView).loadFullScreenVideoAd(mActivity, mAdId, orientation);
@@ -301,6 +312,9 @@ public class CHJAdView extends CommAdView {
         TTAdManagerHolder.get(mAppId).requestPermissionIfNecessary(mContext);
 
         if (mAdView instanceof CsjRewardVideoAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((CsjRewardVideoAdView) mAdView).loadRewardVideoAd(mActivity, mAdId, userId, orientation);
@@ -318,6 +332,9 @@ public class CHJAdView extends CommAdView {
         //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
         TTAdManagerHolder.get(mAppId).requestPermissionIfNecessary(mContext);
         if (mAdView instanceof CsjCustomInsertScreenAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((CsjCustomInsertScreenAdView) mAdView).loadCustomInsertScreenAd(mActivity, showTimeSeconds, mAdId);
@@ -335,6 +352,9 @@ public class CHJAdView extends CommAdView {
         //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
         TTAdManagerHolder.get(mAppId).requestPermissionIfNecessary(mContext);
         if (mAdView instanceof CsjTemplateInsertScreenAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
             ((CsjTemplateInsertScreenAdView) mAdView).loadTemplateInsertScreenAd(mActivity, isFullScreen, showTimeSeconds, mAdId);

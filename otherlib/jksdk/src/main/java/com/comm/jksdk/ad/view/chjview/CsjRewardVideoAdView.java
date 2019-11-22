@@ -78,7 +78,7 @@ public class CsjRewardVideoAdView extends CHJAdView {
                 LogUtils.e(TAG, "rewardVideoAd error:" + code + " message:" + message);
 //                adError(code, message);
                 firstAdError(code, message);
-                Toast.makeText(mContext, "rewardVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "rewardVideoAd error:" + code + " message:" + message, Toast.LENGTH_SHORT).show();
             }
 
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
@@ -92,9 +92,6 @@ public class CsjRewardVideoAdView extends CHJAdView {
                 LogUtils.d(TAG, "rewardVideoAd loaded");
                 if (mttRewardVideoAd != null) {
                     //step6:在获取到广告后展示
-                    mttRewardVideoAd.showRewardVideoAd(activity);
-                    adSuccess(mAdInfo);
-
                     mttRewardVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
 
                         @Override
@@ -118,6 +115,9 @@ public class CsjRewardVideoAdView extends CHJAdView {
                         @Override
                         public void onVideoComplete() {
                             LogUtils.d(TAG, "rewardVideoAd complete");
+                            if (mAdListener != null && mAdListener instanceof VideoAdListener) {
+                                ((VideoAdListener) mAdListener).onVideoComplete(mAdInfo);
+                            }
                         }
 
                         @Override
@@ -170,6 +170,8 @@ public class CsjRewardVideoAdView extends CHJAdView {
                             LogUtils.d(TAG, "安装完成，点击下载区域打开");
                         }
                     });
+                    mttRewardVideoAd.showRewardVideoAd(activity);
+                    adSuccess(mAdInfo);
                 } else {
                     onError(CodeFactory.UNKNOWN, "加载激励视频数据为空");
                 }
@@ -183,7 +185,7 @@ public class CsjRewardVideoAdView extends CHJAdView {
         }
 
         if (mAdListener instanceof VideoAdListener) {
-            ((VideoAdListener) mAdListener).onVideoRewardVerify(rewardVerify, rewardAmount, rewardName);
+            ((VideoAdListener) mAdListener).onVideoRewardVerify(mAdInfo, rewardVerify, rewardAmount, rewardName);
         }
     }
 

@@ -131,6 +131,8 @@ public class NativeAdManger implements AdManager {
 
         adParentView.removeAllViews();
         adParentView.addView(mAdView);
+        mAdView.setAdId(mAdId);
+        mAdView.setAppId(appId);
         requestAd();
     }
 
