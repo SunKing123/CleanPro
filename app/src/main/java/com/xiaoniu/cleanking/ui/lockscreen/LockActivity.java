@@ -235,7 +235,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
         window.setAttributes(lp);
         window.getDecorView().setSystemUiVisibility(0x0);
-
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
     }
@@ -246,6 +245,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rel_clean_file: //清理
                 Intent intentClean = new Intent(this, NowCleanActivity.class);
                 intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 intentClean.putExtra("NotificationService", "clean");
                 startActivity(intentClean);
 
@@ -253,12 +255,19 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rel_clean_ram://一键加速
                 Intent phoneAccessIntent = new Intent(this, PhoneAccessActivity.class);
                 phoneAccessIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 phoneAccessIntent.putExtra("NotificationService", "clean");
                 startActivity(phoneAccessIntent);
                 break;
             case R.id.rel_clean_virus://病毒查杀
                 Intent virusIntent = new Intent(this, VirusKillActivity.class);
                 virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                virusIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                virusIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 virusIntent.putExtra("NotificationService", "clean");
                 startActivity(virusIntent);
                 break;

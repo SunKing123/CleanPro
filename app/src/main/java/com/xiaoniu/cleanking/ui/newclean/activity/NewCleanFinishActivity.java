@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,27 +20,23 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdManager;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTFeedAd;
-import com.bytedance.sdk.openadsdk.TTImage;
-import com.bytedance.sdk.openadsdk.TTNativeAd;
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qq.e.ads.cfg.VideoOption;
-import com.qq.e.ads.nativ.MediaView;
 import com.qq.e.ads.nativ.NativeADEventListener;
-import com.qq.e.ads.nativ.NativeADMediaListener;
 import com.qq.e.ads.nativ.NativeADUnifiedListener;
 import com.qq.e.ads.nativ.NativeUnifiedAD;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
-import com.qq.e.ads.nativ.widget.NativeAdContainer;
-import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -75,6 +70,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -112,28 +108,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private TextView mTvSize;
     private TextView mTvGb;
     private TextView mTvQl;
-
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;
-    private NewsType mType = NewsType.TOUTIAO;
-    private static final int PAGE_NUM = 20;//每一页数据
-    private boolean mIsRefresh = true;
     private ImageView mBtnLeft;
-
     public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool, v_clean_all, v_game;
     public View line_quicken, line_power, line_notification, line_wechat, line_file, line_clean_all, line_game;
-    private ImageView iv_advert_logo, iv_advert, iv_advert_logo2, iv_advert2;
-    private TextView tv_advert, tv_advert_content, tv_advert2, tv_advert_content2, tv_download2;
-    private View v_advert, v_advert2, mRecommendV;
+    private View mRecommendV;
     private TextView tv_quicken, tv_power, tv_notification;
     private ImageView iv_quicken, iv_power, iv_notification;
-    private LottieAnimationView mLottieAd;
-
-    private NativeUnifiedADData mNativeUnifiedADData, mNativeUnifiedADData2;
-    private NativeUnifiedAD mAdManager, mAdManager2;
-    private MediaView mMediaView, mMediaView2;
-    private NativeAdContainer mContainer, mContainer2;
-
     private String mAdvertId = ""; //广告位1
     private String mAdvertId2 = ""; //广告位2
     private String mSecondAdvertId = ""; //备用id
@@ -141,7 +123,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private boolean isScreenSwitchOpen; //插屏广告开关
     private int mScreenShowCount; //插屏广告展示次数
 
-    private int page_index = 1;
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
 
@@ -152,13 +133,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String returnEventName = "";
     String sysReturnEventName = "";
 
-    //穿山甲相关 begin
-    private FrameLayout mChuanShanJiaVideo;
-    private TTAdNative mTTAdNative;
-    private FrameLayout mChuanShanJiaVideo2;
-    private TTAdNative mTTAdNative2;
-    //穿山甲相关 end
-
     //插屏广告相关 begin
     private HScreen mHandlerScreen = new HScreen();
     private TTAdNative mTTAdNativeScreen;
@@ -168,11 +142,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private String mSecondAdvertScreenId = ""; //插屏广告备用id
     private boolean mIsScreenAdSuccess; //插屏广告是否拉取成功
     //插屏广告相关 end
-
-    private AnimationDrawable mAnimationDrawable;
     FileQueryUtils fileQueryUtils;
-
     int processNum = 0;
+
+    FrameLayout ad_container_pos01,ad_container_pos02;
 
     @Override
     protected int getLayoutId() {
@@ -216,32 +189,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mRecyclerView.setAdapter(mNewsAdapter);
         mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
 
+
+        ad_container_pos01 = header.findViewById(R.id.ad_container_pos01);
         mTvSize = header.findViewById(R.id.tv_size);
         mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
-
-        mContainer = header.findViewById(R.id.native_ad_container);
-        mMediaView = header.findViewById(R.id.gdt_media_view);
-        v_advert = header.findViewById(R.id.v_advert);
-        iv_advert_logo = header.findViewById(R.id.iv_advert_logo);
-        iv_advert = header.findViewById(R.id.iv_advert);
-        tv_advert = header.findViewById(R.id.tv_advert);
-        tv_advert_content = header.findViewById(R.id.tv_advert_content);
-        mChuanShanJiaVideo = header.findViewById(R.id.v_video_chuanshanjia);
-
-        mChuanShanJiaVideo2 = headerTool.findViewById(R.id.v_video_chuanshanjia);
+        ad_container_pos02 = headerTool.findViewById(R.id.ad_container_pos02);
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
-        mContainer2 = headerTool.findViewById(R.id.native_ad_container);
-        mMediaView2 = headerTool.findViewById(R.id.gdt_media_view);
-        v_advert2 = headerTool.findViewById(R.id.v_advert);
-        iv_advert_logo2 = headerTool.findViewById(R.id.iv_advert_logo);
-        iv_advert2 = headerTool.findViewById(R.id.iv_advert);
-        tv_advert2 = headerTool.findViewById(R.id.tv_advert);
-        tv_advert_content2 = headerTool.findViewById(R.id.tv_advert_content);
-        tv_download2 = headerTool.findViewById(R.id.tv_download);
-
         v_clean_all = headerTool.findViewById(R.id.v_clean_all);
         v_game = headerTool.findViewById(R.id.v_game);
         v_quicken = headerTool.findViewById(R.id.v_quicken);
@@ -266,55 +222,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         mTitleTv.setText(mTitle);
-
-        mLottieAd = (LottieAnimationView) header.findViewById(R.id.lottie_ad);
-        mLottieAd.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mLottieAd.playAnimation();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
         mPresenter.getScreentSwitch();
         getPageData();
         setListener();
         loadData();
-        initChuanShanJia();
-        initChuanShanJia2();
         initChuanShanJiaScreen();
-
-
-        View ad_bg = header.findViewById(R.id.v_video);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ad_bg.setBackground(getResources().getDrawable(R.drawable.anim_ad));
-            if (ad_bg.getBackground() instanceof AnimationDrawable) {
-                mAnimationDrawable = (AnimationDrawable) ad_bg.getBackground();
-            }
-        }
+        initPos01Ad();
     }
 
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (null != mAnimationDrawable && !mAnimationDrawable.isRunning()) { //判断是否在运行
-            mAnimationDrawable.start();
-        }
-    }
 
     //获取埋点参数
     void getPageData() {
@@ -599,8 +514,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Log.d(TAG, "mAdvertId2=" + mAdvertId2);
         Log.d(TAG, "mSecondAdvertId=" + mSecondAdvertId);
         Log.d(TAG, "mSecondAdvertId2=" + mSecondAdvertId2);
-        loadListAd();
-        loadListAd2();
+
     }
 
     /**
@@ -681,115 +595,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         loadListAdScreen();
     }
 
-    /**
-     * 优量汇广告位1
-     */
-    private void initNativeUnifiedAD() {
-        mAdManager = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertId, new NativeADUnifiedListener() {
 
-            @Override
-            public void onNoAD(AdError adError) {
-                mContainer.setVisibility(View.GONE);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "fail", sourcePage, currentPage);
-                Log.d(TAG, "onNoAd error code: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
-            }
-
-            @Override
-            public void onADLoaded(List<NativeUnifiedADData> ads) {
-                Log.d(TAG, "ads.size()=" + ads.size());
-                if (ads != null && ads.size() > 0) {
-                    mContainer.setVisibility(View.VISIBLE);
-                    Message msg = Message.obtain();
-                    msg.what = MSG_INIT_AD;
-                    mNativeUnifiedADData = ads.get(0);
-                    msg.obj = mNativeUnifiedADData;
-                    mHandler.sendMessage(msg);
-                }
-            }
-        });
-        /**
-         * 如果广告位支持视频广告，强烈建议在调用loadData请求广告前，调用下面两个方法，有助于提高视频广告的eCPM值 <br/>
-         * 如果广告位仅支持图文广告，则无需调用
-         */
-
-        /**
-         * 设置本次拉取的视频广告，从用户角度看到的视频播放策略<p/>
-         *
-         * "用户角度"特指用户看到的情况，并非SDK是否自动播放，与自动播放策略AutoPlayPolicy的取值并非一一对应 <br/>
-         *
-         * 例如开发者设置了VideoOption.AutoPlayPolicy.NEVER，表示从不自动播放 <br/>
-         * 但满足某种条件(如晚上10点)时，开发者调用了startVideo播放视频，这在用户看来仍然是自动播放的
-         */
-        mAdManager.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO); // 本次拉回的视频广告，从用户的角度看是自动播放的
-
-        /**
-         * 设置在视频广告播放前，用户看到显示广告容器的渲染者是SDK还是开发者 <p/>
-         *
-         * 一般来说，用户看到的广告容器都是SDK渲染的，但存在下面这种特殊情况： <br/>
-         *
-         * 1. 开发者将广告拉回后，未调用bindMediaView，而是用自己的ImageView显示视频的封面图 <br/>
-         * 2. 用户点击封面图后，打开一个新的页面，调用bindMediaView，此时才会用到SDK的容器 <br/>
-         * 3. 这种情形下，用户先看到的广告容器就是开发者自己渲染的，其值为VideoADContainerRender.DEV
-         * 4. 如果觉得抽象，可以参考NativeADUnifiedDevRenderContainerActivity的实现
-         */
-        mAdManager.setVideoADContainerRender(VideoOption.VideoADContainerRender.SDK); // 视频播放前，用户看到的广告容器是由SDK渲染的
-        mAdManager.loadData(AD_COUNT);
-
-    }
-
-    /**
-     * 优量汇广告位2
-     */
-    private void initNativeUnifiedAD2() {
-        mAdManager2 = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertId2, new NativeADUnifiedListener() {
-            @Override
-            public void onNoAD(AdError adError) {
-                mContainer2.setVisibility(View.GONE);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mSecondAdvertId2, "优量汇", "fail", sourcePage, currentPage);
-                Log.d(TAG, "onNoAd error code222: " + adError.getErrorCode() + ", error msg: " + adError.getErrorMsg());
-            }
-
-            @Override
-            public void onADLoaded(List<NativeUnifiedADData> ads) {
-                Log.d(TAG, "ads.size()2222=" + ads.size());
-                if (ads != null && ads.size() > 0) {
-                    mContainer2.setVisibility(View.VISIBLE);
-                    Message msg2 = Message.obtain();
-                    msg2.what = MSG_INIT_AD2;
-                    mNativeUnifiedADData2 = ads.get(0);
-                    msg2.obj = mNativeUnifiedADData2;
-                    mHandler.sendMessage(msg2);
-                }
-            }
-        });
-        /**
-         * 如果广告位支持视频广告，强烈建议在调用loadData请求广告前，调用下面两个方法，有助于提高视频广告的eCPM值 <br/>
-         * 如果广告位仅支持图文广告，则无需调用
-         */
-
-        /**
-         * 设置本次拉取的视频广告，从用户角度看到的视频播放策略<p/>
-         *
-         * "用户角度"特指用户看到的情况，并非SDK是否自动播放，与自动播放策略AutoPlayPolicy的取值并非一一对应 <br/>
-         *
-         * 例如开发者设置了VideoOption.AutoPlayPolicy.NEVER，表示从不自动播放 <br/>
-         * 但满足某种条件(如晚上10点)时，开发者调用了startVideo播放视频，这在用户看来仍然是自动播放的
-         */
-        mAdManager2.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO); // 本次拉回的视频广告，从用户的角度看是自动播放的
-
-        /**
-         * 设置在视频广告播放前，用户看到显示广告容器的渲染者是SDK还是开发者 <p/>
-         *
-         * 一般来说，用户看到的广告容器都是SDK渲染的，但存在下面这种特殊情况： <br/>
-         *
-         * 1. 开发者将广告拉回后，未调用bindMediaView，而是用自己的ImageView显示视频的封面图 <br/>
-         * 2. 用户点击封面图后，打开一个新的页面，调用bindMediaView，此时才会用到SDK的容器 <br/>
-         * 3. 这种情形下，用户先看到的广告容器就是开发者自己渲染的，其值为VideoADContainerRender.DEV
-         * 4. 如果觉得抽象，可以参考NativeADUnifiedDevRenderContainerActivity的实现
-         */
-        mAdManager2.setVideoADContainerRender(VideoOption.VideoADContainerRender.SDK); // 视频播放前，用户看到的广告容器是由SDK渲染的
-        mAdManager2.loadData(AD_COUNT);
-    }
 
     private void changeUI(Intent intent) {
         if (intent != null) {
@@ -1288,17 +1094,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             finish();
         });
 
-        /*mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
 
-            }
-
-            @Override
-            public void onLoadMore() {
-                startLoadData();
-            }
-        });*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -1309,9 +1105,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     int lastVisibleItem = manager.findFirstVisibleItemPosition();
                     int totalItemCount = manager.getItemCount();
                     //recyclerView滑动到底部再滑动回顶部后重新执行动画
-                    if (null != mLottieAd && lastVisibleItem == 1) {
-                        mLottieAd.playAnimation();
-                    }
+
                 }
             });
         } else {
@@ -1325,13 +1119,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                    //获取第一个完全显示的ItemPosition
-                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
-                    int totalItemCount = manager.getItemCount();
-                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
-                    if (null != mLottieAd && lastVisibleItem == 1) {
-                        mLottieAd.playAnimation();
-                    }
                 }
             });
         }
@@ -1340,7 +1127,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadData() {
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
-//        startLoadData();
     }
 
     @Override
@@ -1352,7 +1138,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         if (getString(R.string.tool_one_key_speed).contains(mTitle) || getString(R.string.game_quicken).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_back_click", sysReturnEventName, sourcePage, currentPage);
         } else {
@@ -1481,22 +1266,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
-
         super.onResume();
-        if (mNativeUnifiedADData != null) {
-            // 必须要在Actiivty.onResume()时通知到广告数据，以便重置广告恢复状态
-            mNativeUnifiedADData.resume();
-        }
-        if (mNativeUnifiedADData2 != null) {
-            // 必须要在Actiivty.onResume()时通知到广告数据，以便重置广告恢复状态
-            mNativeUnifiedADData2.resume();
-        }
-
         StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
-
-        if (null != mAnimationDrawable) {
-            mAnimationDrawable.start();
-        }
     }
 
     @Override
@@ -1540,9 +1311,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
 
-        if (null != mAnimationDrawable) {
-            mAnimationDrawable.stop();
-        }
+
         super.onPause();
     }
 
@@ -1550,15 +1319,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (mNativeUnifiedADData != null) {
-            // 必须要在Actiivty.destroy()时通知到广告数据，以便释放内存
-            mNativeUnifiedADData.destroy();
-        }
-        if (mNativeUnifiedADData2 != null) {
-            // 必须要在Actiivty.destroy()时通知到广告数据，以便释放内存
-            mNativeUnifiedADData2.destroy();
-        }
-
         if (mRecyclerView != null) {
             mRecyclerView.destroy(); // this will totally release XR's memory
             mRecyclerView = null;
@@ -1574,449 +1334,19 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (null != mHandlerScreen) {
             mHandlerScreen.removeCallbacksAndMessages(null);
         }
-        if (null != mAnimationDrawable && mAnimationDrawable.isRunning()) {
-            mAnimationDrawable.stop();
-        }
+
     }
 
-    public void startLoadData() {
-        if (!NetworkUtils.isNetConnected()) {
-
-            if (mRecyclerView != null)
-                mRecyclerView.loadMoreComplete();
-
-            return;
-        }
-
-        if (mType != null) {
-            if (mType == NewsType.VIDEO) {
-                loadVideoData();
-            } else {
-                loadNewsData();
-            }
-        }
-    }
-
-    private void loadNewsData() {
-        String type = mType.getName();
-        String url = SpCacheConfig.RUISHI_BASEURL + "bd/news/list?media=563&submedia=779&category=" + type + "&page=" + page_index;
-        EHttp.get(this, url, new ApiCallback<List<NewsItemInfoRuishi>>(null) {
-            @Override
-            public void onFailure(Throwable e) {
-            }
-
-            @Override
-            public void onSuccess(List<NewsItemInfoRuishi> result) {
-                if (result != null && result.size() > 0) {
-                    page_index++;
-                    mNewsAdapter.addData(result);
-                }
-            }
-
-            @Override
-            public void onComplete() {
-                if (mRecyclerView != null)
-                    mRecyclerView.loadMoreComplete();
-
-            }
-        });
-    }
-
-    private void loadVideoData() {
-        //请求参数设置：比如一个json字符串
-        JSONObject jsonObject = new JSONObject();
-        try {
-            String lastId = SPUtil.getLastNewsID(mType.getName());
-            jsonObject.put("pageSize", PAGE_NUM);
-            jsonObject.put("lastId", lastId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        HttpRequest request = new HttpRequest.Builder()
-                .addBodyParams(jsonObject.toString())
-                .build();
-
-        EHttp.post(this, BuildConfig.VIDEO_BASE_URL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
-
-            @Override
-            public void onComplete() {
-                if (mRecyclerView != null)
-                    mRecyclerView.loadMoreComplete();
-
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                Log.i("123", e.toString());
-            }
-
-            @Override
-            public void onSuccess(ArrayList<VideoItemInfo> result) {
-                if (result != null && result.size() > 0) {
-                    SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
-                    mNewsAdapter.addData(result);
-
-                }
-            }
-        });
-    }
-
-    private final H mHandler = new H(this);
     private static final int AD_COUNT = 1;
     private static final int MSG_INIT_AD = 0;
     private static final int MSG_VIDEO_START = 1;
-    private static final int MSG_INIT_AD2 = 3;
-    private static final int MSG_VIDEO_START2 = 4;
+
 
     @Override
     public void netError() {
 
     }
 
-    private class H extends Handler {
-        private WeakReference<NewCleanFinishActivity> mActivity;
-
-        public H(NewCleanFinishActivity activity) {
-            mActivity = new WeakReference<NewCleanFinishActivity>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            NewCleanFinishActivity activity = mActivity.get();
-            if (activity != null) {
-                switch (msg.what) {
-                    case MSG_INIT_AD:
-                        NativeUnifiedADData ad = (NativeUnifiedADData) msg.obj;
-                        Log.d(TAG, String.format(Locale.getDefault(), "(pic_width,pic_height) = (%d , %d)", ad
-                                        .getPictureWidth(),
-                                ad.getPictureHeight()));
-                        initAd(ad);
-                        Log.d(TAG, "eCPM = " + mNativeUnifiedADData.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData.getECPMLevel());
-                        break;
-                    case MSG_VIDEO_START:
-                        iv_advert.setVisibility(View.GONE);
-                        mMediaView.setVisibility(View.VISIBLE);
-                        break;
-                    case MSG_INIT_AD2:
-                        NativeUnifiedADData ad2 = (NativeUnifiedADData) msg.obj;
-                        Log.d(TAG, String.format(Locale.getDefault(), "(pic_width,pic_height) = (%d , %d)", ad2
-                                        .getPictureWidth(),
-                                ad2.getPictureHeight()));
-                        initAd2(ad2);
-                        Log.d(TAG, "eCPM = " + mNativeUnifiedADData2.getECPM() + " , eCPMLevel = " + mNativeUnifiedADData2.getECPMLevel());
-                        break;
-                    case MSG_VIDEO_START2:
-                        iv_advert2.setVisibility(View.GONE);
-                        mMediaView2.setVisibility(View.VISIBLE);
-                        break;
-                }
-            }
-
-        }
-
-    }
-
-    //加载广告
-    private void initAd(final NativeUnifiedADData ad) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "success", sourcePage, currentPage);
-        renderAdUi(ad);
-        List<View> clickableViews = new ArrayList<>();
-        clickableViews.add(v_advert);
-        // 将布局与广告进行绑定
-        ad.bindAdToView(this, mContainer, null, clickableViews);
-        // 设置广告事件监听
-        ad.setNativeAdEventListener(new NativeADEventListener() {
-            @Override
-            public void onADExposed() {
-                //广告请求
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mSecondAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
-                Log.d(TAG, "广告曝光");
-            }
-
-            @Override
-            public void onADClicked() {
-                Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", mSecondAdvertId, "优量汇", sourcePage, currentPage, ad.getTitle());
-
-            }
-
-            @Override
-            public void onADError(AdError error) {
-                Log.d(TAG, "错误回调 error code :" + error.getErrorCode()
-                        + "  error msg: " + error.getErrorMsg());
-            }
-
-            @Override
-            public void onADStatusChanged() {
-                Log.d(TAG, "广告状态变化");
-//                updateAdAction(mDownloadButton, ad);
-            }
-        });
-
-        if (ad.getAdPatternType() == AdPatternType.NATIVE_VIDEO) { //视频类型
-            mHandler.sendEmptyMessage(MSG_VIDEO_START);
-
-            VideoOption.Builder builder = new VideoOption.Builder();
-            builder.setAutoPlayMuted(true) //设置视频广告在预览页自动播放时是否静音
-                    .setEnableDetailPage(true) //点击视频是否跳转到详情页
-                    .setEnableUserControl(false) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
-                    .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS);
-
-            VideoOption videoOption = builder.build();
-            // 视频广告需对MediaView进行绑定，MediaView必须为容器mContainer的子View
-            ad.bindMediaView(mMediaView, videoOption,
-                    // 视频相关回调
-                    new NativeADMediaListener() {
-                        @Override
-                        public void onVideoInit() {
-                            Log.d(TAG, "onVideoInit: ");
-                        }
-
-                        @Override
-                        public void onVideoLoading() {
-                            Log.d(TAG, "onVideoLoading: ");
-                        }
-
-                        @Override
-                        public void onVideoReady() {
-                            Log.d(TAG, "onVideoReady: ");
-                        }
-
-                        @Override
-                        public void onVideoLoaded(int videoDuration) {
-                            Log.d(TAG, "onVideoLoaded: ");
-
-                        }
-
-                        @Override
-                        public void onVideoStart() {
-                           /* Log.d(TAG, "onVideoStart: ");
-                            if (mNativeUnifiedADData2 != null) {
-                                mNativeUnifiedADData2.pauseVideo();
-                            }*/
-                        }
-
-                        @Override
-                        public void onVideoPause() {
-                            Log.d(TAG, "onVideoPause: ");
-                        }
-
-                        @Override
-                        public void onVideoResume() {
-                           /* Log.d(TAG, "onVideoResume: ");
-                            if (mNativeUnifiedADData2 != null) {
-                                mNativeUnifiedADData2.pauseVideo();
-                            }*/
-                        }
-
-                        @Override
-                        public void onVideoCompleted() {
-                            if (mNativeUnifiedADData != null) {
-                                mNativeUnifiedADData.startVideo();
-                            }
-                            Log.d(TAG, "onVideoCompleted: ");
-                        }
-
-                        @Override
-                        public void onVideoError(AdError error) {
-                            Log.d(TAG, "onVideoError: ");
-                        }
-
-                        @Override
-                        public void onVideoStop() {
-
-                        }
-
-                        @Override
-                        public void onVideoClicked() {
-
-                        }
-                    });
-        }
-    }
-
-    //加载广告2
-    private void initAd2(final NativeUnifiedADData ad) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mSecondAdvertId2, "优量汇", "success", sourcePage, currentPage);
-        renderAdUi2(ad);
-        List<View> clickableViews = new ArrayList<>();
-        clickableViews.add(v_advert2);
-        // 将布局与广告进行绑定
-        ad.bindAdToView(this, mContainer2, null, clickableViews);
-        // 设置广告事件监听
-        ad.setNativeAdEventListener(new NativeADEventListener() {
-            @Override
-            public void onADExposed() {
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", mSecondAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
-                Log.d(TAG, "广告曝光");
-            }
-
-            @Override
-            public void onADClicked() {
-                Log.d(TAG, "onADClicked: " + " clickUrl: " + ad.ext.get("clickUrl"));
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", mSecondAdvertId2, "优量汇", sourcePage, currentPage, ad.getTitle());
-            }
-
-            @Override
-            public void onADError(AdError error) {
-                Log.d(TAG, "错误回调 error code :" + error.getErrorCode()
-                        + "  error msg: " + error.getErrorMsg());
-            }
-
-            @Override
-            public void onADStatusChanged() {
-                Log.d(TAG, "广告状态变化");
-                updateAdAction(tv_download2, ad);
-            }
-        });
-        updateAdAction(tv_download2, ad);
-
-        if (ad.getAdPatternType() == AdPatternType.NATIVE_VIDEO) { //视频类型
-            mHandler.sendEmptyMessage(MSG_VIDEO_START2);
-
-            VideoOption.Builder builder = new VideoOption.Builder();
-            builder.setAutoPlayMuted(true) //设置视频广告在预览页自动播放时是否静音
-                    .setEnableDetailPage(true) //点击视频是否跳转到详情页
-                    .setEnableUserControl(false) //设置是否允许用户在预览页点击视频播放器区域控制视频的暂停或播放
-                    .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS); //不自动播放
-            VideoOption videoOption = builder.build();
-            // 视频广告需对MediaView进行绑定，MediaView必须为容器mContainer的子View
-            ad.bindMediaView(mMediaView2, videoOption,
-                    // 视频相关回调
-                    new NativeADMediaListener() {
-                        @Override
-                        public void onVideoInit() {
-                            Log.d(TAG, "onVideoInit: ");
-                        }
-
-                        @Override
-                        public void onVideoLoading() {
-                            Log.d(TAG, "onVideoLoading: ");
-                        }
-
-                        @Override
-                        public void onVideoReady() {
-                            Log.d(TAG, "onVideoReady: ");
-                        }
-
-                        @Override
-                        public void onVideoLoaded(int videoDuration) {
-                            Log.d(TAG, "onVideoLoaded: ");
-
-                        }
-
-                        @Override
-                        public void onVideoStart() {
-                            Log.d(TAG, "onVideoStart: ");
-                            /*if (mNativeUnifiedADData != null) {
-                                mNativeUnifiedADData.pauseVideo();
-                            }*/
-                        }
-
-                        @Override
-                        public void onVideoPause() {
-                            Log.d(TAG, "onVideoPause: ");
-                        }
-
-                        @Override
-                        public void onVideoResume() {
-                            Log.d(TAG, "onVideoResume: ");
-                          /*  if (mNativeUnifiedADData != null) {
-                                mNativeUnifiedADData.resumeVideo();
-                            }*/
-                        }
-
-                        @Override
-                        public void onVideoCompleted() {
-                            if (mNativeUnifiedADData2 != null) {
-                                mNativeUnifiedADData2.startVideo();
-                            }
-                            Log.d(TAG, "onVideoCompleted: ");
-                        }
-
-                        @Override
-                        public void onVideoError(AdError error) {
-                            Log.d(TAG, "onVideoError: ");
-                        }
-
-                        @Override
-                        public void onVideoStop() {
-
-                        }
-
-                        @Override
-                        public void onVideoClicked() {
-
-                        }
-                    });
-        }
-    }
-
-    public static void updateAdAction(TextView button, NativeUnifiedADData ad) {
-        if (!ad.isAppAd()) {
-            button.setText("浏览");
-            return;
-        }
-        switch (ad.getAppStatus()) {
-            case 0:
-                button.setText("立即下载");
-                break;
-            case 1:
-                button.setText("立即启动");
-                break;
-            case 2:
-                button.setText("立即更新");
-                break;
-            case 4:
-                button.setText(ad.getProgress() + "%");
-                break;
-            case 8:
-                button.setText("立即安装");
-                break;
-            case 16:
-                button.setText("下载失败");
-                break;
-            default:
-                button.setText("浏览");
-                break;
-        }
-    }
-
-    // 获取广告资源并加载到UI
-    private void renderAdUi(NativeUnifiedADData ad) {
-        int patternType = ad.getAdPatternType();
-        Log.d("AD_DEMO", "广告类型=" + patternType);
-
-        tv_advert.setText(ad.getTitle());
-        tv_advert_content.setText(ad.getDesc());
-        GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo, 20);
-        if (patternType == AdPatternType.NATIVE_VIDEO) {
-            iv_advert.setVisibility(View.GONE);
-        } else {
-            GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert);
-        }
-
-//        mLottieAd.useHardwareAcceleration(true);
-        mLottieAd.setAnimation("clean_finish_download.json");
-        mLottieAd.setImageAssetsFolder("images_clean_download");
-        mLottieAd.playAnimation();
-    }
-
-    // 获取广告资源并加载到UI
-    private void renderAdUi2(NativeUnifiedADData ad) {
-        int patternType = ad.getAdPatternType();
-        Log.d("AD_DEMO", "广告类型222=" + patternType);
-
-        tv_advert2.setText(ad.getTitle());
-        tv_advert_content2.setText(ad.getDesc());
-        GlideUtils.loadRoundImage(this, ad.getIconUrl(), iv_advert_logo2, 20);
-        if (patternType == AdPatternType.NATIVE_VIDEO) {
-            iv_advert2.setVisibility(View.GONE);
-        } else {
-            GlideUtils.loadImage(this, ad.getImgUrl(), iv_advert2);
-        }
-    }
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
@@ -2028,291 +1358,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
 
-    /**
-     * 初始化穿山甲
-     */
-    private void initChuanShanJia() {
-        TTAdManager ttAdManager = TTAdManagerHolder.get();
-        mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
-        //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
-    }
 
-    /**
-     * 初始化穿山甲
-     */
-    private void initChuanShanJia2() {
-        TTAdManager ttAdManager = TTAdManagerHolder.get();
-        mTTAdNative2 = ttAdManager.createAdNative(getApplicationContext());
-        //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
-    }
-
-    /**
-     * 加载穿山甲广告位1
-     */
-    private void loadListAd() {
-        //feed广告请求类型参数
-        AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(mAdvertId)
-                .setSupportDeepLink(true)
-                .setImageAcceptedSize(640, 320)
-                .setAdCount(1)
-                .build();
-        //调用feed广告异步请求接口
-        mTTAdNative.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                Log.d(TAG, "穿山甲加载失败=" + message);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", sourcePage, currentPage);
-                initNativeUnifiedAD();
-            }
-
-            @Override
-            public void onFeedAdLoad(List<TTFeedAd> ads) {
-                //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
-                if (null == ads || ads.isEmpty()) return;
-                Log.d(TAG, "穿山甲----广告请求成功--ads.size()=" + ads.size());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", sourcePage, currentPage);
-//                mLottieAd.useHardwareAcceleration(true);
-                mLottieAd.setAnimation("clean_finish_download.json");
-                mLottieAd.setImageAssetsFolder("images_clean_download");
-                mLottieAd.playAnimation();
-                mContainer.setVisibility(View.VISIBLE);
-                tv_advert.setText(ads.get(0).getTitle());
-                tv_advert_content.setText(ads.get(0).getDescription());
-
-                TTImage icon = ads.get(0).getIcon();
-                if (!NewCleanFinishActivity.this.isFinishing() && icon != null && icon.isValid()) {
-                    GlideUtils.loadRoundImage(NewCleanFinishActivity.this, icon.getImageUrl(), iv_advert_logo, 20);
-                }
-                Log.d(TAG, "穿山甲--广告类型=" + ads.get(0).getImageMode());
-                Log.d(TAG, "穿山甲--广告交互类型=" + ads.get(0).getInteractionType());
-                if (ads.get(0).getImageMode() == TTAdConstant.IMAGE_MODE_VIDEO) { //视频
-                    View video = ads.get(0).getAdView();
-                    if (video != null) { //展示视频
-                        if (video.getParent() == null) {
-                            mChuanShanJiaVideo.removeAllViews();
-                            mChuanShanJiaVideo.addView(video);
-                        }
-                    }
-
-                    //视频播放监听
-                    ads.get(0).setVideoAdListener(new TTFeedAd.VideoAdListener() {
-                        @Override
-                        public void onVideoLoad(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲视频---- onVideoLoad");
-                        }
-
-                        @Override
-                        public void onVideoError(int errorCode, int extraCode) {
-                            Log.d(TAG, "穿山甲视频---- onVideoError");
-                        }
-
-                        @Override
-                        public void onVideoAdStartPlay(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲视频---- onVideoAdStartPlay");
-                        }
-
-                        @Override
-                        public void onVideoAdPaused(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲视频---- onVideoAdPaused");
-                        }
-
-                        @Override
-                        public void onVideoAdContinuePlay(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲视频---- onVideoAdContinuePlay");
-                        }
-
-                        @Override
-                        public void onProgressUpdate(long current, long duration) {
-//                            Log.d(TAG, "穿山甲视频---- onProgressUpdate");
-                        }
-
-                        @Override
-                        public void onVideoAdComplete(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲视频---- onVideoAdComplete");
-                        }
-                    });
-
-                } else {
-                    mChuanShanJiaVideo.setVisibility(View.GONE);
-                    TTImage image = ads.get(0).getImageList().get(0);
-                    if (image != null && image.isValid()) {
-                        GlideUtils.loadImage(NewCleanFinishActivity.this, image.getImageUrl(), iv_advert);
-                    }
-                }
-
-                //可以被点击的view, 也可以把convertView放进来意味item可被点击
-                List<View> clickViewList = new ArrayList<>();
-                clickViewList.add(v_advert);
-                //触发创意广告的view（点击下载或拨打电话）
-                List<View> creativeViewList = new ArrayList<>();
-                creativeViewList.add(v_advert);
-                //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
-//            creativeViewList.add(convertView);
-                //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
-                ads.get(0).registerViewForInteraction((ViewGroup) v_advert, clickViewList, creativeViewList, new TTNativeAd.AdInteractionListener() {
-                    @Override
-                    public void onAdClicked(View view, TTNativeAd ad) {
-                        if (ad != null) {
-                            Log.d(TAG, "广告" + ad.getTitle() + "被点击");
-                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
-                        }
-                    }
-
-                    @Override
-                    public void onAdCreativeClick(View view, TTNativeAd ad) {
-                        if (ad != null) {
-                            Log.d(TAG, "广告" + ad.getTitle() + "被创意按钮被点击");
-                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
-                        }
-                    }
-
-                    @Override
-                    public void onAdShow(TTNativeAd ad) {
-                        if (ad != null && !isShowOne) {
-                            Log.d(TAG, "广告----" + ad.getTitle() + "----展示");
-                            StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "穿山甲", sourcePage, currentPage, ad.getTitle());
-                            isShowOne = true;
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    private boolean isShowOne; //广告位1的广告是否已展示曝光
-    private boolean isShowTwo; //广告位1的广告是否已展示曝光
-
-    /**
-     * 加载穿山甲广告位2
-     */
-    private void loadListAd2() {
-        //feed广告请求类型参数
-        AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(mAdvertId2)
-                .setSupportDeepLink(true)
-                .setImageAcceptedSize(640, 320)
-                .setAdCount(1)
-                .build();
-        //调用feed广告异步请求接口
-        mTTAdNative2.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                Log.d(TAG, "穿山甲2加载失败=" + message);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "fail", sourcePage, currentPage);
-                initNativeUnifiedAD2();
-            }
-
-            @Override
-            public void onFeedAdLoad(List<TTFeedAd> ads) {
-                //加载成功的回调 请确保您的代码足够健壮，可以处理异常情况；
-                if (null == ads || ads.isEmpty()) return;
-                Log.d(TAG, "穿山甲2----广告请求成功--ads.size()=" + ads.size());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
-                mContainer2.setVisibility(View.VISIBLE);
-                tv_advert2.setText(ads.get(0).getTitle());
-                tv_advert_content2.setText(ads.get(0).getDescription());
-
-                TTImage icon = ads.get(0).getIcon();
-                if (!NewCleanFinishActivity.this.isFinishing() && icon != null && icon.isValid()) {
-                    GlideUtils.loadRoundImage(NewCleanFinishActivity.this, icon.getImageUrl(), iv_advert_logo2, 20);
-                }
-                Log.d(TAG, "穿山甲2--广告类型=" + ads.get(0).getImageMode());
-                Log.d(TAG, "穿山甲2--广告交互类型=" + ads.get(0).getInteractionType());
-                if (ads.get(0).getImageMode() == TTAdConstant.IMAGE_MODE_VIDEO) { //视频
-                    View video = ads.get(0).getAdView();
-                    if (video != null) { //展示视频
-                        if (video.getParent() == null) {
-                            mChuanShanJiaVideo2.removeAllViews();
-                            mChuanShanJiaVideo2.addView(video);
-                        }
-                    }
-                    //视频播放监听
-                    ads.get(0).setVideoAdListener(new TTFeedAd.VideoAdListener() {
-                        @Override
-                        public void onVideoLoad(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲2视频---- onVideoLoad");
-                        }
-
-                        @Override
-                        public void onVideoError(int errorCode, int extraCode) {
-                            Log.d(TAG, "穿山甲2视频---- onVideoError");
-                        }
-
-                        @Override
-                        public void onVideoAdStartPlay(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲2视频---- onVideoAdStartPlay");
-                        }
-
-                        @Override
-                        public void onVideoAdPaused(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲2视频---- onVideoAdPaused");
-                        }
-
-                        @Override
-                        public void onVideoAdContinuePlay(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲2视频---- onVideoAdContinuePlay");
-                        }
-
-                        @Override
-                        public void onProgressUpdate(long current, long duration) {
-//                            Log.d(TAG, "穿山甲2视频---- onProgressUpdate");
-                        }
-
-                        @Override
-                        public void onVideoAdComplete(TTFeedAd ad) {
-                            Log.d(TAG, "穿山甲2视频---- onVideoAdComplete");
-                        }
-                    });
-
-                } else {
-                    mChuanShanJiaVideo2.setVisibility(View.GONE);
-                    TTImage image = ads.get(0).getImageList().get(0);
-                    if (image != null && image.isValid()) {
-                        GlideUtils.loadImage(NewCleanFinishActivity.this, image.getImageUrl(), iv_advert2);
-                    }
-                }
-
-                //可以被点击的view, 也可以把convertView放进来意味item可被点击
-                List<View> clickViewList = new ArrayList<>();
-                clickViewList.add(v_advert2);
-                //触发创意广告的view（点击下载或拨打电话）
-                List<View> creativeViewList = new ArrayList<>();
-                creativeViewList.add(v_advert2);
-                //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
-//            creativeViewList.add(convertView);
-                //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
-                ads.get(0).registerViewForInteraction((ViewGroup) v_advert2, clickViewList, creativeViewList, new TTNativeAd.AdInteractionListener() {
-                    @Override
-                    public void onAdClicked(View view, TTNativeAd ad) {
-                        if (ad != null) {
-                            Log.d(TAG, "广告2" + ad.getTitle() + "被点击");
-                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "穿山甲", sourcePage, currentPage, ad.getTitle());
-                        }
-                    }
-
-                    @Override
-                    public void onAdCreativeClick(View view, TTNativeAd ad) {
-                        if (ad != null) {
-                            Log.d(TAG, "广告2" + ad.getTitle() + "被创意按钮被点击");
-                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", mAdvertId2, "穿山甲", sourcePage, currentPage, ad.getTitle());
-                        }
-                    }
-
-                    @Override
-                    public void onAdShow(TTNativeAd ad) {
-                        if (ad != null && !isShowTwo) {
-                            Log.d(TAG, "广告2---" + ad.getTitle() + "----展示");
-                            StatisticsUtils.customADRequest("ad_show", "广告展示曝光", "2", mAdvertId2, "穿山甲", "success", sourcePage, currentPage);
-                            isShowTwo = true;
-                        }
-                    }
-                });
-            }
-        });
-    }
 
     /**
      * 初始化穿山甲(插屏广告)
@@ -2462,4 +1508,84 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         });
     }
+
+
+    public void initPos01Ad(){
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this,"success_page_ad_1", new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (info == null) {
+                    LogUtils.e("DEMO>>>adSuccess， AdInfo is empty");
+                } else {
+                    LogUtils.e("DEMO>>>adSuccess， "+ info.toString());
+                }
+                View adView = adManager.getAdView();
+                if (adView != null) {
+                    ad_container_pos01.removeAllViews();
+                    ad_container_pos01.addView(adView);
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                if (info == null) {
+                    LogUtils.e("DEMO>>>adExposed， AdInfo is empty");
+                } else {
+                    LogUtils.e("DEMO>>>adExposed， "+ info.toString());
+                }
+                LogUtils.e("adExposed");
+                initAd02();
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                if (info == null) {
+                    LogUtils.e("DEMO>>>adClicked， AdInfo is empty");
+                } else {
+                    LogUtils.e("DEMO>>>adClicked， "+ info.toString());
+                }
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                LogUtils.e("DEMO>>>adError： "+errorMsg);
+            }
+        });
+
+
+
+    }
+
+    public void initAd02(){
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this,"success_page_ad_2", new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                View adView = adManager.getAdView();
+                if (adView != null) {
+                    ad_container_pos02.removeAllViews();
+                    ad_container_pos02.addView(adView);
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                LogUtils.e("adExposed");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                LogUtils.e("adClicked");
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                LogUtils.e("adError");
+            }
+        });
+    }
+
+
+
 }
