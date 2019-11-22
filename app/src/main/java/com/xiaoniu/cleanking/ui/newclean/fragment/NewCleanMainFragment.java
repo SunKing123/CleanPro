@@ -421,7 +421,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         adManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "穿山甲", "success", "", "home_page");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "", "home_page");
                 if (null != adManager && null != adManager.getAdView()) {
                     mTopContentView.setVisibility(View.GONE);
                     mTopAdFramelayout.setVisibility(VISIBLE);
@@ -432,7 +432,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void adExposed(AdInfo info) {
-
+//                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(),  info.getAdSource(), "", "home_page", info.getTitle());
             }
 
             @Override

@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.activity
 
 import android.os.Build
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.comm.jksdk.GeekAdSdk
@@ -34,7 +33,6 @@ import java.util.*
 class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.FinishInterface {
 
     private lateinit var mAdManager: AdManager
-    private var mIsAdSusscss = false
 
     private val TAG = "GeekSdk"
     override fun getLayoutId(): Int {
@@ -48,15 +46,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         StatusBarUtil.setTransparentForWindow(this)
         EventBus.getDefault().register(this)
         showRedPacket()
-
-        if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data
-                && AppHolder.getInstance().switchInfoList.data.size > 0) {
-            for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
-                if (PositionId.KEY_RED_JILI == switchInfoList.configKey && switchInfoList.isOpen) {
-                    initGeekAdSdk()
-                }
-            }
-        }
     }
 
     /**
@@ -95,6 +84,27 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     }
 
     /**
+     * 红包点击 js回调
+     */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @Subscriber(mode = ThreadMode.MAIN)
+    fun receiverMessage(baseEvent: BaseEventBus<String>) {
+        when (baseEvent.getAction()) {
+            BaseEventBusConstant.WEB_REDPACKET_AD -> {
+                Log.d("XiLei", "开始了吗--------------")
+                if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data
+                        && AppHolder.getInstance().switchInfoList.data.size > 0) {
+                    for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
+                        if (PositionId.KEY_RED_JILI == switchInfoList.configKey && switchInfoList.isOpen) {
+                            initGeekAdSdk()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * 初始化广告sdk
      */
     private fun initGeekAdSdk() {
@@ -109,7 +119,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
             override fun adSuccess(info: AdInfo?) {
                 Log.d(TAG, "-----adSuccess-----")
-                mIsAdSusscss = true
             }
 
             override fun adExposed(info: AdInfo?) {
@@ -125,33 +134,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 mFrameLayout.removeAllViews()
             }
         })
-    }
-
-    /**
-     * 红包点击 js回调
-     */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @Subscriber(mode = ThreadMode.MAIN)
-    fun receiverMessage(baseEvent: BaseEventBus<String>) {
-        when (baseEvent.getAction()) {
-            BaseEventBusConstant.WEB_REDPACKET_AD -> {
-                Log.d("XiLei", "开始了吗--------------")
-                showGeekAdSdk()
-            }
-        }
-    }
-
-    /**
-     * 展示广告sdk
-     */
-    private fun showGeekAdSdk() {
-        if (mIsAdSusscss && null != mAdManager) {
-            Log.d("XiLei", "showGeekAdSdk");
-            mFrameLayout.visibility = View.VISIBLE
-            mFrameLayout.addView(mAdManager.getAdView())
-        } else {
-            finish()
-        }
     }
 
     override fun finishActivity() {
