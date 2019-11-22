@@ -46,13 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="44dp"
                 android:src="@drawable/icon_sp_bottom" />
-<!--
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_12dp"
-                android:text="@string/app_name"
-                android:textColor="@color/color_333333" />-->
+
 
         </LinearLayout>
 

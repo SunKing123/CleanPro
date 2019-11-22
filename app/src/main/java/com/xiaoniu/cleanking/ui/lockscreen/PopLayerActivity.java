@@ -39,7 +39,7 @@ public class PopLayerActivity extends AppCompatActivity {
         flayoutAdContainer = (FrameLayout)findViewById(R.id.flayout_ad_container);
         adManager = GeekAdSdk.getAdsManger();
         //todo_zzh
-//        loadCustomInsertScreenAd2("external_advertising_ad_1");
+        loadCustomInsertScreenAd2("external_advertising_ad_1");
     }
 
 
