@@ -357,10 +357,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * 一键加速
      */
     public void showCleanButton() {
-        if (null != acceview) {
+     /*   if (null != acceview) {
             acceview.setVisibility(View.GONE);
         }
-        NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");
+        NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");*/
+
+        startClean(false);
     }
 
     private void showCleanFinishUI(String num, String unit) {
