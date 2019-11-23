@@ -142,6 +142,7 @@ public class CsjCustomInsertScreenAdView extends CHJAdView {
                 }
             });
             normalDownloadDialog.show();
+            normalDownloadDialog.setProgress(mProgress);
             normalDownloadDialog.loadAd(ttNativeAd);
         }
     }

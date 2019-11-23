@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -31,17 +33,27 @@ import java.util.List;
  */
 public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements View.OnClickListener {
     private final String TAG = InsertScreenAdNormalDownloadDialog.class.getSimpleName();
-    private TextView adName, adDes, adShowTime, adDownloadBtn;
+    private TextView adName, adDes, adShowTime, adDownloadBtn, progressTv;
     private ImageView adCover, adClose;
     private RoundImageView appIcon;
     private CountDownTimer countDownTimer;
     private ConstraintLayout adContainer;
+
     private int showTimeSecond;
+    private String mProgress;
+
 
     private OnClickListenr mListenr;
 
     public void setListenr(OnClickListenr listenr) {
         this.mListenr = listenr;
+    }
+
+    public void setProgress(String mProgress) {
+        this.mProgress = mProgress;
+        if (!TextUtils.isEmpty(mProgress)) {
+            progressTv.setText("已提速"+mProgress+"%");
+        }
     }
 
     protected InsertScreenAdNormalDownloadDialog(Context context, int showTimeSecond) {
@@ -74,6 +86,7 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
         adCover = findViewById(R.id.full_screen_insert_ad_view);
         adClose = findViewById(R.id.full_screen_insert_ad_close);
         appIcon = findViewById(R.id.full_screen_insert_ad_app_icon);
+        progressTv = findViewById(R.id.progree_tv);
         adShowTime.setText(showTimeSecond + "s");
         adShowTime.setVisibility(View.VISIBLE);
         countDownTimer = new CountDownTimer(showTimeSecond * 1000, 1000) {

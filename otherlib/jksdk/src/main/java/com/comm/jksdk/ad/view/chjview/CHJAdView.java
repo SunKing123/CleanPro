@@ -28,7 +28,16 @@ import java.util.List;
 public class CHJAdView extends CommAdView {
     private String style;
 
-//    /**
+    /**
+     * 优化百分比
+     */
+    protected String mProgress;
+
+    public void setmProgress(String mProgress) {
+        this.mProgress = mProgress;
+    }
+
+    //    /**
 //     * 广告位ID
 //     */
 //    protected String mAdId = "";
@@ -337,6 +346,7 @@ public class CHJAdView extends CommAdView {
             mAdView.setAdInfo(mAdInfo);
             mAdView.setAdListener(mAdListener);
             mAdView.setYlhAdListener(mFirstAdListener);
+            ((CsjCustomInsertScreenAdView) mAdView).setmProgress(mProgress);
             ((CsjCustomInsertScreenAdView) mAdView).loadCustomInsertScreenAd(mActivity, showTimeSeconds, mAdId);
         }
     }

@@ -17,7 +17,7 @@
             android:layout_height="201.5dp"
             android:scaleType="centerCrop" />
         <ImageView
-            android:background="@mipmap/ad_mask"
+            android:background="@mipmap/angle_ad_mask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <TextView
