@@ -299,9 +299,8 @@
 
         <activity
             android:name=".ui.newclean.activity.InsertScreenFinishActivity"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
 
         <activity
             android:name=".ui.main.activity.AgentWebViewActivity"
@@ -330,8 +329,7 @@
             android:name=".ui.main.activity.RedPacketHotActivity"
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
-        <activity
-            android:name=".ui.newclean.activity.ScreenFinishBeforActivity"/>
+        <activity android:name=".ui.newclean.activity.ScreenFinishBeforActivity" />
 
         <activity
             android:name=".ui.lockscreen.LockActivity"

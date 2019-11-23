@@ -1,13 +1,9 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,27 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
-import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdManager;
-import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.qq.e.ads.cfg.VideoOption;
-import com.qq.e.ads.nativ.NativeADEventListener;
-import com.qq.e.ads.nativ.NativeADUnifiedListener;
-import com.qq.e.ads.nativ.NativeUnifiedAD;
-import com.qq.e.ads.nativ.NativeUnifiedADData;
-import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
-import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -52,15 +36,11 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
-import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishPresenter;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -76,23 +56,14 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-import com.xiaoniu.common.http.EHttp;
-import com.xiaoniu.common.http.callback.ApiCallback;
-import com.xiaoniu.common.http.request.HttpRequest;
-import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import cn.jzvd.Jzvd;
@@ -134,18 +105,18 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String sysReturnEventName = "";
 
     //插屏广告相关 begin
-    private HScreen mHandlerScreen = new HScreen();
-    private TTAdNative mTTAdNativeScreen;
-    private NativeUnifiedAD mAdManagerScreen;
-    private NativeUnifiedADData mNativeUnifiedADDataScreen;
-    private String mAdvertScreenId = ""; //插屏广告id
-    private String mSecondAdvertScreenId = ""; //插屏广告备用id
-    private boolean mIsScreenAdSuccess; //插屏广告是否拉取成功
+//    private HScreen mHandlerScreen = new HScreen();
+//    private TTAdNative mTTAdNativeScreen;
+//    private NativeUnifiedAD mAdManagerScreen;
+//    private NativeUnifiedADData mNativeUnifiedADDataScreen;
+//    private String mAdvertScreenId = ""; //插屏广告id
+//    private String mSecondAdvertScreenId = ""; //插屏广告备用id
+//    private boolean mIsScreenAdSuccess; //插屏广告是否拉取成功
     //插屏广告相关 end
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
 
-    FrameLayout ad_container_pos01,ad_container_pos02;
+    FrameLayout ad_container_pos01, ad_container_pos02;
 
     @Override
     protected int getLayoutId() {
@@ -189,7 +160,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mRecyclerView.setAdapter(mNewsAdapter);
         mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
 
-
         ad_container_pos01 = header.findViewById(R.id.ad_container_pos01);
         mTvSize = header.findViewById(R.id.tv_size);
         mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
@@ -226,7 +196,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         getPageData();
         setListener();
         loadData();
-        initChuanShanJiaScreen();
+//        initChuanShanJiaScreen();
         initPos01Ad();
     }
 
@@ -536,65 +506,64 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.tool_one_key_speed).contains(mTitle) && PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle) && PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.tool_notification_clean).contains(mTitle) && PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.tool_chat_clear).contains(mTitle)) { //微信清理
                 if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
                     isScreenSwitchOpen = switchInfoList.isOpen();
                     mScreenShowCount = switchInfoList.getShowRate();
-                    mAdvertScreenId = switchInfoList.getAdvertId();
-                    mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                    mAdvertScreenId = switchInfoList.getAdvertId();
+//                    mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
                 }
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle) && PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.tool_qq_clear).contains(mTitle) && PositionId.KEY_QQ.equals(switchInfoList.getConfigKey())) { //QQ专清
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.game_quicken).contains(mTitle) && PositionId.KEY_GAME.equals(switchInfoList.getConfigKey())) { //游戏加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.virus_kill).contains(mTitle) && PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey())) { //病毒查杀
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             } else if (getString(R.string.network_quicken).contains(mTitle) && PositionId.KEY_NET.equals(switchInfoList.getConfigKey())) { //网络加速
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
-                mAdvertScreenId = switchInfoList.getAdvertId();
-                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
+//                mAdvertScreenId = switchInfoList.getAdvertId();
+//                mSecondAdvertScreenId = switchInfoList.getSecondAdvertId();
             }
         }
-        loadListAdScreen();
+//        loadListAdScreen();
     }
-
 
 
     private void changeUI(Intent intent) {
@@ -1018,12 +987,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else {
                 StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             }
-
             //插屏广告拉取失败禁止跳转到插屏广告页
-            if (mIsScreenAdSuccess) {
+          /*  if (mIsScreenAdSuccess) {
                 finish();
                 return;
-            }
+            }*/
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
             if (isScreenSwitchOpen) {
                 int count = 0;
@@ -1095,7 +1063,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         });
 
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
@@ -1145,10 +1112,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         //插屏广告老去失败禁止跳转到插屏广告页
-        if (mIsScreenAdSuccess) {
+      /*  if (mIsScreenAdSuccess) {
             finish();
             return;
-        }
+        }*/
 
         //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
         if (isScreenSwitchOpen) {
@@ -1328,12 +1295,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             Glide.get(this).clearMemory();
         }
         //Umeng ---
-        if (null != mHandler) {
+      /*  if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);
         }
         if (null != mHandlerScreen) {
             mHandlerScreen.removeCallbacksAndMessages(null);
-        }
+        }*/
 
     }
 
@@ -1358,22 +1325,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
 
-
-
     /**
      * 初始化穿山甲(插屏广告)
      */
-    private void initChuanShanJiaScreen() {
+/*    private void initChuanShanJiaScreen() {
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         mTTAdNativeScreen = ttAdManager.createAdNative(getApplicationContext());
         //申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
 //        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
-    }
+    }*/
 
     /**
      * 加载穿山甲广告(插屏广告)
      */
-    private void loadListAdScreen() {
+/*    private void loadListAdScreen() {
         //feed广告请求类型参数
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(mAdvertScreenId)
@@ -1398,12 +1363,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", mAdvertScreenId, "穿山甲", "success", sourcePage, currentPage);
             }
         });
-    }
+    }*/
 
     /**
      * 优量汇广告(插屏广告)
      */
-    private void initNativeUnifiedADScreen() {
+ /*   private void initNativeUnifiedADScreen() {
         mAdManagerScreen = new NativeUnifiedAD(this, PositionId.APPID, mSecondAdvertScreenId, new NativeADUnifiedListener() {
 
             @Override
@@ -1424,36 +1389,36 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             }
         });
-        /**
-         * 如果广告位支持视频广告，强烈建议在调用loadData请求广告前，调用下面两个方法，有助于提高视频广告的eCPM值 <br/>
-         * 如果广告位仅支持图文广告，则无需调用
-         */
+        *//**
+     * 如果广告位支持视频广告，强烈建议在调用loadData请求广告前，调用下面两个方法，有助于提高视频广告的eCPM值 <br/>
+     * 如果广告位仅支持图文广告，则无需调用
+     *//*
 
-        /**
-         * 设置本次拉取的视频广告，从用户角度看到的视频播放策略<p/>
-         *
-         * "用户角度"特指用户看到的情况，并非SDK是否自动播放，与自动播放策略AutoPlayPolicy的取值并非一一对应 <br/>
-         *
-         * 例如开发者设置了VideoOption.AutoPlayPolicy.NEVER，表示从不自动播放 <br/>
-         * 但满足某种条件(如晚上10点)时，开发者调用了startVideo播放视频，这在用户看来仍然是自动播放的
-         */
+     *//**
+     * 设置本次拉取的视频广告，从用户角度看到的视频播放策略<p/>
+     *
+     * "用户角度"特指用户看到的情况，并非SDK是否自动播放，与自动播放策略AutoPlayPolicy的取值并非一一对应 <br/>
+     *
+     * 例如开发者设置了VideoOption.AutoPlayPolicy.NEVER，表示从不自动播放 <br/>
+     * 但满足某种条件(如晚上10点)时，开发者调用了startVideo播放视频，这在用户看来仍然是自动播放的
+     *//*
         mAdManagerScreen.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO); // 本次拉回的视频广告，从用户的角度看是自动播放的
 
-        /**
-         * 设置在视频广告播放前，用户看到显示广告容器的渲染者是SDK还是开发者 <p/>
-         *
-         * 一般来说，用户看到的广告容器都是SDK渲染的，但存在下面这种特殊情况： <br/>
-         *
-         * 1. 开发者将广告拉回后，未调用bindMediaView，而是用自己的ImageView显示视频的封面图 <br/>
-         * 2. 用户点击封面图后，打开一个新的页面，调用bindMediaView，此时才会用到SDK的容器 <br/>
-         * 3. 这种情形下，用户先看到的广告容器就是开发者自己渲染的，其值为VideoADContainerRender.DEV
-         * 4. 如果觉得抽象，可以参考NativeADUnifiedDevRenderContainerActivity的实现
-         */
+        *//**
+     * 设置在视频广告播放前，用户看到显示广告容器的渲染者是SDK还是开发者 <p/>
+     *
+     * 一般来说，用户看到的广告容器都是SDK渲染的，但存在下面这种特殊情况： <br/>
+     *
+     * 1. 开发者将广告拉回后，未调用bindMediaView，而是用自己的ImageView显示视频的封面图 <br/>
+     * 2. 用户点击封面图后，打开一个新的页面，调用bindMediaView，此时才会用到SDK的容器 <br/>
+     * 3. 这种情形下，用户先看到的广告容器就是开发者自己渲染的，其值为VideoADContainerRender.DEV
+     * 4. 如果觉得抽象，可以参考NativeADUnifiedDevRenderContainerActivity的实现
+     *//*
         mAdManagerScreen.setVideoADContainerRender(VideoOption.VideoADContainerRender.SDK); // 视频播放前，用户看到的广告容器是由SDK渲染的
         mAdManagerScreen.loadData(AD_COUNT);
-    }
+    }*/
 
-    private class HScreen extends Handler {
+/*    private class HScreen extends Handler {
         public HScreen() {
             super();
         }
@@ -1477,14 +1442,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         }
 
-    }
+    }*/
 
     /**
      * 加载优量汇广告(插屏)
-     *
-     * @param ad
      */
-    private void initAdScreen(final NativeUnifiedADData ad) {
+/*    private void initAdScreen(final NativeUnifiedADData ad) {
 
         // 设置广告事件监听
         ad.setNativeAdEventListener(new NativeADEventListener() {
@@ -1507,18 +1470,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onADStatusChanged() {
             }
         });
-    }
-
-
-    public void initPos01Ad(){
+    }*/
+    public void initPos01Ad() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this,"success_page_ad_1", new AdListener() {
+        adManager.loadAd(this, "success_page_ad_1", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (info == null) {
                     LogUtils.e("DEMO>>>adSuccess， AdInfo is empty");
                 } else {
-                    LogUtils.e("DEMO>>>adSuccess， "+ info.toString());
+                    LogUtils.e("DEMO>>>adSuccess， " + info.toString());
                 }
                 View adView = adManager.getAdView();
                 if (adView != null) {
@@ -1532,7 +1493,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (info == null) {
                     LogUtils.e("DEMO>>>adExposed， AdInfo is empty");
                 } else {
-                    LogUtils.e("DEMO>>>adExposed， "+ info.toString());
+                    LogUtils.e("DEMO>>>adExposed， " + info.toString());
                 }
                 LogUtils.e("adExposed");
                 initAd02();
@@ -1543,23 +1504,22 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (info == null) {
                     LogUtils.e("DEMO>>>adClicked， AdInfo is empty");
                 } else {
-                    LogUtils.e("DEMO>>>adClicked， "+ info.toString());
+                    LogUtils.e("DEMO>>>adClicked， " + info.toString());
                 }
             }
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                LogUtils.e("DEMO>>>adError： "+errorMsg);
+                LogUtils.e("DEMO>>>adError： " + errorMsg);
             }
         });
 
 
-
     }
 
-    public void initAd02(){
+    public void initAd02() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this,"success_page_ad_2", new AdListener() {
+        adManager.loadAd(this, "success_page_ad_2", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 View adView = adManager.getAdView();
@@ -1585,7 +1545,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         });
     }
-
 
 
 }

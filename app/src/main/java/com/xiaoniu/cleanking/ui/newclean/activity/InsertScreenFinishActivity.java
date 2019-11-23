@@ -27,7 +27,6 @@ import cn.jzvd.Jzvd;
 public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishPresenter> implements View.OnClickListener {
 
     private AdManager mAdManager;
-    private String mTitle = "";
     private String TAG = "GeekSdk";
 
     @Override
@@ -43,7 +42,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
-        mTitle = getIntent().getStringExtra("title");
         loadGeekSdk();
     }
 
@@ -52,23 +50,29 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      */
     private void loadGeekSdk() {
         mAdManager = GeekAdSdk.getAdsManger();
-      /*  mAdManager.loadCustomInsertScreenAd(this, "external_advertising_ad_1", 3, new AdListener() {//暂时这样
+        mAdManager.loadCustomInsertScreenAd(this, "cp_ad_2", 3, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                Log.d(TAG, "-----adSuccess-----");
+                Log.d(TAG, "-----adSuccess-----=" + info.getAdAppid());
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "success", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
 
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                Log.d(TAG, "adClose---");
+                finish();
             }
 
             @Override
@@ -77,8 +81,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                 finish();
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", " ", " ", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
-
-        }, "80");*/
+        });
     }
 
     @Override

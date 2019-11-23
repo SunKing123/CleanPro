@@ -156,7 +156,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-        Log.d("XiLei", "main_initview");
         getIconListFail();
         mPresenter.getIconList();
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
@@ -288,7 +287,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @param intent
      */
     private void changeTab(Bundle intent) {
-        Log.d("XiLei", "changeTab");
         String type = intent.getString("type");
         String home = intent.getString("NotificationService");
         if ("shangcheng".equals(type)) {
@@ -672,31 +670,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      */
     private void showRedPacket(RedPacketEntity redPacketEntity) {
         if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
-//            if (redPacketEntity.getData().get(0).getLocation() != position)
-//                return;
             mShowRedFirst = true;
-            /*int count;
-            if (redPacketEntity.getData().get(0).getShowType() == 1) { //循环
-                if (PreferenceUtil.getRedPacketShowTrigger() != redPacketEntity.getData().get(0).getTrigger()) {
-                    PreferenceUtil.saveRedPacketForCount(0);
-                }
-                PreferenceUtil.saveRedPacketShowTrigger(redPacketEntity.getData().get(0).getTrigger());
-                count = PreferenceUtil.getRedPacketForCount();
-                if (count >= redPacketEntity.getData().get(0).getImgUrls().size() - 1) {
-                    PreferenceUtil.saveRedPacketForCount(0);
-                } else {
-                    PreferenceUtil.saveRedPacketForCount(PreferenceUtil.getRedPacketForCount() + 1);
-                }
-            } else { //随机
-                if (redPacketEntity.getData().get(0).getImgUrls().size() == 1) {
-                    count = 0;
-                } else {
-                    count = new Random().nextInt(redPacketEntity.getData().get(0).getImgUrls().size() - 1);
-                }
-            }*/
             if (!isFinishing()) {
-//                WebDialogManager.getInstance().showWebDialog(this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
-                Log.d("XiLei","11111111111111111");
                 startActivity(new Intent(this, RedPacketHotActivity.class));
             }
         }
@@ -723,7 +698,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar.setCurrentItem(0);
         } else {
             if (iconsEntity.getData().size() >= 4) {
-                Log.d("XiLei", "getIconListSuccess");
                 mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(2).getIconImgUrl()
                         , iconsEntity.getData().get(2).getTabName()
                         , iconsEntity.getData().get(2).getOrderNum());
@@ -747,7 +721,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * 获取底部icon失败
      */
     public void getIconListFail() {
-        Log.d("XiLei", "getIconListFail");
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {

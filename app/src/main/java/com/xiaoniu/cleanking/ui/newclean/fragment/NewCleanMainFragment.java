@@ -190,7 +190,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     protected void initView() {
-        Log.d("XiLei", "fragment_initview");
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
@@ -273,7 +272,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         initVirus();
         initGeekAdSdk();
-        initGeekSdkTop(true); //暂时注释
+        initGeekSdkTop(true);
         initGeekSdkCenter();
     }
 
@@ -406,9 +405,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 顶部广告 样式---大图嵌套图片_01_跑马灯
      */
     private void initGeekSdkTop(boolean isAllClean) {
-        Log.d("XiLei", "initGeekSdkTop");
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_HOME_AD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        if (!isOpen) return;
         if (isAllClean) {
-            Log.d("XiLei", "initGeekSdkTop2222222222");
             StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
         }
         if (null == getActivity() || null == mTopAdFramelayout) return;
@@ -450,7 +457,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 更多推荐上方广告 样式---大图_下载播放按钮_跑马灯
      */
     private void initGeekSdkCenter() {
-        Log.d("XiLei", "initGeekSdkCenter");
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_HOME_AD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        if (!isOpen) return;
         if (null == getActivity() || null == mCenterAdFramelayout) return;
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), "homepage_ad_2", new AdListener() { //暂时这样
@@ -683,7 +699,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
-        Log.d("XiLei", "changeLifecyEvent");
         if (lifecycEvent.isActivity()) {
             mTopContentView.setVisibility(VISIBLE);
             mTopAdFramelayout.removeAllViews();
@@ -1078,7 +1093,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                Log.d("XiLei", "onEventClean");
                 mIsAllClean = true;
                 initGeekSdkTop(true);
                 showTextView01();

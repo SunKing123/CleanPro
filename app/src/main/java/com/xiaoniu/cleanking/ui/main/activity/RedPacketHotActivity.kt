@@ -62,8 +62,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 || null == AppHolder.getInstance().redPacketEntityList.data[0].imgUrls
                 || AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size <= 0)
             return
-        Log.d("XiLei", "saaaaaaaaa=" + PreferenceUtil.getRedPacketShowTrigger())
-        Log.d("XiLei", "bbbbb=" + AppHolder.getInstance().redPacketEntityList.data[0].trigger)
         if (AppHolder.getInstance().redPacketEntityList.data[0].showType == 1) { //循环
             if (PreferenceUtil.getRedPacketShowTrigger() != AppHolder.getInstance().redPacketEntityList.data[0].trigger) {
                 PreferenceUtil.saveRedPacketForCount(0)
@@ -97,7 +95,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     fun receiverMessage(baseEvent: BaseEventBus<String>) {
         when (baseEvent.getAction()) {
             BaseEventBusConstant.WEB_REDPACKET_AD -> {
-                Log.d("XiLei", "开始了吗--------------")
                 if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data
                         && AppHolder.getInstance().switchInfoList.data.size > 0) {
                     for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
@@ -147,7 +144,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 Log.d(TAG, "-----adClose-----")
                 StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", " ")
                 if (!isFinishing()) {
-                    Log.d("XiLei", "mCount=" + mCount)
                     AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
                     startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
                             .putExtra(ExtraConstant.WEB_URL, AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount]))

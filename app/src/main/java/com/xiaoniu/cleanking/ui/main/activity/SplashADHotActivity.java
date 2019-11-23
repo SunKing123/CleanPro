@@ -125,7 +125,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         if (PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
             switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
                 case 5: //所有页面展示红包
-                    Log.d("XiLei","22222222");
                     startActivity(new Intent(this, RedPacketHotActivity.class));
                     break;
             }
