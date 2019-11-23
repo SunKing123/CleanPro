@@ -454,23 +454,27 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             @Override
             public void onVideoComplete(AdInfo info) {
-
-            }//暂时这样
+                NiuDataAPI.onPageStart("gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
+            }
 
             @Override
             public void adSuccess(AdInfo info) {
                 Log.d(TAG, "-----adSuccess-----");
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "gameboost_add_page", "gameboost_incentive_video_page");
             }
 
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", " ");
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", "");
             }
 
@@ -485,6 +489,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             @Override
             public void adError(int errorCode, String errorMsg) {
                 Log.d(TAG, "-----adError-----" + errorMsg);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "gameboost_add_page", "gameboost_incentive_video_page");
                 startClean();
             }
 

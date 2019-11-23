@@ -53,6 +53,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
         mAdManager.loadCustomInsertScreenAd(this, "cp_ad_2", 3, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
+                if (null == info) return;
                 Log.d(TAG, "-----adSuccess-----=" + info.getAdAppid());
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "success", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
@@ -60,12 +61,14 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
@@ -73,6 +76,8 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             public void adClose(AdInfo info) {
                 Log.d(TAG, "adClose---");
                 finish();
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override

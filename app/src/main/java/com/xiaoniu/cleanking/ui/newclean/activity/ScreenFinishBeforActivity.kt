@@ -189,22 +189,27 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             //暂时这样
             override fun adSuccess(info: AdInfo) {
                 Log.d(TAG, "-----adSuccess-----=" + info.adSource)
+                if (null == info) return
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
             }
 
             override fun adExposed(info: AdInfo) {
                 Log.d(TAG, "-----adExposed-----")
+                if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
             }
 
             override fun adClicked(info: AdInfo) {
                 Log.d(TAG, "-----adClicked-----")
+                if (null == info) return
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
             }
 
             override fun adClose(info: AdInfo) {
                 Log.d(TAG, "-----adClose-----")
-                StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+                if (null != info) {
+                    StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+                }
                 goFinishActivity()
             }
 

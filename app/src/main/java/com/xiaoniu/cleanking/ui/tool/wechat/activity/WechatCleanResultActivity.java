@@ -99,7 +99,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                    .putExtra(ExtraConstant.TITLE, getString(R.string.tool_chat_clear)));
+                    .putExtra(ExtraConstant.TITLE, mTitle));
             finish();
         });
     }
