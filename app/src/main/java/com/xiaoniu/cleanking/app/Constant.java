@@ -46,7 +46,7 @@ public class Constant {
     public static final int SCAN_SPACE_LONG = 20;
 
     //手势解锁后_悬浮页面（秒）
-    public static final int UNLOCK_SPACE_LONG = 3;
+    public static final int UNLOCK_SPACE_LONG = 1;
 
     //点击Home_悬浮页面（秒）
     public static final int HOME_SPACE_LONG = 1;

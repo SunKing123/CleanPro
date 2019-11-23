@@ -24,17 +24,12 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
-import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -44,15 +39,13 @@ import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -75,7 +68,24 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private RxPermissions rxPermissions;
     private LinearLayout linAdLayout;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+/*
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册订阅者
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+        try {
+            ViewGroup layout = (ViewGroup) getWindow().getDecorView();
+            layout.removeAllViews();
+        } catch (Exception e) {
+        }
+    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +93,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_lock);
         ActivityCollector.addActivity(this, LockActivity.class);
         initView();
+        //注册订阅者
+        EventBus.getDefault().register(this);
     }
 
     private void initView() {
@@ -179,7 +191,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(null!= PreferenceUtil.getInstants().get("lock_pos02") &&  PreferenceUtil.getInstants().get("lock_pos02").length()>2){
-            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"),LockScreenBtnInfo.class);
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos02"),LockScreenBtnInfo.class);
             if(btnInfo.isNormal()){
                 tv_ram_size.setVisibility(View.GONE);
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
@@ -193,15 +205,20 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(null!= PreferenceUtil.getInstants().get("lock_pos03") &&  PreferenceUtil.getInstants().get("lock_pos03").length()>2){
-            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"),LockScreenBtnInfo.class);
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos03"),LockScreenBtnInfo.class);
             if(btnInfo.isNormal()){
-                tv_virus_size.setText("防御");
-                tv_virus_size.setVisibility(View.VISIBLE);
-                iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+                if(System.currentTimeMillis()>btnInfo.getReShowTime()){
+                    tv_virus_size.setText("检测");
+                    tv_virus_size.setVisibility(View.VISIBLE);
+                    iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                }else{
+                    tv_virus_size.setText("防御");
+                    tv_virus_size.setVisibility(View.VISIBLE);
+                    iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+                }
             }else{
                 tv_virus_size.setText("检测");
                 tv_virus_size.setVisibility(View.VISIBLE);
-                tv_ram_size.setText(btnInfo.getCheckResult()+"MB");
                 iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
             }
         }else{
@@ -408,6 +425,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         unregisterLockerReceiver();
+        EventBus.getDefault().unregister(this);
 //
      /*   executorService.execute(() -> {
             FileUtils.writeTextFile("stop");
@@ -465,6 +483,55 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         return screenIntent;
+    }
+
+
+    /**
+     * 重新扫描文件
+     */
+    @Subscribe
+    public void onEventLock(LockScreenBtnInfo btnInfo) {
+        if (null != btnInfo) {
+            int pos = btnInfo.getPost();
+            if (pos == 0) {
+                if (btnInfo.isNormal()) {
+                    tv_file_size.setVisibility(View.GONE);
+                    iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+                } else {
+                    tv_file_size.setVisibility(View.VISIBLE);
+                    tv_file_size.setText(btnInfo.getCheckResult() + "MB");
+                    iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                }
+            } else if (pos == 1) {
+                if (btnInfo.isNormal()) {
+                    tv_ram_size.setVisibility(View.GONE);
+                    iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+                } else {
+                    tv_ram_size.setVisibility(View.VISIBLE);
+                    tv_ram_size.setText(btnInfo.getCheckResult() + "MB");
+                    iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                }
+            } else if (pos == 2) {
+                if (btnInfo.isNormal()) {
+                    if (System.currentTimeMillis() > btnInfo.getReShowTime()) {
+                        tv_virus_size.setText("检测");
+                        tv_virus_size.setVisibility(View.VISIBLE);
+                        iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                    } else {
+                        tv_virus_size.setText("防御");
+                        tv_virus_size.setVisibility(View.VISIBLE);
+                        iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+                    }
+                } else {
+                    tv_virus_size.setText("检测");
+                    tv_virus_size.setVisibility(View.VISIBLE);
+                    iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                }
+            }
+
+        } else {
+            setRandState(1);
+        }
     }
 
 }

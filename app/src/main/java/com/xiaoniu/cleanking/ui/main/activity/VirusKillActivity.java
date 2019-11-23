@@ -12,16 +12,22 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.VirusKillPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
@@ -84,6 +90,15 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
                 }
+
+                //设置锁屏数据
+                LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(2);
+                btnInfo.setNormal(true);
+                btnInfo.setCheckResult("500");
+                btnInfo.setReShowTime(System.currentTimeMillis()+1000*60*5);
+                PreferenceUtil.getInstants().save("lock_pos03",new Gson().toJson(btnInfo));
+                EventBus.getDefault().post(btnInfo);
+
                 startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
                 finish();
             }

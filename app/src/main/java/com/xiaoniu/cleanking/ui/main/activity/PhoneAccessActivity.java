@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.gson.Gson;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -40,6 +41,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
@@ -364,6 +366,13 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
+        //设置锁屏数据
+        LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(1);
+        btnInfo.setNormal(true);
+        btnInfo.setCheckResult("550");
+        PreferenceUtil.getInstants().save("lock_pos02",new Gson().toJson(btnInfo));
+        EventBus.getDefault().post(btnInfo);
+
         PreferenceUtil.saveCleanJiaSuUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");

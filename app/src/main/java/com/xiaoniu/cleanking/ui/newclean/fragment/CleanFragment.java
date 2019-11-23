@@ -266,6 +266,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         btnInfo.setNormal(true);
         btnInfo.setCheckResult("500");
         PreferenceUtil.getInstants().save("lock_pos01",new Gson().toJson(btnInfo));
+        EventBus.getDefault().post(btnInfo);
 
         //状态栏恢复正常
         NotificationEvent event = new NotificationEvent();
