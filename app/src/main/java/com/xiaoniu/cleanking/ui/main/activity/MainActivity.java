@@ -156,6 +156,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
+        AppHolder.getInstance().setCurrentTaskId(this.getTaskId());
         getIconListFail();
         mPresenter.getIconList();
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);

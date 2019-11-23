@@ -14,6 +14,7 @@ import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.base.BaseActivity;
 
 import androidx.annotation.Nullable;
@@ -92,7 +93,7 @@ public class PopLayerActivity extends AppCompatActivity {
                 public void adClicked(AdInfo info) {
                     LogUtils.d("-----adClicked-----");
                 }
-            });
+            }, String.valueOf(NumberUtils.mathRandom(25,50)));
         } catch (Exception e) {
             e.printStackTrace();
         }

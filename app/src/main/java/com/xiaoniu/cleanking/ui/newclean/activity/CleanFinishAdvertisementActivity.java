@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bytedance.sdk.openadsdk.TTAdNative;
@@ -56,7 +57,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     private NativeUnifiedAD mAdManager;
     private String mAdvertId = ""; //广告id
     private String mSecondAdvertId = ""; //备用id
-
+    private LinearLayout toolBar;
     String sourcePage = "";
     String currentPage = "";
     String createEventCode = "";
@@ -84,6 +85,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         mPresenter.getSwitchInfoList();
         findViewById(R.id.btnLeft).setOnClickListener(this);
         mViewContent = findViewById(R.id.v_content);
+        toolBar = (LinearLayout)findViewById(R.id.toolBar);
+        StatusBarUtil.setPaddingTop(mContext,toolBar);
         mErrorIv = (ImageView) findViewById(R.id.iv_error);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
         ad_container_pos03 = (FrameLayout)findViewById(R.id.ad_container_pos03);

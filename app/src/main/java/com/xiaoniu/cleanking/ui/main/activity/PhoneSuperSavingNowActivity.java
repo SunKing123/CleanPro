@@ -70,9 +70,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private ImageView mIvAnimationStartView;
     private LottieAnimationView mLottieAnimationFinishView;
     private boolean isError = false;
-
     private MyHandler mHandler = new MyHandler(this);
-
     private int num;
     private TextView mTvAllNum;
     private List<MultiItemInfo> mSelectedList;

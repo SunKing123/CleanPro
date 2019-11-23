@@ -16,6 +16,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.widget.LoadingDialog;
 
@@ -224,6 +225,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     public void startActivity(String path, int[] flags, boolean... finish) {
         startActivity(path, flags, null, finish);
     }
+
 
     /**
      * 含有flags通过ARouter跳转界面
