@@ -2,12 +2,10 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -16,23 +14,15 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.NetWorkPresenter;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NetWorkSpeedUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -50,12 +40,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     @BindView(R.id.tv_net_num)
     TextView mNetNumTv;
 
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //使用内存占总RAM的比例
-    private FileQueryUtils mFileQueryUtils;
     private ValueAnimator mValueAnimator;
-    private boolean mIsOpen;
 
     @Override
     protected int getLayoutId() {
@@ -72,15 +57,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         StatusBarUtil.setTransparentForWindow(this);
         mNumTv.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         initLottieYinDao();
-        mFileQueryUtils = new FileQueryUtils();
-        if (Build.VERSION.SDK_INT < 26) {
-            mPresenter.getAccessListBelow();
-        }
-        if (null != mFileQueryUtils) {
-            mPowerSize = mFileQueryUtils.getRunningProcess().size();
-        }
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPresenter.getSwitchInfoList();
     }
 
     private void initLottieYinDao() {
@@ -111,9 +87,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Log.d("XiLei", "mStartNetNumber=" + mStartNetNumber);
                 mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)) + " KB/S");
-                Log.d("XiLei", "mStartNetNumber2222=" + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)));
                 if (null != mLottieAnimationView) {
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
@@ -123,7 +97,9 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 }
                 try {
                     Thread.sleep(1000);
-                    goFinishActivity();
+                    startActivity(new Intent(NetWorkActivity.this, ScreenFinishBeforActivity.class)
+                            .putExtra(ExtraConstant.TITLE, getString(R.string.network_quicken))
+                            .putExtra(ExtraConstant.NUM, NumberUtils.mathRandom(25, 50)));
                     finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -140,34 +116,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
             }
         });
-    }
-
-    private void goFinishActivity() {
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_NET.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.network_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.network_quicken));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.network_quicken));
-            bundle.putString("num", NumberUtils.mathRandom(25, 50));
-            startActivity(NewCleanFinishActivity.class, bundle);
-        }
-    }
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0 || null == mFileQueryUtils) return;
-        mRamScale = mFileQueryUtils.computeTotalSize(listInfo);
     }
 
     private String mStartNetNumber;
@@ -208,31 +156,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             }*/
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * 拉取广告开关成功
-     *
-     * @return
-     */
-    public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (null == list || null == list.getData() || list.getData().size() <= 0)
-            return;
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            if (PositionId.KEY_NET_SCREEN.equals(switchInfoList.getConfigKey())) {
-                mIsOpen = switchInfoList.isOpen();
-            }
-        }
-    }
-
-    /**
-     * 拉取广告开关失败
-     *
-     * @return
-     */
-    public void getSwitchInfoListFail() {
-//        ToastUtils.showShort(getString(R.string.net_error));
-
     }
 
     @Override

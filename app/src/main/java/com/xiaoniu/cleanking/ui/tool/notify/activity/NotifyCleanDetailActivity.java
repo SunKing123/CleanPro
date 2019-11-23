@@ -1,13 +1,11 @@
 package com.xiaoniu.cleanking.ui.tool.notify.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,13 +13,9 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
@@ -30,7 +24,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.NotificationSetEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.ResidentUpdateEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -44,11 +38,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 授权后通知栏详情页面
@@ -67,9 +56,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
     private ImageView mIvBack;
     private ImageView mIvSet;
     private boolean isCleanFinish = false;
-    private int mNotifySize = 0; //通知条数
-    private int mPowerSize = 0; //耗电应用数
-    private int mRamScale = 0; //所有应用所占内存大小
 
     String sourcePage = "";
     String currentPage = "";
@@ -118,14 +104,6 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         returnEventName = "用户在通知清理诊断页返回";
         sysReturnEventName = "用户在通知清理诊断页返回";
         sourcePage = AppManager.getAppManager().preActivityName().contains("MainActivity") ? "home_page" : "";
-        if (null != NotifyCleanManager.getInstance().getAllNotifications()) {
-            mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        }
-        if (null != new FileQueryUtils().getRunningProcess()) {
-            mPowerSize = new FileQueryUtils().getRunningProcess().size();
-        }
-        getAccessListBelow();
-
 
         mTitleBar = findViewById(R.id.title_bar);
         ll_list = findViewById(R.id.ll_list);
@@ -133,8 +111,8 @@ public class NotifyCleanDetailActivity extends BaseActivity {
         mTvDelete = findViewById(R.id.tv_delete);
         mIvBack = findViewById(R.id.iv_back_notity);
         mIvSet = findViewById(R.id.iv_set);
-        StatusBarUtil.setPaddingTop(mContext,mTitleBar);
-        StatusBarUtil.setPaddingTop(mContext,ll_list);
+        StatusBarUtil.setPaddingTop(mContext, mTitleBar);
+        StatusBarUtil.setPaddingTop(mContext, ll_list);
 
         mHeaderView = mInflater.inflate(R.layout.layout_notification_clean_header, null);
         mTvNotificationCount = mHeaderView.findViewById(R.id.tvNotificationCount);
@@ -299,86 +277,11 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             PreferenceUtil.saveNotificationCleanTime();
         }
         PreferenceUtil.saveCleanNotifyUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_notification_clean));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_notification_clean));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            Intent intent = new Intent(this, NewCleanFinishActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
+        startActivity(new Intent(this, ScreenFinishBeforActivity.class)
+                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_notification_clean)));
         finish();
     }
 
-
-    /**
-     * 获取到可以加速的应用名单Android O以下的获取最近使用情况
-     */
-    @SuppressLint("CheckResult")
-    public void getAccessListBelow() {
-//        mView.showLoadingDialog();
-        Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
-            //获取到可以加速的应用名单
-            FileQueryUtils mFileQueryUtils = new FileQueryUtils();
-            //文件加载进度回调
-            mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
-                @Override
-                public void currentNumber() {
-
-                }
-
-                @Override
-                public void increaseSize(long p0) {
-
-                }
-
-                @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
-                public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
-
-                }
-            });
-            ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
-            if (listInfo == null) {
-                listInfo = new ArrayList<>();
-            }
-            e.onNext(listInfo);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(strings -> {
-                    getAccessListBelow(strings);
-                });
-    }
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0) return;
-        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-    }
 }

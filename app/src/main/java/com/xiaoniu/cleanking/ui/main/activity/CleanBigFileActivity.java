@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -38,9 +39,11 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -99,9 +102,6 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     private List<MultiItemEntity> mData;
 
     private List<ThirdLevelEntity> mAllData = new ArrayList<>();
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //使用内存占总RAM的比例
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -122,10 +122,6 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     protected void initView() {
 
         mTvTitle.setText("手机清理");
-        mPresenter.getAccessListBelow();
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
-
         initAdapter();
         //大文件扫描
         mPresenter.scanBigFile();
@@ -133,30 +129,9 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setOnColorChangeListener(this::showBarColor);
         mCleanAnimView.setListener(() -> finish());
         mCleanAnimView.setAnimationEnd(() -> {
-
-
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_phone_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+            startActivity(new Intent(this, ScreenFinishBeforActivity.class)
+                    .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_clean)));
             finish();
         });
     }
@@ -314,11 +289,5 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         if (keyCode == event.KEYCODE_BACK)
             StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
-    }
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0) return;
-        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 }

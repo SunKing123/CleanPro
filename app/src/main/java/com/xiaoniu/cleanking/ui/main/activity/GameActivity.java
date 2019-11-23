@@ -9,7 +9,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -24,8 +23,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdManager;
@@ -41,14 +38,11 @@ import com.xiaoniu.cleanking.ui.main.bean.GameSelectEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.GamePresenter;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -109,13 +103,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private ArrayList<FirstJunkInfo> mSelectList; //选择的应用列表
     private GameSelectAdapter mGameSelectAdapter;
 
-    private TTAdNative mTTAdNative;
-    private TTRewardVideoAd mttRewardVideoAd;
-    private boolean mHasShowDownloadActive = false;
     private boolean mIsOpen; //激励视频开关
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //所有应用所占内存大小
     private boolean mIsStartClean; //是否开始加速
     private boolean mIsAdError; //激励视频加载失败
     private boolean mIsYinDaoFinish; //引导动画是否结束
@@ -155,11 +143,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mContentView.setVisibility(View.VISIBLE);
         mOpenView.setVisibility(View.VISIBLE);
 //        }
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
-        if (Build.VERSION.SDK_INT < 26) {
-            mPresenter.getAccessListBelow();
-        }
         ivs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
         initGeekAdSdk();
     }
@@ -338,52 +321,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mGameSelectAdapter.setData(mSelectList);
     }
 
-    /**
-     * 拉取广告开关成功
-     *
-     * @return
-     */
-  /*  public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (null == list || null == list.getData() || list.getData().size() <= 0)
-            return;
-        for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-            if (PositionId.KEY_GAME_JILI.equals(switchInfoList.getConfigKey())) {
-                initChuanShanJia(switchInfoList.getAdvertId());
-            }
-            if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                mIsOpen = switchInfoList.isOpen();
-            }
-        }
-    }*/
-
-    /**
-     * 拉取广告开关失败
-     *
-     * @return
-     */
-/*    public void getSwitchInfoListFail() {
-        ToastUtils.showShort(getString(R.string.net_error));
-        if (null == mSelectNameList || mSelectNameList.size() <= 0) {
-            mOpenTv.setEnabled(false);
-            mOpenTv.getBackground().setAlpha(75);
-        }
-        mIsAdError = true;
-    }*/
-
-    /**
-     * 初始化穿山甲
-     */
- /*   private void initChuanShanJia(String id) {
-        NiuDataAPI.onPageStart("gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
-        NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
-        //step1:初始化sdk
-        TTAdManager ttAdManager = TTAdManagerHolder.get();
-        //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
-//        TTAdManagerHolder.get().requestPermissionIfNecessary(this);
-        //step3:创建TTAdNative对象,用于调用广告请求接口
-        mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
-        loadAd(id, TTAdConstant.VERTICAL);
-    }*/
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -473,129 +410,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    /**
-     * 加载穿山甲激励视频广告
-     *
-     * @param codeId
-     * @param orientation
-     */
-  /*  private void loadAd(String codeId, int orientation) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", codeId, "穿山甲", "success", "gameboost_add_page", "gameboost_incentive_video_page");
-        //step4:创建广告请求参数AdSlot,具体参数含义参考文档
-        AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(codeId)
-                .setSupportDeepLink(true)
-                .setImageAcceptedSize(1080, 1920)
-                .setRewardName("金币") //奖励的名称
-                .setRewardAmount(3)  //奖励的数量
-                .setUserID("user123")//用户id,必传参数
-                .setMediaExtra("media_extra") //附加参数，可选
-                .setOrientation(orientation) //必填参数，期望视频的播放方向：TTAdConstant.HORIZONTAL 或 TTAdConstant.VERTICAL
-                .build();
-        //step5:请求广告
-        mTTAdNative.loadRewardVideoAd(adSlot, new TTAdNative.RewardVideoAdListener() {
-            @Override
-            public void onError(int code, String message) {
-                Log.d(TAG, "message=" + message);
-                mIsAdError = true;
-            }
-
-            //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
-            @Override
-            public void onRewardVideoCached() {
-                Log.d(TAG, "rewardVideoAd video cached");
-            }
-
-            //视频广告的素材加载完毕，比如视频url等，在此回调后，可以播放在线视频，网络不好可能出现加载缓冲，影响体验。
-            @Override
-            public void onRewardVideoAdLoad(TTRewardVideoAd ad) {
-                Log.d(TAG, "rewardVideoAd loaded");
-                mttRewardVideoAd = ad;
-                mttRewardVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
-
-                    @Override
-                    public void onAdShow() {
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", codeId, "穿山甲", "gameboost_add_page", "gameboost_incentive_video_page", " ");
-                        Log.d(TAG, "rewardVideoAd show");
-                    }
-
-                    @Override
-                    public void onAdVideoBarClick() {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", codeId, "穿山甲", "gameboost_add_page", "gameboost_incentive_video_page", "");
-                        Log.d(TAG, "rewardVideoAd bar click");
-                    }
-
-                    @Override
-                    public void onAdClose() {
-                        Log.d(TAG, "rewardVideoAd close");
-                        StatisticsUtils.trackClick("close_click", "游戏加速激励视频结束页关闭点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
-                        NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
-                        startClean();
-                    }
-
-                    //视频播放完成回调
-                    @Override
-                    public void onVideoComplete() {
-                        NiuDataAPI.onPageStart("gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
-                        Log.d(TAG, "rewardVideoAd complete");
-                    }
-
-                    @Override
-                    public void onVideoError() {
-                        Log.d(TAG, "rewardVideoAd error");
-                        mIsAdError = true;
-                    }
-
-                    //视频播放完成后，奖励验证回调，rewardVerify：是否有效，rewardAmount：奖励梳理，rewardName：奖励名称
-                    @Override
-                    public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                        Log.d(TAG, "verify:" + rewardVerify + " amount:" + rewardAmount + " name:" + rewardName);
-                    }
-
-                    @Override
-                    public void onSkippedVideo() {
-                        Log.d(TAG, "rewardVideoAd has onSkippedVideo");
-                    }
-                });
-                mttRewardVideoAd.setDownloadListener(new TTAppDownloadListener() {
-                    @Override
-                    public void onIdle() {
-                        mHasShowDownloadActive = false;
-                    }
-
-                    @Override
-                    public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
-                        if (!mHasShowDownloadActive) {
-                            mHasShowDownloadActive = true;
-                            Log.d(TAG, "下载中，点击下载区域暂停");
-                            StatisticsUtils.trackClick("download_click", "游戏加速激励视频结束页下载点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
-                        }
-                    }
-
-                    @Override
-                    public void onDownloadPaused(long totalBytes, long currBytes, String fileName, String appName) {
-                        Log.d(TAG, "下载暂停，点击下载区域继续");
-                    }
-
-                    @Override
-                    public void onDownloadFailed(long totalBytes, long currBytes, String fileName, String appName) {
-                        Log.d(TAG, "下载失败，点击下载区域重新下载");
-                    }
-
-                    @Override
-                    public void onDownloadFinished(long totalBytes, String fileName, String appName) {
-                        Log.d(TAG, "下载完成，点击下载区域重新下载");
-                    }
-
-                    @Override
-                    public void onInstalled(String fileName, String appName) {
-                        Log.d(TAG, "安装完成，点击下载区域打开");
-                    }
-                });
-            }
-        });
-    }*/
 
     /**
      * 保存加速的应用
@@ -784,34 +598,12 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         PreferenceUtil.saveGameQuikcenStart(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
-        if (isOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.game_quicken));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            String num = NumberUtils.mathRandom(25, 50);
-            PreferenceUtil.saveGameCleanPer(num);
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.game_quicken));
-            bundle.putString("num", num);
-            startActivity(NewCleanFinishActivity.class, bundle);
-        }
+        String num = NumberUtils.mathRandom(25, 50);
+        PreferenceUtil.saveGameCleanPer(num);
+        startActivity(new Intent(GameActivity.this, ScreenFinishBeforActivity.class)
+                .putExtra(ExtraConstant.TITLE, getString(R.string.game_quicken))
+                .putExtra(ExtraConstant.NUM, num));
         finish();
-    }
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0) return;
-        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
     @Override
@@ -841,7 +633,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         if (ivs.length == 3 && index <= 2 && index > 0) {
             Drawable drawable = ivs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                if (drawable.getAlpha() == 255) {
                 ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
                 animator.setTarget(drawable);
                 animator.setDuration(2000);
@@ -877,7 +668,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
                     }
                 });
-//                }
             }
         }
 

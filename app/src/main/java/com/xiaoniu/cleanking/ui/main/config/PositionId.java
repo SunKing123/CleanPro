@@ -26,6 +26,10 @@ public class PositionId {
     //热启动开屏广告
     public static final String HOT_CODE = "advert_position_hot_start";
 
+    public static final String DRAW_ONE_CODE = "advert_position_advert1";
+    public static final String DRAW_TWO_CODE = "advert_position_advert2";
+    public static final String DRAW_THREE_CODE = "advert_position_advert3";
+
     public static final String KEY_CLEAN_ALL = "page_immediately_complete";
     public static final String KEY_JIASU = "page_speed_up_complete";
     public static final String KEY_CQSD = "page_save_power_complete";
@@ -34,18 +38,25 @@ public class PositionId {
     public static final String KEY_COOL = "page_cool_complete";
     public static final String KEY_QQ = "page_qq_clear_complete";
     public static final String KEY_PHONE = "page_phone_clear_complete";
-    public static final String KEY_GAME_JILI = "page_speed_game_encourag";
     public static final String KEY_GAME = "page_speed_game_complete";
-    public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
-    public static final String KEY_NET_JILI = "page_net_speed_encourag";
     public static final String KEY_VIRUS = "page_virus_kill_complete";
     public static final String KEY_NET = "page_net_speed_complete";
+
+    public static final String KEY_CLEAN_ALL_SCREEN = "page_immediately_complete_screen";
+    public static final String KEY_PHONE_SCREEN = "page_phone_clear_complete_screen";
+    public static final String KEY_JIASU_SCREEN = "page_speed_up_complete_screen";
+    public static final String KEY_COOL_SCREEN = "page_cool_complete_screen";
+    public static final String KEY_WECHAT_SCREEN = "page_wechat_clean_complete_screen";
+    public static final String KEY_NOTIFY_SCREEN = "page_bar_clean_complete_screen";
+    public static final String KEY_CQSD_SCREEN = "page_save_power_complete_screen";
+    public static final String KEY_GAME_SCREEN = "page_speed_game_complete_screen";
     public static final String KEY_VIRUS_SCREEN = "page_virus_kill_screen";
     public static final String KEY_NET_SCREEN = "page_net_speed_screen";
+    public static final String KEY_QQ_SCREEN = "page_qq_clear_complete_screen";
+
+    public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
+    public static final String KEY_NET_JILI = "page_net_speed_encourag";
     public static final String KEY_RED_JILI = "page_pop_up_encourag";
+    public static final String KEY_GAME_JILI = "page_speed_game_encourag";
 
-
-    public static final String DRAW_ONE_CODE = "advert_position_advert1";
-    public static final String DRAW_TWO_CODE = "advert_position_advert2";
-    public static final String DRAW_THREE_CODE = "advert_position_advert3";
 }

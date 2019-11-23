@@ -273,6 +273,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         initVirus();
         initGeekAdSdk();
+        initGeekSdkTop(true); //暂时注释
+        initGeekSdkCenter();
     }
 
     /**
@@ -398,23 +400,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
-        Log.d("XiLei", "onResume");
-        if (mIsAllClean) {
-            initGeekSdkTop();
-        }
-        initGeekSdkCenter();
     }
 
     /**
      * 顶部广告 样式---大图嵌套图片_01_跑马灯
      */
-    private void initGeekSdkTop() {
+    private void initGeekSdkTop(boolean isAllClean) {
         Log.d("XiLei", "initGeekSdkTop");
+        if (isAllClean) {
+            Log.d("XiLei", "initGeekSdkTop2222222222");
+            StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
+        }
         if (null == getActivity() || null == mTopAdFramelayout) return;
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
+                Log.d(TAG, "adSuccess---1");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                 if (null != adManager && null != adManager.getAdView()) {
                     mTopContentView.setVisibility(View.GONE);
@@ -426,17 +428,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void adExposed(AdInfo info) {
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
+                Log.d(TAG, "adExposed---1");
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
+                Log.d(TAG, "adClicked---1");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
             }
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-
+                Log.d(TAG, "adError---1");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
             }
         });
     }
@@ -652,6 +657,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
         }
+        if (mIsAllClean) {
+            initGeekSdkTop(false);
+        }
+        initGeekSdkCenter();
     }
 
     /**
@@ -676,7 +685,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
         Log.d("XiLei", "changeLifecyEvent");
         if (lifecycEvent.isActivity()) {
-            mIsAllClean = false;
             mTopContentView.setVisibility(VISIBLE);
             mTopAdFramelayout.removeAllViews();
             mTopAdFramelayout.setVisibility(View.GONE);
@@ -1072,6 +1080,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (cleanEvent.isCleanAminOver()) {
                 Log.d("XiLei", "onEventClean");
                 mIsAllClean = true;
+                initGeekSdkTop(true);
                 showTextView01();
                 tvNowClean.setVisibility(View.GONE);
 //                mLottieHomeView.useHardwareAcceleration(true);
@@ -1418,7 +1427,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 Log.d(TAG, "-----adClose-----");
                 NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_end_page", "view_page", "网络加速激励视频结束页浏览");
                 StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
-                startActivity(VirusKillActivity.class);
+                startActivity(NetWorkActivity.class);
             }
 
             @Override
