@@ -100,6 +100,7 @@
         <activity
             android:name=".ui.main.activity.PhoneAccessActivity"
             android:launchMode="singleTask"
+            android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
@@ -283,13 +284,14 @@
 
         <activity
             android:name=".ui.newclean.activity.NowCleanActivity"
-
+            android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
         <!--            android:launchMode="singleTask"-->
         <activity
             android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
+            android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
 
         <activity
@@ -321,6 +323,7 @@
         <activity
             android:name=".ui.main.activity.VirusKillActivity"
             android:configChanges="orientation|screenSize"
+            android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.NetWorkActivity"

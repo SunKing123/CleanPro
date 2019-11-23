@@ -394,12 +394,29 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             bundle.putString("title", getString(R.string.tool_one_key_speed));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);
         } else {
-            AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_one_key_speed));
-            bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
-            bundle.putString("unit", unit);
-            startActivity(NewCleanFinishActivity.class, bundle);
+            /**
+             * 根据TaskId跳转
+             */
+            if (mContext.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3
+                Intent adIsementIntent = new Intent(mContext, CleanFinishAdvertisementActivity.class);
+                adIsementIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                adIsementIntent.putExtras(bundle);
+                startActivity(adIsementIntent);
+            }else{
+                AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
+                bundle.putString("unit", unit);
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+
+
         }
         finish();
     }

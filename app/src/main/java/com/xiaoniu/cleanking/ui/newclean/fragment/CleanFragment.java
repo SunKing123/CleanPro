@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -42,10 +43,12 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -293,11 +296,26 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 bundle.putString("title", getString(R.string.tool_suggest_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
             } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
-                bundle.putString("num", checkCountEntity.getTotalSize());
-                bundle.putString("unit", checkCountEntity.getUnit());
-                startActivity(NewCleanFinishActivity.class, bundle);
+                /**
+                 * 根据TaskId跳转
+                 */
+                if (mActivity.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3
+                    Intent adIsementIntent = new Intent(mContext, CleanFinishAdvertisementActivity.class);
+                    adIsementIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_suggest_clean));
+                    adIsementIntent.putExtras(bundle);
+                    mActivity.startActivity(adIsementIntent);
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
+                    bundle.putString("num", checkCountEntity.getTotalSize());
+                    bundle.putString("unit", checkCountEntity.getUnit());
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
             }
             getActivity().finish();
         }
