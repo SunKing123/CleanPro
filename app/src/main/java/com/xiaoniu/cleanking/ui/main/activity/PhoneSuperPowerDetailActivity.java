@@ -271,7 +271,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             case R.id.tv_super_power:
                 StatisticsUtils.trackClick("optimization_button_click", "用户在省电扫描完成后的诊断页点击【优化】按钮", sourcePage, currentPage);
                 sSelectedList = mPowerCleanAdapter.getSelectedData();
-
                 for (int i = 0; i < sSelectedList.size(); i++) {
                     MultiItemInfo itemInfo = sSelectedList.get(i);
                     if (itemInfo instanceof PowerChildInfo) {
@@ -284,7 +283,6 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 event.setType("power");
                 event.setFlag(0);
                 EventBus.getDefault().post(event);
-
                 PreferenceUtil.saveLengthenAwaitTime(String.valueOf(tvMini.getText().toString()));
                 Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
                 intent.putExtra("processNum", sSelectedList.size());
@@ -426,10 +424,31 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             finish();
             return;
         }
-        mRlResult.setVisibility(View.GONE);
+        //直接执行优化操作
+        sSelectedList = mPowerCleanAdapter.getSelectedData();
+        for (int i = 0; i < sSelectedList.size(); i++) {
+            MultiItemInfo itemInfo = sSelectedList.get(i);
+            if (itemInfo instanceof PowerChildInfo) {
+                PowerChildInfo childInfo = (PowerChildInfo) itemInfo;
+                CleanUtil.killAppProcesses(childInfo.packageName, 0);
+            }
+        }
+        //恢复状态栏颜色
+        NotificationEvent event = new NotificationEvent();
+        event.setType("power");
+        event.setFlag(0);
+        EventBus.getDefault().post(event);
+
+        PreferenceUtil.saveLengthenAwaitTime(String.valueOf(tvMini.getText().toString()));
+        Intent intent = new Intent(mContext, PhoneSuperSavingNowActivity.class);
+        intent.putExtra("processNum", sSelectedList.size());
+        startActivity(intent);
+        finish();
+
+     /*   mRlResult.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mLlBottom.setVisibility(View.VISIBLE);
-        showPowerAnim();
+        showPowerAnim();*/
     }
 
     /**

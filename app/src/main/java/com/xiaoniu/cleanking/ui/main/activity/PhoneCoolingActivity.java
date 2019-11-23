@@ -325,7 +325,19 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                setViewTrans();
+//                setViewTrans();
+
+                /**
+                 * 直接执行降温操作
+                 */
+                if (mRunningProcess == null) return;
+                //立即降温
+                for (FirstJunkInfo firstJunkInfo : mRunningProcess) {
+                    CleanUtil.killAppProcesses(firstJunkInfo.getAppPackageName(), firstJunkInfo.getPid());
+                }
+                //手机降温
+                AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
+                setViewPlay();
             }
 
             @Override
@@ -618,7 +630,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @OnClick(R.id.text_cool_now)
     public void onMLayoutCoolClicked() {
 
-        StatisticsUtils.trackClick("cooling_button_click", "用户在降温扫描完成后的诊断页点击【降温】按钮", sourcePageId, currentPageId);
+//        StatisticsUtils.trackClick("cooling_button_click", "用户在降温扫描完成后的诊断页点击【降温】按钮", sourcePageId, currentPageId);
 
         if (mRunningProcess == null) return;
         //立即降温
