@@ -1242,6 +1242,8 @@ public class PreferenceUtil {
         }
     }
 
+
+
     //是否上报device_info
     public static void saveIsPushDeviceInfo() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_PUSH_DEVICE_INFO, Context.MODE_PRIVATE);
