@@ -649,7 +649,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-
+        LogUtils.i("-zzh-"+aMapLocation.getErrorInfo());
     }
 
 

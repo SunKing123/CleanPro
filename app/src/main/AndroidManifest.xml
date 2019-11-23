@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xiaoniu.cleanking">
 
+
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"
@@ -372,10 +373,16 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
+
+        <!-- 高德地图配置 -->
+        <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
+        <service android:name="com.amap.api.location.APSService" />
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="6c0f162f789cb257e51ceecc1e6b88ec" />
-
+            android:value="3dbcef9fb248acc2c914b9b4ca73ced2" />
+      <!--  <service
+            android:name="com.amap.api.location.APSService"
+            android:foregroundServiceType="location" />-->
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />

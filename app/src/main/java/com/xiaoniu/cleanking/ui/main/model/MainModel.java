@@ -19,14 +19,17 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.SystemUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -191,6 +194,26 @@ public class MainModel extends BaseModel {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.pushDeviceInfo(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
+
+
+    /**
+     * 上报Device消息
+     *
+     * @param
+     */
+//    public void uploadPositionCity(Common4Subscriber<WeatherResponseContent> commonSubscriber) {
+/*        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("uuid", UUID.randomUUID().toString());
+        requestParams.put("latitude", "31.20941");
+        requestParams.put("longitude", "121.625985");
+        requestParams.put("areaCode", "101020600");
+        requestParams.put("position", "");
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), mGson.toJson(requestParams));*/
+//        mService.getWeather72HourList("101020600").compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+//    }
+
+
+
 
 
 

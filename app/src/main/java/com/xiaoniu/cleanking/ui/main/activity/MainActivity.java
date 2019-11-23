@@ -227,7 +227,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //初始插屏广告开关
         mPresenter.getScreentSwitch();
         //获取定位权限
-//        mPresenter.requestLocationPermission();
+        mPresenter.requestLocationPermission();
         //测试入口
      /*   if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);

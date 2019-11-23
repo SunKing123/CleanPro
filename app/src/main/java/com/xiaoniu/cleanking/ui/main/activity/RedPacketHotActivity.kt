@@ -114,7 +114,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
      * 初始化广告sdk
      */
     private fun initGeekAdSdk() {
-        if (null == mAdManager) return
+//        if (null == mAdManager) return
         NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_page", "red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         mAdManager = GeekAdSdk.getAdsManger()

@@ -72,7 +72,7 @@
                     android:longClickable="false"
                     android:singleLine="true"
                     android:gravity="center"
-                    android:text="24°"
+                    android:text="16°"
                     android:textColor="@color/white"
                     android:textSize="42sp" />
 
@@ -94,7 +94,7 @@
                     android:singleLine="true"
                     android:paddingLeft="12dp"
                     android:gravity="center"
-                    android:text="晴"
+                    android:text="多云"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
 
