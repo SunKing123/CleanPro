@@ -427,6 +427,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         NiuDataAPI.onPageStart(viewPageEventCode, viewPageEventName);
         NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
+        if (null == mBgTitle) return;
         int bottom = mBgTitle.getBottom();
         int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(0, startHeight - bottom);
@@ -439,6 +440,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         }
         anim.setDuration(500);
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        if (null == mLayoutCoolView) return;
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) mLayoutCoolView.getLayoutParams();
         anim.addUpdateListener(animation -> {
             rlp.height = (int) animation.getAnimatedValue();
