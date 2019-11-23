@@ -96,6 +96,11 @@ public class NativeAdManger implements AdManager {
 
     private boolean firstRequestAd = true;
 
+    /**
+     * 插屏的百分比
+     */
+    private String mProgress;
+
 
     /**
      * 创建广告View
@@ -112,6 +117,7 @@ public class NativeAdManger implements AdManager {
             }
             ((CHJAdView) mAdView).setFullScreen(isFullScreen);
             ((CHJAdView) mAdView).setShowTimeSeconds(showTimeSeconds);
+            ((CHJAdView) mAdView).setmProgress(mProgress);
         } else if (Constants.AdType.YouLiangHui.equals(adType)) {
             mAdView = new YlhAdView(GeekAdSdk.getContext(), activity, adStyle, appId, mAdId);
         } else {
@@ -321,6 +327,43 @@ public class NativeAdManger implements AdManager {
     public void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener) {
         mAdListener = listener;
         try {
+            mActivity = activity;
+            this.isFullScreen = isFullScreen;
+            this.showTimeSeconds = showTimeSeconds;
+            //创建view
+            adParentView = new RelativeLayout(GeekAdSdk.getContext());
+            //获取本地配置信息
+            ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(position);
+            if (mConfigInfoBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                }
+                return;
+            }
+            //当前广告位所对应的配置信息 存储到curAdlist
+            adStyle = mConfigInfoBean.getAdStyle();
+            adRequestTimeOut = mConfigInfoBean.getAdRequestTimeOut();
+            adsInfoslist.clear();
+            adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
+            LogUtils.d(TAG, "-----loadCustomInsertScreenAd--------");
+            againRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+        }
+    }
+
+    @Override
+    public void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener, String... pos) {
+        mAdListener = listener;
+        try {
+            String progress = ""; //进度
+            if (!CollectionUtils.isEmpty(pos)) {
+                progress = pos[0];
+            }
+            mProgress = progress;
             mActivity = activity;
             this.isFullScreen = isFullScreen;
             this.showTimeSeconds = showTimeSeconds;

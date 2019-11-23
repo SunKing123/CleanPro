@@ -27,5 +27,7 @@ public interface AdManager {
 
     void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener);
 
+    void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener, String... pos);
+
     ViewGroup getAdView();
 }
