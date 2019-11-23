@@ -696,6 +696,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }*/
             if (!isFinishing()) {
 //                WebDialogManager.getInstance().showWebDialog(this, redPacketEntity.getData().get(0).getHtmlUrl() + redPacketEntity.getData().get(0).getImgUrls().get(count));
+                Log.d("XiLei","11111111111111111");
                 startActivity(new Intent(this, RedPacketHotActivity.class));
             }
         }

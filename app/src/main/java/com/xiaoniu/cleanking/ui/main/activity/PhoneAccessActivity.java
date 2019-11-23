@@ -40,20 +40,17 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -121,10 +118,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     TextView mTvTitleName;
     @BindView(R.id.rl_anim_bg)
     RelativeLayout mRlAnimBg;
-    /*    @BindView(R.id.tv_speed)
-        TextView mTvSpeed;*/
-//    @BindView(R.id.line_access)
-//    TextView mLineAccess;
     @BindView(R.id.n_scroll_view)
     NestedScrollView mNestedScrollView;
 
@@ -140,9 +133,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     private String strUnit;
     private boolean isShowListInfo = false; //是否扫描结束
     private boolean isStartClean = false; //是否开始加速
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //所有应用所占内存大小
     private long mTotalSizesCleaned = 0; //扫描的总大小
     private boolean mIsFinish; //是否点击了返回键
 
@@ -245,8 +235,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         NiuDataAPI.onPageStart("boost_scan_page_view_page", "用户在加速扫描页浏览");
         NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_page", "boost_scan_page_view_page", "用户在加速扫描页浏览");
         tv_size.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -375,30 +363,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             PreferenceUtil.saveCleanTime();
         }
         PreferenceUtil.saveCleanJiaSuUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_one_key_speed));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            AppHolder.getInstance().setOtherSourcePageId("once_accelerate_page");
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_one_key_speed));
-            bundle.putString("num", tv_size != null ? tv_size.getText().toString() : num);
-            bundle.putString("unit", unit);
-            startActivity(NewCleanFinishActivity.class, bundle);
-        }
+        startActivity(new Intent(this, ScreenFinishBeforActivity.class)
+                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed))
+                .putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num)
+                .putExtra(ExtraConstant.UNIT, unit));
         finish();
     }
 
@@ -516,7 +486,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (listInfo == null || acceview == null) return;
         acceview.setListInfoSize(listInfo.size());
         if (listInfo.size() != 0) {
-            mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             computeTotalSize(listInfo);
             setAdapter(listInfo);
         }

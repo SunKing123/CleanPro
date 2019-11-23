@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
@@ -24,7 +23,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.statistic.NiuDataAPI
-import kotlinx.android.synthetic.main.activity_hot_redpacket.*
 import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 import org.simple.eventbus.ThreadMode
@@ -84,7 +82,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 mCount = Random().nextInt(AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size - 1)
             }
         }
-        Log.d("XiLei", "mCount111111=" + mCount)
         if (!isFinishing()) {
             NiuDataAPI.onPageStart("red_envelopes_page_view_page", "红包弹窗浏览")
             WebDialogManager.getInstance().showWebDialog(this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount])
@@ -120,7 +117,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
      * 初始化广告sdk
      */
     private fun initGeekAdSdk() {
-        if(null == mAdManager) return
+        if (null == mAdManager) return
         NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_page", "red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         mAdManager = GeekAdSdk.getAdsManger()
@@ -174,9 +171,9 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     }
 
     override fun finishActivity() {
+        finish()
         NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page", "red_envelopes_page_view_page", "红包弹窗浏览")
         StatisticsUtils.trackClick("close_click", "红包弹窗按钮关闭", "hot_splash_page", "red_envelopes_page")
-        finish()
     }
 
     override fun onDestroy() {

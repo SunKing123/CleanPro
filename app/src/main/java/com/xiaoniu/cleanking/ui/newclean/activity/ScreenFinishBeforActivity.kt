@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity
 
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
@@ -15,8 +16,10 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.ScreenFinishBeforPresenter
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
+import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.FileQueryUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
+import com.xiaoniu.common.utils.StatisticsUtils
 import java.util.*
 
 /**
@@ -33,6 +36,11 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     private var mNotifySize = 0 //通知条数
 
     private var mTitle = ""
+    private var mNum = ""
+    private var mUnit = ""
+    private var mIsOpen = false //插屏广告开关（广告位3）
+    var mSourcePage = ""
+    var mCurrentPage = "insert_screen_ad_in_front_of_result_page"
     private val TAG = "GeekSdk"
 
     override fun inject(activityComponent: ActivityComponent?) {
@@ -44,7 +52,14 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     }
 
     override fun initView() {
-        mTitle = intent.getStringExtra("title")
+        mSourcePage = AppHolder.getInstance().cleanFinishSourcePageId
+        mTitle = intent.getStringExtra(ExtraConstant.TITLE)
+        if (!TextUtils.isEmpty(intent.getStringExtra(ExtraConstant.NUM))) {
+            mNum = intent.getStringExtra(ExtraConstant.NUM)
+        }
+        if (!TextUtils.isEmpty(intent.getStringExtra(ExtraConstant.UNIT))) {
+            mUnit = intent.getStringExtra(ExtraConstant.UNIT)
+        }
         initGeegAd()
         mFileQueryUtils = FileQueryUtils()
         mPowerSize = mFileQueryUtils.runningProcess.size
@@ -56,9 +71,97 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
     private fun initGeegAd() {
         var isOpen = false;
-        for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
-            if (mTitle.equals(getString(R.string.virus_kill)) && PositionId.KEY_VIRUS_SCREEN == switchInfoList.configKey) {
-                isOpen = switchInfoList.isOpen
+        if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data && AppHolder.getInstance().switchInfoList.data.size > 0) {
+            for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
+                if (mTitle.equals(getString(R.string.tool_suggest_clean))) {
+                    if (PositionId.KEY_CLEAN_ALL_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_CLEAN_ALL == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_phone_clean))) {
+                    if (PositionId.KEY_PHONE_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_PHONE == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_one_key_speed))) {
+                    if (PositionId.KEY_JIASU_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_JIASU == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_phone_temperature_low))) {
+                    if (PositionId.KEY_COOL_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_COOL == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_chat_clear))) {
+                    if (PositionId.KEY_WECHAT_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_WECHAT == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_notification_clean))) {
+                    if (PositionId.KEY_NOTIFY_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_NOTIFY == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_super_power_saving))) {
+                    if (PositionId.KEY_CQSD_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_CQSD == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.game_quicken))) {
+                    if (PositionId.KEY_GAME_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_GAME == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.virus_kill))) {
+                    if (PositionId.KEY_VIRUS_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_VIRUS == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.network_quicken))) {
+                    if (PositionId.KEY_NET_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_NET == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                } else if (mTitle.equals(getString(R.string.tool_qq_clear))) {
+                    if (PositionId.KEY_QQ_SCREEN == switchInfoList.configKey) {
+                        isOpen = switchInfoList.isOpen
+                    }
+                    if (PositionId.KEY_QQ == switchInfoList.configKey
+                            && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
+                        mIsOpen = switchInfoList.isOpen
+                    }
+                }
             }
         }
         if (isOpen) {
@@ -86,48 +189,46 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             //暂时这样
             override fun adSuccess(info: AdInfo) {
                 Log.d(TAG, "-----adSuccess-----=" + info.adSource)
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
             }
 
             override fun adExposed(info: AdInfo) {
                 Log.d(TAG, "-----adExposed-----")
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
             }
 
             override fun adClicked(info: AdInfo) {
                 Log.d(TAG, "-----adClicked-----")
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
             }
 
             override fun adClose(info: AdInfo) {
                 Log.d(TAG, "-----adClose-----")
+                StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
                 goFinishActivity()
             }
 
             override fun adError(errorCode: Int, errorMsg: String) {
                 Log.d(TAG, "-----adError-----$errorMsg")
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", mSourcePage, mCurrentPage)
                 goFinishActivity()
             }
         })
     }
 
     private fun goFinishActivity() {
-        var isOpen = false
-        if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data && AppHolder.getInstance().switchInfoList.data.size > 0) {
-            for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
-                if (PositionId.KEY_VIRUS == switchInfoList.configKey && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
-                    isOpen = switchInfoList.isOpen
-                }
-            }
-        }
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.virus_kill), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
             startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
-            finish()
         } else {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
+            bundle.putString("num", mNum)
+            bundle.putString("unit", mUnit)
             startActivity(NewCleanFinishActivity::class.java, bundle)
-            finish()
         }
+        finish()
     }
 
     override fun netError() {

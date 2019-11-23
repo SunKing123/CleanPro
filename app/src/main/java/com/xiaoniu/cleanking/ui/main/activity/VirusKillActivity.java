@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.VirusKillPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -47,15 +48,8 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @BindView(R.id.iv_scan_bg01)
     ImageView ivScanBg01;
 
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //使用内存占总RAM的比例
-    private FileQueryUtils mFileQueryUtils;
     private ImageView[] mIvs;
     private ObjectAnimator mObjectAnimator;
-    private AdManager mAdManager;
-
-    private String TAG = "GeekSdk";
 
     @Override
     protected int getLayoutId() {
@@ -70,16 +64,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
-        mAdManager = GeekAdSdk.getAdsManger();
         initLottie();
-        mFileQueryUtils = new FileQueryUtils();
-        if (Build.VERSION.SDK_INT < 26) {
-            mPresenter.getAccessListBelow();
-        }
-        if (null != mFileQueryUtils) {
-            mPowerSize = mFileQueryUtils.getRunningProcess().size();
-        }
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
     }
 
     private void initLottie() {
@@ -106,16 +91,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
                 }
-                startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra("title", getString(R.string.virus_kill)));
-              /*  for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_VIRUS_SCREEN.equals(switchInfoList.getConfigKey())) {
-                        if (switchInfoList.isOpen()) {
-                            loadGeekAd();
-                        } else {
-                            goFinishActivity();
-                        }
-                    }
-                }*/
+                startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
             }
 
             @Override
@@ -128,68 +104,6 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
             }
         });
-    }
-
-    /**
-     * 全屏插屏广告
-     */
-/*    private void loadGeekAd() {
-        if (null == mAdManager) return;
-        mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, new AdListener() { //暂时这样
-            @Override
-            public void adSuccess(AdInfo info) {
-                Log.d(TAG, "-----adSuccess-----");
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed-----");
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked-----");
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                Log.d(TAG, "-----adClose-----");
-                goFinishActivity();
-            }
-
-            @Override
-            public void adError(int errorCode, String errorMsg) {
-                Log.d(TAG, "-----adError-----" + errorMsg);
-            }
-        });
-    }*/
-
-   /* private void goFinishActivity() {
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.virus_kill), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.virus_kill));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.virus_kill));
-            startActivity(NewCleanFinishActivity.class, bundle);
-        }
-        finish();
-    }*/
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0 || null == mFileQueryUtils) return;
-        mRamScale = mFileQueryUtils.computeTotalSize(listInfo);
     }
 
     public void showColorChange(int index) {

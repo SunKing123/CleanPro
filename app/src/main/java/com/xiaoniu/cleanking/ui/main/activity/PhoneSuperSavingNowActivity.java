@@ -3,13 +3,11 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -30,18 +28,13 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -57,13 +50,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 超强省电中...
@@ -94,9 +81,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private RoundedImageView mIvIcon2;
     private boolean isFinish = false;
     private int mTime = 800;
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //所有应用所占内存大小
 
     String sourcePage = "";
     String currentPage = "";
@@ -153,13 +137,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         currentPage = "powersave_animation_page";
         sysReturnEventName = "用户在省电动画页返回";
         returnEventName = "用户在省电动画页返回";
-
-
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
-        if (Build.VERSION.SDK_INT < 26) {
-            getAccessListBelow();
-        }
         mAppBarLayout = findViewById(R.id.app_power_saving_bar_layout);
         mBack = findViewById(R.id.iv_back);
         mBtnCancel = findViewById(R.id.btn_cancel);
@@ -402,31 +379,10 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             PreferenceUtil.savePowerCleanTime();
         }
         PreferenceUtil.saveCleanPowerUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");
-        if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_super_power_saving));
-            startActivity(CleanFinishAdvertisementActivity.class, bundle);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_super_power_saving));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            Intent intent = new Intent(PhoneSuperSavingNowActivity.this, NewCleanFinishActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
+        startActivity(new Intent(this, ScreenFinishBeforActivity.class)
+                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_super_power_saving)));
         finish();
     }
 
@@ -531,57 +487,4 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         });
     }
 
-    /**
-     * 获取到可以加速的应用名单Android O以下的获取最近使用情况
-     */
-    @SuppressLint("CheckResult")
-    public void getAccessListBelow() {
-//        mView.showLoadingDialog();
-        Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
-            //获取到可以加速的应用名单
-            FileQueryUtils mFileQueryUtils = new FileQueryUtils();
-            //文件加载进度回调
-            mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
-                @Override
-                public void currentNumber() {
-
-                }
-
-                @Override
-                public void increaseSize(long p0) {
-
-                }
-
-                @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
-                public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
-
-                }
-            });
-            ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
-            if (listInfo == null) {
-                listInfo = new ArrayList<>();
-            }
-            e.onNext(listInfo);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(strings -> {
-                    getAccessListBelow(strings);
-                });
-    }
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0) return;
-        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-    }
 }

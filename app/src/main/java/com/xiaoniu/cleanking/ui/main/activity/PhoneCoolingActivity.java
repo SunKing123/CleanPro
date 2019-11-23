@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -43,24 +42,19 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -73,8 +67,6 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -174,7 +166,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     String viewPageEventName = "";
     String viewPageEventCode = "";
 
-
     private int position_bluetooth = 2;
     private int position_location = 3;
     private int position_wifi = 4;
@@ -189,9 +180,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      * 数字增加动画
      */
     private ValueAnimator numberAnimator;
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale; //所有应用所占内存大小
 
     @Override
     protected int getLayoutId() {
@@ -201,11 +189,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     @Override
     protected void initView() {
 
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
-        if (Build.VERSION.SDK_INT < 26) {
-            mPresenter.getAccessListBelow();
-        }
         Intent intent = getIntent();
         if (intent != null) {
             String notification = intent.getStringExtra("NotificationService");
@@ -780,17 +763,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
                 PreferenceUtil.saveCleanCoolUsed(true);
-                boolean isOpen = false;
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
-
-
                 //恢复状态栏状态
                 NotificationEvent event = new NotificationEvent();
                 event.setType("cooling");
@@ -799,18 +771,8 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
                 AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(PhoneCoolingActivity.this, getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
-                } else {
-                    AppHolder.getInstance().setCleanFinishSourcePageId("cool_finish_annimation_page");
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-                    bundle.putString("num", "");
-                    bundle.putString("unit", "");
-                    startActivity(NewCleanFinishActivity.class, bundle);
-                }
+                startActivity(new Intent(PhoneCoolingActivity.this, ScreenFinishBeforActivity.class)
+                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low)));
                 finish();
             }
 
@@ -824,12 +786,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
             }
         });
-    }
-
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0) return;
-        mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
 }
