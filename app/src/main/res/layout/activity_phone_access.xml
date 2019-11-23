@@ -11,6 +11,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -128,6 +129,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:scrollbarStyle="outsideOverlay"
+        android:visibility="invisible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
@@ -191,7 +193,7 @@
         android:background="@color/white"
         android:paddingTop="@dimen/dimen_5dp"
         android:paddingBottom="@dimen/dimen_5dp"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <View
             android:id="@+id/viewline"

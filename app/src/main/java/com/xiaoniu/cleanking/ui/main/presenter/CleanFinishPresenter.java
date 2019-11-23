@@ -3,11 +3,9 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -38,33 +36,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList() {
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                mView.getSwitchInfoListSuccess(switchInfoList);
-                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getSwitchInfoListFail();
-            }
-        });
-    }
-    /**
      * 插屏广告开关
      */
     public void getScreentSwitch() {
@@ -81,12 +52,10 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
             @Override
             public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
             }
 
             @Override
             public void netConnectError() {
-                mView.getSwitchInfoListFail();
             }
         });
     }

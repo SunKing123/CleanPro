@@ -7,7 +7,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -29,12 +28,10 @@ import com.xiaoniu.cleanking.ui.main.activity.QQCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QQCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
@@ -45,11 +42,13 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.WxAndQqScanPathInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.PrefsCleanUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -209,36 +208,9 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             long totalSize = 0;
             totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
             if (totalSize == 0) {
-
-                boolean isOpen = false;
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
-
-                int mNotifySize = 0; //通知条数
-                int mPowerSize = 0; //耗电应用数
-                int mRamScale = 0; //使用内存占总RAM的比例
-                if (null != getIntent()) {
-                    mRamScale = getIntent().getIntExtra("mRamScale", 0);
-                    mNotifySize = getIntent().getIntExtra("mNotifySize", 0);
-                    mPowerSize = getIntent().getIntExtra("mPowerSize", 0);
-                }
-                if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_qq_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.tool_qq_clear));
-                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
-                } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.tool_qq_clear));
-                    bundle.putString("num", "");
-                    bundle.putString("unit", "");
-                    startActivity(NewCleanFinishActivity.class, bundle);
-                }
+                EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+                startActivity(new Intent(this, ScreenFinishBeforActivity.class)
+                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_qq_clear)));
                 finish();
             } else {
                 if (selectSize == 0) return;

@@ -123,11 +123,13 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
             override fun adSuccess(info: AdInfo?) {
                 Log.d(TAG, "-----adSuccess-----")
+                if (null == info) return
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info!!.adId, info.adSource, "success", "hot_splash_page", "red_envelopes_page_video_page")
             }
 
             override fun adExposed(info: AdInfo?) {
                 Log.d(TAG, "-----adExposed-----")
+                if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", " ")
             }
 
@@ -137,12 +139,16 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
             override fun adClicked(info: AdInfo?) {
                 Log.d(TAG, "-----adClicked-----")
+                if (null == info) return
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", " ")
             }
 
             override fun adClose(info: AdInfo?) {
                 Log.d(TAG, "-----adClose-----")
-                StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", " ")
+                NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_end_page", "red_envelopes_page_video_end_page_view_page", "红包弹窗激励视频结束页浏览")
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", " ")
+                }
                 if (!isFinishing()) {
                     AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
                     startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
@@ -161,7 +167,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
             }
 
             override fun onVideoComplete(info: AdInfo?) {
-
+                NiuDataAPI.onPageStart("red_envelopes_page_video_end_page_view_page", "红包弹窗激励视频结束页浏览")
             }
         })
     }

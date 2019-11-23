@@ -424,7 +424,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adSuccess(AdInfo info) {
                 Log.d(TAG, "adSuccess---1");
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                }
                 if (null != adManager && null != adManager.getAdView()) {
                     mTopContentView.setVisibility(View.GONE);
                     mTopAdFramelayout.setVisibility(VISIBLE);
@@ -436,12 +438,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "adExposed---1");
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "adClicked---1");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
             }
 
@@ -472,7 +476,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         adManager.loadAd(getActivity(), "homepage_ad_2", new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                }
                 if (null != adManager && null != adManager.getAdView()) {
                     mCenterAdFramelayout.setVisibility(VISIBLE);
                     mCenterAdFramelayout.removeAllViews();
@@ -482,18 +488,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void adExposed(AdInfo info) {
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "adClicked");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
             }
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "fail", "home_page", "home_page");
             }
         });
     }
@@ -777,23 +785,35 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             switch (mVirusPoistion) {
                 case 0:
                     StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
-                            if (switchInfoList.isOpen()) {
-                                loadGeekAd();
-                            } else {
-                                startActivity(VirusKillActivity.class);
+                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                            || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                            || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+                        startActivity(VirusKillActivity.class);
+                    } else {
+                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                            if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
+                                if (switchInfoList.isOpen()) {
+                                    loadGeekAd();
+                                } else {
+                                    startActivity(VirusKillActivity.class);
+                                }
                             }
                         }
                     }
                     break;
                 case 1:
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
-                            if (switchInfoList.isOpen()) {
-                                loadGeekAdNet();
-                            } else {
-                                startActivity(NetWorkActivity.class);
+                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                            || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                            || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+                        startActivity(NetWorkActivity.class);
+                    } else {
+                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                            if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
+                                if (switchInfoList.isOpen()) {
+                                    loadGeekAdNet();
+                                } else {
+                                    startActivity(NetWorkActivity.class);
+                                }
                             }
                         }
                     }
@@ -1361,18 +1381,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adSuccess(AdInfo info) {
                 Log.d(TAG, "-----adSuccess-----");
+                if (null == info) return;
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "virus_killing_video_page");
             }
 
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
             }
 
@@ -1380,7 +1403,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
                 NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
-                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+                }
                 startActivity(VirusKillActivity.class);
             }
 
@@ -1421,18 +1446,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adSuccess(AdInfo info) {
                 Log.d(TAG, "-----adSuccess-----");
+                if (null == info) return;
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "network_acceleration_video_page");
             }
 
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
             }
 
@@ -1440,7 +1468,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
                 NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_end_page", "view_page", "网络加速激励视频结束页浏览");
-                StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
+                }
                 startActivity(NetWorkActivity.class);
             }
 

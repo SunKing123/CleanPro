@@ -12,23 +12,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.VirusKillPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -92,6 +85,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView.clearAnimation();
                 }
                 startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
+                finish();
             }
 
             @Override
