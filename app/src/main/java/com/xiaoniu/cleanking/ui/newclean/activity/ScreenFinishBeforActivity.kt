@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -226,6 +227,10 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
             startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
+        } else if (this.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3_锁屏跳转
+            val bundle = Bundle()
+            bundle.putString("title", mTitle)
+            startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
         } else {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
@@ -234,6 +239,27 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             startActivity(NewCleanFinishActivity::class.java, bundle)
         }
         finish()
+
+        /* /**
+                 * 根据TaskId跳转
+                 */
+                if (mActivity.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3
+                    Intent adIsementIntent = new Intent(mContext, CleanFinishAdvertisementActivity.class);
+                    adIsementIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_suggest_clean));
+                    adIsementIntent.putExtras(bundle);
+                    mActivity.startActivity(adIsementIntent);
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
+                    bundle.putString("num", checkCountEntity.getTotalSize());
+                    bundle.putString("unit", checkCountEntity.getUnit());
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }*/
     }
 
     override fun netError() {

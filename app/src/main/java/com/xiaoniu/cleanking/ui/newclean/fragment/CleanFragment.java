@@ -20,16 +20,19 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
@@ -258,6 +261,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             PreferenceUtil.saveNowCleanTime();
         }
+        //设置锁屏数据
+        LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
+        btnInfo.setNormal(true);
+        btnInfo.setCheckResult("500");
+        PreferenceUtil.getInstants().save("lock_pos01",new Gson().toJson(btnInfo));
 
         //状态栏恢复正常
         NotificationEvent event = new NotificationEvent();

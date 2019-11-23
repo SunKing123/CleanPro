@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.keeplive.receive;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.geek.push.entity.PushMsg;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.jpush.JPushReceiver;
@@ -28,6 +30,7 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
@@ -261,6 +264,7 @@ public class TimingReceiver extends BroadcastReceiver {
     /**
      * 一键加速
      */
+    @SuppressLint("CheckResult")
     public void getAccessListBelow(PushSettingList.DataBean dataBean, Context cxt) {
         //8.0以下 && 已经开启权限
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && PermissionUtils.isUsageAccessAllowed(cxt)) {
@@ -304,7 +308,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(list -> {
                         int computeTotalSize = mFileQueryUtils.computeTotalSize(list);
-
+                        LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(1);
                         if (computeTotalSize > dataBean.getThresholdNum()) {
 //                            String value = String.format("%d%% %n", computeTotalSize);
                             String push_content = mContext.getString(R.string.push_content_access, computeTotalSize);
@@ -312,7 +316,12 @@ public class TimingReceiver extends BroadcastReceiver {
                             Map<String, String> actionMap = new HashMap<>();
                             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY);
                             createNotify(mContext, push_content, actionMap,mContext.getString(R.string.push_btn_access));
+                            btnInfo.setNormal(false);
+                        }else{
+                            btnInfo.setNormal(true);
                         }
+                        btnInfo.setCheckResult(String.valueOf(computeTotalSize));
+                        PreferenceUtil.getInstants().save("lock_pos02",new Gson().toJson(btnInfo));
 
                         NotificationEvent event = new NotificationEvent();
                         event.setType("speed");
@@ -327,6 +336,7 @@ public class TimingReceiver extends BroadcastReceiver {
     /**
      * 获取清理文件大小
      */
+    @SuppressLint("CheckResult")
     public void startScanAll(PushSettingList.DataBean dataBean, Context mContext) {
         HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
         FileQueryUtils mFileQueryUtils = new FileQueryUtils();
@@ -426,6 +436,7 @@ public class TimingReceiver extends BroadcastReceiver {
                 long mbNum = totalSize / (1024 * 1024);
                 NotificationEvent event = new NotificationEvent();
                 event.setType("clean");
+                LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
                 if (mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
                     event.setFlag(2);
                     String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
@@ -433,10 +444,14 @@ public class TimingReceiver extends BroadcastReceiver {
                     Map<String, String> actionMap = new HashMap<>();
                     actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
                     createNotify(mContext, push_content, actionMap,mContext.getString(R.string.tool_now_clean));
-
+                    btnInfo.setNormal(false);
                 }else{
                     event.setFlag(0);
+                    btnInfo.setNormal(true);
                 }
+                btnInfo.setCheckResult(String.valueOf(mbNum));
+                PreferenceUtil.getInstants().save("lock_pos01",new Gson().toJson(btnInfo));
+
                 EventBus.getDefault().post(event);
             }
         });

@@ -139,27 +139,30 @@
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_lock_btn_normal" />
-
-                <ImageView
-                    android:id="@+id/iv_file_tag"
-                    android:layout_width="24.5dp"
-                    android:layout_height="24.5dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:layout_marginTop="10.5dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/icon_file_tag" />
-
-                <TextView
-                    android:id="@+id/tv_file_size"
+                    android:src="@drawable/icon_lock_btn_hot" />
+                <LinearLayout
                     android:layout_width="55dp"
-                    android:layout_height="wrap_content"
-                    android:text="200mb"
-                    android:textColor="@color/white"
+                    android:layout_height="55dp"
                     android:gravity="center"
-                    android:layout_below="@id/iv_file_tag"
-                    android:textSize="9sp"
-                    />
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/iv_file_tag"
+                        android:layout_width="24.5dp"
+                        android:layout_height="24.5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_file_tag" />
+
+                    <TextView
+                        android:id="@+id/tv_file_size"
+                        android:layout_width="55dp"
+                        android:layout_height="wrap_content"
+                        android:text="850mb"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:textSize="9sp"
+                        />
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="55dp"
@@ -187,27 +190,31 @@
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_lock_btn_normal" />
-
-                <ImageView
-                    android:id="@+id/iv_ram_tag"
-                    android:layout_width="24.5dp"
-                    android:layout_height="24.5dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:layout_marginTop="10.5dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/icon_clean_tag" />
-
-                <TextView
-                    android:id="@+id/tv_ram_size"
+                    android:src="@drawable/icon_lock_btn_hot" />
+                <LinearLayout
                     android:layout_width="55dp"
-                    android:layout_height="wrap_content"
-                    android:text="50%"
-                    android:textColor="@color/white"
+                    android:layout_height="55dp"
                     android:gravity="center"
-                    android:layout_below="@id/iv_ram_tag"
-                    android:textSize="9sp"
-                    />
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/iv_ram_tag"
+                        android:layout_width="24.5dp"
+                        android:layout_height="24.5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_clean_tag" />
+
+                    <TextView
+                        android:id="@+id/tv_ram_size"
+                        android:layout_width="55dp"
+                        android:layout_height="wrap_content"
+                        android:text="65%"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:layout_below="@id/iv_ram_tag"
+                        android:textSize="9sp"
+                        />
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="55dp"
@@ -236,28 +243,32 @@
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_lock_btn_normal" />
+                    android:src="@drawable/icon_lock_btn_hot" />
 
-                <ImageView
-                    android:id="@+id/iv_virus_tag"
-                    android:layout_width="24.5dp"
-                    android:layout_height="24.5dp"
-                    android:layout_marginLeft="15.5dp"
-                    android:layout_marginTop="10.5dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/icon_game_tag" />
-
-
-                <TextView
-                    android:id="@+id/tv_virus_size"
+                <LinearLayout
                     android:layout_width="55dp"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/white"
+                    android:layout_height="55dp"
                     android:gravity="center"
-                    android:layout_below="@id/iv_virus_tag"
-                    android:textSize="9sp"
-                    />
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/iv_virus_tag"
+                        android:layout_width="24.5dp"
+                        android:layout_height="24.5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_game_tag" />
+
+                    <TextView
+                        android:id="@+id/tv_virus_size"
+                        android:layout_width="55dp"
+                        android:layout_height="wrap_content"
+                        android:text="检测"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:layout_below="@id/iv_virus_tag"
+                        android:textSize="9sp"
+                        />
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="55dp"

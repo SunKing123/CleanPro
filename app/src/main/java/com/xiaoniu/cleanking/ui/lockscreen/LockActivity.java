@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +22,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
@@ -31,9 +33,13 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
+import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.SystemUtils;
@@ -42,6 +48,8 @@ import com.xiaoniu.common.utils.ToastUtils;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,8 +66,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private LockExitDialog lockExitDialog;
     private ImageView batteryIcon;
     private RelativeLayout relAd;
-    private TextView mLockTime, mLockDate;
+    private TextView mLockTime, mLockDate,tv_weather_temp;
     private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus;
+    private ImageView iv_file_btn,iv_ram_btn,iv_virus_btn;
+    private TextView tv_file_size,tv_ram_size,tv_virus_size;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
     private RxPermissions rxPermissions;
@@ -83,8 +93,20 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         rel_clean_file.setOnClickListener(this::onClick);
         rel_clean_ram.setOnClickListener(this::onClick);
         rel_clean_virus.setOnClickListener(this::onClick);
+        tv_weather_temp = ViewUtils.get(this,R.id.tv_weather_temp);
 
         mLockTime = ViewUtils.get(this, R.id.lock_time_txt);
+        mLockTime.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
+        tv_weather_temp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
+
+        tv_file_size = ViewUtils.get(this,R.id.tv_file_size);
+        tv_ram_size = ViewUtils.get(this,R.id.tv_ram_size);
+        tv_virus_size = ViewUtils.get(this,R.id.tv_virus_size);
+
+        iv_file_btn = ViewUtils.get(this,R.id.iv_file_btn);
+        iv_ram_btn = ViewUtils.get(this,R.id.iv_ram_btn);
+        iv_virus_btn = ViewUtils.get(this,R.id.iv_virus_btn);
+
         mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
         linAdLayout = ViewUtils.get(this, R.id.lock_ad_container);
@@ -115,8 +137,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         });
         registerLockerReceiver();
         LogUtils.i("-----" + SystemUtils.getProcessName(this));
-
-
+        setBtnState();
 //
       /*  rxPermissions = new RxPermissions(this);
         lockExitDialog = new LockExitDialog(this);
@@ -140,6 +161,74 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 .add(R.id.lock_video_container, videoFlowListFragment)
                 .commitAllowingStateLoss();*/
 //        checkLockState();
+    }
+
+    public void setBtnState(){
+        if(null!= PreferenceUtil.getInstants().get("lock_pos01")&&  PreferenceUtil.getInstants().get("lock_pos01").length()>2){
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"),LockScreenBtnInfo.class);
+            if(btnInfo.isNormal()){
+                tv_file_size.setVisibility(View.GONE);
+                iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+            }else{
+                tv_file_size.setVisibility(View.VISIBLE);
+                tv_file_size.setText(btnInfo.getCheckResult()+"MB");
+                iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+            }
+        }else{
+            setRandState(1);
+        }
+
+        if(null!= PreferenceUtil.getInstants().get("lock_pos02") &&  PreferenceUtil.getInstants().get("lock_pos02").length()>2){
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"),LockScreenBtnInfo.class);
+            if(btnInfo.isNormal()){
+                tv_ram_size.setVisibility(View.GONE);
+                iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+            }else{
+                tv_ram_size.setVisibility(View.VISIBLE);
+                tv_ram_size.setText(btnInfo.getCheckResult()+"MB");
+                iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+            }
+        }else{
+            setRandState(2);
+        }
+
+        if(null!= PreferenceUtil.getInstants().get("lock_pos03") &&  PreferenceUtil.getInstants().get("lock_pos03").length()>2){
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"),LockScreenBtnInfo.class);
+            if(btnInfo.isNormal()){
+                tv_virus_size.setText("防御");
+                tv_virus_size.setVisibility(View.VISIBLE);
+                iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
+            }else{
+                tv_virus_size.setText("检测");
+                tv_virus_size.setVisibility(View.VISIBLE);
+                tv_ram_size.setText(btnInfo.getCheckResult()+"MB");
+                iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+            }
+        }else{
+            setRandState(3);
+        }
+
+    }
+    //设置随机值
+    public void setRandState(int index){
+        switch (index){
+            case  1:
+                tv_file_size.setText(NumberUtils.mathRandom(800,1800)+"MB");
+                tv_file_size.setVisibility(View.VISIBLE);
+                iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                break;
+
+            case 2:
+                tv_ram_size.setText(NumberUtils.mathRandom(800,1000)+"MB");
+                tv_ram_size.setVisibility(View.VISIBLE);
+                iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                break;
+            case 3:
+                tv_virus_size.setText("检测");
+                tv_virus_size.setVisibility(View.VISIBLE);
+                iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
+                break;
+        }
     }
 
 
