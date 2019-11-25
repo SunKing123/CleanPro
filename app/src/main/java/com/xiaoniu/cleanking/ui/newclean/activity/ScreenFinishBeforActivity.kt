@@ -204,8 +204,8 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 Log.d(TAG, "-----adClicked-----")
                 if (null == info) return
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
-                //todo
-                goFinishActivity()
+//                //todo
+//                goFinishActivity()
             }
 
             override fun adClose(info: AdInfo) {

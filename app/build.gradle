@@ -104,6 +104,7 @@ android {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://devweatapi.hellogeek.com/weatapi/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
@@ -113,6 +114,7 @@ android {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://testweatapi.hellogeek.com/weatapi/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
@@ -122,6 +124,7 @@ android {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://preweatapi.hellogeek.com/\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
             buildConfigField "String", "SYSTEM_EN", "\"preprod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
@@ -130,6 +133,7 @@ android {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/weatapi/\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
             buildConfigField "String", "SYSTEM_EN", "\"prod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
@@ -177,6 +181,8 @@ dependencies {
 
     implementation rootProject.ext.dependencies["greendao"]
     annotationProcessor rootProject.ext.dependencies["greendao-generator"]
+
+    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     implementation project(':baselib:common')
     implementation project(':otherlib:asmhelp')

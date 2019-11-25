@@ -46,8 +46,6 @@ public class PopLayerActivity extends AppCompatActivity {
     }
 
 
-
-
     private void setLockerWindow(Window window) {
         WindowManager.LayoutParams lp = window.getAttributes();
         if (Build.VERSION.SDK_INT > 18) {

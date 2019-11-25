@@ -10,10 +10,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -175,6 +178,46 @@ public class FileUtils {
         return hashMap;
     }
 
+    /**
+     * 将assets文件夹下文件拷贝到/databases/下
+     * @param context
+     * @param db_name
+     */
+    public static void copyDbFile(Context context, String db_name) {
+        InputStream in = null;
+        FileOutputStream out = null;
+        String path = "/data/data/" + context.getPackageName() + "/databases/";
+        File file = new File(path + db_name);
 
+        //创建文件夹
+        File filePath = new File(path);
+        if (!filePath.exists())
+            filePath.mkdirs();
+
+        if (file.exists())
+            return;
+
+        try {
+            in = context.getAssets().open(db_name); // 从assets目录下复制
+            out = new FileOutputStream(file);
+            int length = -1;
+            byte[] buf = new byte[1024];
+            while ((length = in.read(buf)) != -1) {
+                out.write(buf, 0, length);
+            }
+            out.flush();
+            PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE,1);
+            LogUtils.i("-zzh-finish");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null) in.close();
+                if (out != null) out.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 
 }

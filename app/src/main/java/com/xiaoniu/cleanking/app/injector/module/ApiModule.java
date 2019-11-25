@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.api.BigDataApiService;
 import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.api.WeatherDataApiService;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -41,10 +42,10 @@ public class ApiModule {
     public static String Base_Host = AppConstants.Base_Host;
     public static String Base_H5_Host = AppConstants.Base_H5_Host;//H5路径
     public static String Base_Big_Data = AppConstants.Base_Big_Data;//大数据接口路径
+    public static String base_weather_api = BuildConfig.WEATHER_BASE_URL;//大数据接口路径
 
-    public static String Base_Host2 = "https://www.juxinli.com";//聚信立路径
-    public static String Base_Host3 = "https://credit.baiqishi.com";//白骑士路径
-    public static String ZhiMaXinYong = Base_H5_Host + "/FlashLoanH5/html/page/my/zhima.html";//芝麻信用路径
+
+
     public static String SHOPPING_MALL = Base_H5_Host + "/home_new.html";//商城
 
     public ApiModule(Application application) {
@@ -95,15 +96,9 @@ public class ApiModule {
             e.printStackTrace();
         }
 
-        OkHttpClient okHttpClient2 = new OkHttpClient.Builder()
-                .addInterceptor(new RequestUrlInterceptor())
-                .connectTimeout(120, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-//                .sslSocketFactory(getSSLSocketFactory(application.getApplicationContext())).hostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER)
-                .addInterceptor(loggingInterceptor)
-                //其他配置
-                .build();
+
+
+
 
         OkHttpClient okHttpClient3 = new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
@@ -125,8 +120,8 @@ public class ApiModule {
                 .build();
 
         mRetrofit2 = new Retrofit.Builder()
-                .baseUrl(Base_Host2)
-                .client(okHttpClient2)
+                .baseUrl(base_weather_api)
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
@@ -181,6 +176,12 @@ public class ApiModule {
     @Singleton
     public BigDataApiService provideBigDataApiService() {
         return mRetrofit3.create(BigDataApiService.class);
+    }
+
+    @Provides
+    @Singleton
+    public WeatherDataApiService provideWeatherDataApiService() {
+        return mRetrofit2.create(WeatherDataApiService.class);
     }
 
 }

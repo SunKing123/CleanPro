@@ -188,8 +188,6 @@ public interface UserApiService {
     @POST("/device/save")
     Flowable<BaseEntity> pushDeviceInfo(@Body RequestBody body);
 
-    //**72小时
-    @GET("/weatherRecordHour/seventyTwoHours")
-    Flowable<BaseResponse<WeatherResponseContent>> getWeather72HourList(@Query("areaCode") String areaCode);
+
 
 }

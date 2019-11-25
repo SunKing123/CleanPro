@@ -13,7 +13,7 @@ public interface BigDataApiService {
     /**
      *
      * 通用埋点
-     * @param body
+     *
      * @return
      */
     @POST("/apis/v1/dataprobe")

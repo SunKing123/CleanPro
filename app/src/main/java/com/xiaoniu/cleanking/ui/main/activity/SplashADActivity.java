@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +40,7 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -50,6 +52,7 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.WeakHandler;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -467,7 +470,43 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
+        if(PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE)!=1){
+            readyExternalDb();
+        }
+
     }
+
+
+    /**
+     * 拷贝数据库表
+     */
+    public void readyExternalDb() {
+        new AsyncTask<String, Integer, Boolean>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+            }
+
+            @Override
+            protected Boolean doInBackground(String... strings) {
+                FileUtils.copyDbFile(ContextUtils.getApplication(), Constant.CLEAN_DB_NAME);
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+
+
+            }
+        }.execute();
+    }
+
 
     /**
      * 拉取广告开关成功

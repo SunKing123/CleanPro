@@ -1,6 +1,9 @@
 package com.xiaoniu.cleanking.utils;
 
+import android.content.Context;
 import android.text.TextUtils;
+
+import com.xiaoniu.common.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -293,5 +296,37 @@ public class NumberUtils {
     public static int mathRandomInt(int start, int end) {
         int number = (int) (start + Math.random() * (end - start + 1));
         return number;
+    }
+
+
+    /**
+     * 产生n位随机数
+     * @return
+     */
+    public static long generateRandomNumber(int n){
+        if(n<1){
+            throw new IllegalArgumentException("随机数位数必须大于0");
+        }
+        return (long)(Math.random()*9*Math.pow(10,n-1)) + (long)Math.pow(10,n-1);
+    }
+
+
+
+    /**
+     * 获取文件中保存的uuid，可能是生成的随机字符串
+     * @param context
+     * @return
+     */
+    public static synchronized String getSpUuid(Context context){
+        String uuid = null;
+        if(TextUtils.isEmpty(uuid)){
+            if(TextUtils.isEmpty(uuid)) {
+                //获取失败，则生成随机数保存
+                //"uuid": 接口请求传的"aa3a1cc2ab24c049_28b2748c"
+                uuid = "jk_clean" + DateUtils.getCurrentSimpleYYYYMMDDHHMM() + "_" + generateRandomNumber(8);
+            }
+
+        }
+        return uuid;
     }
 }

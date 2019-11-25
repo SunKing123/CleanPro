@@ -6,19 +6,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.bean.ConfigBean;
-import com.comm.jksdk.config.listener.ConfigListener;
-import com.comm.jksdk.utils.JsonUtils;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -27,6 +25,7 @@ import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -39,13 +38,22 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
+import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
+import com.xiaoniu.cleanking.ui.main.bean.weatherdao.TodayWeatherConditionEntity;
+import com.xiaoniu.cleanking.ui.main.bean.weatherdao.Weather72HEntity;
+import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
+import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherResponeUtils;
+import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherUtils;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -59,6 +67,7 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -74,9 +83,13 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by tie on 2017/5/15.
@@ -620,16 +633,14 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         mLocationOption = new AMapLocationClientOption();
 
         AMapLocationClientOption option = new AMapLocationClientOption();
-
         if (null != mLocationClient) {
             mLocationClient.setLocationOption(option);
             //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-            mLocationClient.stopLocation();
-            mLocationClient.startLocation();
+            //todo
+         /*   mLocationClient.stopLocation();
+            mLocationClient.startLocation();*/
         }
-
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-
         //获取一次定位结果：
         //该方法默认为false。
         mLocationOption.setOnceLocation(true);
@@ -647,12 +658,172 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         mLocationClient.startLocation();
     }
 
+
+
+    /**
+     * 默认的定位参数
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private AMapLocationClientOption getDefaultOption(){
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        mOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.DEFAULT);//可选，设置逆地理信息的语言，默认值为默认语言（根据所在地区选择语言）
+        return mOption;
+    }
+
     @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        LogUtils.i("-zzh-"+aMapLocation.getErrorInfo());
+    public void onLocationChanged(AMapLocation location) {
+//        StringBuffer sb = new StringBuffer();
+        //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+        if(location.getErrorCode() == 0){//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+            LogUtils.i("-zzh-"+location.getProvince());
+            //获取到地理位置后关掉定位
+            mLocationClient.stopLocation();
+            String province = location.getProvince();
+            String city = location.getCity();
+            String district = location.getDistrict();
+            String latitude = String.valueOf(location.getLatitude());
+            String longitude = String.valueOf(location.getLongitude());
+            LogUtils.d( "->aMapLocation:" + location.toStr());
+            LogUtils.d("->xiangzhenbiao->高德定位->latitude:" + latitude + ",longitude:" + longitude);
+            LocationCityInfo cityInfo = new LocationCityInfo(longitude,
+                    latitude,
+                    location.getCountry(),
+                    province,
+                    city,
+                    district,
+                    location.getStreet(),
+                    location.getPoiName(),
+                    location.getAoiName(),
+                    location.getAddress()
+            );
+            LogUtils.i("-zzh-"+new Gson().toJson(location));
+            if(!TextUtils.isEmpty(city))
+            PreferenceUtil.getInstants().save("city",city);
+            dealLocationSuccess(cityInfo);
+        }else{
+            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",0);
+        }
     }
 
 
+
+    private void dealLocationSuccess(LocationCityInfo locationCityInfo){
+        if(locationCityInfo == null){
+            return;
+        }
+        WeatherCity weatherCity = requestUpdateTableLocation(locationCityInfo);
+        String positionArea="";
+        if(!TextUtils.isEmpty(locationCityInfo.getAoiName())){
+            //高德
+            positionArea = locationCityInfo.getDistrict() + locationCityInfo.getAoiName();
+            LogUtils.i("-zzh--"+positionArea);
+        }
+        uploadPositionCity(weatherCity, locationCityInfo.getLatitude(), locationCityInfo.getLongitude(), positionArea);
+    }
+
+
+
+    /**
+     * 用户定位信息上报
+     * @param positionCity 定位城市
+     * @param latitude
+     * @param longitude
+     * @param positionArea 定位城市的详细地址，如“申江路...”
+     */
+    public void uploadPositionCity(@NonNull WeatherCity positionCity, @NonNull String latitude,
+                                   @NonNull String longitude, @NonNull String positionArea){
+        LogUtils.d("uploadPositionCity");
+        if(positionCity == null){
+            return;
+        }
+
+        if (mModel == null || mView==null) {
+            return;
+        }
+        mModel.getWeather72HourList(positionCity.getAreaCode(),new Common2Subscriber<WeatherResponseContent>() {
+            @Override
+            public void getData(WeatherResponseContent weatherResponseContent) {
+
+                String responeStr = WeatherResponeUtils.getResponseStr(weatherResponseContent.getContent());
+                Weather72HEntity weather72HEntity = new Gson().fromJson(responeStr, Weather72HEntity.class);
+                String skycon ="";
+                String temperature = "";
+                if(!CollectionUtils.isEmpty(weather72HEntity.getSkycon())){
+                    skycon  = WeatherUtils.getWeather(weather72HEntity.getSkycon().get(0).getValue());
+                }
+                if(!CollectionUtils.isListNullOrEmpty(weather72HEntity.getTemperature()))
+                {
+                    temperature = weather72HEntity.getTemperature().get(0).getValue();
+                }
+                PreferenceUtil.getInstants().save("skycon",skycon);
+                PreferenceUtil.getInstants().save("temperature",temperature);
+                PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",1);
+                LogUtils.d("-zzh-isGetWeatherInfo");
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+      /*  mModel.uploadPositionCity(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseResponse<String> unloadPositionCityRainRemindBaseResponse) {
+                        if (unloadPositionCityRainRemindBaseResponse.isSuccess()){
+                            String content = unloadPositionCityRainRemindBaseResponse.getData();
+
+                        }
+                    }
+                });*/
+    }
+
+
+    /************************************* 定位相关 **************************************/
+    /**
+     * 定位成功之后调用该方法，更新数据库表定位状态，处理完成后回调 updateTableLocationComplete
+     * @param locationCityInfo
+     */
+    public WeatherCity requestUpdateTableLocation(LocationCityInfo locationCityInfo){
+        if (mModel == null || mView == null) {
+            return null ;
+        }
+        WeatherCity weatherCity = mModel.updateTableLocation(locationCityInfo);
+        if(weatherCity != null){
+            String detailAddress;
+            if(!TextUtils.isEmpty(locationCityInfo.getAoiName())){
+                //高德,优先用aoi
+                detailAddress = locationCityInfo.getAoiName();
+            }else if(!TextUtils.isEmpty(locationCityInfo.getPoiName())){
+                //高德,再用poi
+                detailAddress = locationCityInfo.getPoiName();
+            }else {
+                //百度，用街道地址
+//            detailAddress = locationCityInfo.getDistrict() + locationCityInfo.getPoiName();
+                detailAddress = locationCityInfo.getStreet();
+            }
+//            weatherCity.setStreet(locationCityInfo.getStreet());
+//            weatherCity.setStreet(locationCityInfo.getPoiName());
+            weatherCity.setDetailAddress(detailAddress);
+        }
+        return weatherCity;
+    }
     /**
      * 插屏广告开关
      */
@@ -679,6 +850,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         });
     }
+
+
 
 
 }

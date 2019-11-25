@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.main.bean;
+package com.xiaoniu.cleanking.ui.main.bean.weatherdao;
 
 /**
  * @author xiangzhenbiao
@@ -7,23 +7,8 @@ package com.xiaoniu.cleanking.ui.main.bean;
 public class LocationCityInfo {
 
     private String longitude;
+
     private String latitude;
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
 
     //国家
     private String country;
@@ -40,6 +25,21 @@ public class LocationCityInfo {
 
     //街道，如“申江路”
     private String street;
+
+    /**
+     * poi，如：上海集成电路科技馆
+     */
+    private String poiName;
+
+    /**
+     * 如：星创科技广场
+     */
+    private String aoiName;
+
+    /**
+     * 详细地址
+     */
+    private String address;
 
     public LocationCityInfo(String province, String city, String district) {
         this.province = province;
@@ -60,6 +60,30 @@ public class LocationCityInfo {
         this.city = city;
         this.district = district;
         this.street = street;
+    }
+
+    public LocationCityInfo(String country, String province, String city, String district, String street, String poiName, String aoiName) {
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.district = district;
+        this.street = street;
+        this.poiName = poiName;
+        this.aoiName = aoiName;
+    }
+
+    public LocationCityInfo(String longitude, String latitude, String country, String province, String city, String district, String street,
+                            String poiName, String aoiName, String address) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.district = district;
+        this.street = street;
+        this.poiName = poiName;
+        this.aoiName = aoiName;
+        this.address = address;
     }
 
     public String getCountry() {
@@ -102,6 +126,46 @@ public class LocationCityInfo {
         this.street = street;
     }
 
+    public String getPoiName() {
+        return poiName;
+    }
+
+    public void setPoiName(String poiName) {
+        this.poiName = poiName;
+    }
+
+    public String getAoiName() {
+        return aoiName;
+    }
+
+    public void setAoiName(String aoiName) {
+        this.aoiName = aoiName;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "LocationCityInfo{" +
@@ -112,6 +176,9 @@ public class LocationCityInfo {
                 ", city='" + city + '\'' +
                 ", district='" + district + '\'' +
                 ", street='" + street + '\'' +
+                ", poiName='" + poiName + '\'' +
+                ", aoiName='" + aoiName + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

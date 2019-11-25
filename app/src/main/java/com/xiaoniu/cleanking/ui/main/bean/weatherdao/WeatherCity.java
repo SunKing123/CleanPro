@@ -1,5 +1,4 @@
-
-package com.xiaoniu.cleanking.ui.main.bean;
+package com.xiaoniu.cleanking.ui.main.bean.weatherdao;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,8 +13,10 @@ import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Unique;
 
-
-
+/**
+ * @author xiangzhenbiao
+ * @since 2019/4/11 21:34
+ */
 @Entity(nameInDb = "XNWeatherCityModel", createInDb = false)
 public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
 
@@ -43,9 +44,9 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
     //乡、镇
 //    private String town;
 
-    //街道，如“申江路”
+    //详细地址，取aoi或poi，如“星创科技广场”
     @Transient
-    private String street;
+    private String detailAddress;
 
 //    private Long cityId;
 
@@ -100,6 +101,7 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", district='" + district + '\'' +
+                ", detailAddress='" + detailAddress + '\'' +
                 ", areaCode='" + areaCode + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
@@ -113,32 +115,6 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
                 ", attentionTime='" + attentionTime + '\'' +
                 ", cityShowType=" + cityShowType +
                 '}';
-    }
-
-    @Generated(hash = 1215391175)
-    public WeatherCity(Long id, String country, String province, String city,
-            String district, @NotNull String areaCode, String longitude,
-            String latitude, int cityType, String pinyinDistrict, int recommendCity,
-            int isRecommend, int isSelected, int isPositioning, int isDefalut) {
-        this.id = id;
-        this.country = country;
-        this.province = province;
-        this.city = city;
-        this.district = district;
-        this.areaCode = areaCode;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.cityType = cityType;
-        this.pinyinDistrict = pinyinDistrict;
-        this.recommendCity = recommendCity;
-        this.isRecommend = isRecommend;
-        this.isSelected = isSelected;
-        this.isPositioning = isPositioning;
-        this.isDefalut = isDefalut;
-    }
-
-    @Generated(hash = 187543502)
-    public WeatherCity() {
     }
 
     public Long getId() {
@@ -269,12 +245,12 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
         this.attentionTime = attentionTime;
     }
 
-    public String getStreet() {
-        return street;
+    public String getDetailAddress() {
+        return detailAddress;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
     }
 
     @Override
@@ -283,66 +259,6 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
       return !TextUtils.isEmpty(this.getAreaCode())&&this.getAreaCode().equals(a.getAreaCode());
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.id);
-        dest.writeString(this.country);
-        dest.writeString(this.province);
-        dest.writeString(this.city);
-        dest.writeString(this.district);
-        dest.writeString(this.areaCode);
-        dest.writeString(this.longitude);
-        dest.writeString(this.latitude);
-        dest.writeInt(this.cityType);
-        dest.writeString(this.pinyinDistrict);
-        dest.writeInt(this.recommendCity);
-        dest.writeInt(this.isRecommend);
-        dest.writeInt(this.isSelected);
-        dest.writeInt(this.isPositioning);
-        dest.writeInt(this.isDefalut);
-        dest.writeInt(this.cityShowType);
-        dest.writeString(this.attentionTime);
-        dest.writeString(this.street);
-    }
-
-    protected WeatherCity(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.country = in.readString();
-        this.province = in.readString();
-        this.city = in.readString();
-        this.district = in.readString();
-        this.areaCode = in.readString();
-        this.longitude = in.readString();
-        this.latitude = in.readString();
-        this.cityType = in.readInt();
-        this.pinyinDistrict = in.readString();
-        this.recommendCity = in.readInt();
-        this.isRecommend = in.readInt();
-        this.isSelected = in.readInt();
-        this.isPositioning = in.readInt();
-        this.isDefalut = in.readInt();
-        this.cityShowType = in.readInt();
-        this.attentionTime = in.readString();
-        this.street = in.readString();
-    }
-
-    public static final Creator<WeatherCity> CREATOR = new Creator<WeatherCity>() {
-        @Override
-        public WeatherCity createFromParcel(Parcel source) {
-            return new WeatherCity(source);
-        }
-
-        @Override
-        public WeatherCity[] newArray(int size) {
-            return new WeatherCity[size];
-        }
-    };
 
     @Override
     public int compareTo(WeatherCity o) {
@@ -358,5 +274,91 @@ public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
         }
         return 0;
     }
-}
 
+
+    @Generated(hash = 1215391175)
+    public WeatherCity(Long id, String country, String province, String city, String district,
+            @NotNull String areaCode, String longitude, String latitude, int cityType,
+            String pinyinDistrict, int recommendCity, int isRecommend, int isSelected,
+            int isPositioning, int isDefalut) {
+        this.id = id;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.district = district;
+        this.areaCode = areaCode;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.cityType = cityType;
+        this.pinyinDistrict = pinyinDistrict;
+        this.recommendCity = recommendCity;
+        this.isRecommend = isRecommend;
+        this.isSelected = isSelected;
+        this.isPositioning = isPositioning;
+        this.isDefalut = isDefalut;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeString(this.country);
+        dest.writeString(this.province);
+        dest.writeString(this.city);
+        dest.writeString(this.district);
+        dest.writeString(this.detailAddress);
+        dest.writeString(this.areaCode);
+        dest.writeString(this.longitude);
+        dest.writeString(this.latitude);
+        dest.writeInt(this.cityType);
+        dest.writeString(this.pinyinDistrict);
+        dest.writeInt(this.recommendCity);
+        dest.writeInt(this.isRecommend);
+        dest.writeInt(this.isSelected);
+        dest.writeInt(this.isPositioning);
+        dest.writeInt(this.isDefalut);
+        dest.writeString(this.attentionTime);
+        dest.writeInt(this.cityShowType);
+    }
+
+    protected WeatherCity(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.country = in.readString();
+        this.province = in.readString();
+        this.city = in.readString();
+        this.district = in.readString();
+        this.detailAddress = in.readString();
+        this.areaCode = in.readString();
+        this.longitude = in.readString();
+        this.latitude = in.readString();
+        this.cityType = in.readInt();
+        this.pinyinDistrict = in.readString();
+        this.recommendCity = in.readInt();
+        this.isRecommend = in.readInt();
+        this.isSelected = in.readInt();
+        this.isPositioning = in.readInt();
+        this.isDefalut = in.readInt();
+        this.attentionTime = in.readString();
+        this.cityShowType = in.readInt();
+    }
+
+    @Generated(hash = 187543502)
+    public WeatherCity() {
+    }
+
+    public static final Creator<WeatherCity> CREATOR = new Creator<WeatherCity>() {
+        @Override
+        public WeatherCity createFromParcel(Parcel source) {
+            return new WeatherCity(source);
+        }
+
+        @Override
+        public WeatherCity[] newArray(int size) {
+            return new WeatherCity[size];
+        }
+    };
+}

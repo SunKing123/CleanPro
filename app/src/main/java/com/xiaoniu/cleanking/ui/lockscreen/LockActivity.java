@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.main.bean.LocationInfo;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -63,11 +64,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus;
     private ImageView iv_file_btn,iv_ram_btn,iv_virus_btn;
     private TextView tv_file_size,tv_ram_size,tv_virus_size;
+    private LinearLayout lin_tem_top,lin_tem_bottom;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
     private RxPermissions rxPermissions;
     private LinearLayout linAdLayout;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private TextView tv_weather_state,tv_city;
 /*
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +89,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
         }
     }*/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +106,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         rel_clean_file = ViewUtils.get(this, R.id.rel_clean_file);
         rel_clean_ram = ViewUtils.get(this, R.id.rel_clean_ram);
         rel_clean_virus = ViewUtils.get(this, R.id.rel_clean_virus);
+
+        lin_tem_top = ViewUtils.get(this,R.id.lin_tem_top);
+        lin_tem_bottom = ViewUtils.get(this,R.id.lin_tem_bottom);
+        tv_weather_state = ViewUtils.get(this,R.id.tv_weather_state);
+        tv_city = ViewUtils.get(this,R.id.tv_city);
 
         rel_clean_file.setOnClickListener(this::onClick);
         rel_clean_ram.setOnClickListener(this::onClick);
@@ -150,6 +160,23 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         registerLockerReceiver();
         LogUtils.i("-----" + SystemUtils.getProcessName(this));
         setBtnState();
+
+        if(PreferenceUtil.getInstants().getInt("isGetWeatherInfo") ==1){
+            lin_tem_top.setVisibility(View.VISIBLE);
+            lin_tem_bottom.setVisibility(View.VISIBLE);
+            tv_weather_temp.setText( PreferenceUtil.getInstants().get("temperature")+"°");
+            tv_weather_state.setText(PreferenceUtil.getInstants().get("skycon"));
+            if(TextUtils.isEmpty(PreferenceUtil.getInstants().get("city")))return;
+            tv_city.setText(PreferenceUtil.getInstants().get("city"));
+        }else{
+            lin_tem_top.setVisibility(View.GONE);
+            lin_tem_bottom.setVisibility(View.GONE);
+
+        }
+
+
+
+
 //
       /*  rxPermissions = new RxPermissions(this);
         lockExitDialog = new LockExitDialog(this);

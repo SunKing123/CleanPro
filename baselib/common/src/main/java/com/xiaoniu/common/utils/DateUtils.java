@@ -54,6 +54,8 @@ public class DateUtils {
      */
     public static final String PATTERN_YMD = "yyyy-MM-dd";
 
+    public static final SimpleDateFormat YYYYMMDDHHMMSS_FORMAT_SIMPLE = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+
     /**
      * The format used is 05:07
      */
@@ -540,6 +542,16 @@ public class DateUtils {
             }
         }
         return sHourFormat24.format(time);
+    }
+
+
+    /**
+     * 获取"yyyyMMddHHmmss"格式的14位时间字符串
+     * @return
+     */
+    public static String getCurrentSimpleYYYYMMDDHHMM() {
+        Date date = new Date();
+        return YYYYMMDDHHMMSS_FORMAT_SIMPLE.format(date);
     }
 
 }
