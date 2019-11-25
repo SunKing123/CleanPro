@@ -24,7 +24,6 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +39,15 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
     @BindView(R.id.lottie)
     LottieAnimationView mLottieAnimationView;
+    @BindView(R.id.lottie2)
+    LottieAnimationView mLottieAnimationView2;
+    @BindView(R.id.v_lottie2)
+    View mViewLottie2;
+
+    @BindView(R.id.iv_scan_bg05)
+    ImageView ivScanBg05;
+    @BindView(R.id.iv_scan_bg04)
+    ImageView ivScanBg04;
     @BindView(R.id.iv_scan_bg03)
     ImageView ivScanBg03;
     @BindView(R.id.iv_scan_bg02)
@@ -48,7 +56,6 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     ImageView ivScanBg01;
 
     private ImageView[] mIvs;
-    private ObjectAnimator mObjectAnimator;
 
     @Override
     protected int getLayoutId() {
@@ -69,7 +76,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     private void initLottie() {
         NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "病毒查杀动画页浏览");
         NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_animation_page", "virus_killing_animation_page_view_page", "病毒查杀动画页浏览");
-        showColorChange(2);
+        showColorChange(4);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mLottieAnimationView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
@@ -90,13 +97,48 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
                 }
+                initLottie2();
+            }
 
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void initLottie2() {
+        if (null == mLottieAnimationView2) return;
+        mLottieAnimationView.setVisibility(View.GONE);
+        mViewLottie2.setVisibility(View.VISIBLE);
+        if (!mLottieAnimationView2.isAnimating()) {
+            mLottieAnimationView2.setAnimation("yindao2.json");
+            mLottieAnimationView2.setImageAssetsFolder("images_game_yindao2");
+            mLottieAnimationView2.playAnimation();
+        }
+        mLottieAnimationView2.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (null != mLottieAnimationView2) {
+                    mLottieAnimationView2.cancelAnimation();
+                    mLottieAnimationView2.clearAnimation();
+                }
                 //设置锁屏数据
                 LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(2);
                 btnInfo.setNormal(true);
                 btnInfo.setCheckResult("500");
-                btnInfo.setReShowTime(System.currentTimeMillis()+1000*60*5);
-                PreferenceUtil.getInstants().save("lock_pos03",new Gson().toJson(btnInfo));
+                btnInfo.setReShowTime(System.currentTimeMillis() + 1000 * 60 * 5);
+                PreferenceUtil.getInstants().save("lock_pos03", new Gson().toJson(btnInfo));
                 EventBus.getDefault().post(btnInfo);
 
                 startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
@@ -113,21 +155,21 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
 
             }
         });
+
     }
 
     public void showColorChange(int index) {
-        mIvs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
-        if (mIvs.length == 3 && index <= 2 && index > 0) {
-            if (null == mIvs || null == mIvs[index]) return;
+        mIvs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03, ivScanBg04, ivScanBg05};
+        if (mIvs.length == 5 && index <= 4 && index > 0) {
             Drawable drawable = mIvs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
-                mObjectAnimator.setTarget(drawable);
-                mObjectAnimator.setDuration(2000);
-                if (!mObjectAnimator.isRunning()) {
-                    mObjectAnimator.start();
+                ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
+                animator.setTarget(drawable);
+                animator.setDuration(1500);
+                if (!animator.isRunning()) {
+                    animator.start();
                 }
-                mObjectAnimator.addListener(new Animator.AnimatorListener() {
+                animator.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
 
@@ -137,13 +179,14 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     public void onAnimationEnd(Animator animation) {
                         if (index == 1) {
                             Log.v("onAnimationEnd", "onAnimationEnd ");
-//                            mView.setColorChange(true);
-                            if (null != mObjectAnimator)
-                                mObjectAnimator.cancel();
+                            if (animator != null)
+                                animator.cancel();
                         } else {
                             showColorChange((index - 1));
                         }
-
+                        if (null != mIvs[index]) {
+                            mIvs[index].setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
@@ -163,12 +206,13 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (null != mLottieAnimationView2 && mLottieAnimationView2.isAnimating()) {
+            mLottieAnimationView2.cancelAnimation();
+            mLottieAnimationView2.clearAnimation();
+        }
         if (null != mLottieAnimationView && mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.cancelAnimation();
             mLottieAnimationView.clearAnimation();
-        }
-        if (null != mObjectAnimator && mObjectAnimator.isRunning()) {
-            mObjectAnimator.cancel();
         }
     }
 

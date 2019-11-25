@@ -174,12 +174,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mInteractionPoistion; //互动式广告position
     private int mShowCount;
 
-    private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
-    private HomeRecommendAdapter mRecommendAdapter;
-
     private List<VirusLlistEntity> mVirusList;
+    private HomeRecommendAdapter mRecommendAdapter;
+    private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
     private int mVirusPoistion;
     private AdManager mAdManager;
+    private boolean mIsFristShowTopAd; //是否第一次展示头图广告
 
     private static final String TAG = "GeekSdk";
 
@@ -272,7 +272,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         initVirus();
         initGeekAdSdk();
-        initGeekSdkTop(true);
         initGeekSdkCenter();
     }
 
@@ -384,16 +383,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             }
         }
-        if (null != mVirusList && mVirusList.size() > 0) {
-            if (mVirusPoistion > 2) {
-                mVirusPoistion = 0;
-            }
-            if (mVirusList.size() - 1 >= mVirusPoistion) {
-                mVirusTv.setText(mVirusList.get(mVirusPoistion).getName());
-                mVirusIv.setImageResource(mVirusList.get(mVirusPoistion).getIcon());
-            }
-        }
-
         lineShd.setEnabled(true);
         textWjgl.setEnabled(true);
         viewPhoneThin.setEnabled(true);
@@ -404,7 +393,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /**
      * 顶部广告 样式---大图嵌套图片_01_跑马灯
      */
-    private void initGeekSdkTop(boolean isAllClean) {
+    private void initGeekSdkTop() {
         boolean isOpen = false;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
@@ -415,16 +404,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         }
         if (!isOpen) return;
-        if (isAllClean) {
+        if (!mIsFristShowTopAd) {
             StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
+            mIsFristShowTopAd = true;
         }
         if (null == getActivity() || null == mTopAdFramelayout) return;
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
-                Log.d(TAG, "adSuccess---1");
                 if (null != info) {
+                    Log.d(TAG, "adSuccess---1==" + info.getAdId());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                 }
                 if (null != adManager && null != adManager.getAdView()) {
@@ -681,9 +671,22 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
         }
-        if (mIsAllClean) {
-            initGeekSdkTop(false);
+
+        if (getString(R.string.virus_kill).contains(event.getTitle())
+                || getString(R.string.network_quicken).contains(event.getTitle())
+                || getString(R.string.game_quicken).contains(event.getTitle())) {
+            if (null != mVirusList && mVirusList.size() > 0) {
+                if (mVirusPoistion > 2) {
+                    mVirusPoistion = 0;
+                }
+                if (mVirusList.size() - 1 >= mVirusPoistion) {
+                    mVirusTv.setText(mVirusList.get(mVirusPoistion).getName());
+                    mVirusIv.setImageResource(mVirusList.get(mVirusPoistion).getIcon());
+                }
+            }
         }
+
+        initGeekSdkTop();
         initGeekSdkCenter();
     }
 
@@ -1104,17 +1107,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private boolean mIsAllClean; //是否已使用垃圾清理
-
     /**
      * EventBus 立即清理完成后，更新首页显示文案
      */
     @Subscribe
     public void onEventClean(CleanEvent cleanEvent) {
+        Log.d("XiLei", "onEventClean");
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                mIsAllClean = true;
-                initGeekSdkTop(true);
                 showTextView01();
                 tvNowClean.setVisibility(View.GONE);
 //                mLottieHomeView.useHardwareAcceleration(true);

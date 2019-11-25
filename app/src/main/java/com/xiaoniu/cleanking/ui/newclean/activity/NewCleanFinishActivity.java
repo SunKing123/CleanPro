@@ -119,11 +119,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
         mTitle = getIntent().getStringExtra("title");
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)
-                || getString(R.string.tool_notification_clean).contains(mTitle)
-                || getString(R.string.tool_super_power_saving).contains(mTitle)) {
-            EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-        }
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -770,6 +765,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         v_clean_all.setOnClickListener(this);
 
         mBtnLeft.setOnClickListener(v -> {
+            EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
             if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                 StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, currentPage);
             } else {
@@ -893,6 +889,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         if (getString(R.string.tool_one_key_speed).contains(mTitle) || getString(R.string.game_quicken).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_back_click", sysReturnEventName, sourcePage, currentPage);
         } else {
