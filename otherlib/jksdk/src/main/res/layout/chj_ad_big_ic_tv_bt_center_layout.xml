@@ -4,6 +4,7 @@
     android:id="@+id/rl_ad_item_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/ad_big_img_bg"
     tools:ignore="HardcodedText">
 
     <LinearLayout
@@ -46,6 +47,7 @@
             android:id="@+id/down_bt"
             android:visibility="gone"
             android:gravity="center"
+            android:textColor="#ffffff"
             android:layout_marginTop="22dp"
             android:layout_gravity="center_horizontal"
             android:background="@mipmap/ad_big_img_down"

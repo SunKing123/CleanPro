@@ -247,6 +247,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
         if (PreferenceUtil.isFirstOpenApp() && mIsOpen) {
             initGeekSdkAD();
+        }else{
+            jumpActivity();
         }
     }
 

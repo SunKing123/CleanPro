@@ -13,8 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
-    <ImageView
-        android:background="@mipmap/ad_mask"
+    <com.comm.jksdk.widget.TopRoundImageView
+        android:src="@mipmap/angle_ad_mask"
+        app:fillet="@dimen/dimen_12dp"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
@@ -60,7 +62,7 @@
             <TextView
                 android:id="@+id/ad_title_tv"
                 android:layout_marginTop="@dimen/dimen_11dp"
-                android:lines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
                 android:layout_marginRight="@dimen/dimen_10dp"
                 android:textSize="10dp"

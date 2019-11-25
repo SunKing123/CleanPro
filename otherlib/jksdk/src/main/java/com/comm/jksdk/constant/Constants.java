@@ -95,6 +95,10 @@ public class Constants {
          */
         String FAKE_VIDEO_IARGE_IMAGE = "FAKE_VIDEO_IARGE_IMAGE";
         /**
+         * 外部插屏_01
+         */
+        String EXTERNAL_CP_01 = "EXTERNAL_CP_01";
+        /**
          *
          */
         String All = "All";

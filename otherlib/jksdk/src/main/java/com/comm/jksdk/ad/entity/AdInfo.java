@@ -34,6 +34,11 @@ public class AdInfo extends BaseEntity{
      */
     private String adTitle;
 
+    /**
+     * 插屏样式
+     */
+    private String adStyle;
+
     public String getAdAppid() {
         return adAppid;
     }
@@ -66,6 +71,14 @@ public class AdInfo extends BaseEntity{
         this.adTitle = adTitle;
     }
 
+    public String getAdStyle() {
+        return adStyle;
+    }
+
+    public void setAdStyle(String adStyle) {
+        this.adStyle = adStyle;
+    }
+
 
     @Override
     public int describeContents() {
@@ -78,6 +91,7 @@ public class AdInfo extends BaseEntity{
         dest.writeString(this.adId);
         dest.writeString(this.adSource);
         dest.writeString(this.adTitle);
+        dest.writeString(this.adStyle);
     }
 
     public AdInfo() {
@@ -88,6 +102,7 @@ public class AdInfo extends BaseEntity{
         this.adId = in.readString();
         this.adSource = in.readString();
         this.adTitle = in.readString();
+        this.adStyle = in.readString();
     }
 
     public static final Creator<AdInfo> CREATOR = new Creator<AdInfo>() {
@@ -109,6 +124,7 @@ public class AdInfo extends BaseEntity{
                 ", adId='" + adId + '\'' +
                 ", adSource='" + adSource + '\'' +
                 ", adTitle='" + adTitle + '\'' +
+                ", adStyle='" + adStyle + '\'' +
                 '}';
     }
 }

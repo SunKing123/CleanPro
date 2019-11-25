@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class NewsFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
-    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.VIDEO, NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
+    private NewsType[] mNewTypes = {NewsType.VIDEO, NewsType.TOUTIAO , NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
     private ViewPager mViewPager;
     private ViewPagerIndicator mTabIndicator;
     private ArrayList<NewsListFragment> mFragments;

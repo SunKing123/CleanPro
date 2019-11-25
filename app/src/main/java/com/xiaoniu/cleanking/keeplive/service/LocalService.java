@@ -108,12 +108,14 @@ public final class LocalService extends Service {
         intentFilter2.addAction("_ACTION_SCREEN_ON");
         registerReceiver(screenStateReceiver, intentFilter2);
 
-
-  /*      if(innerReceiver ==null){
+        /**
+         * home键监听
+         */
+        if(innerReceiver ==null){
             innerReceiver = new InnerReceiver();
         }
         IntentFilter mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        registerReceiver(innerReceiver, mFilter);*/
+        registerReceiver(innerReceiver, mFilter);
 
         //开启一个前台通知，用于提升服务进程优先级
         shouDefNotify();

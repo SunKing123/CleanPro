@@ -71,6 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginTop="-60dp"
         android:layout_marginRight="@dimen/dimen_12dp"
         android:background="@drawable/ad_container_bg_white">
     </FrameLayout>

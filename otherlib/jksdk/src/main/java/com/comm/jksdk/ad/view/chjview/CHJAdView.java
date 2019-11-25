@@ -117,7 +117,9 @@ public class CHJAdView extends CommAdView {
             mAdView = new CsjCustomInsertScreenAdView(mContext);
         } else if (Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) { //自定义全屏插屏
             mAdView = new CsjCustomInsertScreenAdView(mContext, true);
-        }  else {
+        } else if (Constants.AdStyle.EXTERNAL_CP_01.equals(style)) { //外部插屏_01
+            mAdView = new CsjExternalInsertScreenAdView(mContext);
+        } else {
             //  all
             //所有样式都支持 随机展示
             //所有样式都支持 随机展示
@@ -204,6 +206,8 @@ public class CHJAdView extends CommAdView {
             getRewardVideoAd();
         } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) {
             getCustomInsertScreenAd();
+        } else if (Constants.AdStyle.EXTERNAL_CP_01.equals(style)) {
+            getExternalInsertScreenAd();
         } else if (Constants.AdStyle.CP.equals(style)) {
             getTemplateInsertScreenAd();
         }
@@ -348,6 +352,27 @@ public class CHJAdView extends CommAdView {
             mAdView.setYlhAdListener(mFirstAdListener);
             ((CsjCustomInsertScreenAdView) mAdView).setmProgress(mProgress);
             ((CsjCustomInsertScreenAdView) mAdView).loadCustomInsertScreenAd(mActivity, showTimeSeconds, mAdId);
+        }
+    }
+
+    /**
+     * 请求外部插屏广告_01
+     */
+    private void getExternalInsertScreenAd() {
+        if (mAdView == null) {
+            return;
+        }
+
+        //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
+        TTAdManagerHolder.get(mAppId).requestPermissionIfNecessary(mContext);
+        if (mAdView instanceof CsjExternalInsertScreenAdView) {
+            mAdView.setAppId(mAppId);
+            mAdView.setAdId(mAdId);
+            mAdView.setAdInfo(mAdInfo);
+            mAdView.setAdListener(mAdListener);
+            mAdView.setYlhAdListener(mFirstAdListener);
+            ((CsjExternalInsertScreenAdView) mAdView).setmProgress(mProgress);
+            ((CsjExternalInsertScreenAdView) mAdView).loadExternalInsertScreenAd(mActivity, showTimeSeconds, mAdId);
         }
     }
 
