@@ -204,8 +204,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 Log.d(TAG, "-----adClicked-----")
                 if (null == info) return
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
-                //todo
-                goFinishActivity()
             }
 
             override fun adClose(info: AdInfo) {
@@ -213,8 +211,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 if (null != info) {
                     StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
                 }
-
-                //todo
                 goFinishActivity()
             }
 

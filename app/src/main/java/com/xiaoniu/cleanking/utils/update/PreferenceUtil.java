@@ -485,7 +485,7 @@ public class PreferenceUtil {
      *
      * @return
      */
-    public static boolean isNoFirstOpenApp() {
+    public static boolean isFirstOpenApp() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_APP, false);
     }

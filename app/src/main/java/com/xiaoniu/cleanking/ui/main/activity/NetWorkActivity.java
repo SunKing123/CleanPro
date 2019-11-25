@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -87,6 +88,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if(TextUtils.isEmpty(mStartNetNumber)) return;
                 mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)) + " KB/S");
                 if (null != mLottieAnimationView) {
                     mLottieAnimationView.cancelAnimation();

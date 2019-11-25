@@ -654,7 +654,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                     public void onAnimationEnd(Animator animation) {
                         if (index == 1) {
                             Log.v("onAnimationEnd", "onAnimationEnd ");
-//                            mView.setColorChange(true);
                             if (animator != null)
                                 animator.cancel();
                         } else {

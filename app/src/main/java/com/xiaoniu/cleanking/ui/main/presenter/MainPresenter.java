@@ -15,10 +15,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.bean.ConfigBean;
-import com.comm.jksdk.config.listener.ConfigListener;
-import com.comm.jksdk.utils.JsonUtils;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -39,7 +35,6 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -649,7 +644,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        LogUtils.i("-zzh-"+aMapLocation.getErrorInfo());
+        LogUtils.i("-zzh-" + aMapLocation.getErrorInfo());
     }
 
 

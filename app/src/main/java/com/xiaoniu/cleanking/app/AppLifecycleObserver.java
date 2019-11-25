@@ -16,7 +16,6 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,11 +35,15 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
-        if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) ||ActivityCollector.isActivityExist(PopLayerActivity.class)) return;
+        if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
+                || ActivityCollector.isActivityExist(PopLayerActivity.class)
+                || !PreferenceUtil.isFirstOpenApp())
+            return;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+//                if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                     Intent intent = new Intent();
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.setClass(mContext, SplashADHotActivity.class);

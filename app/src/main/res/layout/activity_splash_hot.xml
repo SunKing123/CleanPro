@@ -36,20 +36,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/dimen_100dp">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:src="@drawable/icon_sp_bottom" />
-        </LinearLayout>
+            android:src="@drawable/icon_sp_bottom" />
 
         <!-- 4.自定义跳过按钮区域：开发者可以根据需要自己实现不同样式的跳过按钮 -->
         <!-- 注意1：根据广告法规定，跳过按钮必须在屏幕当中出现。因此广告展示的时候，必须让将SkipView显示出来，即visible，否则将SDK将不展示广告，返回错误码608。。 -->
@@ -73,8 +66,8 @@
             app:textProgressSize="9sp" />
     </RelativeLayout>
 
-    <Space
+    <!--<Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_0dp"
-        android:layout_weight="3" />
+        android:layout_weight="3" />-->
 </LinearLayout>

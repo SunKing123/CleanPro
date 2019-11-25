@@ -25,10 +25,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -61,6 +59,7 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -670,6 +669,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * 展示红包
      */
     private void showRedPacket(RedPacketEntity redPacketEntity) {
+        if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
+                || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
+                || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
+            return;
+
         if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
             mShowRedFirst = true;
             if (!isFinishing()) {

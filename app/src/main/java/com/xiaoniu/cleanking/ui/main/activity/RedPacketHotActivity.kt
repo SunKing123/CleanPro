@@ -105,6 +105,8 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                             initGeekAdSdk()
                         }
                     }
+                } else {
+                    showWebView()
                 }
             }
         }
@@ -114,7 +116,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
      * 初始化广告sdk
      */
     private fun initGeekAdSdk() {
-//        if (null == mAdManager) return
         NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_page", "red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         mAdManager = GeekAdSdk.getAdsManger()
@@ -149,17 +150,13 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", " ")
                 }
-                if (!isFinishing()) {
-                    AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
-                    startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
-                            .putExtra(ExtraConstant.WEB_URL, AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount]))
-                    finish()
-                }
+                showWebView()
             }
 
             override fun adError(errorCode: Int, errorMsg: String) {
                 Log.d(TAG, "-----adError-----$errorMsg")
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "red_envelopes_page_video_page")
+                showWebView()
             }
 
             override fun onVideoRewardVerify(info: AdInfo?, rewardVerify: Boolean, rewardAmount: Int, rewardName: String?) {
@@ -170,6 +167,25 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 NiuDataAPI.onPageStart("red_envelopes_page_video_end_page_view_page", "红包弹窗激励视频结束页浏览")
             }
         })
+    }
+
+    private fun showWebView() {
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().redPacketEntityList
+                || null == AppHolder.getInstance().redPacketEntityList.data
+                || AppHolder.getInstance().redPacketEntityList.data.size <= 0
+                || null == AppHolder.getInstance().redPacketEntityList.data[0].imgUrls
+                || AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size <= 0)
+            finish()
+            return
+
+        if (!isFinishing()) {
+            if (AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount].contains("http")) {
+                AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
+                startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
+                        .putExtra(ExtraConstant.WEB_URL, AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount]))
+            }
+            finish()
+        }
     }
 
     override fun finishActivity() {

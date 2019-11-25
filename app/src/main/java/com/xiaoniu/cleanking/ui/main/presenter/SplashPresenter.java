@@ -1,7 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
-import android.util.Log;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.config.listener.ConfigListener;
@@ -92,19 +90,19 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
     }
 
     //获取广告配置
-    public void geekAdSDKConfig(){
+    public void geekAdSDKConfig() {
         GeekAdSdk.requestConfig(new ConfigListener() {
             @Override
             public void adSuccess(List<ConfigBean.AdListBean> configList) {
                 String config = JsonUtils.encode(configList);
                 String aa = config.substring(0, config.length() / 2);
                 LogUtils.i("config:" + aa);
-                LogUtils.i( "config-------:" + config.substring(config.length() / 2));
+                LogUtils.i("config-------:" + config.substring(config.length() / 2));
             }
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                LogUtils.i(errorCode+"----config--error---:" + errorMsg);
+                LogUtils.i(errorCode + "----config--error---:" + errorMsg);
 
             }
         });

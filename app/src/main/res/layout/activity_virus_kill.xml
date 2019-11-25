@@ -29,10 +29,52 @@
             android:alpha="1"
             android:background="@drawable/icon_scaning_bg03" />
 
+        <ImageView
+            android:id="@+id/iv_scan_bg04"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg02" />
+
+        <ImageView
+            android:id="@+id/iv_scan_bg05"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_scaning_bg01" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:id="@+id/v_lottie2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:background="@drawable/icon_scaning_bg01">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie2"
+                android:layout_width="370dp"
+                android:layout_height="288dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lottie2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dimen_25dp"
+                android:text="@string/already_virus"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_20sp" />
+        </RelativeLayout>
 
     </RelativeLayout>
 
