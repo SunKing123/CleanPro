@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
@@ -36,11 +38,13 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -53,6 +57,7 @@ import java.util.concurrent.Executors;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * 锁屏信息流广告页面
@@ -99,6 +104,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLockerWindow(getWindow());
+        StatusBarUtil.setTransparentForWindow(this);
         setContentView(R.layout.activity_lock);
         ActivityCollector.addActivity(this, LockActivity.class);
         initView();
@@ -177,6 +183,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+
     }
 
     public void setBtnState(){
@@ -197,11 +204,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if(null!= PreferenceUtil.getInstants().get("lock_pos02") &&  PreferenceUtil.getInstants().get("lock_pos02").length()>2){
             LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos02"),LockScreenBtnInfo.class);
             if(btnInfo.isNormal()){
-                tv_ram_size.setVisibility(View.GONE);
+                tv_ram_size.setVisibility(View.VISIBLE);
+                tv_ram_size.setText( NumberUtils.mathRandom(15,30)+ "%");
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
             }else{
                 tv_ram_size.setVisibility(View.VISIBLE);
-                tv_ram_size.setText(btnInfo.getCheckResult()+"MB");
+                tv_ram_size.setText( NumberUtils.mathRandom(70,85)+ "%");
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
             }
         }else{
@@ -238,9 +246,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 tv_file_size.setVisibility(View.VISIBLE);
                 iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 break;
-
             case 2:
-                tv_ram_size.setText(NumberUtils.mathRandom(800,1000)+"MB");
+                tv_ram_size.setText( NumberUtils.mathRandom(70,85)+ "%");
                 tv_ram_size.setVisibility(View.VISIBLE);
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 break;
@@ -251,6 +258,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+
 
 
     public void adInit() {
@@ -389,17 +398,99 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.rel_clean_virus://病毒查杀
                 StatisticsUtils.trackClick("virus_killing_click", "病毒查杀点击", "lock_screen", "lock_screen");
-                Intent virusIntent = new Intent(this, VirusKillActivity.class);
-                virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                virusIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                virusIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                PreferenceUtil.getInstants().save("lock_action","virus");
-                startActivity(virusIntent);
+                if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                        || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                        || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+                    startVirUsKill();
+                } else {
+                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
+                            if (switchInfoList.isOpen()) {
+                                loadGeekAd();
+                            } else {
+                                startVirUsKill();
+                            }
+                        }
+                    }
+                }
+
                 break;
 
         }
+    }
+
+
+    public void startVirUsKill(){
+        Intent virusIntent = new Intent(this, VirusKillActivity.class);
+        virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        virusIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        virusIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        PreferenceUtil.getInstants().save("lock_action","virus");
+        startActivity(virusIntent);
+    }
+
+
+    /**
+     * 病毒查杀激励视频
+     */
+    private void loadGeekAd() {
+       AdManager mAdManager =  GeekAdSdk.getAdsManger();
+        if (null == mAdManager) return;
+        NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
+        NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
+        mAdManager.loadRewardVideoAd(this, "click_virus_killing_ad", "user123", 1, new VideoAdListener() {
+            @Override
+            public void onVideoResume(AdInfo info) {
+
+            }
+
+            @Override
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+                NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频结束页浏览");
+            }
+
+            @Override
+            public void adSuccess(AdInfo info) {
+
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "virus_killing_video_page");
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                if (null == info) return;
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "virus_killing_video_page", " ");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "virus_killing_video_page", " ");
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+                }
+                startVirUsKill();
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "virus_killing_video_page");
+                startVirUsKill();
+            }
+
+        });
     }
 
     protected UIChangingReceiver mUIChangingReceiver;
@@ -528,11 +619,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } else if (pos == 1) {
                 if (btnInfo.isNormal()) {
-                    tv_ram_size.setVisibility(View.GONE);
+                    tv_ram_size.setVisibility(View.VISIBLE);
+                    tv_ram_size.setText( NumberUtils.mathRandom(15,30)+ "%");
                     iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
                 } else {
+                    //btnInfo.getCheckResult()
                     tv_ram_size.setVisibility(View.VISIBLE);
-                    tv_ram_size.setText(btnInfo.getCheckResult() + "MB");
+                    tv_ram_size.setText( NumberUtils.mathRandom(70,85)+ "%");
                     iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 }
             } else if (pos == 2) {

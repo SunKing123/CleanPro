@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.http.utils.NetworkUtil;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -228,23 +229,29 @@ public class NewsListFragment extends BaseFragment {
      * @return
      */
     public ArrayList<NewsItemInfo> insertNewsAd(ArrayList<NewsItemInfo> newsItemInfos){
-        int showRate = 3;   //间隔几条展示；
-        if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
-            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
-            showRate = null != map.get("page_news_screen") ? 3 : map.get("page_news_screen").getShowRate();
-            showRate = showRate <= 2 ? 2 : showRate;
+        if (NetworkUtils.isNetConnected()) {
+            int showRate = 3;   //间隔几条展示；
+            if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
+                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+                showRate = null != map.get("page_news_screen") ? 3 : map.get("page_news_screen").getShowRate();
+                showRate = showRate <= 2 ? 2 : showRate;
+            }
+
+            ArrayList<NewsItemInfo> newdata = new ArrayList<>();
+            for(int i=0;i<newsItemInfos.size();i++){
+                newdata.add(newsItemInfos.get(i));
+                if ((i + 1) % (showRate-1) == 0) {//每间隔showRate播放
+                    NewsItemInfo newsItemInfo = new NewsItemInfo();
+                    newsItemInfo.isAd = true;
+                    newdata.add(newsItemInfo);
+                }
+            }
+            return newdata;
+        }else{
+            return newsItemInfos;
         }
 
-        ArrayList<NewsItemInfo> newdata = new ArrayList<>();
-        for(int i=0;i<newsItemInfos.size();i++){
-            newdata.add(newsItemInfos.get(i));
-            if ((i + 1) % (showRate-1) == 0) {//每间隔showRate播放
-                NewsItemInfo newsItemInfo = new NewsItemInfo();
-                newsItemInfo.isAd = true;
-                newdata.add(newsItemInfo);
-            }
-        }
-        return newdata;
+
 
     }
 }

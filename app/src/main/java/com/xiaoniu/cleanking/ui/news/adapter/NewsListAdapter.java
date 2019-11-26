@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.http.utils.NetworkUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -27,6 +28,7 @@ import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.widget.CountDownView;
 import com.xiaoniu.common.base.SimpleWebActivity;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
@@ -85,7 +87,10 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 @Override
                 public void completed() {
                     //newlist_2_1   第二屏幕广告样式
-                    insertAd(linAdContainer,"newlist_2_1",closeBtn,View.VISIBLE);
+                    if (NetworkUtils.isNetConnected()) {
+                        insertAd(linAdContainer,"newlist_2_1",closeBtn,View.VISIBLE);
+                    }
+
                 }
             });
 
@@ -96,6 +101,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             }
             if ((position + 1) % showRate == 0) {//每间隔showRate播放
                 //newlist_2_1   第二屏幕广告样式
+                if (NetworkUtils.isNetConnected())
                 insertAd(linAdContainer,"newlist_2_1",closeBtn,View.GONE);
             }else{
                 linAdContainer.removeAllViews();
@@ -127,6 +133,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 RelativeLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);//广告加载
                 //newlist_2_1   第二屏幕广告样式
                 String positionId = pageName.equals(NewsType.TOUTIAO.getValue())?"newlist_1_1":"newlist_other_1";
+                if (NetworkUtils.isNetConnected())
                 insertAd(linAdContainer,positionId,null,View.GONE);
             }
 

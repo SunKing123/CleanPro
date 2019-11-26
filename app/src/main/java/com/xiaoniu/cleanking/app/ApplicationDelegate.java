@@ -85,7 +85,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
         initRoom(application);
         initNiuData(application);
-//        initOaid(application);
+        initOaid(application);
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
@@ -98,8 +98,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initJsBridge();
         homeCatch(application);
 
-
     }
+
+
 
     private static AppComponent mAppComponent;
 
@@ -200,43 +201,48 @@ public class ApplicationDelegate implements IApplicationDelegate {
     private String oaId = "";
 
     public void initOaid(Application application) {
-        //设置oaid到埋点公共参数
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) { //4.4以上版本oaid
-            try {
-                JLibrary.InitEntry(application);
-                //获取oaid
-                new MiitHelper(new MiitHelper.AppIdsUpdater() {
-                    @Override
-                    public void OnIdsAvalid(@NonNull String mOaid) {
-                        oaId = mOaid;
-                        NiuDataAPI.setOaid(oaId);
-                        NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
-                            //添加到默认事件
-                            @Override
-                            public void onTrackAutoCollectEvent(String eventCode, JSONObject eventProperties) {
-                                try {
-                                    eventProperties.put("oaid", oaId);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+        String processName = getProcessName(application);
+        LogUtils.i( "-zhh-processName = " + processName);
+        if (processName.equals(application.getPackageName())) {
+            //设置oaid到埋点公共参数
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) { //6.0以上版本oaid
+                try {
+                    JLibrary.InitEntry(application);
+                    //获取oaid
+                    new MiitHelper(new MiitHelper.AppIdsUpdater() {
+                        @Override
+                        public void OnIdsAvalid(@NonNull String mOaid) {
+                            oaId = mOaid;
+                            NiuDataAPI.setOaid(oaId);
+                            NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
+                                //添加到默认事件
+                                @Override
+                                public void onTrackAutoCollectEvent(String eventCode, JSONObject eventProperties) {
+                                    try {
+                                        eventProperties.put("oaid", oaId);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
 
-                            //添加到其他事件
-                            @Override
-                            public void onTrackEvent(String eventCode, JSONObject eventProperties) {
-                                try {
-                                    eventProperties.put("oaid", oaId);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                //添加到其他事件
+                                @Override
+                                public void onTrackEvent(String eventCode, JSONObject eventProperties) {
+                                    try {
+                                        eventProperties.put("oaid", oaId);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        });
-                    }
-                }).getDeviceIds(application);
-            } catch (Exception e) {
-                e.printStackTrace();
+                            });
+                        }
+                    }).getDeviceIds(application);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+
     }
 
     //获取当前进程名称

@@ -23,7 +23,7 @@
             android:id="@+id/ad_describe_tv"
             android:lines="1"
             android:textColor="#ffffff"
-            android:textSize="@dimen/dimen_15dp"
+            android:textSize="@dimen/dimen_17dp"
             android:layout_marginTop="7.5dp"
             android:layout_marginLeft="@dimen/dimen_16dp"
             android:layout_marginRight="@dimen/dimen_16dp"
@@ -32,8 +32,8 @@
         <ImageView
             android:layout_gravity="center"
             android:src="@mipmap/ad_big_img_paly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="45dp"
+            android:layout_height="45dp"/>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
     <RelativeLayout
         android:orientation="horizontal"
