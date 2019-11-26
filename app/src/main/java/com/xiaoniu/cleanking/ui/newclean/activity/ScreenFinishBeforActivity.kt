@@ -195,9 +195,9 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
             override fun adExposed(info: AdInfo) {
                 Log.d(TAG, "-----adExposed-----")
-                PreferenceUtil.saveShowAD(true)
                 if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+                PreferenceUtil.saveShowAD(true)
             }
 
             override fun adClicked(info: AdInfo) {

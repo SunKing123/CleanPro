@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 /**
  * 动画引导
@@ -32,6 +33,7 @@ public class PhonePremisActivity extends Activity {
     }
 
     private void initViews() {
+        PreferenceUtil.saveShowAD(true);
         mLottieAnimationView = findViewById(R.id.view_lottie);
 //        mLottieAnimationView.useHardwareAcceleration();
         mLottieAnimationView.setAnimation("data_premis.json");

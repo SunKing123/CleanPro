@@ -473,7 +473,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 startCleanAnim();
                 EventBus.getDefault().post(new InternalStoragePremEvent());
             } else {
-                NiuDataAPI.onPageStart("boost_scan_page_view_page", "加速授权失败页浏览");
+                NiuDataAPI.onPageStart("boost_authorization_fail_page_view_page", "加速授权失败页浏览");
                 NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_fail_page", "boost_authorization_fail_page_view_page", "加速授权失败页浏览");
                 ToastUtils.showShort(getString(R.string.tool_get_premis));
                 if (isDoubleBack) finish();
@@ -735,6 +735,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        PreferenceUtil.saveShowAD(false);
         NiuDataAPI.onPageEnd("one_click_acceleration_view_page", "一键加速页浏览");
     }
 
