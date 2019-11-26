@@ -198,7 +198,36 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         }
     }
 
+/*
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this, "lock_screen_advertising", new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
+                View adView = adManager.getAdView();
+                if (adView != null) {
+                    relAd.removeAllViews();
+                    relAd.addView(adView);
+                }
+            }
 
+            @Override
+            public void adExposed(AdInfo info) {
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
+                LogUtils.e("adExposed");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
+
+            }
+        });*/
     /**
      * 插入广告
      */
@@ -208,8 +237,14 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             adManager.loadAd(mActivity,positionId , new AdListener() {
                 @Override
                 public void adSuccess(AdInfo info) {
+                    if(positionId.equals("newlist_2_1")){
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "video_information_page", "video_information_page");
+                        StatisticsUtils.customTrackEvent("ad_vue_custom", "视频页广告vue创建", "video_information_page", "video_information_page");
+                    }else {
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "information_page", "information_page");
+                        StatisticsUtils.customTrackEvent("ad_vue_custom", "视频页广告vue创建", "information_page", "information_page");
+                    }
                     if (null != container ) {
-
                         View adView = adManager.getAdView();
                         if (adView != null) {
                             if (adView.getParent() != null) {
@@ -229,7 +264,10 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                                             if(closeBtn!=null)
                                                 closeBtn.setVisibility(View.GONE);
                                             if(container!=null)
+                                                container.removeAllViews();
                                                 container.setVisibility(View.GONE);
+
+                                            StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), "video_information_page", "video_information_page", info.getAdTitle());
                                         }
                                     });
                                     closeBtn.setOnCountDownListener(new CountDownView.OnCountDownListener() {
@@ -238,6 +276,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                                             if(closeBtn!=null)
                                                 closeBtn.setVisibility(View.GONE);
                                             if(container!=null)
+                                                container.removeAllViews();
                                                 container.setVisibility(View.GONE);
                                         }
                                     });
@@ -251,17 +290,25 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
                 @Override
                 public void adExposed(AdInfo info) {
-
+                    if(positionId.equals("newlist_2_1")){
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "video_information_page", "video_information_page", info.getAdTitle());
+                    }else {
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "information_page", "information_page", info.getAdTitle());
+                    }
                 }
 
                 @Override
                 public void adClicked(AdInfo info) {
-
+                    if(positionId.equals("newlist_2_1")){
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "video_information_page", "video_information_page", info.getAdTitle());
+                    }else{
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "information_page", "information_page", info.getAdTitle());
+                    }
                 }
 
                 @Override
                 public void adError(int errorCode, String errorMsg) {
-
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
                 }
             });
         }
