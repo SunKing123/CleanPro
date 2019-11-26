@@ -180,6 +180,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mVirusPoistion;
     private AdManager mAdManager;
     private boolean mIsFristShowTopAd; //是否第一次展示头图广告
+    private boolean isGameMain; //点击的是主功能的游戏加速还是推荐下的游戏加速o
 
     private static final String TAG = "GeekSdk";
 
@@ -672,23 +673,30 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
         }
 
-        if (getString(R.string.virus_kill).contains(event.getTitle())
-                || getString(R.string.network_quicken).contains(event.getTitle())
-                || getString(R.string.game_quicken).contains(event.getTitle())) {
-            mVirusPoistion++;
-            if (null != mVirusList && mVirusList.size() > 0) {
-                if (mVirusPoistion > 2) {
-                    mVirusPoistion = 0;
-                }
-                if (mVirusList.size() - 1 >= mVirusPoistion) {
-                    mVirusTv.setText(mVirusList.get(mVirusPoistion).getName());
-                    mVirusIv.setImageResource(mVirusList.get(mVirusPoistion).getIcon());
-                }
-            }
+        if (getString(R.string.virus_kill).contains(event.getTitle()) || getString(R.string.network_quicken).contains(event.getTitle())) {
+            forThreeTab();
         }
-
+        if (getString(R.string.game_quicken).contains(event.getTitle()) && isGameMain) {
+            forThreeTab();
+        }
         initGeekSdkTop();
         initGeekSdkCenter();
+    }
+
+    /**
+     * 病毒查杀、网络加速、游戏加速轮播
+     */
+    private void forThreeTab() {
+        mVirusPoistion++;
+        if (null != mVirusList && mVirusList.size() > 0) {
+            if (mVirusPoistion > 2) {
+                mVirusPoistion = 0;
+            }
+            if (mVirusList.size() - 1 >= mVirusPoistion) {
+                mVirusTv.setText(mVirusList.get(mVirusPoistion).getName());
+                mVirusIv.setImageResource(mVirusList.get(mVirusPoistion).getIcon());
+            }
+        }
     }
 
     /**
@@ -806,6 +814,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     }
                     break;
                 case 1:
+                    StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
                     if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
                             || null == AppHolder.getInstance().getSwitchInfoList().getData()
                             || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
@@ -823,8 +832,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     }
                     break;
                 case 2:
+                    isGameMain = true;
+                    StatisticsUtils.trackClick("main_function_area_gameboost_click", "用户在首页主功能区点击【游戏加速】按钮", "home_page", "home_page");
                     if (PreferenceUtil.getGameTime()) {
-                        startActivity(GameActivity.class);
+                        getActivity().startActivity(new Intent(getActivity(), GameActivity.class)
+                                .putExtra("main", true));
                     } else {
                         goFinishActivity();
                     }
@@ -939,9 +951,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.v_game_clean)
     public void ViewThinClick() {
+        isGameMain = false;
         viewGame.setEnabled(false);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         Intent intent = new Intent(getActivity(), GameActivity.class);
+        intent.putExtra("main", false);
         intent.putExtra(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.game_quicken));
         startActivity(intent);
         StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
@@ -1406,7 +1420,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 PreferenceUtil.saveShowAD(false);
                 NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
                 if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", " ");
                 }
                 startActivity(VirusKillActivity.class);
             }

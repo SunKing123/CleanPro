@@ -71,7 +71,8 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     private ArrayList<FirstJunkInfo> mSelectList; //选择的应用列表
     private GameListAdapter mGameListAdapter;
     private List<HomeRecommendListEntity> mBannerList;
-    private final String CURRENT_PAGE = "gameboost_add_list_page";
+    private String CURRENT_PAGE = "gameboost_add_list_page";
+    private boolean mIsFromHomeMain; //是否来自首页主功能区
 
     @Override
     public int getLayoutId() {
@@ -86,7 +87,13 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     @Override
     public void initView() {
         StatusBarUtil.setTransparentForWindow(this);
-        NiuDataAPI.onPageStart("gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
+        mIsFromHomeMain = getIntent().getBooleanExtra("main", false);
+        if (mIsFromHomeMain) {
+            CURRENT_PAGE = "main_function_area_gameboost_add_list_page";
+            NiuDataAPI.onPageStart("main_function_area_gameboost_add_list_page_view_page", "主功能区游戏加速添加列表页浏览");
+        } else {
+            NiuDataAPI.onPageStart("gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
+        }
         mSelectNameList = new ArrayList<>();
         mAllList = new ArrayList<>();
         mSelectList = new ArrayList<>();
@@ -139,7 +146,11 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                StatisticsUtils.trackClick("return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
+                if (mIsFromHomeMain) {
+                    StatisticsUtils.trackClick("return_click", "主功能区游戏加速添加列表页返回", "main_function_area_gameboost_add_page", CURRENT_PAGE);
+                } else {
+                    StatisticsUtils.trackClick("return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
+                }
                 EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mAllList.size()) ? true : false));
                 GameListActivity.this.finish();
                 break;
@@ -163,7 +174,11 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            StatisticsUtils.trackClick("system_return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
+            if (mIsFromHomeMain) {
+                StatisticsUtils.trackClick("system_return_click", "游戏加速添加列表页返回", "gameboost_add_page", CURRENT_PAGE);
+            }else{
+                StatisticsUtils.trackClick("system_return_click", "主功能区游戏加速添加列表页返回", "main_function_area_gameboost_add_page", CURRENT_PAGE);
+            }
             EventBus.getDefault().post(new SelectGameEvent(mAllList, mSelectList, (mNotSelectCount == mAllList.size()) ? true : false));
             GameListActivity.this.finish();
             return true;
@@ -179,7 +194,11 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
         recycle_view.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
         recycle_view.setAdapter(mGameListAdapter);
         mGameListAdapter.setmOnCheckListener((listFile, pos) -> {
-            StatisticsUtils.trackClick("gameboost_choice_click", "游戏加速添加列表页选择框点击", "gameboost_add_page", CURRENT_PAGE);
+            if (mIsFromHomeMain) {
+                StatisticsUtils.trackClick("gameboost_choice_click", "游戏加速添加列表页选择框点击", "gameboost_add_page", CURRENT_PAGE);
+            } else {
+                StatisticsUtils.trackClick("gameboost_choice_click", "主功能区游戏加速添加列表页选择框点击", "main_function_area_gameboost_add_page", CURRENT_PAGE);
+            }
             mSelectList.clear();
             mNotSelectCount = 0;
             for (int i = 0; i < listFile.size(); i++) {
@@ -219,7 +238,11 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPIUtil.onPageEnd("gameboost_add_page", CURRENT_PAGE, "gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
+        if (mIsFromHomeMain) {
+            NiuDataAPIUtil.onPageEnd("gameboost_add_page", CURRENT_PAGE, "gameboost_add_list_page_view_page", "游戏加速添加列表页浏览");
+        } else {
+            NiuDataAPIUtil.onPageEnd("main_function_area_gameboost_add_page", CURRENT_PAGE, "main_function_area_gameboost_add_list_page_view_page", "主功能区游戏加速添加列表页浏览");
+        }
     }
 }
 

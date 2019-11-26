@@ -89,8 +89,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
         });
-
-
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("hot_splash_page_custom", "热启动页创建时", "hot_splash_page", "hot_splash_page");
     }

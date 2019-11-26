@@ -73,7 +73,7 @@ import cn.jzvd.Jzvd;
  */
 public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> implements View.OnClickListener {
 
-    private static final String TAG = "AD_DEMO";
+    private static final String TAG = "GeekSdk";
     private String mTitle = "";
     private TextView mTitleTv;
     private TextView mTvSize;
@@ -99,6 +99,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String createEventName = "";
     String returnEventName = "";
     String sysReturnEventName = "";
+    private boolean mIsFromHomeMain; //是否来自首页主功能区
 
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
@@ -118,6 +119,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        mIsFromHomeMain = getIntent().getBooleanExtra("main", false);
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
         mTitle = getIntent().getStringExtra("title");
@@ -280,6 +282,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
+        Log.d("XiLei", "sourcePage=" + sourcePage);
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             currentPage = "clean_success_page";
@@ -334,11 +337,33 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             sysReturnEventName = "用户在降温结果页返回";
         } else if (getString(R.string.game_quicken).contains(mTitle)) {
             //游戏加速
-            currentPage = "gameboost_success_page";
-            createEventName = "游戏加速结果页创建时";
-            createEventCode = "gameboost_success_page_custom";
-            returnEventName = "游戏加速结果页返回";
-            sysReturnEventName = "游戏加速结果页返回";
+            if (mIsFromHomeMain) {
+                currentPage = "main_function_area_gameboost_success_page";
+                createEventName = "主功能区游戏加速结果页创建时";
+                createEventCode = "main_function_area_gameboost_success_page_custom";
+                returnEventName = "主功能区游戏加速结果页返回";
+                sysReturnEventName = "主功能区游戏加速结果页返回";
+            } else {
+                currentPage = "gameboost_success_page";
+                createEventName = "游戏加速结果页创建时";
+                createEventCode = "gameboost_success_page_custom";
+                returnEventName = "游戏加速结果页返回";
+                sysReturnEventName = "游戏加速结果页返回";
+            }
+        } else if (getString(R.string.virus_kill).contains(mTitle)) {
+            //病毒查杀
+            currentPage = "virus_killing_success_page";
+            createEventName = "病毒查杀结果页创建时";
+            createEventCode = "virus_killing_success_page_custom";
+            returnEventName = "用户在病毒查杀结果页返回";
+            sysReturnEventName = "用户在病毒查杀结果页返回";
+        } else if (getString(R.string.network_quicken).contains(mTitle)) {
+            //网络加速
+            currentPage = "network_acceleration_success_page";
+            createEventName = "网络加速结果页创建时";
+            createEventCode = "network_acceleration_success_page_view_page";
+            returnEventName = "用户在网络加速结果页返回";
+            sysReturnEventName = "用户在网络加速结果页返回";
         } else {
             currentPage = "clean_up_page_view_immediately";
         }
@@ -382,21 +407,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 createEventCode = "direct_cooling_success_page_custom";
             } else if (getString(R.string.game_quicken).contains(mTitle)) {
                 //游戏加速
-                currentPage = "direct_gameboots_success_page";
-                createEventName = "直接跳游戏加速结果页创建时";
-                createEventCode = "direct_game_success_page_custom";
-            } else if (getString(R.string.virus_kill).contains(mTitle)) {
-                //病毒查杀
-                currentPage = "virus_killing_success_page";
-                createEventName = "病毒查杀结果页创建时";
-                createEventCode = "virus_killing_success_page_custom";
-            } else if (getString(R.string.network_quicken).contains(mTitle)) {
-                //网络加速
-                currentPage = "network_acceleration_success_page";
-                createEventName = "网络加速结果页创建时";
-                createEventCode = "network_acceleration_success_page_custom";
+                if (mIsFromHomeMain) {
+                    currentPage = "main_function_area_direct_gameboots_success_page";
+                    createEventName = "主功能区直接跳游戏加速结果页创建时";
+                    createEventCode = "main_function_area_direct_game_success_page_custom";
+                } else {
+                    currentPage = "direct_gameboots_success_page";
+                    createEventName = "直接跳游戏加速结果页创建时";
+                    createEventCode = "direct_game_success_page_custom";
+                }
             }
-
         }
     }
 
@@ -863,11 +883,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         mBtnLeft.setOnClickListener(v -> {
             EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-            if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-                StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, currentPage);
-            } else {
-                StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
-            }
+            StatisticsUtils.trackClick("return_click", returnEventName, sourcePage, currentPage);
             //插屏广告拉取失败禁止跳转到插屏广告页
           /*  if (mIsScreenAdSuccess) {
                 finish();
@@ -970,6 +986,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             });
         }
+
     }
 
     protected void loadData() {
@@ -986,13 +1003,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.d("XiLei", "onback===sourcePage==" + sourcePage);
+        Log.d("XiLei", "onback===currentPage==" + currentPage);
         EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
-        if (getString(R.string.tool_one_key_speed).contains(mTitle) || getString(R.string.game_quicken).contains(mTitle)) {
-            StatisticsUtils.trackClick("system_return_back_click", sysReturnEventName, sourcePage, currentPage);
-        } else {
-            StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
-        }
-
+        StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
         //插屏广告老去失败禁止跳转到插屏广告页
       /*  if (mIsScreenAdSuccess) {
             finish();
@@ -1227,11 +1241,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void adClicked(AdInfo info) {
-                if (info == null) {
-                    LogUtils.e("DEMO>>>adClicked， AdInfo is empty");
-                } else {
-                    LogUtils.e("DEMO>>>adClicked， " + info.toString());
-                }
+                if (null == info) return;
+                Log.d(TAG, "adClicked");
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
@@ -1248,7 +1259,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         adManager.loadAd(this, "success_page_ad_2", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
+                }
                 View adView = adManager.getAdView();
                 if (adView != null) {
                     ad_container_pos02.removeAllViews();
@@ -1259,12 +1272,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void adExposed(AdInfo info) {
                 LogUtils.e("adExposed");
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                LogUtils.e("adClicked");
+                Log.d(TAG, "adClicked");
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 

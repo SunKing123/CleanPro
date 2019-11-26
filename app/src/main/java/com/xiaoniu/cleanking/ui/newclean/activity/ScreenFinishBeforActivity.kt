@@ -227,6 +227,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
+            bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
             startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
         } else if (this.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3_锁屏跳转
             val bundle = Bundle()
@@ -238,6 +239,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             bundle.putString("title", mTitle)
             bundle.putString("num", mNum)
             bundle.putString("unit", mUnit)
+            bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
             startActivity(NewCleanFinishActivity::class.java, bundle)
         }
         finish()

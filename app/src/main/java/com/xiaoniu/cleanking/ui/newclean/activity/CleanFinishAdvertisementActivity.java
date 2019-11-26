@@ -69,6 +69,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     //穿山甲相关 begin
     private TTAdNative mTTAdNative;
     //穿山甲相关 end
+    private boolean mIsFromHomeMain; //是否来自首页主功能区
 
     @Override
     protected int getLayoutId() {
@@ -83,6 +84,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
+        mIsFromHomeMain = getIntent().getBooleanExtra("main", false);
         mPresenter.getSwitchInfoList();
         findViewById(R.id.btnLeft).setOnClickListener(this);
         mViewContent = findViewById(R.id.v_content);
