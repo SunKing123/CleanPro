@@ -88,8 +88,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(TextUtils.isEmpty(mStartNetNumber)) return;
-                mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)) + " KB/S");
+                if (TextUtils.isEmpty(mStartNetNumber)) return;
+                mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)).setScale(2, BigDecimal.ROUND_HALF_UP) + " KB/S");
                 if (null != mLottieAnimationView) {
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();

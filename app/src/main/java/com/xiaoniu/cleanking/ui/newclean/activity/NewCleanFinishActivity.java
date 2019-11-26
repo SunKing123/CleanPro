@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -35,6 +36,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -175,10 +177,105 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         getPageData();
         setListener();
         loadData();
-//        initChuanShanJiaScreen();
-        initPos01Ad();
+        initGeekAd();
     }
 
+    private void initGeekAd() {
+        if (null != AppHolder.getInstance() && null != AppHolder.getInstance().getSwitchInfoList()
+                && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            boolean isOpenOne = false;
+            boolean isOpenTwo = false;
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.tool_one_key_speed).contains(mTitle) && PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.tool_super_power_saving).contains(mTitle) && PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.tool_notification_clean).contains(mTitle) && PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.tool_chat_clear).contains(mTitle)) { //微信清理
+                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
+                        if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                            isOpenOne = switchInfoList.isOpen();
+                        }
+                        if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                            isOpenTwo = switchInfoList.isOpen();
+                        }
+                    }
+                } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle) && PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.tool_qq_clear).contains(mTitle) && PositionId.KEY_QQ.equals(switchInfoList.getConfigKey())) { //QQ专清
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.game_quicken).contains(mTitle) && PositionId.KEY_GAME.equals(switchInfoList.getConfigKey())) { //游戏加速
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.virus_kill).contains(mTitle) && PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey())) { //病毒查杀
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                } else if (getString(R.string.network_quicken).contains(mTitle) && PositionId.KEY_NET.equals(switchInfoList.getConfigKey())) { //网络加速
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                        isOpenOne = switchInfoList.isOpen();
+                    }
+                    if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                        isOpenTwo = switchInfoList.isOpen();
+                    }
+                }
+            }
+            if (isOpenOne) {
+                initPos01Ad();
+            }
+            if (isOpenTwo) {
+                initAd02();
+            }
+        }
+    }
 
     //获取埋点参数
     void getPageData() {
@@ -899,7 +996,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         //插屏广告老去失败禁止跳转到插屏广告页
       /*  if (mIsScreenAdSuccess) {
             finish();
-            return;
+            re
         }*/
 
         //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
@@ -1126,7 +1223,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
                 LogUtils.e("adExposed");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                initAd02();
             }
 
             @Override
@@ -1174,7 +1270,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                LogUtils.e("adError");
+                LogUtils.e("adError2222");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "fail", sourcePage, currentPage);
             }
         });

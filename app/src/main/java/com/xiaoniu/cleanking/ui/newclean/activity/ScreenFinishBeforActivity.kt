@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.newclean.activity
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -196,6 +195,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
             override fun adExposed(info: AdInfo) {
                 Log.d(TAG, "-----adExposed-----")
+                PreferenceUtil.saveShowAD(true)
                 if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
             }
@@ -208,6 +208,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
             override fun adClose(info: AdInfo) {
                 Log.d(TAG, "-----adClose-----")
+                PreferenceUtil.saveShowAD(false)
                 if (null != info) {
                     StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
                 }

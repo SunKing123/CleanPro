@@ -675,6 +675,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (getString(R.string.virus_kill).contains(event.getTitle())
                 || getString(R.string.network_quicken).contains(event.getTitle())
                 || getString(R.string.game_quicken).contains(event.getTitle())) {
+            mVirusPoistion++;
             if (null != mVirusList && mVirusList.size() > 0) {
                 if (mVirusPoistion > 2) {
                     mVirusPoistion = 0;
@@ -829,7 +830,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     }
                     break;
             }
-            mVirusPoistion++;
         }
     }
 
@@ -1388,6 +1388,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
             }
@@ -1402,6 +1403,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
+                PreferenceUtil.saveShowAD(false);
                 NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
@@ -1453,6 +1455,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
             }
@@ -1467,6 +1470,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
+                PreferenceUtil.saveShowAD(false);
                 NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_end_page", "view_page", "网络加速激励视频结束页浏览");
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");

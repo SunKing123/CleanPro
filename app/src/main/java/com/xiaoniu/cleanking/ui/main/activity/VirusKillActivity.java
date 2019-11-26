@@ -161,6 +161,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     public void showColorChange(int index) {
         mIvs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03, ivScanBg04, ivScanBg05};
         if (mIvs.length == 5 && index <= 4 && index > 0) {
+            if (null == mIvs[index]) return;
             Drawable drawable = mIvs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));

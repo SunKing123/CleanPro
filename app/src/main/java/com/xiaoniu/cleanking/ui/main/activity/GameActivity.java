@@ -467,6 +467,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", " ");
             }
@@ -481,6 +482,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
+                PreferenceUtil.saveShowAD(false);
                 StatisticsUtils.trackClick("close_click", "游戏加速激励视频结束页关闭点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
                 NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
                 startClean();

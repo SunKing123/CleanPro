@@ -92,6 +92,7 @@ public class SpCacheConfig {
     public static final  String RED_PACKET_SHOW = "RedPacketShow";
     public static final  String RED_PACKET_FOR = "RedPacketFor";
     public static final  String RED_PACKET_SHOW_TRIGGER= "RedPacketShowTrigger";
+    public static final  String IS_SHOW_AD= "isShowAd";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";

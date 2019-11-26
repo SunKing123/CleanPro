@@ -155,6 +155,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
+        PreferenceUtil.saveShowAD(false);
         AppHolder.getInstance().setCurrentTaskId(this.getTaskId());
         getIconListFail();
         mPresenter.getIconList();
@@ -674,7 +675,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
 
-        if (PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
+        if (redPacketEntity.getData().get(0).getTrigger() == 0
+                || PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
             mShowRedFirst = true;
             if (!isFinishing()) {
                 startActivity(new Intent(this, RedPacketHotActivity.class));

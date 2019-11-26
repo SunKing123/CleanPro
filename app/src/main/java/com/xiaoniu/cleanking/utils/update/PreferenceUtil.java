@@ -485,7 +485,7 @@ public class PreferenceUtil {
      *
      * @return
      */
-    public static boolean isFirstOpenApp() {
+    public static boolean isNotFirstOpenApp() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_FIRST_OPEN_APP, false);
     }
@@ -1139,6 +1139,7 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(SpCacheConfig.RED_PACKET_FOR, 0);
     }
+
     /**
      * 保存红包循环展示频次
      *
@@ -1157,6 +1158,26 @@ public class PreferenceUtil {
     public static int getRedPacketShowTrigger() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(SpCacheConfig.RED_PACKET_SHOW_TRIGGER, 0);
+    }
+
+    /**
+     * 保存是否正在播放广告
+     *
+     * @return
+     */
+    public static boolean saveShowAD(boolean isShow) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.IS_SHOW_AD, isShow).commit();
+        return true;
+    }
+
+    /**
+     * 获取是否正在播放广告(正在播放广告时不展示红包)
+     */
+    public static boolean isShowAD() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SHOW_AD, false);
     }
 
     /**
@@ -1243,7 +1264,6 @@ public class PreferenceUtil {
     }
 
 
-
     //是否上报device_info
     public static void saveIsPushDeviceInfo() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_PUSH_DEVICE_INFO, Context.MODE_PRIVATE);
@@ -1271,7 +1291,6 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
-
 
 
 }

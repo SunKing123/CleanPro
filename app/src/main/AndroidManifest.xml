@@ -45,8 +45,7 @@
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
-            android:theme="@style/Theme.AppLauncher"
-            />
+            android:theme="@style/Theme.AppLauncher" />
         <!--        android:screenOrientation="portrait"-->
         <!--        android:screenOrientation="portrait"-->
         <activity
@@ -102,8 +101,8 @@
         <activity
             android:name=".ui.main.activity.PhoneAccessActivity"
             android:launchMode="singleTask"
-            android:taskAffinity="com.locker.new.task"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
             android:launchMode="singleTask"
@@ -286,15 +285,15 @@
 
         <activity
             android:name=".ui.newclean.activity.NowCleanActivity"
-            android:taskAffinity="com.locker.new.task"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
         <!--            android:launchMode="singleTask"-->
         <activity
             android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
-            android:taskAffinity="com.locker.new.task"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
 
         <activity
             android:name=".ui.main.activity.SplashADHotActivity"
@@ -324,8 +323,8 @@
         <activity
             android:name=".ui.main.activity.VirusKillActivity"
             android:configChanges="orientation|screenSize"
-            android:taskAffinity="com.locker.new.task"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
         <activity
             android:name=".ui.main.activity.NetWorkActivity"
             android:configChanges="orientation|screenSize"
@@ -334,7 +333,10 @@
             android:name=".ui.main.activity.RedPacketHotActivity"
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
-        <activity android:name=".ui.newclean.activity.ScreenFinishBeforActivity" />
+        <activity
+            android:name=".ui.newclean.activity.ScreenFinishBeforActivity"
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
 
         <activity
             android:name=".ui.lockscreen.LockActivity"
@@ -381,9 +383,9 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="5c2a7b30b1e998e4d319335e488fb46e" />
-      <!--  <service
-            android:name="com.amap.api.location.APSService"
-            android:foregroundServiceType="location" />-->
+        <!--  <service
+              android:name="com.amap.api.location.APSService"
+              android:foregroundServiceType="location" />-->
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />
