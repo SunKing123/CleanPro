@@ -495,17 +495,16 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
 
         } else if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("lock")) {
-
             String lockAction =   PreferenceUtil.getInstants().get("lock_action");
             if(lockAction.equals("file")){
                 //锁屏清理结果页展示浏览
                 NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_clean_success_page_view_page", "锁屏清理结果页展示浏览");
             }else if(lockAction.equals("ram")){
                 //锁屏页面
-                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_boost_success_page_view_page", "锁屏清理结果页展示浏览");
+                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_boost_success_page_view_page", "锁屏加速结果页展示浏览");
             }else if(lockAction.equals("virus")){
                 //锁屏页面
-                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_virus_killing_success_page_view_page", "锁屏清理结果页展示浏览");
+                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_virus_killing_success_page_view_page", "锁屏病毒查杀结果页展示浏览");
             }
 
         } else {

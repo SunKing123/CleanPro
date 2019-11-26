@@ -219,7 +219,7 @@
     <style name="common_locker_screen" parent="AppTheme">
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="windowNoTitle">true</item>
     </style>
