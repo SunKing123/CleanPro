@@ -16,6 +16,7 @@ import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.jpush.JPushReceiver;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
@@ -29,9 +30,12 @@ import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -126,8 +130,24 @@ public class TimingReceiver extends BroadcastReceiver {
     //悬浮广告页面
     public void startActivity(Context context) {
         try {
-            Intent screenIntent = getIntent(context);
-            context.startActivity(screenIntent);
+            //判断广告开关
+            boolean isOpen = false;
+            if (null != AppHolder.getInstance().getInsertAdSwitchmap()  ) {
+                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+                isOpen = null == map.get("page_outside_screen") ? false : map.get("page_outside_screen").isOpen();
+            }
+            if (!isOpen) return;
+
+
+            long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get("pop_time")) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get("pop_time"));
+            int number = PreferenceUtil.getInstants().getInt("pop_numbers");
+            //一小时内三次
+            if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime)<= (60 * 60 * 1000) && number < 3)) {
+                Intent screenIntent = getIntent(context);
+                context.startActivity(screenIntent);
+                PreferenceUtil.getInstants().save("pop_time", String.valueOf(System.currentTimeMillis()));
+                PreferenceUtil.getInstants().saveInt("pop_numbers",number+1);
+            }
         } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
         }

@@ -390,6 +390,13 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             createEventCode = "cooling_success_page_custom";
             returnEventName = "用户在降温结果页返回";
             sysReturnEventName = "用户在降温结果页返回";
+        } else if(getIntent().hasExtra("action")&&getIntent().getStringExtra("action").equals("lock")){
+            //锁屏页面
+            currentPage = "lock_screen_clean_success_page";
+            createEventName = "锁屏清理结果页创建时";
+            createEventCode = "lock_screen_clean_success_page_custom";
+            returnEventName = "锁屏清理结果页返回";
+            sysReturnEventName = "用户在降温结果页返回";
         } else {
             currentPage = "clean_up_page_view_immediately";
         }

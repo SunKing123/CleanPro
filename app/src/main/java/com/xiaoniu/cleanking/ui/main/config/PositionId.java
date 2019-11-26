@@ -42,6 +42,7 @@ public class PositionId {
     public static final String KEY_VIRUS = "page_virus_kill_complete";
     public static final String KEY_NET = "page_net_speed_complete";
     public static final String KEY_HOME_AD= "page_function_return_complete";
+    public static final String KEY_LOCK_SCREEN= "page_lock_screen";
 
     public static final String KEY_CLEAN_ALL_SCREEN = "page_immediately_complete_screen";
     public static final String KEY_PHONE_SCREEN = "page_phone_clear_complete_screen";

@@ -378,7 +378,7 @@ public final class LocalService extends Service {
         unbindService(connection);
         unregisterReceiver(mOnepxReceiver);
         unregisterReceiver(screenStateReceiver);
-//        unregisterReceiver(innerReceiver);
+        unregisterReceiver(innerReceiver);
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
         }
@@ -405,7 +405,7 @@ public final class LocalService extends Service {
                     if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {//home键点击
                         try {
                             AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                            long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.HOME_SPACE_LONG * 1000);
+                            long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.HOME_SPACE_LONG * 500);
                             Intent inten = new Intent(context, TimingReceiver.class);
                             inten.putExtra("action","unlock_screen");
                             inten.putExtra("temp", temp);
@@ -423,13 +423,7 @@ public final class LocalService extends Service {
                             e.printStackTrace();
                         }
                     }
-                  /*  if (mListener != null) {
-                        if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
 
-                        } else if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
-
-                        }
-                    }*/
                 }
             }
         }

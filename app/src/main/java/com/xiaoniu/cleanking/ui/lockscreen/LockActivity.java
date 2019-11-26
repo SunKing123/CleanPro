@@ -25,12 +25,15 @@ import com.comm.jksdk.ad.listener.AdManager;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.LocationInfo;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -49,6 +52,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * 锁屏信息流广告页面
@@ -158,7 +162,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         registerLockerReceiver();
-        LogUtils.i("-----" + SystemUtils.getProcessName(this));
         setBtnState();
 
         if(PreferenceUtil.getInstants().getInt("isGetWeatherInfo") ==1){
@@ -174,32 +177,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-
-
-
-//
-      /*  rxPermissions = new RxPermissions(this);
-        lockExitDialog = new LockExitDialog(this);
-        lockDial = ViewUtils.get(this, R.id.lock_dial);
-        lockCamera = ViewUtils.get(this, R.id.lock_camera);
-        lockSetting = ViewUtils.get(this, R.id.lock_settings);
-        batteryIcon = ViewUtils.get(this, R.id.lock_battery_icon);
-
-//        videoContainer = ViewUtils.get(this, R.id.lock_video_container);
-
-        lockCamera.setOnClickListener(this);
-        lockDial.setOnClickListener(this);
-        lockSetting.setOnClickListener(this);
-
-        batteryIcon.setImageResource(PowerUtil.isCharging(null) ? R.drawable.lock_battery_charging : R.drawable.lock_battery_normal);*/
-
-      /*  VideoFlowListFragment videoFlowListFragment = new VideoFlowListFragment();
-        videoFlowListFragment.setCategroyId(-1, true, "锁屏通知页", 0);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.lock_video_container, videoFlowListFragment)
-                .commitAllowingStateLoss();*/
-//        checkLockState();
     }
 
     public void setBtnState(){
@@ -277,11 +254,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void adInit() {
+
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, "lock_screen_advertising", new AdListener() {
-
             @Override
             public void adSuccess(AdInfo info) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
                 View adView = adManager.getAdView();
                 if (adView != null) {
                     relAd.removeAllViews();
@@ -291,16 +269,18 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void adExposed(AdInfo info) {
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
                 LogUtils.e("adExposed");
             }
 
             @Override
             public void adClicked(AdInfo info) {
-
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
             }
 
             @Override
             public void adError(int errorCode, String errorMsg) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
 
             }
         });
@@ -346,6 +326,17 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         mUnlockView.startAnim();
         updateTimeUI();
+
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_LOCK_SCREEN.equals(switchInfoList.getConfigKey())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        if (!isOpen) return;
         adInit();
     }
 
@@ -376,6 +367,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rel_clean_file: //清理
+                StatisticsUtils.trackClick("junk_file_click", "垃圾文件点击", "lock_screen", "lock_screen");
                 Intent intentClean = new Intent(this, NowCleanActivity.class);
                 intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -385,6 +377,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.rel_clean_ram://一键加速
+                StatisticsUtils.trackClick("memory_usage_click", "内存使用点击", "lock_screen", "lock_screen");
                 Intent phoneAccessIntent = new Intent(this, PhoneAccessActivity.class);
                 phoneAccessIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -393,6 +386,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(phoneAccessIntent);
                 break;
             case R.id.rel_clean_virus://病毒查杀
+                StatisticsUtils.trackClick("virus_killing_click", "病毒查杀点击", "lock_screen", "lock_screen");
                 Intent virusIntent = new Intent(this, VirusKillActivity.class);
                 virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
