@@ -543,35 +543,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
 
     public void initPos03Ad(){
-        /*  AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, "lock_screen_advertising", new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
-                View adView = adManager.getAdView();
-                if (adView != null) {
-                    relAd.removeAllViews();
-                    relAd.addView(adView);
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
-                LogUtils.e("adExposed");
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(int errorCode, String errorMsg) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
-
-            }
-        });*/
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this,"success_page_ad_3", new AdListener() {
             @Override
@@ -602,6 +573,11 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
             @Override
             public void adError(int errorCode, String errorMsg) {
+                if (null != mErrorIv){
+                    mViewContent.setVisibility(View.GONE);
+                    mErrorIv.setVisibility(View.VISIBLE);
+                }
+
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1","","", "fail", sourcePage, currentPage);
             }
         });

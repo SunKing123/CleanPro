@@ -373,7 +373,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 finish();
                 break;
             case R.id.tv_qx:
-                jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree1.html");
+                jumpXieyiActivity(AppConstants.Base_H5_Host + "/userAgreement.html");
                 StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
                 break;
         }

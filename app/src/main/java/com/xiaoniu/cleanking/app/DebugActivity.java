@@ -87,7 +87,7 @@ public class DebugActivity extends BaseActivity {
     public void toH5(View view) {
         //jump 协议
 //        "cleanking://com.xiaoniu.cleanking/jump?url=XXXX"
-        String url = AppConstants.Base_H5_Host + "/agree1.html";
+        String url = AppConstants.Base_H5_Host + "/userAgreement.html";
         String jump = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.JUMP + "?url=";
         String jumpParams = "&is_no_title=0&h5_title=协议";

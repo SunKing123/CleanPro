@@ -78,7 +78,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         line_xy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpXieyiActivity(AppConstants.Base_H5_Host+"/agree1.html");
+                jumpXieyiActivity(AppConstants.Base_H5_Host+"/userAgreement.html");
                 StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
             }
         });

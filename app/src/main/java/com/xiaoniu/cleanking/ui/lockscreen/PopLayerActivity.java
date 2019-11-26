@@ -108,7 +108,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void adClicked(AdInfo info) {
-
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "external_advertising_page", "external_advertising_page", info.getAdTitle());
             }
 
             @Override
@@ -126,7 +126,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         finish();
         if(null!=adInfo){
-            StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", adInfo.getAdId(), adInfo.getAdSource(), "video_information_page", "video_information_page", adInfo.getAdTitle());
+            StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", adInfo.getAdId(), adInfo.getAdSource(), "external_advertising_page", "external_advertising_page", adInfo.getAdTitle());
         }
 
     }

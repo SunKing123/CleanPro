@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
@@ -30,6 +31,8 @@ import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 import androidx.annotation.NonNull;
@@ -165,6 +168,7 @@ public final class LocalService extends Service {
             if (intent.getAction().equals("_ACTION_SCREEN_OFF")) {
                 isPause = false;
                 play();
+
                 startActivity(context);
             } else if (intent.getAction().equals("_ACTION_SCREEN_ON")) {
                 isPause = true;
@@ -311,8 +315,11 @@ public final class LocalService extends Service {
     //锁屏页面
     public void startActivity(Context context) {
         try {
-            Intent screenIntent = getIntent(context);
-            context.startActivity(screenIntent);
+            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            if (TextUtils.equals(auditSwitch, "1")){ //过审开关打开状态
+                Intent screenIntent = getIntent(context);
+                context.startActivity(screenIntent);
+            }
         } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
         }
