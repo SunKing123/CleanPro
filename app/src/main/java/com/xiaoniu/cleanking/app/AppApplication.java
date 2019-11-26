@@ -1,13 +1,17 @@
 package com.xiaoniu.cleanking.app;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
 import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.utils.ContextUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -64,4 +68,5 @@ public class AppApplication extends BaseApplication {
         //解决4.4以下手机启动失败
         MultiDex.install(base);
     }
+
 }

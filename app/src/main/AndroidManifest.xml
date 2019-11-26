@@ -70,7 +70,6 @@
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
-            android:excludeFromRecents="true"
             android:screenOrientation="portrait"
             android:theme="@style/Main.Theme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
