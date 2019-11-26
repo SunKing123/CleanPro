@@ -118,6 +118,11 @@ public class TimingReceiver extends BroadcastReceiver {
     //悬浮广告页面
     public void startActivity(Context context) {
         try {
+            //判断是否进入后台
+            int isBack = PreferenceUtil.getInstants().getInt("isback");
+            if(isBack!=1)
+                return;
+
             //判断广告开关
             boolean isOpen = false;
             int showTimes = 3;

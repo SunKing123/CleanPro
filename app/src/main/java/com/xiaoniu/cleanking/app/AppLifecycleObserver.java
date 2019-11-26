@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,6 +36,8 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
+        LogUtils.i("---zzz---start");
+        PreferenceUtil.getInstants().saveInt("isback",0);
         if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
                 || ActivityCollector.isActivityExist(PopLayerActivity.class)
                 || !PreferenceUtil.isNotFirstOpenApp())
@@ -50,6 +53,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
                     intent.setClass(mContext, SplashADHotActivity.class);
                     mContext.startActivity(intent);
                     mIsBack = false;
+
                 }
             }
         }
@@ -58,9 +62,11 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void onEnterBackground() {
+        LogUtils.i("---zzz---back");
         if (!AppLifecycleUtil.isAppOnForeground(mContext)) {
             //app 进入后台
             mIsBack = true;
+            PreferenceUtil.getInstants().saveInt("isback",1);
             PreferenceUtil.saveHomeBackTime();
         }
     }
