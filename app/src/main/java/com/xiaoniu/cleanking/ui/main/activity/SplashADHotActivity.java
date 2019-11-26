@@ -63,7 +63,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
                 || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
             return;
-        if (PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
+        if (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0
+                || PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
             switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
                 case 5: //所有页面展示红包
                     startActivity(new Intent(this, RedPacketHotActivity.class));
@@ -88,8 +89,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             }
             StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
         });
-
-
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("hot_splash_page_custom", "热启动页创建时", "hot_splash_page", "hot_splash_page");
     }

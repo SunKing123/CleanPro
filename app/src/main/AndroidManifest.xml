@@ -398,7 +398,10 @@
             android:exported="true"
             android:excludeFromRecents="true"
             android:theme="@style/activityBgTranslucent" />
-        <activity android:name=".ui.newclean.activity.ScreenFinishBeforActivity" />
+        <activity
+            android:name=".ui.newclean.activity.ScreenFinishBeforActivity"
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
 
         <activity
             android:name=".ui.lockscreen.LockActivity"
@@ -446,9 +449,9 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="5c2a7b30b1e998e4d319335e488fb46e" />
-      <!--  <service
-            android:name="com.amap.api.location.APSService"
-            android:foregroundServiceType="location" />-->
+        <!--  <service
+              android:name="com.amap.api.location.APSService"
+              android:foregroundServiceType="location" />-->
         <meta-data
             android:name="PARTNER_CODE"
             android:value="hlxx" />

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.NetWorkPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
@@ -88,8 +89,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(TextUtils.isEmpty(mStartNetNumber)) return;
-                mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)) + " KB/S");
+                if (TextUtils.isEmpty(mStartNetNumber)) return;
+                mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)).setScale(2, BigDecimal.ROUND_HALF_UP) + " KB/S");
                 if (null != mLottieAnimationView) {
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
@@ -99,6 +100,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 }
                 try {
                     Thread.sleep(1000);
+                    AppHolder.getInstance().setCleanFinishSourcePageId("network_acceleration_animation_page");
                     startActivity(new Intent(NetWorkActivity.this, ScreenFinishBeforActivity.class)
                             .putExtra(ExtraConstant.TITLE, getString(R.string.network_quicken))
                             .putExtra(ExtraConstant.NUM, NumberUtils.mathRandom(25, 50)));
@@ -165,6 +167,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         super.onDestroy();
         if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);
+            mHandler = null;
         }
         if (null != mLottieAnimationView && mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.cancelAnimation();

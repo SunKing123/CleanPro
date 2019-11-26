@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.newclean.activity
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -198,6 +197,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 Log.d(TAG, "-----adExposed-----")
                 if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+                PreferenceUtil.saveShowAD(true)
             }
 
             override fun adClicked(info: AdInfo) {
@@ -208,6 +208,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
             override fun adClose(info: AdInfo) {
                 Log.d(TAG, "-----adClose-----")
+                PreferenceUtil.saveShowAD(false)
                 if (null != info) {
                     StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
                 }
@@ -226,6 +227,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
+            bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
             startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
         } else if (this.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3_锁屏跳转
             val bundle = Bundle()
@@ -237,6 +239,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             bundle.putString("title", mTitle)
             bundle.putString("num", mNum)
             bundle.putString("unit", mUnit)
+            bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
             startActivity(NewCleanFinishActivity::class.java, bundle)
         }
         finish()

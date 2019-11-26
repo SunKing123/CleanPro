@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -56,9 +57,18 @@ public class NetWorkSpeedUtils {
         Message msg = mHandler.obtainMessage();
         msg.what = 100;
         if (speed == 0 && speed2 == 0) {
-            msg.obj = "2.660 KB/S";
+            msg.obj = "2.66 KB/S";
         } else {
-            msg.obj = String.valueOf(speed) + "." + String.valueOf(speed2) + " KB/S";
+            Log.d("XiLei", "speed2=" + speed2);
+            String speed2Result = "0";
+            if (speed2 <= 0) {
+                speed2Result = "0";
+            } else if (String.valueOf(speed2).length() < 2) {
+                speed2Result = String.valueOf(speed2);
+            } else {
+                speed2Result = String.valueOf(speed2).substring(0, 2);
+            }
+            msg.obj = speed + "." + speed2Result + " KB/S";
         }
         mHandler.sendMessage(msg);//更新界面
     }

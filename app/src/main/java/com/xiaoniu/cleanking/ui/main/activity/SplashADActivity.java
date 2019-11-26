@@ -2,10 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -26,7 +23,6 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -104,7 +100,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         } else {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
-        if (!PreferenceUtil.isFirstOpenApp()) {
+        if (!PreferenceUtil.isNotFirstOpenApp()) {
             mStartView.setVisibility(View.VISIBLE);
             mContentView.setVisibility(View.GONE);
             mPresenter.getSwitchInfoList();
@@ -194,7 +190,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-        if(PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE)!=1){
+        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyExternalDb();
         }
 
@@ -238,6 +234,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
+        if (!PreferenceUtil.isNotFirstOpenApp()) return;
         if (null != list && null != list.getData() && list.getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
                 if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition()) && PositionId.SPLASH_ID.equals(switchInfoList.getConfigKey())) {
@@ -245,9 +242,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
             }
         }
-        if (PreferenceUtil.isFirstOpenApp() && mIsOpen) {
+        if (PreferenceUtil.isNotFirstOpenApp() && mIsOpen) {
             initGeekSdkAD();
-        }else{
+        } else {
             jumpActivity();
         }
     }

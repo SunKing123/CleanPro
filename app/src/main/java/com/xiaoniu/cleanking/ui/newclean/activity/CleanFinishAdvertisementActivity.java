@@ -69,6 +69,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     //穿山甲相关 begin
     private TTAdNative mTTAdNative;
     //穿山甲相关 end
+    private boolean mIsFromHomeMain; //是否来自首页主功能区
 
     @Override
     protected int getLayoutId() {
@@ -83,6 +84,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
+        mIsFromHomeMain = getIntent().getBooleanExtra("main", false);
         mPresenter.getSwitchInfoList();
         findViewById(R.id.btnLeft).setOnClickListener(this);
         mViewContent = findViewById(R.id.v_content);
@@ -301,6 +303,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         switch (v.getId()) {
             case R.id.btnLeft:
+                PreferenceUtil.saveShowAD(false);
                 if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
                     StatisticsUtils.trackClick("return_back", returnEventName, sourcePage, "one_click_acceleration_clean_up_page");
                 } else {
@@ -322,6 +325,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     @Override
     public void onBackPressed() {
+        PreferenceUtil.saveShowAD(false);
         if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, "one_click_acceleration_clean_up_page");
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
@@ -557,6 +561,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
             @Override
             public void adExposed(AdInfo info) {
+                PreferenceUtil.saveShowAD(true);
                 if (info == null) {
                     LogUtils.e("DEMO>>>adExposed， AdInfo is empty");
                 } else {
@@ -564,6 +569,11 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 }
                 LogUtils.e("adExposed");
 
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                PreferenceUtil.saveShowAD(false);
             }
 
             @Override

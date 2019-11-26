@@ -15,6 +15,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.presenter.VirusKillPresenter;
@@ -74,7 +75,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     }
 
     private void initLottie() {
-        NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "病毒查杀动画页浏览");
+        NiuDataAPI.onPageStart("virus_killing_animation_page_view_page", "病毒查杀动画页浏览");
         NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_animation_page", "virus_killing_animation_page_view_page", "病毒查杀动画页浏览");
         showColorChange(4);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -141,6 +142,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                 PreferenceUtil.getInstants().save("lock_pos03", new Gson().toJson(btnInfo));
                 EventBus.getDefault().post(btnInfo);
 
+                AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
                 startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
                 finish();
             }
@@ -161,6 +163,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
     public void showColorChange(int index) {
         mIvs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03, ivScanBg04, ivScanBg05};
         if (mIvs.length == 5 && index <= 4 && index > 0) {
+            if (null == mIvs[index]) return;
             Drawable drawable = mIvs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));

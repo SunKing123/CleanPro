@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -61,6 +62,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
@@ -75,6 +77,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "adClose---");
+                PreferenceUtil.saveShowAD(false);
                 finish();
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
