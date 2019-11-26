@@ -79,11 +79,11 @@ public class Constants {
          */
         String BIG_IMG_NEST_LAMP = "BIG_IMG_NEST_01_LAMP";
         /**
-         * 大图带按钮（大图_下载播放按钮）
+         * 大图_下载播放按钮
          */
-        String BIG_IMG_BUTTON = "BIG_IMG_BUTTON";
+        String BIG_IMG_BUTTON = "BIG_IMG_PLAY_BUTTON";
         /**
-         * 大图带按钮带跑马灯
+         * 大图_下载播放按钮_跑马灯
          */
         String BIG_IMG_BUTTON_LAMP = "BIG_IMG_PLAY_BUTTON_LAMP";
         /**

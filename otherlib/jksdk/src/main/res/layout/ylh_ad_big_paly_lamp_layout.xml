@@ -39,8 +39,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dimen_80dp"
             android:src="@mipmap/ad_big_img_paly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="45dp"
+            android:layout_height="45dp"/>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
     <RelativeLayout
         android:orientation="horizontal"

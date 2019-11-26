@@ -7,7 +7,7 @@
     android:background="@drawable/ad_big_img_bg"
     tools:ignore="HardcodedText">
     <LinearLayout
-        android:layout_margin="@dimen/dimen_12dp"
+        android:layout_margin="@dimen/dimen_15dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
