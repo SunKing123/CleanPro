@@ -42,7 +42,7 @@
          <TextView
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:layout_marginTop="13dp"
+             android:layout_marginTop="8dp"
              android:text="手机运行快如火箭"
              android:textColor="#ffffffff"
              android:textSize="15sp" />
@@ -78,6 +78,8 @@
        android:id="@+id/flayout_ad_container"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+      android:background="@color/white"
+       android:gravity="center"
        android:layout_marginBottom="10dp"
        android:layout_below="@+id/full_screen_insert_ad_header_layout"
        >

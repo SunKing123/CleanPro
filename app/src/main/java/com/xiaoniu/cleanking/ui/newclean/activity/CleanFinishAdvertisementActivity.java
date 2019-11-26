@@ -404,18 +404,18 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 sysReturnEventName = "锁屏清理结果页返回";
             }else if(lockAction.equals("ram")){
                 //锁屏页面
-                currentPage = "lock_screen_clean_success_page";
-                createEventName = "锁屏清理结果页创建时";
-                createEventCode = "lock_screen_clean_success_page_custom";
-                returnEventName = "锁屏清理结果页返回";
-                sysReturnEventName = "锁屏清理结果页返回";
+                currentPage = "lock_screen_boost_success_page";
+                createEventName = "锁屏加速结果页创建时";
+                createEventCode = "lock_screen_boost_success_page_custom";
+                returnEventName = "锁屏加速结果页返回";
+                sysReturnEventName = "锁屏加速结果页返回";
             }else if(lockAction.equals("virus")){
                 //锁屏页面
-                currentPage = "lock_screen_clean_success_page";
-                createEventName = "锁屏清理结果页创建时";
+                currentPage = "lock_screen_virus_killing_success_page";
+                createEventName = "锁屏病毒查杀结果页创建时";
                 createEventCode = "lock_screen_clean_success_page_custom";
-                returnEventName = "锁屏清理结果页返回";
-                sysReturnEventName = "锁屏清理结果页返回";
+                returnEventName = "锁屏病毒查杀结果页返回";
+                sysReturnEventName = "锁屏病毒查杀结果页返回";
             }
 
         } else {
@@ -497,8 +497,19 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
 
         } else if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("lock")) {
-            //锁屏清理结果页展示浏览
-            NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_clean_success_page_view_page", "锁屏清理结果页展示浏览");
+
+            String lockAction =   PreferenceUtil.getInstants().get("lock_action");
+            if(lockAction.equals("file")){
+                //锁屏清理结果页展示浏览
+                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_clean_success_page_view_page", "锁屏清理结果页展示浏览");
+            }else if(lockAction.equals("ram")){
+                //锁屏页面
+                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_boost_success_page_view_page", "锁屏清理结果页展示浏览");
+            }else if(lockAction.equals("virus")){
+                //锁屏页面
+                NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_virus_killing_success_page_view_page", "锁屏清理结果页展示浏览");
+            }
+
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
