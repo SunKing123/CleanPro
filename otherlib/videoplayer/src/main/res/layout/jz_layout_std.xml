@@ -133,13 +133,14 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
+            android:layout_marginTop="2dp"
             android:layout_toLeftOf="@+id/battery_time_layout"
             android:layout_toEndOf="@+id/back"
             android:layout_toRightOf="@+id/back"
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="#ffffff"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
         <LinearLayout
             android:id="@+id/battery_time_layout"
