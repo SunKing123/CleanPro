@@ -105,21 +105,9 @@ public class TimingReceiver extends BroadcastReceiver {
             i.putExtra("action","heartbeat");
             context.startService(i);
 
-        }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("unlock_screen")){//锁屏打开页面
+        }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("unlock_screen") ||intent.getStringExtra("action").equals("home")) ){//锁屏打开页面||home按键触发
             if(null==context)return;
             startActivity(context);
-/*
-            try {
-                if(null==context)return;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                },3000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
         }
 
 
@@ -132,9 +120,11 @@ public class TimingReceiver extends BroadcastReceiver {
         try {
             //判断广告开关
             boolean isOpen = false;
+            int showTimes = 3;
             if (null != AppHolder.getInstance().getInsertAdSwitchmap()  ) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                 isOpen = null == map.get("page_outside_screen") ? false : map.get("page_outside_screen").isOpen();
+                showTimes = null == map.get("page_outside_screen") ? 2 : map.get("page_outside_screen").getShowRate();
             }
             if (!isOpen) return;
 
@@ -142,7 +132,7 @@ public class TimingReceiver extends BroadcastReceiver {
             long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get("pop_time")) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get("pop_time"));
             int number = PreferenceUtil.getInstants().getInt("pop_numbers");
             //一小时内三次
-            if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime)<= (60 * 60 * 1000) && number < 3)) {
+            if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime)<= (60 * 60 * 1000) && number < showTimes)) {
                 Intent screenIntent = getIntent(context);
                 context.startActivity(screenIntent);
                 PreferenceUtil.getInstants().save("pop_time", String.valueOf(System.currentTimeMillis()));

@@ -3,7 +3,9 @@ package com.xiaoniu.cleanking.app;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 import android.webkit.WebView;
 
@@ -30,8 +32,13 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
+import com.xiaoniu.cleanking.keeplive.service.LocalService;
+import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
+import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
+import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -89,6 +96,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //todo_zzh
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,"5036430", ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
         initJsBridge();
+        homeCatch(application);
+
+
     }
 
     private static AppComponent mAppComponent;
@@ -242,5 +252,35 @@ public class ApplicationDelegate implements IApplicationDelegate {
         }
         return "";
     }
+
+    private long mLastClickTime = 0;
+    //home键监听
+    public void homeCatch(Application application){
+        HomeWatcher mHomeWatcher = new HomeWatcher(application);
+        mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
+            @Override
+            public void onHomePressed() {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Intent i = new Intent(application, LocalService.class);
+                i.putExtra("action", "home");
+                application.startService(i);
+            }
+            @Override
+            public void onHomeLongPressed() {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Intent i = new Intent(application, LocalService.class);
+                i.putExtra("action", "home");
+                application.startService(i);
+            }
+        });
+        mHomeWatcher.startWatch();
+    }
+
 
 }
