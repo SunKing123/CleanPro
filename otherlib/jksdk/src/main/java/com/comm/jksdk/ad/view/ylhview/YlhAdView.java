@@ -78,6 +78,8 @@ public class YlhAdView extends CommAdView {
             mAdView = new YlhBigImgNestPlayLampView(mContext, true);
         } else if (Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style)) { //假视频大图_01
             mAdView = new YlhBigImgFakeVideoAdView(mContext);
+        } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_01.equals(style)) { //外部弹窗大图广告_01
+            mAdView = new YlhExternalDialogBigImageView(mContext);
         } else if (Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style)) {
             mAdView = new YlhLeftImgRightTwoTextAdView(mContext);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) {
@@ -134,7 +136,7 @@ public class YlhAdView extends CommAdView {
      */
     protected void getAdBySdk(final int adRequestTimeOut) {
         LogUtils.d(TAG, "--------开始请求广告-------------广告样式------->style:" + style);
-        if (Constants.AdStyle.BIG_IMG.equals(style) || Constants.AdStyle.DATU_ICON_TEXT.equals(style) || Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style)
+        if (Constants.AdStyle.BIG_IMG.equals(style) || Constants.AdStyle.DATU_ICON_TEXT.equals(style) || Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style) || Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_01.equals(style)
                 || Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style) || Constants.AdStyle.LEFT_IMG_RIGHT_TWO_TEXT.equals(style) || Constants.AdStyle.BIG_IMG_BUTTON_LAMP.equals(style)
                 || Constants.AdStyle.BIG_IMG_BUTTON.equals(style) || Constants.AdStyle.BIG_IMG_NEST.equals(style) || Constants.AdStyle.BIG_IMG_NEST_LAMP.equals(style) || Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style)) {
             //todo请求大图广告

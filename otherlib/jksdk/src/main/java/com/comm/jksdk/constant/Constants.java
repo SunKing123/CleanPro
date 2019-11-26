@@ -99,6 +99,10 @@ public class Constants {
          */
         String EXTERNAL_CP_01 = "EXTERNAL_CP_01";
         /**
+         * 外部弹窗大图广告_01
+         */
+        String EXTERNAL_DIALOG_BIG_IMAGE_01 = "EXTERNAL_DIALOG_BIG_IMAGE_01";
+        /**
          *
          */
         String All = "All";

@@ -87,7 +87,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, "success_page_ad_1", new AdListener() {
+        adManager.loadAd(this, "external_advertising_ad_1", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
 

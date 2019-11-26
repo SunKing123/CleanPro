@@ -78,6 +78,8 @@
        android:id="@+id/flayout_ad_container"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+
+       android:gravity="center"
        android:layout_marginBottom="10dp"
        android:layout_below="@+id/full_screen_insert_ad_header_layout"
        >
