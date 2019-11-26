@@ -95,14 +95,22 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     fun receiverMessage(baseEvent: BaseEventBus<String>) {
         when (baseEvent.getAction()) {
             BaseEventBusConstant.WEB_REDPACKET_AD -> {
+                Log.d("XiLei", "1111111");
                 if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data
                         && AppHolder.getInstance().switchInfoList.data.size > 0) {
+                    Log.d("XiLei", "222222");
                     for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
-                        if (PositionId.KEY_RED_JILI == switchInfoList.configKey && switchInfoList.isOpen) {
-                            NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page", "red_envelopes_page_view_page", "红包弹窗浏览")
-                            StatisticsUtils.trackClick("red_envelopes_click", "红包弹窗点击", "hot_splash_page", "red_envelopes_page")
-                            WebDialogManager.getInstance().dismissDialog()
-                            initGeekAdSdk()
+                        if (PositionId.KEY_RED_JILI == switchInfoList.configKey) {
+                            if (switchInfoList.isOpen) {
+                                Log.d("XiLei", "33333");
+                                NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page", "red_envelopes_page_view_page", "红包弹窗浏览")
+                                StatisticsUtils.trackClick("red_envelopes_click", "红包弹窗点击", "hot_splash_page", "red_envelopes_page")
+                                WebDialogManager.getInstance().dismissDialog()
+                                initGeekAdSdk()
+                            } else {
+                                Log.d("XiLei", "444444444");
+                                showWebView()
+                            }
                         }
                     }
                 } else {
@@ -170,14 +178,16 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     }
 
     private fun showWebView() {
+        Log.d("XiLei", "5555");
         if (null == AppHolder.getInstance() || null == AppHolder.getInstance().redPacketEntityList
                 || null == AppHolder.getInstance().redPacketEntityList.data
                 || AppHolder.getInstance().redPacketEntityList.data.size <= 0
                 || null == AppHolder.getInstance().redPacketEntityList.data[0].imgUrls
-                || AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size <= 0)
+                || AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size <= 0) {
             finish()
             return
-
+        }
+        Log.d("XiLei", "666666666");
         if (!isFinishing()) {
             if (AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount].contains("http")) {
                 AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"

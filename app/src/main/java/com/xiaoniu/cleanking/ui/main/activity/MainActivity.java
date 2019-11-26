@@ -128,9 +128,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
     private NewCleanMainFragment mainFragment;
-    private MyHandler mHandler = new MyHandler(this);
+//    private MyHandler mHandler = new MyHandler(this);
 
-    private class MyHandler extends Handler {
+  /*  private class MyHandler extends Handler {
         WeakReference<Activity> mActivity;
 
         public MyHandler(Activity con) {
@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public int getLayoutId() {
@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         AppHolder.getInstance().setCurrentTaskId(this.getTaskId());
         getIconListFail();
         mPresenter.getIconList();
-        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
+//        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
         isFirstCreate = true;
         initFragments();
         CLEAN = 0;
@@ -181,8 +181,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     if (isSelectTop) {
                         isSelectTop = false;
                         //清空所有的消息
-                        mHandler.removeCallbacksAndMessages(null);
-                        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
+//                        mHandler.removeCallbacksAndMessages(null);
+//                        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
                     }
                 }
 
