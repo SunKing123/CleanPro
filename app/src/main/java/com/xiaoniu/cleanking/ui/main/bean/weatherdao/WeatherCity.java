@@ -16,6 +16,7 @@ import org.greenrobot.greendao.annotation.Unique;
 /**
  * @author xiangzhenbiao
  * @since 2019/4/11 21:34
+ * weather
  */
 @Entity(nameInDb = "XNWeatherCityModel", createInDb = false)
 public class WeatherCity implements Parcelable ,Comparable<WeatherCity>{
