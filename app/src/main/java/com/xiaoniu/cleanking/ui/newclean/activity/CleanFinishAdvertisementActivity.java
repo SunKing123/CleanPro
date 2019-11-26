@@ -276,8 +276,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      * @return
      */
     public void getSwitchInfoListFail(String message) {
-
-        mViewContent.setVisibility(View.GONE);
+        ad_container_pos03.setVisibility(View.GONE);
         mErrorIv.setVisibility(View.VISIBLE);
         ToastUtils.showShort(message);
     }
@@ -289,7 +288,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
      */
     public void getSwitchInfoListConnectError() {
 
-        mViewContent.setVisibility(View.GONE);
+        ad_container_pos03.setVisibility(View.GONE);
         mErrorIv.setVisibility(View.VISIBLE);
         ToastUtils.showShort("网络连接失败，请假查您的网络连接");
     }
@@ -584,7 +583,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             @Override
             public void adError(int errorCode, String errorMsg) {
                 if (null != mErrorIv){
-                    mViewContent.setVisibility(View.GONE);
+                    ad_container_pos03.setVisibility(View.GONE);
                     mErrorIv.setVisibility(View.VISIBLE);
                 }
 
