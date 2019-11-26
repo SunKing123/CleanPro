@@ -373,6 +373,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                 intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                PreferenceUtil.getInstants().save("lock_action","file");
                 startActivity(intentClean);
 
                 break;
@@ -383,6 +384,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                 phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                PreferenceUtil.getInstants().save("lock_action","ram");
                 startActivity(phoneAccessIntent);
                 break;
             case R.id.rel_clean_virus://病毒查杀
@@ -393,6 +395,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 virusIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                 virusIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                PreferenceUtil.getInstants().save("lock_action","virus");
                 startActivity(virusIntent);
                 break;
 

@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -391,12 +392,30 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             returnEventName = "用户在降温结果页返回";
             sysReturnEventName = "用户在降温结果页返回";
         } else if(getIntent().hasExtra("action")&&getIntent().getStringExtra("action").equals("lock")){
-            //锁屏页面
-            currentPage = "lock_screen_clean_success_page";
-            createEventName = "锁屏清理结果页创建时";
-            createEventCode = "lock_screen_clean_success_page_custom";
-            returnEventName = "锁屏清理结果页返回";
-            sysReturnEventName = "用户在降温结果页返回";
+            String lockAction =   PreferenceUtil.getInstants().get("lock_action");
+            if(lockAction.equals("file")){
+                //锁屏页面
+                currentPage = "lock_screen_clean_success_page";
+                createEventName = "锁屏清理结果页创建时";
+                createEventCode = "lock_screen_clean_success_page_custom";
+                returnEventName = "锁屏清理结果页返回";
+                sysReturnEventName = "锁屏清理结果页返回";
+            }else if(lockAction.equals("ram")){
+                //锁屏页面
+                currentPage = "lock_screen_clean_success_page";
+                createEventName = "锁屏清理结果页创建时";
+                createEventCode = "lock_screen_clean_success_page_custom";
+                returnEventName = "锁屏清理结果页返回";
+                sysReturnEventName = "锁屏清理结果页返回";
+            }else if(lockAction.equals("virus")){
+                //锁屏页面
+                currentPage = "lock_screen_clean_success_page";
+                createEventName = "锁屏清理结果页创建时";
+                createEventCode = "lock_screen_clean_success_page_custom";
+                returnEventName = "锁屏清理结果页返回";
+                sysReturnEventName = "锁屏清理结果页返回";
+            }
+
         } else {
             currentPage = "clean_up_page_view_immediately";
         }
@@ -436,7 +455,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
             NiuDataAPI.onPageStart("cooling_success_page_view_page", "降温结果页出现时");
-        } else {
+        } else if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("lock")) {
+            //锁屏清理结果页展示浏览
+            NiuDataAPI.onPageStart("lock_screen_clean_success_page_view_page", "锁屏清理结果页展示浏览");
+        }else {
             NiuDataAPI.onPageStart("clean_up_page_view_immediately", "清理完成页浏览");
         }
     }
@@ -471,6 +493,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
             //手机降温
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "cooling_success_page_view_page", "降温结果页出现时");
+
+        } else if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("lock")) {
+            //锁屏清理结果页展示浏览
+            NiuDataAPIUtil.onPageEnd(source_page, currentPage,"lock_screen_clean_success_page_view_page", "锁屏清理结果页展示浏览");
         } else {
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
@@ -507,15 +533,40 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
 
     public void initPos03Ad(){
+        /*  AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this, "lock_screen_advertising", new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
+                View adView = adManager.getAdView();
+                if (adView != null) {
+                    relAd.removeAllViews();
+                    relAd.addView(adView);
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
+                LogUtils.e("adExposed");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
+
+            }
+        });*/
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this,"success_page_ad_3", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                if (info == null) {
-                    LogUtils.e("DEMO>>>adSuccess， AdInfo is empty");
-                } else {
-                    LogUtils.e("DEMO>>>adSuccess， "+ info.toString());
-                }
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                 View adView = adManager.getAdView();
                 if (adView != null) {
                     ad_container_pos03.removeAllViews();
@@ -528,7 +579,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 if (info == null) {
                     LogUtils.e("DEMO>>>adExposed， AdInfo is empty");
                 } else {
-                    LogUtils.e("DEMO>>>adExposed， "+ info.toString());
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
                 }
                 LogUtils.e("adExposed");
 
@@ -536,16 +587,12 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
             @Override
             public void adClicked(AdInfo info) {
-                if (info == null) {
-                    LogUtils.e("DEMO>>>adClicked， AdInfo is empty");
-                } else {
-                    LogUtils.e("DEMO>>>adClicked， "+ info.toString());
-                }
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                LogUtils.e("DEMO>>>adError： "+errorMsg);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1","","", "fail", sourcePage, currentPage);
             }
         });
 

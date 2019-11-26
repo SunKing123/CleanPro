@@ -19,6 +19,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerLoadResult;
@@ -731,22 +732,31 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         mModel.getWeather72HourList(positionCity.getAreaCode(),new Common2Subscriber<WeatherResponseContent>() {
             @Override
             public void getData(WeatherResponseContent weatherResponseContent) {
+                try {
+                    if (null != weatherResponseContent && null != weatherResponseContent.getContent()) {
+                        String responeStr = WeatherResponeUtils.getResponseStr(weatherResponseContent.getContent());
+                        Weather72HEntity weather72HEntity = new Gson().fromJson(responeStr, Weather72HEntity.class);
+                        String skycon ="";
+                        String temperature = "";
+                        if(!CollectionUtils.isEmpty(weather72HEntity.getSkycon())){
+                            skycon  = WeatherUtils.getWeather(weather72HEntity.getSkycon().get(0).getValue());
+                        }
+                        if(!CollectionUtils.isListNullOrEmpty(weather72HEntity.getTemperature()))
+                        {
+                            temperature = weather72HEntity.getTemperature().get(0).getValue();
+                        }
+                        PreferenceUtil.getInstants().save("skycon",skycon);
+                        PreferenceUtil.getInstants().save("temperature",temperature);
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",1);
+                        LogUtils.d("-zzh-isGetWeatherInfo");
+                    }else{
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",0);
+                    }
+                } catch (JsonSyntaxException e) {
+                    PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",0);
+                    e.printStackTrace();
+                }
 
-                String responeStr = WeatherResponeUtils.getResponseStr(weatherResponseContent.getContent());
-                Weather72HEntity weather72HEntity = new Gson().fromJson(responeStr, Weather72HEntity.class);
-                String skycon ="";
-                String temperature = "";
-                if(!CollectionUtils.isEmpty(weather72HEntity.getSkycon())){
-                    skycon  = WeatherUtils.getWeather(weather72HEntity.getSkycon().get(0).getValue());
-                }
-                if(!CollectionUtils.isListNullOrEmpty(weather72HEntity.getTemperature()))
-                {
-                    temperature = weather72HEntity.getTemperature().get(0).getValue();
-                }
-                PreferenceUtil.getInstants().save("skycon",skycon);
-                PreferenceUtil.getInstants().save("temperature",temperature);
-                PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",1);
-                LogUtils.d("-zzh-isGetWeatherInfo");
             }
 
             @Override
@@ -790,11 +800,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 detailAddress = locationCityInfo.getPoiName();
             }else {
                 //百度，用街道地址
-//            detailAddress = locationCityInfo.getDistrict() + locationCityInfo.getPoiName();
                 detailAddress = locationCityInfo.getStreet();
             }
-//            weatherCity.setStreet(locationCityInfo.getStreet());
-//            weatherCity.setStreet(locationCityInfo.getPoiName());
             weatherCity.setDetailAddress(detailAddress);
         }
         return weatherCity;
