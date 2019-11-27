@@ -83,8 +83,14 @@
                         android:id="@+id/tv_qx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
-                        android:text="《清理管家极速版用户隐私政策》"
+                        android:text="《用户隐私政策》"
+                        android:textColor="#666666"
+                        android:textSize="@dimen/dimen_12sp" />
+                    <TextView
+                        android:id="@+id/tv_xy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="和《用户协议》"
                         android:textColor="#666666"
                         android:textSize="@dimen/dimen_12sp" />
                 </LinearLayout>

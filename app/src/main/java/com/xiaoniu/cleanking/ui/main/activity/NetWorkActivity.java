@@ -43,6 +43,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     TextView mNetNumTv;
 
     private ValueAnimator mValueAnimator;
+    private NetWorkSpeedUtils mNetWorkSpeedUtils;
 
     @Override
     protected int getLayoutId() {
@@ -63,7 +64,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
     private void initLottieYinDao() {
         if (null != mHandler) {
-            new NetWorkSpeedUtils(NetWorkActivity.this, mHandler).startShowNetSpeed();
+            mNetWorkSpeedUtils = new NetWorkSpeedUtils(NetWorkActivity.this, mHandler);
+            mNetWorkSpeedUtils.startShowNetSpeed();
         }
         if (!mLottieAnimationView.isAnimating()) {
             mLottieAnimationView.setAnimation("wangluo.json");
@@ -91,6 +93,9 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
             public void onAnimationEnd(Animator animation) {
                 if (TextUtils.isEmpty(mStartNetNumber)) return;
                 mNetNumTv.setText("现网速度： " + new BigDecimal(mStartNetNumber.replace("KB/S", "").trim()).multiply(new BigDecimal(1.5)).setScale(2, BigDecimal.ROUND_HALF_UP) + " KB/S");
+                if (null != mNetWorkSpeedUtils) {
+                    mNetWorkSpeedUtils.cancelTask();
+                }
                 if (null != mLottieAnimationView) {
                     mLottieAnimationView.cancelAnimation();
                     mLottieAnimationView.clearAnimation();
@@ -98,16 +103,11 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 if (null != mValueAnimator) {
                     mValueAnimator.cancel();
                 }
-                try {
-                    Thread.sleep(1000);
-                    AppHolder.getInstance().setCleanFinishSourcePageId("network_acceleration_animation_page");
-                    startActivity(new Intent(NetWorkActivity.this, ScreenFinishBeforActivity.class)
-                            .putExtra(ExtraConstant.TITLE, getString(R.string.network_quicken))
-                            .putExtra(ExtraConstant.NUM, NumberUtils.mathRandom(25, 50)));
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                AppHolder.getInstance().setCleanFinishSourcePageId("network_acceleration_animation_page");
+                startActivity(new Intent(NetWorkActivity.this, ScreenFinishBeforActivity.class)
+                        .putExtra(ExtraConstant.TITLE, getString(R.string.network_quicken))
+                        .putExtra(ExtraConstant.NUM, NumberUtils.mathRandom(25, 50)));
+                finish();
             }
 
             @Override

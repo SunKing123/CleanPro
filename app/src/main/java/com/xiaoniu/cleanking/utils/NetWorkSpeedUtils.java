@@ -37,7 +37,10 @@ public class NetWorkSpeedUtils {
         lastTotalRxBytes = getTotalRxBytes();
         lastTimeStamp = System.currentTimeMillis();
         new Timer().schedule(task, 1000, 1000); // 1s后启动任务，每2s执行一次
+    }
 
+    public void cancelTask(){
+        task.cancel();
     }
 
     private long getTotalRxBytes() {
@@ -59,7 +62,6 @@ public class NetWorkSpeedUtils {
         if (speed == 0 && speed2 == 0) {
             msg.obj = "2.66 KB/S";
         } else {
-            Log.d("XiLei", "speed2=" + speed2);
             String speed2Result = "0";
             if (speed2 <= 0) {
                 speed2Result = "0";

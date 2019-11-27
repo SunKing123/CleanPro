@@ -1169,7 +1169,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @Subscribe
     public void onEventClean(CleanEvent cleanEvent) {
-        Log.d("XiLei", "onEventClean");
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();

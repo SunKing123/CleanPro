@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutPresenter;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -36,6 +37,8 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     TextView tv_newversion;
     @BindView(R.id.line_version)
     LinearLayout line_version;
+    @BindView(R.id.line_zc)
+    LinearLayout line_zc;
     @BindView(R.id.line_xy)
     LinearLayout line_xy;
     @BindView(R.id.line_share)
@@ -75,11 +78,27 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
 
         });
 
+        line_zc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
+                    jumpXieyiActivity("file:///android_asset/agree.html");
+                } else {
+                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+                }
+                StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
+            }
+        });
+
         line_xy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpXieyiActivity(AppConstants.Base_H5_Host+"/userAgreement.html");
-                StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
+                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
+                    jumpXieyiActivity("file:///android_asset/userAgreement.html");
+                } else {
+                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/userAgreement.html");
+                }
+                StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
             }
         });
 
@@ -87,7 +106,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-                mPresenter.share("", AppConstants.Base_H5_Host+"/share.html", getString(R.string.app_name), shareContent, -1);
+                mPresenter.share("", AppConstants.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
                 StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
             }
         });
@@ -96,7 +115,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("about_view_page","关于");
+        NiuDataAPI.onPageStart("about_view_page", "关于");
     }
 
     @Override

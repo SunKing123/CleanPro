@@ -394,12 +394,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ToolFragment toolFragment = new ToolFragment();
         upQuotaFragment = NewsFragment.getNewsFragment("");
         mFragments.add(mainFragment);
-
-        mFragments.add(toolFragment);
-
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "1")) {
+            mFragments.add(toolFragment);
             mFragments.add(upQuotaFragment);
         }
         mFragments.add(mineFragment);
@@ -696,9 +694,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
                             , iconsEntity.getData().get(0).getTabName()
                             , iconsEntity.getData().get(0).getOrderNum()))
-                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
-                            , iconsEntity.getData().get(1).getTabName()
-                            , iconsEntity.getData().get(1).getOrderNum()));
+                    .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
+                            , iconsEntity.getData().get(3).getTabName()
+                            , iconsEntity.getData().get(3).getOrderNum()));
             mBottomBar.setCurrentItem(0);
         } else {
             if (iconsEntity.getData().size() >= 4) {

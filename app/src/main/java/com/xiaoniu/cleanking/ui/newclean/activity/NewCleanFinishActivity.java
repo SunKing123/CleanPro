@@ -12,6 +12,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.comm.jksdk.GeekAdSdk;
@@ -62,9 +66,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Random;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import cn.jzvd.Jzvd;
 
 /**
@@ -82,7 +83,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private NewsListAdapter mNewsAdapter;
     private ImageView mBtnLeft;
     public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool, v_clean_all, v_game;
-    public View line_quicken, line_power, line_notification, line_wechat, line_file, line_clean_all, line_game;
+    public View line_quicken, line_power, line_notification, line_wechat, line_cool, line_clean_all, line_game;
     private View mRecommendV;
     private TextView tv_quicken, tv_power, tv_notification;
     private ImageView iv_quicken, iv_power, iv_notification;
@@ -162,7 +163,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         line_power = headerTool.findViewById(R.id.line_power);
         line_notification = headerTool.findViewById(R.id.line_notification);
         line_wechat = headerTool.findViewById(R.id.line_wechat);
-        line_file = headerTool.findViewById(R.id.line_file);
+        line_cool = headerTool.findViewById(R.id.line_cool);
         line_clean_all = headerTool.findViewById(R.id.line_clean_all);
         line_game = headerTool.findViewById(R.id.line_game);
 
@@ -281,7 +282,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
-        Log.d("XiLei", "sourcePage=" + sourcePage);
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             currentPage = "clean_success_page";
@@ -567,6 +567,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvSize.setText(num);
                 mTvGb.setText("%");
                 mTvQl.setText("已提速");
+                mTvQl.setTextSize(20);
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
@@ -615,6 +616,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 是否显示推荐功能项
      */
     private void showTool() {
+        mShowCount = 0;
         mRecommendV.setVisibility(View.VISIBLE);
         if (!getString(R.string.tool_suggest_clean).contains(mTitle) && !PreferenceUtil.isCleanAllUsed()) {
             mShowCount++;
@@ -688,6 +690,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (mShowCount >= 3) return;
             mShowCount++;
             v_game.setVisibility(View.VISIBLE);
+            if (mShowCount >= 3) return;
             line_game.setVisibility(View.VISIBLE);
         }
         if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
@@ -695,15 +698,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (mShowCount >= 3) return;
             mShowCount++;
             v_cool.setVisibility(View.VISIBLE);
+            if (mShowCount >= 3) return;
+            line_cool.setVisibility(View.VISIBLE);
         }
 
         //文件清理
         if (mShowCount >= 3) return;
         mShowCount++;
         v_file.setVisibility(View.VISIBLE);
-        if (mShowCount < 3) {
-            line_file.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -1002,15 +1004,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.d("XiLei", "onback===sourcePage==" + sourcePage);
-        Log.d("XiLei", "onback===currentPage==" + currentPage);
         EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         StatisticsUtils.trackClick("system_return_click", sysReturnEventName, sourcePage, currentPage);
-        //插屏广告老去失败禁止跳转到插屏广告页
-      /*  if (mIsScreenAdSuccess) {
-            finish();
-            re
-        }*/
 
         //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
         if (isScreenSwitchOpen) {

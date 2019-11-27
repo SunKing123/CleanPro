@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_num"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="-10dp"
                 android:text="%"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
@@ -44,7 +45,7 @@
             android:layout_below="@+id/lottie"
             android:layout_centerHorizontal="true"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="@dimen/dimen_16sp" />
     </RelativeLayout>
 
 

@@ -126,7 +126,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             @Override
             public void adError(int errorCode, String errorMsg) {
                 Log.e(TAG, "-----adError-----" + errorMsg);
-                Log.d("XiLei", "55555555");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "hot_splash_page");
                 jumpActivity();
             }
