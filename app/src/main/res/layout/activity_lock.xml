@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/lock_bg">
@@ -40,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:longClickable="false"
                 android:text="4月11日 周四 "
+                android:alpha="0.65"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -60,8 +62,8 @@
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/iv_weather_state"
-                    android:layout_width="62dp"
-                    android:layout_height="36dp"
+                    android:layout_width="26dp"
+                    android:layout_height="37dp"
                     android:longClickable="false"
                     android:scaleType="fitCenter"
                     android:src="@drawable/icon_weather_fine" />
@@ -73,6 +75,7 @@
                     android:longClickable="false"
                     android:singleLine="true"
                     android:gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:text="16°"
                     android:textColor="@color/white"
                     android:textSize="42sp" />
@@ -94,20 +97,28 @@
                     android:layout_height="wrap_content"
                     android:longClickable="false"
                     android:singleLine="true"
-                    android:paddingLeft="12dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="10dp"
                     android:gravity="center"
+                    android:alpha="0.8"
                     android:text="多云"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
-
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="9dp"
+                    android:background="@color/white"
+                    android:textColor="@color/white" />
                 <TextView
                     android:id="@+id/tv_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:longClickable="false"
                     android:singleLine="true"
-                    android:paddingLeft="12dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="6dp"
                     android:gravity="center"
+                    android:alpha="0.8"
                     android:text="上海市"
                     android:textColor="@color/white"
                     android:textSize="11sp" />
@@ -174,6 +185,7 @@
                     android:textColor="@color/white"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:gravity="center"
+                    android:alpha="0.6"
                     android:layout_below="@id/iv_file_btn"
                     android:textSize="12sp"
                     />
@@ -227,6 +239,7 @@
                     android:textColor="@color/white"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:gravity="center"
+                    android:alpha="0.6"
                     android:layout_below="@id/iv_ram_btn"
                     android:textSize="12sp"
                     />
@@ -281,6 +294,7 @@
                     android:textColor="@color/white"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:gravity="center"
+                    android:alpha="0.6"
                     android:layout_below="@id/iv_virus_btn"
                     android:textSize="12sp"
                     />
@@ -302,10 +316,13 @@
         app:layout_constraintTop_toBottomOf="@+id/lock_ad_container" >
 
     </RelativeLayout>
+
     <com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView
         android:id="@+id/lock_unlock_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

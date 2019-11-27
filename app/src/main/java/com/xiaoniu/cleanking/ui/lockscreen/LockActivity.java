@@ -175,11 +175,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             lin_tem_top.setVisibility(View.VISIBLE);
             lin_tem_bottom.setVisibility(View.VISIBLE);
             String temp = PreferenceUtil.getInstants().get("temperature");
-            double tempDoub = Double.valueOf(temp);
+            Double tempDoub = Double.valueOf(temp);
             if(tempDoub>=0){
-                tv_weather_temp.setText( String.valueOf(tempDoub)+"°");
+                tv_weather_temp.setText( String.valueOf(tempDoub.intValue())+"°");
             }else{
-                tv_weather_temp.setText( "-"+String.valueOf(tempDoub)+"°");
+                tv_weather_temp.setText( "-"+String.valueOf(tempDoub.intValue())+"°");
             }
 
             tv_weather_state.setText(PreferenceUtil.getInstants().get("skycon"));
