@@ -235,20 +235,30 @@ public class NewsListFragment extends BaseFragment {
             int showRate = 3;   //间隔几条展示；
             if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
-                showRate = null != map.get("page_news_screen") ? 3 : map.get("page_news_screen").getShowRate();
-                showRate = showRate <= 2 ? 2 : showRate;
+                if(null != map.get("page_news_screen") ){
+                    InsertAdSwitchInfoList.DataBean  dataBean=map.get("page_news_screen");
+                    if(dataBean.isOpen()){
+                        showRate = null != map.get("page_news_screen") ? 3 : map.get("page_news_screen").getShowRate();
+                        showRate = showRate <= 2 ? 2 : showRate;
+                        ArrayList<NewsItemInfo> newdata = new ArrayList<>();
+                        for(int i=0;i<newsItemInfos.size();i++){
+                            newdata.add(newsItemInfos.get(i));
+                            if ((i + 1) % (showRate) == 0) {//每间隔showRate播放
+                                NewsItemInfo newsItemInfo = new NewsItemInfo();
+                                newsItemInfo.isAd = true;
+                                newdata.add(newsItemInfo);
+                            }
+                        }
+                        return newdata;
+                    }else{
+                        return newsItemInfos;
+                    }
+                }
+                return newsItemInfos;
+            }else{
+                return newsItemInfos;
             }
 
-            ArrayList<NewsItemInfo> newdata = new ArrayList<>();
-            for(int i=0;i<newsItemInfos.size();i++){
-                newdata.add(newsItemInfos.get(i));
-                if ((i + 1) % (showRate) == 0) {//每间隔showRate播放
-                    NewsItemInfo newsItemInfo = new NewsItemInfo();
-                    newsItemInfo.isAd = true;
-                    newdata.add(newsItemInfo);
-                }
-            }
-            return newdata;
         }else{
             return newsItemInfos;
         }

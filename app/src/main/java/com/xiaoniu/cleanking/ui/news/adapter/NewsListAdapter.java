@@ -97,17 +97,28 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             int showRate = 3;   //间隔几条展示；
             if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
-                showRate = null != map.get("page_video_end_screen") ? 3 : map.get("page_video_end_screen").getShowRate();
+                if(null != map.get("page_video_end_screen")){
+                    InsertAdSwitchInfoList.DataBean dataBean=  map.get("page_video_end_screen");
+                    if(dataBean.isOpen()){
+                        showRate = map.get("page_video_end_screen").getShowRate();
+                        if ((position + 1) % (showRate+1) == 0) {//每间隔showRate播放
+                            //newlist_2_1   第二屏幕广告样式
+                            if (NetworkUtils.isNetConnected())
+                                insertAd(linAdContainer,"newlist_2_1",closeBtn,View.GONE);
+                        }else{
+                            linAdContainer.removeAllViews();
+                            linAdContainer.setVisibility(View.GONE);
+                            closeBtn.setVisibility(View.GONE);
+                        }
+                    }else{  //广告关闭
+                        linAdContainer.removeAllViews();
+                        linAdContainer.setVisibility(View.GONE);
+                        closeBtn.setVisibility(View.GONE);
+                    }
+                }
+
             }
-            if ((position + 1) % (showRate+1) == 0) {//每间隔showRate播放
-                //newlist_2_1   第二屏幕广告样式
-                if (NetworkUtils.isNetConnected())
-                insertAd(linAdContainer,"newlist_2_1",closeBtn,View.GONE);
-            }else{
-                linAdContainer.removeAllViews();
-                linAdContainer.setVisibility(View.GONE);
-                closeBtn.setVisibility(View.GONE);
-            }
+
         } else {
             final NewsItemInfo itemInfo = (NewsItemInfo) itemData;
 
