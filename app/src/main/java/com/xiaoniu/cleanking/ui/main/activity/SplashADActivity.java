@@ -172,7 +172,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             if (!PreferenceUtil.isNotFirstOpenApp()) {
                 mStartView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.GONE);
-                SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "0");//无网且第一次打开app总开关置为关闭
             } else {
                 getAuditSwitchFail();
             }
