@@ -6,11 +6,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -26,7 +24,6 @@ import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -42,7 +39,6 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.TodayWeatherConditionEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.Weather72HEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherResponeUtils;
@@ -52,7 +48,6 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -68,7 +63,6 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
-import com.xiaoniu.common.utils.SystemUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -88,9 +82,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 /**
  * Created by tie on 2017/5/15.
@@ -432,6 +423,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     public void setAppVersion(AppVersion result) {
         if (result != null && result.getData() != null) {
+            PreferenceUtil.saveHaseUpdateVersion(result.getData().isPopup);
             if (result.getData().isPopup) {
                 if (mUpdateAgent == null) {
                     mUpdateAgent = new UpdateAgent(mActivity, result, () -> {
@@ -440,12 +432,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {
                     mUpdateAgent.check();
                 }
-            } else {
-                getRedPacketList();
             }
-        } else {
-            getRedPacketList();
         }
+        getRedPacketList();
     }
 
 
@@ -663,8 +652,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void onLocationChanged(AMapLocation location) {
 //        StringBuffer sb = new StringBuffer();
         //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-        if(location.getErrorCode() == 0){//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-            LogUtils.i("-zzh-"+location.getProvince());
+        if (location.getErrorCode() == 0) {//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+            LogUtils.i("-zzh-" + location.getProvince());
             //获取到地理位置后关掉定位
             mLocationClient.stopLocation();
             String province = location.getProvince();
@@ -672,7 +661,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             String district = location.getDistrict();
             String latitude = String.valueOf(location.getLatitude());
             String longitude = String.valueOf(location.getLongitude());
-            LogUtils.d( "->aMapLocation:" + location.toStr());
+            LogUtils.d("->aMapLocation:" + location.toStr());
             LogUtils.d("->xiangzhenbiao->高德定位->latitude:" + latitude + ",longitude:" + longitude);
             LocationCityInfo cityInfo = new LocationCityInfo(longitude,
                     latitude,
@@ -685,75 +674,73 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     location.getAoiName(),
                     location.getAddress()
             );
-            LogUtils.i("-zzh-"+new Gson().toJson(location));
-            if(!TextUtils.isEmpty(city))
-            PreferenceUtil.getInstants().save("city",city);
+            LogUtils.i("-zzh-" + new Gson().toJson(location));
+            if (!TextUtils.isEmpty(city))
+                PreferenceUtil.getInstants().save("city", city);
             dealLocationSuccess(cityInfo);
-        }else{
-            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",0);
+        } else {
+            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
         }
     }
 
 
-
-    private void dealLocationSuccess(LocationCityInfo locationCityInfo){
-        if(locationCityInfo == null){
+    private void dealLocationSuccess(LocationCityInfo locationCityInfo) {
+        if (locationCityInfo == null) {
             return;
         }
         WeatherCity weatherCity = requestUpdateTableLocation(locationCityInfo);
-        String positionArea="";
-        if(!TextUtils.isEmpty(locationCityInfo.getAoiName())){
+        String positionArea = "";
+        if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
             //高德
             positionArea = locationCityInfo.getDistrict() + locationCityInfo.getAoiName();
-            LogUtils.i("-zzh--"+positionArea);
+            LogUtils.i("-zzh--" + positionArea);
         }
         uploadPositionCity(weatherCity, locationCityInfo.getLatitude(), locationCityInfo.getLongitude(), positionArea);
     }
 
 
-
     /**
      * 用户定位信息上报
+     *
      * @param positionCity 定位城市
      * @param latitude
      * @param longitude
      * @param positionArea 定位城市的详细地址，如“申江路...”
      */
     public void uploadPositionCity(@NonNull WeatherCity positionCity, @NonNull String latitude,
-                                   @NonNull String longitude, @NonNull String positionArea){
+                                   @NonNull String longitude, @NonNull String positionArea) {
         LogUtils.d("uploadPositionCity");
-        if(positionCity == null){
+        if (positionCity == null) {
             return;
         }
 
-        if (mModel == null || mView==null) {
+        if (mModel == null || mView == null) {
             return;
         }
-        mModel.getWeather72HourList(positionCity.getAreaCode(),new Common2Subscriber<WeatherResponseContent>() {
+        mModel.getWeather72HourList(positionCity.getAreaCode(), new Common2Subscriber<WeatherResponseContent>() {
             @Override
             public void getData(WeatherResponseContent weatherResponseContent) {
                 try {
                     if (null != weatherResponseContent && null != weatherResponseContent.getContent()) {
                         String responeStr = WeatherResponeUtils.getResponseStr(weatherResponseContent.getContent());
                         Weather72HEntity weather72HEntity = new Gson().fromJson(responeStr, Weather72HEntity.class);
-                        String skycon ="";
+                        String skycon = "";
                         String temperature = "";
-                        if(!CollectionUtils.isEmpty(weather72HEntity.getSkycon())){
-                            skycon  = WeatherUtils.getWeather(weather72HEntity.getSkycon().get(0).getValue());
+                        if (!CollectionUtils.isEmpty(weather72HEntity.getSkycon())) {
+                            skycon = WeatherUtils.getWeather(weather72HEntity.getSkycon().get(0).getValue());
                         }
-                        if(!CollectionUtils.isListNullOrEmpty(weather72HEntity.getTemperature()))
-                        {
+                        if (!CollectionUtils.isListNullOrEmpty(weather72HEntity.getTemperature())) {
                             temperature = weather72HEntity.getTemperature().get(0).getValue();
                         }
-                        PreferenceUtil.getInstants().save("skycon",skycon);
-                        PreferenceUtil.getInstants().save("temperature",temperature);
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",1);
+                        PreferenceUtil.getInstants().save("skycon", skycon);
+                        PreferenceUtil.getInstants().save("temperature", temperature);
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 1);
                         LogUtils.d("-zzh-isGetWeatherInfo");
-                    }else{
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",0);
+                    } else {
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     }
                 } catch (JsonSyntaxException e) {
-                    PreferenceUtil.getInstants().saveInt("isGetWeatherInfo",0);
+                    PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     e.printStackTrace();
                 }
 
@@ -783,22 +770,23 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /************************************* 定位相关 **************************************/
     /**
      * 定位成功之后调用该方法，更新数据库表定位状态，处理完成后回调 updateTableLocationComplete
+     *
      * @param locationCityInfo
      */
-    public WeatherCity requestUpdateTableLocation(LocationCityInfo locationCityInfo){
+    public WeatherCity requestUpdateTableLocation(LocationCityInfo locationCityInfo) {
         if (mModel == null || mView == null) {
-            return null ;
+            return null;
         }
         WeatherCity weatherCity = mModel.updateTableLocation(locationCityInfo);
-        if(weatherCity != null){
+        if (weatherCity != null) {
             String detailAddress;
-            if(!TextUtils.isEmpty(locationCityInfo.getAoiName())){
+            if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
                 //高德,优先用aoi
                 detailAddress = locationCityInfo.getAoiName();
-            }else if(!TextUtils.isEmpty(locationCityInfo.getPoiName())){
+            } else if (!TextUtils.isEmpty(locationCityInfo.getPoiName())) {
                 //高德,再用poi
                 detailAddress = locationCityInfo.getPoiName();
-            }else {
+            } else {
                 //百度，用街道地址
                 detailAddress = locationCityInfo.getStreet();
             }
@@ -806,6 +794,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
         return weatherCity;
     }
+
     /**
      * 插屏广告开关
      */
@@ -832,8 +821,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         });
     }
-
-
 
 
 }

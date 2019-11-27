@@ -283,7 +283,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
             dialog = new Dialog(mActivity, R.style.dialog_2_button);
 
             //dialog.setLeftTitle("应用更新");
-            dialog.setCanceledOnTouchOutside(true);
+            dialog.setCanceledOnTouchOutside(false);
 
             View inflate = View.inflate(mActivity, R.layout.activity_update_dialog, null);
 
@@ -302,9 +302,15 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
             update_version_num.setText("V " + mInfo.getData().versionNumber);
             //设置点击监听
             //升级
-            update_id_ok.setOnClickListener(v -> requestPermission(agent));
+            update_id_ok.setOnClickListener(v -> {
+                PreferenceUtil.saveHaseUpdateVersion(false);
+                requestPermission(agent);
+            });
             //取消
-            update_id_cancel.setOnClickListener(v -> dialog.dismiss());
+            update_id_cancel.setOnClickListener(v -> {
+                PreferenceUtil.saveHaseUpdateVersion(false);
+                dialog.dismiss();
+            });
             if (mForce) {
                 //弹窗无法关闭
                 dialog.setCancelable(false);

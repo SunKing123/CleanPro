@@ -53,7 +53,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
      */
     private void showRedPacket() {
         PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
-        if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
+        if (PreferenceUtil.isHaseUpdateVersion() || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;

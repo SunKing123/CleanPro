@@ -37,6 +37,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
     private var mCount = 0
     private lateinit var mAdManager: AdManager
+    private var mAdExposed = false //广告是否曝光
 
     private val TAG = "GeekSdk"
     override fun getLayoutId(): Int {
@@ -136,7 +137,8 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 Log.d(TAG, "-----adExposed-----")
                 PreferenceUtil.saveShowAD(true)
                 if (null == info) return
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", " ")
+                mAdExposed = true
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page",  info.adTitle)
             }
 
             override fun onVideoResume(info: AdInfo?) {
@@ -146,7 +148,11 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
             override fun adClicked(info: AdInfo?) {
                 Log.d(TAG, "-----adClicked-----")
                 if (null == info) return
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", " ")
+                if (mAdExposed) {
+                    StatisticsUtils.clickAD("ad_click", "红包弹窗激励视频结束页下载点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", info.adTitle)
+                } else {
+                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page",  info.adTitle)
+                }
             }
 
             override fun adClose(info: AdInfo?) {
@@ -154,7 +160,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 PreferenceUtil.saveShowAD(false)
                 NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_end_page", "red_envelopes_page_video_end_page_view_page", "红包弹窗激励视频结束页浏览")
                 if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", " ")
+                    StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page",  info.adTitle)
                 }
                 showWebView()
             }

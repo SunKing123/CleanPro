@@ -17,9 +17,9 @@ public class SpCacheConfig {
     public static final String KEY_FIRST_HOME_RECOMMEND = "key_first_home_recommend";
 
     public static final String MUL_RUN_CACHES_CUSTOM = "mul_run_caches_custom";
-    public static final String RUN_CACHES_IS_CHECK_ALL= "run_caches_is_check_all";
-    public static final String RUN_CHECK_IS_CHECK_ALL= "run_is_check_all";
-    public static final String CLEAN_USED= "clean_used";
+    public static final String RUN_CACHES_IS_CHECK_ALL = "run_caches_is_check_all";
+    public static final String RUN_CHECK_IS_CHECK_ALL = "run_is_check_all";
+    public static final String CLEAN_USED = "clean_used";
 
     public static final String CLEAN_ACTION_LOG = "clean_action_log";
 
@@ -60,43 +60,44 @@ public class SpCacheConfig {
     //夜间省电
     public static final String IS_SAVE_NIGHT_POWER = "night_power";
     //异常耗电提醒
-    public static final  String IS_SAVE_ERROR_POWER = "error_power";
+    public static final String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
-    public static final  String IS_SAVE_CLEAN_TIME = "clean_time";
+    public static final String IS_SAVE_CLEAN_TIME = "clean_time";
 
     //病毒查杀间隔时间
-    public static final  String IS_SAVE_VIRUS_TIME = "virus_time";
+    public static final String IS_SAVE_VIRUS_TIME = "virus_time";
 
-    public static final  String IS_SAVE_NOW_CLEAN_TIME = "now_clean_time";
-    public static final  String IS_SAVE_WeCLEAN_TIME = "weclean_time";
-    public static final  String IS_SAVE_NOTIFICATION_TIME = "notification_time";
-    public static final  String IS_SAVE_POWER_TIME = "power_time";
-    public static final  String IS_SAVE_COOLINF_TIME = "cooling_time";
-    public static final  String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
-    public static final  String IS_SAVE_GAME_TIME = "game_time";
+    public static final String IS_SAVE_NOW_CLEAN_TIME = "now_clean_time";
+    public static final String IS_SAVE_WeCLEAN_TIME = "weclean_time";
+    public static final String IS_SAVE_NOTIFICATION_TIME = "notification_time";
+    public static final String IS_SAVE_POWER_TIME = "power_time";
+    public static final String IS_SAVE_COOLINF_TIME = "cooling_time";
+    public static final String IS_SAVE_FIRST_OPEN_APP = "first_open_app";
+    public static final String IS_SAVE_GAME_TIME = "game_time";
 
-    public static final  String IS_SAVE_FIRST_HOME_ICON = "first_home_icon";
-    public static final  String IS_HOME_BACK_TIME = "home_back";
-    public static final  String IS_HOME_BACK = "is_home_back";
-    public static final  String CLEAN_FINISH_CLICK_COUNT = "CleanFinishClickCount";
-    public static final  String CLEAN_FINISH_CLICK_JIAU_COUNT = "CleanFinishClickJiaSuCount";
-    public static final  String CLEAN_FINISH_CLICK_POWER_COUNT = "CleanFinishClickPowerCount";
-    public static final  String CLEAN_FINISH_CLICK_NOTIFY_COUNT = "CleanFinishClickNotifyCount";
-    public static final  String CLEAN_FINISH_CLICK_WECHAT_COUNT = "CleanFinishClickWechatCount";
-    public static final  String CLEAN_FINISH_CLICK_COOL_COUNT = "CleanFinishClickCoolCount";
-    public static final  String CLEAN_FINISH_CLICK_QQ_COUNT = "CleanFinishClickQQCount";
-    public static final  String CLEAN_FINISH_CLICK_PHONE_COUNT = "CleanFinishClickPhoneCount";
-    public static final  String CLEAN_FINISH_CLICK_GAME_COUNT = "CleanFinishClickGameCount";
-    public static final  String CLEAN_FINISH_CLICK_VIRUS_COUNT = "CleanFinishClickViursCount";
-    public static final  String CLEAN_FINISH_CLICK_NET_COUNT = "CleanFinishClickNetCount";
-    public static final  String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
-    public static final  String IS_FIRST_HOME_RECOMMEND = "is_first_home_recommend";
-    public static final  String IS_GAME_QUIKCEN_START = "is_game_quikcen_start";
-    public static final  String GAME_QUIKCEN_NUM = "game_quikcen_num";
-    public static final  String RED_PACKET_SHOW = "RedPacketShow";
-    public static final  String RED_PACKET_FOR = "RedPacketFor";
-    public static final  String RED_PACKET_SHOW_TRIGGER= "RedPacketShowTrigger";
-    public static final  String IS_SHOW_AD= "isShowAd";
+    public static final String IS_SAVE_FIRST_HOME_ICON = "first_home_icon";
+    public static final String IS_HOME_BACK_TIME = "home_back";
+    public static final String IS_HOME_BACK = "is_home_back";
+    public static final String CLEAN_FINISH_CLICK_COUNT = "CleanFinishClickCount";
+    public static final String CLEAN_FINISH_CLICK_JIAU_COUNT = "CleanFinishClickJiaSuCount";
+    public static final String CLEAN_FINISH_CLICK_POWER_COUNT = "CleanFinishClickPowerCount";
+    public static final String CLEAN_FINISH_CLICK_NOTIFY_COUNT = "CleanFinishClickNotifyCount";
+    public static final String CLEAN_FINISH_CLICK_WECHAT_COUNT = "CleanFinishClickWechatCount";
+    public static final String CLEAN_FINISH_CLICK_COOL_COUNT = "CleanFinishClickCoolCount";
+    public static final String CLEAN_FINISH_CLICK_QQ_COUNT = "CleanFinishClickQQCount";
+    public static final String CLEAN_FINISH_CLICK_PHONE_COUNT = "CleanFinishClickPhoneCount";
+    public static final String CLEAN_FINISH_CLICK_GAME_COUNT = "CleanFinishClickGameCount";
+    public static final String CLEAN_FINISH_CLICK_VIRUS_COUNT = "CleanFinishClickViursCount";
+    public static final String CLEAN_FINISH_CLICK_NET_COUNT = "CleanFinishClickNetCount";
+    public static final String LENGTHEN_AWAIT_TIME = "LengthenAwaitTime";
+    public static final String IS_FIRST_HOME_RECOMMEND = "is_first_home_recommend";
+    public static final String IS_GAME_QUIKCEN_START = "is_game_quikcen_start";
+    public static final String GAME_QUIKCEN_NUM = "game_quikcen_num";
+    public static final String RED_PACKET_SHOW = "RedPacketShow";
+    public static final String RED_PACKET_FOR = "RedPacketFor";
+    public static final String RED_PACKET_SHOW_TRIGGER = "RedPacketShowTrigger";
+    public static final String IS_SHOW_AD = "isShowAd";
+    public static final String HASE_UPDATE_VERSION = "HaseUpdateVersion";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";
@@ -113,12 +114,12 @@ public class SpCacheConfig {
     //瑞狮信息流地址
     public static final String RUISHI_BASEURL = "http://api.viaweb.cn/";
 
-    public static final  String IS_USED_CLEAN_ALL = "is_used_clean_all";
-    public static final  String IS_USED_JIASU = "is_used_jiasu";
-    public static final  String IS_USED_POWER = "is_used_power";
-    public static final  String IS_USED_NOTIFY = "is_used_notify";
-    public static final  String IS_USED_WECHAT = "is_used_wechat";
-    public static final  String IS_USED_COLL = "is_used_coll";
-    public static final  String IS_USED_GAME = "is_used_game";
+    public static final String IS_USED_CLEAN_ALL = "is_used_clean_all";
+    public static final String IS_USED_JIASU = "is_used_jiasu";
+    public static final String IS_USED_POWER = "is_used_power";
+    public static final String IS_USED_NOTIFY = "is_used_notify";
+    public static final String IS_USED_WECHAT = "is_used_wechat";
+    public static final String IS_USED_COLL = "is_used_coll";
+    public static final String IS_USED_GAME = "is_used_game";
 
 }

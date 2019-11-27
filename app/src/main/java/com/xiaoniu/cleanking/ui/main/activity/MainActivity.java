@@ -2,14 +2,12 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -65,7 +63,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -656,7 +653,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @param redPacketEntity
      */
     public void getRedPacketListSuccess(RedPacketEntity redPacketEntity) {
-        if (null == redPacketEntity || null == redPacketEntity.getData()
+        if (PreferenceUtil.isHaseUpdateVersion() || null == redPacketEntity || null == redPacketEntity.getData()
                 || redPacketEntity.getData().size() <= 0 || null == redPacketEntity.getData().get(0).getImgUrls()
                 || redPacketEntity.getData().get(0).getImgUrls().size() <= 0)
             return;

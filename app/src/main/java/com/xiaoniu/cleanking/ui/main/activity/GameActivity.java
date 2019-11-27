@@ -110,6 +110,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private AdManager mAdManager;
     private ImageView[] ivs;
     private boolean mIsFromHomeMain; //是否来自首页主功能区
+    private boolean mAdExposed; //广告是否曝光
+
     private static final String TAG = "ChuanShanJia";
 
     @Override
@@ -538,10 +540,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 Log.d(TAG, "-----adExposed-----");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
+                mAdExposed = true;
                 if (mIsFromHomeMain) {
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", " ");
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", info.getAdTitle());
                 } else {
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", " ");
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", info.getAdTitle());
                 }
             }
 
@@ -550,9 +553,17 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                 Log.d(TAG, "-----adClicked-----");
                 if (null == info) return;
                 if (mIsFromHomeMain) {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", "");
+                    if (mAdExposed) {
+                        StatisticsUtils.clickAD("ad_click", "主功能区游戏加速激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_incentive_video_page", "main_function_area_gameboost_incentive_video_end_page", info.getAdTitle());
+                    } else {
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", info.getAdTitle());
+                    }
                 } else {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", "");
+                    if (mAdExposed) {
+                        StatisticsUtils.clickAD("ad_click", "游戏加速激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "gameboost_incentive_video_page", "gameboost_incentive_video_end_page", info.getAdTitle());
+                    } else {
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", info.getAdTitle());
+                    }
                 }
             }
 

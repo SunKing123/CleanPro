@@ -1208,6 +1208,26 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存是否有版本更新
+     *
+     * @return
+     */
+    public static boolean saveHaseUpdateVersion(boolean isShow) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.HASE_UPDATE_VERSION, isShow).commit();
+        return true;
+    }
+
+    /**
+     * 获取是否有版本更新
+     */
+    public static boolean isHaseUpdateVersion() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.HASE_UPDATE_VERSION, false);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return
