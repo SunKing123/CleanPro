@@ -76,14 +76,14 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void setLockerWindow(Window window) {
-        WindowManager.LayoutParams lp = window.getAttributes();
+/*        WindowManager.LayoutParams lp = window.getAttributes();
         if (Build.VERSION.SDK_INT > 18) {
             lp.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         }
         window.setAttributes(lp);
         window.getDecorView().setSystemUiVisibility(0x0);
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);*/
     }
 
     public void adInit() {

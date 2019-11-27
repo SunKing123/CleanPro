@@ -114,4 +114,6 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
     protected String getUrl() {
         return getIntent().getStringExtra(ExtraConstant.WEB_URL);
     }
+
+
 }

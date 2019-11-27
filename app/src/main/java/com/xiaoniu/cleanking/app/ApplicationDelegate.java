@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.app;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
@@ -17,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.utils.SpUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 import com.umeng.commonsdk.UMConfigure;
@@ -30,16 +32,28 @@ import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
 import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
+import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
+import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.MiitHelper;
@@ -48,6 +62,7 @@ import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,6 +112,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,"5036430", ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
         initJsBridge();
         homeCatch(application);
+        initLifecycle(application);
 
     }
 
@@ -287,6 +303,49 @@ public class ApplicationDelegate implements IApplicationDelegate {
         });
         mHomeWatcher.startWatch();
     }
+
+
+    private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
+
+    public void initLifecycle(Application application){
+        LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
+            @Override
+            public void onBecameForeground(Activity activity) {
+                PreferenceUtil.getInstants().saveInt("isback", 0);
+
+                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
+                        || ActivityCollector.isActivityExist(PopLayerActivity.class)
+                        || !PreferenceUtil.isNotFirstOpenApp() || !getProcessName(application).equals(BuildConfig.APPLICATION_ID))
+                    return;
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+//                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
+                        if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {
+                            Intent intent = new Intent();
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
+                            application.getApplicationContext().startActivity(intent);
+                            mIsBack = false;
+                        }
+                    }
+                }
+                EventBus.getDefault().post(new LifecycEvent(true));
+            }
+
+            @Override
+            public void onBecameBackground(Activity activity) {
+                SPUtils.getInstance(application,"Lifecycle").put("acitivity_name",activity.getLocalClassName());
+                if (!AppLifecycleUtil.isAppOnForeground(application)) {
+                    //app 进入后台
+                    mIsBack = true;
+                    PreferenceUtil.getInstants().saveInt("isback",1);
+                    PreferenceUtil.saveHomeBackTime();
+                }
+            }
+        });
+    }
+
 
 
 }

@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -392,7 +393,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ExtraConstant.ACTION_NAME, "lock");
+                    intentClean.putExtras(bundle);
                     startActivity(intentClean);
                 } else {
                     Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
@@ -407,7 +410,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString("unit", "");
                     bundle.putString("home", "");
                     intentClean.putExtras(bundle);
-
                     startActivity(intentClean);
                 }
 
@@ -421,6 +423,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ExtraConstant.ACTION_NAME, "lock");
+                    phoneAccessIntent.putExtras(bundle);
                     startActivity(phoneAccessIntent);
                 }else{
                     PreferenceUtil.getInstants().save("lock_action", "ram");//埋点区分逻辑
@@ -484,7 +489,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         virusIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         virusIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        PreferenceUtil.getInstants().save("lock_action","virus");
+        Bundle bundle = new Bundle();
+        bundle.putString(ExtraConstant.ACTION_NAME, "lock");
+        virusIntent.putExtras(bundle);
+        PreferenceUtil.getInstants().save("lock_action","virus");//埋点逻辑
         startActivity(virusIntent);
     }
 

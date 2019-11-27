@@ -61,7 +61,7 @@ public final class LocalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtils.i("--zzh--"+System.currentTimeMillis());
+
         Log.i("本地服务", "：本地服务启动成功");
         if (mBilder == null) {
             mBilder = new LocalBinder();
@@ -106,7 +106,7 @@ public final class LocalService extends Service {
         intentFilter.addAction("android.intent.action.SCREEN_OFF");
         intentFilter.addAction("android.intent.action.SCREEN_ON");
         registerReceiver(mOnepxReceiver, intentFilter);
-        LogUtils.i("--zzh--"+System.currentTimeMillis());
+
         //屏幕点亮状态监听，用于单独控制音乐播放
         if (screenStateReceiver == null) {
             screenStateReceiver = new ScreenStateReceiver();

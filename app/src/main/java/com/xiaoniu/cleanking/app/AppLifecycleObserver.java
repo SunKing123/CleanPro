@@ -36,7 +36,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
-        LogUtils.i("---zzz---start");
+/*        LogUtils.i("---zzz---start");
         PreferenceUtil.getInstants().saveInt("isback",0);
         if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
                 || ActivityCollector.isActivityExist(PopLayerActivity.class)
@@ -57,18 +57,18 @@ public class AppLifecycleObserver implements LifecycleObserver {
                 }
             }
         }
-        EventBus.getDefault().post(new LifecycEvent(true));
+        EventBus.getDefault().post(new LifecycEvent(true));*/
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void onEnterBackground() {
-        LogUtils.i("---zzz---back");
+     /*   LogUtils.i("---zzz---back");
         if (!AppLifecycleUtil.isAppOnForeground(mContext)) {
             //app 进入后台
             mIsBack = true;
             PreferenceUtil.getInstants().saveInt("isback",1);
             PreferenceUtil.saveHomeBackTime();
-        }
+        }*/
     }
 
 

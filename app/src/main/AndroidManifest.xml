@@ -368,8 +368,9 @@
             android:name=".ui.main.activity.AgentWebViewActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:process=":gj_webview"
+
             android:screenOrientation="portrait" />
+       <!-- android:process=":gj_webview"-->
 
         <activity
             android:name=".ui.main.activity.GameActivity"

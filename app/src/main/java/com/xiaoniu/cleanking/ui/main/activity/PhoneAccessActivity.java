@@ -376,10 +376,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         PreferenceUtil.saveCleanJiaSuUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
-        startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed))
-                .putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num)
-                .putExtra(ExtraConstant.UNIT, unit));
+        Intent mIntent = new Intent(this, ScreenFinishBeforActivity.class);
+        mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
+        mIntent.putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num);
+        mIntent.putExtra(ExtraConstant.UNIT, unit);
+        if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME)){
+            mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME));
+        }
+        startActivity(mIntent);
         finish();
     }
 

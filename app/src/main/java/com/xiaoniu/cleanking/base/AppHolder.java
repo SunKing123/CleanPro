@@ -37,19 +37,6 @@ public class AppHolder {
      */
     private String otherSourcePageId = "home_page";
 
-    /**
-     * 当前TaskId
-     * @return
-     */
-    private int currentTaskId = 0;
-
-    public int getCurrentTaskId() {
-        return currentTaskId;
-    }
-
-    public void setCurrentTaskId(int currentTaskId) {
-        this.currentTaskId = currentTaskId;
-    }
 
     public String getSourcePageId() {
         return sourcePageId;

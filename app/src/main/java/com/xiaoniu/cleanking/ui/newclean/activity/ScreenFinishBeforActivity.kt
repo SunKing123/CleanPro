@@ -229,7 +229,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             bundle.putString("title", mTitle)
             bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
             startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
-        } else if (this.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3_锁屏跳转
+        } else if (getIntent().hasExtra(ExtraConstant.ACTION_NAME) && getIntent().getStringExtra(ExtraConstant.ACTION_NAME).equals("lock")) {//新Task路径_跳转Ad3_锁屏跳转
             val bundle = Bundle()
             bundle.putString("title", mTitle)
             bundle.putString("action", "lock")

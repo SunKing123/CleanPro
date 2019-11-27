@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -277,10 +278,14 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         PreferenceUtil.saveCleanAllUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
-            startActivity(new Intent(getActivity(), ScreenFinishBeforActivity.class)
-                    .putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean))
-                    .putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize())
-                    .putExtra(ExtraConstant.UNIT, checkCountEntity.getUnit()));
+           Intent intent_finish=  new Intent(getActivity(), ScreenFinishBeforActivity.class);
+            intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
+            intent_finish.putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize());
+            intent_finish.putExtra(ExtraConstant.UNIT, checkCountEntity.getUnit());
+            if(getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME)){
+                intent_finish.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME));
+            }
+            startActivity(intent_finish);
             getActivity().finish();
         }
     }

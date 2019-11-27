@@ -144,7 +144,12 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                 //保存杀毒完成时间
                 PreferenceUtil.saveVirusKillTime();
                 AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
-                startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
+                Intent mIntent = new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class);
+                mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
+                if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME)){
+                    mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME));
+                }
+                startActivity(mIntent);
                 finish();
             }
 
