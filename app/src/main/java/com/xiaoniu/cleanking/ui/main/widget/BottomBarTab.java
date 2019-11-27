@@ -66,6 +66,7 @@ public class BottomBarTab extends FrameLayout {
         if (null == AppHolder.getInstance().getIconsEntityList()
                 || null == AppHolder.getInstance().getIconsEntityList().getData()
                 || AppHolder.getInstance().getIconsEntityList().getData().size() <= 0) {
+            Log.d("XiLei","hhhh");
             if (TextUtils.equals(auditSwitch, "0")) {
                 icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
                 iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
@@ -74,6 +75,7 @@ public class BottomBarTab extends FrameLayout {
                 iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
             }
         } else {
+            Log.d("XiLei","vvvv");
             for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
                 iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());

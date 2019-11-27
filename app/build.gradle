@@ -7,8 +7,7 @@ apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.hellogeek.cleanking" //暂时注释
-//        applicationId "com.xiaoniu.cleanking"
+        applicationId "com.hellogeek.cleanking"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName rootProject.ext.versionName

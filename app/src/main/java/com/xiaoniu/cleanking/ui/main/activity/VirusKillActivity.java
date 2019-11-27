@@ -193,9 +193,6 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                         } else {
                             showColorChange((index - 1));
                         }
-                        if (null != mIvs[index]) {
-                            mIvs[index].setVisibility(View.GONE);
-                        }
                     }
 
                     @Override

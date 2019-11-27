@@ -34,14 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="1"
-            android:background="@drawable/icon_scaning_bg02" />
+            android:background="@drawable/icon_clean_bg02" />
 
         <ImageView
             android:id="@+id/iv_scan_bg05"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="1"
-            android:background="@drawable/icon_scaning_bg01" />
+            android:background="@drawable/icon_clean_bg01" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie"
@@ -55,8 +55,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:background="@drawable/icon_scaning_bg01">
+            android:visibility="gone">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie2"

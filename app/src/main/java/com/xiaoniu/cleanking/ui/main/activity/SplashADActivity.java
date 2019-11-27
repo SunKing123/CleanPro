@@ -125,7 +125,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("XiLei", "222222222");
                     jumpActivity();
                 }
             }, 100);
@@ -156,9 +155,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     @Override
     protected void initView() {
-/*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
+        /*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
         mBtn.setOnClickListener(this);
         mAgreement.setOnClickListener(this);
+        findViewById(R.id.tv_xy).setOnClickListener(this);
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -167,11 +167,17 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
         PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
-        if (NetworkUtils.isNetConnected()) {
+
+        if (!NetworkUtils.isNetConnected()) {
+            if (!PreferenceUtil.isNotFirstOpenApp()) {
+                mStartView.setVisibility(View.VISIBLE);
+                mContentView.setVisibility(View.GONE);
+            } else {
+                getAuditSwitchFail();
+            }
+        } else {
             mPresenter.geekAdSDKConfig();//加载广告配置
             mPresenter.getAuditSwitch();
-        } else {
-            getAuditSwitchFail();
         }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
@@ -259,7 +265,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
-            Log.d("XiLei", "33333");
             jumpActivity();
         });
     }
@@ -327,7 +332,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void adError(int errorCode, String errorMsg) {
                 Log.e(TAG, "-----adError-----" + errorMsg);
-                Log.d("XiLei", "55555555");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "clod_splash_page", "clod_splash_page");
                 jumpActivity();
             }
@@ -347,7 +351,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Log.d("XiLei", "66666666");
                 jumpActivity();
             }
 
@@ -371,8 +374,20 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 finish();
                 break;
             case R.id.tv_qx:
-                jumpXieyiActivity(AppConstants.Base_H5_Host + "/userAgreement.html");
-                StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
+                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
+                    jumpXieyiActivity("file:///android_asset/agree.html");
+                } else {
+                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+                }
+                StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
+                break;
+            case R.id.tv_xy:
+                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
+                    jumpXieyiActivity("file:///android_asset/userAgreement.html");
+                } else {
+                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/userAgreement.html");
+                }
+                StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
                 break;
         }
     }
