@@ -180,7 +180,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mVirusPoistion;
     private AdManager mAdManager;
     private boolean mIsFristShowTopAd; //是否第一次展示头图广告
-    private boolean isGameMain; //点击的是主功能的游戏加速还是推荐下的游戏加速o
+    private boolean isGameMain; //点击的是主功能的游戏加速还是推荐下的游戏加速
+    private boolean mIsClickAdTopDetail; //顶部广告点击是否跳转详情还是下载
+    private boolean mIsClickAdCenterDetail; //顶部广告点击是否跳转详情还是下载
+    private boolean mIsTopAdExposed; //广告是否曝光
+    private boolean mIsCenterAdExposed; //广告是否曝光
 
     private static final String TAG = "GeekSdk";
 
@@ -389,6 +393,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
+
+        if (mIsClickAdTopDetail) {
+            initGeekSdkTop();
+        }
+        if (mIsClickAdCenterDetail) {
+            initGeekSdkCenter();
+        }
     }
 
     /**
@@ -430,6 +441,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "adExposed---1");
                 if (null == info) return;
+                mIsTopAdExposed = true;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
             }
 
@@ -437,7 +449,22 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "adClicked---1");
                 if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                if (mIsTopAdExposed) {
+                    StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                } else {
+                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                }
+                if (info.getAdClickType() == 2) { //2=详情
+                    mIsClickAdTopDetail = true;
+                } else {
+                    mIsClickAdTopDetail = false;
+                }
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                if (null == info) return;
+                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
             }
 
             @Override
@@ -480,6 +507,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adExposed(AdInfo info) {
                 if (null == info) return;
+                mIsCenterAdExposed = true;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
             }
 
@@ -487,7 +515,22 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "adClicked");
                 if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
+                if (mIsCenterAdExposed) {
+                    StatisticsUtils.clickAD("ad_click", "网络加速激励视频结束页下载点击", "2", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
+                } else {
+                    StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                }
+                if (info.getAdClickType() == 2) { //2=详情
+                    mIsClickAdCenterDetail = true;
+                } else {
+                    mIsClickAdCenterDetail = false;
+                }
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                if (null == info) return;
+                StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
             }
 
             @Override
