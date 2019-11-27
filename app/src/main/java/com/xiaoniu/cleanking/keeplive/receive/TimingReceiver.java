@@ -129,19 +129,22 @@ public class TimingReceiver extends BroadcastReceiver {
             if (null != AppHolder.getInstance().getInsertAdSwitchmap()  ) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                 isOpen = null == map.get("page_outside_screen") ? false : map.get("page_outside_screen").isOpen();
-                showTimes = null == map.get("page_outside_screen") ? 2 : map.get("page_outside_screen").getShowRate();
+                showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
             }
             if (!isOpen) return;
 
 
             long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get("pop_time")) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get("pop_time"));
             int number = PreferenceUtil.getInstants().getInt("pop_numbers");
+
             //一小时内三次
             if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime)<= (60 * 60 * 1000) && number < showTimes)) {
+                if((System.currentTimeMillis() - pretime)> (60 * 60 * 1000)){//超过一小时
+                    PreferenceUtil.getInstants().saveInt("pop_numbers",0);
+                }
                 Intent screenIntent = getIntent(context);
                 context.startActivity(screenIntent);
-                PreferenceUtil.getInstants().save("pop_time", String.valueOf(System.currentTimeMillis()));
-                PreferenceUtil.getInstants().saveInt("pop_numbers",number+1);
+
             }
         } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());

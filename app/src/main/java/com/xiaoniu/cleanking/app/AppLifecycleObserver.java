@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -38,6 +39,7 @@ public class AppLifecycleObserver implements LifecycleObserver {
         LogUtils.i("---zzz---start");
         PreferenceUtil.getInstants().saveInt("isback",0);
         if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
+                || ActivityCollector.isActivityExist(PopLayerActivity.class)
                 || !PreferenceUtil.isNotFirstOpenApp())
             return;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()

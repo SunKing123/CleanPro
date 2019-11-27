@@ -266,7 +266,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override
             public void onHomePressed() {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -276,7 +276,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
             @Override
             public void onHomeLongPressed() {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 500){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();

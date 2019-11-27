@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -97,6 +98,9 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                     full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
                     flayoutAdContainer.removeAllViews();
                     flayoutAdContainer.addView(adView);
+                    int number = PreferenceUtil.getInstants().getInt("pop_numbers");
+                    PreferenceUtil.getInstants().saveInt("pop_numbers",number+1);
+                    PreferenceUtil.getInstants().save("pop_time", String.valueOf(System.currentTimeMillis()));
                 }
             }
 
