@@ -71,7 +71,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             CountDownView closeBtn = commonHolder.getView(R.id.rp_close_view);
 
             tv_collection_num.setText(String.valueOf(itemInfo.collectTimes));
-            tv_viewed_num.setText(mContext.getString(R.string.watch_times,String.valueOf(itemInfo.watchedTimes)));
+            tv_viewed_num.setText(mContext.getString(R.string.watch_times,itemInfo.watchedTimes));
             tv_zan_num.setText(String.valueOf(itemInfo.starTimes));
 
             JzvdStd jzvdStd = commonHolder.getView(R.id.videoplayer);
@@ -99,7 +99,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                 showRate = null != map.get("page_video_end_screen") ? 3 : map.get("page_video_end_screen").getShowRate();
             }
-            if ((position + 1) % showRate == 0) {//每间隔showRate播放
+            if ((position + 1) % (showRate+1) == 0) {//每间隔showRate播放
                 //newlist_2_1   第二屏幕广告样式
                 if (NetworkUtils.isNetConnected())
                 insertAd(linAdContainer,"newlist_2_1",closeBtn,View.GONE);

@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -175,7 +176,7 @@ public class NewsListFragment extends BaseFragment {
     private void loadVideoData() {
         //请求参数设置：比如一个json字符串
         if(mIsRefresh)
-            current_page_no = 1;
+            current_page_no = PreferenceUtil.getInstants().getInt("video_page")+1;;
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("pageSize", PAGE_NUM);
@@ -211,6 +212,7 @@ public class NewsListFragment extends BaseFragment {
                         mLlNoNet.setVisibility(View.GONE);
 //                    if (result.size() >= PAGE_NUM) { //数据加载中
                         current_page_no++;
+                        PreferenceUtil.getInstants().saveInt("video_page",current_page_no);
 //                    }
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result);
@@ -240,7 +242,7 @@ public class NewsListFragment extends BaseFragment {
             ArrayList<NewsItemInfo> newdata = new ArrayList<>();
             for(int i=0;i<newsItemInfos.size();i++){
                 newdata.add(newsItemInfos.get(i));
-                if ((i + 1) % (showRate-1) == 0) {//每间隔showRate播放
+                if ((i + 1) % (showRate) == 0) {//每间隔showRate播放
                     NewsItemInfo newsItemInfo = new NewsItemInfo();
                     newsItemInfo.isAd = true;
                     newdata.add(newsItemInfo);
