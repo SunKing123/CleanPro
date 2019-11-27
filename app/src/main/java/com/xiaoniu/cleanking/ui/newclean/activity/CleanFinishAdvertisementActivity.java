@@ -194,6 +194,9 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 mTvGb.setText("%");
                 mTvSize.setText(NumberUtils.mathRandom(25, 50));
                 mTvQl.setText("已提速");
+            }else if (getString(R.string.virus_kill).contains(mTitle)) {
+                mTvSize.setText(R.string.virus_guard);
+                mTvSize.setTextSize(20);
             }
             mTitleTv.setText(mTitle);
         }

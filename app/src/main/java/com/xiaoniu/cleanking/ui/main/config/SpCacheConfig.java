@@ -63,6 +63,10 @@ public class SpCacheConfig {
     public static final  String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final  String IS_SAVE_CLEAN_TIME = "clean_time";
+
+    //病毒查杀间隔时间
+    public static final  String IS_SAVE_VIRUS_TIME = "virus_time";
+
     public static final  String IS_SAVE_NOW_CLEAN_TIME = "now_clean_time";
     public static final  String IS_SAVE_WeCLEAN_TIME = "weclean_time";
     public static final  String IS_SAVE_NOTIFICATION_TIME = "notification_time";

@@ -12,10 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.comm.jksdk.GeekAdSdk;
@@ -66,6 +62,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Random;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cn.jzvd.Jzvd;
 
 /**
@@ -290,7 +289,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             //一键加速
             currentPage = "boost_success_page";
             createEventName = "加速结果页创建时";
-            createEventCode = "boost_success_page_page_custom";
+            createEventCode = "boost_success_page_custom";
             returnEventName = "用户在加速结果页返回";
             sysReturnEventName = "用户在加速结果页返回";
 

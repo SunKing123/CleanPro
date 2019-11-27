@@ -156,6 +156,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     @Override
     protected void initView() {
+/*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
         mBtn.setOnClickListener(this);
         mAgreement.setOnClickListener(this);
         PreferenceUtil.saveCleanAllUsed(false);

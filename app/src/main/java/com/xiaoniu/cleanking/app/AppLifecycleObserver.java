@@ -3,14 +3,9 @@ package com.xiaoniu.cleanking.app;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
-
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
-import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -20,6 +15,10 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * @author XiLei
@@ -39,7 +38,6 @@ public class AppLifecycleObserver implements LifecycleObserver {
         LogUtils.i("---zzz---start");
         PreferenceUtil.getInstants().saveInt("isback",0);
         if (null == mContext || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
-                || ActivityCollector.isActivityExist(PopLayerActivity.class)
                 || !PreferenceUtil.isNotFirstOpenApp())
             return;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()

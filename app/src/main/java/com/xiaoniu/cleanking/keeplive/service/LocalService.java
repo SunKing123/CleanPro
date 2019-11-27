@@ -20,6 +20,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -31,11 +32,13 @@ import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
+
 import androidx.annotation.NonNull;
+
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
@@ -58,6 +61,7 @@ public final class LocalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtils.i("--zzh--"+System.currentTimeMillis());
         Log.i("本地服务", "：本地服务启动成功");
         if (mBilder == null) {
             mBilder = new LocalBinder();
@@ -102,6 +106,7 @@ public final class LocalService extends Service {
         intentFilter.addAction("android.intent.action.SCREEN_OFF");
         intentFilter.addAction("android.intent.action.SCREEN_ON");
         registerReceiver(mOnepxReceiver, intentFilter);
+        LogUtils.i("--zzh--"+System.currentTimeMillis());
         //屏幕点亮状态监听，用于单独控制音乐播放
         if (screenStateReceiver == null) {
             screenStateReceiver = new ScreenStateReceiver();
@@ -168,7 +173,6 @@ public final class LocalService extends Service {
             if (intent.getAction().equals("_ACTION_SCREEN_OFF")) {
                 isPause = false;
                 play();
-
                 startActivity(context);
             } else if (intent.getAction().equals("_ACTION_SCREEN_ON")) {
                 isPause = true;

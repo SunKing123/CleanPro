@@ -141,7 +141,8 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                 btnInfo.setReShowTime(System.currentTimeMillis() + 1000 * 60 * 5);
                 PreferenceUtil.getInstants().save("lock_pos03", new Gson().toJson(btnInfo));
                 EventBus.getDefault().post(btnInfo);
-
+                //保存杀毒完成时间
+                PreferenceUtil.saveVirusKillTime();
                 AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
                 startActivity(new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class).putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill)));
                 finish();

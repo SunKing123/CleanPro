@@ -342,6 +342,33 @@ public class PreferenceUtil {
         return false;
     }
 
+
+
+    /**
+     * 保存游戏加速时间
+     *
+     * @return
+     */
+    public static boolean saveVirusKillTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次游戏加速间隔至少3分钟
+     *
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getVirusKillTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
     /**
      * 保存垃圾清理是否已使用
      */

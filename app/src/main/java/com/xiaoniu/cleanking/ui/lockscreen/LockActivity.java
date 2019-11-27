@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.ui.main.bean.LocationInfo;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -384,41 +385,90 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.rel_clean_file: //清理
                 StatisticsUtils.trackClick("junk_file_click", "垃圾文件点击", "lock_screen", "lock_screen");
-                Intent intentClean = new Intent(this, NowCleanActivity.class);
-                intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                PreferenceUtil.getInstants().save("lock_action","file");
-                startActivity(intentClean);
+                PreferenceUtil.getInstants().save("lock_action", "file");//埋点区分逻辑
+                if (PreferenceUtil.getNowCleanTime()) {//是否超过三分钟
+                    Intent intentClean = new Intent(this, NowCleanActivity.class);
+                    intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+
+                    startActivity(intentClean);
+                } else {
+                    Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
+                    intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", "立即清理");
+                    bundle.putString("action", "lock");
+                    bundle.putString("num", "");
+                    bundle.putString("unit", "");
+                    bundle.putString("home", "");
+                    intentClean.putExtras(bundle);
+
+                    startActivity(intentClean);
+                }
 
                 break;
             case R.id.rel_clean_ram://一键加速
                 StatisticsUtils.trackClick("memory_usage_click", "内存使用点击", "lock_screen", "lock_screen");
-                Intent phoneAccessIntent = new Intent(this, PhoneAccessActivity.class);
-                phoneAccessIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 PreferenceUtil.getInstants().save("lock_action","ram");
-                startActivity(phoneAccessIntent);
+                if (PreferenceUtil.getCleanTime()) {
+                    Intent phoneAccessIntent = new Intent(this, PhoneAccessActivity.class);
+                    phoneAccessIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    phoneAccessIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    startActivity(phoneAccessIntent);
+                }else{
+                    PreferenceUtil.getInstants().save("lock_action", "ram");//埋点区分逻辑
+                    Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
+                    intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", "一键加速");
+                    bundle.putString("action", "lock");
+                    intentClean.putExtras(bundle);
+                    startActivity(intentClean);
+                }
+
                 break;
             case R.id.rel_clean_virus://病毒查杀
                 StatisticsUtils.trackClick("virus_killing_click", "病毒查杀点击", "lock_screen", "lock_screen");
-                if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
-                        || null == AppHolder.getInstance().getSwitchInfoList().getData()
-                        || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
-                    startVirUsKill();
-                } else {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
-                            if (switchInfoList.isOpen()) {
-                                loadGeekAd();
-                            } else {
-                                startVirUsKill();
+                PreferenceUtil.getInstants().save("lock_action", "virus");//埋点区分逻辑
+
+                if (PreferenceUtil.getVirusKillTime()) {
+                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                            || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                            || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+                        startVirUsKill();
+                    } else {
+                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                            if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
+                                if (switchInfoList.isOpen()) {
+                                    loadGeekAd();
+                                } else {
+                                    startVirUsKill();
+                                }
                             }
                         }
                     }
+                } else {
+                    Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
+                    intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", "病毒查杀");
+                    bundle.putString("action", "lock");
+                    intentClean.putExtras(bundle);
+                    startActivity(intentClean);
+
                 }
 
                 break;
@@ -443,7 +493,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
      * 病毒查杀激励视频
      */
     private void loadGeekAd() {
-       AdManager mAdManager =  GeekAdSdk.getAdsManger();
+        AdManager mAdManager =  GeekAdSdk.getAdsManger();
         if (null == mAdManager) return;
         NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
         NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
