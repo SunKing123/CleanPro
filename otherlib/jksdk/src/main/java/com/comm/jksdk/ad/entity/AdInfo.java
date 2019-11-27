@@ -39,6 +39,11 @@ public class AdInfo extends BaseEntity{
      */
     private String adStyle;
 
+    /**
+     * 点击后的类型：1=下载；2=详情
+     */
+    private int adClickType;
+
     public String getAdAppid() {
         return adAppid;
     }
@@ -79,6 +84,13 @@ public class AdInfo extends BaseEntity{
         this.adStyle = adStyle;
     }
 
+    public int getAdClickType() {
+        return adClickType;
+    }
+
+    public void setAdClickType(int adClickType) {
+        this.adClickType = adClickType;
+    }
 
     @Override
     public int describeContents() {
@@ -92,6 +104,7 @@ public class AdInfo extends BaseEntity{
         dest.writeString(this.adSource);
         dest.writeString(this.adTitle);
         dest.writeString(this.adStyle);
+        dest.writeInt(this.adClickType);
     }
 
     public AdInfo() {
@@ -103,6 +116,7 @@ public class AdInfo extends BaseEntity{
         this.adSource = in.readString();
         this.adTitle = in.readString();
         this.adStyle = in.readString();
+        this.adClickType = in.readInt();
     }
 
     public static final Creator<AdInfo> CREATOR = new Creator<AdInfo>() {
@@ -125,6 +139,7 @@ public class AdInfo extends BaseEntity{
                 ", adSource='" + adSource + '\'' +
                 ", adTitle='" + adTitle + '\'' +
                 ", adStyle='" + adStyle + '\'' +
+                ", adClickType=" + adClickType +
                 '}';
     }
 }

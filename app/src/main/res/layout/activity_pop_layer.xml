@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:id="@+id/full_screen_insert_ad_header_layout"
     android:background="@color/translucent"
+
     android:visibility="gone"
     android:layout_height="wrap_content">
 
@@ -79,7 +80,7 @@
        android:id="@+id/flayout_ad_container"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-      android:background="@color/white"
+       android:background="@color/translucent"
        android:gravity="center"
        android:layout_marginBottom="10dp"
        android:layout_below="@+id/rel_ad_top"  >
