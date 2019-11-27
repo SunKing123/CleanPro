@@ -38,6 +38,7 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
     private RoundImageView appIcon;
     private CountDownTimer countDownTimer;
     private ConstraintLayout adContainer;
+    private ImageView adLogo;
 
     private int showTimeSecond;
     private String mProgress;
@@ -87,6 +88,7 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
         adClose = findViewById(R.id.full_screen_insert_ad_close);
         appIcon = findViewById(R.id.full_screen_insert_ad_app_icon);
         progressTv = findViewById(R.id.progree_tv);
+        adLogo = findViewById(R.id.ad_logo);
         adShowTime.setText(showTimeSecond + "s");
         adShowTime.setVisibility(View.VISIBLE);
         countDownTimer = new CountDownTimer(showTimeSecond * 1000, 1000) {
@@ -121,7 +123,7 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
         if (icon != null && icon.isValid()) {
             Glide.with(getContext()).load(icon.getImageUrl()).into(appIcon);
         }
-
+        adLogo.setImageBitmap(ttNativeAd.getAdLogo());
         adName.setText(ttNativeAd.getTitle());
         adDes.setText(ttNativeAd.getDescription());
         adDownloadBtn.setText(ttNativeAd.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD ? "下载" : "查看详情");

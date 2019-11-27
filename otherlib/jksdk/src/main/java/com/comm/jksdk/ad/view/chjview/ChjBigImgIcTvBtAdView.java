@@ -57,6 +57,7 @@ public class ChjBigImgIcTvBtAdView extends CommAdView {
     TextView adDescribeTv; //广告描述
     ImageView adIm; //广告主体图片
     TextView downTb; //广告下载按钮
+    ImageView adLogo;
 
     public ChjBigImgIcTvBtAdView(Context context) {
         super(context);
@@ -78,7 +79,7 @@ public class ChjBigImgIcTvBtAdView extends CommAdView {
         adDescribeTv = findViewById(R.id.ad_describe_tv);
         adIm = findViewById(R.id.ad_im);
         downTb = findViewById(R.id.down_bt);
-
+        adLogo = findViewById(R.id.ad_logo);
         if (mContext == null) {
             return;
         }
@@ -175,6 +176,7 @@ public class ChjBigImgIcTvBtAdView extends CommAdView {
                     .apply(requestOptions)
                     .into(brandIconIm);
         }
+        adLogo.setImageBitmap(ad.getAdLogo());
         adTitleTv.setText(ad.getTitle());
         adDescribeTv.setText(ad.getDescription());
         //可以被点击的view, 也可以把convertView放进来意味item可被点击

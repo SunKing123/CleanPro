@@ -42,11 +42,36 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
-        <ImageView
+        <FrameLayout
             android:layout_marginTop="5.5dp"
-            android:id="@+id/ad_im"
             android:layout_width="match_parent"
-            android:layout_height="171dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ad_im"
+                android:layout_width="match_parent"
+                android:layout_height="171dp"
+                android:scaleType="centerCrop" />
+            <RelativeLayout
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="@dimen/dimen_8dp"
+                android:layout_marginRight="@dimen/dimen_12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ad_logo"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/dimen_16dp"
+                    android:layout_height="@dimen/dimen_16dp"/>
+                <TextView
+                    android:layout_toRightOf="@+id/ad_logo"
+                    android:layout_centerVertical="true"
+                    android:text="广告"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/dimen_9dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </FrameLayout>
+
     </LinearLayout>
 </RelativeLayout>

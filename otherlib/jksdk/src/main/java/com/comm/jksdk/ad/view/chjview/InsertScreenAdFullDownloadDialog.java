@@ -37,6 +37,7 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
     private CountDownTimer countDownTimer;
     private ConstraintLayout adContainer;
     private int showTimeSecond;
+    private ImageView adLogo;
 
     private OnClickListenr mListenr;
 
@@ -74,6 +75,7 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
         adCover = findViewById(R.id.full_screen_insert_ad_view);
         adClose = findViewById(R.id.full_screen_insert_ad_close);
         appIcon = findViewById(R.id.full_screen_insert_ad_app_icon);
+        adLogo = findViewById(R.id.ad_logo);
         adShowTime.setText(showTimeSecond + "s");
         adShowTime.setVisibility(View.VISIBLE);
         countDownTimer = new CountDownTimer(showTimeSecond * 1000, 1000) {
@@ -129,7 +131,7 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
         //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
         //creativeViewList.add(nativeView);
         creativeViewList.add(adDownloadBtn);
-
+        adLogo.setImageBitmap(ttNativeAd.getAdLogo());
         //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
         ttNativeAd.registerViewForInteraction(adContainer, clickViewList, creativeViewList, new TTNativeAd.AdInteractionListener() {
             @Override

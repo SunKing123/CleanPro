@@ -57,6 +57,7 @@ public class ChjBigImgFakeVideoAdView extends CommAdView {
     TextView adDescribeTv; //广告描述
     ImageView adIm; //广告主体图片
     TextView downTb; //广告下载按钮
+    ImageView adLogo; //广告logo
 
     private AnimationDrawable mAnimationDrawable;
 
@@ -77,6 +78,7 @@ public class ChjBigImgFakeVideoAdView extends CommAdView {
         adDescribeTv = findViewById(R.id.ad_describe_tv);
         adIm = findViewById(R.id.ad_im);
         downTb = findViewById(R.id.down_bt);
+        adLogo = findViewById(R.id.ad_logo);
         if (mContext == null) {
             return;
         }
@@ -143,6 +145,7 @@ public class ChjBigImgFakeVideoAdView extends CommAdView {
 
     private void bindData(View convertView, TTFeedAd ad) {
         adTitleTv.setText(ad.getTitle());
+        adLogo.setImageBitmap(ad.getAdLogo());
         adDescribeTv.setText(ad.getDescription());
         //可以被点击的view, 也可以把convertView放进来意味item可被点击
         List<View> clickViewList = new ArrayList<>();
@@ -184,7 +187,7 @@ public class ChjBigImgFakeVideoAdView extends CommAdView {
                 if (mContext instanceof Activity) {
                     ad.setActivityForDownloadApp((Activity) mContext);
                 }
-                downTb.setText("下载");
+                downTb.setText("立即下载");
                 bindDownloadListener(ad);
                 //绑定下载状态控制器
                 bindDownLoadStatusController(ad);
@@ -221,7 +224,7 @@ public class ChjBigImgFakeVideoAdView extends CommAdView {
                 if (!isValid()) {
                     return;
                 }
-                downTb.setText("下载");
+                downTb.setText("立即下载");
             }
 
             @SuppressLint("SetTextI18n")
@@ -257,7 +260,7 @@ public class ChjBigImgFakeVideoAdView extends CommAdView {
                 if (!isValid()) {
                     return;
                 }
-                downTb.setText("下载");
+                downTb.setText("立即下载");
             }
 
             @Override
