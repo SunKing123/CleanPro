@@ -270,6 +270,11 @@ public class CHJAdView extends CommAdView {
                 if (ttFeedAd != null) {
                     String title = ttFeedAd.getTitle();
                     mAdInfo.setAdTitle(title);
+                    if (TTAdConstant.INTERACTION_TYPE_DOWNLOAD == ttFeedAd.getInteractionType()) {
+                        mAdInfo.setAdClickType(1);
+                    } else {
+                        mAdInfo.setAdClickType(2);
+                    }
                 }
                 adSuccess(mAdInfo);
                 mAdView.setAdInfo(mAdInfo);

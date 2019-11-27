@@ -58,6 +58,8 @@
             android:id="@+id/ad_title_tv"
             android:layout_centerVertical="true"
             android:layout_marginLeft="60dp"
+            android:layout_marginRight="110dp"
+            android:ellipsize="end"
             android:lines="1"
             android:textSize="15dp"
             android:textColor="#404040"

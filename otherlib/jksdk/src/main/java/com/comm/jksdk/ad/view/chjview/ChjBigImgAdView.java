@@ -100,9 +100,9 @@ public class ChjBigImgAdView extends CommAdView {
             firstAdError(1, "请求结果为空");
             return;
         }
-        int size = nativeAdList.size();
-        int index = new Random().nextInt(size);
-        TTFeedAd adData = nativeAdList.get(index);
+//        int size = nativeAdList.size();
+//        int index = new Random().nextInt(size);
+        TTFeedAd adData = nativeAdList.get(0);
         if (adData == null) {
             firstAdError(1, "请求结果为空");
             return;

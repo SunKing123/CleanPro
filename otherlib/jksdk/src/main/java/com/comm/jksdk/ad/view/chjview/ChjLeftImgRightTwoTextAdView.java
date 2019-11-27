@@ -103,9 +103,9 @@ public class ChjLeftImgRightTwoTextAdView extends CommAdView {
         if (nativeAdList == null || nativeAdList.isEmpty()) {
             return;
         }
-        int size = nativeAdList.size();
-        int index = new Random().nextInt(size);
-        TTFeedAd adData = nativeAdList.get(index);
+//        int size = nativeAdList.size();
+//        int index = new Random().nextInt(size);
+        TTFeedAd adData = nativeAdList.get(0);
         if (adData == null) {
             return;
         }

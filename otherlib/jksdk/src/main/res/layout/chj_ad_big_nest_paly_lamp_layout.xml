@@ -30,7 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <ImageView
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="84dp"
         android:src="@mipmap/ad_big_img_paly"
         android:layout_width="45dp"
         android:layout_height="45dp"/>

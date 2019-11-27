@@ -30,7 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <ImageView
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="84dp"
         android:src="@mipmap/ad_big_img_paly"
         android:layout_width="45dp"
         android:layout_height="45dp"/>
@@ -69,24 +70,7 @@
                 android:textColor="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-<!--            <LinearLayout-->
-<!--                android:layout_marginTop="4.5dp"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content">-->
-<!--                <ImageView-->
-<!--                    android:id="@+id/ad_logo"-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:layout_width="@dimen/dimen_16dp"-->
-<!--                    android:layout_height="@dimen/dimen_16dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:text="广告"-->
-<!--                    android:textColor="#ffffff"-->
-<!--                    android:textSize="@dimen/dimen_10dp"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"/>-->
-<!--            </LinearLayout>-->
+
         </LinearLayout>
     </FrameLayout>
     <View

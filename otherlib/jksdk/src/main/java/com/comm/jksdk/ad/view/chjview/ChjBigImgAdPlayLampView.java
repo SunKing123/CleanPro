@@ -134,9 +134,9 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
             firstAdError(1, "请求结果为空");
             return;
         }
-        int size = nativeAdList.size();
-        int index = new Random().nextInt(size);
-        TTFeedAd adData = nativeAdList.get(index);
+//        int size = nativeAdList.size();
+//        int index = new Random().nextInt(size);
+        TTFeedAd adData = nativeAdList.get(0);
         if (adData == null) {
             firstAdError(1, "请求结果为空");
             return;
@@ -193,14 +193,6 @@ public class ChjBigImgAdPlayLampView extends CommAdView {
 //            creativeViewList.add(convertView);
         //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
         ad.registerViewForInteraction((ViewGroup) convertView, clickViewList, creativeViewList,adListener );
-
-
-
-////默认0
-//        long downloadCount = 0;
-////         预览描述
-//        String browseDesc = getBrowseDesc(downloadCount);
-//        tvAdBrowseCount.setText(browseDesc);
 
         TTImage image = ad.getImageList().get(0);
         if (image != null && image.isValid()) {

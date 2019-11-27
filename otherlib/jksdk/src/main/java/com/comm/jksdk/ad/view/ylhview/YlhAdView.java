@@ -206,6 +206,11 @@ public class YlhAdView extends CommAdView {
                 if (nativeUnifiedADData != null) {
                     String title = nativeUnifiedADData.getTitle();
                     mAdInfo.setAdTitle(title);
+                    if (nativeUnifiedADData.isAppAd()) {
+                        mAdInfo.setAdClickType(1);
+                    } else {
+                        mAdInfo.setAdClickType(2);
+                    }
                 }
                 adSuccess(mAdInfo);
                 mAdView.setAdInfo(mAdInfo);
