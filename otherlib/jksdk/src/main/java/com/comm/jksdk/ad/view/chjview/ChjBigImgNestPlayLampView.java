@@ -109,6 +109,14 @@ public class ChjBigImgNestPlayLampView extends CommAdView {
         if (mContext == null) {
             return;
         }
+        List<Integer> list = new ArrayList<>();
+        list.add(R.mipmap.nest_im);
+        list.add(R.mipmap.nest_im1);
+        list.add(R.mipmap.nest_im2);
+        list.add(R.mipmap.nest_im3);
+        list.add(R.mipmap.nest_im4);
+        int index = new Random().nextInt(list.size());
+        custonIm.setImageResource(list.get(index));
         int adlogoWidth = DisplayUtil.dp2px(mContext, 30);
         int adlogoHeight = DisplayUtil.dp2px(mContext, 12);
         adlogoParams = new FrameLayout.LayoutParams(adlogoWidth, adlogoHeight);
