@@ -20,13 +20,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
-import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * 超强省电主页面
@@ -90,7 +87,7 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
             StatisticsUtils.trackClick("powersave_guidance_page_clean_click", "用户在省电引导页点击【立即清理】", sourcePage, currentPage);
             if (!isUsageAccessAllowed() && !isFinishing()) {
                 showPermissionDialog();
-            } else {
+            } else if (!isFinishing()) {
                 startActivity(PhoneSuperPowerDetailActivity.class);
                 finish();
             }

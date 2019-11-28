@@ -278,7 +278,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             viewLottieBottom.cancelAnimation();
             viewLottieBottom.clearAnimation();
 
-            LogUtils.i("----zzh----"+getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME));
            Intent intent_finish=  new Intent(getActivity(), ScreenFinishBeforActivity.class);
             intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
             intent_finish.putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize());
