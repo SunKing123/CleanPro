@@ -10,15 +10,10 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.webkit.WebView;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.room.Room;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.utils.SpUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 import com.umeng.commonsdk.UMConfigure;
@@ -66,6 +61,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 /**
  * Created by admin on 2017/6/8.
  */
@@ -100,20 +98,16 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
         initRoom(application);
         initNiuData(application);
-        //initOaid(application);
+        initOaid(application);
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
         initProcess(application);
         //商业sdk初始化
-        /*this, "18", "5036430", "jinritoutiao",   false*/
-//        Context context, String productName, String csjAppId, String channel, boolean isFormal
-        //todo_zzh
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,"5036430", ChannelUtil.getChannel(),  BuildConfig.SYSTEM_EN.contains("prod"));
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,Constant.CSJ_AD_ID, ChannelUtil.getChannel(),true);//BuildConfig.SYSTEM_EN.contains("prod")
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
-
     }
 
 
@@ -126,7 +120,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .apiModule(new ApiModule(application))
                 .build();
         mAppComponent.inject(application);
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleObserver(application.getApplicationContext()));
+
     }
 
     /**
