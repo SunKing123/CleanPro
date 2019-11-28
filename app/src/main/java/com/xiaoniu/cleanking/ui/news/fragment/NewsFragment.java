@@ -10,12 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -28,12 +27,16 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 /**
  * viewpager 新闻页
  */
 public class NewsFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
-    private NewsType[] mNewTypes = {NewsType.VIDEO, NewsType.TOUTIAO , NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
+    private NewsType[] mNewTypes = {NewsType.TOUTIAO , NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
     private ViewPager mViewPager;
     private ViewPagerIndicator mTabIndicator;
     private ArrayList<NewsListFragment> mFragments;
@@ -85,6 +88,16 @@ public class NewsFragment extends BaseFragment {
         if (isShowBack) {
             mIvBack.setVisibility(View.VISIBLE);
         }
+
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_LOCK_SCREEN.equals(switchInfoList.getConfigKey())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
     }
 
     @Override
@@ -104,6 +117,22 @@ public class NewsFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
+        //判断视频接口是否打开;
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_VIDEO_PLAY.equals(switchInfoList.getConfigKey())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        if(isOpen){
+            mNewTypes = new NewsType[]{NewsType.VIDEO, NewsType.TOUTIAO , NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
+        }else{
+            mNewTypes = new NewsType[]{NewsType.TOUTIAO , NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
+        }
+
         for (int i = 0; i < mNewTypes.length; i++) {
             NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
             mFragments.add(listFragment);

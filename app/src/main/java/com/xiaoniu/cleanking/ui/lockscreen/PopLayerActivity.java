@@ -1,13 +1,8 @@
 package com.xiaoniu.cleanking.ui.lockscreen;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,10 +13,9 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.base.BaseActivity;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import androidx.annotation.Nullable;
@@ -45,7 +39,6 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setLockerWindow(getWindow());
         ActivityCollector.addActivity(this,PopLayerActivity.class);
         setContentView(R.layout.activity_pop_layer);
         adShowTime = findViewById(R.id.full_screen_insert_ad_show_time_txt);
@@ -71,20 +64,13 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         };
         countDownTimer.start();
         adClose.setOnClickListener(this);
-        adInit();
-    }
-
-
-    private void setLockerWindow(Window window) {
-/*        WindowManager.LayoutParams lp = window.getAttributes();
-        if (Build.VERSION.SDK_INT > 18) {
-            lp.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if(NetworkUtils.isNetConnected()){
+            adInit();
         }
-        window.setAttributes(lp);
-        window.getDecorView().setSystemUiVisibility(0x0);
-        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);*/
     }
+
+
+
 
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();

@@ -422,10 +422,10 @@
             android:excludeFromRecents="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+        <!--     android:screenOrientation="portrait"-->
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
