@@ -56,8 +56,8 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
         }
         mAdInfo = new AdInfo();
         mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
-        mAdInfo.setAdAppid(mAppId);
-        mAdInfo.setAdId(mAdId);
+        mAdInfo.setAdAppid(appId);
+        mAdInfo.setAdId(adId);
         if (iad == null) {
             iad = new UnifiedInterstitialAD(activity, appId, UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
                 @Override
@@ -96,7 +96,7 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
 
                 @Override
                 public void onADClosed() {
-                    adClicked(mAdInfo);
+                    adClose(mAdInfo);
                 }
             });
             iad.loadAD();
