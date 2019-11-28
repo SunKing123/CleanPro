@@ -280,7 +280,6 @@ public class StatisticsUtils {
      * @param sourcePage
      * @param currentPage
      * @param newsName
-     * @param newsId
      * @param position
      */
     public static void trackFunctionClickItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName, String position) {
