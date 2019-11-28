@@ -254,7 +254,7 @@ public final class LocalService extends Service {
             }
         }else if((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("unlock_screen")))){ //解锁操作action
             try {
-                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 5000);
+                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 3000);
                 Intent inten = new Intent(this, TimingReceiver.class);
                 inten.putExtra("action","unlock_screen");
                 inten.putExtra("temp", temp);

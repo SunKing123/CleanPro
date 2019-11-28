@@ -66,6 +66,9 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         adClose.setOnClickListener(this);
         if(NetworkUtils.isNetConnected()){
             adInit();
+        }else{
+            countDownTimer.cancel();
+            finish();
         }
     }
 

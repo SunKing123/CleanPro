@@ -9,16 +9,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
@@ -28,7 +24,6 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -41,13 +36,11 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,6 +50,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -278,6 +273,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         PreferenceUtil.saveCleanAllUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
+            viewLottieTop.cancelAnimation();
+            viewLottieTop.clearAnimation();
+            viewLottieBottom.cancelAnimation();
+            viewLottieBottom.clearAnimation();
+
             LogUtils.i("----zzh----"+getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME));
            Intent intent_finish=  new Intent(getActivity(), ScreenFinishBeforActivity.class);
             intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
