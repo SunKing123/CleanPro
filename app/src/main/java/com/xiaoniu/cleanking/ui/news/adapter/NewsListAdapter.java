@@ -133,7 +133,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 ((TextView) commonHolder.getView(R.id.tvTitle)).setText(itemInfo.topic);
                 ((TextView) commonHolder.getView(R.id.tvDate)).setText(itemInfo.date);
                 ((TextView) commonHolder.getView(R.id.tvSource)).setText(itemInfo.source);
-            }else if(viewType == 4){
+            }else if(viewType == 4){ //资讯广告
                 RelativeLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);//广告加载
                 //newlist_2_1   第二屏幕广告样式
                 String positionId = pageName.equals(NewsType.TOUTIAO.getValue())?"newlist_1_1":"newlist_other_1";
@@ -248,12 +248,12 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             adManager.loadAd(mActivity,positionId , new AdListener() {
                 @Override
                 public void adSuccess(AdInfo info) {
-                    if(positionId.equals("newlist_2_1")){
+                    if(positionId.equals("newlist_2_1")){//视频类型
                         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "video_information_page", "video_information_page");
                         StatisticsUtils.customTrackEvent("ad_vue_custom", "视频页广告vue创建", "video_information_page", "video_information_page");
                     }else {
                         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "information_page", "information_page");
-                        StatisticsUtils.customTrackEvent("ad_vue_custom", "视频页广告vue创建", "information_page", "information_page");
+                        StatisticsUtils.customTrackEvent("ad_vue_custom", "资讯页广告vue创建", "information_page", "information_page");
                     }
                     if (null != container ) {
                         View adView = adManager.getAdView();

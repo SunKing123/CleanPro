@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -78,7 +79,14 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         mTvQl = findViewById(R.id.tv_ql);
         changeUI(getIntent());
         getPageData();
-        initPos03Ad();
+        if(NetworkUtils.isNetConnected()){
+            initPos03Ad();
+        }else{
+            ad_container_pos03.setVisibility(View.GONE);
+            mErrorIv.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     @Override

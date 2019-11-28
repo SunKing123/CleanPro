@@ -1,14 +1,11 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
-import android.webkit.WebView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
@@ -46,12 +43,12 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.MiitHelper;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -95,14 +92,12 @@ public class ApplicationDelegate implements IApplicationDelegate {
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
 
-
         initRoom(application);
         initNiuData(application);
         initOaid(application);
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
-        initProcess(application);
         //商业sdk初始化
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,Constant.CSJ_AD_ID, ChannelUtil.getChannel(),true);//BuildConfig.SYSTEM_EN.contains("prod")
         initJsBridge();
@@ -149,16 +144,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .build();
     }
 
-    /*Andriod P多进程访问webviwe;
-     在对应的WebView数据目录后缀*/
-    private void initProcess(Application application) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            String processName = getProcessName(application);
-            if (!(BuildConfig.APPLICATION_ID + ":pushcore").equals(processName)) {
-                WebView.setDataDirectorySuffix(processName);
-            }
-        }
-    }
+
 
     public static AppDataBase getAppDatabase() {
         return mAppDatabase;
@@ -209,10 +195,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
     private String oaId = "";
-
     public void initOaid(Application application) {
-        String processName = getProcessName(application);
-        LogUtils.i( "-zhh-processName = " + processName);
+        //判断是否为当前主进程
+        String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //设置oaid到埋点公共参数
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) { //6.0以上版本oaid
@@ -255,7 +240,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     }
 
-    //获取当前进程名称
+ /*   //获取当前进程名称
     public String getProcessName(Context context) {
         if (context == null) {
             return "";
@@ -267,7 +252,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         }
         return "";
-    }
+    }*/
 
     private long mLastClickTime = 0;
     //home键监听
@@ -309,7 +294,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
                 if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
                         || ActivityCollector.isActivityExist(PopLayerActivity.class)
-                        || !PreferenceUtil.isNotFirstOpenApp() || !getProcessName(application).equals(BuildConfig.APPLICATION_ID))
+                        || !PreferenceUtil.isNotFirstOpenApp() || !SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID))
                     return;
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
