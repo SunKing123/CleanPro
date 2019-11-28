@@ -91,7 +91,7 @@ public class JsBridgeModule extends JsModule {
                         }*/
                         break;
                     case OPNE_DIALOG_WEBVIEW://打开红包webview
-                        if (jsBridgeEntity.data != null) {
+                       /* if (jsBridgeEntity.data != null) {
                             RedEntity redEntity = gson.fromJson(data, RedEntity.class);
                             if (redEntity != null) {
                                 WebPageEntity webPageEntity = redEntity.data;
@@ -99,10 +99,16 @@ public class JsBridgeModule extends JsModule {
                                     WebDialogManager.getInstance().showWebDialog(getContext(), webPageEntity.url);
                                 }
                             }
-                        }
+                        }*/
                         break;
                     case CLOSE_DIALOG_WEBVIEW://关闭红包webview
-                        WebDialogManager.getInstance().dismissWebDialog();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            WebDialogManager.getInstance().dismissWebDialog();
+                        } else {
+                            BaseEventBus baseEventClose = new BaseEventBus();
+                            baseEventClose.setAction(BaseEventBusConstant.WEB_REDPACKET_CLOSE);
+                            EventBus.getDefault().post(baseEventClose);
+                        }
                         break;
                     case REFRESH_RMB_COIN://刷新人民币和金币
 //                        EventBus.getDefault().post(new GoldRefreshEvent());
