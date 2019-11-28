@@ -22,4 +22,6 @@ public class BaseEventBusConstant {
 
     public static final String WEB_REDPACKET_AD = "web_redpacket_ad";
 
+    public static final String WEB_REDPACKET_CLOSE = "web_redpacket_close";
+
 }

@@ -95,6 +95,16 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     @Subscriber(mode = ThreadMode.MAIN)
     fun receiverMessage(baseEvent: BaseEventBus<String>) {
         when (baseEvent.getAction()) {
+            BaseEventBusConstant.WEB_REDPACKET_CLOSE -> { //红包点击x按钮关闭
+                Log.d("XiLei", "红包点击x按钮关闭")
+                WebDialogManager.getInstance().dismissDialog()
+                if (!isFinishing) {
+                    Log.d("XiLei", "红包点击x按钮关闭---finish()")
+                    finish()
+                }
+                NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page", "red_envelopes_page_view_page", "红包弹窗浏览")
+                StatisticsUtils.trackClick("close_click", "红包弹窗按钮关闭", "hot_splash_page", "red_envelopes_page")
+            }
             BaseEventBusConstant.WEB_REDPACKET_AD -> {
                 if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data
                         && AppHolder.getInstance().switchInfoList.data.size > 0) {
@@ -138,7 +148,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 PreferenceUtil.saveShowAD(true)
                 if (null == info) return
                 mAdExposed = true
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page",  info.adTitle)
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", info.adTitle)
             }
 
             override fun onVideoResume(info: AdInfo?) {
@@ -151,7 +161,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 if (mAdExposed) {
                     StatisticsUtils.clickAD("ad_click", "红包弹窗激励视频结束页下载点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", info.adTitle)
                 } else {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page",  info.adTitle)
+                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", info.adTitle)
                 }
             }
 
@@ -160,7 +170,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 PreferenceUtil.saveShowAD(false)
                 NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_end_page", "red_envelopes_page_video_end_page_view_page", "红包弹窗激励视频结束页浏览")
                 if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page",  info.adTitle)
+                    StatisticsUtils.clickAD("close_click", "红包弹窗激励视频结束页关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_end_page", info.adTitle)
                 }
                 showWebView()
             }
@@ -190,12 +200,12 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
             finish()
             return
         }
+        if (AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount].contains("http")) {
+            AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
+            startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
+                    .putExtra(ExtraConstant.WEB_URL, AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount]))
+        }
         if (!isFinishing()) {
-            if (AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount].contains("http")) {
-                AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
-                startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
-                        .putExtra(ExtraConstant.WEB_URL, AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount]))
-            }
             finish()
         }
     }
@@ -204,6 +214,14 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         finish()
         NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page", "red_envelopes_page_view_page", "红包弹窗浏览")
         StatisticsUtils.trackClick("close_click", "红包弹窗按钮关闭", "hot_splash_page", "red_envelopes_page")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!isFinishing) {
+            WebDialogManager.getInstance().dismissDialog()
+            finish()
+        }
     }
 
     override fun onDestroy() {
