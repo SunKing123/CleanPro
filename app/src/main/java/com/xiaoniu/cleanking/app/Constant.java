@@ -51,7 +51,7 @@ public class Constant {
     //点击Home_悬浮页面（秒）
     public static final int HOME_SPACE_LONG = 1;
 
-    //穿山甲广告id
+    //穿山甲广告app_id
     public static final String CSJ_AD_ID = "5036430";
 
     public static final String CLEAN_DB_NAME = "weatherCity.db";

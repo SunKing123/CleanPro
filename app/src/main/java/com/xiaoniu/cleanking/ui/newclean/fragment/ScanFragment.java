@@ -9,15 +9,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
@@ -36,6 +32,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -212,6 +209,16 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             return;
         if (mCountEntity != null) {
             if (mCountEntity.getNumber() > 0) {
+                if(null!=lottieRipple){
+                    lottieRipple.cancelAnimation();
+                    lottieRipple.clearAnimation();
+                }
+
+                if(null!=mLottieHomeView){
+                    mLottieHomeView.cancelAnimation();
+                    mLottieHomeView.clearAnimation();
+                }
+
                 mCountEntity = CleanUtil.formatShortFileSize(CleanUtil.getTotalSize(junkGroups));
                 ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
                 ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
@@ -403,7 +410,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * @param isMove true转动 false 停止
      */
     private void showHomeLottieView(boolean isMove) {
-        Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_anim);
+//        Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_anim);
      /*   if (rotate == null) {
             mIconOuter.setAnimation(rotate);
         }*/

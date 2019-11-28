@@ -116,7 +116,7 @@ public class NowCleanActivity extends BaseActivity {
     }
 
     /**
-     * 扫描完成
+     * 扫描完成、跳转诊断页
      */
     public void scanFinish(){
         isScan = false;

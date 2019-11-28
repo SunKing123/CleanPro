@@ -22,7 +22,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import cn.jzvd.Jzvd;
 
 /**
- * 插屏广告
+ * 全屏插屏广告
  * 由功能结束页进入
  */
 public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishPresenter> implements View.OnClickListener {

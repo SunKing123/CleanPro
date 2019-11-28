@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,7 +31,6 @@ import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
-import com.xiaoniu.cleanking.ui.main.bean.LocationInfo;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -46,20 +44,22 @@ import com.xiaoniu.cleanking.utils.ViewUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * 锁屏信息流广告页面
@@ -233,7 +233,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     tv_virus_size.setVisibility(View.VISIBLE);
                     iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 }else{
-                    tv_virus_size.setText("防御");
+                    tv_virus_size.setText("防御中");
                     tv_virus_size.setVisibility(View.VISIBLE);
                     iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
                 }
@@ -700,7 +700,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                         tv_virus_size.setVisibility(View.VISIBLE);
                         iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                     } else {
-                        tv_virus_size.setText("防御");
+                        tv_virus_size.setText("防御中");
                         tv_virus_size.setVisibility(View.VISIBLE);
                         iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
                     }
