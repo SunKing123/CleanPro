@@ -278,12 +278,13 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         PreferenceUtil.saveCleanAllUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
+            LogUtils.i("----zzh----"+getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME));
            Intent intent_finish=  new Intent(getActivity(), ScreenFinishBeforActivity.class);
             intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
             intent_finish.putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize());
             intent_finish.putExtra(ExtraConstant.UNIT, checkCountEntity.getUnit());
-            if(getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME)){
-                intent_finish.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME));
+            if(getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
+                intent_finish.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
             }
             startActivity(intent_finish);
             getActivity().finish();

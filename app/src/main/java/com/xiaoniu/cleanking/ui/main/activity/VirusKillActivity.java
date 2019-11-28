@@ -6,6 +6,7 @@ import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -146,8 +147,8 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                 AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
                 Intent mIntent = new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class);
                 mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
-                if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME)){
-                    mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME));
+                if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
+                    mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
                 }
                 startActivity(mIntent);
                 finish();

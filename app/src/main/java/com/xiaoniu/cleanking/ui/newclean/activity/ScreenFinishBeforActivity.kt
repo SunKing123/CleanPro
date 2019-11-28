@@ -18,8 +18,11 @@ import com.xiaoniu.cleanking.ui.main.presenter.ScreenFinishBeforPresenter
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.FileQueryUtils
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
+import com.xiaoniu.common.utils.NetworkUtils
+
 import java.util.*
 
 /**
@@ -165,8 +168,13 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             }
         }
         if (isOpen) {
-            mAdManager = GeekAdSdk.getAdsManger()
-            loadGeekAd()
+            if (NetworkUtils.isNetConnected()) {
+                mAdManager = GeekAdSdk.getAdsManger()
+                loadGeekAd()
+            }else{
+                goFinishActivity()
+            }
+
         } else {
             goFinishActivity()
         }
@@ -224,12 +232,13 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     }
 
     private fun goFinishActivity() {
+        LogUtils.i("--zzh--"+getIntent().getStringExtra(ExtraConstant.ACTION_NAME))
         if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
             bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
             startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
-        } else if (getIntent().hasExtra(ExtraConstant.ACTION_NAME) && getIntent().getStringExtra(ExtraConstant.ACTION_NAME).equals("lock")) {//新Task路径_跳转Ad3_锁屏跳转
+        } else if (getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getIntent().getStringExtra(ExtraConstant.ACTION_NAME))&& getIntent().getStringExtra(ExtraConstant.ACTION_NAME).equals("lock")) {//新Task路径_跳转Ad3_锁屏跳转
             val bundle = Bundle()
             bundle.putString("title", mTitle)
             bundle.putString("action", "lock")
