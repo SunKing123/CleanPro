@@ -1,22 +1,16 @@
 package com.xiaoniu.cleanking.ui.news.adapter;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.http.utils.NetworkUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -24,7 +18,6 @@ import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsPicInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
-import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.widget.CountDownView;
 import com.xiaoniu.common.base.SimpleWebActivity;
@@ -36,9 +29,9 @@ import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 import java.util.ArrayList;
 import java.util.Map;
 
+import androidx.recyclerview.widget.RecyclerView;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
-import kotlin.reflect.jvm.internal.impl.resolve.constants.StringValue;
 
 /**
  * 头条资讯适配器
@@ -71,7 +64,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             CountDownView closeBtn = commonHolder.getView(R.id.rp_close_view);
 
             tv_collection_num.setText(String.valueOf(itemInfo.collectTimes));
-            tv_viewed_num.setText(mContext.getString(R.string.watch_times,itemInfo.watchedTimes));
+            tv_viewed_num.setText(mContext.getString(R.string.watch_times,itemInfo.watchedTimesStr));
             tv_zan_num.setText(String.valueOf(itemInfo.starTimes));
 
             JzvdStd jzvdStd = commonHolder.getView(R.id.videoplayer);

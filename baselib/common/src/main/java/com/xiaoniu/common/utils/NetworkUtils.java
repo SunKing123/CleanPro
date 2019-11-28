@@ -75,7 +75,7 @@ public class NetworkUtils {
         NETWORK_3G,
         NETWORK_2G,
         NETWORK_UNKNOWN,
-        NETWORK_NO
+        NETWORK_NO;
     }
 
     /**

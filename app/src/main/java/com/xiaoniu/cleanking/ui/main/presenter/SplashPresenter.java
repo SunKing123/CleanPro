@@ -97,7 +97,6 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
                 String config = JsonUtils.encode(configList);
                 String aa = config.substring(0, config.length() / 2);
                 LogUtils.i("config:" + aa);
-                LogUtils.i("config-------:" + config.substring(config.length() / 2));
             }
 
             @Override

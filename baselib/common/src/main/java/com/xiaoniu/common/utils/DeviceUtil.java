@@ -1,5 +1,6 @@
 package com.xiaoniu.common.utils;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -32,10 +33,11 @@ public class DeviceUtil {
     public static String getDeviceId(Context context){
         TelephonyManager TelephonyMgr = (TelephonyManager)context.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         if(TelephonyMgr != null){
+            @SuppressLint("MissingPermission")
             String szImei = TelephonyMgr.getDeviceId();
             return szImei;
         }
-        return null;
+        return "";
     }
 
     // xiaomi 即使连接 wifi 也不能获取到 mac
@@ -185,6 +187,7 @@ public class DeviceUtil {
 
     public static String getDeviceId2(Context context){
         TelephonyManager tm = (TelephonyManager)context.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission")
         String tmDevice = tm.getDeviceId();
         String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         if (TextUtils.isEmpty(androidId) || TextUtils.isEmpty(tmDevice))
