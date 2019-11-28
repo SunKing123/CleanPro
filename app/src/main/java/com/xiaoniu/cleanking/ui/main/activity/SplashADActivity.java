@@ -185,6 +185,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         initNiuData();
         initFileRelation();
         skipView.setOnClickListener(v -> {
+            PreferenceUtil.saveShowAD(false);
             skipView.clearAnimation();
             JSONObject extension = new JSONObject();
             try {
@@ -318,6 +319,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", "");
             }
@@ -325,6 +327,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", "");
             }
@@ -351,6 +354,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                PreferenceUtil.saveShowAD(false);
                 jumpActivity();
             }
 

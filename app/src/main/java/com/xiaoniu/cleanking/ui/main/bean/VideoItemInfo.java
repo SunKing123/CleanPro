@@ -9,7 +9,7 @@ public class VideoItemInfo implements Serializable {
     public String duration = "";;//视频时长
     public String url = "";//视频文件地址
     public String watchedTimes = "2万";  //观看次数
-    public String watchedTimesStr = "2万";  //观看次数
+    public String watchTimesStr = "1.5万";  //观看次数
     public long starTimes = 2500;      //点赞数
     public long collectTimes = 3000;    //收藏数
 

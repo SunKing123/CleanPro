@@ -64,7 +64,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             CountDownView closeBtn = commonHolder.getView(R.id.rp_close_view);
 
             tv_collection_num.setText(String.valueOf(itemInfo.collectTimes));
-            tv_viewed_num.setText(mContext.getString(R.string.watch_times,itemInfo.watchedTimesStr));
+            tv_viewed_num.setText(mContext.getString(R.string.watch_times,itemInfo.watchTimesStr));
             tv_zan_num.setText(String.valueOf(itemInfo.starTimes));
 
             JzvdStd jzvdStd = commonHolder.getView(R.id.videoplayer);

@@ -50,7 +50,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         adShowTime.setVisibility(View.VISIBLE);
         progree_tv.setText("已提速" + NumberUtils.mathRandom(25, 50) + "%");
         showTimeSecond = NumberUtils.mathRandomInt(25,50);
-        countDownTimer = new CountDownTimer(3 * 1000, 1000) {
+        countDownTimer = new CountDownTimer(5 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 adShowTime.setText(millisUntilFinished / 1000 + "s");

@@ -45,6 +45,7 @@
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.AppLauncher"
 
             />
