@@ -106,7 +106,7 @@ android {
             buildConfigField "String", "WEATHER_BASE_URL", "\"http://devweatapi.hellogeek.com/weatapi/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
-            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
 
         }
         btest {
