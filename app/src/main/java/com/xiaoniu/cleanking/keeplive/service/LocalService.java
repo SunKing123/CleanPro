@@ -33,7 +33,6 @@ import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
@@ -255,7 +254,7 @@ public final class LocalService extends Service {
             }
         }else if((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("unlock_screen")))){ //解锁操作action
             try {
-                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 1000);
+                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 5000);
                 Intent inten = new Intent(this, TimingReceiver.class);
                 inten.putExtra("action","unlock_screen");
                 inten.putExtra("temp", temp);
@@ -275,7 +274,7 @@ public final class LocalService extends Service {
 
         }else if((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("home")))){ //home_键监听
             try {
-                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 10);
+                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 1000);
                 Intent inten = new Intent(this, TimingReceiver.class);
                 inten.putExtra("action","home");
                 inten.putExtra("temp", temp);
