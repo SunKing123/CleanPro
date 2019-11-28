@@ -55,7 +55,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void adSuccess(AdInfo info) {
                 if (null == info) return;
-                Log.d(TAG, "-----adSuccess-----=" + info.getAdAppid());
+                Log.d(TAG, "-----adSuccess-----=" + info.getAdSource() + "---" + info.getAdAppid());
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "success", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
 

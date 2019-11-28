@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -66,7 +65,6 @@ public class BottomBarTab extends FrameLayout {
         if (null == AppHolder.getInstance().getIconsEntityList()
                 || null == AppHolder.getInstance().getIconsEntityList().getData()
                 || AppHolder.getInstance().getIconsEntityList().getData().size() <= 0) {
-            Log.d("XiLei","hhhh");
             if (TextUtils.equals(auditSwitch, "0")) {
                 icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
                 iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
@@ -75,10 +73,16 @@ public class BottomBarTab extends FrameLayout {
                 iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
             }
         } else {
-            Log.d("XiLei","vvvv");
-            for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
-                iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
-                iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
+            if (TextUtils.equals(auditSwitch, "0")) {
+                iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(0).getIconImgUrl());
+                iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(3).getIconImgUrl());
+                iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(0).getClickIconUrl());
+                iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(3).getClickIconUrl());
+            } else {
+                for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
+                    iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
+                    iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
+                }
             }
         }
 
@@ -149,7 +153,7 @@ public class BottomBarTab extends FrameLayout {
         } else {
             if (null == mContext || iconsNet.isEmpty()) {
                 mIcon.setImageResource(icons[mTabPosition]);
-            }else{
+            } else {
                 GlideUtils.loadImage((Activity) mContext, iconsNet.get(mTabPosition), mIcon);
             }
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_999999));
