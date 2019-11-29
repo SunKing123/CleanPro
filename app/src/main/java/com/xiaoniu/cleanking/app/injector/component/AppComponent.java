@@ -26,8 +26,6 @@ public interface AppComponent {
 
     PreferencesHelper getPreferencesHelper();
 
-    BigDataApiService getBigDataApiService();
-
     WeatherDataApiService getWeatherDataApiService();
 }
 
