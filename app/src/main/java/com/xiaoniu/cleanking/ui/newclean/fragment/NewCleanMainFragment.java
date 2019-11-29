@@ -429,7 +429,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     Log.d(TAG, "adSuccess---1==" + info.getAdId());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                 }
-                if (null != adManager && null != adManager.getAdView()) {
+                if (null != mTopAdFramelayout && null != adManager && null != adManager.getAdView()) {
                     mTopContentView.setVisibility(View.GONE);
                     mTopAdFramelayout.setVisibility(VISIBLE);
                     mTopAdFramelayout.removeAllViews();
@@ -497,7 +497,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                 }
-                if (null != adManager && null != adManager.getAdView()) {
+                if (null != mCenterAdFramelayout && null != adManager && null != adManager.getAdView()) {
                     mCenterAdFramelayout.setVisibility(VISIBLE);
                     mCenterAdFramelayout.removeAllViews();
                     mCenterAdFramelayout.addView(adManager.getAdView());
@@ -762,6 +762,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
+        if (null == mTopAdFramelayout || null == mLottieHomeView) return;
         if (lifecycEvent.isActivity()) {
             mTopContentView.setVisibility(VISIBLE);
             mTopAdFramelayout.removeAllViews();

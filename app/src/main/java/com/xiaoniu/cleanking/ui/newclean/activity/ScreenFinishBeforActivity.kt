@@ -231,7 +231,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     }
 
     private fun goFinishActivity() {
-        LogUtils.i("--zzh--" + getIntent().getStringExtra(ExtraConstant.ACTION_NAME))
         if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
             val bundle = Bundle()
             bundle.putString("title", mTitle)

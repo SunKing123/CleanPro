@@ -83,7 +83,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         }
         if (!isFinishing()) {
             NiuDataAPI.onPageStart("red_envelopes_page_view_page", "红包弹窗浏览")
-            WebDialogManager.getInstance().showWebDialog(this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount])
+            WebDialogManager.getInstance().showWebDialog(this, this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount])
             WebDialogManager.getInstance().setFinishInterface(this)
         }
     }

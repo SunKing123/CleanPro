@@ -1,5 +1,6 @@
 package com.geek.webpage.web.model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
@@ -28,19 +29,32 @@ public class WebDialogManager {
 
     private LWWebViewDialog dialog;
 
-    public void showWebDialog(Context context, String urlStr) {
-        if (context == null || TextUtils.isEmpty(urlStr))
+    public void showWebDialog(final Activity activity, Context context, String urlStr) {
+        if (null == activity || activity.isFinishing()) return;
+        if (null == context || TextUtils.isEmpty(urlStr)) {
+            if (null != mFinishInterface && !activity.isFinishing()) {
+                mFinishInterface.finishActivity();
+            }
             return;
+        }
+
         dialog = new LWWebViewDialog(context);
         dialog.loadUrl(urlStr);
         dialog.getWebView().setWebViewListener(new WebViewListener() {
             @Override
             public void onLoad(WebView view, int newProgress) {
-                if (newProgress == 100) {
-                    if (dialog != null && !dialog.isShowing()) {
-                        dialog.show();
+                if (null != activity && !activity.isFinishing()) {
+                    if (newProgress == 100) {
+                        if (dialog != null && !dialog.isShowing()) {
+                            dialog.show();
+                        }
+                    }
+                } else {
+                    if (null != mFinishInterface) {
+                        mFinishInterface.finishActivity();
                     }
                 }
+
             }
 
             @Override
@@ -78,6 +92,7 @@ public class WebDialogManager {
             }
         }
     }
+
     public void dismissDialog() {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
