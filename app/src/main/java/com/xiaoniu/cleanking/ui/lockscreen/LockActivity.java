@@ -158,10 +158,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onSlideToUnlock() {
                 //todo_zzh
-                //todo 兼容性优化——重新打开保活service
                 Intent i = new Intent(LockActivity.this, LocalService.class);
                 i.putExtra("action", "unlock_screen");
-                LockActivity.this.startService(i);
+                if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+                    LockActivity.this.startForegroundService(i);
+                }else{
+                    LockActivity.this.startService(i);
+                }
                 finish();
             }
 

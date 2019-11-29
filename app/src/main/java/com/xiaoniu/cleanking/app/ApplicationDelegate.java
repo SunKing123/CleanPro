@@ -240,9 +240,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     }
 
-
-    private long mLastClickTime = 0;
     //home键监听
+    private long mLastClickTime = 0;
     public void homeCatch(Application application){
         HomeWatcher mHomeWatcher = new HomeWatcher(application);
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
@@ -252,19 +251,29 @@ public class ApplicationDelegate implements IApplicationDelegate {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
-                application.startService(i);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    application.startForegroundService(i);
+                }else{
+                    application.startService(i);
+                }
             }
             @Override
-            public void onHomeLongPressed() {
+            public void onHomeLongPressed() {  //部分手机不走 onHomePressed();
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
-                application.startService(i);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    application.startForegroundService(i);
+                }else{
+                    application.startService(i);
+                }
             }
         });
         mHomeWatcher.startWatch();
