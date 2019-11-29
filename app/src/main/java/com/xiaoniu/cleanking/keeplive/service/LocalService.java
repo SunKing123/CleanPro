@@ -193,7 +193,7 @@ public final class LocalService extends Service {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Intent remoteService = new Intent(LocalService.this, RemoteService.class);
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
                 LocalService.this.startForegroundService(remoteService);
             } else {
                 LocalService.this.startService(remoteService);

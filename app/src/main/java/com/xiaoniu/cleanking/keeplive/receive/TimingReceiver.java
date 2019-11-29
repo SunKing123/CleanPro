@@ -78,10 +78,16 @@ public class TimingReceiver extends BroadcastReceiver {
                     PreferenceUtil.saveCleanLogMap(map);
                 }
             }
-            //todo 兼容性优化——重新打开保活service
+
             Intent i = new Intent(context, LocalService.class);
             i.putExtra("action","heartbeat");
-            context.startService(i);
+            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+                context.startForegroundService(i);
+            } else {
+                context.startService(i);
+            }
+
+
 
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("unlock_screen") ||intent.getStringExtra("action").equals("home")) ){//锁屏打开页面||home按键触发
             if(null==context)return;
