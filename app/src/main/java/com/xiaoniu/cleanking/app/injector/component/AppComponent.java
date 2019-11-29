@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.app.injector.component;
 
 import android.app.Application;
 
-import com.xiaoniu.cleanking.api.BigDataApiService;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
