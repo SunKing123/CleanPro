@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
-import com.xiaoniu.cleanking.api.BigDataApiService;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
 
@@ -36,12 +35,10 @@ public class ApiModule {
 
     private Retrofit mRetrofit;
     private Retrofit mRetrofit2;
-    private Retrofit mRetrofit3;
 
     //网络地址
     public static String Base_Host = AppConstants.Base_Host;
     public static String Base_H5_Host = AppConstants.Base_H5_Host;//H5路径
-    public static String Base_Big_Data = AppConstants.Base_Big_Data;//大数据接口路径
     public static String base_weather_api = BuildConfig.WEATHER_BASE_URL;//大数据接口路径
 
 
@@ -126,12 +123,7 @@ public class ApiModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        mRetrofit3 = new Retrofit.Builder()
-                .baseUrl(Base_Big_Data)
-                .client(okHttpClient3)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+
 
 
     }
@@ -172,11 +164,11 @@ public class ApiModule {
         return mRetrofit.create(UserApiService.class);
     }
 
-    @Provides
+/*    @Provides
     @Singleton
     public BigDataApiService provideBigDataApiService() {
         return mRetrofit3.create(BigDataApiService.class);
-    }
+    }*/
 
     @Provides
     @Singleton
