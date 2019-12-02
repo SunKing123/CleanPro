@@ -3,11 +3,10 @@ package com.xiaoniu.cleanking.ui.newclean.activity
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
-import com.comm.jksdk.ad.listener.AdListener
 import com.comm.jksdk.ad.listener.AdManager
+import com.comm.jksdk.ad.listener.VideoAdListener
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
@@ -22,6 +21,7 @@ import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.NetworkUtils
 import com.xiaoniu.common.utils.StatisticsUtils
+import kotlinx.android.synthetic.main.activity_finish_befor.*
 import java.util.*
 
 /**
@@ -50,7 +50,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.activity_hot_redpacket
+        return R.layout.activity_finish_befor
     }
 
     override fun initView() {
@@ -192,9 +192,59 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
      */
     private fun loadGeekAd() {
         if (null == mAdManager) return
-        mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, object : AdListener {
+        mAdManager.loadVideoAd(this, "cp_ad_1", object : VideoAdListener {
+            override fun onVideoResume(info: AdInfo) {
+
+            }
+            override fun onVideoRewardVerify(info: AdInfo, rewardVerify: Boolean, rewardAmount: Int, rewardName: String) {
+
+            }
+            override fun onVideoComplete(info: AdInfo) {
+
+            }
+
+            override fun adSuccess(info: AdInfo) {
+                var view = mAdManager.getAdView()
+                if (null != lin_ad_container && null != view) {
+                    lin_ad_container.removeAllViews()
+                    lin_ad_container.addView(view)
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
+                }else{
+                    goFinishActivity()
+                }
+
+            }
+
+            override fun adExposed(info: AdInfo) {
+                if (null == info) return
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+                PreferenceUtil.saveShowAD(true)
+            }
+
+            override fun adClicked(info: AdInfo) {
+                if (null == info) return
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+            }
+
+            override fun adClose(info: AdInfo) {
+                PreferenceUtil.saveShowAD(false)
+                if (null != info) {
+                    StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
+                }
+                goFinishActivity()
+
+            }
+
+            override fun adError(errorCode: Int, errorMsg: String) {
+                LogUtils.i("-----adError-----$errorMsg")
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", mSourcePage, mCurrentPage)
+                goFinishActivity()
+            }
+        })
+      /*  mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, object : AdListener {
             //暂时这样
             override fun adSuccess(info: AdInfo) {
+                LogUtils.i("-zzh---")
                 Log.d(TAG, "-----adSuccess-----=" + info.adSource)
                 if (null == info) return
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
@@ -227,7 +277,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", mSourcePage, mCurrentPage)
                 goFinishActivity()
             }
-        })
+        })*/
     }
 
     private fun goFinishActivity() {

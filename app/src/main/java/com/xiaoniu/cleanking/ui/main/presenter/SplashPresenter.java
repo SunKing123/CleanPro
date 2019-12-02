@@ -1,12 +1,12 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
-import android.util.Log;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.config.listener.ConfigListener;
 import com.comm.jksdk.utils.JsonUtils;
+import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             public void getData(SwitchInfoList switchInfoList) {
                 mView.getSwitchInfoListSuccess(switchInfoList);
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+                PreferenceUtil.getInstants().save(Constant.SWITCH_INFO,new Gson().toJson(switchInfoList));
             }
 
             @Override
@@ -66,6 +68,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
      * 冷启动、热启动、完成页广告开关
      */
     public void getSwitchInfoListNew() {
+
         mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
@@ -75,6 +78,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             @Override
             public void getData(SwitchInfoList switchInfoList) {
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+                PreferenceUtil.getInstants().save(Constant.SWITCH_INFO,new Gson().toJson(switchInfoList));
             }
 
             @Override

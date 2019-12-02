@@ -25,11 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.umeng.socialize.UMShareAPI;
@@ -74,6 +69,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -425,38 +424,53 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     private void startClean(boolean b) {
-        if (!canClickDelete || acceview == null || null == belowAdapter) return;
-//        mTvSpeed.setVisibility(View.GONE);
+        if (!canClickDelete || acceview == null || null == belowAdapter) {
+            //设置默认值
+            strNum = "521";
+            strUnit = "MB";
+            showCleanFinishUI(strNum, strUnit);
+        }else{
+            //        mTvSpeed.setVisibility(View.GONE);
 //        mLineAccess.setCompoundDrawables(null, null, null, null);
 //        mLineAccess.setText(getString(R.string.tool_speed_now));
-        StatisticsUtils.trackClick("accelerate_clean_button_click", "用户在加速诊断页点击【一键清理】按钮", "boost_scan_page", "boost_scan_result_page");
-        ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
-        for (FirstJunkInfo info : belowAdapter.getListImage()) {
-            if (info.isSelect()) {
-                junkTemp.add(info);
+            StatisticsUtils.trackClick("accelerate_clean_button_click", "用户在加速诊断页点击【一键清理】按钮", "boost_scan_page", "boost_scan_result_page");
+            ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
+            ArrayList<FirstJunkInfo> listdata = belowAdapter.getListImage();
+            if(null!= listdata && listdata.size()>0){
+                for (FirstJunkInfo info : listdata) {
+                    if (info.isSelect()) {
+                        junkTemp.add(info);
+                    }
+                }
+                if (junkTemp.size() == 0) return;
+                acceview.setVisibility(View.VISIBLE);
+                acceview.startTopAnim(b);
+                isStartClean = true;
+                NiuDataAPI.onPageStart("boost_animation_page_view_page", "加速动画页浏览");
+                NiuDataAPIUtil.onPageEnd("boost_scan_result_page", "boost_animation_page", "boost_animation_page_view_page", "加速动画页浏览");
+
+                long total = 0;
+                for (FirstJunkInfo info : junkTemp) {
+                    total += info.getTotalSize();
+                    CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
+                }
+                belowAdapter.deleteData(junkTemp);
+                if (total == 0) {
+                    acceview.setListInfoSize(0);
+                }
+                if (Build.VERSION.SDK_INT >= 26) {
+                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
+                    SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, mTotalSizesCleaned);
+                }
+                computeTotalSizeDeleteClick(junkTemp);
+            }else{
+                //设置默认值
+                strNum = "521";
+                strUnit = "MB";
+                showCleanFinishUI(strNum, strUnit);
             }
         }
-        if (junkTemp.size() == 0) return;
-        acceview.setVisibility(View.VISIBLE);
-        acceview.startTopAnim(b);
-        isStartClean = true;
-        NiuDataAPI.onPageStart("boost_animation_page_view_page", "加速动画页浏览");
-        NiuDataAPIUtil.onPageEnd("boost_scan_result_page", "boost_animation_page", "boost_animation_page_view_page", "加速动画页浏览");
 
-        long total = 0;
-        for (FirstJunkInfo info : junkTemp) {
-            total += info.getTotalSize();
-            CleanUtil.killAppProcesses(info.getAppPackageName(), info.getPid());
-        }
-        belowAdapter.deleteData(junkTemp);
-        if (total == 0) {
-            acceview.setListInfoSize(0);
-        }
-        if (Build.VERSION.SDK_INT >= 26) {
-            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, System.currentTimeMillis());
-            SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, mTotalSizesCleaned);
-        }
-        computeTotalSizeDeleteClick(junkTemp);
     }
 
     @Override

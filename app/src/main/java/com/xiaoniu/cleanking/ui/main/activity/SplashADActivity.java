@@ -17,11 +17,13 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -130,7 +132,17 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                     if (!PreferenceUtil.isNotFirstOpenApp()) return;
                     if (PreferenceUtil.isNotFirstOpenApp() && PreferenceUtil.getCoolStartADStatus()) {
                         initGeekSdkAD();
-                        mPresenter.getSwitchInfoListNew(); //暂时注释(要删除)
+                        String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
+                        if (!TextUtils.isEmpty(switchInfo)) {
+                            SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
+                            if (null != switchInfoList) {
+                                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+                            } else {
+                                mPresenter.getSwitchInfoListNew();
+                            }
+                        } else {
+                            mPresenter.getSwitchInfoListNew();
+                        }
                     } else {
                         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                             new Handler().postDelayed(new Runnable() {
