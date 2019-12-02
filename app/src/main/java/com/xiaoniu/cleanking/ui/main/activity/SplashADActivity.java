@@ -36,7 +36,6 @@ import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -83,6 +82,92 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash_ad;
+    }
+
+    @Override
+    protected void initView() {
+        /*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
+        mBtn.setOnClickListener(this);
+        mAgreement.setOnClickListener(this);
+        findViewById(R.id.tv_xy).setOnClickListener(this);
+        PreferenceUtil.saveCleanAllUsed(false);
+        PreferenceUtil.saveCleanJiaSuUsed(false);
+        PreferenceUtil.saveCleanPowerUsed(false);
+        PreferenceUtil.saveCleanNotifyUsed(false);
+        PreferenceUtil.saveCleanWechatUsed(false);
+        PreferenceUtil.saveCleanCoolUsed(false);
+        PreferenceUtil.saveCleanGameUsed(false);
+        if (PreferenceUtil.getScreenInsideTime()) {
+            PreferenceUtil.saveRedPacketShowCount(1);
+            PreferenceUtil.saveScreenInsideTime();
+        } else {
+            PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
+        }
+
+        if (!NetworkUtils.isNetConnected()) {
+            if (!PreferenceUtil.isNotFirstOpenApp()) {
+                mStartView.setVisibility(View.VISIBLE);
+                mContentView.setVisibility(View.GONE);
+            } else {
+                getAuditSwitchFail();
+            }
+        } else {
+            mPresenter.geekAdSDKConfig();//加载广告配置
+            if (PreferenceUtil.getCoolStartTime()) {
+                mPresenter.getAuditSwitch();
+            } else { //小于10分钟不获取开关直接请求广告
+                //        状态（0=隐藏，1=显示）
+                String auditSwitch = SPUtil.getString(this, AppApplication.AuditSwitch, "1");
+                if (auditSwitch.equals("0")) {
+                    mStartView.setVisibility(View.GONE);
+                    mContentView.setVisibility(View.VISIBLE);
+                    this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                        jumpActivity();
+                    });
+                } else if (auditSwitch.equals("1")) {
+                    mStartView.setVisibility(View.GONE);
+                    mContentView.setVisibility(View.VISIBLE);
+                    if (!PreferenceUtil.isNotFirstOpenApp()) return;
+                    if (PreferenceUtil.isNotFirstOpenApp() && PreferenceUtil.getCoolStartADStatus()) {
+                        initGeekSdkAD();
+                        mPresenter.getSwitchInfoListNew(); //暂时注释(要删除)
+                    } else {
+                        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jumpActivity();
+                                }
+                            }, 100);
+                        });
+                    }
+                }
+            }
+            PreferenceUtil.saveCoolStartTime();
+        }
+        container = this.findViewById(R.id.splash_container);
+        skipView = findViewById(R.id.skip_view);
+
+        initNiuData();
+        initFileRelation();
+        skipView.setOnClickListener(v -> {
+            PreferenceUtil.saveShowAD(false);
+            skipView.clearAnimation();
+            JSONObject extension = new JSONObject();
+            try {
+                extension.put("ad_id", mAdTitle);
+                extension.put("ad_agency", mAdSourse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
+        });
+        //页面创建事件埋点
+        StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
+        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
+            readyExternalDb();
+        }
+
     }
 
     //初始sd根目录关联关系
@@ -138,60 +223,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         finish();
     }
 
-
-
-
-    @Override
-    protected void initView() {
-        /*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
-        mBtn.setOnClickListener(this);
-        mAgreement.setOnClickListener(this);
-        findViewById(R.id.tv_xy).setOnClickListener(this);
-        PreferenceUtil.saveCleanAllUsed(false);
-        PreferenceUtil.saveCleanJiaSuUsed(false);
-        PreferenceUtil.saveCleanPowerUsed(false);
-        PreferenceUtil.saveCleanNotifyUsed(false);
-        PreferenceUtil.saveCleanWechatUsed(false);
-        PreferenceUtil.saveCleanCoolUsed(false);
-        PreferenceUtil.saveCleanGameUsed(false);
-        PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
-
-        if (!NetworkUtils.isNetConnected()) {
-            if (!PreferenceUtil.isNotFirstOpenApp()) {
-                mStartView.setVisibility(View.VISIBLE);
-                mContentView.setVisibility(View.GONE);
-            } else {
-                getAuditSwitchFail();
-            }
-        } else {
-            mPresenter.geekAdSDKConfig();//加载广告配置
-            mPresenter.getAuditSwitch();
-        }
-        container = this.findViewById(R.id.splash_container);
-        skipView = findViewById(R.id.skip_view);
-        initNiuData();
-        initFileRelation();
-        skipView.setOnClickListener(v -> {
-            PreferenceUtil.saveShowAD(false);
-            skipView.clearAnimation();
-            JSONObject extension = new JSONObject();
-            try {
-                extension.put("ad_id", mAdTitle);
-                extension.put("ad_agency", mAdSourse);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
-        });
-        //页面创建事件埋点
-        StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
-            readyExternalDb();
-        }
-
-    }
-
-
     /**
      * 拷贝数据库表
      */
@@ -229,14 +260,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * @return
      */
     public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (!PreferenceUtil.isNotFirstOpenApp()) return;
         if (null != list && null != list.getData() && list.getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
                 if (PositionId.COLD_CODE.equals(switchInfoList.getAdvertPosition()) && PositionId.SPLASH_ID.equals(switchInfoList.getConfigKey())) {
                     mIsOpen = switchInfoList.isOpen();
+                    PreferenceUtil.saveCoolStartADStatus(mIsOpen);
                 }
             }
         }
+        if (!PreferenceUtil.isNotFirstOpenApp()) return;
         if (PreferenceUtil.isNotFirstOpenApp() && mIsOpen) {
             initGeekSdkAD();
         } else {
@@ -300,7 +332,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 if (null == info) return;
                 showProgressBar();
                 container.addView(mAdManager.getAdView());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "true", "clod_splash_page", "clod_splash_page");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
             }
 
             @Override
@@ -391,8 +423,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         startActivity(UserLoadH5Activity.class, bundle);
     }
 
-
-
     /**
      * 埋点事件
      */
@@ -400,7 +430,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (!mSPHelper.isUploadImei()) {
             //有没有传过imei
             String imei = PhoneInfoUtils.getIMEI(mContext);
-            LogUtils.i("--zzh--"+imei);
+            LogUtils.i("--zzh--" + imei);
             if (TextUtils.isEmpty(imei)) {
                 NiuDataAPI.setIMEI("");
                 mSPHelper.setUploadImeiStatus(false);

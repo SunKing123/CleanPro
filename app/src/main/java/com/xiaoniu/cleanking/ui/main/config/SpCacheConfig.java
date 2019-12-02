@@ -98,6 +98,9 @@ public class SpCacheConfig {
     public static final String RED_PACKET_SHOW_TRIGGER = "RedPacketShowTrigger";
     public static final String IS_SHOW_AD = "isShowAd";
     public static final String HASE_UPDATE_VERSION = "HaseUpdateVersion";
+    public static final String COOL_START_STATUS = "CoolStartStatus";
+    public static final String COOL_START_TIME = "CoolStartTime";
+    public static final String SCREEN_INSIDE_TIME = "ScreenInsideTime";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";

@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -58,9 +61,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 /**
  * Created by admin on 2017/6/8.
  */
@@ -99,12 +99,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
         //商业sdk初始化
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,Constant.CSJ_AD_ID, ChannelUtil.getChannel(),true);//BuildConfig.SYSTEM_EN.contains("prod")
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN.contains("prod"));
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
     }
-
 
 
     private static AppComponent mAppComponent;
@@ -143,7 +142,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .fallbackToDestructiveMigration()
                 .build();
     }
-
 
 
     public static AppDataBase getAppDatabase() {
@@ -194,6 +192,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
     private String oaId = "";
+
     public void initOaid(Application application) {
         //判断是否为当前主进程
         String processName = SystemUtils.getProcessName(application);
@@ -241,12 +240,13 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     //home键监听
     private long mLastClickTime = 0;
-    public void homeCatch(Application application){
+
+    public void homeCatch(Application application) {
         HomeWatcher mHomeWatcher = new HomeWatcher(application);
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override
             public void onHomePressed() {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -255,13 +255,14 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 i.putExtra("action", "home");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
-                }else{
+                } else {
                     application.startService(i);
                 }
             }
+
             @Override
             public void onHomeLongPressed() {  //部分手机不走 onHomePressed();
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -270,7 +271,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 i.putExtra("action", "home");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
-                }else{
+                } else {
                     application.startService(i);
                 }
             }
@@ -281,12 +282,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
 
-    public void initLifecycle(Application application){
+    public void initLifecycle(Application application) {
         LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
             @Override
             public void onBecameForeground(Activity activity) {
                 PreferenceUtil.getInstants().saveInt("isback", 0);
-
                 if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
                         || ActivityCollector.isActivityExist(PopLayerActivity.class)
                         || !PreferenceUtil.isNotFirstOpenApp() || !SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID))
@@ -309,17 +309,16 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
             @Override
             public void onBecameBackground(Activity activity) {
-                SPUtils.getInstance(application,"Lifecycle").put("acitivity_name",activity.getLocalClassName());
+                SPUtils.getInstance(application, "Lifecycle").put("acitivity_name", activity.getLocalClassName());
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
-                    PreferenceUtil.getInstants().saveInt("isback",1);
+                    PreferenceUtil.getInstants().saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
                 }
             }
         });
     }
-
 
 
 }

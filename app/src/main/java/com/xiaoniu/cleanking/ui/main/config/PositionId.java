@@ -57,6 +57,7 @@ public class PositionId {
     public static final String KEY_VIRUS_SCREEN = "page_virus_kill_screen";
     public static final String KEY_NET_SCREEN = "page_net_speed_screen";
     public static final String KEY_QQ_SCREEN = "page_qq_clear_complete_screen";
+    public static final String KEY_NEIBU_SCREEN = "page_internal_page";
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";

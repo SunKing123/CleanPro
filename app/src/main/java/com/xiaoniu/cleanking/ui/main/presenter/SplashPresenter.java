@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
+import android.util.Log;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.config.listener.ConfigListener;
@@ -57,6 +59,30 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             @Override
             public void netConnectError() {
                 mView.getSwitchInfoListFail();
+            }
+        });
+    }
+    /**
+     * 冷启动、热启动、完成页广告开关
+     */
+    public void getSwitchInfoListNew() {
+        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(SwitchInfoList switchInfoList) {
+                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
             }
         });
     }
