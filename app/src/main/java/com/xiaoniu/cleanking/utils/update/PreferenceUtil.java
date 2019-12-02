@@ -343,7 +343,6 @@ public class PreferenceUtil {
     }
 
 
-
     /**
      * 保存游戏加速时间
      *
@@ -1225,6 +1224,82 @@ public class PreferenceUtil {
     public static boolean isHaseUpdateVersion() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.HASE_UPDATE_VERSION, false);
+    }
+
+    /**
+     * 保存冷启动开关状态
+     *
+     * @return
+     */
+    public static boolean saveCoolStartADStatus(boolean ischeck) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SpCacheConfig.COOL_START_STATUS, ischeck).commit();
+        return true;
+    }
+
+
+    /**
+     * 获取冷启动开关状态
+     *
+     * @return
+     */
+    public static boolean getCoolStartADStatus() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        boolean mul = sharedPreferences.getBoolean(SpCacheConfig.COOL_START_STATUS, false);
+        return mul;
+    }
+
+
+    /**
+     * 保存冷启动的时间戳
+     *
+     * @return
+     */
+    public static boolean saveCoolStartTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.COOL_START_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 冷启动的时间间隔
+     *
+     * @return true 大于10分钟 false 小于10分钟
+     */
+    public static boolean getCoolStartTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.COOL_START_TIME, 0);
+        if (time == 0 || System.currentTimeMillis() - time > 10 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+    /**
+     * 保存内部插屏广告启动的时间戳
+     *
+     * @return
+     */
+    public static boolean saveScreenInsideTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.SCREEN_INSIDE_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 内部插屏广告启动的时间间隔
+     *
+     * @return true 大于24小时 false 小于24小时
+     */
+    public static boolean getScreenInsideTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.SCREEN_INSIDE_TIME, 0);
+        if (time == 0) return false;
+        if (System.currentTimeMillis() - time > 24 * 60 * 60 * 1000)
+            return true;
+        return false;
     }
 
     /**

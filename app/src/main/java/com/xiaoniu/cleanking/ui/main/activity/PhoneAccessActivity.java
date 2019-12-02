@@ -370,7 +370,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(1);
         btnInfo.setNormal(true);
         btnInfo.setCheckResult("550");
-        PreferenceUtil.getInstants().save("lock_pos02",new Gson().toJson(btnInfo));
+        PreferenceUtil.getInstants().save("lock_pos02", new Gson().toJson(btnInfo));
         EventBus.getDefault().post(btnInfo);
 
         PreferenceUtil.saveCleanJiaSuUsed(true);
@@ -380,7 +380,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
         mIntent.putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num);
         mIntent.putExtra(ExtraConstant.UNIT, unit);
-        if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME)&&!TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
+        if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
             mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
         }
         startActivity(mIntent);
@@ -425,7 +425,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     private void startClean(boolean b) {
-        if (!canClickDelete || acceview == null) return;
+        if (!canClickDelete || acceview == null || null == belowAdapter) return;
 //        mTvSpeed.setVisibility(View.GONE);
 //        mLineAccess.setCompoundDrawables(null, null, null, null);
 //        mLineAccess.setText(getString(R.string.tool_speed_now));
