@@ -13,18 +13,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -69,6 +63,13 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -225,9 +226,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取定位权限
         mPresenter.requestLocationPermission();
         //测试入口
-     /*   if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
-        }*/
+        }
     }
 
     @Override
@@ -243,7 +244,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mPresenter.getWebUrl();
             isFirstCreate = false;
         }
-
     }
 
     private void checkReadPermission() {

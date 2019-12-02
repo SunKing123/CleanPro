@@ -31,6 +31,8 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -136,22 +138,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         finish();
     }
 
-    /**
-     * 埋点事件
-     */
-    private void initNiuData() {
-        if (!mSPHelper.isUploadImei()) {
-            //有没有传过imei
-            String imei = DeviceUtils.getIMEI();
-            if (TextUtils.isEmpty(imei)) {
-                NiuDataAPI.setIMEI("");
-                mSPHelper.setUploadImeiStatus(false);
-            } else {
-                NiuDataAPI.setIMEI(imei);
-                mSPHelper.setUploadImeiStatus(true);
-            }
-        }
-    }
+
+
 
     @Override
     protected void initView() {
@@ -181,7 +169,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
-
         initNiuData();
         initFileRelation();
         skipView.setOnClickListener(v -> {
@@ -313,7 +300,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 if (null == info) return;
                 showProgressBar();
                 container.addView(mAdManager.getAdView());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "clod_splash_page", "clod_splash_page");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "true", "clod_splash_page", "clod_splash_page");
             }
 
             @Override
@@ -402,5 +389,25 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         bundle.putString(Constant.Title, "服务协议");
         bundle.putBoolean(Constant.NoTitle, false);
         startActivity(UserLoadH5Activity.class, bundle);
+    }
+
+
+
+    /**
+     * 埋点事件
+     */
+    private void initNiuData() {
+        if (!mSPHelper.isUploadImei()) {
+            //有没有传过imei
+            String imei = PhoneInfoUtils.getIMEI(mContext);
+            LogUtils.i("--zzh--"+imei);
+            if (TextUtils.isEmpty(imei)) {
+                NiuDataAPI.setIMEI("");
+                mSPHelper.setUploadImeiStatus(false);
+            } else {
+                NiuDataAPI.setIMEI(imei);
+                mSPHelper.setUploadImeiStatus(true);
+            }
+        }
     }
 }
