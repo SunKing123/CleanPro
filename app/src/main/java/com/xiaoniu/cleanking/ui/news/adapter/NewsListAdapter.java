@@ -136,9 +136,10 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             }else if(viewType == 4){ //资讯广告
                 RelativeLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);//广告加载
                 //newlist_2_1   第二屏幕广告样式
-                String positionId = pageName.equals(NewsType.TOUTIAO.getValue())?"newlist_1_1":"newlist_other_1";
+                String positionId = pageName.equals(NewsType.TOUTIAO.getName())?"newlist_1_1":"newlist_other_1";
                 if (NetworkUtils.isNetConnected())
                 insertAd(linAdContainer,positionId,null,View.GONE);
+//                LogUtils.i("---zzh--" + positionId);
             }
 
             commonHolder.itemView.setOnClickListener(v -> {
