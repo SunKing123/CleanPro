@@ -175,7 +175,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //测试环境
         NiuDataAPI.init(application, new Configuration()
                 //切换到sdk默认的测试环境地址
-                .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
                 .serverUrl(AppConstants.BIGDATA_MD)
                 .setHeartbeatUrl(AppConstants.BIGDATA_MD)
                 //打开sdk日志信息
