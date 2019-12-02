@@ -287,15 +287,18 @@ public class ApplicationDelegate implements IApplicationDelegate {
             @Override
             public void onBecameForeground(Activity activity) {
                 PreferenceUtil.getInstants().saveInt("isback", 0);
+                Log.d("XiLei","1111111");
                 if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
                         || ActivityCollector.isActivityExist(PopLayerActivity.class)
                         || !PreferenceUtil.isNotFirstOpenApp() || !SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID))
                     return;
+                Log.d("XiLei","222222");
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                         if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {
+                            Log.d("XiLei","3333");
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);

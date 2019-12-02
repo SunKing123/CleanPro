@@ -56,12 +56,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
      * 展示红包
      */
     private void showRedPacket() {
-        if (PreferenceUtil.getScreenInsideTime()) {
-            PreferenceUtil.saveRedPacketShowCount(1);
-            PreferenceUtil.saveScreenInsideTime();
-        } else {
-            PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
-        }
         if (PreferenceUtil.isHaseUpdateVersion() || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
@@ -72,13 +66,14 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
                 || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
             return;
-
+        Log.d("XiLei", "PreferenceUtil.getRedPacketShowCount()=" + PreferenceUtil.getRedPacketShowCount());
         switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
             case 5:
                 if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
                     Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
+                        Log.d("XiLei", "dataBean.isOpen()=" + dataBean.isOpen());
                         if (dataBean.isOpen()) {
                             if (PreferenceUtil.getRedPacketShowCount() == 2
                                     || PreferenceUtil.getRedPacketShowCount() == 5) { //内部插屏广告
@@ -101,6 +96,12 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     @Override
     protected void initView() {
+        if (PreferenceUtil.getScreenInsideTime()) {
+            PreferenceUtil.saveRedPacketShowCount(1);
+            PreferenceUtil.saveScreenInsideTime();
+        } else {
+            PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
+        }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         initGeekSdkAD();
@@ -121,6 +122,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private void initGeekSdkAD() {
         mAdManager = GeekAdSdk.getAdsManger();
+//        mAdManager.loadSplashAd(this, "hot_kp", new AdListener() { //暂时注释
         mAdManager.loadSplashAd(this, "hot_kp", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -129,7 +131,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     mAdTitle = info.getAdTitle();
                     mAdSourse = info.getAdSource();
                 }
-                if (null == info || null==container) return;
+                if (null == info || null == container) return;
                 showProgressBar();
                 container.addView(mAdManager.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "hot_splash_page", "hot_splash_page");
@@ -151,9 +153,10 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                Log.e(TAG, "-----adError-----" + errorMsg);
+                Log.e(TAG, "-----adError 热启动-----" + errorMsg);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "hot_splash_page");
-                jumpActivity();
+                finish();
+                showRedPacket();
             }
         });
     }

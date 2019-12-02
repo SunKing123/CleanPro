@@ -195,8 +195,8 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, object : AdListener {
             //暂时这样
             override fun adSuccess(info: AdInfo) {
-                Log.d(TAG, "-----adSuccess-----=" + info.adSource)
                 if (null == info) return
+                Log.d(TAG, "-----adSuccess-----=" + info.adSource)
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
             }
 
@@ -223,7 +223,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             }
 
             override fun adError(errorCode: Int, errorMsg: String) {
-                Log.d(TAG, "-----adError-----$errorMsg")
+                Log.d(TAG, "-----adError 前置插屏 -----$errorMsg")
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", mSourcePage, mCurrentPage)
                 goFinishActivity()
             }
