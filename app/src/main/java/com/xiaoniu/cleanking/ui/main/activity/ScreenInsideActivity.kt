@@ -32,8 +32,8 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
     }
 
     var mIsFirst = false
-    override fun onResume() {
-        super.onResume()
+    override fun onPostResume() {
+        super.onPostResume()
         if (!mIsFirst) {
             loadCustomInsertScreenAd()
         }
