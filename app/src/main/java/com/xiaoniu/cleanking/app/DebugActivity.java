@@ -8,6 +8,8 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.common.utils.DeviceUtils;
 
 /**
  * deprecation:调试页面
@@ -106,6 +108,13 @@ public class DebugActivity extends BaseActivity {
                 "?" + SchemeConstant.ANDROID_NAME + "=";
         String scheme = schemeHeader + packagePath;
         SchemeProxy.openScheme(this, scheme);
+    }
+
+
+    public void getImei(){
+        //有没有传过imei
+        String imei = DeviceUtils.getIMEI();
+        LogUtils.i("--zzh-"+imei);
     }
 
 

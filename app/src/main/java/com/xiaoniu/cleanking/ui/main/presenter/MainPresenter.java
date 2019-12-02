@@ -49,6 +49,7 @@ import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -63,6 +64,7 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -603,8 +605,43 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         return;
                     if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         //永久拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     } else {
                         //拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    }
+                }
+                //过去imei
+                requestPhoneStatePermission();
+            }
+        });
+    }
+
+    //获取Imei
+    @SuppressLint("CheckResult")
+    public void requestPhoneStatePermission() {
+        if (mView == null) {
+            return;
+        }
+        String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
+        if (null == mView) return;
+        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始
+                    if (mView == null)
+                        return;
+                    initNiuData();
+                } else {
+                    if (mView == null)
+                        return;
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        //永久拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    } else {
+                        //拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     }
                 }
             }
@@ -822,5 +859,23 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
+
+    /**
+     * 埋点事件
+     */
+    private void initNiuData() {
+        if (!mPreferencesHelper.isUploadImei()) {
+            //有没有传过imei
+            String imei = PhoneInfoUtils.getIMEI(mActivity);
+            LogUtils.i("--zzh--"+imei);
+            if (TextUtils.isEmpty(imei)) {
+                NiuDataAPI.setIMEI("");
+                mPreferencesHelper.setUploadImeiStatus(false);
+            } else {
+                NiuDataAPI.setIMEI(imei);
+                mPreferencesHelper.setUploadImeiStatus(true);
+            }
+        }
+    }
 
 }

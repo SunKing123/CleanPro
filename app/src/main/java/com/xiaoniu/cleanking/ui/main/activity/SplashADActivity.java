@@ -31,6 +31,8 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -248,6 +250,57 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
     }
 
+    @Override
+    protected void initView() {
+        /*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
+        mBtn.setOnClickListener(this);
+        mAgreement.setOnClickListener(this);
+        findViewById(R.id.tv_xy).setOnClickListener(this);
+        PreferenceUtil.saveCleanAllUsed(false);
+        PreferenceUtil.saveCleanJiaSuUsed(false);
+        PreferenceUtil.saveCleanPowerUsed(false);
+        PreferenceUtil.saveCleanNotifyUsed(false);
+        PreferenceUtil.saveCleanWechatUsed(false);
+        PreferenceUtil.saveCleanCoolUsed(false);
+        PreferenceUtil.saveCleanGameUsed(false);
+        PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
+
+        if (!NetworkUtils.isNetConnected()) {
+            if (!PreferenceUtil.isNotFirstOpenApp()) {
+                mStartView.setVisibility(View.VISIBLE);
+                mContentView.setVisibility(View.GONE);
+            } else {
+                getAuditSwitchFail();
+            }
+        } else {
+            mPresenter.geekAdSDKConfig();//加载广告配置
+            mPresenter.getAuditSwitch();
+        }
+        container = this.findViewById(R.id.splash_container);
+        skipView = findViewById(R.id.skip_view);
+        initNiuData();
+        initFileRelation();
+        skipView.setOnClickListener(v -> {
+            PreferenceUtil.saveShowAD(false);
+            skipView.clearAnimation();
+            JSONObject extension = new JSONObject();
+            try {
+                extension.put("ad_id", mAdTitle);
+                extension.put("ad_agency", mAdSourse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
+        });
+        //页面创建事件埋点
+        StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
+        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
+            readyExternalDb();
+        }
+
+    }
+
+
     /**
      * 拷贝数据库表
      */
@@ -447,5 +500,25 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         bundle.putString(Constant.Title, "服务协议");
         bundle.putBoolean(Constant.NoTitle, false);
         startActivity(UserLoadH5Activity.class, bundle);
+    }
+
+
+
+    /**
+     * 埋点事件
+     */
+    private void initNiuData() {
+        if (!mSPHelper.isUploadImei()) {
+            //有没有传过imei
+            String imei = PhoneInfoUtils.getIMEI(mContext);
+            LogUtils.i("--zzh--"+imei);
+            if (TextUtils.isEmpty(imei)) {
+                NiuDataAPI.setIMEI("");
+                mSPHelper.setUploadImeiStatus(false);
+            } else {
+                NiuDataAPI.setIMEI(imei);
+                mSPHelper.setUploadImeiStatus(true);
+            }
+        }
     }
 }
