@@ -421,6 +421,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         adManager.loadAd(this, "success_page_ad_3", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
+                if(null==info || null== ad_container_pos03)
+                    return;
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                 View adView = adManager.getAdView();
                 if (adView != null) {
@@ -437,17 +439,20 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 } else {
                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
                 }
-                LogUtils.e("adExposed");
 
             }
 
             @Override
             public void adClose(AdInfo info) {
+                if(null==info)
+                    return;
                 PreferenceUtil.saveShowAD(false);
             }
 
             @Override
             public void adClicked(AdInfo info) {
+                if(null==info)
+                    return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 

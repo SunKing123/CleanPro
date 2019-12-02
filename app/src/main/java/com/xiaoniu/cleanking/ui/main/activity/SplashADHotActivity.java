@@ -103,7 +103,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     mAdTitle = info.getAdTitle();
                     mAdSourse = info.getAdSource();
                 }
-                if (null == info) return;
+                if (null == info || null==container) return;
                 showProgressBar();
                 container.addView(mAdManager.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "hot_splash_page", "hot_splash_page");
