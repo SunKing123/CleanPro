@@ -49,7 +49,6 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             public void getData(SwitchInfoList switchInfoList) {
                 mView.getSwitchInfoListSuccess(switchInfoList);
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-                Log.d("XiLei", "AppHolder.getInstance().setSwitchInfoList=" + AppHolder.getInstance().getSwitchInfoList().getData().size());
             }
 
             @Override

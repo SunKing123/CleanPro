@@ -44,7 +44,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     @Override
     protected int getLayoutId() {
-        Log.d("XiLei", "getLayoutId");
         return R.layout.activity_splash_ad_hot;
     }
 
@@ -57,7 +56,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
      * 展示红包
      */
     private void showRedPacket() {
-        Log.d("XiLei", "getScreenInsideTime222=" + PreferenceUtil.getScreenInsideTime());
         if (PreferenceUtil.getScreenInsideTime()) {
             PreferenceUtil.saveRedPacketShowCount(1);
             PreferenceUtil.saveScreenInsideTime();
@@ -75,7 +73,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
             return;
 
-        Log.d("XiLei", "PreferenceUtil.getRedPacketShowCount()=" + PreferenceUtil.getRedPacketShowCount());
         switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
             case 5:
                 if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
@@ -83,7 +80,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                         if (dataBean.isOpen()) {
-                            Log.d("XiLei", "dddddddd");
                             if (PreferenceUtil.getRedPacketShowCount() == 2
                                     || PreferenceUtil.getRedPacketShowCount() == 5) { //内部插屏广告
                                 PreferenceUtil.saveScreenInsideTime();
@@ -93,7 +89,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                         }
                     }
                 }
-                Log.d("XiLei", "eeeeeeee");
                 //所有页面展示红包
                 if (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0
                         || PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
