@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
+import com.xiaoniu.common.utils.ToastUtils
 
 /**
  * @author XiLei
@@ -67,13 +68,14 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
             override fun adClose(info: AdInfo?) {
                 Log.d(TAG, "-----adClose 内部插屏-----")
                 if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
+                    StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
                 }
                 finish()
             }
 
             override fun adError(errorCode: Int, errorMsg: String) {
                 Log.d(TAG, "-----adError 内部插屏-----$errorMsg")
+                ToastUtils.showShort("-----adError 内部插屏错误 -----$errorMsg") //暂时注释(正式包删除)
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "inside_advertising_ad_page")
                 finish()
             }
