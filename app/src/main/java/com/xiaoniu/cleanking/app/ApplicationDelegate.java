@@ -39,6 +39,7 @@ import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -289,16 +290,20 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
-
     public void initLifecycle(Application application) {
         LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
             @Override
             public void onBecameForeground(Activity activity) {
-                PreferenceUtil.getInstants().saveInt("isback", 0);
+                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)){
+                    PreferenceUtil.getInstants().saveInt("isback", 0);
+                }else{//非当前主进程
+                    return;
+                }
+
                 Log.d("XiLei","1111111");
-                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
-                        || ActivityCollector.isActivityExist(PopLayerActivity.class)
-                        || !PreferenceUtil.isNotFirstOpenApp() || !SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID))
+                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) || ActivityCollector.isActivityExist(PopLayerActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class)
+                        || !PreferenceUtil.isNotFirstOpenApp())
                     return;
                 Log.d("XiLei","222222");
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()

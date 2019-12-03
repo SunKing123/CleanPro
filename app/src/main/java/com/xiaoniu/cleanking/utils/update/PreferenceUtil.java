@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.common.utils.ContextUtils;
+import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.util.ArrayList;
@@ -1297,9 +1298,8 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.SCREEN_INSIDE_TIME, 0);
         if (time == 0) return false;
-        if (System.currentTimeMillis() - time > 24 * 60 * 60 * 1000)
-            return true;
-        return false;
+        return !DateUtils.isSameDay(time,System.currentTimeMillis());
+
     }
 
     /**
