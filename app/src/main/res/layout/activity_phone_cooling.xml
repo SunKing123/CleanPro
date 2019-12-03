@@ -20,15 +20,14 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_FD6F46"
             android:descendantFocusability="blocksDescendants"
-            android:minHeight="50dp"
             app:contentInsetStart="0dp"
             app:layout_collapseMode="pin">
 
             <include
                 android:id="@+id/layout_title_bar"
                 layout="@layout/layout_titlebar"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_56dp" />
         </androidx.appcompat.widget.Toolbar>

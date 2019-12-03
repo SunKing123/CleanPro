@@ -187,11 +187,13 @@
         <ImageView
             android:id="@+id/iv_back"
             style="@style/top_iv_back"
+            android:visibility="gone"
             android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/tv_title_name"
             style="@style/top_tv_title"
+            android:visibility="gone"
             android:layout_gravity="center_vertical"
             android:text="@string/tool_one_key_speed" />
     </LinearLayout>

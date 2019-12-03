@@ -4,6 +4,7 @@ import android.util.Log
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdListener
+import com.xiaoniu.cleanking.BuildConfig
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
@@ -75,7 +76,9 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
 
             override fun adError(errorCode: Int, errorMsg: String) {
                 Log.d(TAG, "-----adError 内部插屏-----$errorMsg")
-                ToastUtils.showShort("-----adError 内部插屏错误 -----$errorMsg") //暂时注释(正式包删除)
+                if(!BuildConfig.SYSTEM_EN.contains("prod")){
+                    ToastUtils.showShort("-----adError 内部插屏错误 -----$errorMsg")
+                }
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "inside_advertising_ad_page")
                 finish()
             }
