@@ -178,7 +178,8 @@ dependencies {
     implementation rootProject.ext.dependencies["greendao"]
     annotationProcessor rootProject.ext.dependencies["greendao-generator"]
 
-    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
+    implementation rootProject.ext.dependencies["GreenDaoUpgradeHelper"]
+    implementation rootProject.ext.dependencies["logger"]
 
     implementation project(':baselib:common')
     implementation project(':otherlib:asmhelp')

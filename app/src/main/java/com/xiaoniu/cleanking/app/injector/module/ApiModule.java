@@ -2,13 +2,14 @@ package com.xiaoniu.cleanking.app.injector.module;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
+import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.api.BigDataApiService;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
+import com.xiaoniu.common.utils.JSONUtils;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -50,12 +51,7 @@ public class ApiModule {
 
     public ApiModule(Application application) {
         //原生Log日志拦截
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.e("print","okhttp=>"+message);
-            }
-        });
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLogger());
         if (BuildConfig.DEBUG) {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         } else {
@@ -89,6 +85,8 @@ public class ApiModule {
                     .addInterceptor(loggingInterceptor)
                     //其他配置
                     .build();
+
+
         } catch (
                 Exception e)
 
@@ -182,6 +180,32 @@ public class ApiModule {
     @Singleton
     public WeatherDataApiService provideWeatherDataApiService() {
         return mRetrofit2.create(WeatherDataApiService.class);
+    }
+
+    //日志拼接
+    private class HttpLogger implements HttpLoggingInterceptor.Logger {
+        private StringBuilder mMessage = new StringBuilder();
+
+        @Override
+        public void log(String message) {
+            // 请求或者响应开始
+            if (message.startsWith("--> POST")) {
+                mMessage.setLength(0);
+            }
+            // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
+            if ((message.startsWith("{") && message.endsWith("}"))
+                    || (message.startsWith("[") && message.endsWith("]"))) {
+                message = JSONUtils.formatJson(JSONUtils.decodeUnicode(message));
+            }
+            mMessage.append(message.concat("\n"));
+            // 响应结束，打印整条日志
+            if (message.startsWith("<-- END HTTP")) {
+                Logger.d(mMessage.toString());
+            }
+        }
+
+
+
     }
 
 }

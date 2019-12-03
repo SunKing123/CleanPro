@@ -7,15 +7,14 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -61,6 +60,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 /**
  * Created by admin on 2017/6/8.
  */
@@ -103,6 +105,12 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
+
+        Logger.addLogAdapter(new AndroidLogAdapter(){
+            @Override public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
     }
 
 
