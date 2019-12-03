@@ -34,9 +34,9 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
     }
 
     var mIsFirst = false
-    override fun onPostResume() {
-        super.onPostResume()
-        if (!mIsFirst) {
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (!mIsFirst && !isFinishing) {
             loadCustomInsertScreenAd()
         }
     }
@@ -75,9 +75,9 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
             }
 
             override fun adError(errorCode: Int, errorMsg: String) {
-                Log.d(TAG, "-----adError 内部插屏-----$errorMsg")
-                if(!BuildConfig.SYSTEM_EN.contains("prod")){
-                    ToastUtils.showShort("-----adError 内部插屏错误 -----$errorMsg")
+                Log.d(TAG, "-----adError 内部插屏 $errorCode-----$errorMsg")
+                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                    ToastUtils.showShort("-----adError 内部插屏错误 $errorCode -----$errorMsg")
                 }
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "inside_advertising_ad_page")
                 finish()
