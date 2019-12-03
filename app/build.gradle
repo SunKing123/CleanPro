@@ -446,7 +446,8 @@ if (buildWithTinker()) {
                     copy {
                         def fileNamePrefix = "${project.name}-${variant.baseName}"
                         def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
-                        def destPath = hasFlavors ? file("${bakPath}/${project.name}-${date}/${variant.flavorName}") : bakPath
+//                        def destPath = hasFlavors ? file("${bakPath}/${project.name}-${date}/${variant.flavorName}") : bakPath
+                        def destPath = hasFlavors ? file("${bakPath}/${variant.flavorName}") : bakPath
                         from variant.outputs.first().outputFile
                         into destPath
                         rename { String fileName ->
