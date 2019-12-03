@@ -466,7 +466,7 @@ if (buildWithTinker()) {
                     }
                     def fileNamePrefix = "${project.name}-${variant.baseName}"
                     def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
-                    def path = "${buildDir}/bakApk/"
+                    def path = "${buildDir}/bakApk"
 //                    def destPath = hasFlavors ? "${path}/${project.name}-${date}/${variant.flavorName}" : bakPath
                     def destPath = hasFlavors ? "${path}/${variant.flavorName}" : bakPath
                     def filePath = "${destPath}/${newFileNamePrefix}.apk"
