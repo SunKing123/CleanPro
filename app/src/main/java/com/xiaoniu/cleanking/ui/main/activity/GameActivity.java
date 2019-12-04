@@ -643,7 +643,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
             }
         });
-        if (null == mAllList || null == mSelectNameList || mAllList.size() <= 0 || mSelectNameList.size() <= 0)
+        if (null == mAllList || null == mSelectNameList || mAllList.size() <= 0 || mSelectNameList.size() <= 0
+                || mAllList.size() < mSelectNameList.size())
             return;
         for (int i = 0; i < mAllList.size(); i++) {
             for (int j = 0; j < mSelectNameList.size(); j++) {
