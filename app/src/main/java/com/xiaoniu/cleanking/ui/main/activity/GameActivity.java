@@ -604,7 +604,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             clean();
             return;
         }*/
-
+        if (null == mViewBgLottie) return;
         mIsStartClean = true;
         NiuDataAPI.onPageStart("gameboost_animation_page_view_page", "游戏加速动画页浏览");
         NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_end_page", "gameboost_animation_page", "gameboost_animation_page_view_page", "游戏加速动画页浏览");

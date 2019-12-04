@@ -70,12 +70,12 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
- /*           minifyEnabled false
-            debuggable false
-            shrinkResources true
-            zipAlignEnabled true
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'*/
+            /*           minifyEnabled false
+                       debuggable false
+                       shrinkResources true
+                       zipAlignEnabled true
+                       signingConfig signingConfigs.release
+                       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'*/
         }
         debug {
             minifyEnabled false
@@ -106,7 +106,7 @@ android {
             buildConfigField "String", "WEATHER_BASE_URL", "\"http://devweatapi.hellogeek.com/weatapi/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
-            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
 
         }
         btest {
@@ -116,7 +116,7 @@ android {
             buildConfigField "String", "WEATHER_BASE_URL", "\"http://testweatapi.hellogeek.com/weatapi/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
-            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
 
         }
         preprod {
@@ -178,7 +178,8 @@ dependencies {
     implementation rootProject.ext.dependencies["greendao"]
     annotationProcessor rootProject.ext.dependencies["greendao-generator"]
 
-    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
+    implementation rootProject.ext.dependencies["GreenDaoUpgradeHelper"]
+    implementation rootProject.ext.dependencies["logger"]
 
     implementation project(':baselib:common')
     implementation project(':otherlib:asmhelp')
@@ -494,7 +495,10 @@ if (buildWithTinker()) {
                     copy {
                         def fileNamePrefix = "${project.name}-${variant.baseName}"
                         def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
-                        def destPath = hasFlavors ? file("${bakPath}/${project.name}-${date}/${variant.flavorName}") : bakPath
+                        println("fileNamePrefix-->" + fileNamePrefix)
+                        println("newFileNamePrefix-->" + newFileNamePrefix)
+//                        def destPath = hasFlavors ? file("${bakPath}/${project.name}-${date}/${variant.flavorName}") : bakPath
+                        def destPath = hasFlavors ? file("${bakPath}/${variant.flavorName}") : bakPath
                         from variant.outputs.first().outputFile
                         into destPath
                         rename { String fileName ->
@@ -515,7 +519,8 @@ if (buildWithTinker()) {
                     def fileNamePrefix = "${project.name}-${variant.baseName}"
                     def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
                     def path = "${buildDir}/bakApk/"
-                    def destPath = hasFlavors ? "${path}/${project.name}-${date}/${variant.flavorName}" : bakPath
+//                    def destPath = hasFlavors ? "${path}/${project.name}-${date}/${variant.flavorName}" : bakPath
+                    def destPath = hasFlavors ? "${path}/${variant.flavorName}" : bakPath
                     def filePath = "${destPath}/${newFileNamePrefix}.apk"
                     filePath2 = filePath.replace("\\", "/")
                     if ("${taskName.capitalize()}".contains("Btest")) {

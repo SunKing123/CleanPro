@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
@@ -36,7 +39,6 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -50,8 +52,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -261,7 +261,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
         btnInfo.setNormal(true);
         btnInfo.setCheckResult("500");
-        PreferenceUtil.getInstants().save("lock_pos01",new Gson().toJson(btnInfo));
+        PreferenceUtil.getInstants().save("lock_pos01", new Gson().toJson(btnInfo));
         EventBus.getDefault().post(btnInfo);
 
         //状态栏恢复正常
@@ -278,11 +278,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             viewLottieBottom.cancelAnimation();
             viewLottieBottom.clearAnimation();
 
-           Intent intent_finish=  new Intent(getActivity(), ScreenFinishBeforActivity.class);
+            Intent intent_finish = new Intent(getActivity(), ScreenFinishBeforActivity.class);
             intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
             intent_finish.putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize());
             intent_finish.putExtra(ExtraConstant.UNIT, checkCountEntity.getUnit());
-            if(getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
+            if (getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
                 intent_finish.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
             }
             startActivity(intent_finish);
@@ -473,6 +473,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      * 停止清理
      */
     public void stopClean() {
+        if (null == viewLottieBottom) return;
         viewLottieBottom.pauseAnimation();
 //        mCleanAnimView.stopClean();
     }

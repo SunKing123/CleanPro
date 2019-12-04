@@ -96,10 +96,8 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     fun receiverMessage(baseEvent: BaseEventBus<String>) {
         when (baseEvent.getAction()) {
             BaseEventBusConstant.WEB_REDPACKET_CLOSE -> { //红包点击x按钮关闭
-                Log.d("XiLei", "红包点击x按钮关闭")
                 WebDialogManager.getInstance().dismissDialog()
                 if (!isFinishing) {
-                    Log.d("XiLei", "红包点击x按钮关闭---finish()")
                     finish()
                 }
                 NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page", "red_envelopes_page_view_page", "红包弹窗浏览")

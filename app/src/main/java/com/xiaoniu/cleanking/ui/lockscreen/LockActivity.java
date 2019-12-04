@@ -282,7 +282,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             public void adSuccess(AdInfo info) {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
                 View adView = adManager.getAdView();
-                if (adView != null) {
+
+                if (adView != null&&null!=relAd ) {
                     relAd.removeAllViews();
                     relAd.addView(adView);
                 }
@@ -290,12 +291,14 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void adExposed(AdInfo info) {
+                if(null==info)return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
                 LogUtils.e("adExposed");
             }
 
             @Override
             public void adClicked(AdInfo info) {
+                if(null==info)return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
             }
 
@@ -345,7 +348,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        if(null==mUnlockView)
+            return;
         mUnlockView.startAnim();
+
         updateTimeUI();
 
         boolean isOpen = false;
@@ -369,7 +375,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateTimeUI() {
+        if (null != mLockDate)
         mLockTime.setText(DateUtils.getHourString(this, System.currentTimeMillis()));
+        if (null != mLockDate)
         mLockDate.setText(monthFormat.format(GregorianCalendar.getInstance().getTime()) + "  " + weekFormat.format(GregorianCalendar.getInstance().getTime()));
     }
 

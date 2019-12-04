@@ -58,5 +58,6 @@ public class Constant {
     public static final String CLEAN_TABLE_NAME = "XNWeatherCityModel";
     public static final String CLEAN_DB_SAVE = "weather_db_issaved";
 
+    public static final String SWITCH_INFO = "switch_info";
 }
 

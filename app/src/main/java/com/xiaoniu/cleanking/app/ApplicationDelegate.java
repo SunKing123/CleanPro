@@ -13,6 +13,8 @@ import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -37,6 +39,7 @@ import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -99,12 +102,17 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
         //商业sdk初始化
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME,Constant.CSJ_AD_ID, ChannelUtil.getChannel(),true);//BuildConfig.SYSTEM_EN.contains("prod")
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN.contains("prod"));
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
-    }
 
+        Logger.addLogAdapter(new AndroidLogAdapter(){
+            @Override public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
+    }
 
 
     private static AppComponent mAppComponent;
@@ -145,7 +153,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
 
-
     public static AppDataBase getAppDatabase() {
         return mAppDatabase;
     }
@@ -175,7 +182,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //测试环境
         NiuDataAPI.init(application, new Configuration()
                 //切换到sdk默认的测试环境地址
-                .setHeartbeatMode(Configuration.HEARTBEAT_MODE_FOREGROUND)
                 .serverUrl(AppConstants.BIGDATA_MD)
                 .setHeartbeatUrl(AppConstants.BIGDATA_MD)
                 //打开sdk日志信息
@@ -195,6 +201,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
     private String oaId = "";
+
     public void initOaid(Application application) {
         //判断是否为当前主进程
         String processName = SystemUtils.getProcessName(application);
@@ -242,12 +249,13 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     //home键监听
     private long mLastClickTime = 0;
-    public void homeCatch(Application application){
+
+    public void homeCatch(Application application) {
         HomeWatcher mHomeWatcher = new HomeWatcher(application);
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override
             public void onHomePressed() {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -256,13 +264,14 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 i.putExtra("action", "home");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
-                }else{
+                } else {
                     application.startService(i);
                 }
             }
+
             @Override
             public void onHomeLongPressed() {  //部分手机不走 onHomePressed();
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -271,7 +280,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 i.putExtra("action", "home");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
-                }else{
+                } else {
                     application.startService(i);
                 }
             }
@@ -281,22 +290,28 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
-
-    public void initLifecycle(Application application){
+    public void initLifecycle(Application application) {
         LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
             @Override
             public void onBecameForeground(Activity activity) {
-                PreferenceUtil.getInstants().saveInt("isback", 0);
-
-                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
-                        || ActivityCollector.isActivityExist(PopLayerActivity.class)
-                        || !PreferenceUtil.isNotFirstOpenApp() || !SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID))
+                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)){
+                    PreferenceUtil.getInstants().saveInt("isback", 0);
+                }else{//非当前主进程
                     return;
+                }
+
+                Log.d("XiLei","1111111");
+                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) || ActivityCollector.isActivityExist(PopLayerActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class)
+                        || !PreferenceUtil.isNotFirstOpenApp())
+                    return;
+                Log.d("XiLei","222222");
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                         if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {
+                            Log.d("XiLei","3333");
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
@@ -310,17 +325,16 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
             @Override
             public void onBecameBackground(Activity activity) {
-                SPUtils.getInstance(application,"Lifecycle").put("acitivity_name",activity.getLocalClassName());
+                SPUtils.getInstance(application, "Lifecycle").put("acitivity_name", activity.getLocalClassName());
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
-                    PreferenceUtil.getInstants().saveInt("isback",1);
+                    PreferenceUtil.getInstants().saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
                 }
             }
         });
     }
-
 
 
 }

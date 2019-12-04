@@ -3,7 +3,7 @@ ext {
     minSdkVersion = 17
     targetSdkVersion = 28
     versionCode = 3
-    versionName = "1.2.0_dev"
+    versionName = "1.1.1"
     buildToolsVersion = "28.0.3"
     supportLibVersion = "28.0.0"
 
@@ -81,6 +81,8 @@ ext {
             "amap2d"                       : "com.amap.api:map2d:latest.integration",
             "greendao"                     : "org.greenrobot:greendao:3.2.2",
             "greendao-generator"           : "org.greenrobot:greendao-generator:3.2.2",
+            "GreenDaoUpgradeHelper"        : "com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0",
+            "logger"                       : "com.orhanobut:logger:2.2.0"
 //            "easy-popup"                   : "com.github.zyyoona7:EasyPopup:1.0.1",
 //            "particleview"                 : "com.github.shchurov:particleview:0.9.12",
 //            "hellodaemon"                  : "com.xdandroid:hellodaemon:+",
