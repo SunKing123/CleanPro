@@ -1,7 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
-import android.util.Log;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.config.listener.ConfigListener;
@@ -15,6 +13,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -151,7 +150,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             public void getData(BottoomAdList auditSwitch) {
                 if (null == auditSwitch.getData() || auditSwitch.getData().size() <= 0) return;
                 AppHolder.getInstance().setBottomAdList(auditSwitch.getData());
-                Log.d("XiLei", "getBottomAdList");
+                PreferenceUtil.getInstants().save(SpCacheConfig.BOTTOM_AD_LIST, new Gson().toJson(auditSwitch));
             }
 
             @Override

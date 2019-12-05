@@ -102,6 +102,7 @@ public class SpCacheConfig {
     public static final String COOL_START_TIME = "CoolStartTime";
     public static final String SCREEN_INSIDE_TIME = "ScreenInsideTime";
     public static final String BOTTOM_AD_COOL_COUNT = "BottomAdCoolCount";
+    public static final String BOTTOM_AD_LIST = "BottomAdList";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";
