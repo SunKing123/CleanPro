@@ -144,7 +144,7 @@ public class DebugActivity extends BaseActivity {
         }
     }
 
-  /*  *
+  /**
      *back the app's icon.*/
     public void backIcon(){
         PackageManager p = getPackageManager();
@@ -154,7 +154,7 @@ public class DebugActivity extends BaseActivity {
 
 
     /**
-     *  添加当活动为启动项
+     *  添加桌面快捷方式
      * @param cx
      * @param name 快捷方式名称
      *  调用示例：      ShortCutUtils.addShortcut(MainActivity.this, name.getText() != null ? name.getText().toString() : "1");

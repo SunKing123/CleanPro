@@ -224,8 +224,21 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!--悬浮Activity样式-->
+    <!--外部插屏_悬浮Activity样式-->
     <style name="pop_layer_style" parent="AppTheme">
+        <!--是否悬浮在activity上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--透明是否-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@null</item>
+        <!--设置没有窗口标题、dialog标题等各种标题-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:title">@null</item>
+        <item name="android:dialogTitle">@null</item>
+    </style>
+
+    <!--全屏_外部插屏_悬浮Activity样式-->
+    <style name="full_pop_layer_style" parent="AppTheme">
         <!--是否悬浮在activity上-->
         <item name="android:windowIsFloating">true</item>
         <!--透明是否-->

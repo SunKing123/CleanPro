@@ -73,8 +73,7 @@ public final class LocalService extends Service {
         if (handler == null) {
             handler = new Handler();
         }
-        //网络状态监听
-        netWorkStateListener();
+
     }
 
     @Override
@@ -101,7 +100,8 @@ public final class LocalService extends Service {
         }
         //定时循环任务_位置注意
         sendTimingReceiver(intent,!(null == mOnepxReceiver));
-
+        //网络状态监听
+        netWorkStateListener();
         //像素保活
         if (mOnepxReceiver == null) {
             mOnepxReceiver = new OnepxReceiver();
@@ -409,17 +409,17 @@ public final class LocalService extends Service {
         }
     }
 
+    /**
+     * 注册网络状态监听
+     */
     public void netWorkStateListener(){
         if (netWorkStateReceiver == null) {
             netWorkStateReceiver = new NetWorkStateReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            registerReceiver(netWorkStateReceiver, filter);
         }
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(netWorkStateReceiver, filter);
-
     }
-
-
 
     @Override
     public void onDestroy() {

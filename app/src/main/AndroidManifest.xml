@@ -432,6 +432,16 @@
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+
+        <activity
+            android:name=".ui.lockscreen.FullPopLayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/full_pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
         <!--     android:screenOrientation="portrait"-->
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->

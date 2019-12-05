@@ -125,4 +125,6 @@ public class SpCacheConfig {
     public static final String IS_USED_COLL = "is_used_coll";
     public static final String IS_USED_GAME = "is_used_game";
 
+    public static final String WIFI_STATE = "wifi_state";
+
 }
