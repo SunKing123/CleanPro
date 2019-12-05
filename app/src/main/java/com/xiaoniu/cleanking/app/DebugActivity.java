@@ -1,13 +1,18 @@
 package com.xiaoniu.cleanking.app;
 
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.view.View;
+import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
@@ -17,7 +22,7 @@ import com.xiaoniu.common.utils.DeviceUtils;
  * time:2018/11/28
  */
 public class DebugActivity extends BaseActivity {
-
+    private TextView tv_hide_icon;
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -35,7 +40,13 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        tv_hide_icon = findViewById(R.id.tv_hide_icon);
+        tv_hide_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideIcon();
+            }
+        });
     }
 
     public void close(View view) {
@@ -117,5 +128,27 @@ public class DebugActivity extends BaseActivity {
         LogUtils.i("--zzh-"+imei);
     }
 
+    /**
+     * Hide app's icon
+     */
+    public void hideIcon(){
+        try {
+            PackageManager p = getPackageManager();
+            ComponentName componentName = new ComponentName(this, SplashADActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
+            p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Logger.e("zzh","--"+e.getMessage(),"");
+        }
+    }
+
+/*    *//**
+     *back the app's icon.
+     *//*
+    public void backIcon(){
+        PackageManager p = getPackageManager();
+        ComponentName componentName = new ComponentName(this, SplashADActivity.class);
+        p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }*/
 
 }

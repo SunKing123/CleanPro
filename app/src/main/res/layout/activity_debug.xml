@@ -162,6 +162,17 @@
             android:text="获取ImeI"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_16sp" />
+
+        <TextView
+            android:id="@+id/tv_hide_icon"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen_50dp"
+            android:layout_weight="1"
+            android:background="@color/color_00DA80"
+            android:gravity="center"
+            android:text="hide_icon"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
     </LinearLayout>
 
 </LinearLayout>
