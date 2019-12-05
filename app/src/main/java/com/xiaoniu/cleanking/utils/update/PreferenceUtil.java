@@ -1298,8 +1298,27 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.SCREEN_INSIDE_TIME, 0);
         if (time == 0) return false;
-        return !DateUtils.isSameDay(time,System.currentTimeMillis());
+        return !DateUtils.isSameDay(time, System.currentTimeMillis());
+    }
 
+    /**
+     * 保存冷启动打底广告循环展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveBottomAdCoolCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.BOTTOM_AD_COOL_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取冷启动打底广告循环展示到第几个
+     */
+    public static int getBottomAdCoolCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.BOTTOM_AD_COOL_COUNT, 0);
     }
 
     /**

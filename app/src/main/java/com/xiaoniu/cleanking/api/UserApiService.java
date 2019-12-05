@@ -1,10 +1,10 @@
 package com.xiaoniu.cleanking.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.comm.jksdk.http.base.BaseResponse;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -15,16 +15,13 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -67,6 +64,14 @@ public interface UserApiService {
      */
     @GET("/screen/v3/switch")
     Flowable<InsertAdSwitchInfoList> getScreentSwitch();
+
+    /**
+     * 打底广告
+     *
+     * @return
+     */
+    @GET("/advBottom/getAdvBottomInfoList")
+    Flowable<BottoomAdList> getBottomAdList();
 
     /**
      * 本地Push阀值配置
@@ -187,7 +192,6 @@ public interface UserApiService {
      */
     @POST("/device/save")
     Flowable<BaseEntity> pushDeviceInfo(@Body RequestBody body);
-
 
 
 }
