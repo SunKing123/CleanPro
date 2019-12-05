@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.model;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
-import com.comm.jksdk.http.base.BaseResponse;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -13,6 +12,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -32,13 +32,9 @@ import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
-import com.xiaoniu.common.utils.SystemUtils;
-
-import org.simple.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -130,6 +126,10 @@ public class MainModel extends BaseModel {
         mService.queryAuditSwitch(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
+    public void getBottomAdList(Common4Subscriber<BottoomAdList> commonSubscriber) {
+        mService.getBottomAdList().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
     /**
      * 广告开关
      *
@@ -151,12 +151,6 @@ public class MainModel extends BaseModel {
      * @param commonSubscriber
      */
     public void getScreentSwitch(Common4Subscriber<InsertAdSwitchInfoList> commonSubscriber) {
-        Gson gson = new Gson();
-        Map<String, Object> map = new HashMap<>();
-        map.put("channel", ChannelUtil.getChannel());
-        map.put("appVersion", AppUtils.getVersionName(mActivity, mActivity.getPackageName()));
-        String json = gson.toJson(map);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getScreentSwitch().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
@@ -208,7 +202,6 @@ public class MainModel extends BaseModel {
     }
 
 
-
     /**
      * 游戏加速列表顶部广告
      */
@@ -218,8 +211,8 @@ public class MainModel extends BaseModel {
 
 
     public WeatherCity updateTableLocation(LocationCityInfo locationCityInfo) {
-      WeatherCity locationWeatherCity = GreenDaoManager.getInstance().updateTableLocation(locationCityInfo);
-        LogUtils.d( "-zzh-:code-" + locationWeatherCity.getAreaCode());
+        WeatherCity locationWeatherCity = GreenDaoManager.getInstance().updateTableLocation(locationCityInfo);
+        LogUtils.d("-zzh-:code-" + locationWeatherCity.getAreaCode());
         if (locationWeatherCity != null && !TextUtils.isEmpty(locationWeatherCity.getAreaCode())) {
             String areaCode = locationWeatherCity.getAreaCode();
             return locationWeatherCity;
@@ -242,14 +235,6 @@ public class MainModel extends BaseModel {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), mGson.toJson(requestParams));*/
 //        mService.getWeather72HourList("101020600").compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
 //    }
-
-
-
-
-
-
-
-
 
 
 }

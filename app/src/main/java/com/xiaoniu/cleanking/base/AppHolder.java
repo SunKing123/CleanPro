@@ -1,11 +1,13 @@
 package com.xiaoniu.cleanking.base;
 
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,21 +58,13 @@ public class AppHolder {
 
     private SwitchInfoList switchInfoList;
 
-    private InsertAdSwitchInfoList insertAdSwitchInfoList;
-
-    private Map<String,InsertAdSwitchInfoList.DataBean> insertAdSwitchmap =new HashMap<>();
+    private Map<String, InsertAdSwitchInfoList.DataBean> insertAdSwitchmap = new HashMap<>();
 
     public Map<String, InsertAdSwitchInfoList.DataBean> getInsertAdSwitchmap() {
         return insertAdSwitchmap;
     }
 
-    public InsertAdSwitchInfoList getInsertAdSwitchInfoList() {
-        return insertAdSwitchInfoList;
-    }
-
     public void setInsertAdSwitchInfoList(InsertAdSwitchInfoList insertAdSwitchInfoList) {
-        this.insertAdSwitchInfoList = insertAdSwitchInfoList;
-
         //开关数据Map存储
         insertAdSwitchmap.clear();
         for (InsertAdSwitchInfoList.DataBean post : insertAdSwitchInfoList.getData()) {
@@ -78,12 +72,23 @@ public class AppHolder {
         }
     }
 
+
     public void setSwitchInfoList(SwitchInfoList switchInfoList) {
         this.switchInfoList = switchInfoList;
     }
 
     public SwitchInfoList getSwitchInfoList() {
         return switchInfoList;
+    }
+
+    private List<BottoomAdList.DataBean> mBottoomAdList;
+
+    public void setBottomAdList(List<BottoomAdList.DataBean> switchInfoList) {
+        this.mBottoomAdList = switchInfoList;
+    }
+
+    public List<BottoomAdList.DataBean> getBottomAdList() {
+        return mBottoomAdList;
     }
 
     private RedPacketEntity mRedPacketEntity;

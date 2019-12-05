@@ -11,7 +11,9 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -50,7 +52,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             public void getData(SwitchInfoList switchInfoList) {
                 mView.getSwitchInfoListSuccess(switchInfoList);
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-                PreferenceUtil.getInstants().save(Constant.SWITCH_INFO,new Gson().toJson(switchInfoList));
+                PreferenceUtil.getInstants().save(Constant.SWITCH_INFO, new Gson().toJson(switchInfoList));
             }
 
             @Override
@@ -64,6 +66,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             }
         });
     }
+
     /**
      * 冷启动、热启动、完成页广告开关
      */
@@ -78,7 +81,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             @Override
             public void getData(SwitchInfoList switchInfoList) {
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-                PreferenceUtil.getInstants().save(Constant.SWITCH_INFO,new Gson().toJson(switchInfoList));
+                PreferenceUtil.getInstants().save(Constant.SWITCH_INFO, new Gson().toJson(switchInfoList));
             }
 
             @Override
@@ -133,6 +136,33 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             public void adError(int errorCode, String errorMsg) {
                 LogUtils.i(errorCode + "----config--error---:" + errorMsg);
 
+            }
+        });
+    }
+
+    /**
+     * 打底广告
+     */
+    public void getBottomAdList() {
+        mModel.getBottomAdList(new Common4Subscriber<BottoomAdList>() {
+
+            @Override
+            public void getData(BottoomAdList auditSwitch) {
+                if (null == auditSwitch.getData() || auditSwitch.getData().size() <= 0) return;
+                AppHolder.getInstance().setBottomAdList(auditSwitch.getData());
+                PreferenceUtil.getInstants().save(SpCacheConfig.BOTTOM_AD_LIST, new Gson().toJson(auditSwitch));
+            }
+
+            @Override
+            public void showExtraOp(String code, String message) {
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
             }
         });
     }

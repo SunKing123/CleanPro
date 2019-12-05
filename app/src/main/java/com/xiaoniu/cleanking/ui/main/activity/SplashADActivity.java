@@ -11,7 +11,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -26,13 +29,16 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -44,6 +50,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.json.JSONObject;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -68,6 +75,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     TextView mBtn;
     @BindView(R.id.tv_qx)
     TextView mAgreement;
+    @BindView(R.id.error_ad_iv)
+    ImageView mErrorAdIv;
 
     @Inject
     NoClearSPHelper mSPHelper;
@@ -115,6 +124,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             }
         } else {
             mPresenter.geekAdSDKConfig();//加载广告配置
+            mPresenter.getBottomAdList();
             if (PreferenceUtil.getCoolStartTime()) {
                 mPresenter.getAuditSwitch();
             } else { //小于10分钟不获取开关直接请求广告
@@ -336,8 +346,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         mAdManager.loadSplashAd(this, "cold_kp", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                Log.d(TAG, "-----adSuccess-----");
                 if (null != info) {
+                    Log.d(TAG, "-----adSuccess-----" + info.getAdSource() + "---" + info.getAdId());
                     mAdTitle = info.getAdTitle();
                     mAdSourse = info.getAdSource();
                 }
@@ -365,11 +375,56 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                Log.e(TAG, "-----adError-----" + errorMsg);
+                Log.e(TAG, "-----adError 热启动-----" + errorMsg);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "clod_splash_page", "clod_splash_page");
-                jumpActivity();
+                showProgressBar();
+                showBottomAd();
             }
         });
+    }
+
+    private int mBottomAdShowCount = 0;
+
+    /**
+     * 打底广告
+     */
+    private void showBottomAd() {
+        if (null != AppHolder.getInstance().getBottomAdList() &&
+                AppHolder.getInstance().getBottomAdList().size() > 0) {
+            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
+                if (dataBean.getAdvertPosition().equals(PositionId.COLD_CODE)) {
+                    if (dataBean.getShowType() == 1) { //循环
+                        mBottomAdShowCount = PreferenceUtil.getBottomAdCoolCount();
+                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
+                            PreferenceUtil.saveBottomAdCoolCount(0);
+                        } else {
+                            PreferenceUtil.saveBottomAdCoolCount(PreferenceUtil.getBottomAdCoolCount() + 1);
+                        }
+                    } else { //随机
+                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
+                            mBottomAdShowCount = 0;
+                        } else {
+                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
+                        }
+                    }
+                    GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    mErrorAdIv.setOnClickListener(v -> {
+                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()), 100);
+                    });
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 100:
+                jumpActivity();
+                break;
+        }
     }
 
     /**
