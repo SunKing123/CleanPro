@@ -4,11 +4,13 @@ import android.util.Log
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdListener
+import com.comm.jksdk.ad.listener.AdManager
 import com.xiaoniu.cleanking.BuildConfig
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
@@ -20,6 +22,7 @@ import com.xiaoniu.common.utils.ToastUtils
  */
 class ScreenInsideActivity : BaseActivity<MainPresenter>() {
 
+    private lateinit var mAdManager: AdManager
     private val TAG = "GeekSdk"
     override fun getLayoutId(): Int {
         return R.layout.activity_hot_redpacket
@@ -30,6 +33,7 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
 
     override fun initView() {
         StatusBarUtil.setTransparentForWindow(this)
+        mAdManager = GeekAdSdk.getAdsManger()
         StatisticsUtils.customTrackEvent("ad_vue_custom", "内部插屏广告vue创建", "hot_splash_page", "inside_advertising_ad_page")
     }
 
@@ -45,9 +49,9 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
      * 内部插屏广告
      */
     private fun loadCustomInsertScreenAd() {
+        if (null == mAdManager) return
         mIsFirst = true
-        val adManager = GeekAdSdk.getAdsManger()
-        adManager.loadCustomInsertScreenAd(this, "inside_advertising_ad", 3, object : AdListener {
+        mAdManager.loadCustomInsertScreenAd(this, "inside_advertising_ad", 3, object : AdListener {
             override fun adSuccess(info: AdInfo) {
                 Log.d(TAG, "-----adSuccess 内部插屏-----")
                 if (null == info) return
@@ -56,6 +60,7 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
 
             override fun adExposed(info: AdInfo) {
                 Log.d(TAG, "-----adExposed 内部插屏-----")
+                PreferenceUtil.saveShowAD(true)
                 if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
             }
@@ -64,10 +69,12 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
                 Log.d(TAG, "-----adClicked 内部插屏-----")
                 if (null == info) return
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
+                finish()
             }
 
             override fun adClose(info: AdInfo?) {
                 Log.d(TAG, "-----adClose 内部插屏-----")
+                PreferenceUtil.saveShowAD(false)
                 if (null != info) {
                     StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
                 }
@@ -83,13 +90,6 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
                 finish()
             }
         }, "80")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (!isFinishing) {
-            finish()
-        }
     }
 
     override fun netError() {

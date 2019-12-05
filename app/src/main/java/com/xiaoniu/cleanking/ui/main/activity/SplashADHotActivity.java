@@ -69,14 +69,13 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         Log.d("XiLei", "PreferenceUtil.getRedPacketShowCount()=" + PreferenceUtil.getRedPacketShowCount());
         switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
             case 5:
-                if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
+                if (null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
                     Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                         Log.d("XiLei", "dataBean.isOpen()=" + dataBean.isOpen());
-                        if (dataBean.isOpen()) {
-                            if (PreferenceUtil.getRedPacketShowCount() == 2
-                                    || PreferenceUtil.getRedPacketShowCount() == 5) { //内部插屏广告
+                        if (dataBean.isOpen()) {//内部插屏广告
+                            if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
                                 PreferenceUtil.saveScreenInsideTime();
                                 startActivity(new Intent(this, ScreenInsideActivity.class));
                                 return;

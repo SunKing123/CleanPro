@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -112,6 +113,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(AppVersion updateInfoEntity) {
+                Log.d("XiLei", "queryAppVersion");
                 setAppVersion(updateInfoEntity);
             }
 
@@ -500,6 +502,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 红包
      */
     public void getRedPacketList() {
+        mView.showScreenInside(); //内部插屏广告
         if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
@@ -844,6 +847,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(InsertAdSwitchInfoList switchInfoList) {
+                Log.d("XiLei", "getScreentSwitch");
                 AppHolder.getInstance().setInsertAdSwitchInfoList(switchInfoList);
             }
 
@@ -867,7 +871,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (!mPreferencesHelper.isUploadImei()) {
             //有没有传过imei
             String imei = PhoneInfoUtils.getIMEI(mActivity);
-            LogUtils.i("--zzh--"+imei);
+            LogUtils.i("--zzh--" + imei);
             if (TextUtils.isEmpty(imei)) {
                 NiuDataAPI.setIMEI("");
                 mPreferencesHelper.setUploadImeiStatus(false);
