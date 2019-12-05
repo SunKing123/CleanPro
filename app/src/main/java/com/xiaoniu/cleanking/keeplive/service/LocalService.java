@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.config.RunMode;
+import com.xiaoniu.cleanking.keeplive.receive.NetWorkStateReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
@@ -46,6 +48,7 @@ public final class LocalService extends Service {
     private OnepxReceiver mOnepxReceiver;
     private ScreenStateReceiver screenStateReceiver;
     private BroadcastReceiver batteryReceiver;
+    private NetWorkStateReceiver netWorkStateReceiver;
 
     private boolean isPause = true;//控制暂停
     private MediaPlayer mediaPlayer;
@@ -70,6 +73,8 @@ public final class LocalService extends Service {
         if (handler == null) {
             handler = new Handler();
         }
+        //网络状态监听
+        netWorkStateListener();
     }
 
     @Override
@@ -234,6 +239,7 @@ public final class LocalService extends Service {
         if (!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("heartbeat"))) {//心跳action
             checkCharge();
             watchingBattery();
+
             try {
                 long triggerAtTime = SystemClock.elapsedRealtime() + (SCAN_SPACE_LONG * 1000);
                 Intent i = new Intent(this, TimingReceiver.class);
@@ -403,6 +409,18 @@ public final class LocalService extends Service {
         }
     }
 
+    public void netWorkStateListener(){
+        if (netWorkStateReceiver == null) {
+            netWorkStateReceiver = new NetWorkStateReceiver();
+        }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netWorkStateReceiver, filter);
+
+    }
+
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -411,6 +429,9 @@ public final class LocalService extends Service {
         unregisterReceiver(screenStateReceiver);
         if (batteryReceiver != null)
             unregisterReceiver(batteryReceiver);
+
+        if (netWorkStateReceiver != null)
+            unregisterReceiver(netWorkStateReceiver);
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
         }
