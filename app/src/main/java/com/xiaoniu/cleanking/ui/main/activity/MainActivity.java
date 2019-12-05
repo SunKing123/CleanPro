@@ -13,6 +13,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -31,7 +39,9 @@ import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
@@ -60,16 +70,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -737,5 +741,25 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         }
         mBottomBar.setCurrentItem(0);
+    }
+
+    /**
+     * 展示内部插屏广告
+     */
+    public void showScreenInside() {
+        if (null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
+            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+            if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
+                InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
+                Log.d("XiLei", "dataBean.isOpen()--main=" + dataBean.isOpen());
+                if (dataBean.isOpen()) {//内部插屏广告
+                    if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
+                        PreferenceUtil.saveScreenInsideTime();
+                        startActivity(new Intent(this, ScreenInsideActivity.class));
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
