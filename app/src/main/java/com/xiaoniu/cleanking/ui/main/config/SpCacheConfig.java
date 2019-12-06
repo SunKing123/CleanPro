@@ -126,7 +126,9 @@ public class SpCacheConfig {
     public static final String IS_USED_WECHAT = "is_used_wechat";
     public static final String IS_USED_COLL = "is_used_coll";
     public static final String IS_USED_GAME = "is_used_game";
-
+    //wifi连接状态
     public static final String WIFI_STATE = "wifi_state";
+    //充电状态切换
+    public static final String CHARGE_STATE = "charge_state";
 
 }

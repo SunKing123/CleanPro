@@ -22,6 +22,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -34,11 +35,16 @@ import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
-
-import androidx.annotation.NonNull;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -329,37 +335,17 @@ public final class LocalService extends Service {
         }
     }
 
-    //锁屏页面
-    public void startActivity(Context context) {
-        try {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
-            if (TextUtils.equals(auditSwitch, "1")){ //过审开关打开状态
-                Intent screenIntent = getIntent(context);
-                context.startActivity(screenIntent);
-            }
-        } catch (Exception e) {
-            Log.e("LockerService", "start lock activity error:" + e.getMessage());
-        }
-    }
 
-    //全局跳转锁屏页面
-    @NonNull
-    private Intent getIntent(Context context) {
-        Intent screenIntent = new Intent();
-        screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.LockActivity");
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        return screenIntent;
-    }
+
 
     //判断是否充电
     public void checkCharge() {
         try {
             boolean usb = false;//usb充电
             boolean ac = false;//交流电
-            boolean wireless = false;
+            boolean wireless = false; //无线充电
+            int chargePlug = -1;
+
             IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
             if (batteryReceiver == null) {
                 batteryReceiver = new BroadcastReceiver() {
@@ -374,25 +360,35 @@ public final class LocalService extends Service {
                         temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
                         int i = temp / 10;
                         temp = i > 0 ? i : 30 + NumberUtils.mathRandomInt(1, 3);
+                        Logger.i("zz--" + SystemUtils.getProcessName(context));
                     }
                 };
             }
             //注册接收器以获取电量信息
-            Intent powerIntent = registerReceiver(batteryReceiver, iFilter);
+            Intent powerIntent  = registerReceiver(batteryReceiver, iFilter);
             //----判断是否为充电状态-------------------------------
-            int chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+            chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
             usb = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
             ac = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
             //无线充电---API>=17
-            wireless = false;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
             }
+
+            Logger.i(SystemUtils.getProcessName(this) +"zz--" + (usb ?"usb": ac ? "ac" : wireless ? "wireless" : ""));
             isCharged = usb || ac || wireless;
         } catch (Exception e) {
             e.printStackTrace();
             isCharged = false;
         }
+
+        //充电状态变更wifi
+        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
+            startFullInsertAd(this);
+        }
+        Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
+        //更新sp当前充电状态
+        PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
 
     }
 
@@ -438,6 +434,45 @@ public final class LocalService extends Service {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer = null;
+        }
+    }
+
+
+    //全局跳转锁屏页面
+    public void startActivity(Context context) {
+        try {
+            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            if (TextUtils.equals(auditSwitch, "1")){ //过审开关打开状态
+                Intent screenIntent = new Intent();
+                screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.LockActivity");
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                context.startActivity(screenIntent);
+            }
+        } catch (Exception e) {
+            Log.e("LockerService", "start lock activity error:" + e.getMessage());
+        }
+    }
+
+    //全局跳转全屏插屏页面
+    public void startFullInsertAd(Context context) {
+        try {
+            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            //过审开关打开状态
+            //!PreferenceUtil.isShowAD()广告曝光状态
+            if (TextUtils.equals(auditSwitch, "1")&& !ActivityCollector.isActivityExist(PopLayerActivity.class)&& !ActivityCollector.isActivityExist(LockActivity.class)&& !PreferenceUtil.isShowAD()){
+                Intent screenIntent = new Intent();
+                screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity");
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                context.startActivity(screenIntent);
+            }
+        } catch (Exception e) {
+            Log.e("LockerService", "start lock activity error:" + e.getMessage());
         }
     }
 

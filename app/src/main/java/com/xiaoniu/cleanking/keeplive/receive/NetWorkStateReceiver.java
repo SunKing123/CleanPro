@@ -37,7 +37,6 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             //获取移动数据连接的信息
             NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             if (wifiNetworkInfo.isConnected()) {
-                Logger.i("zz---WIFI已连接");
                 wifiContected = 1;
             }
 
@@ -61,7 +60,6 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
                     NetworkInfo networkInfo = connMgr.getNetworkInfo(networks[i]);
                     if(networkInfo.getTypeName().toUpperCase().contains("WIFI")){
                         if(networkInfo.isConnected()){
-                            Logger.i("zz---WIFI已连接");
                             wifiContected = 1;
                         }
                     }
@@ -83,6 +81,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             Intent screenIntent = getIntent(context);
             context.startActivity(screenIntent);
         }
+        Logger.i("zz---WIFI" + (wifiContected == 0 ? "未连接" : "已连接"));
 
         //更新sp当前wifi状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, wifiContected);
@@ -90,7 +89,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
     }
 
 
-    //全局跳转锁屏页面
+    //全局跳转全屏插屏页面
     @NonNull
     private Intent getIntent(Context context) {
         Intent screenIntent = new Intent();

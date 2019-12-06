@@ -3,86 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/full_screen_insert_ad_header_layout"
-    android:background="@color/translucent"
+    android:background="@color/white"
     android:layout_height="wrap_content">
 
 
    <RelativeLayout
-       android:id="@+id/rel_ad_top"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:background="@drawable/insert_screen_ad_header_bg"
-       app:layout_constraintTop_toTopOf="parent">
-
-      <ImageView
-          android:id="@+id/insert_screen_rocket_icon"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="50dp"
-          android:layout_marginTop="6dp"
-          android:layout_marginRight="40dp"
-          android:scaleType="fitCenter"
-          android:src="@mipmap/insert_screen_ad_rocket" />
-
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toRightOf="@+id/insert_screen_rocket_icon"
-          android:orientation="vertical">
-
-         <TextView
-             android:id="@+id/progree_tv"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="已提速25%"
-             android:textColor="#ffffffff"
-             android:textSize="22sp" />
-
-         <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="8dp"
-             android:text="手机运行快如火箭"
-             android:textColor="#ffffffff"
-             android:textSize="15sp" />
-      </LinearLayout>
-
-      <TextView
-          android:id="@+id/full_screen_insert_ad_show_time_txt"
-          android:layout_width="23dp"
-          android:layout_height="23dp"
-          android:layout_alignParentTop="true"
-          android:layout_alignParentRight="true"
-          android:layout_marginTop="9dp"
-          android:layout_marginRight="9dp"
-          android:background="@drawable/insert_ad_time_count_bg"
-          android:gravity="center"
-          android:text="3s"
-          android:textColor="@color/white"
-          android:textSize="12sp" />
-
-      <ImageView
-          android:id="@+id/full_screen_insert_ad_close"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentTop="true"
-          android:layout_alignParentRight="true"
-          android:padding="9dp"
-          android:scaleType="fitCenter"
-          android:src="@mipmap/insert_screen_ad_close"
-          android:visibility="gone" />
-   </RelativeLayout>
-
-   <RelativeLayout
        android:id="@+id/flayout_ad_container"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:background="@color/translucent"
-       android:gravity="center"
-       android:layout_marginTop="10dp"
-       android:layout_marginBottom="10dp"
-       android:layout_below="@+id/rel_ad_top"  >
+       android:layout_height="match_parent">
 
    </RelativeLayout>
+
+   <TextView
+       android:id="@+id/full_insert_ad_show_time_txt"
+       android:layout_width="23dp"
+       android:layout_height="23dp"
+       android:layout_alignParentTop="true"
+       android:layout_alignParentRight="true"
+       android:layout_marginTop="15dp"
+       android:layout_marginRight="15dp"
+       android:background="@drawable/insert_ad_time_count_bg"
+       android:gravity="center"
+       android:text="3s"
+       android:textColor="@color/white"
+       android:textSize="12sp" />
+
+   <ImageView
+       android:id="@+id/full_insert_ad_close"
+       android:layout_width="23dp"
+       android:layout_height="23dp"
+       android:layout_alignParentTop="true"
+       android:layout_alignParentRight="true"
+       android:layout_marginTop="15dp"
+       android:layout_marginRight="15dp"
+       android:scaleType="fitCenter"
+       android:src="@mipmap/insert_screen_ad_close"
+       android:visibility="gone" />
 </RelativeLayout>

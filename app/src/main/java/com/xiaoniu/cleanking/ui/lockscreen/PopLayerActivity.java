@@ -113,7 +113,11 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 
     @Override
     public void onClick(View v) {

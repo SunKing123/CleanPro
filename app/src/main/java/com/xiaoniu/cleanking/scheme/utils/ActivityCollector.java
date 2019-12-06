@@ -58,6 +58,39 @@ public class ActivityCollector {
     }
 
     /**
+     * 判断多个Activity 是否至少一个存在
+     *
+     * @param clzlist
+     * @return
+     */
+    public static <T extends Activity> boolean isListActivityExist(Class<T>... clzlist) {
+        boolean res =false;
+        for (Class<T> clz : clzlist) {
+            Activity activity = getActivity(clz);
+            if (activity == null) {
+                res = false;
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if (activity.isFinishing() || activity.isDestroyed()) {
+                        res = false;
+                    } else {
+                        res = true;
+                        return res;
+                    }
+                } else {
+                    if (activity.isFinishing()) {
+                        res = false;
+                    } else {
+                        res = true;
+                        return res;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * 获得指定activity实例
      *
      * @param clazz Activity 的类对象
