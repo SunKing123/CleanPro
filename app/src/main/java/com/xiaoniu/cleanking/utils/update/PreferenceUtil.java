@@ -1322,6 +1322,26 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存热启动打底广告循环展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveBottomAdHotCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.BOTTOM_AD_HOT_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取热启动打底广告循环展示到第几个
+     */
+    public static int getBottomAdHotCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.BOTTOM_AD_HOT_COUNT, 0);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return

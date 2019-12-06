@@ -341,6 +341,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     }
 
+    private boolean mIsAdError;
+
     private void initGeekSdkAD() {
         mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, "cold_kp", new AdListener() {
@@ -375,7 +377,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                Log.e(TAG, "-----adError 热启动-----" + errorMsg);
+                Log.e(TAG, "-----adError 冷启动-----" + errorMsg);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "clod_splash_page", "clod_splash_page");
                 showProgressBar();
                 showBottomAd();
@@ -409,6 +411,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                     }
                     GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
+                        mIsAdError = true;
                         startActivityForResult(new Intent(this, AgentWebViewActivity.class)
                                 .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()), 100);
                     });
@@ -441,7 +444,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void onAnimationEnd(Animator animation) {
                 PreferenceUtil.saveShowAD(false);
-                jumpActivity();
+                if (!mIsAdError) {
+                    jumpActivity();
+                }
             }
 
             @Override
