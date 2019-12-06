@@ -103,6 +103,9 @@ public class SpCacheConfig {
     public static final String SCREEN_INSIDE_TIME = "ScreenInsideTime";
     public static final String BOTTOM_AD_COOL_COUNT = "BottomAdCoolCount";
     public static final String BOTTOM_AD_HOT_COUNT = "BottomAdHotCount";
+    public static final String FINISH_AD_ONE_COUNT = "FinishAdOneCount";
+    public static final String FINISH_AD_TWO_COUNT = "FinishAdTwoCount";
+    public static final String FINISH_AD_THREE_COUNT = "FinishAdThreeCount";
     public static final String BOTTOM_AD_LIST = "BottomAdList";
     public static final String BOTTOM_AD_LOCK_COUNT = "BottomAdLockCount";
 

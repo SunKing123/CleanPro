@@ -30,12 +30,20 @@ import com.xiaoniu.statistic.NiuDataAPI;
 public class AgentWebViewActivity extends BaseAgentWebActivity {
 
     private TextView mTitleTextView;
+    private String mWebFrom;
     private String sourcePage;
+    private String currentPage;
+    private String eventName;
+    private String eventCode;
+    private String eventCloseName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        if (null != getIntent().getStringExtra(ExtraConstant.WEB_FROM)) {
+            mWebFrom = getIntent().getStringExtra(ExtraConstant.WEB_FROM);
+        }
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
         LinearLayout mLinearLayout = (LinearLayout) this.findViewById(R.id.container);
         Toolbar mToolbar = (Toolbar) this.findViewById(R.id.toolbar);
@@ -46,10 +54,43 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        if (!TextUtils.isEmpty(mWebFrom)) {
+            if (mWebFrom.equals("SplashADActivity")) {
+                currentPage = "clod_splash_custom_ad_page";
+                eventCode = "clod_splash_custom_ad_page_view_page";
+                eventName = "冷启动打底广告页浏览";
+                eventCloseName = "冷启动打底广告页关闭点击";
+            }
+            if (mWebFrom.equals("SplashADHotActivity")) {
+                currentPage = "hot_splash_custom_ad_page";
+                eventCode = "hot_splash_custom_ad_page_view_page";
+                eventName = "热启动打底广告页浏览";
+                eventCloseName = "热启动打底广告页关闭点击";
+            }
+            if (mWebFrom.equals("FinishActivity")) {
+                currentPage = "success_custom_page";
+                eventCode = "success_custom_page_view_page";
+                eventName = "结果页打底广告页浏览";
+                eventCloseName = "结果页打底广告页关闭点击";
+            }
+            if (mWebFrom.equals("LockActivity")) {
+                currentPage = "lock_screen_custom_page";
+                eventCode = "lock_screen_custom_page";
+                eventName = "锁屏页打底广告页浏览";
+                eventCloseName = "锁屏页打底广告页关闭点击";
+            }
+        } else {
+            currentPage = "interactive_advertising_page";
+            eventCode = "interactive_advertising_page_view_page";
+            eventName = "互动式广告页浏览";
+            eventCloseName = "互动式广告关闭点击";
+        }
+
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatisticsUtils.trackClick("close_click", "互动式广告关闭点击", sourcePage, "interactive_advertising_page");
+                StatisticsUtils.trackClick("close_click", eventCloseName, sourcePage, currentPage);
                 finish();
             }
         });
@@ -58,13 +99,13 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("interactive_advertising_page_view_page","互动式广告页浏览");
+        NiuDataAPI.onPageStart(eventCode, eventName);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NiuDataAPIUtil.onPageEnd(sourcePage, "interactive_advertising_page", "interactive_advertising_page_view_page", "互动式广告页浏览");
+        NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, eventCode, eventName);
     }
 
     @NonNull
@@ -75,7 +116,7 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("system_return_click", "互动式广告关闭点击", sourcePage, "interactive_advertising_page");
+        StatisticsUtils.trackClick("system_return_click", eventCloseName, sourcePage, currentPage);
         super.onBackPressed();
     }
 

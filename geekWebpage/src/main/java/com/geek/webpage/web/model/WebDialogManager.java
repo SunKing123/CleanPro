@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 
@@ -44,7 +43,6 @@ public class WebDialogManager {
         dialog.getWebView().setWebViewListener(new WebViewListener() {
             @Override
             public void onLoad(WebView view, int newProgress) {
-                Log.d("XiLei", "newProgress=" + newProgress);
                 if (null != activity && !activity.isFinishing()) {
                     if (newProgress == 100) {
                         if (dialog != null && !dialog.isShowing()) {

@@ -363,7 +363,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 Log.d(TAG, "-----adExposed-----");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", "");
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
             }
 
             @Override
@@ -371,7 +371,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 Log.d(TAG, "-----adClicked-----");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", "");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
             }
 
             @Override
@@ -408,11 +408,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                             mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", "clod_splash_page", "clod_splash_page", dataBean.getSwitcherName());
                     GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
                         mIsAdError = true;
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", "clod_splash_page", "clod_splash_page", dataBean.getSwitcherName());
+                        AppHolder.getInstance().setCleanFinishSourcePageId("clod_splash_page");
                         startActivityForResult(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()), 100);
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
+                                .putExtra(ExtraConstant.WEB_FROM,"SplashADActivity"), 100);
                     });
                 }
             }

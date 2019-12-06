@@ -78,14 +78,12 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
                 || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
             return;
-        Log.d("XiLei", "PreferenceUtil.getRedPacketShowCount()=" + PreferenceUtil.getRedPacketShowCount());
         switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
             case 5:
                 if (null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
                     Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-                        Log.d("XiLei", "dataBean.isOpen()=" + dataBean.isOpen());
                         if (dataBean.isOpen()) {//内部插屏广告
                             if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
                                 PreferenceUtil.saveScreenInsideTime();
@@ -135,7 +133,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private void initGeekSdkAD() {
         mAdManager = GeekAdSdk.getAdsManger();
-//        mAdManager.loadSplashAd(this, "hot_kp", new AdListener() { //暂时注释
         mAdManager.loadSplashAd(this, "hot_kp", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -154,14 +151,14 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed-----");
                 if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", "");
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
                 if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", "");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
             }
 
             @Override
@@ -198,11 +195,15 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                             mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", "hot_splash_page", "hot_splash_page", dataBean.getSwitcherName());
                     GlideUtils.loadImage(SplashADHotActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
                         mIsAdError = true;
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", "hot_splash_page", "hot_splash_page", dataBean.getSwitcherName());
+                        AppHolder.getInstance().setCleanFinishSourcePageId("hot_splash_page");
                         startActivityForResult(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()), 100);
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
+                                .putExtra(ExtraConstant.WEB_FROM, "SplashADHotActivity"), 100);
                     });
                 }
             }

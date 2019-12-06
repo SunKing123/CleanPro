@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -61,9 +64,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 /**
  * Created by admin on 2017/6/8.
  */
@@ -107,8 +107,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         homeCatch(application);
         initLifecycle(application);
 
-        Logger.addLogAdapter(new AndroidLogAdapter(){
-            @Override public boolean isLoggable(int priority, String tag) {
+        Logger.addLogAdapter(new AndroidLogAdapter() {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
                 return BuildConfig.DEBUG;
             }
         });
@@ -290,28 +291,25 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
+
     public void initLifecycle(Application application) {
         LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
             @Override
             public void onBecameForeground(Activity activity) {
-                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)){
+                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
                     PreferenceUtil.getInstants().saveInt("isback", 0);
-                }else{//非当前主进程
+                } else {//非当前主进程
                     return;
                 }
-
-                Log.d("XiLei","1111111");
                 if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) || ActivityCollector.isActivityExist(PopLayerActivity.class)
                         || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class)
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;
-                Log.d("XiLei","222222");
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                         if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {
-                            Log.d("XiLei","3333");
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
