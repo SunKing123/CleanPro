@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
@@ -30,6 +31,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -44,6 +46,7 @@ import com.xiaoniu.cleanking.ui.main.bean.weatherdao.Weather72HEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherResponeUtils;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherUtils;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
@@ -502,7 +505,22 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 红包
      */
     public void getRedPacketList() {
-        mView.showScreenInside(); //内部插屏广告
+        //展示内部插屏广告
+        if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchmap()
+                && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
+            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+            if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
+                InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
+                Log.d("XiLei", "dataBean.isOpen()--main=" + dataBean.isOpen());
+                if (dataBean.isOpen()) {//内部插屏广告
+                    if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
+                        PreferenceUtil.saveScreenInsideTime();
+                        mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
+                        return;
+                    }
+                }
+            }
+        }
         if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
