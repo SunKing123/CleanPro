@@ -30,10 +30,12 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -48,9 +50,9 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -104,7 +106,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
 
-    FrameLayout ad_container_pos01, ad_container_pos02;
+    private FrameLayout ad_container_pos01, ad_container_pos02;
+    private ImageView error_ad_iv1, error_ad_iv2;
 
     @Override
     protected int getLayoutId() {
@@ -144,12 +147,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
 
         ad_container_pos01 = header.findViewById(R.id.ad_container_pos01);
+        error_ad_iv1 = header.findViewById(R.id.error_ad_iv1);
         mTvSize = header.findViewById(R.id.tv_size);
         mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
+
         ad_container_pos02 = headerTool.findViewById(R.id.ad_container_pos02);
+        error_ad_iv2 = headerTool.findViewById(R.id.error_ad_iv2);
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
         v_clean_all = headerTool.findViewById(R.id.v_clean_all);
         v_game = headerTool.findViewById(R.id.v_game);
@@ -996,12 +1002,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
@@ -1211,9 +1211,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void adSuccess(AdInfo info) {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                 if (info == null) {
-                    LogUtils.e("DEMO>>>adSuccess， AdInfo is empty");
+                    Log.d(TAG, "DEMO>>>adSuccess， AdInfo is empty");
                 } else {
-                    LogUtils.e("DEMO>>>adSuccess， " + info.toString());
+                    Log.d(TAG, "DEMO>>>adSuccess， " + info.toString());
                 }
                 View adView = adManager.getAdView();
                 if (adView != null) {
@@ -1225,11 +1225,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void adExposed(AdInfo info) {
                 if (info == null) {
-                    LogUtils.e("DEMO>>>adExposed， AdInfo is empty");
+                    Log.d(TAG, "DEMO>>>adExposed， AdInfo is empty");
                 } else {
-                    LogUtils.e("DEMO>>>adExposed， " + info.toString());
+                    Log.d(TAG, "DEMO>>>adExposed， " + info.toString());
                 }
-                LogUtils.e("adExposed");
+                Log.d(TAG, "adExposed");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
@@ -1242,10 +1242,52 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                LogUtils.e("DEMO>>>adError： " + errorMsg);
+                Log.d(TAG, "adError 111： " + errorMsg);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", sourcePage, currentPage);
+                showBottomAd();
             }
         });
+    }
+
+    private int mBottomAdShowCount = 0;
+
+    /**
+     * 打底广告
+     */
+    private void showBottomAd() {
+        if (null != AppHolder.getInstance().getBottomAdList() &&
+                AppHolder.getInstance().getBottomAdList().size() > 0) {
+            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
+                if (dataBean.getSwitcherKey().equals(PositionId.KEY_CLEAN_ALL)
+                        && dataBean.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
+                    if (dataBean.getShowType() == 1) { //循环
+                        mBottomAdShowCount = PreferenceUtil.getFinishAdOneCount();
+                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
+                            PreferenceUtil.saveFinishAdOneCount(0);
+                        } else {
+                            PreferenceUtil.saveFinishAdOneCount(PreferenceUtil.getFinishAdOneCount() + 1);
+                        }
+                    } else { //随机
+                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
+                            mBottomAdShowCount = 0;
+                        } else {
+                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
+                        }
+                    }
+                    ad_container_pos01.setVisibility(View.GONE);
+                    error_ad_iv1.setVisibility(View.VISIBLE);
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
+                    GlideUtils.loadImage(this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), error_ad_iv1);
+                    error_ad_iv1.setOnClickListener(v -> {
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
+                        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
+                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
+                                .putExtra(ExtraConstant.WEB_FROM, "FinishActivity"), 100);
+                    });
+                }
+            }
+        }
     }
 
     public void initAd02() {
@@ -1265,7 +1307,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void adExposed(AdInfo info) {
-                LogUtils.e("adExposed");
+                Log.d(TAG, "adExposed");
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
@@ -1279,11 +1321,67 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void adError(int errorCode, String errorMsg) {
-                LogUtils.e("adError2222");
+                Log.d(TAG, "adError2222");
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "fail", sourcePage, currentPage);
+                showBottomAd2();
             }
         });
     }
 
+    private int mBottomAdShowCount2 = 0;
+
+    /**
+     * 打底广告
+     */
+    private void showBottomAd2() {
+        if (null != AppHolder.getInstance().getBottomAdList() &&
+                AppHolder.getInstance().getBottomAdList().size() > 0) {
+            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
+                if (dataBean.getSwitcherKey().equals(PositionId.KEY_CLEAN_ALL)
+                        && dataBean.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
+                    if (dataBean.getShowType() == 1) { //循环
+                        mBottomAdShowCount2 = PreferenceUtil.getFinishAdTwoCount();
+                        if (mBottomAdShowCount2 >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
+                            PreferenceUtil.saveFinishAdTwoCount(0);
+                        } else {
+                            PreferenceUtil.saveFinishAdTwoCount(PreferenceUtil.getFinishAdTwoCount() + 1);
+                        }
+                    } else { //随机
+                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
+                            mBottomAdShowCount2 = 0;
+                        } else {
+                            mBottomAdShowCount2 = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
+                        }
+                    }
+                    ad_container_pos02.setVisibility(View.GONE);
+                    error_ad_iv2.setVisibility(View.VISIBLE);
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
+                    GlideUtils.loadImage(this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount2).getImgUrl(), error_ad_iv2);
+                    error_ad_iv2.setOnClickListener(v -> {
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "2", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
+                        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
+                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount2).getLinkUrl())
+                                .putExtra(ExtraConstant.WEB_FROM, "FinishActivity"), 200);
+                    });
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 100:
+                showBottomAd();
+                return;
+            case 200:
+                showBottomAd2();
+                return;
+        }
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 
 }

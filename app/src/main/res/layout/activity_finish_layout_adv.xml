@@ -90,32 +90,31 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_finish" />
+
             <FrameLayout
                 android:id="@+id/ad_container_pos03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginTop="-60dp"
-                android:layout_marginRight="@dimen/dimen_12dp">
-            </FrameLayout>
+                android:layout_marginRight="@dimen/dimen_12dp"></FrameLayout>
+
             <ImageView
                 android:id="@+id/iv_error"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:visibility="gone"
-                android:src="@mipmap/icon_no_net"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="550dp"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="@dimen/dimen_12dp"
+                android:layout_marginTop="-60dp"
+                android:layout_marginRight="@dimen/dimen_12dp" />
         </LinearLayout>
 
     </ScrollView>
-
-
 
 
 </LinearLayout>

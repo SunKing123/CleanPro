@@ -1342,6 +1342,66 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存完成页广告位1打底广告循环展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveFinishAdOneCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.FINISH_AD_ONE_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取完成页广告位1打底广告循环展示到第几个
+     */
+    public static int getFinishAdOneCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.FINISH_AD_ONE_COUNT, 0);
+    }
+
+    /**
+     * 保存完成页广告位2打底广告循环展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveFinishAdTwoCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.FINISH_AD_TWO_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取完成页广告位2打底广告循环展示到第几个
+     */
+    public static int getFinishAdTwoCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.FINISH_AD_TWO_COUNT, 0);
+    }
+
+    /**
+     * 保存完成页广告位3打底广告循环展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveFinishAdThreeCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.FINISH_AD_THREE_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     * 获取完成页广告位3打底广告循环展示到第几个
+     */
+    public static int getFinishAdThreeCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.FINISH_AD_THREE_COUNT, 0);
+    }
+
+    /**
      * 判断6大功能在清理完成页需要展示的数量
      *
      * @return

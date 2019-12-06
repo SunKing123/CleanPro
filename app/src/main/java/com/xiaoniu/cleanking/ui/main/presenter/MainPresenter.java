@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -116,7 +115,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(AppVersion updateInfoEntity) {
-                Log.d("XiLei", "queryAppVersion");
                 setAppVersion(updateInfoEntity);
             }
 
@@ -511,7 +509,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-                Log.d("XiLei", "dataBean.isOpen()--main=" + dataBean.isOpen());
                 if (dataBean.isOpen()) {//内部插屏广告
                     if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
                         PreferenceUtil.saveScreenInsideTime();
@@ -865,7 +862,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(InsertAdSwitchInfoList switchInfoList) {
-                Log.d("XiLei", "getScreentSwitch");
                 AppHolder.getInstance().setInsertAdSwitchInfoList(switchInfoList);
             }
 
