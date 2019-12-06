@@ -104,6 +104,7 @@ public class SpCacheConfig {
     public static final String BOTTOM_AD_COOL_COUNT = "BottomAdCoolCount";
     public static final String BOTTOM_AD_HOT_COUNT = "BottomAdHotCount";
     public static final String BOTTOM_AD_LIST = "BottomAdList";
+    public static final String BOTTOM_AD_LOCK_COUNT = "BottomAdLockCount";
 
     //埋点上一级页面
     public static final String ONKEY = "one_key";
@@ -131,5 +132,20 @@ public class SpCacheConfig {
     public static final String WIFI_STATE = "wifi_state";
     //充电状态切换
     public static final String CHARGE_STATE = "charge_state";
+
+    //外部插屏时间、次数
+    public static final String POP_LAYER_TIME = "pop_time";
+    public static final String POP_LAYER_NUMBERS = "pop_numbers";
+
+    //外部全屏插屏时间、次数
+    public static final String POP_FULL_LAYER_TIME = "pop_full_time";
+    public static final String POP_FULL_LAYER_NUMBERS = "pop_full_numbers";
+
+
+
+
+
+
+
 
 }

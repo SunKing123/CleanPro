@@ -13,6 +13,8 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -77,7 +79,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, "external_advertising_ad_1", new AdListener() {
+        adManager.loadAd(this, PositionId.KEY_EXTERNAL_ADVERTISING_AD_1, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "external_advertising_page", "external_advertising_page");
@@ -87,9 +89,9 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                     full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
                     flayoutAdContainer.removeAllViews();
                     flayoutAdContainer.addView(adView);
-                    int number = PreferenceUtil.getInstants().getInt("pop_numbers");
-                    PreferenceUtil.getInstants().saveInt("pop_numbers",number+1);
-                    PreferenceUtil.getInstants().save("pop_time", String.valueOf(System.currentTimeMillis()));
+                    int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
+                    PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS,number+1);
+                    PreferenceUtil.getInstants().save(SpCacheConfig.POP_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
                 }
             }
 

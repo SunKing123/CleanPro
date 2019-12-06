@@ -315,7 +315,12 @@
         android:background="@drawable/ad_container_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lock_ad_container" >
+        <ImageView
+            android:id="@+id/error_ad_iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
+            android:scaleType="fitXY" />
     </RelativeLayout>
 
     <com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView

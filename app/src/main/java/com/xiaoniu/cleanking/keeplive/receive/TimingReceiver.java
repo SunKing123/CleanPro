@@ -118,13 +118,13 @@ public class TimingReceiver extends BroadcastReceiver {
             if (!isOpen) return;
 
 
-            long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get("pop_time")) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get("pop_time"));
-            int number = PreferenceUtil.getInstants().getInt("pop_numbers");
+            long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME)) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME));
+            int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
 
-            //一小时内三次
+            //一小时内N次
             if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime)<= (60 * 60 * 1000) && number < showTimes)) {
                 if((System.currentTimeMillis() - pretime)> (60 * 60 * 1000)){//超过一小时
-                    PreferenceUtil.getInstants().saveInt("pop_numbers",0);
+                    PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS,0);
                 }
                 if(NetworkUtils.isNetConnected()){
                     Intent screenIntent = getIntent(context);
@@ -140,7 +140,7 @@ public class TimingReceiver extends BroadcastReceiver {
     @NonNull
     private Intent getIntent(Context context) {
         Intent screenIntent = new Intent();
-        screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity");
+        screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_POPLAYERACTIVITY);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);

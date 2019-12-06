@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.lockscreen;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -24,19 +22,22 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.google.gson.Gson;
-import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -46,7 +47,6 @@ import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,9 +54,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,21 +66,14 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class LockActivity extends AppCompatActivity implements View.OnClickListener {
     private TouchToUnLockView mUnlockView;
-    private ImageView lockDial;
-    private ImageView lockCamera;
-    private LockExitDialog lockExitDialog;
-    private ImageView batteryIcon;
     private RelativeLayout relAd;
     private TextView mLockTime, mLockDate,tv_weather_temp;
     private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus;
-    private ImageView iv_file_btn,iv_ram_btn,iv_virus_btn;
+    private ImageView iv_file_btn,iv_ram_btn,iv_virus_btn,mErrorAdIv;
     private TextView tv_file_size,tv_ram_size,tv_virus_size;
-    private LinearLayout lin_tem_top,lin_tem_bottom;
+    private LinearLayout lin_tem_top,lin_tem_bottom,linAdLayout;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
-    private RxPermissions rxPermissions;
-    private LinearLayout linAdLayout;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private TextView tv_weather_state,tv_city;
 /*
     @Override
@@ -118,6 +111,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         rel_clean_file = ViewUtils.get(this, R.id.rel_clean_file);
         rel_clean_ram = ViewUtils.get(this, R.id.rel_clean_ram);
         rel_clean_virus = ViewUtils.get(this, R.id.rel_clean_virus);
+        mErrorAdIv = ViewUtils.get(this,R.id.error_ad_iv);
 
         lin_tem_top = ViewUtils.get(this,R.id.lin_tem_top);
         lin_tem_bottom = ViewUtils.get(this,R.id.lin_tem_bottom);
@@ -277,12 +271,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void adInit() {
 
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, "lock_screen_advertising", new AdListener() {
+        adManager.loadAd(this, PositionId.KEY_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
                 View adView = adManager.getAdView();
-
                 if (adView != null&&null!=relAd ) {
                     relAd.removeAllViews();
                     relAd.addView(adView);
@@ -305,45 +298,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void adError(int errorCode, String errorMsg) {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
-
+                Logger.d("zz--" + errorMsg);
+                showBottomAd();
             }
         });
     }
 
-    private String content = null;
-
-   /* private void checkLockState() {
-        if (rxPermissions == null) {
-            return;
-        }
-        if (rxPermissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            executorService.execute(() -> {
-                content = FileUtils.readTextFile();
-                runOnUiThread(() -> {
-                    if (!TextUtils.isEmpty(content) && content.contains("com.geek.lw")) {
-                        finish();
-                    }
-                });
-                FileUtils.writeTextFile(getPackageName());
-            });
-        } else {
-            rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe((isGranted) -> {
-                if (isGranted) {
-                    executorService.execute(() -> {
-                        content = FileUtils.readTextFile();
-                        runOnUiThread(() -> {
-                            if (!TextUtils.isEmpty(content) && content.contains("com.geek.qukan.video")) {
-                                finish();
-                            }
-                        });
-                        FileUtils.writeTextFile(getPackageName());
-                    });
-                } else {
-                    LogUtils.i("permission dined");
-                }
-            });
-        }
-    }*/
 
     @Override
     protected void onResume() {
@@ -603,10 +563,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     if (action.equals(Intent.ACTION_TIME_TICK)) {
                         updateTimeUI();
                     }
-                    /*else if (action.equals(Intent.ACTION_POWER_CONNECTED) || action.equals(Intent.ACTION_BATTERY_CHANGED)
-                            || action.equals(Intent.ACTION_POWER_DISCONNECTED)) {
-                        batteryIcon.setImageResource(PowerUtil.isCharging(intent) ? R.drawable.lock_battery_charging : R.drawable.lock_battery_normal);
-                    }*/
+
                 }
             }
         }
@@ -623,35 +580,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         });*/
     }
 
-    private void emergencyDial() {
-        try {
-            Intent intent = new Intent();
-            intent.setAction("com.android.phone.EmergencyDialer.DIAL");
-            startActivity(intent);
-        } catch (Exception e) {
-            LogUtils.e("dial error:" + e.getMessage());
-        }
-    }
 
-    private void openCamera() {
-        try {
-            if (!rxPermissions.isGranted(Manifest.permission.CAMERA) || !rxPermissions.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe((isGranted) -> {
-                    if (isGranted) {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivity(intent);
-                    } else {
-                        ToastUtils.showShort("相机权限拒绝");
-                    }
-                });
-            } else {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivity(intent);
-            }
-        } catch (Exception e) {
-            LogUtils.e("open camera error:" + e.getMessage());
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -724,6 +653,41 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             setRandState(1);
+        }
+    }
+
+
+    /**
+     * 锁屏打底广告
+     */
+    private int mBottomAdShowCount = 0;
+    private void showBottomAd() {
+        List<BottoomAdList.DataBean> mBottoomAdList = AppHolder.getInstance().getBottomAdList();
+        if (null != mBottoomAdList && mBottoomAdList.size() > 0) {
+            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
+                if (dataBean.getSwitcherKey().equals(PositionId.KEY_LOCK_SCREEN)) {
+                    Logger.d("zz--1"+dataBean.getAdvertPosition());
+                    if (dataBean.getShowType() == 1) { //循环
+                        mBottomAdShowCount = PreferenceUtil.getBottomLockAdCount();
+                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
+                            PreferenceUtil.saveBottomLockAdCount(0);
+                        } else {
+                            PreferenceUtil.saveBottomLockAdCount(PreferenceUtil.getBottomLockAdCount() + 1);
+                        }
+                    } else { //随机
+                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
+                            mBottomAdShowCount = 0;
+                        } else {
+                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
+                        }
+                    }
+                    GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    mErrorAdIv.setOnClickListener(v -> {
+                        startActivity(new Intent(this, AgentWebViewActivity.class)
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()));
+                    });
+                }
+            }
         }
     }
 

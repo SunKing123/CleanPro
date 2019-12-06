@@ -56,4 +56,18 @@ public class SchemeConstant {
 
     }
 
+    //根据className启动
+    public static class StartFromClassName{
+        //插屏全屏页面
+        public static final String CLASS_FULLPOPLAYERACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity";
+
+        //插屏全屏页面
+        public static final String CLASS_POPLAYERACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity";
+
+        //插屏全屏页面
+        public static final String CLASS_LOCKACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.LockActivity";
+
+
+    }
+
 }

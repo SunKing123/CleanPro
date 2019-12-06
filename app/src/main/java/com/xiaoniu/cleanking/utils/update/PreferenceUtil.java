@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1341,6 +1342,28 @@ public class PreferenceUtil {
         return sharedPreferences.getInt(SpCacheConfig.BOTTOM_AD_HOT_COUNT, 0);
     }
 
+
+
+    /**
+     * 锁屏打底广告循环展示到第几个
+     *
+     * @return
+     */
+    public static boolean saveBottomLockAdCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.BOTTOM_AD_LOCK_COUNT, count).commit();
+        return true;
+    }
+
+    /**
+     *  锁屏打底广告循环展示到第几个
+     */
+    public static int getBottomLockAdCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.BOTTOM_AD_LOCK_COUNT, 0);
+    }
+
     /**
      * 判断6大功能在清理完成页需要展示的数量
      *
@@ -1451,6 +1474,26 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
+    }
+
+
+    //全屏插屏时间展示逻辑
+    public static  boolean fullInsertPageIsShow(int showTimes){
+        long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get(SpCacheConfig.POP_FULL_LAYER_TIME)) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get(SpCacheConfig.POP_FULL_LAYER_TIME));
+        int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_FULL_LAYER_NUMBERS);
+        //一小时内showTimes次
+        if (pretime <= 0 || (System.currentTimeMillis() - pretime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
+            if ((System.currentTimeMillis() - pretime) > (60 * 60 * 1000)) {//超过一小时重置次数
+                PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, 0);
+            }
+            if (NetworkUtils.isNetConnected()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
 

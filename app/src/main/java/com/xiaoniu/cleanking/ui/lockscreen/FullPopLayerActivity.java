@@ -80,7 +80,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
                     flayoutAdContainer.addView(adView);
                     int number = PreferenceUtil.getInstants().getInt("pop_numbers");
                     PreferenceUtil.getInstants().saveInt("pop_numbers",number+1);
-                    PreferenceUtil.getInstants().save("pop_time", String.valueOf(System.currentTimeMillis()));
+                    PreferenceUtil.getInstants().save(SpCacheConfig.POP_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
                 }
             }
 

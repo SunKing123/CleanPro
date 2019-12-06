@@ -58,10 +58,17 @@ public class PositionId {
     public static final String KEY_NET_SCREEN = "page_net_speed_screen";
     public static final String KEY_QQ_SCREEN = "page_qq_clear_complete_screen";
     public static final String KEY_NEIBU_SCREEN = "page_internal_page";
+    public static final String KEY_PAGE_EXTERNAL_FULL = "page_external_full";    //外部全屏插屏
+    public static final String KEY_PAGE_INTERNAL_EXTERNAL_FULL = "page_internal_external_full"; //内外部全屏插屏
+    public static final String KEY_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
+    public static final String KEY_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
+
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";
     public static final String KEY_RED_JILI = "page_pop_up_encourag";
     public static final String KEY_GAME_JILI = "page_speed_game_encourag";
+
+
 
 }

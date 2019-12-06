@@ -26,6 +26,7 @@ import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
@@ -35,16 +36,21 @@ import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
+
+import java.util.Map;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -444,7 +450,7 @@ public final class LocalService extends Service {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
             if (TextUtils.equals(auditSwitch, "1")){ //过审开关打开状态
                 Intent screenIntent = new Intent();
-                screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.LockActivity");
+                screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -461,20 +467,53 @@ public final class LocalService extends Service {
         try {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
             //过审开关打开状态
-            //!PreferenceUtil.isShowAD()广告曝光状态
-            if (TextUtils.equals(auditSwitch, "1")&& !ActivityCollector.isActivityExist(PopLayerActivity.class)&& !ActivityCollector.isActivityExist(LockActivity.class)&& !PreferenceUtil.isShowAD()){
-                Intent screenIntent = new Intent();
-                screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity");
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                context.startActivity(screenIntent);
+            //!PreferenceUtil.isShowAD()广告展示状态
+            if (TextUtils.equals(auditSwitch, "1") && !ActivityCollector.isActivityExist(PopLayerActivity.class) && !ActivityCollector.isActivityExist(LockActivity.class) && !PreferenceUtil.isShowAD()) {
+                if (null != context && null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
+                    Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+                    if (null != map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL)) { //内外部插屏
+                        int showTimes = 2;
+                        InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL);
+                        if (dataBean.isOpen()) {
+                            showTimes = dataBean.getShowRate();
+                            if(PreferenceUtil.fullInsertPageIsShow(showTimes)){
+                                startFullInsertIntent(context);
+                            }
+
+                        } else {
+                            if (null != map.get(PositionId.KEY_PAGE_EXTERNAL_FULL)) {//外部插屏
+                                InsertAdSwitchInfoList.DataBean dataBean01 = map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL);
+                                if (dataBean01.isOpen()) {
+                                    showTimes = dataBean.getShowRate();
+                                    //判断应用是否进入后台
+                                    int isBack = PreferenceUtil.getInstants().getInt("isback");
+                                    if(isBack!=1)
+                                        return;
+
+                                    if(PreferenceUtil.fullInsertPageIsShow(showTimes)){
+                                        startFullInsertIntent(context);
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
         }
     }
 
+
+    public void startFullInsertIntent(Context context){
+        Intent screenIntent = new Intent();
+        screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        context.startActivity(screenIntent);
+    }
 
 }
