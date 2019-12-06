@@ -7,6 +7,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -16,10 +19,13 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -27,11 +33,17 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.Random;
+
+import butterknife.BindView;
 
 /**
  * 热启动开屏广告
  */
 public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
+
+    @BindView(R.id.error_ad_iv)
+    ImageView mErrorAdIv;
 
     private ViewGroup container;
     private RoundProgressBar skipView;
@@ -119,6 +131,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         StatisticsUtils.customTrackEvent("hot_splash_page_custom", "热启动页创建时", "hot_splash_page", "hot_splash_page");
     }
 
+    private boolean mIsAdError;
+
     private void initGeekSdkAD() {
         mAdManager = GeekAdSdk.getAdsManger();
 //        mAdManager.loadSplashAd(this, "hot_kp", new AdListener() { //暂时注释
@@ -154,10 +168,55 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             public void adError(int errorCode, String errorMsg) {
                 Log.e(TAG, "-----adError 热启动-----" + errorMsg);
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "hot_splash_page");
-                finish();
-                showRedPacket();
+                showProgressBar();
+                showBottomAd();
             }
         });
+    }
+
+    private int mBottomAdShowCount = 0;
+
+    /**
+     * 打底广告
+     */
+    private void showBottomAd() {
+        if (null != AppHolder.getInstance().getBottomAdList() &&
+                AppHolder.getInstance().getBottomAdList().size() > 0) {
+            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
+                if (dataBean.getAdvertPosition().equals(PositionId.HOT_CODE)) {
+                    if (dataBean.getShowType() == 1) { //循环
+                        mBottomAdShowCount = PreferenceUtil.getBottomAdHotCount();
+                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
+                            PreferenceUtil.saveBottomAdHotCount(0);
+                        } else {
+                            PreferenceUtil.saveBottomAdHotCount(PreferenceUtil.getBottomAdHotCount() + 1);
+                        }
+                    } else { //随机
+                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
+                            mBottomAdShowCount = 0;
+                        } else {
+                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
+                        }
+                    }
+                    GlideUtils.loadImage(SplashADHotActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    mErrorAdIv.setOnClickListener(v -> {
+                        mIsAdError = true;
+                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()), 100);
+                    });
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 100:
+                jumpActivity();
+                break;
+        }
     }
 
     @Override
@@ -189,7 +248,9 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                jumpActivity();
+                if (!mIsAdError) {
+                    jumpActivity();
+                }
             }
 
             @Override

@@ -743,23 +743,4 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mBottomBar.setCurrentItem(0);
     }
 
-    /**
-     * 展示内部插屏广告
-     */
-    public void showScreenInside() {
-        if (null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
-            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
-            if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
-                InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-                Log.d("XiLei", "dataBean.isOpen()--main=" + dataBean.isOpen());
-                if (dataBean.isOpen()) {//内部插屏广告
-                    if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
-                        PreferenceUtil.saveScreenInsideTime();
-                        startActivity(new Intent(this, ScreenInsideActivity.class));
-                        return;
-                    }
-                }
-            }
-        }
-    }
 }
