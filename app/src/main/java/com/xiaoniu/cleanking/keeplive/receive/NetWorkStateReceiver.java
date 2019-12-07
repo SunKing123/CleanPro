@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -99,10 +98,11 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
 
     //全局跳转全屏插屏页面
     public void startFullInsertAd(Context context) {
-        try {
+//        try {
             String auditSwitch = SPUtil.getString(context, AppApplication.AuditSwitch, "1");
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
+            Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));
             if (TextUtils.equals(auditSwitch, "1") && !ActivityCollector.isActivityExist(PopLayerActivity.class) && !ActivityCollector.isActivityExist(LockActivity.class) && !PreferenceUtil.isShowAD()) {
                 if (null != context && null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
                     Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
@@ -135,9 +135,9 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
                     }
                 }
             }
-        } catch (Exception e) {
+      /*  } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
-        }
+        }*/
     }
 
 

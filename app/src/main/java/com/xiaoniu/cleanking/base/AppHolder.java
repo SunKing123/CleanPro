@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.base;
 
+import android.text.TextUtils;
+
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -14,7 +16,6 @@ import java.util.Map;
  * 保存埋点来源
  */
 public class AppHolder {
-    private static AppHolder appHolder;
 
     private AppHolder() {
     }
@@ -39,6 +40,25 @@ public class AppHolder {
      */
     private String otherSourcePageId = "home_page";
 
+    //总广告
+    private SwitchInfoList switchInfoList;
+
+    //插屏广告
+    private Map<String, InsertAdSwitchInfoList.DataBean> insertAdSwitchmap = new HashMap<>();
+
+    //兜底广告
+    private List<BottoomAdList.DataBean> mBottoomAdList;
+
+    //红包弹窗
+    private RedPacketEntity mRedPacketEntity;
+
+    //底部Icon
+    private IconsEntity mIconsEntity;
+
+    //完成页sourcePageId暂存
+    private String cleanFinishSourcePageId = "";
+
+
 
     public String getSourcePageId() {
         return sourcePageId;
@@ -56,9 +76,7 @@ public class AppHolder {
         return otherSourcePageId;
     }
 
-    private SwitchInfoList switchInfoList;
 
-    private Map<String, InsertAdSwitchInfoList.DataBean> insertAdSwitchmap = new HashMap<>();
 
     public Map<String, InsertAdSwitchInfoList.DataBean> getInsertAdSwitchmap() {
         return insertAdSwitchmap;
@@ -81,7 +99,7 @@ public class AppHolder {
         return switchInfoList;
     }
 
-    private List<BottoomAdList.DataBean> mBottoomAdList;
+
 
     public void setBottomAdList(List<BottoomAdList.DataBean> switchInfoList) {
         this.mBottoomAdList = switchInfoList;
@@ -91,7 +109,7 @@ public class AppHolder {
         return mBottoomAdList;
     }
 
-    private RedPacketEntity mRedPacketEntity;
+
 
     public void setRedPacketEntityList(RedPacketEntity redPacketEntity) {
         this.mRedPacketEntity = redPacketEntity;
@@ -101,7 +119,7 @@ public class AppHolder {
         return mRedPacketEntity;
     }
 
-    private IconsEntity mIconsEntity;
+
 
     public void setIconsEntityList(IconsEntity iconsEntity) {
         this.mIconsEntity = iconsEntity;
@@ -111,16 +129,6 @@ public class AppHolder {
         return mIconsEntity;
     }
 
-    private String cleanFinishSourcePageId = "";
-    private boolean isPush = false;
-
-    public boolean isPush() {
-        return isPush;
-    }
-
-    public void setPush(boolean push) {
-        isPush = push;
-    }
 
     public String getCleanFinishSourcePageId() {
         return cleanFinishSourcePageId;
@@ -128,5 +136,57 @@ public class AppHolder {
 
     public void setCleanFinishSourcePageId(String cleanFinishSourcePageId) {
         this.cleanFinishSourcePageId = cleanFinishSourcePageId;
+    }
+
+    /**
+     *  总开关检查
+     * @param configKey
+     * @param advertPosition
+     * @return
+     */
+    public boolean checkAdSwitch(String configKey,String advertPosition){
+        boolean isOpen = false;
+        if (null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey) && !TextUtils.isEmpty(advertPosition)) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (configKey.equals(switchInfoList.getConfigKey()) && advertPosition.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+       return isOpen;
+    }
+
+
+    /**
+     *  总开关检查
+     * @param configKey
+     * @return
+     */
+    public boolean checkAdSwitch(String configKey){
+        boolean isOpen = false;
+        if (null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (configKey.equals(switchInfoList.getConfigKey())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        return isOpen;
+    }
+
+    /**
+     *  插屏开关Data
+     * @param configKey
+     * @return
+     */
+    public InsertAdSwitchInfoList.DataBean getInsertAdInfo(String configKey) {
+        if (null != getInsertAdSwitchmap()) {
+            Map<String, InsertAdSwitchInfoList.DataBean> map = getInsertAdSwitchmap();
+            if (null != map.get(configKey)) {
+                InsertAdSwitchInfoList.DataBean dataBean = map.get(configKey);
+                return dataBean;
+            }
+        }
+        return null;
     }
 }

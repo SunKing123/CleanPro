@@ -22,7 +22,6 @@ public class JPushReceiver extends BasePushReceiver {
             for (String key : msg.getKeyValue().keySet()) {
                 String url = msg.getKeyValue().get("url");
                 if (!TextUtils.isEmpty(url)) {
-                    AppHolder.getInstance().setPush(true);
                     AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
                     NiuDataAPIUtil.trackClickJPush("push_info_click", "推送消息点击", "", "notification_page",url,msg.getNotifyId(),msg.getTitle());
                     SchemeProxy.openScheme(context, url);

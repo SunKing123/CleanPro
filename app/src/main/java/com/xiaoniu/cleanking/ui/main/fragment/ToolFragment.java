@@ -8,8 +8,14 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
+import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -85,10 +91,13 @@ public class ToolFragment extends SimpleFragment {
     TextView mTvDefQqSubTitleGb;
     @BindView(R.id.tv_phone_space)
     TextView mTvPhoneSpace;
+    @BindView(R.id.flayout_bottom_ad)
+    FrameLayout frameBottomLayout;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale = 20; //使用内存占总RAM的比例
+    private AdManager mAdManager;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -108,10 +117,17 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
+        initGeekAdSdk();
         getAccessListBelow();
     }
 
-
+    /**
+     * 广告sdk
+     */
+    private void initGeekAdSdk() {
+        if (null == mAdManager)
+        mAdManager = GeekAdSdk.getAdsManger();
+    }
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
@@ -329,6 +345,7 @@ public class ToolFragment extends SimpleFragment {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
             }
             setData();
+            addBottomAdView();
         }
         if (hidden) {
             NiuDataAPI.onPageEnd("clean-up_toolbox_view_page", "工具页面浏览");
@@ -390,6 +407,59 @@ public class ToolFragment extends SimpleFragment {
     public void getAccessListBelowSize(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null || listInfo.size() <= 0) return;
         mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
+    }
+
+
+
+
+    /**
+     * 底部广告样式--
+     */
+    private void addBottomAdView() {
+        if (null == getActivity()||!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE)) return;
+        initGeekAdSdk();
+        //todo
+        mAdManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null != info) {
+                    Logger.i("adSuccess---1==" + info.getAdId());
+//                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                }
+                if (null != frameBottomLayout && null != mAdManager && null != mAdManager.getAdView()) {
+                    frameBottomLayout.removeAllViews();
+                    frameBottomLayout.addView(mAdManager.getAdView());
+                    frameBottomLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                Logger.i("adExposed---1");
+                if (null == info) return;
+//                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Logger.i( "adClicked---1");
+                if (null == info) return;
+//                StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                if (null == info) return;
+//                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+            }
+
+            @Override
+            public void adError(int errorCode, String errorMsg) {
+                Logger.i("adError---1");
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
+                frameBottomLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
 }

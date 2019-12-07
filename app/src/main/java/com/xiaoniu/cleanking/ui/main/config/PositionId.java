@@ -62,6 +62,12 @@ public class PositionId {
     public static final String KEY_PAGE_INTERNAL_EXTERNAL_FULL = "page_internal_external_full"; //内外部全屏插屏
     public static final String KEY_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
     public static final String KEY_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
+    public static final String KEY_PAGE_ACCELERATE = "page_accelerate";
+    public static final String KEY_PAGE_MINE = "page_mine";
+
+
+
+
 
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
