@@ -107,7 +107,7 @@ dependencies {
     api rootProject.ext.dependencies["kotlin-reflect"]
 
     api project(path: ':otherlib:takephoto_library')
-    api project(':otherlib:imagepicker')
+
     api project(':otherlib:videoplayer')
 
 

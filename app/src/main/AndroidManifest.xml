@@ -275,10 +275,10 @@
             android:launchMode="singleTop"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
-        <activity
+  <!--      <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/ImagePickerThemeFullScreen" />
+            android:theme="@style/ImagePickerThemeFullScreen" />-->
         <activity
             android:name=".ui.main.activity.PhoneSuperPowerActivity"
             android:launchMode="singleTask"

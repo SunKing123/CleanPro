@@ -621,7 +621,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {
                     if (mView == null)
                         return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                         //永久拒绝权限
                         PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     } else {
@@ -654,7 +654,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {
                     if (mView == null)
                         return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.READ_PHONE_STATE)) {
                         //永久拒绝权限
                         PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     } else {

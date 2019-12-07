@@ -7,11 +7,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.lzy.imagepicker.util.Utils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -23,10 +18,10 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.VideoPlayFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanVideoManagePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.GrideManagerWrapper;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
@@ -35,6 +30,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -98,7 +95,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new GrideManagerWrapper(Utils.dp2px(mContext,8)));
+        mRecyclerView.addItemDecoration(new GrideManagerWrapper(DimenUtils.dp2px(mContext,8)));
         mAdapter.setOnCheckListener(this);
 
         mLLCheckAll.setOnClickListener(v -> {
