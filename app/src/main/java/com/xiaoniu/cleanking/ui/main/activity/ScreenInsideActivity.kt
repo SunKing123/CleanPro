@@ -53,8 +53,8 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
         mIsFirst = true
         mAdManager.loadCustomInsertScreenAd(this, "inside_advertising_ad", 3, object : AdListener {
             override fun adSuccess(info: AdInfo) {
-                Log.d(TAG, "-----adSuccess 内部插屏-----")
                 if (null == info) return
+                Log.d(TAG, "-----adSuccess 内部插屏-----" + info.adSource + "---" + info.adId)
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info!!.adId, info.adSource, "success", "hot_splash_page", "inside_advertising_ad_page")
             }
 
