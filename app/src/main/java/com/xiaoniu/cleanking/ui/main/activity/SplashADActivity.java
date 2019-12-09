@@ -201,7 +201,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     public void geekAdSDKConfigSuccess() {
-        super.onResume();
         initHomeCenterAD();
     }
 
