@@ -129,7 +129,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
                 .setImageAcceptedSize(640,320 )//这个参数设置即可，不影响模板广告的size
                 .build();
         //step5:请求广告，对请求回调的广告作渲染处理
-        TTAdManagerHolder.get().createAdNative(activity).loadInteractionExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
+        TTAdManagerHolder.get().createAdNative(activity.getApplicationContext()).loadInteractionExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
             @Override
             public void onError(int code, String message) {
                 if (listener != null) {

@@ -767,6 +767,7 @@ public class NativeAdManger implements AdManager {
                 if (mAdListener != null) {
                     mAdListener.adSuccess(info);
                 }
+                ttNativeExpressAd.showInteractionExpressAd(activity);
             }
 
             @Override
