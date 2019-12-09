@@ -273,7 +273,7 @@ public class MeFragment extends SimpleFragment {
             public void adSuccess(AdInfo info) {
                 if (null != info) {
                     Logger.i("adSuccess---1==" + info.getAdId());
-//                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "my_page", "my_page");
                     if (null != frameBottomLayout && null != info.getAdView()) {
                         frameBottomLayout.removeAllViews();
                         frameBottomLayout.addView(info.getAdView());
@@ -286,26 +286,22 @@ public class MeFragment extends SimpleFragment {
             public void adExposed(AdInfo info) {
                 Logger.i("adExposed---1");
                 if (null == info) return;
-//                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "my_page", "my_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Logger.i("adClicked---1");
                 if (null == info) return;
-//                StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                if (null == info) return;
-//                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "my_page", "my_page", info.getAdTitle());
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Logger.i("adError---1");
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "my_page", "my_page");
+                }
                 frameBottomLayout.setVisibility(View.GONE);
             }
         });
