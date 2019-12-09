@@ -193,7 +193,7 @@ package com.comm.jksdk.ad.admanager;//package com.comm.jksdk.ad.admanager;
 //            //向客户端提供接口
 //            mAdView.setAdListener(mAdListener);
 //            //ylh请求失败请求chj广告接口回掉
-//            mAdView.setYlhAdListener(mFirstAdListener);
+//            mAdView.setPollingAdListener(mFirstAdListener);
 //        }
 //
 //        adParentView.removeAllViews();

@@ -45,7 +45,7 @@ public class InsertScreenAdFullDownloadDialog extends AlertDialog implements Vie
         this.mListenr = listenr;
     }
 
-    protected InsertScreenAdFullDownloadDialog(Context context, int showTimeSecond) {
+    public InsertScreenAdFullDownloadDialog(Context context, int showTimeSecond) {
         super(context, R.style.InsertScreenAdDialog);
         this.showTimeSecond = showTimeSecond;
         setCancelable(false);

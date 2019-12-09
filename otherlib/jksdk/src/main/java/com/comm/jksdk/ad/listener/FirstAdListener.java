@@ -1,5 +1,7 @@
 package com.comm.jksdk.ad.listener;
 
+import com.comm.jksdk.ad.entity.AdInfo;
+
 /**
  * @author: docking
  * @date: 2019/9/7 12:09
@@ -13,6 +15,6 @@ public interface FirstAdListener {
      * @param errorCode
      * @param errorMsg
      */
-    void firstAdError(int errorCode, String errorMsg);
+    void firstAdError(AdInfo adInfo, int errorCode, String errorMsg);
 
 }

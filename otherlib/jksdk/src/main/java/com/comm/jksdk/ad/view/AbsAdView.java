@@ -6,11 +6,24 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import com.bytedance.sdk.openadsdk.TTFeedAd;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
 
 import java.util.List;
 
-
+/**
+  *
+  * @ProjectName:    ${PROJECT_NAME}
+  * @Package:        ${PACKAGE_NAME}
+  * @ClassName:      ${NAME}
+  * @Description:     广告view基类
+  * @Author:         fanhailong
+  * @CreateDate:     ${DATE} ${TIME}
+  * @UpdateUser:     更新者：
+  * @UpdateDate:     ${DATE} ${TIME}
+  * @UpdateRemark:   更新说明：
+  * @Version:        1.0
+ */
 public abstract class AbsAdView extends RelativeLayout {
 
     protected final String TAG = "GeekAdSdk-->";
@@ -43,9 +56,15 @@ public abstract class AbsAdView extends RelativeLayout {
 
     public abstract int getLayoutId();
 
-    public abstract void requestAd(int requestType, int adRequestTimeOut);
+//    public abstract void requestAd(int requestType, int adRequestTimeOut);
+//
+//    public abstract void requestAd(int requestType, TTFeedAd ttFeedAd, int adRequestTimeOut);
 
-    public abstract void parseYlhAd(List<NativeUnifiedADData> nativeAdList);
+//    public abstract void parseYlhAd(List<NativeUnifiedADData> nativeAdList);
+//
+//    public abstract void parseChjAd(List<TTFeedAd> nativeAdList);
+//
+//    public abstract void parseChjAd(TTFeedAd ttFeedAd);
 
-    public abstract void parseChjAd(List<TTFeedAd> nativeAdList);
+    public abstract void parseAd(AdInfo adInfo);
 }

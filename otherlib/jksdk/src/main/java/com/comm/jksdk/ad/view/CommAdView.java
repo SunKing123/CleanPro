@@ -30,13 +30,6 @@ public class CommAdView extends AbsAdView {
      */
     protected String mAppId = "";
 
-    //广告信息
-    protected AdInfo mAdInfo;
-
-    public void setAdInfo(AdInfo info){
-        this.mAdInfo = info;
-    }
-
     public void setAdId(String mAdId) {
         this.mAdId = mAdId;
     }
@@ -61,31 +54,46 @@ public class CommAdView extends AbsAdView {
         return 0;
     }
 
+    @Override
+    public void parseAd(AdInfo adInfo) {
+        
+    }
+
     public void initView() {
 
     }
 
-    @Override
-    public void requestAd(int requestType, int adRequestTimeOut) {
+//    @Override
+//    public void requestAd(int requestType, int adRequestTimeOut) {
+//
+//    }
 
-    }
-
-    @Override
-    public void parseYlhAd(List<NativeUnifiedADData> nativeAdList) {
-
-    }
-
-    @Override
-    public void parseChjAd(List<TTFeedAd> nativeAdList) {
-
-    }
+//    @Override
+//    public void requestAd(int requestType, TTFeedAd ttFeedAd, int adRequestTimeOut) {
+//
+//    }
+//
+//    @Override
+//    public void parseYlhAd(List<NativeUnifiedADData> nativeAdList) {
+//
+//    }
+//
+//    @Override
+//    public void parseChjAd(List<TTFeedAd> nativeAdList) {
+//
+//    }
+//
+//    @Override
+//    public void parseChjAd(TTFeedAd ttFeedAd) {
+//
+//    }
 
 
     public void setAdListener(AdListener adListener) {
         mAdListener = adListener;
     }
 
-    public void setYlhAdListener(FirstAdListener adListener) {
+    public void setPollingAdListener(FirstAdListener adListener) {
         mFirstAdListener = adListener;
     }
 
@@ -95,9 +103,9 @@ public class CommAdView extends AbsAdView {
      * @param errorCode
      * @param errorMsg
      */
-    protected void firstAdError(int errorCode, String errorMsg) {
+    protected void firstAdError(AdInfo adInfo,int errorCode, String errorMsg) {
         if (mFirstAdListener != null) {
-            mFirstAdListener.firstAdError(errorCode, errorMsg);
+            mFirstAdListener.firstAdError(adInfo, errorCode, errorMsg);
         }
     }
 
@@ -148,9 +156,9 @@ public class CommAdView extends AbsAdView {
      * @param errorCode
      * @param errorMsg
      */
-    protected void adError(int errorCode, String errorMsg) {
+    protected void adError(AdInfo adInfo, int errorCode, String errorMsg) {
         if (mAdListener != null) {
-            mAdListener.adError(errorCode, errorMsg);
+            mAdListener.adError(adInfo, errorCode, errorMsg);
         }
     }
 }

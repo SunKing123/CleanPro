@@ -18,24 +18,24 @@ public class TTAdManagerHolder {
     private static boolean sInit;
     private static String mAppId;
 
-//    public static TTAdManager get() {
-//        if (!sInit) {
-//            throw new RuntimeException("TTAdSdk is not init, please check.");
-//        }
-//        return TTAdSdk.getAdManager();
-//    }
-
-    public static TTAdManager get(String appId) {
-        if (!sInit && !TextUtils.isEmpty(appId) && !appId.equals(mAppId)) {
-            sInit = false;
-            mAppId = appId;
-            init(GeekAdSdk.getContext(), mAppId);
-        }
+    public static TTAdManager get() {
         if (!sInit) {
             throw new RuntimeException("TTAdSdk is not init, please check.");
         }
         return TTAdSdk.getAdManager();
     }
+
+//    public static TTAdManager get(String appId) {
+//        if (!sInit && !TextUtils.isEmpty(appId) && !appId.equals(mAppId)) {
+//            sInit = false;
+//            mAppId = appId;
+//            init(GeekAdSdk.getContext(), mAppId);
+//        }
+//        if (!sInit) {
+//            throw new RuntimeException("TTAdSdk is not init, please check.");
+//        }
+//        return TTAdSdk.getAdManager();
+//    }
 
     public synchronized static void init(Context context, String appId) {
         mAppId = appId;

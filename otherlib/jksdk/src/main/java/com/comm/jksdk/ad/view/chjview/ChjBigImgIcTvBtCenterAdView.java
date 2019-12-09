@@ -22,6 +22,7 @@ import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTImage;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.DisplayUtil;
@@ -45,7 +46,7 @@ import java.util.Random;
  */
 
 
-public class ChjBigImgIcTvBtCenterAdView extends CommAdView {
+public class ChjBigImgIcTvBtCenterAdView extends CHJAdView {
     // 广告实体数据
     private TTFeedAd mNativeADData = null;
     private RequestOptions requestOptions;
@@ -94,81 +95,37 @@ public class ChjBigImgIcTvBtCenterAdView extends CommAdView {
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
     }
 
-    /**
-     * 解析广告
-     *
-     * @param nativeAdList
-     */
     @Override
-    public void parseChjAd(List<TTFeedAd> nativeAdList) {
-        // 如果没有特定需求，随机取一个
-        if (nativeAdList == null || nativeAdList.isEmpty()) {
-            firstAdError(1, "请求结果为空");
-            return;
-        }
-//        int size = nativeAdList.size();
-//        int index = new Random().nextInt(size);
-        TTFeedAd adData = nativeAdList.get(0);
-        if (adData == null) {
-            firstAdError(1, "请求结果为空");
-            return;
-        }
-
-        this.mNativeADData = adData;
-
-
-
-        initAdData(adData);
+    public void parseAd(AdInfo adInfo) {
+        super.parseAd(adInfo);
+        TTFeedAd ttFeedAd = adInfo.getTtFeedAd();
+        initAdData(ttFeedAd, adInfo);
     }
+
 
     /**
      * 初始化广告数据
      *
      * @param adData
      */
-    private void initAdData(TTFeedAd adData) {
+    private void initAdData(TTFeedAd adData, AdInfo adInfo) {
         if ( mContext == null) {
-            firstAdError(1, "mContext 为空");
+            firstAdError(adInfo, 1, "mContext 为空");
             return;
         }
 
         if (adData.getImageMode() != TTAdConstant.IMAGE_MODE_LARGE_IMG) {
-            firstAdError(1, "返回结果不是大图");
+            firstAdError(adInfo,1, "返回结果不是大图");
             return;
         }
         nativeAdContainer.setVisibility(VISIBLE);
 
-        bindData(nativeAdContainer,adData);
+        bindData(nativeAdContainer,adData, adInfo);
 
     }
 
 
-    private int getRandowNum() {
-        //为2000到10000的随机数
-        int num = (int) (Math.random() * 8000 + 2000);
-        return num;
-    }
-
-    /**
-     * 更新浏览人数量
-     *
-     * @param downloadCount
-     * @return
-     */
-    private String getBrowseDesc(long downloadCount) {
-        String desc = "";
-        if (downloadCount <= 0) {
-            desc = getRandowNum() + "人浏览";
-        } else if (0 < downloadCount && downloadCount < 10000) {
-            desc = downloadCount + "人浏览";
-        } else {
-            desc = downloadCount / 10000 + "w+人浏览";
-        }
-        return desc;
-    }
-
-
-    private void bindData(View convertView, TTFeedAd ad) {
+    private void bindData(View convertView, TTFeedAd ad, AdInfo adInfo) {
         TTImage icon = ad.getIcon();
         if (icon != null && icon.isValid()) {
             Glide.with(mContext).load(icon.getImageUrl())
@@ -190,7 +147,31 @@ public class ChjBigImgIcTvBtCenterAdView extends CommAdView {
         //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
 //            creativeViewList.add(convertView);
         //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
-        ad.registerViewForInteraction((ViewGroup) convertView, clickViewList, creativeViewList,adListener );
+        ad.registerViewForInteraction((ViewGroup) convertView, clickViewList, creativeViewList, new TTNativeAd.AdInteractionListener() {
+            @Override
+            public void onAdClicked(View view, TTNativeAd ttNativeAd) {
+                if (ad != null) {
+                    LogUtils.w(TAG, "deployAditem onAdClicked");
+                    adClicked(adInfo);
+                }
+            }
+
+            @Override
+            public void onAdCreativeClick(View view, TTNativeAd ttNativeAd) {
+                if (ad != null) {
+                    LogUtils.w(TAG, "deployAditem onAdClicked");
+                    adClicked(adInfo);
+                }
+            }
+
+            @Override
+            public void onAdShow(TTNativeAd ttNativeAd) {
+                if (ad != null) {
+                    LogUtils.w(TAG, "广告" + ad.getTitle() + "展示");
+                    adExposed(adInfo);
+                }
+            }
+        });
 
 
 
@@ -328,30 +309,4 @@ public class ChjBigImgIcTvBtCenterAdView extends CommAdView {
         ad.setDownloadListener(downloadListener); // 注册下载监听器
 
     }
-
-    TTNativeAd.AdInteractionListener adListener=new TTNativeAd.AdInteractionListener() {
-        @Override
-        public void onAdClicked(View view, TTNativeAd ad) {
-            if (ad != null) {
-                LogUtils.w(TAG, "deployAditem onAdClicked");
-                adClicked(mAdInfo);
-            }
-        }
-
-        @Override
-        public void onAdCreativeClick(View view, TTNativeAd ad) {
-            if (ad != null) {
-                LogUtils.w(TAG, "deployAditem onAdCreativeClick");
-                adClicked(mAdInfo);
-            }
-        }
-
-        @Override
-        public void onAdShow(TTNativeAd ad) {
-            if (ad != null) {
-                LogUtils.w(TAG, "广告" + ad.getTitle() + "展示");
-                adExposed(mAdInfo);
-            }
-        }
-    };
 }

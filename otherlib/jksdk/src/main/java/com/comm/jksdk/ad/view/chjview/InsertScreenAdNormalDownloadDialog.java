@@ -57,7 +57,7 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
         }
     }
 
-    protected InsertScreenAdNormalDownloadDialog(Context context, int showTimeSecond) {
+    public InsertScreenAdNormalDownloadDialog(Context context, int showTimeSecond) {
         super(context, R.style.InsertScreenAdDialog);
         this.showTimeSecond = showTimeSecond;
         setCancelable(false);
@@ -87,7 +87,7 @@ public class InsertScreenAdNormalDownloadDialog extends AlertDialog implements V
         adCover = findViewById(R.id.full_screen_insert_ad_view);
         adClose = findViewById(R.id.full_screen_insert_ad_close);
         appIcon = findViewById(R.id.full_screen_insert_ad_app_icon);
-        progressTv = findViewById(R.id.progree_tv);
+        progressTv = findViewById(R.id.progress_tv);
         adLogo = findViewById(R.id.ad_logo);
         adShowTime.setText(showTimeSecond + "s");
         adShowTime.setVisibility(View.VISIBLE);

@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.comm.jksdk.R;
+import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.NativeADEventListener;
@@ -40,7 +41,7 @@ import java.util.Random;
  */
 
 
-public class YlhBigImgIcTvBtAdView extends CommAdView {
+public class YlhBigImgIcTvBtAdView extends YlhAdView {
     // 广告实体数据
     private NativeUnifiedADData mNativeADData = null;
     private RequestOptions requestOptions;
@@ -91,41 +92,46 @@ public class YlhBigImgIcTvBtAdView extends CommAdView {
     }
 
     @Override
-    public void parseYlhAd(List<NativeUnifiedADData> nativeAdList) {
-        super.parseYlhAd(nativeAdList);
-        // 如果没有特定需求，随机取一个
-        if (nativeAdList == null || nativeAdList.isEmpty()) {
-            firstAdError(1, "请求结果为空");
-            return;
-        }
-        NativeUnifiedADData adData = nativeAdList.get(0);
-        if (adData == null) {
-            firstAdError(1, "请求结果为空");
-            return;
-        }
-
-        this.mNativeADData = adData;
-
-
-
-        initAdData(adData);
+    public void parseAd(AdInfo adInfo) {
+        super.parseAd(adInfo);
+        initAdData(adInfo);
     }
+
+    //    @Override
+//    public void parseYlhAd(List<NativeUnifiedADData> nativeAdList) {
+//        super.parseYlhAd(nativeAdList);
+//        // 如果没有特定需求，随机取一个
+//        if (nativeAdList == null || nativeAdList.isEmpty()) {
+//            firstAdError(1, "请求结果为空");
+//            return;
+//        }
+//        NativeUnifiedADData adData = nativeAdList.get(0);
+//        if (adData == null) {
+//            firstAdError(1, "请求结果为空");
+//            return;
+//        }
+//
+//        this.mNativeADData = adData;
+//
+//
+//
+//        initAdData(adData);
+//    }
 
     /**
      * 初始化广告数据
      *
-     * @param adData
      */
-    private void initAdData(NativeUnifiedADData adData) {
-        if ( mContext == null) {
-            firstAdError(1, "mContext 为空");
-            return;
-        }
-
-        bindData(adData);
+    private void initAdData(AdInfo adInfo) {
+//        if ( mContext == null) {
+//            firstAdError(1, "mContext 为空");
+//            return;
+//        }
+        NativeUnifiedADData nativeUnifiedADData = adInfo.getNativeUnifiedADData();
+        bindData(nativeUnifiedADData, adInfo);
     }
 
-    private void bindData(final NativeUnifiedADData ad) {
+    private void bindData(final NativeUnifiedADData ad, AdInfo adInfo) {
         String imgUrl = ad.getImgUrl();
         try {
             if (!TextUtils.isEmpty(imgUrl)) {
@@ -160,17 +166,17 @@ public class YlhBigImgIcTvBtAdView extends CommAdView {
         ad.setNativeAdEventListener(new NativeADEventListener(){
             @Override
             public void onADExposed() {
-                adExposed(mAdInfo);
+                adExposed(adInfo);
             }
 
             @Override
             public void onADClicked() {
-                adClicked(mAdInfo);
+                adClicked(adInfo);
             }
 
             @Override
             public void onADError(AdError adError) {
-                firstAdError(adError.getErrorCode(), adError.getErrorMsg());
+                adError(adInfo, adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override

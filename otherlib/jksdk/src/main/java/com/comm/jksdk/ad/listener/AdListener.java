@@ -3,10 +3,18 @@ package com.comm.jksdk.ad.listener;
 import com.comm.jksdk.ad.entity.AdInfo;
 
 /**
- * @author: docking
- * @date: 2019/9/7 12:09
- * @description: todo ...
- **/
+  *
+  * @ProjectName:    ${PROJECT_NAME}
+  * @Package:        ${PACKAGE_NAME}
+  * @ClassName:      ${NAME}
+  * @Description:     广告回调接口，给到业务线
+  * @Author:         fanhailong
+  * @CreateDate:     ${DATE} ${TIME}
+  * @UpdateUser:     更新者：
+  * @UpdateDate:     ${DATE} ${TIME}
+  * @UpdateRemark:   更新说明：
+  * @Version:        1.0
+ */
 public interface AdListener {
 
     /**
@@ -37,7 +45,7 @@ public interface AdListener {
      * @param errorCode
      * @param errorMsg
      */
-    void adError(int errorCode, String errorMsg);
+    void adError(AdInfo info, int errorCode, String errorMsg);
 
 
 }

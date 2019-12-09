@@ -17,17 +17,81 @@ import android.view.ViewGroup;
  */
 public interface AdManager {
 
+    /**
+     * 加载图文类广告
+     * @param activity
+     * @param position
+     * @param listener
+     */
     void loadAd(Activity activity, String position, AdListener listener);
+
+    /**
+     * 预加载图文类广告
+     * @param activity
+     * @param position
+     * @param listener
+     */
+    void preloadingAd(Activity activity, String position, AdPreloadingListener listener);
 
     void loadSplashAd(Activity activity, String position, AdListener listener);
 
+    /**
+     * 加载全屏视频广告
+     * @param activity
+     * @param position
+     * @param listener
+     */
     void loadVideoAd(Activity activity, String position, AdListener listener);
 
+    /**
+     * 预加载全屏视频广告
+     * @param activity
+     * @param position
+     * @param listener
+     */
+    void preloadingVideoAd(Activity activity, String position, AdPreloadingListener listener);
+
+    /**
+     * 加载激励广告
+     * @param activity
+     * @param position
+     * @param userId
+     * @param orientation
+     * @param listener
+     */
     void loadRewardVideoAd(Activity activity, String position, String userId, int orientation, AdListener listener);
+
+    /**
+     * 预加载激励广告
+     * @param activity
+     * @param position
+     * @param userId
+     * @param orientation
+     * @param listener
+     */
+    void preloadingRewardVideoAd(Activity activity, String position, String userId, int orientation, AdPreloadingListener listener);
+
+    /**
+     * 加载激励广告
+     * @param activity
+     * @param position
+     * @param userId
+     * @param orientation
+     * @param listener
+     */
+    void loadRewardVideoAd(Activity activity, String position, String userId, int orientation, String rewardName, int rewardAmount, AdListener listener);
+
+    /**
+     * 预加载激励广告
+     * @param activity
+     * @param position
+     * @param userId
+     * @param orientation
+     * @param listener
+     */
+    void preloadingRewardVideoAd(Activity activity, String position, String userId, int orientation, String rewardName, int rewardAmount, AdPreloadingListener listener);
 
     void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener);
 
     void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener, String... pos);
-
-    ViewGroup getAdView();
 }

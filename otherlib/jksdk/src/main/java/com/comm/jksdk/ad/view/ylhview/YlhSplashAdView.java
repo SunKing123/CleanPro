@@ -22,7 +22,7 @@ import com.qq.e.comm.util.AdError;
 public class YlhSplashAdView extends YlhAdView {
     private ConstraintLayout splashContainer;
 
-    protected YlhSplashAdView(Context context) {
+    public YlhSplashAdView(Context context) {
         super(context);
     }
 
@@ -36,34 +36,31 @@ public class YlhSplashAdView extends YlhAdView {
         splashContainer = findViewById(R.id.splash_ad_container);
     }
 
+    @Override
+    public void parseAd(AdInfo adInfo) {
+        super.parseAd(adInfo);
+        loadSplashAd(adInfo, (Activity) mContext, adInfo.getAdAppid(), adInfo.getAdId());
+    }
+
     /**
      * 获取开屏广告并加载
      */
-    public void loadSplashAd(Activity activity, String appId, String adId) {
+    public void loadSplashAd(AdInfo adInfo, Activity activity, String appId, String adId) {
         if (activity == null) {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
-        mAdInfo = new AdInfo();
-        mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
-        mAdInfo.setAdAppid(appId);
-        mAdInfo.setAdId(adId);
         LogUtils.d(TAG, "YLH appId:" + appId + " adId:" + adId);
         SplashAD splashAD = new SplashAD(activity, appId, adId, new SplashADListener() {
             @Override
             public void onADDismissed() {
                 LogUtils.d(TAG, "YLH onADDismissed:");
+                adClose(adInfo);
             }
 
             @Override
             public void onNoAD(AdError adError) {
                 LogUtils.d(TAG, "YLH onNoAD:");
-                if (adError != null) {
-//                    adError(adError.getErrorCode(), adError.getErrorMsg());
-                    firstAdError(adError.getErrorCode(), adError.getErrorMsg());
-                } else {
-//                    adError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
-                    firstAdError(CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
-                }
+                adError(adInfo, adError.getErrorCode(), adError.getErrorMsg());
             }
 
             @Override
@@ -73,7 +70,7 @@ public class YlhSplashAdView extends YlhAdView {
             @Override
             public void onADClicked() {
                 LogUtils.d(TAG, "YLH onADClicked:");
-                adClicked(mAdInfo);
+                adClicked(adInfo);
             }
 
             @Override
@@ -84,10 +81,10 @@ public class YlhSplashAdView extends YlhAdView {
             @Override
             public void onADExposure() {
                 LogUtils.d(TAG, "YLH onADClicked:");
-                adSuccess(mAdInfo);
-                adExposed(mAdInfo);
+                adExposed(adInfo);
             }
         });
         splashAD.fetchAndShowIn(splashContainer);
+//        adSuccess(adInfo);
     }
 }

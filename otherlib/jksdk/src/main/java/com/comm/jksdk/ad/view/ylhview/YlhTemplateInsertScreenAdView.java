@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.view.chjview.CHJAdView;
-import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
@@ -18,7 +16,7 @@ import com.qq.e.comm.util.AdError;
  * @author zixuefei
  * @since 2019/11/18 11:24
  */
-public class YlhTemplateInsertScreenAdView extends CHJAdView {
+public class YlhTemplateInsertScreenAdView extends YlhAdView {
     private Activity activity;
     private UnifiedInterstitialAD iad;
 
@@ -38,10 +36,16 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
     public void initView() {
     }
 
+    @Override
+    public void parseAd(AdInfo adInfo) {
+        super.parseAd(adInfo);
+        loadTemplateInsertScreenAd(adInfo, (Activity) mContext, adInfo.getAdAppid(), adInfo.getAdId());
+    }
+
     /**
      * 获取插屏广告并展示
      */
-    public void loadTemplateInsertScreenAd(final Activity activity,String appId, String adId) {
+    public void loadTemplateInsertScreenAd(AdInfo adInfo, Activity activity,String appId, String adId) {
         if (activity == null) {
             throw new NullPointerException("loadCustomInsertScreenAd activity is null");
         }
@@ -54,24 +58,20 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
             iad.destroy();
             iad = null;
         }
-        mAdInfo = new AdInfo();
-        mAdInfo.setAdSource(Constants.AdType.YouLiangHui);
-        mAdInfo.setAdAppid(appId);
-        mAdInfo.setAdId(adId);
         if (iad == null) {
             iad = new UnifiedInterstitialAD(activity, appId, UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
                 @Override
                 public void onADReceive() {
                     //广告加载成功
                     if (iad != null) {
-                        adSuccess(mAdInfo);
+                        adSuccess(adInfo);
                         iad.showAsPopupWindow();
                     }
                 }
 
                 @Override
                 public void onNoAD(AdError adError) {
-                    adError(1, "没有广告");
+                    adError(adInfo, 1, "没有广告");
                 }
 
                 @Override
@@ -81,12 +81,12 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
 
                 @Override
                 public void onADExposure() {
-                    adExposed(mAdInfo);
+                    adExposed(adInfo);
                 }
 
                 @Override
                 public void onADClicked() {
-                    adClicked(mAdInfo);
+                    adClicked(adInfo);
                 }
 
                 @Override
@@ -96,7 +96,7 @@ public class YlhTemplateInsertScreenAdView extends CHJAdView {
 
                 @Override
                 public void onADClosed() {
-                    adClose(mAdInfo);
+                    adClose(adInfo);
                 }
             });
             iad.loadAD();
