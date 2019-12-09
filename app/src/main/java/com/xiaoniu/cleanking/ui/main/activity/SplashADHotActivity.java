@@ -85,7 +85,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                         if (dataBean.isOpen()) {//内部插屏广告
-                            if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() == dataBean.getShowRate()) {
+                            if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
                                 PreferenceUtil.saveScreenInsideTime();
                                 startActivity(new Intent(this, ScreenInsideActivity.class));
                                 return;

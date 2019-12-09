@@ -129,6 +129,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
             public void adSuccess(List<ConfigBean.AdListBean> configList) {
                 String config = JsonUtils.encode(configList);
                 String aa = config.substring(0, config.length() / 2);
+                mView.geekAdSDKConfigSuccess();
                 LogUtils.i("config:" + aa);
             }
 
