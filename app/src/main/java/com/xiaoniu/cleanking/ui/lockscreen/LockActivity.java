@@ -15,14 +15,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
@@ -453,6 +456,25 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GeekAdSdk.getAdsManger().preloadingAd(this,PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdPreloadingListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+//                LogUtils.e(TAG, "DEMO>>>adSuccess， "+ info.toString());
+                if(!BuildConfig.SYSTEM_EN.contains("prod"))
+                Toast.makeText(getApplicationContext(), "预加载成功", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+//                LogUtils.e(TAG, "DEMO>>>adError： "+errorMsg);
+                if(!BuildConfig.SYSTEM_EN.contains("prod"))
+                Toast.makeText(getApplicationContext(), "预加载失败", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     public void startVirUsKill() {
         Intent virusIntent = new Intent(this, VirusKillActivity.class);
@@ -685,8 +707,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
+                        AppHolder.getInstance().setCleanFinishSourcePageId("lock_screen");
                         startActivity(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl()));
+                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
+                                .putExtra(ExtraConstant.WEB_FROM, "LockActivity"));
+
                     });
                 }
             }
