@@ -25,6 +25,7 @@ import com.comm.jksdk.ad.view.chjview.ChjBigImgFakeVideoAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtCenterAdView;
+import com.comm.jksdk.ad.view.chjview.ChjExternalDialogBigImage2View;
 import com.comm.jksdk.ad.view.chjview.ChjExternalDialogBigImageView;
 import com.comm.jksdk.ad.view.chjview.ChjSplashAdView;
 import com.comm.jksdk.ad.view.chjview.InsertScreenAdFullDownloadDialog;
@@ -35,6 +36,7 @@ import com.comm.jksdk.ad.view.ylhview.YlhBigImgFakeVideoAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvBtCenterAdView;
+import com.comm.jksdk.ad.view.ylhview.YlhExternalDialogBigImage2View;
 import com.comm.jksdk.ad.view.ylhview.YlhExternalDialogBigImageView;
 import com.comm.jksdk.ad.view.ylhview.YlhFullScreenVideoAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhSplashAdView;
@@ -642,6 +644,8 @@ public class NativeAdManger implements AdManager {
             adView = new ChjBigImgFakeVideoAdView(activity);
         } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_01.equals(style)) { //外部弹窗大图广告_01
             adView = new ChjExternalDialogBigImageView(activity);
+        } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_02.equals(style)) { //外部弹窗大图广告_02
+            adView = new ChjExternalDialogBigImage2View(activity);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) { //开屏广告
             adView = new ChjSplashAdView(activity);
         }
@@ -973,6 +977,8 @@ public class NativeAdManger implements AdManager {
             adView = new YlhBigImgFakeVideoAdView(activity);
         } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_01.equals(style)) { //外部弹窗大图广告_01
             adView = new YlhExternalDialogBigImageView(activity);
+        } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_02.equals(style)) { //外部弹窗大图广告_02
+            adView = new YlhExternalDialogBigImage2View(activity);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) { //开屏广告
             adView = new YlhSplashAdView(activity);
         } else if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) { //全屏视频广告

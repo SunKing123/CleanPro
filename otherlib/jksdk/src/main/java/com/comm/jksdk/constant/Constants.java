@@ -40,12 +40,6 @@ public class Constants {
          * 开屏
          */
         String OPEN_ADS = "OPEN_ADS";
-
-        /**
-         * 大图
-         */
-        String BIG_IMG = "BIG_IMG";
-
         /**
          * 大图_带icon文字
          */
@@ -67,18 +61,6 @@ public class Constants {
          */
         String DATU_ICON_TEXT_BUTTON = "DATU_ICON_TEXT_BUTTON";
         /**
-         * 左图右文
-         */
-        String LEFT_IMG_RIGHT_TWO_TEXT = "LEFT_IMG_RIGHT_TWO_TEXT";
-        /**
-         * 大图嵌套美女图片
-         */
-        String BIG_IMG_NEST = "BIG_IMG_NEST_01";
-        /**
-         * 大图嵌套图片带跑马灯
-         */
-        String BIG_IMG_NEST_LAMP = "BIG_IMG_NEST_01_LAMP";
-        /**
          * 大图_下载播放按钮
          */
         String BIG_IMG_BUTTON = "BIG_IMG_PLAY_BUTTON";
@@ -87,25 +69,17 @@ public class Constants {
          */
         String BIG_IMG_BUTTON_LAMP = "BIG_IMG_PLAY_BUTTON_LAMP";
         /**
-         * 信息流
-         */
-        String INFO_STREAM = "INFO_STREAM";
-        /**
          * 假视频大图_01
          */
         String FAKE_VIDEO_IARGE_IMAGE = "FAKE_VIDEO_IARGE_IMAGE";
-        /**
-         * 外部插屏_01
-         */
-        String EXTERNAL_CP_01 = "EXTERNAL_CP_01";
         /**
          * 外部弹窗大图广告_01
          */
         String EXTERNAL_DIALOG_BIG_IMAGE_01 = "EXTERNAL_DIALOG_BIG_IMAGE_01";
         /**
-         *
+         * 外部弹窗大图广告_02
          */
-        String All = "All";
+        String EXTERNAL_DIALOG_BIG_IMAGE_02 = "EXTERNAL_DIALOG_BIG_IMAGE_02";
     }
 
 
