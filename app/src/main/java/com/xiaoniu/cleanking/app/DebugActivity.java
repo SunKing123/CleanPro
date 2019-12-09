@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.view.View;
@@ -14,7 +15,10 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
@@ -46,7 +50,8 @@ public class DebugActivity extends BaseActivity {
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideIcon();
+//                hideIcon();
+                startFullInsertPage(DebugActivity.this);
             }
         });
     }
@@ -178,5 +183,20 @@ public class DebugActivity extends BaseActivity {
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, carryIntent);
         // TODO: 2017/6/25  发送广播
         cx.sendBroadcast(shortcut);
+    }
+
+
+    //全局跳转全屏插屏页面
+    private void startFullInsertPage(Context context) {
+        if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
+            return;
+        Intent screenIntent = new Intent();
+        screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
+        context.startActivity(screenIntent);
     }
 }

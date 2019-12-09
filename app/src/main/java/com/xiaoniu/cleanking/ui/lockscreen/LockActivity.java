@@ -16,9 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -60,6 +57,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 锁屏信息流广告页面
@@ -270,7 +270,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void adInit() {
 
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.KEY_LOCK_SCREEN_ADVERTISING, new AdListener() {
+        adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null == info) return;

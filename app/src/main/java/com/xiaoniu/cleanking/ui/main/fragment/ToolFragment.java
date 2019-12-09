@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -53,6 +51,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -419,7 +418,7 @@ public class ToolFragment extends SimpleFragment {
             return;
         initGeekAdSdk();
         //todo
-        mAdManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
+        mAdManager.loadAd(getActivity(), PositionId.AD_ACCELERATION_PAGE_BELOW, new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {

@@ -61,10 +61,10 @@ public class SchemeConstant {
         //插屏全屏页面
         public static final String CLASS_FULLPOPLAYERACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity";
 
-        //插屏全屏页面
+        //插屏非全屏页面
         public static final String CLASS_POPLAYERACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity";
 
-        //插屏全屏页面
+        //插屏锁屏页面
         public static final String CLASS_LOCKACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.LockActivity";
 
 

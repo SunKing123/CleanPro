@@ -7,9 +7,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -22,6 +19,9 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * @author zhengzhihao
@@ -77,7 +77,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.KEY_EXTERNAL_ADVERTISING_AD_1, new AdListener() {
+        adManager.loadAd(this, PositionId.AD_EXTERNAL_ADVERTISING_AD_1, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null == info) return;

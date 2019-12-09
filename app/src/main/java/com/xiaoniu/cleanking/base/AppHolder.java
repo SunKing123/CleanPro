@@ -2,11 +2,13 @@ package com.xiaoniu.cleanking.base;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +90,8 @@ public class AppHolder {
         for (InsertAdSwitchInfoList.DataBean post : insertAdSwitchInfoList.getData()) {
             insertAdSwitchmap.put(post.getConfigKey(), post);
         }
+        //sp存储,跨进程访问待优化 //todo
+        PreferenceUtil.getInstants().save("insert_ad_switch",new Gson().toJson(insertAdSwitchInfoList));
     }
 
 
@@ -185,6 +189,28 @@ public class AppHolder {
             if (null != map.get(configKey)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(configKey);
                 return dataBean;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     *  插屏开关Data
+     * @param configKey
+     * @return
+     */
+    public InsertAdSwitchInfoList.DataBean getInsertAdInfo(String configKey,String insertData) {
+        if (!TextUtils.isEmpty(insertData)) {
+            InsertAdSwitchInfoList dataBean = new Gson().fromJson(insertData,InsertAdSwitchInfoList.class);
+            if(null!=dataBean && dataBean.getData()!=null && dataBean.getData().size()>0){
+                List<InsertAdSwitchInfoList.DataBean> dataBeans = dataBean.getData();
+                for(int i=0;i<dataBeans.size();i++){
+                    InsertAdSwitchInfoList.DataBean posData = dataBeans.get(i);
+                    if (null != posData && posData.getConfigKey().equals(configKey)) {
+                        return posData;
+                    }
+                }
             }
         }
         return null;

@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -48,9 +49,8 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.SystemUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
-
-import java.util.Map;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -156,7 +156,6 @@ public final class LocalService extends Service {
         if (mKeepAliveRuning == null)
             mKeepAliveRuning = new KeepAliveRuning();
         mKeepAliveRuning.onRuning();
-
         return START_STICKY;
     }
 
@@ -366,7 +365,6 @@ public final class LocalService extends Service {
                         temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
                         int i = temp / 10;
                         temp = i > 0 ? i : 30 + NumberUtils.mathRandomInt(1, 3);
-                        Logger.i("zz--" + SystemUtils.getProcessName(context));
                     }
                 };
             }
@@ -392,6 +390,8 @@ public final class LocalService extends Service {
         if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
             startFullInsertAd(this);
         }
+        if(!BuildConfig.SYSTEM_EN.contains("prod"))
+        ToastUtils.showShort("charge--"+(isCharged ? "充电中" : "未充电"));
         Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
@@ -466,39 +466,40 @@ public final class LocalService extends Service {
     public void startFullInsertAd(Context context) {
         try {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
             if (TextUtils.equals(auditSwitch, "1") && !ActivityCollector.isActivityExist(PopLayerActivity.class) && !ActivityCollector.isActivityExist(LockActivity.class) && !PreferenceUtil.isShowAD()) {
-                if (null != context && null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
-                    Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
-                    if (null != map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL)) { //内外部插屏
-                        int showTimes = 2;
-                        InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL);
-                        if (dataBean.isOpen()) {
-                            showTimes = dataBean.getShowRate();
-                            if(PreferenceUtil.fullInsertPageIsShow(showTimes)){
-                                startFullInsertIntent(context);
-                            }
+                //内外部插屏
+                InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
+                //外部插屏
+                InsertAdSwitchInfoList.DataBean dataBean01= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
 
-                        } else {
-                            if (null != map.get(PositionId.KEY_PAGE_EXTERNAL_FULL)) {//外部插屏
-                                InsertAdSwitchInfoList.DataBean dataBean01 = map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL);
-                                if (dataBean01.isOpen()) {
-                                    showTimes = dataBean.getShowRate();
-                                    //判断应用是否进入后台
-                                    int isBack = PreferenceUtil.getInstants().getInt("isback");
-                                    if(isBack!=1)
-                                        return;
+                if (null != context && null != dataBean) {//内外部插屏
+                    int showTimes = 2;
+                    if (dataBean.isOpen()) {
+                        showTimes = dataBean.getShowRate();
+                        if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
+                            startFullInsertIntent(context,PositionId.AD_EXTERNAL_ADVERTISING_03);
+                        }
+                    } else {
+                        if (null != dataBean01) {       //外部插屏
+                            if (dataBean01.isOpen()) {
+                                showTimes = dataBean01.getShowRate();
+                                //判断应用是否进入后台
+                                int isBack = PreferenceUtil.getInstants().getInt("isback");
+                                if (isBack != 1)
+                                    return;
 
-                                    if(PreferenceUtil.fullInsertPageIsShow(showTimes)){
-                                        startFullInsertIntent(context);
-                                    }
-
+                                if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
+                                    startFullInsertIntent(context,PositionId.AD_EXTERNAL_ADVERTISING_02);
                                 }
+
                             }
                         }
                     }
                 }
+
             }
         } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
@@ -506,13 +507,16 @@ public final class LocalService extends Service {
     }
 
 
-    public void startFullInsertIntent(Context context){
+    public void startFullInsertIntent(Context context,String adStyle){
+        if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
+            return;
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        screenIntent.putExtra("ad_style",adStyle);
         context.startActivity(screenIntent);
     }
 
