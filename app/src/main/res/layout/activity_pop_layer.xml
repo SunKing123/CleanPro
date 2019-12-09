@@ -12,7 +12,7 @@
        android:id="@+id/rel_ad_top"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:background="@drawable/insert_screen_ad_header_bg"
+       android:background="@drawable/insert_ad_header_bg01"
        app:layout_constraintTop_toTopOf="parent">
 
       <ImageView

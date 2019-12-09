@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -21,8 +22,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-
-import java.util.Map;
+import com.xiaoniu.common.utils.ToastUtils;
 
 
 /**
@@ -83,12 +83,14 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             }
             Logger.i("zz---"+sb.toString());*/
         }
-
+//        Logger.i("zz---总开关："+AppHolder.getInstance().getSwitchInfoList().getData()+"--插屏开关："+AppHolder.getInstance().getInsertAdSwitchmap());
 
         //网络状态变更为wifi
         if (PreferenceUtil.getInstants().getInt(SpCacheConfig.WIFI_STATE) == 0 && wifiContected == 1 && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
             startFullInsertAd(context);
         }
+        if(!BuildConfig.SYSTEM_EN.contains("prod"))
+        ToastUtils.showShort("WIFI---"+(wifiContected == 0 ? "未连接" : "已连接"));
         Logger.i("zz---WIFI" + (wifiContected == 0 ? "未连接" : "已连接"));
         //更新sp当前wifi状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, wifiContected);
@@ -104,21 +106,56 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             //!PreferenceUtil.isShowAD()广告展示状态
             Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));
             if (TextUtils.equals(auditSwitch, "1") && !ActivityCollector.isActivityExist(PopLayerActivity.class) && !ActivityCollector.isActivityExist(LockActivity.class) && !PreferenceUtil.isShowAD()) {
-                if (null != context && null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
+                //内外部插屏
+                InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
+                //外部插屏
+                InsertAdSwitchInfoList.DataBean dataBean01= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
+
+                if (null != context && null != dataBean) {//内外部插屏
+                    int showTimes = 2;
+                    if (dataBean.isOpen()) {
+                        showTimes = dataBean.getShowRate();
+                        if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
+                            startFullInsertPage(context,PositionId.AD_EXTERNAL_ADVERTISING_03);
+                        }
+                    } else {
+                        if (null != dataBean01) {       //外部插屏
+                            if (dataBean01.isOpen()) {
+                                showTimes = dataBean01.getShowRate();
+                                //判断应用是否进入后台
+                                int isBack = PreferenceUtil.getInstants().getInt("isback");
+                                if (isBack != 1)
+                                    return;
+
+                                if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
+                                    startFullInsertPage(context,PositionId.AD_EXTERNAL_ADVERTISING_02);
+                                }
+
+                            }
+                        }
+                    }
+                }
+               /* if (null != context && null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
+                    Logger.i("zz---1");
                     Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                     if (null != map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL)) { //内外部插屏
+                        Logger.i("zz---2");
                         int showTimes = 2;
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL);
                         if (dataBean.isOpen()) {
+                            Logger.i("zz---3");
                             showTimes = dataBean.getShowRate();
                             if(PreferenceUtil.fullInsertPageIsShow(showTimes)){
                                 startFullInsertPage(context);
                             }
 
                         } else {
+                            Logger.i("zz---4");
                             if (null != map.get(PositionId.KEY_PAGE_EXTERNAL_FULL)) {//外部插屏
+                                Logger.i("zz---5");
                                 InsertAdSwitchInfoList.DataBean dataBean01 = map.get(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL);
                                 if (dataBean01.isOpen()) {
+                                    Logger.i("zz---6");
                                     showTimes = dataBean.getShowRate();
                                     //判断应用是否进入后台
                                     int isBack = PreferenceUtil.getInstants().getInt("isback");
@@ -126,6 +163,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
                                         return;
 
                                     if(PreferenceUtil.fullInsertPageIsShow(showTimes)){
+                                        Logger.i("zz---7");
                                         startFullInsertPage(context);
                                     }
 
@@ -133,7 +171,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
                             }
                         }
                     }
-                }
+                }*/
             }
       /*  } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
@@ -142,13 +180,16 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
 
 
     //全局跳转全屏插屏页面
-    private void startFullInsertPage(Context context) {
+    private void startFullInsertPage(Context context,String adStyle) {
+        if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
+            return;
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        screenIntent.putExtra("ad_style",adStyle);
         context.startActivity(screenIntent);
     }
 }

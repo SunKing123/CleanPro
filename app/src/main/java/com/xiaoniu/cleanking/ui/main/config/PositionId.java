@@ -60,20 +60,30 @@ public class PositionId {
     public static final String KEY_NEIBU_SCREEN = "page_internal_page";
     public static final String KEY_PAGE_EXTERNAL_FULL = "page_external_full";    //外部全屏插屏
     public static final String KEY_PAGE_INTERNAL_EXTERNAL_FULL = "page_internal_external_full"; //内外部全屏插屏
-    public static final String KEY_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
-    public static final String KEY_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
     public static final String KEY_PAGE_ACCELERATE = "page_accelerate";
     public static final String KEY_PAGE_MINE = "page_mine";
-
-
-
-
 
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";
     public static final String KEY_RED_JILI = "page_pop_up_encourag";
     public static final String KEY_GAME_JILI = "page_speed_game_encourag";
+
+    //位置code
+    public static final String AD_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
+    public static final String AD_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
+    public static final String AD_ACCELERATION_PAGE_BELOW = "acceleration_page_below_ad";
+    public static final String AD_PERSONAL_CENTER_PAGE_BELOW = "personal_center_page_below_ad";
+    public static final String AD_EXTERNAL_ADVERTISING_02 = "external_advertising_ad_2";//外部插屏全屏广告
+    public static final String AD_EXTERNAL_ADVERTISING_03 = "external_advertising_ad_3";//内外部插屏全屏广告
+
+
+
+
+
+
+
+
 
 
 
