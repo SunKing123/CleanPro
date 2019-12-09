@@ -1214,11 +1214,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     Log.d(TAG, "DEMO>>>adSuccess， AdInfo is empty");
                 } else {
                     Log.d(TAG, "DEMO>>>adSuccess， " + info.toString());
-                }
-                View adView = adManager.getAdView();
-                if (adView != null) {
-                    ad_container_pos01.removeAllViews();
-                    ad_container_pos01.addView(adView);
+                    if (info.getAdView() != null) {
+                        ad_container_pos01.removeAllViews();
+                        ad_container_pos01.addView(info.getAdView());
+                    }
                 }
             }
 
@@ -1241,9 +1240,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "adError 111： " + errorMsg);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", sourcePage, currentPage);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
+                }
                 showBottomAd();
             }
         });
@@ -1297,11 +1298,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void adSuccess(AdInfo info) {
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
-                }
-                View adView = adManager.getAdView();
-                if (adView != null) {
-                    ad_container_pos02.removeAllViews();
-                    ad_container_pos02.addView(adView);
+                    if (info.getAdView() != null) {
+                        ad_container_pos02.removeAllViews();
+                        ad_container_pos02.addView(info.getAdView());
+                    }
                 }
             }
 
@@ -1320,9 +1320,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "adError2222");
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "fail", sourcePage, currentPage);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
+                }
                 showBottomAd2();
             }
         });

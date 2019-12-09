@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -51,7 +53,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -126,7 +127,7 @@ public class ToolFragment extends SimpleFragment {
      */
     private void initGeekAdSdk() {
         if (null == mAdManager)
-        mAdManager = GeekAdSdk.getAdsManger();
+            mAdManager = GeekAdSdk.getAdsManger();
     }
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
@@ -219,7 +220,7 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -261,7 +262,7 @@ public class ToolFragment extends SimpleFragment {
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_one_key_speed));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -296,7 +297,7 @@ public class ToolFragment extends SimpleFragment {
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -410,13 +411,12 @@ public class ToolFragment extends SimpleFragment {
     }
 
 
-
-
     /**
      * 底部广告样式--
      */
     private void addBottomAdView() {
-        if (null == getActivity()||!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE)) return;
+        if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
+            return;
         initGeekAdSdk();
         //todo
         mAdManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
@@ -425,11 +425,11 @@ public class ToolFragment extends SimpleFragment {
                 if (null != info) {
                     Logger.i("adSuccess---1==" + info.getAdId());
 //                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                }
-                if (null != frameBottomLayout && null != mAdManager && null != mAdManager.getAdView()) {
-                    frameBottomLayout.removeAllViews();
-                    frameBottomLayout.addView(mAdManager.getAdView());
-                    frameBottomLayout.setVisibility(View.VISIBLE);
+                    if (null != frameBottomLayout && null != info.getAdView()) {
+                        frameBottomLayout.removeAllViews();
+                        frameBottomLayout.addView(info.getAdView());
+                        frameBottomLayout.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -442,7 +442,7 @@ public class ToolFragment extends SimpleFragment {
 
             @Override
             public void adClicked(AdInfo info) {
-                Logger.i( "adClicked---1");
+                Logger.i("adClicked---1");
                 if (null == info) return;
 //                StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
             }
@@ -454,9 +454,9 @@ public class ToolFragment extends SimpleFragment {
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Logger.i("adError---1");
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
+                //                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
                 frameBottomLayout.setVisibility(View.GONE);
             }
         });

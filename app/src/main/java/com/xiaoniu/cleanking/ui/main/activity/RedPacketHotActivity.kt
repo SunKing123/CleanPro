@@ -173,9 +173,11 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 showWebView()
             }
 
-            override fun adError(errorCode: Int, errorMsg: String) {
+            override fun adError(info: AdInfo?, errorCode: Int, errorMsg: String?) {
                 Log.d(TAG, "-----adError-----$errorMsg")
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "red_envelopes_page_video_page")
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info!!.adId, info!!.adSource, "fail", "hot_splash_page", "red_envelopes_page_video_page")
+                }
                 showWebView()
             }
 

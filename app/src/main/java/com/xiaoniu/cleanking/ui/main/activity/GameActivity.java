@@ -582,12 +582,14 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "-----adError-----" + errorMsg);
-                if (mIsFromHomeMain) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page");
-                } else {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "gameboost_add_page", "gameboost_incentive_video_page");
+                if (null != info) {
+                    if (mIsFromHomeMain) {
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page");
+                    } else {
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "gameboost_add_page", "gameboost_incentive_video_page");
+                    }
                 }
                 startClean();
             }

@@ -422,7 +422,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 if (null == info || null == ad_container_pos03)
                     return;
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
-                View adView = adManager.getAdView();
+                View adView = info.getAdView();
                 if (adView != null) {
                     ad_container_pos03.removeAllViews();
                     ad_container_pos03.addView(adView);
@@ -448,16 +448,18 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             }
 
             @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
+                }
+                showBottomAd();
+            }
+
+            @Override
             public void adClicked(AdInfo info) {
                 if (null == info)
                     return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-            }
-
-            @Override
-            public void adError(int errorCode, String errorMsg) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", sourcePage, currentPage);
-                showBottomAd();
             }
         });
     }

@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -58,23 +61,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * 锁屏信息流广告页面
  */
 public class LockActivity extends AppCompatActivity implements View.OnClickListener {
     private TouchToUnLockView mUnlockView;
     private RelativeLayout relAd;
-    private TextView mLockTime, mLockDate,tv_weather_temp;
+    private TextView mLockTime, mLockDate, tv_weather_temp;
     private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus;
-    private ImageView iv_file_btn,iv_ram_btn,iv_virus_btn,mErrorAdIv;
-    private TextView tv_file_size,tv_ram_size,tv_virus_size;
-    private LinearLayout lin_tem_top,lin_tem_bottom,linAdLayout;
+    private ImageView iv_file_btn, iv_ram_btn, iv_virus_btn, mErrorAdIv;
+    private TextView tv_file_size, tv_ram_size, tv_virus_size;
+    private LinearLayout lin_tem_top, lin_tem_bottom, linAdLayout;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
-    private TextView tv_weather_state,tv_city;
+    private TextView tv_weather_state, tv_city;
 /*
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,29 +111,29 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         rel_clean_file = ViewUtils.get(this, R.id.rel_clean_file);
         rel_clean_ram = ViewUtils.get(this, R.id.rel_clean_ram);
         rel_clean_virus = ViewUtils.get(this, R.id.rel_clean_virus);
-        mErrorAdIv = ViewUtils.get(this,R.id.error_ad_iv);
+        mErrorAdIv = ViewUtils.get(this, R.id.error_ad_iv);
 
-        lin_tem_top = ViewUtils.get(this,R.id.lin_tem_top);
-        lin_tem_bottom = ViewUtils.get(this,R.id.lin_tem_bottom);
-        tv_weather_state = ViewUtils.get(this,R.id.tv_weather_state);
-        tv_city = ViewUtils.get(this,R.id.tv_city);
+        lin_tem_top = ViewUtils.get(this, R.id.lin_tem_top);
+        lin_tem_bottom = ViewUtils.get(this, R.id.lin_tem_bottom);
+        tv_weather_state = ViewUtils.get(this, R.id.tv_weather_state);
+        tv_city = ViewUtils.get(this, R.id.tv_city);
 
         rel_clean_file.setOnClickListener(this::onClick);
         rel_clean_ram.setOnClickListener(this::onClick);
         rel_clean_virus.setOnClickListener(this::onClick);
-        tv_weather_temp = ViewUtils.get(this,R.id.tv_weather_temp);
+        tv_weather_temp = ViewUtils.get(this, R.id.tv_weather_temp);
 
         mLockTime = ViewUtils.get(this, R.id.lock_time_txt);
         mLockTime.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
         tv_weather_temp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/D-DIN.otf"));
 
-        tv_file_size = ViewUtils.get(this,R.id.tv_file_size);
-        tv_ram_size = ViewUtils.get(this,R.id.tv_ram_size);
-        tv_virus_size = ViewUtils.get(this,R.id.tv_virus_size);
+        tv_file_size = ViewUtils.get(this, R.id.tv_file_size);
+        tv_ram_size = ViewUtils.get(this, R.id.tv_ram_size);
+        tv_virus_size = ViewUtils.get(this, R.id.tv_virus_size);
 
-        iv_file_btn = ViewUtils.get(this,R.id.iv_file_btn);
-        iv_ram_btn = ViewUtils.get(this,R.id.iv_ram_btn);
-        iv_virus_btn = ViewUtils.get(this,R.id.iv_virus_btn);
+        iv_file_btn = ViewUtils.get(this, R.id.iv_file_btn);
+        iv_ram_btn = ViewUtils.get(this, R.id.iv_ram_btn);
+        iv_virus_btn = ViewUtils.get(this, R.id.iv_virus_btn);
 
         mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
@@ -154,9 +154,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 //todo_zzh
                 Intent i = new Intent(LockActivity.this, LocalService.class);
                 i.putExtra("action", "unlock_screen");
-                if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     LockActivity.this.startForegroundService(i);
-                }else{
+                } else {
                     LockActivity.this.startService(i);
                 }
                 finish();
@@ -169,21 +169,21 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         registerLockerReceiver();
         setBtnState();
 
-        if(PreferenceUtil.getInstants().getInt("isGetWeatherInfo") ==1){
+        if (PreferenceUtil.getInstants().getInt("isGetWeatherInfo") == 1) {
             lin_tem_top.setVisibility(View.VISIBLE);
             lin_tem_bottom.setVisibility(View.VISIBLE);
             String temp = PreferenceUtil.getInstants().get("temperature");
             Double tempDoub = Double.valueOf(temp);
-            if(tempDoub>=0){
-                tv_weather_temp.setText( String.valueOf(tempDoub.intValue())+"°");
-            }else{
-                tv_weather_temp.setText( "-"+String.valueOf(tempDoub.intValue())+"°");
+            if (tempDoub >= 0) {
+                tv_weather_temp.setText(String.valueOf(tempDoub.intValue()) + "°");
+            } else {
+                tv_weather_temp.setText("-" + String.valueOf(tempDoub.intValue()) + "°");
             }
 
             tv_weather_state.setText(PreferenceUtil.getInstants().get("skycon"));
-            if(TextUtils.isEmpty(PreferenceUtil.getInstants().get("city")))return;
+            if (TextUtils.isEmpty(PreferenceUtil.getInstants().get("city"))) return;
             tv_city.setText(PreferenceUtil.getInstants().get("city"));
-        }else{
+        } else {
             lin_tem_top.setVisibility(View.GONE);
             lin_tem_bottom.setVisibility(View.GONE);
 
@@ -192,68 +192,69 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void setBtnState(){
-        if(null!= PreferenceUtil.getInstants().get("lock_pos01")&&  PreferenceUtil.getInstants().get("lock_pos01").length()>2){
-            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"),LockScreenBtnInfo.class);
-            if(btnInfo.isNormal()){
+    public void setBtnState() {
+        if (null != PreferenceUtil.getInstants().get("lock_pos01") && PreferenceUtil.getInstants().get("lock_pos01").length() > 2) {
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"), LockScreenBtnInfo.class);
+            if (btnInfo.isNormal()) {
                 tv_file_size.setVisibility(View.GONE);
                 iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
-            }else{
+            } else {
                 tv_file_size.setVisibility(View.VISIBLE);
-                tv_file_size.setText(btnInfo.getCheckResult()+"MB");
+                tv_file_size.setText(btnInfo.getCheckResult() + "MB");
                 iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
             }
-        }else{
+        } else {
             setRandState(1);
         }
 
-        if(null!= PreferenceUtil.getInstants().get("lock_pos02") &&  PreferenceUtil.getInstants().get("lock_pos02").length()>2){
-            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos02"),LockScreenBtnInfo.class);
-            if(btnInfo.isNormal()){
+        if (null != PreferenceUtil.getInstants().get("lock_pos02") && PreferenceUtil.getInstants().get("lock_pos02").length() > 2) {
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos02"), LockScreenBtnInfo.class);
+            if (btnInfo.isNormal()) {
                 tv_ram_size.setVisibility(View.VISIBLE);
-                tv_ram_size.setText( NumberUtils.mathRandom(15,30)+ "%");
+                tv_ram_size.setText(NumberUtils.mathRandom(15, 30) + "%");
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
-            }else{
+            } else {
                 tv_ram_size.setVisibility(View.VISIBLE);
-                tv_ram_size.setText( NumberUtils.mathRandom(70,85)+ "%");
+                tv_ram_size.setText(NumberUtils.mathRandom(70, 85) + "%");
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
             }
-        }else{
+        } else {
             setRandState(2);
         }
 
-        if(null!= PreferenceUtil.getInstants().get("lock_pos03") &&  PreferenceUtil.getInstants().get("lock_pos03").length()>2){
-            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos03"),LockScreenBtnInfo.class);
-            if(btnInfo.isNormal()){
-                if(System.currentTimeMillis()>btnInfo.getReShowTime()){
+        if (null != PreferenceUtil.getInstants().get("lock_pos03") && PreferenceUtil.getInstants().get("lock_pos03").length() > 2) {
+            LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos03"), LockScreenBtnInfo.class);
+            if (btnInfo.isNormal()) {
+                if (System.currentTimeMillis() > btnInfo.getReShowTime()) {
                     tv_virus_size.setText("检测");
                     tv_virus_size.setVisibility(View.VISIBLE);
                     iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
-                }else{
+                } else {
                     tv_virus_size.setText("防御中");
                     tv_virus_size.setVisibility(View.VISIBLE);
                     iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
                 }
-            }else{
+            } else {
                 tv_virus_size.setText("检测");
                 tv_virus_size.setVisibility(View.VISIBLE);
                 iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
             }
-        }else{
+        } else {
             setRandState(3);
         }
 
     }
+
     //设置随机值
-    public void setRandState(int index){
-        switch (index){
-            case  1:
-                tv_file_size.setText(NumberUtils.mathRandom(800,1800)+"MB");
+    public void setRandState(int index) {
+        switch (index) {
+            case 1:
+                tv_file_size.setText(NumberUtils.mathRandom(800, 1800) + "MB");
                 tv_file_size.setVisibility(View.VISIBLE);
                 iv_file_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 break;
             case 2:
-                tv_ram_size.setText( NumberUtils.mathRandom(70,85)+ "%");
+                tv_ram_size.setText(NumberUtils.mathRandom(70, 85) + "%");
                 tv_ram_size.setVisibility(View.VISIBLE);
                 iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 break;
@@ -266,38 +267,38 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
     public void adInit() {
 
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.KEY_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
+                if (null == info) return;
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
-                View adView = adManager.getAdView();
-                if (adView != null&&null!=relAd ) {
+                if (info.getAdView() != null && null != relAd) {
                     relAd.removeAllViews();
-                    relAd.addView(adView);
+                    relAd.addView(info.getAdView());
                 }
             }
 
             @Override
             public void adExposed(AdInfo info) {
-                if(null==info)return;
+                if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
                 LogUtils.e("adExposed");
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                if(null==info)return;
+                if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "lock_screen", "lock_screen");
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
+                }
                 Logger.d("zz--" + errorMsg);
                 showBottomAd();
             }
@@ -308,7 +309,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        if(null==mUnlockView)
+        if (null == mUnlockView)
             return;
         mUnlockView.startAnim();
 
@@ -336,9 +337,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateTimeUI() {
         if (null != mLockDate)
-        mLockTime.setText(DateUtils.getHourString(this, System.currentTimeMillis()));
+            mLockTime.setText(DateUtils.getHourString(this, System.currentTimeMillis()));
         if (null != mLockDate)
-        mLockDate.setText(monthFormat.format(GregorianCalendar.getInstance().getTime()) + "  " + weekFormat.format(GregorianCalendar.getInstance().getTime()));
+            mLockDate.setText(monthFormat.format(GregorianCalendar.getInstance().getTime()) + "  " + weekFormat.format(GregorianCalendar.getInstance().getTime()));
     }
 
     private void setLockerWindow(Window window) {
@@ -387,7 +388,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.rel_clean_ram://一键加速
                 StatisticsUtils.trackClick("memory_usage_click", "内存使用点击", "lock_screen", "lock_screen");
-                PreferenceUtil.getInstants().save("lock_action","ram");
+                PreferenceUtil.getInstants().save("lock_action", "ram");
                 if (PreferenceUtil.getCleanTime()) {
                     Intent phoneAccessIntent = new Intent(this, PhoneAccessActivity.class);
                     phoneAccessIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -398,7 +399,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString(ExtraConstant.ACTION_NAME, "lock");
                     phoneAccessIntent.putExtras(bundle);
                     startActivity(phoneAccessIntent);
-                }else{
+                } else {
                     PreferenceUtil.getInstants().save("lock_action", "ram");//埋点区分逻辑
                     Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
                     intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -453,7 +454,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void startVirUsKill(){
+    public void startVirUsKill() {
         Intent virusIntent = new Intent(this, VirusKillActivity.class);
         virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -463,7 +464,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         Bundle bundle = new Bundle();
         bundle.putString(ExtraConstant.ACTION_NAME, "lock");
         virusIntent.putExtras(bundle);
-        PreferenceUtil.getInstants().save("lock_action","virus");//埋点逻辑
+        PreferenceUtil.getInstants().save("lock_action", "virus");//埋点逻辑
         startActivity(virusIntent);
     }
 
@@ -472,7 +473,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
      * 病毒查杀激励视频
      */
     private void loadGeekAd() {
-        AdManager mAdManager =  GeekAdSdk.getAdsManger();
+        AdManager mAdManager = GeekAdSdk.getAdsManger();
         if (null == mAdManager) return;
         NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
         NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
@@ -521,11 +522,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "virus_killing_video_page");
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
+                }
                 startVirUsKill();
             }
-
         });
     }
 
@@ -581,7 +583,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     @Override
     public void onBackPressed() {
 
@@ -625,12 +626,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             } else if (pos == 1) {
                 if (btnInfo.isNormal()) {
                     tv_ram_size.setVisibility(View.VISIBLE);
-                    tv_ram_size.setText( NumberUtils.mathRandom(15,30)+ "%");
+                    tv_ram_size.setText(NumberUtils.mathRandom(15, 30) + "%");
                     iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_normal));
                 } else {
                     //btnInfo.getCheckResult()
                     tv_ram_size.setVisibility(View.VISIBLE);
-                    tv_ram_size.setText( NumberUtils.mathRandom(70,85)+ "%");
+                    tv_ram_size.setText(NumberUtils.mathRandom(70, 85) + "%");
                     iv_ram_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 }
             } else if (pos == 2) {
@@ -661,12 +662,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
      * 锁屏打底广告
      */
     private int mBottomAdShowCount = 0;
+
     private void showBottomAd() {
         List<BottoomAdList.DataBean> mBottoomAdList = AppHolder.getInstance().getBottomAdList();
         if (null != mBottoomAdList && mBottoomAdList.size() > 0) {
             for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
                 if (dataBean.getSwitcherKey().equals(PositionId.KEY_LOCK_SCREEN)) {
-                    Logger.d("zz--1"+dataBean.getAdvertPosition());
+                    Logger.d("zz--1" + dataBean.getAdvertPosition());
                     if (dataBean.getShowType() == 1) { //循环
                         mBottomAdShowCount = PreferenceUtil.getBottomLockAdCount();
                         if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {

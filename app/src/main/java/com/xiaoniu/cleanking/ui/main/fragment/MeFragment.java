@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -39,7 +41,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -130,7 +131,7 @@ public class MeFragment extends SimpleFragment {
         }
     }
 
-    @OnClick({R.id.line_share,R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report})
+    @OnClick({R.id.line_share, R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_setting) {
@@ -146,9 +147,9 @@ public class MeFragment extends SimpleFragment {
 
             long ls = e + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
             Log.e("fdsa", "" + ls);
-        }else if (ids == R.id.line_share) {
+        } else if (ids == R.id.line_share) {
             String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-            share("", AppConstants.Base_H5_Host+"/share.html", getString(R.string.app_name), shareContent, -1);
+            share("", AppConstants.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
             StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", AppHolder.getInstance().getSourcePageId(), "about_page");
 
         }
@@ -214,7 +215,7 @@ public class MeFragment extends SimpleFragment {
         });
         switch (type) {
             case -1:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA);
                 shareAction.open();
 //                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
 //                shareAction.open();
@@ -228,7 +229,7 @@ public class MeFragment extends SimpleFragment {
                 shareAction.share();
                 break;
             default:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA);
                 shareAction.open();
         }
     }
@@ -260,12 +261,12 @@ public class MeFragment extends SimpleFragment {
     };
 
 
-
     /**
      * 底部广告样式--
      */
     private void addBottomAdView() {
-        if (null == getActivity()||!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE)) return;
+        if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE))
+            return;
         initGeekAdSdk();
         //todo
         mAdManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
@@ -274,11 +275,11 @@ public class MeFragment extends SimpleFragment {
                 if (null != info) {
                     Logger.i("adSuccess---1==" + info.getAdId());
 //                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                }
-                if (null != frameBottomLayout && null != mAdManager && null != mAdManager.getAdView()) {
-                    frameBottomLayout.removeAllViews();
-                    frameBottomLayout.addView(mAdManager.getAdView());
-                    frameBottomLayout.setVisibility(View.VISIBLE);
+                    if (null != frameBottomLayout && null != info.getAdView()) {
+                        frameBottomLayout.removeAllViews();
+                        frameBottomLayout.addView(info.getAdView());
+                        frameBottomLayout.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -291,7 +292,7 @@ public class MeFragment extends SimpleFragment {
 
             @Override
             public void adClicked(AdInfo info) {
-                Logger.i( "adClicked---1");
+                Logger.i("adClicked---1");
                 if (null == info) return;
 //                StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
             }
@@ -303,7 +304,7 @@ public class MeFragment extends SimpleFragment {
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Logger.i("adError---1");
 //                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
                 frameBottomLayout.setVisibility(View.GONE);

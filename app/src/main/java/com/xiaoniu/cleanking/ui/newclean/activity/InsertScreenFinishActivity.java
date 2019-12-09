@@ -84,10 +84,11 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "-----adError-----");
                 finish();
-                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", " ", " ", "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
         });
     }

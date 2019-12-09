@@ -81,12 +81,12 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
                 finish()
             }
 
-            override fun adError(errorCode: Int, errorMsg: String) {
+            override fun adError(info: AdInfo?, errorCode: Int, errorMsg: String?) {
                 Log.d(TAG, "-----adError 内部插屏 $errorCode-----$errorMsg")
                 if (!BuildConfig.SYSTEM_EN.contains("prod")) {
                     ToastUtils.showShort("-----adError 内部插屏错误 $errorCode -----$errorMsg")
                 }
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "inside_advertising_ad_page")
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info!!.adId, info!!.adSource, "fail", "hot_splash_page", "inside_advertising_ad_page")
                 finish()
             }
         }, "80")

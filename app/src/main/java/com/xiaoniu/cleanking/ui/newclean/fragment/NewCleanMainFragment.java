@@ -428,12 +428,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     Log.d(TAG, "adSuccess---1==" + info.getAdId());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                }
-                if (null != mTopAdFramelayout && null != adManager && null != adManager.getAdView()) {
-                    mTopContentView.setVisibility(View.GONE);
-                    mTopAdFramelayout.setVisibility(VISIBLE);
-                    mTopAdFramelayout.removeAllViews();
-                    mTopAdFramelayout.addView(adManager.getAdView());
+                    if (null != mTopAdFramelayout && null != info.getAdView()) {
+                        mTopContentView.setVisibility(View.GONE);
+                        mTopAdFramelayout.setVisibility(VISIBLE);
+                        mTopAdFramelayout.removeAllViews();
+                        mTopAdFramelayout.addView(info.getAdView());
+                    }
                 }
             }
 
@@ -468,9 +468,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "adError---1");
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "home_page");
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
             }
         });
     }
@@ -496,11 +497,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adSuccess(AdInfo info) {
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                }
-                if (null != mCenterAdFramelayout && null != adManager && null != adManager.getAdView()) {
-                    mCenterAdFramelayout.setVisibility(VISIBLE);
-                    mCenterAdFramelayout.removeAllViews();
-                    mCenterAdFramelayout.addView(adManager.getAdView());
+                    if (null != mCenterAdFramelayout && null != info.getAdView()) {
+                        mCenterAdFramelayout.setVisibility(VISIBLE);
+                        mCenterAdFramelayout.removeAllViews();
+                        mCenterAdFramelayout.addView(info.getAdView());
+                    }
                 }
             }
 
@@ -534,8 +535,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "fail", "home_page", "home_page");
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
             }
         });
     }
@@ -1469,12 +1471,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "-----adError-----" + errorMsg);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "virus_killing_video_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
+                }
                 startActivity(VirusKillActivity.class);
             }
-
         });
     }
 
@@ -1536,12 +1539,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "-----adError-----" + errorMsg);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "home_page", "network_acceleration_video_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "network_acceleration_video_page");
+                }
                 startActivity(NetWorkActivity.class);
             }
-
         });
     }
 }

@@ -14,6 +14,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -53,7 +55,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -354,7 +355,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
                 if (null == info) return;
                 showProgressBar();
-                container.addView(mAdManager.getAdView());
+                container.addView(info.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
             }
 
@@ -375,9 +376,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.e(TAG, "-----adError 冷启动-----" + errorMsg);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "clod_splash_page", "clod_splash_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "clod_splash_page", "clod_splash_page");
+                }
                 showProgressBar();
                 showBottomAd();
             }
@@ -416,7 +419,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         AppHolder.getInstance().setCleanFinishSourcePageId("clod_splash_page");
                         startActivityForResult(new Intent(this, AgentWebViewActivity.class)
                                 .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
-                                .putExtra(ExtraConstant.WEB_FROM,"SplashADActivity"), 100);
+                                .putExtra(ExtraConstant.WEB_FROM, "SplashADActivity"), 100);
                     });
                 }
             }

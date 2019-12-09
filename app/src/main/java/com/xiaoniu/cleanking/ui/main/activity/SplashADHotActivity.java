@@ -143,7 +143,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 }
                 if (null == info || null == container) return;
                 showProgressBar();
-                container.addView(mAdManager.getAdView());
+                container.addView(info.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "hot_splash_page", "hot_splash_page");
             }
 
@@ -162,9 +162,11 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             }
 
             @Override
-            public void adError(int errorCode, String errorMsg) {
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.e(TAG, "-----adError 热启动-----" + errorMsg);
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", "hot_splash_page", "hot_splash_page");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "hot_splash_page", "hot_splash_page");
+                }
                 showProgressBar();
                 showBottomAd();
             }
