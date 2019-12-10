@@ -152,18 +152,22 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
                 if (null == auditSwitch.getData() || auditSwitch.getData().size() <= 0) return;
                 AppHolder.getInstance().setBottomAdList(auditSwitch.getData());
                 PreferenceUtil.getInstants().save(SpCacheConfig.BOTTOM_AD_LIST, new Gson().toJson(auditSwitch));
+                mView.getBottomAdListSuccess();
             }
 
             @Override
             public void showExtraOp(String code, String message) {
+                mView.getBottomAdListSuccess();
             }
 
             @Override
             public void showExtraOp(String message) {
+                mView.getBottomAdListSuccess();
             }
 
             @Override
             public void netConnectError() {
+                mView.getBottomAdListSuccess();
             }
         });
     }

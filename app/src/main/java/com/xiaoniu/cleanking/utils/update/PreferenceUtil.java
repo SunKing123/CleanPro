@@ -1351,7 +1351,6 @@ public class PreferenceUtil {
     }
 
 
-
     /**
      * 锁屏打底广告循环展示到第几个
      *
@@ -1365,7 +1364,7 @@ public class PreferenceUtil {
     }
 
     /**
-     *  锁屏打底广告循环展示到第几个
+     * 锁屏打底广告循环展示到第几个
      */
     public static int getBottomLockAdCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
@@ -1546,7 +1545,7 @@ public class PreferenceUtil {
 
 
     //全屏插屏时间展示逻辑
-    public static  boolean fullInsertPageIsShow(int showTimes){
+    public static boolean fullInsertPageIsShow(int showTimes) {
         long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get(SpCacheConfig.POP_FULL_LAYER_TIME)) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get(SpCacheConfig.POP_FULL_LAYER_TIME));
         int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_FULL_LAYER_NUMBERS);
         //一小时内showTimes次

@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -56,7 +58,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -129,44 +130,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         } else {
             mPresenter.geekAdSDKConfig();//加载广告配置
             mPresenter.getBottomAdList();
-            if (PreferenceUtil.getCoolStartTime()) {
-                mPresenter.getAuditSwitch();
-            } else { //小于10分钟不获取开关直接请求广告
-                //        状态（0=隐藏，1=显示）
-                String auditSwitch = SPUtil.getString(this, AppApplication.AuditSwitch, "1");
-                if (auditSwitch.equals("0")) {
-                    mStartView.setVisibility(View.GONE);
-                    mContentView.setVisibility(View.VISIBLE);
-                    this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                        jumpActivity();
-                    });
-                } else if (auditSwitch.equals("1")) {
-                    mStartView.setVisibility(View.GONE);
-                    mContentView.setVisibility(View.VISIBLE);
-                    if (PreferenceUtil.isNotFirstOpenApp()) {
-                        if (PreferenceUtil.getCoolStartADStatus()) {
-                            initGeekSdkAD();
-                        }else{
-                            coolStartActivity();
-                        }
-                        String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
-                        if (!TextUtils.isEmpty(switchInfo)) {
-                            SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
-                            if (null != switchInfoList) {
-                                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-                            } else {
-                                mPresenter.getSwitchInfoListNew();
-                            }
-                        } else {
-                            mPresenter.getSwitchInfoListNew();
-                        }
-
-                    } else {
-                        coolStartActivity();
-                    }
-                }
-            }
-            PreferenceUtil.saveCoolStartTime();
         }
 
         initNiuData();
@@ -192,7 +155,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
 
-    public void coolStartActivity(){
+    public void coolStartActivity() {
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -426,6 +389,47 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         });
     }
 
+    public void getBottomAdListSuccess() {
+        if (PreferenceUtil.getCoolStartTime()) {
+            mPresenter.getAuditSwitch();
+        } else { //小于10分钟不获取开关直接请求广告
+            //        状态（0=隐藏，1=显示）
+            String auditSwitch = SPUtil.getString(this, AppApplication.AuditSwitch, "1");
+            if (auditSwitch.equals("0")) {
+                mStartView.setVisibility(View.GONE);
+                mContentView.setVisibility(View.VISIBLE);
+                this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                    jumpActivity();
+                });
+            } else if (auditSwitch.equals("1")) {
+                mStartView.setVisibility(View.GONE);
+                mContentView.setVisibility(View.VISIBLE);
+                if (PreferenceUtil.isNotFirstOpenApp()) {
+                    if (PreferenceUtil.getCoolStartADStatus()) {
+                        initGeekSdkAD();
+                    } else {
+                        coolStartActivity();
+                    }
+                    String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
+                    if (!TextUtils.isEmpty(switchInfo)) {
+                        SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
+                        if (null != switchInfoList) {
+                            AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+                        } else {
+                            mPresenter.getSwitchInfoListNew();
+                        }
+                    } else {
+                        mPresenter.getSwitchInfoListNew();
+                    }
+
+                } else {
+                    coolStartActivity();
+                }
+            }
+        }
+        PreferenceUtil.saveCoolStartTime();
+    }
+
     private int mBottomAdShowCount = 0;
 
     /**
@@ -451,6 +455,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         }
                     }
                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", "clod_splash_page", "clod_splash_page", dataBean.getSwitcherName());
+                    container.setVisibility(View.GONE);
+                    mErrorAdIv.setVisibility(View.VISIBLE);
                     GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
                         mIsAdError = true;
