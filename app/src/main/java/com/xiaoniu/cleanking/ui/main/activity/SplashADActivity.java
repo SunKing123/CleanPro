@@ -142,12 +142,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 } else if (auditSwitch.equals("1")) {
                     mStartView.setVisibility(View.GONE);
                     mContentView.setVisibility(View.VISIBLE);
-                    if (PreferenceUtil.isNotFirstOpenApp()) {
-                        if (PreferenceUtil.getCoolStartADStatus()) {
-                            initGeekSdkAD();
-                        } else {
-                            coolStartActivity();
-                        }
+//                    if (!PreferenceUtil.isNotFirstOpenApp()) return;  卡在启动页
+                    if (PreferenceUtil.isNotFirstOpenApp() && PreferenceUtil.getCoolStartADStatus()) {
+                        initGeekSdkAD();
                         String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
                         if (!TextUtils.isEmpty(switchInfo)) {
                             SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
@@ -159,9 +156,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         } else {
                             mPresenter.getSwitchInfoListNew();
                         }
-
                     } else {
-                        coolStartActivity();
+                        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jumpActivity();
+                                }
+                            }, 100);
+                        });
                     }
                 }
             }
@@ -192,25 +195,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     }
 
-
-    public void coolStartActivity() {
-        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    jumpActivity();
-                }
-            }, 100);
-        });
-    }
-
     //初始sd根目录关联关系
     void initFileRelation() {
         SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
     }
 
     public void geekAdSDKConfigSuccess() {
-//        initHomeCenterAD();
+        initHomeCenterAD();
     }
 
     /**
@@ -229,9 +220,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "DEMO>>>adError： " + errorMsg + "---" + errorCode);
+                LogUtils.d("DEMO>>>adError： " + errorMsg);
                 if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告" + errorMsg + "---" + errorCode, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告", Toast.LENGTH_LONG).show();
                 }
             }
         });

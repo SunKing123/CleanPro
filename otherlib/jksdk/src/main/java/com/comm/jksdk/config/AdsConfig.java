@@ -39,7 +39,7 @@ public class AdsConfig {
     private static AdsConfig mAdsConfig = null;
     private Gson mGson = new Gson();
     private String mConfigInfo;
-//    private ConfigBean.AdListBean mConfigInfoBean;
+    //    private ConfigBean.AdListBean mConfigInfoBean;
     private ArrayList<PositionInfo> posInfoList;
 
     //本地的配置信息
@@ -107,9 +107,6 @@ public class AdsConfig {
                             }
                             return;
                         }
-                        if (listener != null) {
-                            listener.adSuccess(configList);
-                        }
 //                        for (int i = 0; i < configList.size(); i++) {
 //                            // "isChange": 0,//是否变更：0 - 无  1 - 有
 //                            if (configList.get(i).getIsChange() == 1) {
@@ -129,8 +126,9 @@ public class AdsConfig {
                         //保存总json
                         setAdsInfoslist(configBean);
                         LogUtils.d(TAG, "accept->配置信息请求成功: ");
-//                        Toast.makeText(mContext, "accept->配置信息请求成功: "+configInfo, Toast.LENGTH_LONG).show();
-
+                        if (listener != null) {
+                            listener.adSuccess(configList);
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override

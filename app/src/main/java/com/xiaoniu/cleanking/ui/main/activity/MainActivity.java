@@ -13,12 +13,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -237,31 +233,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
-        initHomeCenterAD();
-    }
-
-    /**
-     * 首页更多推荐上方广告预加载
-     */
-    private void initHomeCenterAD() {
-        GeekAdSdk.getAdsManger().preloadingAd(this, "homepage_ad_2", new AdPreloadingListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "DEMO>>>adSuccess， " + info.toString());
-                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载成功--首页更多推荐上方广告", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "DEMO>>>adError： " + errorMsg + "---" + errorCode);
-                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告" + errorMsg + "---" + errorCode, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
     @Override
