@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -58,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -142,9 +141,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 } else if (auditSwitch.equals("1")) {
                     mStartView.setVisibility(View.GONE);
                     mContentView.setVisibility(View.VISIBLE);
-//                    if (!PreferenceUtil.isNotFirstOpenApp()) return;  卡在启动页
-                    if (PreferenceUtil.isNotFirstOpenApp() && PreferenceUtil.getCoolStartADStatus()) {
-                        initGeekSdkAD();
+                    if (PreferenceUtil.isNotFirstOpenApp()) {
+                        if (PreferenceUtil.getCoolStartADStatus()) {
+                            initGeekSdkAD();
+                        }else{
+                            coolStartActivity();
+                        }
                         String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
                         if (!TextUtils.isEmpty(switchInfo)) {
                             SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
@@ -156,15 +158,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         } else {
                             mPresenter.getSwitchInfoListNew();
                         }
+
                     } else {
-                        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    jumpActivity();
-                                }
-                            }, 100);
-                        });
+                        coolStartActivity();
                     }
                 }
             }
@@ -193,6 +189,18 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             readyExternalDb();
         }
 
+    }
+
+
+    public void coolStartActivity(){
+        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    jumpActivity();
+                }
+            }, 100);
+        });
     }
 
     //初始sd根目录关联关系
