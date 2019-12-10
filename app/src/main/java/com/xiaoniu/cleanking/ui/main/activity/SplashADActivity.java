@@ -100,6 +100,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     @Override
     protected void initView() {
         /*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
+        container = this.findViewById(R.id.splash_container);
+        skipView = findViewById(R.id.skip_view);
         mBtn.setOnClickListener(this);
         mAgreement.setOnClickListener(this);
         findViewById(R.id.tv_xy).setOnClickListener(this);
@@ -166,8 +168,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             }
             PreferenceUtil.saveCoolStartTime();
         }
-        container = this.findViewById(R.id.splash_container);
-        skipView = findViewById(R.id.skip_view);
 
         initNiuData();
         initFileRelation();
