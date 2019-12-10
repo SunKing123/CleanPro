@@ -317,7 +317,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mUnlockView.startAnim();
 
         updateTimeUI();
-
         boolean isOpen = false;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {

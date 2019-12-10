@@ -75,7 +75,6 @@ public final class LocalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
         Log.i("本地服务", "：本地服务启动成功");
         if (mBilder == null) {
             mBilder = new LocalBinder();
@@ -85,7 +84,8 @@ public final class LocalService extends Service {
         if (handler == null) {
             handler = new Handler();
         }
-
+        //默认连接状态
+        PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, 1);
     }
 
     @Override
@@ -386,8 +386,10 @@ public final class LocalService extends Service {
             isCharged = false;
         }
 
-        //充电状态变更wifi
+        //充电状态变更
         if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
+            startFullInsertAd(this);
+        }else if(PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)){//拔电状态变更
             startFullInsertAd(this);
         }
         if(!BuildConfig.SYSTEM_EN.contains("prod"))
