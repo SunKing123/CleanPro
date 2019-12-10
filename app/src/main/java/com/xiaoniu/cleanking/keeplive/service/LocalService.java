@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
+import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -42,6 +43,8 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.RedPacketHotActivity;
+import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -95,6 +98,7 @@ public final class LocalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         //播放无声音乐
         KeepAliveConfig.runMode = SPUtils.getInstance(getApplicationContext(), SP_NAME).getInt(KeepAliveConfig.RUN_MODE);
         Log.d(TAG, "运行模式：" + KeepAliveConfig.runMode);
@@ -471,7 +475,7 @@ public final class LocalService extends Service {
 
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
-            if (TextUtils.equals(auditSwitch, "1") && !ActivityCollector.isActivityExist(PopLayerActivity.class) && !ActivityCollector.isActivityExist(LockActivity.class) && !PreferenceUtil.isShowAD()) {
+            if (TextUtils.equals(auditSwitch, "1") && isShowFullInsert()) {
                 //内外部插屏
                 InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
                 //外部插屏
@@ -510,8 +514,6 @@ public final class LocalService extends Service {
 
 
     public void startFullInsertIntent(Context context,String adStyle){
-        if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
-            return;
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -520,6 +522,16 @@ public final class LocalService extends Service {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         screenIntent.putExtra("ad_style",adStyle);
         context.startActivity(screenIntent);
+    }
+
+
+
+    //外部全屏插屏冲突展示时机判断
+    private boolean isShowFullInsert(){
+        //是否在更新
+        MMKV kv = MMKV.mmkvWithID("update_info", MMKV.MULTI_PROCESS_MODE);
+        boolean isUpdate =  kv.decodeBool(SpCacheConfig.HASE_UPDATE_VERSION);
+        return !ActivityCollector.isActivityExistMkv(PopLayerActivity.class) && !ActivityCollector.isActivityExistMkv(LockActivity.class) && !ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)&& !ActivityCollector.isActivityExistMkv(RedPacketHotActivity.class) && !isUpdate;
     }
 
 }

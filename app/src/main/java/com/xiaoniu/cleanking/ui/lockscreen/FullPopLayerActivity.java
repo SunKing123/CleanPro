@@ -11,6 +11,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -63,6 +64,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
         adClose.setOnClickListener(this);
         if(NetworkUtils.isNetConnected()){
             adInit();
+
         }else{
             countDownTimer.cancel();
             finish();
@@ -86,6 +88,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
                     flayoutAdContainer.addView(adView);
                     int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_FULL_LAYER_NUMBERS);
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_FULL_LAYER_NUMBERS,number+1);
+                    Logger.i("zz--"+(number+1));
                     PreferenceUtil.getInstants().save(SpCacheConfig.POP_FULL_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
                 }
             }

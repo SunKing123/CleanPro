@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -1217,7 +1218,14 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SpCacheConfig.HASE_UPDATE_VERSION, isShow).commit();
+        saveHaseUpdateVersionMK(isShow);
         return true;
+    }
+
+
+    public static void saveHaseUpdateVersionMK(boolean isShow) {
+        MMKV kv = MMKV.mmkvWithID("update_info", MMKV.MULTI_PROCESS_MODE);
+        kv.encode(SpCacheConfig.HASE_UPDATE_VERSION, isShow);
     }
 
     /**
@@ -1544,7 +1552,7 @@ public class PreferenceUtil {
         //一小时内showTimes次
         if (pretime <= 0 || (System.currentTimeMillis() - pretime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
             if ((System.currentTimeMillis() - pretime) > (60 * 60 * 1000)) {//超过一小时重置次数
-                PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, 0);
+                PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_FULL_LAYER_TIME, 0);
             }
             if (NetworkUtils.isNetConnected()) {
                 return true;

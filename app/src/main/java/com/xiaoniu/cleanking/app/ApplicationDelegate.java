@@ -15,13 +15,13 @@ import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.tencent.mmkv.MMKV;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -106,13 +106,14 @@ public class ApplicationDelegate implements IApplicationDelegate {
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
-
         Logger.addLogAdapter(new AndroidLogAdapter() {
             @Override
             public boolean isLoggable(int priority, String tag) {
                 return BuildConfig.DEBUG;
             }
         });
+        String rootDir = MMKV.initialize(application);
+//        Logger.i("zz---"+rootDir);
     }
 
 

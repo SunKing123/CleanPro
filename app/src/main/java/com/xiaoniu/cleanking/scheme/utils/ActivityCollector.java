@@ -3,8 +3,15 @@ package com.xiaoniu.cleanking.scheme.utils;
 import android.app.Activity;
 import android.os.Build;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.orhanobut.logger.Logger;
+import com.tencent.mmkv.MMKV;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +33,7 @@ public class ActivityCollector {
      */
     public static void addActivity(Activity activity, Class<?> clz) {
         activities.put(clz, activity);
+        spSave(activities);
     }
 
     /**
@@ -108,6 +116,7 @@ public class ActivityCollector {
     public static void removeActivity(Activity activity) {
         if (activities.containsValue(activity)) {
             activities.remove(activity.getClass());
+            spSave(activities);
         }
     }
 
@@ -133,5 +142,37 @@ public class ActivityCollector {
         T activity = (T) activities.get(activities.size() - 1);
         return activity;
     }
+
+    public static void spSave(HashMap<Class<?>, Activity> activities){
+        List<String> acNameList= new ArrayList<>();
+        if(activities!=null && activities.size()>0){
+            for (Map.Entry<Class<?>, Activity> activityEntry : activities.entrySet()) {
+                acNameList.add(((Activity)activityEntry.getValue()).getLocalClassName());
+            }
+        }
+
+        if (acNameList.size() > 0) {
+            Logger.i("zz-activity-"+new Gson().toJson(acNameList));
+            MMKV kv = MMKV.mmkvWithID("activitys_info", MMKV.MULTI_PROCESS_MODE);
+            kv.encode("activity_list", new Gson().toJson(acNameList));
+        }
+    }
+
+    public static boolean isActivityExistMkv(Class cla){
+        boolean isExist =false;
+        MMKV kv = MMKV.mmkvWithID("activitys_info", MMKV.MULTI_PROCESS_MODE);
+        String activity_list = kv.decodeString("activity_list");
+        TypeToken<List<String>> token = new TypeToken<List<String>>() {};
+        List<String> acNameList = new Gson().fromJson(activity_list, token.getType());
+        if (null != acNameList && acNameList.size() > 0) {
+            for(String name:acNameList){
+                if(name.contains(cla.getName())){
+                    isExist = true;
+                }
+            }
+        }
+        return isExist;
+    }
+
 
 }

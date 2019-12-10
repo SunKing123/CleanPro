@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
+import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -17,10 +18,13 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.RedPacketHotActivity;
+import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -86,7 +90,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
 //        Logger.i("zz---总开关："+AppHolder.getInstance().getSwitchInfoList().getData()+"--插屏开关："+AppHolder.getInstance().getInsertAdSwitchmap());
 
         //网络状态变更为wifi
-        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.WIFI_STATE) == 0 && wifiContected == 1 && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
+        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.WIFI_STATE) == 0 && wifiContected == 1) {
             startFullInsertAd(context);
         }
         if(!BuildConfig.SYSTEM_EN.contains("prod"))
@@ -105,7 +109,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
             Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));
-            if (TextUtils.equals(auditSwitch, "1") && !ActivityCollector.isActivityExist(PopLayerActivity.class) && !ActivityCollector.isActivityExist(LockActivity.class) && !PreferenceUtil.isShowAD()) {
+            if (TextUtils.equals(auditSwitch, "1") && isShowFullInsert()) {
                 //内外部插屏
                 InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
                 //外部插屏
@@ -115,6 +119,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
                     int showTimes = 2;
                     if (dataBean.isOpen()) {
                         showTimes = dataBean.getShowRate();
+                        LogUtils.i("zz--times-"+showTimes);
                         if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
                             startFullInsertPage(context,PositionId.AD_EXTERNAL_ADVERTISING_03);
                         }
@@ -192,4 +197,18 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
         screenIntent.putExtra("ad_style",adStyle);
         context.startActivity(screenIntent);
     }
+
+
+    //外部全屏插屏冲突展示时机判断
+    private boolean isShowFullInsert(){
+        //是否在更新
+        MMKV kv = MMKV.mmkvWithID("update_info", MMKV.MULTI_PROCESS_MODE);
+        boolean isUpdate =  kv.decodeBool(SpCacheConfig.HASE_UPDATE_VERSION);
+        //外部非全屏插屏&& 锁屏页面&& 内部插屏 && 红包 && 更新
+        return !ActivityCollector.isActivityExistMkv(PopLayerActivity.class) && !ActivityCollector.isActivityExistMkv(LockActivity.class) && !ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)&& !ActivityCollector.isActivityExistMkv(RedPacketHotActivity.class) && !isUpdate;
+    }
+
+
+
+
 }

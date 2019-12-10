@@ -105,6 +105,8 @@ dependencies {
 
     api rootProject.ext.dependencies["kotlin-stdlib-jdk7"]
     api rootProject.ext.dependencies["kotlin-reflect"]
+    api rootProject.ext.dependencies["mmkv"]
+
 
     api project(path: ':otherlib:takephoto_library')
 
