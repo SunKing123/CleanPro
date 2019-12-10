@@ -165,6 +165,7 @@
     <string name="garbage_ram">内存使用</string>
     <string name="garbage_virus">病毒查杀</string>
     <string name="already_virus">已杀毒</string>
+    <string name="app_label">微信</string>
 
 
 </resources>

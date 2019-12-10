@@ -11,7 +11,6 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -75,7 +74,6 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
     public void adInit() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        Logger.i("zz---999---"+adStyle);
         adManager.loadAd(this, adStyle, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -110,6 +108,12 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override

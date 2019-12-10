@@ -24,7 +24,6 @@ import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -302,7 +301,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
                 }
-                Logger.d("zz--" + errorMsg);
                 showBottomAd();
             }
         });
@@ -689,7 +687,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if (null != mBottoomAdList && mBottoomAdList.size() > 0) {
             for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
                 if (dataBean.getSwitcherKey().equals(PositionId.KEY_LOCK_SCREEN)) {
-                    Logger.d("zz--1" + dataBean.getAdvertPosition());
                     if (dataBean.getShowType() == 1) { //循环
                         mBottomAdShowCount = PreferenceUtil.getBottomLockAdCount();
                         if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {

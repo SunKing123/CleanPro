@@ -29,6 +29,7 @@ import com.xiaoniu.common.utils.DeviceUtils;
  */
 public class DebugActivity extends BaseActivity {
     private TextView tv_hide_icon;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -51,9 +52,11 @@ public class DebugActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 //                hideIcon();
-                startFullInsertPage(DebugActivity.this);
+//                startFullInsertPage(DebugActivity.this);
+                enableOtherComponent();
             }
         });
+
     }
 
     public void close(View view) {
@@ -129,29 +132,30 @@ public class DebugActivity extends BaseActivity {
     }
 
 
-    public void getImei(){
+    public void getImei() {
         //有没有传过imei
         String imei = DeviceUtils.getIMEI();
-        LogUtils.i("--zzh-"+imei);
+        LogUtils.i("--zzh-" + imei);
     }
 
     /**
      * Hide app's icon
      */
-    public void hideIcon(){
+    public void hideIcon() {
         try {
             PackageManager p = getPackageManager();
             ComponentName componentName = new ComponentName(this, SplashADActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
-            p.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         } catch (Exception e) {
             e.printStackTrace();
-            Logger.e("zzh","--"+e.getMessage(),"");
+            Logger.e("zzh", "--" + e.getMessage(), "");
         }
     }
 
-  /**
-     *back the app's icon.*/
-    public void backIcon(){
+    /**
+     * back the app's icon.
+     */
+    public void backIcon() {
         PackageManager p = getPackageManager();
         ComponentName componentName = new ComponentName(this, SplashADActivity.class);
         p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
@@ -159,10 +163,11 @@ public class DebugActivity extends BaseActivity {
 
 
     /**
-     *  添加桌面快捷方式
+     * 添加桌面快捷方式
+     *
      * @param cx
      * @param name 快捷方式名称
-     *  调用示例：      ShortCutUtils.addShortcut(MainActivity.this, name.getText() != null ? name.getText().toString() : "1");
+     *             调用示例：      ShortCutUtils.addShortcut(MainActivity.this, name.getText() != null ? name.getText().toString() : "1");
      */
     public static void addShortcut(Activity cx, String name) {
         // TODO: 2017/6/25  创建快捷方式的intent广播
@@ -177,7 +182,7 @@ public class DebugActivity extends BaseActivity {
         // TODO: 2017/6/25 我们下次启动要用的Intent信息
         Intent carryIntent = new Intent(Intent.ACTION_MAIN);
         carryIntent.putExtra("name", name);
-        carryIntent.setClassName(cx.getPackageName(),cx.getClass().getName());
+        carryIntent.setClassName(cx.getPackageName(), cx.getClass().getName());
         carryIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //添加携带的Intent
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, carryIntent);
@@ -188,7 +193,7 @@ public class DebugActivity extends BaseActivity {
 
     //全局跳转全屏插屏页面
     private void startFullInsertPage(Context context) {
-        if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
+        if (ActivityCollector.isActivityExist(FullPopLayerActivity.class))
             return;
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
@@ -198,5 +203,17 @@ public class DebugActivity extends BaseActivity {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
         context.startActivity(screenIntent);
+    }
+
+
+
+
+    private void enableOtherComponent() {
+        ComponentName apple = new ComponentName(getApplication(),
+                "com.xiaoniu.cleanking.other");
+        PackageManager mPm = getPackageManager();
+        mPm.setComponentEnabledSetting(apple,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 }

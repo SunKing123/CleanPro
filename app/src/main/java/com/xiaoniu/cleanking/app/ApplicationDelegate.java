@@ -7,9 +7,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -63,6 +60,9 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 /**
  * Created by admin on 2017/6/8.
@@ -302,7 +302,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                     return;
                 }
                 if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) || ActivityCollector.isActivityExist(PopLayerActivity.class)
-                        || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class) || activity.getLocalClassName().contains(".other") || activity.getLocalClassName().contains("FullPopLayerActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()

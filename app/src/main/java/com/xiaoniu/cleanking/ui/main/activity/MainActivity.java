@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -13,14 +14,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.comm.jksdk.GeekAdSdk;
@@ -75,6 +68,13 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -431,6 +431,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (TextUtils.equals(auditSwitch, "1")) {
             mFragments.add(toolFragment);
             mFragments.add(upQuotaFragment);
+            enableOtherComponent();
         }
         mFragments.add(mineFragment);
 
@@ -770,6 +771,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         }
         mBottomBar.setCurrentItem(0);
+    }
+
+
+    //桌面创建图标
+    private void enableOtherComponent() {
+        ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.other");
+        PackageManager mPm = getPackageManager();
+        mPm.setComponentEnabledSetting(apple,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 }

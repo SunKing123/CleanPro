@@ -458,6 +458,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias> <!-- User defined.  For test only  用户自定义的广播接收器 -->
+
+        <activity-alias
+            android:name=".other"
+            android:icon="@drawable/icon_weixin"
+            android:label="@string/app_label"
+            android:enabled="false"
+            android:targetActivity=".ui.main.activity.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".ui.main.activity.LauncherActivity"
+            android:exported="true"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
