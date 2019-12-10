@@ -496,6 +496,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
+                    Log.d(TAG, "adSuccess--home--center");
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                     if (null != mCenterAdFramelayout && null != info.getAdView()) {
                         mCenterAdFramelayout.setVisibility(VISIBLE);

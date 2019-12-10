@@ -145,7 +145,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                     if (PreferenceUtil.isNotFirstOpenApp()) {
                         if (PreferenceUtil.getCoolStartADStatus()) {
                             initGeekSdkAD();
-                        }else{
+                        } else {
                             coolStartActivity();
                         }
                         String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
@@ -193,7 +193,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
 
-    public void coolStartActivity(){
+    public void coolStartActivity() {
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -210,7 +210,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     public void geekAdSDKConfigSuccess() {
-        initHomeCenterAD();
+//        initHomeCenterAD();
     }
 
     /**
@@ -229,9 +229,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                LogUtils.d("DEMO>>>adError： " + errorMsg);
+                Log.d(TAG, "DEMO>>>adError： " + errorMsg + "---" + errorCode);
                 if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告" + errorMsg + "---" + errorCode, Toast.LENGTH_LONG).show();
                 }
             }
         });

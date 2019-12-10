@@ -505,7 +505,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void getRedPacketList() {
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchmap()
-                && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
+                && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0
+                && !PreferenceUtil.isHaseUpdateVersion()) {
             Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);

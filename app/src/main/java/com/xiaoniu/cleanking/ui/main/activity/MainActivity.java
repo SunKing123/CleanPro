@@ -12,8 +12,20 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -63,13 +75,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -126,6 +131,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
     private NewCleanMainFragment mainFragment;
+
+    private final String TAG = "GeekSdk";
+
 //    private MyHandler mHandler = new MyHandler(this);
 
   /*  private class MyHandler extends Handler {
@@ -229,6 +237,31 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
+        initHomeCenterAD();
+    }
+
+    /**
+     * 首页更多推荐上方广告预加载
+     */
+    private void initHomeCenterAD() {
+        GeekAdSdk.getAdsManger().preloadingAd(this, "homepage_ad_2", new AdPreloadingListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null == info) return;
+                Log.d(TAG, "DEMO>>>adSuccess， " + info.toString());
+                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                    Toast.makeText(getApplicationContext(), "预加载成功--首页更多推荐上方广告", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "DEMO>>>adError： " + errorMsg + "---" + errorCode);
+                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告" + errorMsg + "---" + errorCode, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
