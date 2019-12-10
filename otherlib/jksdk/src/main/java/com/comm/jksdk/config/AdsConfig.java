@@ -180,7 +180,7 @@ public class AdsConfig {
         requestParams.put("province", Constants.province);
         requestParams.put("city", Constants.city);
         requestParams.put("modelVersion", "");
-        requestParams.put("sdkVersion", 1);
+        requestParams.put("sdkVersion", Constants.sdkVisionCode);
 
 //        Boolean posInfosBoolean=getPositionInfos();
 //        if (posInfosBoolean) {

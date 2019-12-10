@@ -191,4 +191,9 @@ public class Constants {
      * 全局context
      */
     public static Context mContext;
+
+    /**
+     * 聚合广告sdk版本号
+     */
+    public static int sdkVisionCode = 2;
 }
