@@ -6,7 +6,7 @@ import android.os.Build;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
-import com.tencent.mmkv.MMKV;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,15 +153,13 @@ public class ActivityCollector {
 
         if (acNameList.size() > 0) {
             Logger.i("zz-activity-"+new Gson().toJson(acNameList));
-            MMKV kv = MMKV.mmkvWithID("activitys_info", MMKV.MULTI_PROCESS_MODE);
-            kv.encode("activity_list", new Gson().toJson(acNameList));
+            MmkvUtil.save("activity_list", new Gson().toJson(acNameList));
         }
     }
 
     public static boolean isActivityExistMkv(Class cla){
         boolean isExist =false;
-        MMKV kv = MMKV.mmkvWithID("activitys_info", MMKV.MULTI_PROCESS_MODE);
-        String activity_list = kv.decodeString("activity_list");
+        String activity_list = MmkvUtil.get("activity_list");
         TypeToken<List<String>> token = new TypeToken<List<String>>() {};
         List<String> acNameList = new Gson().fromJson(activity_list, token.getType());
         if (null != acNameList && acNameList.size() > 0) {

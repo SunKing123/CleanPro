@@ -23,7 +23,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
-import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -41,15 +40,12 @@ import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
-import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
-import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
-import com.xiaoniu.cleanking.ui.main.activity.RedPacketHotActivity;
-import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -475,17 +471,19 @@ public final class LocalService extends Service {
 
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
-            if (TextUtils.equals(auditSwitch, "1") && isShowFullInsert()) {
+            if (TextUtils.equals(auditSwitch, "1") && MmkvUtil.isShowFullInsert()) {
+
+                String adSwitch = MmkvUtil.getSwitchInfo();
                 //内外部插屏
-                InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
+                InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,adSwitch);
                 //外部插屏
-                InsertAdSwitchInfoList.DataBean dataBean01= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_EXTERNAL_FULL,PreferenceUtil.getInstants().get("insert_ad_switch"));
+                InsertAdSwitchInfoList.DataBean dataBean01= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_EXTERNAL_FULL,adSwitch);
 
                 if (null != context && null != dataBean) {//内外部插屏
                     int showTimes = 2;
                     if (dataBean.isOpen()) {
                         showTimes = dataBean.getShowRate();
-                        if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
+                        if (MmkvUtil.fullInsertPageIsShow(showTimes)) {
                             startFullInsertIntent(context,PositionId.AD_EXTERNAL_ADVERTISING_03);
                         }
                     } else {
@@ -497,7 +495,7 @@ public final class LocalService extends Service {
                                 if (isBack != 1)
                                     return;
 
-                                if (PreferenceUtil.fullInsertPageIsShow(showTimes)) {
+                                if (MmkvUtil.fullInsertPageIsShow(showTimes)) {
                                     startFullInsertIntent(context,PositionId.AD_EXTERNAL_ADVERTISING_02);
                                 }
 
@@ -526,12 +524,6 @@ public final class LocalService extends Service {
 
 
 
-    //外部全屏插屏冲突展示时机判断
-    private boolean isShowFullInsert(){
-        //是否在更新
-        MMKV kv = MMKV.mmkvWithID("update_info", MMKV.MULTI_PROCESS_MODE);
-        boolean isUpdate =  kv.decodeBool(SpCacheConfig.HASE_UPDATE_VERSION);
-        return !ActivityCollector.isActivityExistMkv(PopLayerActivity.class) && !ActivityCollector.isActivityExistMkv(LockActivity.class) && !ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)&& !ActivityCollector.isActivityExistMkv(RedPacketHotActivity.class) && !isUpdate;
-    }
+
 
 }

@@ -8,7 +8,7 @@ import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -90,8 +90,7 @@ public class AppHolder {
         for (InsertAdSwitchInfoList.DataBean post : insertAdSwitchInfoList.getData()) {
             insertAdSwitchmap.put(post.getConfigKey(), post);
         }
-        //sp存储,跨进程访问待优化 //todo
-        PreferenceUtil.getInstants().save("insert_ad_switch",new Gson().toJson(insertAdSwitchInfoList));
+        MmkvUtil.setSwitchInfo(new Gson().toJson(insertAdSwitchInfoList));
     }
 
 
@@ -215,4 +214,7 @@ public class AppHolder {
         }
         return null;
     }
+
+
+
 }
