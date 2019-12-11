@@ -355,6 +355,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         viewLottieBottom.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                if (null == tvCleanCount) return;
                 float animatedValue = (float) animation.getAnimatedFraction();
                 if (animatedValue <= 0.74f) {
                     float currentValue = Float.valueOf(checkCountEntity.getTotalSize()) * (0.74f - animatedValue);
