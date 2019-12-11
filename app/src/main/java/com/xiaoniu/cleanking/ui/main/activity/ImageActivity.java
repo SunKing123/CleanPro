@@ -72,13 +72,13 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
             if (!recycle_view.isComputingLayout()) {
                 cb_checkall.setSelected(!cb_checkall.isSelected());
                 tv_delete.setSelected(cb_checkall.isSelected());
-                if (imageAdapter != null){
+                if (imageAdapter != null) {
                     imageAdapter.setIsCheckAll(cb_checkall.isSelected() ? true : false);
                 }
                 cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
                 tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
                 compulateDeleteSize();
-                if(cb_checkall.isSelected()){
+                if (cb_checkall.isSelected()) {
                     String pageName = "";
                     if (AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
                         pageName = "file_cleaning_page";
@@ -117,7 +117,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
             String pageName = "";
             if (AppManager.getAppManager().preActivityName() != null && AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
-                    pageName = "file_cleaning_page";
+                pageName = "file_cleaning_page";
             }
             StatisticsUtils.trackClick("picture_cleaning_clean_click", "图片清理-删除", pageName, "picture_cleaning_page");
         });
@@ -145,6 +145,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
     //计算删除文件大小
     public void compulateDeleteSize() {
+        if (null == imageAdapter) return;
         List<FileEntity> listF = new ArrayList<>();
         List<FileEntity> listData = imageAdapter.getListImage();
         for (int i = 0; i < listData.size(); i++) {
