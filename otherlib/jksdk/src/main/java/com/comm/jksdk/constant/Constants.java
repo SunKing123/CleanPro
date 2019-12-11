@@ -195,5 +195,5 @@ public class Constants {
     /**
      * 聚合广告sdk版本号
      */
-    public static int sdkVisionCode = 2;
+    public static int sdkVisionCode = 1;
 }
