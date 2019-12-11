@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -109,6 +110,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
+
         rel_clean_file = ViewUtils.get(this, R.id.rel_clean_file);
         rel_clean_ram = ViewUtils.get(this, R.id.rel_clean_ram);
         rel_clean_virus = ViewUtils.get(this, R.id.rel_clean_virus);
@@ -267,8 +269,14 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    private long mLastTime = 0;
     public void adInit() {
+        //避免重复加载
+        if (SystemClock.elapsedRealtime() - mLastTime < 500) {
+            return;
+        }
+        mLastTime = SystemClock.elapsedRealtime();
+
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
@@ -278,6 +286,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (info.getAdView() != null && null != relAd) {
                     relAd.removeAllViews();
                     relAd.addView(info.getAdView());
+                    adPredLoad();
                 }
             }
 
@@ -308,6 +317,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
         if (null == mUnlockView)
             return;
         mUnlockView.startAnim();
@@ -451,24 +461,29 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    //广告预加载
+    public void adPredLoad(){
         GeekAdSdk.getAdsManger().preloadingAd(this,PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdPreloadingListener() {
             @Override
             public void adSuccess(AdInfo info) {
 //                LogUtils.e(TAG, "DEMO>>>adSuccess， "+ info.toString());
                 if(!BuildConfig.SYSTEM_EN.contains("prod"))
-                Toast.makeText(getApplicationContext(), "预加载成功", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "预加载成功", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
 //                LogUtils.e(TAG, "DEMO>>>adError： "+errorMsg);
                 if(!BuildConfig.SYSTEM_EN.contains("prod"))
-                Toast.makeText(getApplicationContext(), "预加载失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "预加载失败", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 
     public void startVirUsKill() {
