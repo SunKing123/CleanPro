@@ -58,7 +58,6 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -270,7 +269,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void adInit() {
-
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
@@ -698,7 +696,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                         if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
                             mBottomAdShowCount = 0;
                         } else {
-                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
+                            mBottomAdShowCount = NumberUtils.mathRandomInt(0,dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
                     GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);

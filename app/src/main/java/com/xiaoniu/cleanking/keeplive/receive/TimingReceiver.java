@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -103,7 +104,7 @@ public class TimingReceiver extends BroadcastReceiver {
     public void startActivity(Context context) {
         try {
             //判断是否进入后台
-            int isBack = PreferenceUtil.getInstants().getInt("isback");
+            int isBack = MmkvUtil.getInt("isback");
             if(isBack!=1)
                 return;
 

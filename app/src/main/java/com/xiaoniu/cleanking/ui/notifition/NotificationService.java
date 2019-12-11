@@ -14,8 +14,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import androidx.annotation.Nullable;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -27,10 +25,12 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
-import com.xiaoniu.statistic.NiuDataAPI;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import androidx.annotation.Nullable;
 
 /**
  * 常住通知栏服务
@@ -54,7 +54,6 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        NiuDataAPI.onPageStart("toggle_page_view_page", "常驻通知栏成功创建");
         EventBus.getDefault().register(this);
         context = this;
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -168,9 +167,8 @@ public class NotificationService extends Service {
         notification = mBuilder.build();
         // 发送到手机的通知栏
         notificationManager.notify(NOTIFICATION_ID, notification);
-        NiuDataAPI.onPageEnd("toggle_page_view_page", "常驻通知栏成功创建");
 
-
+        StatisticsUtils.customTrackEvent("toggle_page_custom", "常驻通知栏成功创建", "toggle_page", "toggle_page");
     }
 
     /**

@@ -47,6 +47,7 @@ import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -298,7 +299,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             @Override
             public void onBecameForeground(Activity activity) {
                 if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
-                    PreferenceUtil.getInstants().saveInt("isback", 0);
+                    MmkvUtil.saveInt("isback",0);
                 } else {//非当前主进程
                     return;
                 }
@@ -328,7 +329,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
-                    PreferenceUtil.getInstants().saveInt("isback", 1);
+                    MmkvUtil.saveInt("isback",1);
                     PreferenceUtil.saveHomeBackTime();
                 }
             }

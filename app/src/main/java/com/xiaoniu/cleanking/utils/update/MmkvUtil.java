@@ -88,6 +88,18 @@ public class MmkvUtil {
         return kv.decodeString(key);
     }
 
+    //(数据保存)
+    public static void saveInt(String key,int data){
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        kv.encode(key, data);
+    }
+
+    //(数据获取)
+    public static int getInt(String key){
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        return kv.decodeInt(key);
+    }
+
 
 
 }

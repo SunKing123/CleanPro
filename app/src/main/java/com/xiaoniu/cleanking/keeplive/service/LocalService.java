@@ -491,7 +491,7 @@ public final class LocalService extends Service {
                             if (dataBean01.isOpen()) {
                                 showTimes = dataBean01.getShowRate();
                                 //判断应用是否进入后台
-                                int isBack = PreferenceUtil.getInstants().getInt("isback");
+                                int isBack = MmkvUtil.getInt("isback");
                                 if (isBack != 1)
                                     return;
 
