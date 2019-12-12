@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
-
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -16,12 +14,12 @@ import com.umeng.analytics.MobclickAgent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.widget.LoadingDialog;
 
 import java.lang.ref.WeakReference;
 
+import androidx.annotation.Nullable;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -249,4 +247,17 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
             this.finish();
         }
     }
+
+
+    /**
+     * Activity是否已被销毁
+     * @return
+     */
+    public boolean isActivityEnable(){
+        if(this == null || isDestroyed() || isFinishing()){
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -58,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -455,6 +454,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         }
                     }
                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", "clod_splash_page", "clod_splash_page", dataBean.getSwitcherName());
+                    if (null == container || null == mErrorAdIv || !isActivityEnable())
+                        return;
                     container.setVisibility(View.GONE);
                     mErrorAdIv.setVisibility(View.VISIBLE);
                     GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
@@ -485,30 +486,32 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 自定义倒计时进度条
      */
     private void showProgressBar() {
-        skipView.setVisibility(View.VISIBLE);
-        skipView.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+        if(null!= skipView && isActivityEnable()){
+            skipView.setVisibility(View.VISIBLE);
+            skipView.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                PreferenceUtil.saveShowAD(false);
-                if (!mIsAdError) {
-                    jumpActivity();
                 }
-            }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    PreferenceUtil.saveShowAD(false);
+                    if (!mIsAdError) {
+                        jumpActivity();
+                    }
+                }
 
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            });
+        }
     }
 
     @Override
