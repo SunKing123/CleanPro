@@ -10,10 +10,6 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseAgentWebActivity;
@@ -21,6 +17,10 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * @author XiLei
@@ -76,7 +76,7 @@ public class AgentWebViewActivity extends BaseAgentWebActivity {
             }
             if (mWebFrom.equals("LockActivity")) {
                 currentPage = "lock_screen_custom_page";
-                eventCode = "lock_screen_custom_page";
+                eventCode = "lock_screen_custom_page_view_page";
                 eventName = "锁屏页打底广告页浏览";
                 eventCloseName = "锁屏页打底广告页关闭点击";
             }
