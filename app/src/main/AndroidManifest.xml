@@ -317,7 +317,7 @@
             android:name=".ui.main.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:excludeFromRecents="true"
-            android:theme="@style/transparent_activity" />
+       />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:excludeFromRecents="true"

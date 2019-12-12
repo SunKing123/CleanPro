@@ -7,6 +7,7 @@ import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdManager
 import com.comm.jksdk.ad.listener.VideoAdListener
+import com.comm.jksdk.constant.Constants
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
@@ -206,13 +207,17 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             }
 
             override fun adSuccess(info: AdInfo) {
-                var view = info.getAdView()
-                if (null != lin_ad_container && null != view) {
-                    lin_ad_container.removeAllViews()
-                    lin_ad_container.addView(view)
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
-                } else {
-                    goFinishActivity()
+                if (Constants.AdType.YouLiangHui.equals(info.adSource)) {
+                    var view = info.getAdView()
+                    if (null != lin_ad_container && null != view) {
+                        lin_ad_container.removeAllViews()
+                        lin_ad_container.addView(view)
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
+                    } else {
+                        goFinishActivity()
+                    }
+                } else if (Constants.AdType.ChuanShanJia.equals(info.adSource)) { //穿山甲没有view返回,不做异常处理
+
                 }
 
             }
