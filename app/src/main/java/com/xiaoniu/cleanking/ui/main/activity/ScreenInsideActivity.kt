@@ -37,10 +37,9 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
         StatisticsUtils.customTrackEvent("ad_vue_custom", "内部插屏广告vue创建", "hot_splash_page", "inside_advertising_ad_page")
     }
 
-    var mIsFirst = false
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        if (!mIsFirst && !isFinishing) {
+        if (!isFinishing) {
             loadCustomInsertScreenAd()
         }
     }
@@ -50,7 +49,6 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
      */
     private fun loadCustomInsertScreenAd() {
         if (null == mAdManager) return
-        mIsFirst = true
         mAdManager.loadCustomInsertScreenAd(this, "inside_advertising_ad", 3, object : AdListener {
             override fun adSuccess(info: AdInfo) {
                 if (null == info) return
