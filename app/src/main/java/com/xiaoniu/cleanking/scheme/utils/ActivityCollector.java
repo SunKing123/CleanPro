@@ -116,8 +116,8 @@ public class ActivityCollector {
     public static void removeActivity(Activity activity) {
         if (activities.containsValue(activity)) {
             activities.remove(activity.getClass());
-            spSave(activities);
         }
+        spSave(activities);
     }
 
     /**

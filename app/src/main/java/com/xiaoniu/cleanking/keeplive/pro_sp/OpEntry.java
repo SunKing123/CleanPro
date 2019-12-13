@@ -2,11 +2,11 @@ package com.xiaoniu.cleanking.keeplive.pro_sp;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
 
 
 class OpEntry {
@@ -58,7 +58,7 @@ class OpEntry {
     }
 
     public String getKey() {
-        return bundle.getString(KEY_KEY, null);
+        return null != bundle ?bundle.getString(KEY_KEY, null):"";
     }
 
     public OpEntry setKey(String key) {
@@ -67,7 +67,7 @@ class OpEntry {
     }
 
     public int getValueType() {
-        return bundle.getInt(KEY_VALUE_TYPE, 0);
+        return null != bundle ? bundle.getInt(KEY_VALUE_TYPE, 0):0;
     }
 
     public OpEntry setValueType(int valueType) {
@@ -76,7 +76,7 @@ class OpEntry {
     }
 
     public int getOpType() {
-        return bundle.getInt(KEY_OP_TYPE, 0);
+        return null != bundle ? bundle.getInt(KEY_OP_TYPE, 0) : 0;
     }
 
     public OpEntry setOpType(int opType) {
@@ -85,7 +85,7 @@ class OpEntry {
     }
 
     public String getStringValue(String defValue) {
-        return bundle.getString(KEY_VALUE, defValue);
+        return (null != bundle) ? bundle.getString(KEY_VALUE, defValue) : "";
     }
 
     public OpEntry setStringValue(String value) {
@@ -126,7 +126,7 @@ class OpEntry {
 
 
     public boolean getBooleanValue(boolean defValue) {
-        return bundle.getBoolean(KEY_VALUE, defValue);
+        return null != bundle ? bundle.getBoolean(KEY_VALUE, defValue) : false;
     }
 
     public OpEntry setBooleanValue(boolean value) {

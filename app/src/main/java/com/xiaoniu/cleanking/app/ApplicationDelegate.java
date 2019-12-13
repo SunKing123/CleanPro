@@ -32,7 +32,6 @@ import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
 import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
-import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
 import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
@@ -325,7 +324,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
             @Override
             public void onBecameBackground(Activity activity) {
-                SPUtils.getInstance(application, "Lifecycle").put("acitivity_name", activity.getLocalClassName());
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
