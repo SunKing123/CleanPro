@@ -12,6 +12,7 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.orhanobut.logger.Logger;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -20,6 +21,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,7 +99,6 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void adExposed(AdInfo info) {
-
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "external_advertising_page", "external_advertising_page", info.getAdTitle());
             }
 
@@ -108,6 +109,8 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if(!BuildConfig.SYSTEM_EN.contains("prod"))
+                    ToastUtils.showLong("外部插屏errorcode-----"+errorMsg+"---errorMsg----"+errorMsg);
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "external_advertising_page", "external_advertising_page");
                 }
