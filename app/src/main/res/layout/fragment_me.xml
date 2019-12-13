@@ -48,7 +48,7 @@
         android:id="@+id/viewmid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="167dp"
         android:background="@drawable/bg_btn_me"
         app:layout_constraintTop_toTopOf="parent" />
 
