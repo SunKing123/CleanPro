@@ -272,9 +272,8 @@
                 android:layout_marginTop="@dimen/dimen_5dp"
                 android:orientation="horizontal"
                 android:weightSum="3">
-
                 <LinearLayout
-                    android:id="@+id/ll_phone_speed"
+                    android:id="@+id/ll_notification_clear"
                     android:layout_width="0px"
                     android:layout_weight="1"
                     android:layout_marginLeft="@dimen/dimen_11dp"
@@ -288,14 +287,14 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_speed" />
+                        android:src="@mipmap/icon_sjql" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_16dp"
-                        android:text="@string/tool_phone_speed"
+                        android:text="手机清理"
                         android:textColor="@color/color_333333"
                         android:textSize="13sp" />
 
@@ -306,9 +305,10 @@
                         android:layout_marginBottom="@dimen/dimen_20dp"
                         android:layout_marginTop="@dimen/dimen_4dp"
                         android:textColor="#999999"
-                        android:text="@string/tool_memory_speed"
+                        android:text="深度扫描文件"
                         android:textSize="12dp" />
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/text_cooling"
@@ -394,7 +394,7 @@
                 android:weightSum="3">
 
                 <LinearLayout
-                    android:id="@+id/ll_notification_clear"
+                    android:id="@+id/ll_phone_speed"
                     android:layout_width="0px"
                     android:layout_weight="1"
                     android:layout_marginLeft="@dimen/dimen_11dp"
@@ -403,32 +403,32 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="@dimen/dimen_32dp"
-                    android:layout_height="@dimen/dimen_32dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_20dp"
-                    android:src="@mipmap/icon_sjql" />
+                    <ImageView
+                        android:layout_width="@dimen/dimen_32dp"
+                        android:layout_height="@dimen/dimen_32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:src="@mipmap/icon_speed" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:text="手机清理"
-                    android:textColor="@color/color_333333"
-                    android:textSize="13sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_16dp"
+                        android:text="@string/tool_phone_speed"
+                        android:textColor="@color/color_333333"
+                        android:textSize="13sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="@dimen/dimen_20dp"
-                    android:layout_marginTop="@dimen/dimen_4dp"
-                    android:textColor="#999999"
-                    android:text="深度扫描文件"
-                    android:textSize="12dp" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/dimen_20dp"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:textColor="#999999"
+                        android:text="@string/tool_memory_speed"
+                        android:textSize="12dp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0px"
