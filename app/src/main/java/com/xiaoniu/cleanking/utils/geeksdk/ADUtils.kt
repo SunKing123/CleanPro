@@ -12,7 +12,7 @@ import com.xiaoniu.cleanking.app.AppApplication
 /**
  * @author XiLei
  * @date 2019/12/17.
- * description：
+ * description：广告SDK预加载工具类
  */
 
 private val TAG: String? = "GeekSdk"
@@ -34,6 +34,28 @@ fun preloadingSplashAd(activity: Activity, position: String, name: String) {
             if (!BuildConfig.SYSTEM_EN.contains("prod")) {
                 Log.d(TAG, "-----adError ${name}预加载-----$errorMsg")
                 Toast.makeText(AppApplication.getInstance(), "${name}预加载失败", Toast.LENGTH_LONG).show()
+            }
+        }
+    })
+}
+
+/**
+ * 全屏视频
+ */
+fun preloadingSplashAd(activity: Activity, position: String) {
+    if (null == activity || null == AppApplication.getInstance()) return
+    GeekAdSdk.getAdsManger().preloadingVideoAd(activity, position, object : AdPreloadingListener {
+        override fun adSuccess(info: AdInfo) {
+            if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                Log.d(TAG, "-----adSuccess 完成页前全屏视频-----")
+                Toast.makeText(AppApplication.getInstance(), "完成页前全屏视频 - 预加载成功", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        override fun adError(info: AdInfo, errorCode: Int, errorMsg: String) {
+            if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                Log.d(TAG, "-----adError 完成页前全屏视频-----$errorMsg")
+                Toast.makeText(AppApplication.getInstance(), "完成页前全屏视频 - 预加载失败", Toast.LENGTH_LONG).show()
             }
         }
     })

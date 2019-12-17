@@ -78,6 +78,7 @@ public class PositionId {
     public static final String AD_EXTERNAL_ADVERTISING_03 = "external_advertising_ad_3";//内外部插屏全屏广告
     public static final String AD_VIRUS = "click_virus_killing_ad";//病毒查杀
     public static final String AD_RED_PACKET = "red_envelopes_ad";//红包
+    public static final String AD_FINISH_BEFOR = "cp_ad_1";//完成页前全屏视频
 
 
 }

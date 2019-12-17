@@ -193,7 +193,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
      */
     private fun loadGeekAd() {
         if (null == mAdManager) return
-        mAdManager.loadVideoAd(this, "cp_ad_1", object : VideoAdListener {
+        mAdManager.loadVideoAd(this, PositionId.AD_FINISH_BEFOR, object : VideoAdListener {
             override fun onVideoResume(info: AdInfo) {
 
             }
@@ -250,43 +250,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 goFinishActivity()
             }
         })
-        /*  mAdManager.loadCustomInsertScreenAd(this, "cp_ad_1", 3, object : AdListener {
-              //暂时这样
-              override fun adSuccess(info: AdInfo) {
-                  LogUtils.i("-zzh---")
-                  Log.d(TAG, "-----adSuccess-----=" + info.adSource)
-                  if (null == info) return
-                  StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
-              }
-
-              override fun adExposed(info: AdInfo) {
-                  Log.d(TAG, "-----adExposed-----")
-                  if (null == info) return
-                  StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
-                  PreferenceUtil.saveShowAD(true)
-              }
-
-              override fun adClicked(info: AdInfo) {
-                  Log.d(TAG, "-----adClicked-----")
-                  if (null == info) return
-                  StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
-              }
-
-              override fun adClose(info: AdInfo) {
-                  Log.d(TAG, "-----adClose-----")
-                  PreferenceUtil.saveShowAD(false)
-                  if (null != info) {
-                      StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
-                  }
-                  goFinishActivity()
-              }
-
-              override fun adError(errorCode: Int, errorMsg: String) {
-                  Log.d(TAG, "-----adError-----$errorMsg")
-                  StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "fail", mSourcePage, mCurrentPage)
-                  goFinishActivity()
-              }
-          })*/
     }
 
     private fun goFinishActivity() {
@@ -309,27 +272,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             startActivity(NewCleanFinishActivity::class.java, bundle)
         }
         finish()
-
-        /* /**
-                 * 根据TaskId跳转
-                 */
-                if (mActivity.getTaskId() > AppHolder.getInstance().getCurrentTaskId()) {//新Task路径_跳转Ad3
-                    Intent adIsementIntent = new Intent(mContext, CleanFinishAdvertisementActivity.class);
-                    adIsementIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                    adIsementIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", getString(R.string.tool_suggest_clean));
-                    adIsementIntent.putExtras(bundle);
-                    mActivity.startActivity(adIsementIntent);
-                }else{
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", mContext.getString(R.string.tool_suggest_clean));
-                    bundle.putString("num", checkCountEntity.getTotalSize());
-                    bundle.putString("unit", checkCountEntity.getUnit());
-                    startActivity(NewCleanFinishActivity.class, bundle);
-                }*/
     }
 
     override fun netError() {
