@@ -341,8 +341,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
             return;
         if (switchInfoList.getData().get(0).isOpen()) {
+            mInteractionIv.setVisibility(VISIBLE);
             mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
             Glide.with(this).load(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl()).into(mInteractionIv);
+        } else {
+            mInteractionIv.setVisibility(View.GONE);
         }
     }
 
