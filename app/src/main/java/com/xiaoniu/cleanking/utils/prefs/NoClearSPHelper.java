@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -348,6 +349,24 @@ public class NoClearSPHelper {
      */
     public String getOperatorToken() {
         return mSPrefs.getString(SpConstants.OPERATOR_TOKEN, "");
+    }
+
+
+
+    /**
+     * 是否上传过空imei
+     * @return
+     */
+    public boolean isUploadEmpImei() {
+        return mSPrefs.getBoolean(SpConstants.OPERATOR_IS_UPLOAD_EMP_IMEI, false);
+    }
+
+    /**
+     * 设置上传imei状态
+     * @param isUpload
+     */
+    public void setUploadEmpImeiStatus(boolean isUpload) {
+        mSPrefs.edit().putBoolean(SpConstants.OPERATOR_IS_UPLOAD_EMP_IMEI, isUpload).apply();
     }
 
     /**

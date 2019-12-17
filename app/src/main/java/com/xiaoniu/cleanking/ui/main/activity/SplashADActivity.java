@@ -41,6 +41,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.WeakHandler;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -183,9 +184,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private void initNiuData() {
         if (!mSPHelper.isUploadImei()) {
             //有没有传过imei
-            String imei = DeviceUtils.getIMEI();
+            String imei = PhoneInfoUtils.getIMEI(mContext);
             if (TextUtils.isEmpty(imei)) {
-                NiuDataAPI.setIMEI("");
+                if (!mSPHelper.isUploadEmpImei()) { //空imei只上报一次
+                    NiuDataAPI.setIMEI("");
+                    mSPHelper.setUploadEmpImeiStatus(true);
+                }
                 mSPHelper.setUploadImeiStatus(false);
             } else {
                 NiuDataAPI.setIMEI(imei);
