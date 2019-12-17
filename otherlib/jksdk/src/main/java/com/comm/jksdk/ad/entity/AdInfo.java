@@ -1,6 +1,7 @@
 package com.comm.jksdk.ad.entity;
 
 import android.os.Parcel;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bytedance.sdk.openadsdk.TTFeedAd;
@@ -29,7 +30,11 @@ public class AdInfo extends BaseEntity{
     /**
      * 广告view
      */
-    private ViewGroup adView;
+    private View adView;
+    /**
+     * 模板广告的宽
+     */
+    private float width;
     /**
      * 激励视频用的的用户id
      */
@@ -54,7 +59,7 @@ public class AdInfo extends BaseEntity{
      */
     private TTNativeAd ttNativeAd;
     /**
-     * 穿山甲模板插屏广告
+     * 穿山甲模板插屏广告、信息流模板广告
      */
     private TTNativeExpressAd ttNativeExpressAd;
     /**
@@ -122,6 +127,14 @@ public class AdInfo extends BaseEntity{
      * 是否支持磁盘缓存
      */
     private boolean isDisk;
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
 
     public String getRewardName() {
         return rewardName;
@@ -195,11 +208,11 @@ public class AdInfo extends BaseEntity{
         this.ttRewardVideoAd = ttRewardVideoAd;
     }
 
-    public ViewGroup getAdView() {
+    public View getAdView() {
         return adView;
     }
 
-    public void setAdView(ViewGroup adView) {
+    public void setAdView(View adView) {
         this.adView = adView;
     }
 

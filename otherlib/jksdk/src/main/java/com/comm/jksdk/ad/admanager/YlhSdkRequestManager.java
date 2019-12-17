@@ -21,7 +21,10 @@ import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.qq.e.ads.cfg.VideoOption;
+import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeADUnifiedListener;
+import com.qq.e.ads.nativ.NativeExpressAD;
+import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.ads.nativ.NativeUnifiedAD;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
 import com.qq.e.comm.util.AdError;
@@ -64,10 +67,24 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
             getCustomInsertScreenAd(activity, adInfo, listener);
 //        } else if (Constants.AdStyle.REWARD_VIDEO.equals(style)) {
 //            getRewardVideoAd(activity, adInfo, listener);
+        } else if(Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
+            getFeedTemplate(activity, adInfo, listener);
         } else {
             if (listener != null) {
                 listener.adError(adInfo, 2, "暂不支持该样式");
             }
+        }
+    }
+
+    /**
+     * 获取信息流模板广告
+     * @param activity
+     * @param info
+     * @param listener
+     */
+    private void getFeedTemplate(Activity activity, AdInfo info, AdRequestListener listener) {
+        if (listener != null) {
+            listener.adSuccess(info);
         }
     }
 

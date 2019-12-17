@@ -18,6 +18,14 @@ import android.view.ViewGroup;
 public interface AdManager {
 
     /**
+     * 加载原生模板广告
+     * @param activity
+     * @param position
+     * @param listener
+     */
+    void loadNativeTemplateAd(Activity activity, String position, float width, AdListener listener);
+
+    /**
      * 加载图文类广告
      * @param activity
      * @param position

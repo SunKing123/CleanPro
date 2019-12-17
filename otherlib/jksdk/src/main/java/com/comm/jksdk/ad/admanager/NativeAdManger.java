@@ -1,9 +1,15 @@
 package com.comm.jksdk.ad.admanager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
@@ -47,10 +53,16 @@ import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
+import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
+import com.qq.e.ads.nativ.ADSize;
+import com.qq.e.ads.nativ.NativeExpressAD;
+import com.qq.e.ads.nativ.NativeExpressADView;
+import com.qq.e.ads.nativ.NativeExpressMediaListener;
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
 import com.qq.e.ads.rewardvideo.RewardVideoADListener;
+import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.util.AdError;
 
 import java.util.ArrayList;
@@ -142,6 +154,39 @@ public class NativeAdManger implements AdManager {
 
 
     @Override
+    public void loadNativeTemplateAd(Activity activity, String position, float width, AdListener listener) {
+        mAdListener = listener;
+        AdInfo adInfo = new AdInfo();
+        adInfo.setWidth(width);
+        try {
+            mActivity = activity;
+            //设置广告位置信息
+            adInfo.setPosition(position);
+            //获取本地配置信息
+            readyInfo(adInfo);
+            if (CollectionUtils.isEmpty(adsInfoslist)) {
+                if (mAdListener != null) {
+                    mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+                }
+                return;
+            }
+            ConfigBean.AdListBean.AdsInfosBean mAdsInfosBean = adsInfoslist.remove(0);
+            if (mAdsInfosBean == null) {
+                if (mAdListener != null) {
+                    mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+                }
+                return;
+            }
+            againRequest(adInfo, mAdsInfosBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (mAdListener != null) {
+                mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
+            }
+        }
+    }
+
+    @Override
     public void loadAd(Activity activity, String position, AdListener listener) {
         mAdListener = listener;
         AdInfo adInfo = new AdInfo();
@@ -153,14 +198,14 @@ public class NativeAdManger implements AdManager {
             readyInfo(adInfo);
             if (CollectionUtils.isEmpty(adsInfoslist)) {
                 if (mAdListener != null) {
-                    mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                    mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                 }
                 return;
             }
             ConfigBean.AdListBean.AdsInfosBean mAdsInfosBean = adsInfoslist.remove(0);
             if (mAdsInfosBean == null) {
                 if (mAdListener != null) {
-                    mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                    mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                 }
                 return;
             }
@@ -179,16 +224,16 @@ public class NativeAdManger implements AdManager {
      */
     public void readyInfo(AdInfo adInfo){
         //获取本地配置信息
-        adsInfoslist.clear();
         ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(adInfo.getPosition());
         if (mConfigInfoBean == null) {
-//            if (mAdListener != null) {
-//                mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
-//            }
+            if (mAdListener != null) {
+                mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+            }
             return;
         }
         adInfo.setAdStyle(mConfigInfoBean.getAdStyle());
         adInfo.setAdRequestTimeOut(mConfigInfoBean.getAdRequestTimeOut());
+        adsInfoslist.clear();
         adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
     }
 
@@ -237,14 +282,14 @@ public class NativeAdManger implements AdManager {
             readyInfo(adInfo);
             if (CollectionUtils.isEmpty(adsInfoslist)) {
                 if (mAdListener != null) {
-                    mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                    mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                 }
                 return;
             }
             ConfigBean.AdListBean.AdsInfosBean mAdsInfosBean = adsInfoslist.remove(0);
             if (mAdsInfosBean == null) {
                 if (mAdListener != null) {
-                    mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+                    mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                 }
                 return;
             }
@@ -440,6 +485,9 @@ public class NativeAdManger implements AdManager {
     public void loadCustomInsertScreenAd(Activity activity, String position, int showTimeSeconds, AdListener listener, String... pos) {
         mAdListener = listener;
         AdInfo adInfo = new AdInfo();
+        if (!CollectionUtils.isEmpty(pos)) {
+            mProgress = pos[0];
+        }
         try {
             mActivity = activity;
             //设置广告位置信息
@@ -604,6 +652,11 @@ public class NativeAdManger implements AdManager {
             return;
         }
         String style = adInfo.getAdStyle();
+        //信息流模板广告
+        if (Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
+            showCsjFeedTemplate(activity, adInfo);
+            return;
+        }
         //全屏视频
         if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) {
             showCsjFullVideo(activity, adInfo);
@@ -662,6 +715,91 @@ public class NativeAdManger implements AdManager {
         if (mAdListener != null) {
             mAdListener.adSuccess(adInfo);
         }
+    }
+
+    /**
+     * 显示穿山甲信息模板广告
+     * @param activity
+     * @param info
+     */
+    private void showCsjFeedTemplate(Activity activity, AdInfo info) {
+        TTNativeExpressAd ttNativeExpressAd = info.getTtNativeExpressAd();
+        ttNativeExpressAd.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
+            @Override
+            public void onAdClicked(View view, int type) {
+                if (mAdListener != null) {
+                    mAdListener.adClicked(info);
+                }
+            }
+
+            @Override
+            public void onAdShow(View view, int type) {
+                if (mAdListener != null) {
+                    mAdListener.adExposed(info);
+                }
+            }
+
+            @Override
+            public void onRenderFail(View view, String msg, int code) {
+//                Log.e("ExpressView","render fail:"+(System.currentTimeMillis() - startTime));
+                if (mAdListener != null) {
+                    mAdListener.adError(info, code, msg);
+                }
+            }
+
+            @Override
+            public void onRenderSuccess(View view, float width, float height) {
+//                Log.e("ExpressView","render suc:"+(System.currentTimeMillis() - startTime));
+                //返回view的宽高 单位 dp
+//                TToast.show(mContext, "渲染成功");
+//                mExpressContainer.removeAllViews();
+//                mExpressContainer.addView(view);
+                info.setAdView(view);
+                if (mAdListener != null) {
+                    mAdListener.adSuccess(info);
+                }
+            }
+        });
+        //dislike设置
+//        bindDislike(ttNativeExpressAd, false);
+        if (ttNativeExpressAd.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD){
+            ttNativeExpressAd.setDownloadListener(new TTAppDownloadListener() {
+                @Override
+                public void onIdle() {
+//                TToast.show(NativeExpressActivity.this, "点击开始下载", Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
+//                if (!mHasShowDownloadActive) {
+//                    mHasShowDownloadActive = true;
+//                    TToast.show(NativeExpressActivity.this, "下载中，点击暂停", Toast.LENGTH_LONG);
+//                }
+                }
+
+                @Override
+                public void onDownloadPaused(long totalBytes, long currBytes, String fileName, String appName) {
+//                TToast.show(NativeExpressActivity.this, "下载暂停，点击继续", Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onDownloadFailed(long totalBytes, long currBytes, String fileName, String appName) {
+//                TToast.show(NativeExpressActivity.this, "下载失败，点击重新下载", Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onInstalled(String fileName, String appName) {
+//                TToast.show(NativeExpressActivity.this, "安装完成，点击图片打开", Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onDownloadFinished(long totalBytes, String fileName, String appName) {
+//                TToast.show(NativeExpressActivity.this, "点击安装", Toast.LENGTH_LONG);
+                }
+            });
+        }
+
+        ttNativeExpressAd.render();
     }
 
     /**
@@ -948,6 +1086,11 @@ public class NativeAdManger implements AdManager {
             return;
         }
         String style = adInfo.getAdStyle();
+        //信息流模板广告
+        if (Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
+            showYlhFeedTemplate(activity, adInfo);
+            return;
+        }
 //        //全屏视频
 //        if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) {
 //            showYlhFullVideo(activity, adInfo);
@@ -998,6 +1141,177 @@ public class NativeAdManger implements AdManager {
         if (mAdListener != null) {
             mAdListener.adSuccess(adInfo);
         }
+    }
+
+    NativeExpressADView nativeExpressADView = null;
+    /**
+     * 展示优量汇信息流模板广告
+     * @param activity
+     * @param info
+     */
+    private void showYlhFeedTemplate(Activity activity, AdInfo info) {
+//        ADSize.FULL_WIDTH, ADSize.AUTO_HEIGHT
+        NativeExpressAD nativeExpressAD = new NativeExpressAD(activity, new ADSize((int) info.getWidth(), ADSize.AUTO_HEIGHT), info.getAdAppid(), info.getAdId(), new NativeExpressAD.NativeExpressADListener() {
+            @Override
+            public void onADLoaded(List<NativeExpressADView> list) {
+                // 释放前一个展示的NativeExpressADView的资源
+                if (nativeExpressADView != null) {
+                    nativeExpressADView.destroy();
+                }
+
+//                if (container.getVisibility() != View.VISIBLE) {
+//                    container.setVisibility(View.VISIBLE);
+//                }
+//
+//                if (container.getChildCount() > 0) {
+//                    container.removeAllViews();
+//                }
+
+                nativeExpressADView = list.get(0);
+                if (nativeExpressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
+                    nativeExpressADView.setMediaListener(new NativeExpressMediaListener() {
+                        @Override
+                        public void onVideoInit(NativeExpressADView nativeExpressADView) {
+
+                        }
+
+                        @Override
+                        public void onVideoLoading(NativeExpressADView nativeExpressADView) {
+
+                        }
+
+                        @Override
+                        public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
+
+                        }
+
+                        @Override
+                        public void onVideoStart(NativeExpressADView nativeExpressADView) {
+
+                        }
+
+                        @Override
+                        public void onVideoPause(NativeExpressADView nativeExpressADView) {
+
+                        }
+
+                        @Override
+                        public void onVideoComplete(NativeExpressADView nativeExpressADView) {
+
+                        }
+
+                        @Override
+                        public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
+
+                        }
+
+                        @Override
+                        public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
+
+                        }
+
+                        @Override
+                        public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
+
+                        }
+                    });
+                }
+                // 广告可见才会产生曝光，否则将无法产生收益。
+                info.setAdView(nativeExpressADView);
+                nativeExpressADView.render();
+            }
+
+            @Override
+            public void onRenderFail(NativeExpressADView nativeExpressADView) {
+                if (mAdListener != null) {
+                    mAdListener.adError(info, 2, "on render fail");
+                }
+            }
+
+            @Override
+            public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
+                if (mAdListener != null) {
+                    mAdListener.adSuccess(info);
+                }
+            }
+
+            @Override
+            public void onADExposure(NativeExpressADView nativeExpressADView) {
+                if (mAdListener != null) {
+                    mAdListener.adExposed(info);
+                }
+            }
+
+            @Override
+            public void onADClicked(NativeExpressADView nativeExpressADView) {
+                if (mAdListener != null) {
+                    mAdListener.adClicked(info);
+                }
+            }
+
+            @Override
+            public void onADClosed(NativeExpressADView nativeExpressADView) {
+                if (mAdListener != null) {
+                    mAdListener.adClose(info);
+                }
+            }
+
+            @Override
+            public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
+
+            }
+
+            @Override
+            public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
+
+            }
+
+            @Override
+            public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
+
+            }
+
+            @Override
+            public void onNoAD(AdError adError) {
+                if (mAdListener != null) {
+                    mAdListener.adError(info, adError.getErrorCode(), adError.getErrorMsg());
+                }
+            }
+        }); // 这里的Context必须为Activity
+        nativeExpressAD.setVideoOption(new VideoOption.Builder()
+                .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS) // 设置什么网络环境下可以自动播放视频
+                .setAutoPlayMuted(true) // 设置自动播放视频时，是否静音
+                .build()); // setVideoOption是可选的，开发者可根据需要选择是否配置
+//        nativeExpressAD.setMaxVideoDuration(getMaxVideoDuration());
+        nativeExpressAD.setMaxVideoDuration(8);
+        /**
+         * 如果广告位支持视频广告，强烈建议在调用loadData请求广告前调用setVideoPlayPolicy，有助于提高视频广告的eCPM值 <br/>
+         * 如果广告位仅支持图文广告，则无需调用
+         */
+
+        /**
+         * 设置本次拉取的视频广告，从用户角度看到的视频播放策略<p/>
+         *
+         * "用户角度"特指用户看到的情况，并非SDK是否自动播放，与自动播放策略AutoPlayPolicy的取值并非一一对应 <br/>
+         *
+         * 如自动播放策略为AutoPlayPolicy.WIFI，但此时用户网络为4G环境，在用户看来就是手工播放的
+         */
+        nativeExpressAD.setVideoPlayPolicy(getVideoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS, activity));  // 本次拉回的视频广告，在用户看来是否为自动播放的
+        nativeExpressAD.loadAD(1);
+    }
+
+    public static int getVideoPlayPolicy(int autoPlayPolicy, Context context){
+        if(autoPlayPolicy == VideoOption.AutoPlayPolicy.ALWAYS){
+            return VideoOption.VideoPlayPolicy.AUTO;
+        }else if(autoPlayPolicy == VideoOption.AutoPlayPolicy.WIFI){
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo wifiNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            return wifiNetworkInfo != null && wifiNetworkInfo.isConnected() ? VideoOption.VideoPlayPolicy.AUTO
+                    : VideoOption.VideoPlayPolicy.MANUAL;
+        }else if(autoPlayPolicy == VideoOption.AutoPlayPolicy.NEVER){
+            return VideoOption.VideoPlayPolicy.MANUAL;
+        }
+        return VideoOption.VideoPlayPolicy.UNKNOWN;
     }
 
     /**

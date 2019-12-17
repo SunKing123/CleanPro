@@ -58,11 +58,69 @@ public class CsjSdkRequestManager extends SdkRequestManager {
             getTemplateInsertScreenAd(activity, adInfo, listener);
         } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) {
             getCustomInsertScreenAd(adInfo, listener);
+        } else if(Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
+            getFeedTemplate(activity, adInfo, listener);
         } else {
             if (listener != null) {
                 listener.adError(adInfo, 2, "暂不支持该样式");
             }
         }
+    }
+
+    /**
+     * 获取信息流模板广告
+     * @param activity
+     * @param info
+     * @param listener
+     */
+    private void getFeedTemplate(Activity activity, AdInfo info, AdRequestListener listener) {
+        AdSlot adSlot = new AdSlot.Builder()
+                .setCodeId(info.getAdId()) //广告位id
+                .setSupportDeepLink(true)
+                .setAdCount(1) //请求广告数量为1到3条
+                .setExpressViewAcceptedSize(info.getWidth(),0) //期望模板广告view的size,单位dp
+                .setImageAcceptedSize(640,320 )//这个参数设置即可，不影响模板广告的size
+                .build();
+        //step5:请求广告，对请求回调的广告作渲染处理
+        TTAdManagerHolder.get().createAdNative(GeekAdSdk.getContext()).loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
+            @Override
+            public void onError(int code, String message) {
+//                TToast.show(NativeExpressActivity.this, "load error : " + code + ", " + message);
+//                mExpressContainer.removeAllViews();
+                LogUtils.e(TAG, "loadNativeAd code:" + code + " message:" + message);
+                if (listener != null) {
+                    listener.adError(info, code, message);
+                }
+            }
+
+            @Override
+            public void onNativeExpressAdLoad(List<TTNativeExpressAd> ads) {
+//                if (ads == null || ads.size() == 0){
+//                    return;
+//                }
+//                mTTAd = ads.get(0);
+//                bindAdListener(mTTAd);
+//                startTime = System.currentTimeMillis();
+//                mTTAd.render();
+                if (CollectionUtils.isEmpty(ads)) {
+                    if (listener != null) {
+                        listener.adError(info, 1, "没请求到广告数据");
+                    }
+                    return;
+                }
+                TTNativeExpressAd ttNativeAd = ads.get(0);
+                if (ttNativeAd == null) {
+                    if (listener != null) {
+                        listener.adError(info, 1, "没请求到广告数据");
+                    }
+                    return;
+                }
+                info.setTtNativeExpressAd(ttNativeAd);
+                if (listener != null) {
+                    listener.adSuccess(info);
+                }
+            }
+        });
     }
 
     /**
