@@ -41,9 +41,9 @@ public class PositionId {
     public static final String KEY_GAME = "page_speed_game_complete";
     public static final String KEY_VIRUS = "page_virus_kill_complete";
     public static final String KEY_NET = "page_net_speed_complete";
-    public static final String KEY_HOME_AD= "page_function_return_complete";
-    public static final String KEY_LOCK_SCREEN= "page_lock_screen";
-    public static final String KEY_VIDEO_PLAY= "page_video_play_screen";
+    public static final String KEY_HOME_AD = "page_function_return_complete";
+    public static final String KEY_LOCK_SCREEN = "page_lock_screen";
+    public static final String KEY_VIDEO_PLAY = "page_video_play_screen";
 
 
     public static final String KEY_CLEAN_ALL_SCREEN = "page_immediately_complete_screen";
@@ -76,15 +76,8 @@ public class PositionId {
     public static final String AD_PERSONAL_CENTER_PAGE_BELOW = "personal_center_page_below_ad";
     public static final String AD_EXTERNAL_ADVERTISING_02 = "external_advertising_ad_2";//外部插屏全屏广告
     public static final String AD_EXTERNAL_ADVERTISING_03 = "external_advertising_ad_3";//内外部插屏全屏广告
-
-
-
-
-
-
-
-
-
+    public static final String AD_VIRUS = "click_virus_killing_ad";//病毒查杀
+    public static final String AD_RED_PACKET = "red_envelopes_ad";//红包
 
 
 }

@@ -79,6 +79,7 @@ import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -278,6 +279,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         initVirus();
         initGeekAdSdk();
         initGeekSdkCenter();
+        if (null != getActivity()) {
+            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
+        }
     }
 
     /**
@@ -836,10 +840,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
         textWjgl.setEnabled(false);
-        /*((MainActivity) getActivity()).commitJpushClickTime(4);
-        StatisticsUtils.trackClick("file_clean_click", "用户在首页点击【文件清理】按钮", "home_page", "home_page");
-        startActivity(FileManagerHomeActivity.class);*/
-
         if (null != mVirusList && mVirusList.size() > 0) {
             switch (mVirusPoistion) {
                 case 0:
@@ -1421,7 +1421,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == getActivity() || null == mAdManager) return;
         NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
         NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
-        mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_VIRUS, "user123", 1, new VideoAdListener() {
             @Override
             public void onVideoResume(AdInfo info) {
 
