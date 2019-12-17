@@ -13,16 +13,15 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.AppConstants;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -42,6 +41,7 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
+import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -56,7 +56,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -175,27 +174,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     /**
-     * 首页更多推荐上方广告预加载
+     * 首页下方广告预加载
      */
     private void initHomeCenterAD() {
-        GeekAdSdk.getAdsManger().preloadingAd(this, "homepage_ad_2", new AdPreloadingListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null == info) return;
-                LogUtils.d("DEMO>>>adSuccess， " + info.toString());
-                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载成功--首页更多推荐上方广告", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                LogUtils.d("DEMO>>>adError： " + errorMsg);
-                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载失败--首页更多推荐上方广告", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        ADUtilsKt.preloadingAd(this, PositionId.AD_HOME_BOTTOM, "首页下方广告");
     }
 
     /**
@@ -486,7 +468,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 自定义倒计时进度条
      */
     private void showProgressBar() {
-        if(null!= skipView && isActivityEnable()){
+        if (null != skipView && isActivityEnable()) {
             skipView.setVisibility(View.VISIBLE);
             skipView.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
                 @Override

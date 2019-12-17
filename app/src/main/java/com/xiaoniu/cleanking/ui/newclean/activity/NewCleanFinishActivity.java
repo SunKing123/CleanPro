@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,11 +22,9 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -56,10 +53,10 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -197,24 +194,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 首页顶部广告预加载
      */
     private void initHomeCenterAD() {
-        GeekAdSdk.getAdsManger().preloadingAd(this, "homepage_ad_1", new AdPreloadingListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null == info) return;
-                LogUtils.d("DEMO>>>adSuccess， " + info.toString());
-                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载成功--首页顶部广告", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                LogUtils.d("DEMO>>>adError： " + errorMsg);
-                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                    Toast.makeText(getApplicationContext(), "预加载失败--首页顶部广告", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        ADUtilsKt.preloadingAd(this, PositionId.AD_HOME_TOP, "首页上方广告");
     }
 
     private void initGeekAd() {

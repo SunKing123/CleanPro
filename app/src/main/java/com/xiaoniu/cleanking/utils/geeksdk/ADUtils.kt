@@ -60,3 +60,26 @@ fun preloadingSplashAd(activity: Activity, position: String) {
         }
     })
 }
+
+/**
+ * 大图广告预加载
+ */
+fun preloadingAd(activity: Activity, position: String, name: String) {
+    if (null == activity || null == AppApplication.getInstance()) return
+    GeekAdSdk.getAdsManger().preloadingAd(activity, position, object : AdPreloadingListener {
+        override fun adSuccess(info: AdInfo) {
+            if (null == info) return
+            if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                Log.d(TAG, "-----adSuccess ${name}-----")
+                Toast.makeText(AppApplication.getInstance(), "${name}预加载成功", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        override fun adError(info: AdInfo, errorCode: Int, errorMsg: String) {
+            if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                Log.d(TAG, "-----adError ${name}-----$errorMsg")
+                Toast.makeText(AppApplication.getInstance(), "${name}预加载失败", Toast.LENGTH_LONG).show()
+            }
+        }
+    })
+}

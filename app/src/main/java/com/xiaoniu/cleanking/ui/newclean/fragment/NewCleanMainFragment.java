@@ -499,7 +499,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!isOpen) return;
         if (null == getActivity() || null == mCenterAdFramelayout) return;
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(getActivity(), "homepage_ad_2", new AdListener() { //暂时这样
+        adManager.loadAd(getActivity(), PositionId.AD_HOME_BOTTOM, new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {

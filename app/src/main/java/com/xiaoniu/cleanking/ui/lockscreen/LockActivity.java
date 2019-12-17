@@ -45,6 +45,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
+import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
@@ -463,21 +464,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     //广告预加载
     public void adPredLoad(){
-        GeekAdSdk.getAdsManger().preloadingAd(this,PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdPreloadingListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-//                LogUtils.e(TAG, "DEMO>>>adSuccess， "+ info.toString());
-                if(!BuildConfig.SYSTEM_EN.contains("prod"))
-                    Toast.makeText(getApplicationContext(), "预加载成功", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-//                LogUtils.e(TAG, "DEMO>>>adError： "+errorMsg);
-                if(!BuildConfig.SYSTEM_EN.contains("prod"))
-                    Toast.makeText(getApplicationContext(), "预加载失败", Toast.LENGTH_LONG).show();
-            }
-        });
+        ADUtilsKt.preloadingAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, "外部锁屏");
     }
 
     @Override
