@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +26,6 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishAdvertisementPresenter
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -59,6 +59,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     String returnEventName = "";
     String sysReturnEventName = "";
     FrameLayout ad_container_pos03;
+
+    private String TAG = "GeekSdk";
 
     @Override
     protected int getLayoutId() {
@@ -421,6 +423,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             public void adSuccess(AdInfo info) {
                 if (null == info || null == ad_container_pos03)
                     return;
+                Log.d(TAG, "adSuccess 完成页广告位3---" + info.toString());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                 View adView = info.getAdView();
                 if (adView != null) {
@@ -433,8 +436,9 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             public void adExposed(AdInfo info) {
                 PreferenceUtil.saveShowAD(true);
                 if (info == null) {
-                    LogUtils.e("DEMO>>>adExposed， AdInfo is empty");
+                    Log.d(TAG, "DEMO>>>adExposed， AdInfo is empty");
                 } else {
+                    Log.d(TAG, "adExposed 完成页广告位3");
                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
                 }
 
@@ -450,6 +454,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
                 if (null != info) {
+                    Log.d(TAG, "adError---" + errorCode + "---" + errorMsg);
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
                 }
                 showBottomAd();

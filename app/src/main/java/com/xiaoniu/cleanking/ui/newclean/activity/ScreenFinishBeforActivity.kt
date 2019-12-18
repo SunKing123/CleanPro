@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdManager
@@ -207,6 +208,8 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             }
 
             override fun adSuccess(info: AdInfo) {
+                if (null == info) return
+                Log.d(TAG, "adSuccess 完成页前全屏视频==" + info.toString())
                 if (Constants.AdType.YouLiangHui.equals(info.adSource)) {
                     var view = info.getAdView()
                     if (null != lin_ad_container && null != view) {
@@ -224,6 +227,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
             override fun adExposed(info: AdInfo) {
                 if (null == info) return
+                Log.d(TAG, "adExposed 完成页前全屏视频")
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
                 PreferenceUtil.saveShowAD(true)
             }
@@ -243,8 +247,8 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             }
 
             override fun adError(info: AdInfo?, errorCode: Int, errorMsg: String?) {
-                LogUtils.i("-----adError-----$errorMsg")
                 if (null != info) {
+                    Log.d(TAG, "adError 完成页前全屏视频")
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info!!.adId, info!!.adSource, "fail", mSourcePage, mCurrentPage)
                 }
                 goFinishActivity()

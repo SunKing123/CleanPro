@@ -47,14 +47,14 @@ fun preloadingSplashAd(activity: Activity, position: String) {
     GeekAdSdk.getAdsManger().preloadingVideoAd(activity, position, object : AdPreloadingListener {
         override fun adSuccess(info: AdInfo) {
             if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                Log.d(TAG, "-----adSuccess 完成页前全屏视频-----")
+                Log.d(TAG, "-----adSuccess 完成页前全屏视频预加载-----")
                 Toast.makeText(AppApplication.getInstance(), "完成页前全屏视频 - 预加载成功", Toast.LENGTH_LONG).show()
             }
         }
 
         override fun adError(info: AdInfo, errorCode: Int, errorMsg: String) {
             if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                Log.d(TAG, "-----adError 完成页前全屏视频-----$errorMsg")
+                Log.d(TAG, "-----adError 完成页前全屏视频预加载-----$errorMsg")
                 Toast.makeText(AppApplication.getInstance(), "完成页前全屏视频 - 预加载失败", Toast.LENGTH_LONG).show()
             }
         }
@@ -70,14 +70,14 @@ fun preloadingAd(activity: Activity, position: String, name: String) {
         override fun adSuccess(info: AdInfo) {
             if (null == info) return
             if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                Log.d(TAG, "-----adSuccess ${name}-----")
+                Log.d(TAG, "-----adSuccess ${name}-----预加载")
                 Toast.makeText(AppApplication.getInstance(), "${name}预加载成功", Toast.LENGTH_LONG).show()
             }
         }
 
         override fun adError(info: AdInfo, errorCode: Int, errorMsg: String) {
             if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                Log.d(TAG, "-----adError ${name}-----$errorCode-----$errorMsg")
+                Log.d(TAG, "-----adError ${name}-----预加载$errorCode-----$errorMsg")
                 Toast.makeText(AppApplication.getInstance(), "${name}预加载失败", Toast.LENGTH_LONG).show()
             }
         }

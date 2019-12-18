@@ -7,15 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -52,7 +54,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -99,6 +100,8 @@ public class ToolFragment extends SimpleFragment {
     private int mPowerSize; //耗电应用数
     private int mRamScale = 20; //使用内存占总RAM的比例
     private AdManager mAdManager;
+
+    private static final String TAG = "GeekSdk";
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -427,7 +430,7 @@ public class ToolFragment extends SimpleFragment {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
-                    Logger.i("adSuccess---1==" + info.getAdId());
+                    Log.i(TAG, "adSuccess---=" + info.getAdId() + "---" + info.getAdSource());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "acceleration_page", "acceleration_page");
                     if (null != frameBottomLayout && null != info.getAdView()) {
                         frameBottomLayout.removeAllViews();
@@ -439,21 +442,21 @@ public class ToolFragment extends SimpleFragment {
 
             @Override
             public void adExposed(AdInfo info) {
-                Logger.i("adExposed---1");
                 if (null == info) return;
+                Log.i(TAG, "adExposed---1");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "acceleration_page", "acceleration_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                Logger.i("adClicked---1");
+                Log.i(TAG, "adClicked---1");
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "acceleration_page", "acceleration_page", info.getAdTitle());
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Logger.i("adError---1");
+                Log.i(TAG, "adError---1");
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "acceleration_page", "acceleration_page");
                 }

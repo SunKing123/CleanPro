@@ -834,6 +834,9 @@ public class NativeAdManger implements AdManager {
         });
         fullDownloadDialog.show();
         fullDownloadDialog.loadAd(ttNativeAd);
+        if (mAdListener != null) {
+            mAdListener.adSuccess(info);
+        }
     }
 
     /**

@@ -1220,9 +1220,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void adSuccess(AdInfo info) {
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                 if (info == null) {
-                    Log.d(TAG, "DEMO>>>adSuccess， AdInfo is empty");
+                    Log.d(TAG, "DEMO>>>adSuccess1， AdInfo is empty");
                 } else {
-                    Log.d(TAG, "DEMO>>>adSuccess， " + info.toString());
+                    Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
                     if (info.getAdView() != null) {
                         ad_container_pos01.removeAllViews();
                         ad_container_pos01.addView(info.getAdView());
@@ -1233,18 +1233,17 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void adExposed(AdInfo info) {
                 if (info == null) {
-                    Log.d(TAG, "DEMO>>>adExposed， AdInfo is empty");
+                    Log.d(TAG, "DEMO>>>adExposed1， AdInfo is empty");
                 } else {
-                    Log.d(TAG, "DEMO>>>adExposed， " + info.toString());
+                    Log.d(TAG, "DEMO>>>adExposed1， ");
                 }
-                Log.d(TAG, "adExposed");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 if (null == info) return;
-                Log.d(TAG, "adClicked");
+                Log.d(TAG, "adClicked1");
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
@@ -1306,6 +1305,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
+                    Log.d(TAG, "DEMO>>>adSuccess2， " + info.toString());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                     if (info.getAdView() != null) {
                         ad_container_pos02.removeAllViews();
@@ -1318,12 +1318,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "adExposed");
                 if (null == info) return;
+                Log.d(TAG, "DEMO>>>adExposed2， ");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked");
+                Log.d(TAG, "adClicked2");
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
             }

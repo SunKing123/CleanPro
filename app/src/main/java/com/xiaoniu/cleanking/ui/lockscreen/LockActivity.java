@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,16 +17,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.ad.listener.AdPreloadingListener;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.google.gson.Gson;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
@@ -61,9 +62,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * 锁屏信息流广告页面
  */
@@ -78,6 +76,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
     private TextView tv_weather_state, tv_city;
+
+    private String TAG = "GeekSdk";
 /*
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -271,6 +271,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private long mLastTime = 0;
+
     public void adInit() {
         //避免重复加载
         if (SystemClock.elapsedRealtime() - mLastTime < 500) {
@@ -283,6 +284,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void adSuccess(AdInfo info) {
                 if (null == info) return;
+                Log.d(TAG, "adSuccess 锁屏==" + info.toString());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
                 if (info.getAdView() != null && null != relAd) {
                     relAd.removeAllViews();
@@ -294,6 +296,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void adExposed(AdInfo info) {
                 if (null == info) return;
+                Log.d(TAG, "adExposed 锁屏");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
                 LogUtils.e("adExposed");
             }
@@ -306,6 +309,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "adError 锁屏==" + errorCode + "---" + errorMsg);
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
                 }
@@ -463,7 +467,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //广告预加载
-    public void adPredLoad(){
+    public void adPredLoad() {
         ADUtilsKt.preloadingAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, "外部锁屏");
     }
 
@@ -698,7 +702,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                         if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
                             mBottomAdShowCount = 0;
                         } else {
-                            mBottomAdShowCount = NumberUtils.mathRandomInt(0,dataBean.getAdvBottomPicsDTOS().size() - 1);
+                            mBottomAdShowCount = NumberUtils.mathRandomInt(0, dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
                     GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);

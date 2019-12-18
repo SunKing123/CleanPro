@@ -55,13 +55,13 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             @Override
             public void adSuccess(AdInfo info) {
                 if (null == info) return;
-                Log.d(TAG, "-----adSuccess-----=" + info.getAdSource() + "---" + info.getAdId());
+                Log.d(TAG, "-----adSuccess 完成页返回插屏-----=" + info.toString());
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "success", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
 
             @Override
             public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed-----");
+                Log.d(TAG, "-----adExposed 完成页返回插屏-----");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
@@ -69,14 +69,14 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
             @Override
             public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked-----");
+                Log.d(TAG, "-----adClicked 完成页返回插屏-----");
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override
             public void adClose(AdInfo info) {
-                Log.d(TAG, "adClose---");
+                Log.d(TAG, "adClose 完成页返回插屏---");
                 PreferenceUtil.saveShowAD(false);
                 finish();
                 if (null == info) return;
@@ -85,7 +85,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "-----adError-----");
+                Log.d(TAG, "-----adError 完成页返回插屏-----");
                 finish();
                 if (null == info) return;
                 StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "fail", NewCleanFinishActivity.currentPage, "screen_advertising");

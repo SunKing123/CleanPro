@@ -433,7 +433,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
-                    Log.d(TAG, "adSuccess---1==" + info.getAdId());
+                    Log.d(TAG, "adSuccess---home--top =" + info.getAdId() + "--" + info.getAdSource());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                     if (null != mTopAdFramelayout && null != info.getAdView()) {
                         mTopContentView.setVisibility(View.GONE);
@@ -446,8 +446,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void adExposed(AdInfo info) {
-                Log.d(TAG, "adExposed---1");
                 if (null == info) return;
+                Log.d(TAG, "adExposed---home--top");
                 mIsTopAdExposed = true;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
             }
@@ -503,7 +503,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
-                    Log.d(TAG, "adSuccess--home--center");
+                    Log.d(TAG, "adSuccess--home--center =" + info.getAdId() + "--" + info.getAdSource());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                     if (null != mCenterAdFramelayout && null != info.getAdView()) {
                         mCenterAdFramelayout.setVisibility(VISIBLE);
@@ -516,6 +516,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adExposed(AdInfo info) {
                 if (null == info) return;
+                Log.d(TAG, "adExposed--home--center");
                 mIsCenterAdExposed = true;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
             }
