@@ -70,6 +70,8 @@ public class PositionId {
     public static final String KEY_GAME_JILI = "page_speed_game_encourag";
 
     //位置code
+    public static final String AD_SOURCE_YLH = "youlianghui";
+    public static final String AD_SOURCE_CSJ = "chuanshanjia";
     public static final String AD_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
     public static final String AD_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
     public static final String AD_ACCELERATION_PAGE_BELOW = "acceleration_page_below_ad";

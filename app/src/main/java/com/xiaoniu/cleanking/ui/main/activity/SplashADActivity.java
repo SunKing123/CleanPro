@@ -337,7 +337,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                     mAdSourse = info.getAdSource();
                 }
                 if (null == info) return;
-                showProgressBar();
+                if (info.getAdSource().equals(PositionId.AD_SOURCE_CSJ)) {
+                    showProgressBar();
+                }
                 container.addView(info.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
             }
@@ -348,6 +350,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
+                if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
+                    jumpActivity();
+                }
             }
 
             @Override

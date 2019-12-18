@@ -136,13 +136,15 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         mAdManager.loadSplashAd(this, "hot_kp", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                Log.d(TAG, "-----adSuccess-----");
                 if (null != info) {
+                    Log.d(TAG, "-----adSuccess-----" + info.getAdId() + "---" + info.getAdSource());
                     mAdTitle = info.getAdTitle();
                     mAdSourse = info.getAdSource();
                 }
                 if (null == info || null == container) return;
-                showProgressBar();
+                if (info.getAdSource().equals(PositionId.AD_SOURCE_CSJ)) {
+                    showProgressBar();
+                }
                 container.addView(info.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "hot_splash_page", "hot_splash_page");
             }
@@ -152,6 +154,9 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 Log.d(TAG, "-----adExposed-----");
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
+                if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
+                    finish();
+                }
             }
 
             @Override

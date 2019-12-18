@@ -77,7 +77,7 @@ fun preloadingAd(activity: Activity, position: String, name: String) {
 
         override fun adError(info: AdInfo, errorCode: Int, errorMsg: String) {
             if (!BuildConfig.SYSTEM_EN.contains("prod")) {
-                Log.d(TAG, "-----adError ${name}-----$errorMsg")
+                Log.d(TAG, "-----adError ${name}-----$errorCode-----$errorMsg")
                 Toast.makeText(AppApplication.getInstance(), "${name}预加载失败", Toast.LENGTH_LONG).show()
             }
         }
