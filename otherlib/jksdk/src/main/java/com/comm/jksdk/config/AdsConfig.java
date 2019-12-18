@@ -459,6 +459,7 @@ public class AdsConfig {
         adsInfoslist.clear();
         adsInfoslist.addAll(configBean.getAdList());
         String configInfo = new Gson().toJson(configBean);
+        LogUtils.i("GeekSdk--configInfo---"+configInfo);
         SpUtils.putString(Constants.SPUtils.CONFIG_INFO, configInfo);
 //        //初始化穿山甲sdk
 //        String csjAppId = "";

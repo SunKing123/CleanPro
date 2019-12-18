@@ -12,7 +12,7 @@ import android.util.Log;
 public class LogUtils {
     public static boolean isDebug = true;
 
-    public static final String TAGAN = "lpb";
+    public static final String TAGAN = "GeekSdk";
 
     public static void info(String msg){
         if(isDebug) {
