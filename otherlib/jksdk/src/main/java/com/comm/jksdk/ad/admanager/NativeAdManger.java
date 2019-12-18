@@ -224,16 +224,16 @@ public class NativeAdManger implements AdManager {
      */
     public void readyInfo(AdInfo adInfo){
         //获取本地配置信息
+        adsInfoslist.clear();
         ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(adInfo.getPosition());
         if (mConfigInfoBean == null) {
-            if (mAdListener != null) {
-                mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
-            }
+//            if (mAdListener != null) {
+//                mAdListener.adError(adInfo, CodeFactory.LOCAL_INFO_EMPTY, CodeFactory.getError(CodeFactory.LOCAL_INFO_EMPTY));
+//            }
             return;
         }
         adInfo.setAdStyle(mConfigInfoBean.getAdStyle());
         adInfo.setAdRequestTimeOut(mConfigInfoBean.getAdRequestTimeOut());
-        adsInfoslist.clear();
         adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
     }
 
