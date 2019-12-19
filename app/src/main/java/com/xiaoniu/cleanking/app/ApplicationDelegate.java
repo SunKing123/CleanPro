@@ -102,7 +102,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
 //        TTAdManagerHolder.init(application);
         //商业sdk初始化
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN.contains("prod"));
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);

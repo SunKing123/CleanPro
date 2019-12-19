@@ -4,13 +4,10 @@ import android.content.Context;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.Api;
-import com.comm.jksdk.http.Constant;
 import com.comm.jksdk.http.utils.ApiManage;
 import com.comm.jksdk.http.utils.AppEnvironment;
-import com.comm.jksdk.http.utils.ChannelUtil;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.SpUtils;
-
 
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
@@ -19,21 +16,23 @@ import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
  * @date 2019/9/24
  */
 public class InitBaseConfig {
-    private  final String TAG = "MainApp";
-    private  final String SERVER_ENVIRONMENT = "server_environment";
-    private  final String TEST_MODE_IS_OPEN = "test_is_open";
+    private final String TAG = "MainApp";
+    private final String SERVER_ENVIRONMENT = "server_environment";
+    private final String TEST_MODE_IS_OPEN = "test_is_open";
     private static InitBaseConfig instance;
-    public static InitBaseConfig getInstance(){
-        if(instance==null){
-            synchronized (InitBaseConfig.class){
-                if(instance==null){
-                    instance=new InitBaseConfig();
+
+    public static InitBaseConfig getInstance() {
+        if (instance == null) {
+            synchronized (InitBaseConfig.class) {
+                if (instance == null) {
+                    instance = new InitBaseConfig();
                 }
             }
         }
         return instance;
     }
-    public  void init(Context context){
+
+    public void init(Context context) {
         // 需要放在接口请求之前
         initNetWork();
         //初始化穿山甲
@@ -46,7 +45,7 @@ public class InitBaseConfig {
         TTAdManagerHolder.init(context, appId);
     }
 
-    private  void initNetWork() {
+    private void initNetWork() {
         System.getProperty("os.arch");
         initServerEnvironmentStub();
         try {
@@ -60,15 +59,28 @@ public class InitBaseConfig {
         }
     }
 
-    private  void initServerEnvironmentStub() {
+    private void initServerEnvironmentStub() {
         AppEnvironment.init(new AppEnvironment.ServerEnvironmentStub() {
             @Override
             public int getServerEnvironment() {
 //                //判断应用环境：release 且不为mt_test 渠道时候使用正式环境
 //                boolean product = !Constant.CHANNEL_TEST.equals(ChannelUtil.getChannel());
-                boolean product = GeekAdSdk.isFormal();
-                int defEnvironment = product? AppEnvironment.ServerEnvironment.Product.ordinal():AppEnvironment.ServerEnvironment.Test.ordinal();
-                return SpUtils.getInt(SERVER_ENVIRONMENT,defEnvironment);
+                String product = GeekAdSdk.isFormal();
+                int defEnvironment;
+                switch (product) {
+                    case "dev":
+                        defEnvironment = AppEnvironment.ServerEnvironment.Dev.ordinal();
+                        break;
+                    case "btest":
+                        defEnvironment = AppEnvironment.ServerEnvironment.Test.ordinal();
+                        break;
+                    case "prod":
+                        defEnvironment = AppEnvironment.ServerEnvironment.Product.ordinal();
+                        break;
+                    default:
+                        defEnvironment = AppEnvironment.ServerEnvironment.Product.ordinal();
+                }
+                return SpUtils.getInt(SERVER_ENVIRONMENT, defEnvironment);
             }
 
             @Override

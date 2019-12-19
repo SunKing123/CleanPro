@@ -2,7 +2,6 @@ package com.comm.jksdk.http.utils;
 
 
 import com.comm.jksdk.http.Api;
-import com.comm.jksdk.http.Constant;
 
 /**
  * 代码描述<p>
@@ -12,9 +11,9 @@ import com.comm.jksdk.http.Constant;
  */
 public class ApiManage {
 
-    public static String getWeatherURL(){
+    public static String getWeatherURL() {
         String weatherUrl = null;
-        switch (AppEnvironment.getServerApiEnvironment()){
+        switch (AppEnvironment.getServerApiEnvironment()) {
             case Dev:
                 weatherUrl = Api.URL_DEV.APP_WEATHER_DOMAIN;
                 break;
@@ -33,7 +32,6 @@ public class ApiManage {
         }
         return weatherUrl;
     }
-
 
 
 }

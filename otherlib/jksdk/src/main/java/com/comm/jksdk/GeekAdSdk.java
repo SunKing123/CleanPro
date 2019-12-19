@@ -28,7 +28,7 @@ public final class GeekAdSdk {
     public static Context mContext;
     public static String mRroductName;
     public static String mChannel;
-    public static boolean mIsFormal;
+    public static String mIsFormal;
 
     /**
      * 聚合广告sdk初始化
@@ -37,7 +37,7 @@ public final class GeekAdSdk {
      * @param channel 渠道名称
      * @param isFormal 是否是正式环境 true对应生产环境
      */
-    public static void init(Context context, String productName, String csjAppId, String channel, boolean isFormal){
+    public static void init(Context context, String productName, String csjAppId, String channel, String isFormal){
         mContext = context.getApplicationContext();
         mRroductName = productName;
         mChannel = channel;
@@ -112,7 +112,7 @@ public final class GeekAdSdk {
         return mChannel;
     }
 
-    public static boolean isFormal() {
+    public static String isFormal() {
         return mIsFormal;
     }
 
