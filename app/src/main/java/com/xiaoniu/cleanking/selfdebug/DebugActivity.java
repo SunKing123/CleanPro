@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.app;
+package com.xiaoniu.cleanking.selfdebug;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -216,4 +216,10 @@ public class DebugActivity extends BaseActivity {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
     }
+
+    //获取广告配置
+    public void getAdConfig(View view) {
+        startActivity(new Intent(mContext,AdConfigActivity.class));
+    }
+
 }

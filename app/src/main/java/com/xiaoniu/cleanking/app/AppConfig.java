@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.selfdebug.DebugActivity;
 import com.xiaoniu.common.utils.DisplayUtils;
 
 /**

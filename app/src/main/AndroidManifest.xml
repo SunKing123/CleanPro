@@ -84,9 +84,15 @@
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".app.DebugActivity"
+            android:name=".selfdebug.DebugActivity"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".selfdebug.AdConfigActivity"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".ui.main.activity.ImageActivity"
             android:excludeFromRecents="true"

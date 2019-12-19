@@ -25,7 +25,9 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
@@ -59,6 +61,8 @@ public class MeFragment extends SimpleFragment {
     LinearLayout line_permisson;
     @BindView(R.id.flayout_bottom_ad)
     FrameLayout frameBottomLayout;
+    @BindView(R.id.iv_icon)
+    ImageView ivIcon;
     private AdManager mAdManager;
 
     public static MeFragment getIntance() {
@@ -78,9 +82,10 @@ public class MeFragment extends SimpleFragment {
 
     WxQqUtil f;
     public String c;
-
+    int tagNum = 0;
     @Override
     protected void initView() {
+
         line_about.setOnClickListener(v -> {
             Log.e("fdsa", "dsd");
             StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
@@ -95,8 +100,14 @@ public class MeFragment extends SimpleFragment {
         clpt.topMargin = DisplayUtils.getScreenHeight() * 26 / 100 - DisplayUtils.dip2px(15);
         viewmid.setLayoutParams(clpt);
         initGeekAdSdk();
+
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        tagNum = 0;
+    }
 
     /**
      * 广告sdk
@@ -131,7 +142,7 @@ public class MeFragment extends SimpleFragment {
         }
     }
 
-    @OnClick({R.id.line_share, R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report})
+    @OnClick({R.id.line_share, R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report,R.id.iv_icon})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_setting) {
@@ -151,7 +162,14 @@ public class MeFragment extends SimpleFragment {
             String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
             share("", AppConstants.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
             StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", AppHolder.getInstance().getSourcePageId(), "about_page");
-
+        } else if( ids ==R.id.iv_icon){
+            tagNum ++;
+            if (tagNum >= 7) {
+                //测试入口
+                if (!BuildConfig.SYSTEM_EN.contains("prod")) {
+                    AppConfig.showDebugWindow(getActivity());
+                }
+            }
         }
     }
 

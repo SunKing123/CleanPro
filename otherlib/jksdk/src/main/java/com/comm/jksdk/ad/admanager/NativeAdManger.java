@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
@@ -31,8 +29,8 @@ import com.comm.jksdk.ad.view.chjview.ChjBigImgFakeVideoAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtCenterAdView;
-import com.comm.jksdk.ad.view.chjview.ChjExternalDialogBigImage2View;
 import com.comm.jksdk.ad.view.chjview.ChjExternalDialogBigImageView;
+import com.comm.jksdk.ad.view.chjview.ChjFullScreenBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.chjview.ChjSplashAdView;
 import com.comm.jksdk.ad.view.chjview.InsertScreenAdFullDownloadDialog;
 import com.comm.jksdk.ad.view.chjview.InsertScreenAdNormalDownloadDialog;
@@ -571,18 +569,20 @@ public class NativeAdManger implements AdManager {
             }
             return;
         }
+        //是否已有缓存Adinfo
         AdInfo temAdinfo = CacheAd.getAd(adInfo.getPosition());
         if (temAdinfo != null) {
-            if (adInfo.isPreload()) {
+            if (adInfo.isPreload()) {//预加载成功
                 if (mAdPreloadingListener != null) {
                     mAdPreloadingListener.adSuccess(temAdinfo);
                 }
-            } else {
+            } else {//清除缓存重新加载
                 CacheAd.removeAd(adInfo.getPosition());
                 createAdView(mActivity, temAdinfo);
             }
             return;
         }
+        //没有缓存对象,走正常流程
         adRequestManager.requestAd(mActivity, adInfo, new AdRequestListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -698,7 +698,8 @@ public class NativeAdManger implements AdManager {
         } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_01.equals(style)) { //外部弹窗大图广告_01
             adView = new ChjExternalDialogBigImageView(activity);
         } else if (Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_02.equals(style)) { //外部弹窗大图广告_02
-            adView = new ChjExternalDialogBigImage2View(activity);
+//            adView = new ChjExternalDialogBigImage2View(activity);
+            adView = new ChjFullScreenBigImgIcTvBtCenterAdView(activity);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) { //开屏广告
             adView = new ChjSplashAdView(activity);
         }
@@ -711,6 +712,7 @@ public class NativeAdManger implements AdManager {
         adView.setAdListener(mAdListener);
         adView.setPollingAdListener(mFirstAdListener);
         adInfo.setAdView(adView);
+        //填充物料
         adView.parseAd(adInfo);
         if (mAdListener != null) {
             mAdListener.adSuccess(adInfo);
@@ -1140,6 +1142,7 @@ public class NativeAdManger implements AdManager {
         adView.setAdListener(mAdListener);
         adView.setPollingAdListener(mFirstAdListener);
         adInfo.setAdView(adView);
+        //填充物料
         adView.parseAd(adInfo);
         if (mAdListener != null) {
             mAdListener.adSuccess(adInfo);
