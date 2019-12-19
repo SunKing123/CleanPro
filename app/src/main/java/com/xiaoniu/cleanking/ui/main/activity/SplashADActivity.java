@@ -332,7 +332,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
-                    Log.d(TAG, "-----adSuccess-----" + info.getAdSource() + "---" + info.getAdId());
+                    Log.d(TAG, "adSuccess 冷启动---" + info.toString());
                     mAdTitle = info.getAdTitle();
                     mAdSourse = info.getAdSource();
                 }
@@ -346,7 +346,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed-----");
+                Log.d(TAG, "adExposed 冷启动");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
@@ -357,7 +357,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked-----");
+                Log.d(TAG, "adClicked 冷启动");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
@@ -365,8 +365,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.e(TAG, "-----adError 冷启动-----" + errorMsg);
                 if (null != info) {
+                    Log.e(TAG, "adError 冷启动-----" + errorCode + "---" + errorMsg + "--" + info.toString());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "clod_splash_page", "clod_splash_page");
                 }
                 showProgressBar();

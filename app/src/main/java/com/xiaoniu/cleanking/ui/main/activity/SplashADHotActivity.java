@@ -168,8 +168,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.e(TAG, "-----adError 热启动-----" + errorMsg);
                 if (null != info) {
+                    Log.e(TAG, "-----adError 热启动-----" + errorCode + "--" + errorMsg + info.toString());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "hot_splash_page", "hot_splash_page");
                 }
                 showProgressBar();

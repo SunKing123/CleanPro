@@ -22,7 +22,7 @@ public interface Api {
 //        public static final String APP_WEATHER_DOMAIN = "http://testadsenseapi.hellogeek.com/adsenseapi/"; //测试环境
 
         //广告中心整合
-          public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-fat-default.fqt188.com/"; //测试环境
+          public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-dev-default.fqt188.com/"; //测试环境
 
     }
 

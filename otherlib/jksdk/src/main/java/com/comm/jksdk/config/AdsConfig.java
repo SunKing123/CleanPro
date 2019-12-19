@@ -35,11 +35,11 @@ import okhttp3.RequestBody;
  */
 public class AdsConfig {
     private static Context mContext;
-    protected final String TAG = "GeekAdSdk-->";
+    protected final String TAG = "GeekSdk";
     private static AdsConfig mAdsConfig = null;
     private Gson mGson = new Gson();
     private String mConfigInfo;
-//    private ConfigBean.AdListBean mConfigInfoBean;
+    //    private ConfigBean.AdListBean mConfigInfoBean;
     private ArrayList<PositionInfo> posInfoList;
 
     //本地的配置信息
@@ -79,11 +79,11 @@ public class AdsConfig {
                         }
                         if (!ConfigInfoBean.isSuccess()) {
                             LogUtils.d(TAG, "accept->配置信息请求失败:" + ConfigInfoBean.getCode()
-                                    +ConfigInfoBean.getMsg());
+                                    + ConfigInfoBean.getMsg());
 //                            Toast.makeText(mContext, "accept->配置信息请求失败:" + ConfigInfoBean.getCode()
 //                                    +ConfigInfoBean.getMsg(), Toast.LENGTH_LONG).show();
                             if (listener != null) {
-                                listener.adError(1, "配置信息请求失败,code:"+ConfigInfoBean.getCode()+" msg:"+ConfigInfoBean.getMsg());
+                                listener.adError(1, "配置信息请求失败,code:" + ConfigInfoBean.getCode() + " msg:" + ConfigInfoBean.getMsg());
                             }
                             return;
                         }
@@ -138,7 +138,7 @@ public class AdsConfig {
                         LogUtils.d(TAG, "accept->配置信息请求失败" + throwable.getMessage());
 //                        Toast.makeText(mContext, "accept->配置信息请求失败" + throwable.getMessage(), Toast.LENGTH_LONG).show();
                         if (listener != null) {
-                            listener.adError(1, "配置信息请求失败,"+throwable.getMessage());
+                            listener.adError(1, "配置信息请求失败," + throwable.getMessage());
                         }
                     }
                 });
@@ -188,21 +188,22 @@ public class AdsConfig {
 //        if (posInfosBoolean) {
 //            requestParams.put("positionInfos", posInfoList);
 //        }
-        String requstData=mGson.toJson(requestParams);
-        LogUtils.d(TAG, "requstData->"+requstData);
+        String requstData = mGson.toJson(requestParams);
+        LogUtils.d(TAG, "requstData->" + requstData);
 
-        requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"),requstData);
+        requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), requstData);
         return OkHttpWrapper.getInstance().getRetrofit().create(ConfigService.class).getConfig(requestBody);
     }
 
     /**
      * 获取所有位置对于信息
+     *
      * @return
      */
-    private  Boolean getPositionInfos() {
+    private Boolean getPositionInfos() {
         posInfoList = new ArrayList<PositionInfo>();
         posInfoList.clear();
-        Boolean positionInfos=false;
+        Boolean positionInfos = false;
         // 从sp获取配置信息
         mConfigInfo = SpUtils.getString(Constants.SPUtils.CONFIG_INFO, "");
         if (!TextUtils.isEmpty(mConfigInfo)) {
@@ -219,7 +220,7 @@ public class AdsConfig {
                         posInfo.productId = adListBean.getProductId();
                         posInfoList.add(posInfo);
                     }
-                    positionInfos=true;
+                    positionInfos = true;
                 }
 //                if (mConfigInfoBean.getData() != null) {
 //                    if (mConfigInfoBean.getData().getAdList() != null && mConfigInfoBean.getData().getAdList().size() > 0) {
@@ -299,9 +300,10 @@ public class AdsConfig {
 
     /**
      * 获取bid
+     *
      * @return
      */
-    public static int getBid(){
+    public static int getBid() {
         if (Constants.bid > 0) {
             return Constants.bid;
         }
@@ -311,18 +313,20 @@ public class AdsConfig {
 
     /**
      * 设置bid
+     *
      * @return
      */
-    public static void setBid(int bid){
+    public static void setBid(int bid) {
         SpUtils.putInt(Constants.SPUtils.BID, bid);
         Constants.bid = bid;
     }
 
     /**
-     *获取用户激活时间
+     * 获取用户激活时间
+     *
      * @return
      */
-    public static long getUserActive(){
+    public static long getUserActive() {
         if (Constants.userActive > 0) {
             return Constants.userActive;
         }
@@ -332,15 +336,17 @@ public class AdsConfig {
 
     /**
      * 设置用户激活时间
+     *
      * @param userActive
      */
-    public static void setUserActive(long userActive){
+    public static void setUserActive(long userActive) {
         SpUtils.putLong(Constants.SPUtils.USER_ACTIVE, userActive);
         Constants.userActive = userActive;
     }
 
     /**
      * 设置经度
+     *
      * @param longitude
      */
     public static void setLongitude(String longitude) {
@@ -350,9 +356,10 @@ public class AdsConfig {
 
     /**
      * 获取经度
+     *
      * @return
      */
-    public static String getLongitude(){
+    public static String getLongitude() {
         if (!TextUtils.isEmpty(Constants.longitude)) {
             return Constants.longitude;
         }
@@ -363,16 +370,17 @@ public class AdsConfig {
     /**
      * 设置纬度
      */
-    public static void setLatitude(String latitude){
+    public static void setLatitude(String latitude) {
         SpUtils.putString(Constants.SPUtils.LATITUDE, latitude);
         Constants.latitude = latitude;
     }
 
     /**
      * 获取纬度
+     *
      * @return
      */
-    public static String getLatitude(){
+    public static String getLatitude() {
         if (!TextUtils.isEmpty(Constants.latitude)) {
             return Constants.latitude;
         }
@@ -382,25 +390,28 @@ public class AdsConfig {
 
     /**
      * 设置业务线标识
+     *
      * @param productName
      */
-    public static void setProductName(String productName){
+    public static void setProductName(String productName) {
         Constants.productName = productName;
     }
 
     /**
      * 获取业务线标识
+     *
      * @return
      */
-    public static String getProductName(){
+    public static String getProductName() {
         return Constants.productName;
     }
 
     /**
      * 根据业务线获取app name
+     *
      * @return
      */
-    public static String getProductAppName(){
+    public static String getProductAppName() {
         if (TextUtils.isEmpty(Constants.productName)) {
             return "未知";
         }
@@ -433,9 +444,10 @@ public class AdsConfig {
 
     /**
      * 获取本地配置信息
+     *
      * @return
      */
-    public static List<ConfigBean.AdListBean> getAdsInfoslist(){
+    public static List<ConfigBean.AdListBean> getAdsInfoslist() {
         if (!CollectionUtils.isEmpty(adsInfoslist)) {
             return adsInfoslist;
         }
@@ -450,16 +462,17 @@ public class AdsConfig {
 
     /**
      * 设置本地配置信息
+     *
      * @param configBean
      */
-    public static void setAdsInfoslist(ConfigBean configBean){
+    public static void setAdsInfoslist(ConfigBean configBean) {
         if (configBean == null) {
             return;
         }
         adsInfoslist.clear();
         adsInfoslist.addAll(configBean.getAdList());
         String configInfo = new Gson().toJson(configBean);
-        LogUtils.i("GeekSdk--configInfo---"+configInfo);
+        LogUtils.i("GeekSdk--configInfo---" + configInfo);
         SpUtils.putString(Constants.SPUtils.CONFIG_INFO, configInfo);
 //        //初始化穿山甲sdk
 //        String csjAppId = "";

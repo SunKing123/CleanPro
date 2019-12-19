@@ -29,7 +29,7 @@ import java.util.*
 /**
  * @author XiLei
  * @date 2019/11/22.
- * description：完成页之前的插屏广告
+ * description：完成页之前的全屏视频广告
  */
 class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
 
