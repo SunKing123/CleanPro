@@ -154,6 +154,11 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * 广告sdk
      */
     private void initGeekAdSdk() {
+        if (mIsFromHomeMain) {
+            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page");
+        } else {
+            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "gameboost_add_page", "gameboost_incentive_video_page");
+        }
         mAdManager = GeekAdSdk.getAdsManger();
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {

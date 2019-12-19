@@ -327,6 +327,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private boolean mIsAdError;
 
     private void initGeekSdkAD() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "clod_splash_page", "clod_splash_page");
         mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, "cold_kp", new AdListener() {
             @Override

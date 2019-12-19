@@ -278,7 +278,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         mLastTime = SystemClock.elapsedRealtime();
-
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "lock_screen");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
@@ -498,6 +498,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private void loadGeekAd() {
         AdManager mAdManager = GeekAdSdk.getAdsManger();
         if (null == mAdManager) return;
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "virus_killing_video_page");
         NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
         NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
         mAdManager.loadRewardVideoAd(this, "click_virus_killing_ad", "user123", 1, new VideoAdListener() {

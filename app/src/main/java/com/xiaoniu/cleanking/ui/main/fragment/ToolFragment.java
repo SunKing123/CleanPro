@@ -424,8 +424,8 @@ public class ToolFragment extends SimpleFragment {
     private void addBottomAdView() {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
         initGeekAdSdk();
-        //todo
         mAdManager.loadAd(getActivity(), PositionId.AD_ACCELERATION_PAGE_BELOW, new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {

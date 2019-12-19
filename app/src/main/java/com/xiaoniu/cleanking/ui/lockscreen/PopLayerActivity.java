@@ -7,6 +7,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -22,9 +25,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * @author zhengzhihao
@@ -79,6 +79,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
 
     public void adInit() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "external_advertising_page", "external_advertising_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.AD_EXTERNAL_ADVERTISING_AD_1, new AdListener() {
             @Override
@@ -92,7 +93,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                     flayoutAdContainer.addView(info.getAdView());
                     int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, number + 1);
-                    Logger.i("zz--"+(number+1));
+                    Logger.i("zz--" + (number + 1));
                     PreferenceUtil.getInstants().save(SpCacheConfig.POP_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
                 }
             }
@@ -109,8 +110,8 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if(!BuildConfig.SYSTEM_EN.contains("prod"))
-                    ToastUtils.showLong("外部插屏errorcode-----"+errorMsg+"---errorMsg----"+errorMsg);
+                if (!BuildConfig.SYSTEM_EN.contains("prod"))
+                    ToastUtils.showLong("外部插屏errorcode-----" + errorMsg + "---errorMsg----" + errorMsg);
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "external_advertising_page", "external_advertising_page");
                 }
