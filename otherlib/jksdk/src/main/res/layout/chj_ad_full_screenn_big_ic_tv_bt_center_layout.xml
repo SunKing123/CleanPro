@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_ad_item_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ad_big_img_bg"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:orientation="vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ad_im"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:scaleType="centerCrop" />
+            <RelativeLayout
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="@dimen/dimen_8dp"
+                android:layout_marginRight="@dimen/dimen_12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ad_logo"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/dimen_16dp"
+                    android:layout_height="@dimen/dimen_16dp"/>
+                <TextView
+                    android:layout_toRightOf="@+id/ad_logo"
+                    android:layout_centerVertical="true"
+                    android:text="广告"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/dimen_9dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_marginTop="22dp"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/brand_icon_im"
+                android:layout_width="69dp"
+                android:layout_height="69dp"/>
+            <TextView
+                android:id="@+id/ad_title_tv"
+                android:layout_marginTop="15.5dp"
+                android:layout_gravity="center_horizontal"
+                android:lines="1"
+                android:textSize="20sp"
+                android:textColor="#404040"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/ad_describe_tv"
+                android:layout_marginTop="11dp"
+                android:layout_marginLeft="@dimen/dimen_17dp"
+                android:layout_marginRight="@dimen/dimen_17dp"
+                android:maxLines="2"
+                android:textColor="#B3B3B3"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/down_bt"
+
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:layout_marginTop="22dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/ad_big_img_down"
+            android:layout_marginRight="27dp"
+            android:layout_marginLeft="27dp"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="30dp"
+            android:layout_height="48dp"/>
+    </LinearLayout>
+</RelativeLayout>

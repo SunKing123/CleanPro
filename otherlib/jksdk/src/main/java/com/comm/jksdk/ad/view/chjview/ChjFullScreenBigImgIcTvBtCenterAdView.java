@@ -23,30 +23,28 @@ import com.bytedance.sdk.openadsdk.TTImage;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
   *
   * @ProjectName:    ${PROJECT_NAME}
   * @Package:        ${PACKAGE_NAME}
   * @ClassName:      ${NAME}
-  * @Description:     大图_带icon文字按钮居中
+  * @Description:    全屏大图_带icon文字按钮居中
   * @Author:         fanhailong
   * @CreateDate:     ${DATE} ${TIME}
   * @UpdateUser:     更新者：
   * @UpdateDate:     ${DATE} ${TIME}
   * @UpdateRemark:   更新说明：
-  * @Version:        1.0
+  * @Version:        全屏大图_带icon文字按钮居中（作为外部全屏插屏样式）
  */
 
 
-public class ChjBigImgIcTvBtCenterAdView extends CHJAdView {
+public class ChjFullScreenBigImgIcTvBtCenterAdView extends CHJAdView {
     // 广告实体数据
     private TTFeedAd mNativeADData = null;
     private RequestOptions requestOptions;
@@ -60,7 +58,7 @@ public class ChjBigImgIcTvBtCenterAdView extends CHJAdView {
     TextView downTb; //广告下载按钮
     ImageView adLogo;
 
-    public ChjBigImgIcTvBtCenterAdView(Context context) {
+    public ChjFullScreenBigImgIcTvBtCenterAdView(Context context) {
         super(context);
 
     }
@@ -68,7 +66,7 @@ public class ChjBigImgIcTvBtCenterAdView extends CHJAdView {
 
     @Override
     public int getLayoutId() {
-        return R.layout.chj_ad_big_ic_tv_bt_center_layout;
+        return R.layout.chj_ad_full_screenn_big_ic_tv_bt_center_layout;
     }
 
     @Override
@@ -94,6 +92,7 @@ public class ChjBigImgIcTvBtCenterAdView extends CHJAdView {
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
     }
+
 
     @Override
     public void parseAd(AdInfo adInfo) {
