@@ -210,12 +210,12 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             override fun adSuccess(info: AdInfo) {
                 if (null == info) return
                 Log.d(TAG, "adSuccess 完成页前全屏视频==" + info.toString())
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
                 if (Constants.AdType.YouLiangHui.equals(info.adSource)) {
                     var view = info.getAdView()
                     if (null != lin_ad_container && null != view) {
                         lin_ad_container.removeAllViews()
                         lin_ad_container.addView(view)
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.adId, info.adSource, "success", mSourcePage, mCurrentPage)
                     } else {
                         goFinishActivity()
                     }
