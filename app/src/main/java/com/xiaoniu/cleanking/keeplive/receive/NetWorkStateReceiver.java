@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -140,7 +141,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
 
     //全局跳转全屏插屏页面
     private void startFullInsertPage(Context context,String adStyle) {
-        if(ActivityCollector.isActivityExist(PopLayerActivity.class))
+        if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
             return;
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);

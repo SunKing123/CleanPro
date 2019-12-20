@@ -17,7 +17,7 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -107,7 +107,7 @@ public class TimingReceiver extends BroadcastReceiver {
         try {
             //判断是否进入后台
             int isBack = MmkvUtil.getInt("isback");
-            if(isBack!=1 || ActivityCollector.isActivityExistMkv(PopLayerActivity.class))
+            if(isBack!=1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
                 return;
 
             //判断广告开关

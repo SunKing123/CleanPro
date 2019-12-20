@@ -9,12 +9,11 @@
 
     <LinearLayout
         android:orientation="vertical"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:layout_marginTop="16dp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -80,7 +79,6 @@
 
         <TextView
             android:id="@+id/down_bt"
-
             android:gravity="center"
             android:textColor="#ffffff"
             android:layout_marginTop="22dp"

@@ -222,4 +222,11 @@ public class DebugActivity extends BaseActivity {
         startActivity(new Intent(mContext,AdConfigActivity.class));
     }
 
+
+
+    //获取广告配置
+    public void gotoFullAd(View view) {
+        startFullInsertPage(this);
+    }
+
 }
