@@ -7,6 +7,7 @@ import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.config.AdsConfig;
 import com.comm.jksdk.config.InitBaseConfig;
 import com.comm.jksdk.config.listener.ConfigListener;
+import com.comm.jksdk.http.utils.LogUtils;
 import com.tencent.mmkv.MMKV;
 
 /**
@@ -87,7 +88,16 @@ public final class GeekAdSdk {
      * @param bid
      */
     public static void setBid(int bid){
+        LogUtils.i("GeekSdk---"+bid);
         AdsConfig.setBid(bid);
+    }
+
+    /**
+     * 获取bid
+     */
+    public static int getBid(){
+        LogUtils.i("GeekSdk---get"+AdsConfig.getBid());
+        return AdsConfig.getBid();
     }
 
     /**

@@ -12,10 +12,20 @@ public class ContextUtils {
     private static Context sContext;
 
     private static Application application;
+
+    private static int adBid;
     private ContextUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+
+    public static void initAdBid(int bid) {
+        adBid = bid;
+    }
+
+    public static int getAdBid() {
+        return adBid;
+    }
     /**
      * 初始化工具类
      *

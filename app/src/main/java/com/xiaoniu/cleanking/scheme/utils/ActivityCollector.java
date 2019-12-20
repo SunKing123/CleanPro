@@ -153,13 +153,13 @@ public class ActivityCollector {
 
         if (acNameList.size() > 0) {
             Logger.i("zz-activity-"+new Gson().toJson(acNameList));
-            MmkvUtil.save("activity_list", new Gson().toJson(acNameList));
+            MmkvUtil.saveString("activity_list", new Gson().toJson(acNameList));
         }
     }
 
     public static boolean isActivityExistMkv(Class cla){
         boolean isExist =false;
-        String activity_list = MmkvUtil.get("activity_list");
+        String activity_list = MmkvUtil.getString("activity_list","");
         TypeToken<List<String>> token = new TypeToken<List<String>>() {};
         List<String> acNameList = new Gson().fromJson(activity_list, token.getType());
         if (null != acNameList && acNameList.size() > 0) {

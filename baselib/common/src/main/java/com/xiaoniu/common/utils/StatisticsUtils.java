@@ -1,5 +1,7 @@
 package com.xiaoniu.common.utils;
 
+import android.text.TextUtils;
+
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.json.JSONException;
@@ -332,6 +334,11 @@ public class StatisticsUtils {
             extension.put("ad_id", ad_id);
             extension.put("ad_title",title);
             extension.put("ad_agency", ad_agency);
+            //广告sdk埋点
+            String adBid = String.valueOf(ContextUtils.getAdBid());
+            if (!TextUtils.isEmpty(adBid)) {
+                extension.put("bid", adBid);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -359,6 +366,11 @@ public class StatisticsUtils {
 //            extension.put("ad_title","");//请求阶段无title
             extension.put("ad_agency", ad_agency);
             extension.put("ad_request_status", ad_request_status);
+            //广告sdk埋点
+            String adBid = String.valueOf(ContextUtils.getAdBid());
+            if (!TextUtils.isEmpty(adBid)) {
+                extension.put("bid", adBid);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -385,6 +397,11 @@ public class StatisticsUtils {
             extension.put("ad_id", ad_id);
             extension.put("ad_title",title);
             extension.put("ad_agency", ad_agency);
+            //广告sdk埋点
+            String adBid = String.valueOf(ContextUtils.getAdBid());
+            if (!TextUtils.isEmpty(adBid)) {
+                extension.put("bid", adBid);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

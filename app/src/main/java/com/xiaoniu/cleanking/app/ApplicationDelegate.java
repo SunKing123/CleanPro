@@ -46,10 +46,12 @@ import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.MiitHelper;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.Configuration;
@@ -103,6 +105,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
 //        TTAdManagerHolder.init(application);
         //商业sdk初始化
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+        //广告sdk_Bid只设置一次
+        if (GeekAdSdk.getBid() < 0) {
+            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0,99));
+        }
+        ContextUtils.initAdBid(GeekAdSdk.getBid());
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
