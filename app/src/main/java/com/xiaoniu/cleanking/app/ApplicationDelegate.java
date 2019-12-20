@@ -113,7 +113,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         });
         String rootDir = MMKV.initialize(application);
-//        Logger.i("zz---"+rootDir);
     }
 
 
