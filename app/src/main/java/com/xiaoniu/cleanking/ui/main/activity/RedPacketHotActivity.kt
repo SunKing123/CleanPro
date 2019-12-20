@@ -133,6 +133,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     private fun initGeekAdSdk() {
         NiuDataAPI.onPageStart("red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
         NiuDataAPIUtil.onPageEnd("hot_splash_page", "red_envelopes_page_video_page", "red_envelopes_page_video_view_page", "红包弹窗激励视频页浏览")
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "red_envelopes_page_video_page")
         mAdManager = GeekAdSdk.getAdsManger()
         //暂时这样
         mAdManager.loadRewardVideoAd(this, PositionId.AD_RED_PACKET, "user123", 1, object : VideoAdListener {

@@ -50,6 +50,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
      * 获取插屏广告并加载
      */
     private void loadGeekSdk() {
+        StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", " ",  " ", "all_ad_request", NewCleanFinishActivity.currentPage, "screen_advertising");
         mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadCustomInsertScreenAd(this, "cp_ad_2", 3, new AdListener() {
             @Override

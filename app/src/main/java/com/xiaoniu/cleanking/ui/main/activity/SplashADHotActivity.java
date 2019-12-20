@@ -132,12 +132,13 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     private boolean mIsAdError;
 
     private void initGeekSdkAD() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "hot_splash_page");
         mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, "hot_kp", new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
-                    Log.d(TAG, "-----adSuccess-----" + info.getAdId() + "---" + info.getAdSource());
+                    Log.d(TAG, "-----adSuccess 热启动--" + info.toString());
                     mAdTitle = info.getAdTitle();
                     mAdSourse = info.getAdSource();
                 }
@@ -151,7 +152,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed-----");
+                Log.d(TAG, "-----adExposed 热启动");
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
@@ -161,7 +162,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked-----");
+                Log.d(TAG, "-----adClicked 热启动");
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
             }

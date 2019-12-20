@@ -1214,6 +1214,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     public void initPos01Ad() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, "success_page_ad_1", new AdListener() {
             @Override
@@ -1300,6 +1301,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     public void initAd02() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, "success_page_ad_2", new AdListener() {
             @Override

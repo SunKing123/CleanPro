@@ -72,6 +72,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
 
     public void adInit() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, adStyle, new AdListener() {
             @Override

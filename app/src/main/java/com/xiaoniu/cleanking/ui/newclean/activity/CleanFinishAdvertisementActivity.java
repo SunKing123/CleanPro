@@ -417,6 +417,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     }
 
     public void initPos03Ad() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, "success_page_ad_3", new AdListener() {
             @Override

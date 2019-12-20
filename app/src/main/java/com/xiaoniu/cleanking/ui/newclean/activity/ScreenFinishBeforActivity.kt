@@ -19,7 +19,6 @@ import com.xiaoniu.cleanking.ui.main.presenter.ScreenFinishBeforPresenter
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.FileQueryUtils
-import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.NetworkUtils
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -194,6 +193,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
      */
     private fun loadGeekAd() {
         if (null == mAdManager) return
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", mSourcePage, mCurrentPage)
         mAdManager.loadVideoAd(this, PositionId.AD_FINISH_BEFOR, object : VideoAdListener {
             override fun onVideoResume(info: AdInfo) {
 
