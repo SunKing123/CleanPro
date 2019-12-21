@@ -18,15 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
@@ -47,6 +46,7 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
 import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
@@ -58,9 +58,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 锁屏信息流广告页面
@@ -76,26 +80,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
     private TextView tv_weather_state, tv_city;
-
     private String TAG = "GeekSdk";
-/*
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //注册订阅者
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-        try {
-            ViewGroup layout = (ViewGroup) getWindow().getDecorView();
-            layout.removeAllViews();
-        } catch (Exception e) {
-        }
-    }*/
+    private List<SwitchInfoList.DataBean> dataBeans = new ArrayList<>();
+    private List<BottoomAdList.DataBean> bottomAds= new ArrayList<>();
 
 
     @Override
@@ -105,9 +92,28 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         StatusBarUtil.setTransparentForWindow(this);
         setContentView(R.layout.activity_lock);
         ActivityCollector.addActivity(this, LockActivity.class);
+
+        //获取总开关数据
+       String switchString = MmkvUtil.getSwitchInfo();
+       if(!TextUtils.isEmpty(switchString)){
+           SwitchInfoList  switchInfoList = new Gson().fromJson(MmkvUtil.getSwitchInfo(), SwitchInfoList.class);
+           if (null != switchInfoList)
+           dataBeans.addAll(switchInfoList.getData());
+       }
+       //获取打底广告数据
+        String botomAdString = MmkvUtil.getBottoomAdInfo();
+        if (!TextUtils.isEmpty(botomAdString)) {
+            List<BottoomAdList.DataBean> bottomBeans = new Gson().fromJson(MmkvUtil.getBottoomAdInfo(), new TypeToken<List<BottoomAdList.DataBean>>() {
+            }.getType());
+            if (null != bottomBeans && bottomBeans.size() > 0) {
+                bottomAds.addAll(bottomBeans);
+            }
+        }
+
         initView();
         //注册订阅者
         EventBus.getDefault().register(this);
+
     }
 
     private void initView() {
@@ -196,6 +202,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * 设置功能按钮状态
+     */
     public void setBtnState() {
         if (null != PreferenceUtil.getInstants().get("lock_pos01") && PreferenceUtil.getInstants().get("lock_pos01").length() > 2) {
             LockScreenBtnInfo btnInfo = new Gson().fromJson(PreferenceUtil.getInstants().get("lock_pos01"), LockScreenBtnInfo.class);
@@ -270,6 +279,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 广告加载
+     */
     private long mLastTime = 0;
 
     public void adInit() {
@@ -279,7 +291,44 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
         mLastTime = SystemClock.elapsedRealtime();
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "lock_screen");
-        AdManager adManager = GeekAdSdk.getAdsManger();
+        GeekAdSdk.getAdsManger().loadNativeTemplateAd(this,PositionId.AD_LOCK_SCREEN_ADVERTISING_1_3_0, Float.valueOf (DisplayUtil.px2dp(LockActivity.this,DisplayUtil.getScreenWidth(LockActivity.this)) -28), new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null == info) return;
+//                Log.d(TAG, "adSuccess 锁屏==" + info.toString());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
+                if (info.getAdView() != null && null != relAd) {
+                    relAd.removeAllViews();
+                    relAd.addView(info.getAdView());
+                    //模板样式暂不支持预加载
+//                    adPredLoad();
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                if (null == info) return;
+                Log.d(TAG, "adExposed 锁屏");
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
+                LogUtils.e("adExposed");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "adError 锁屏==" + errorCode + "---" + errorMsg);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
+                }
+                showBottomAd();
+            }
+        });
+    /*    AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -315,7 +364,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 showBottomAd();
             }
-        });
+        });*/
     }
 
 
@@ -329,9 +378,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         updateTimeUI();
         boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+        if (dataBeans.size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : dataBeans) {
                 if (PositionId.KEY_LOCK_SCREEN.equals(switchInfoList.getConfigKey())) {
                     isOpen = switchInfoList.isOpen();
                 }
@@ -432,12 +480,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 PreferenceUtil.getInstants().save("lock_action", "virus");//埋点区分逻辑
 
                 if (PreferenceUtil.getVirusKillTime()) {
-                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
-                            || null == AppHolder.getInstance().getSwitchInfoList().getData()
-                            || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+                    if (dataBeans.size() <= 0) {
                         startVirUsKill();
                     } else {
-                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        for (SwitchInfoList.DataBean switchInfoList : dataBeans) {
                             if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
                                 if (switchInfoList.isOpen()) {
                                     loadGeekAd();
@@ -600,6 +646,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         unregisterLockerReceiver();
         EventBus.getDefault().unregister(this);
+        ActivityCollector.removeActivity(this);
 //
      /*   executorService.execute(() -> {
             FileUtils.writeTextFile("stop");
@@ -688,9 +735,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private int mBottomAdShowCount = 0;
 
     private void showBottomAd() {
-        List<BottoomAdList.DataBean> mBottoomAdList = AppHolder.getInstance().getBottomAdList();
-        if (null != mBottoomAdList && mBottoomAdList.size() > 0) {
-            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
+
+        if ( bottomAds.size() > 0) {
+            for (BottoomAdList.DataBean dataBean : bottomAds) {
                 if (dataBean.getSwitcherKey().equals(PositionId.KEY_LOCK_SCREEN)) {
                     if (dataBean.getShowType() == 1) { //循环
                         mBottomAdShowCount = PreferenceUtil.getBottomLockAdCount();
@@ -706,6 +753,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                             mBottomAdShowCount = NumberUtils.mathRandomInt(0, dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
+
                     GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
                         AppHolder.getInstance().setCleanFinishSourcePageId("lock_screen");

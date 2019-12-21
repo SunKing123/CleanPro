@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.base;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -90,26 +91,30 @@ public class AppHolder {
         for (InsertAdSwitchInfoList.DataBean post : insertAdSwitchInfoList.getData()) {
             insertAdSwitchmap.put(post.getConfigKey(), post);
         }
-        MmkvUtil.setSwitchInfo(new Gson().toJson(insertAdSwitchInfoList));
+        MmkvUtil.setInsertSwitchInfo(new Gson().toJson(insertAdSwitchInfoList));
     }
 
 
     public void setSwitchInfoList(SwitchInfoList switchInfoList) {
         this.switchInfoList = switchInfoList;
+        //本地数据保存
+        MmkvUtil.setSwitchInfo(new Gson().toJson(switchInfoList));
     }
 
     public SwitchInfoList getSwitchInfoList() {
-        return switchInfoList;
+        return switchInfoList != null ? switchInfoList : new Gson().fromJson(MmkvUtil.getSwitchInfo(), SwitchInfoList.class);
     }
 
 
 
     public void setBottomAdList(List<BottoomAdList.DataBean> switchInfoList) {
         this.mBottoomAdList = switchInfoList;
+        MmkvUtil.setBottoomAdInfo(new Gson().toJson(mBottoomAdList));
     }
 
     public List<BottoomAdList.DataBean> getBottomAdList() {
-        return mBottoomAdList;
+        return mBottoomAdList != null ? mBottoomAdList : new Gson().fromJson(MmkvUtil.getBottoomAdInfo(), new TypeToken<List<BottoomAdList.DataBean>>() {
+        }.getType());
     }
 
 

@@ -66,6 +66,7 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
 
             override fun adClicked(info: AdInfo) {
                 Log.d(TAG, "adClicked 内部插屏")
+                PreferenceUtil.saveShowAD(false)
                 if (null == info) return
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
                 finish()
@@ -89,6 +90,14 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
                 finish()
             }
         }, "80")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!isFinishing) {
+            PreferenceUtil.saveShowAD(false)
+            finish()
+        }
     }
 
     override fun netError() {

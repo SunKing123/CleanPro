@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -46,10 +49,12 @@ import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.MiitHelper;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.Configuration;
@@ -60,9 +65,6 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import androidx.annotation.NonNull;
-import androidx.room.Room;
 
 /**
  * Created by admin on 2017/6/8.
@@ -103,6 +105,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
 //        TTAdManagerHolder.init(application);
         //商业sdk初始化
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+        //广告sdk_Bid只设置一次
+        if (GeekAdSdk.getBid() < 0) {
+            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
+        }
+        ContextUtils.initAdBid(GeekAdSdk.getBid());
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
@@ -113,7 +120,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         });
         String rootDir = MMKV.initialize(application);
-//        Logger.i("zz---"+rootDir);
     }
 
 
@@ -298,12 +304,16 @@ public class ApplicationDelegate implements IApplicationDelegate {
             @Override
             public void onBecameForeground(Activity activity) {
                 if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
-                    MmkvUtil.saveInt("isback",0);
+                    MmkvUtil.saveInt("isback", 0);
                 } else {//非当前主进程
                     return;
                 }
-                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) || ActivityCollector.isActivityExist(PopLayerActivity.class)
-                        || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class) || activity.getLocalClassName().contains(".other") || activity.getLocalClassName().contains("FullPopLayerActivity")
+                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
+                        || ActivityCollector.isActivityExist(PopLayerActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADHotActivity.class)
+                        || activity.getLocalClassName().contains(".other")
+                        || activity.getLocalClassName().contains("FullPopLayerActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
@@ -327,7 +337,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
-                    MmkvUtil.saveInt("isback",1);
+                    MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
                 }
             }

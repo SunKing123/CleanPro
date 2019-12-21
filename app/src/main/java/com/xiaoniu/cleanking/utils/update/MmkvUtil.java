@@ -20,6 +20,57 @@ import com.xiaoniu.common.utils.NetworkUtils;
  */
 public class MmkvUtil {
 
+    //(string数据保存)
+    public static void saveString(String key, String data) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        kv.encode(key, data);
+    }
+
+    //(string数据获取)
+    public static String getString(String key, String def) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        return kv.containsKey(key) ? kv.decodeString(key) : def;
+    }
+
+    //(int数据保存)
+    public static void saveInt(String key, int data) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        kv.encode(key, data);
+    }
+
+    //(int数据获取)
+    public static int getInt(String key, int def) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        return kv.containsKey(key) ? kv.decodeInt(key) : def;
+    }
+
+
+    //(boolean数据保存)
+    public static void saveBool(String key, boolean data) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        kv.encode(key, data);
+    }
+
+    //(boolean数据获取)
+    public static boolean getBool(String key, boolean def) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        return kv.containsKey(key) ? kv.decodeBool(key) : def;
+    }
+
+
+    //(long数据保存)
+    public static void saveLong(String key, long data) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        kv.encode(key, data);
+    }
+
+    //(long数据获取)
+    public static long getLong(String key, long def) {
+        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
+        return kv.decodeLong(key, def);
+    }
+
+
     //全屏插屏时间展示逻辑(跨进程)
     public static boolean fullInsertPageIsShow(int showTimes) {
         MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
@@ -64,40 +115,42 @@ public class MmkvUtil {
         return !ActivityCollector.isActivityExistMkv(PopLayerActivity.class) && !ActivityCollector.isActivityExistMkv(LockActivity.class) && !ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)&& !ActivityCollector.isActivityExistMkv(RedPacketHotActivity.class) && !isUpdate;
     }
 
-    //(开关数据获取)
-    public static String getSwitchInfo(){
+    //(插屏开关数据获取)
+    public static String getInsertSwitchInfo(){
         MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
         return kv.decodeString("insert_ad_switch");
     }
 
-    //(开关数据保存)
-    public static void setSwitchInfo(String info){
+    //(插屏开关数据保存)
+    public static void setInsertSwitchInfo(String info){
         MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
         kv.encode("insert_ad_switch", info);
     }
 
-    //(数据保存)
-    public static void save(String key,String data){
-        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
-        kv.encode(key, data);
+
+    //(总开关数据获取)
+    public static String getSwitchInfo(){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        return kv.decodeString("ad_switch");
     }
 
-    //(数据获取)
-    public static String get(String key){
-        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
-        return kv.decodeString(key);
+    //(总开关数据保存)
+    public static void setSwitchInfo(String info){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        kv.encode("ad_switch", info);
     }
 
-    //(数据保存)
-    public static void saveInt(String key,int data){
-        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
-        kv.encode(key, data);
+
+    //(打底开关数据获取)
+    public static String getBottoomAdInfo(){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        return kv.decodeString("ad_bottom");
     }
 
-    //(数据获取)
-    public static int getInt(String key){
-        MMKV kv = MMKV.mmkvWithID(BuildConfig.APPLICATION_ID, MMKV.MULTI_PROCESS_MODE);
-        return kv.decodeInt(key);
+    //(打底开关数据保存)
+    public static void setBottoomAdInfo(String info){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        kv.encode("ad_bottom", info);
     }
 
 

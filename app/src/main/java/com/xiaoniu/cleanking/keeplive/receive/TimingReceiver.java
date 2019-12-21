@@ -145,7 +145,7 @@ public class TimingReceiver extends BroadcastReceiver {
     public void startActivity(Context context) {
         try {
             //判断是否进入后台
-            int isBack = MmkvUtil.getInt("isback");
+            int isBack = MmkvUtil.getInt("isback",-1);
             if(isBack!=1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
                 return;
 

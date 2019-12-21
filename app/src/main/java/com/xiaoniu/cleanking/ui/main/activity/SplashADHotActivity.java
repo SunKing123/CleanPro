@@ -156,7 +156,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
-                    finish();
+                    jumpActivity();
                 }
             }
 

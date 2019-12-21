@@ -120,6 +120,7 @@
     <color name="common_half_alpha">#55000000</color>
     <color name="translucent">#01000000</color>
     <color name="some_translucent">#80000000</color>
+    <color name="some_translucent01">#A0FFFFFF</color>
 
 
 </resources>

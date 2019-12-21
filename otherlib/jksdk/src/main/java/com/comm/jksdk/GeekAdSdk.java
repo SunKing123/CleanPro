@@ -2,12 +2,13 @@ package com.comm.jksdk;
 
 import android.content.Context;
 
-import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.comm.jksdk.ad.factory.NativeManagerFactory;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.config.AdsConfig;
 import com.comm.jksdk.config.InitBaseConfig;
 import com.comm.jksdk.config.listener.ConfigListener;
+import com.comm.jksdk.http.utils.LogUtils;
+import com.tencent.mmkv.MMKV;
 
 /**
  * @ProjectName: GeekAdSdk
@@ -39,6 +40,7 @@ public final class GeekAdSdk {
      */
     public static void init(Context context, String productName, String csjAppId, String channel, String isFormal){
         mContext = context.getApplicationContext();
+        String mmkvPath = MMKV.initialize(mContext);
         mRroductName = productName;
         mChannel = channel;
         mIsFormal = isFormal;
@@ -86,7 +88,16 @@ public final class GeekAdSdk {
      * @param bid
      */
     public static void setBid(int bid){
+        LogUtils.i("GeekSdk---"+bid);
         AdsConfig.setBid(bid);
+    }
+
+    /**
+     * 获取bid
+     */
+    public static int getBid(){
+        LogUtils.i("GeekSdk---get"+AdsConfig.getBid());
+        return AdsConfig.getBid();
     }
 
     /**

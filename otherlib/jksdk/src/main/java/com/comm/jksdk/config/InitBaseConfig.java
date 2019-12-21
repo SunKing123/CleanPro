@@ -7,7 +7,7 @@ import com.comm.jksdk.http.Api;
 import com.comm.jksdk.http.utils.ApiManage;
 import com.comm.jksdk.http.utils.AppEnvironment;
 import com.comm.jksdk.http.utils.LogUtils;
-import com.comm.jksdk.utils.SpUtils;
+import com.comm.jksdk.utils.MmkvUtil;
 
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
@@ -80,22 +80,22 @@ public class InitBaseConfig {
                     default:
                         defEnvironment = AppEnvironment.ServerEnvironment.Product.ordinal();
                 }
-                return SpUtils.getInt(SERVER_ENVIRONMENT, defEnvironment);
+                return MmkvUtil.getInt(SERVER_ENVIRONMENT, defEnvironment);
             }
 
             @Override
             public void setServerEnvironmentOrdinal(int ordinal) {
-                SpUtils.putInt(SERVER_ENVIRONMENT, ordinal);
+                MmkvUtil.saveInt(SERVER_ENVIRONMENT, ordinal);
             }
         }, new AppEnvironment.TestModeStub() {
             @Override
             public void setIsTestMode(boolean isTestMode) {
-                SpUtils.putBoolean(TEST_MODE_IS_OPEN, isTestMode);
+                MmkvUtil.saveBool(TEST_MODE_IS_OPEN, isTestMode);
             }
 
             @Override
             public boolean isTestMode() {
-                return SpUtils.getBoolean(TEST_MODE_IS_OPEN, false);
+                return MmkvUtil.getBool(TEST_MODE_IS_OPEN, false);
             }
         });
     }
