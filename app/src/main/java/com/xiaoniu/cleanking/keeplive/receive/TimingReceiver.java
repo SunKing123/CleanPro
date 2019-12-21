@@ -93,50 +93,11 @@ public class TimingReceiver extends BroadcastReceiver {
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("unlock_screen") ||intent.getStringExtra("action").equals("home")) ){//锁屏打开页面||home按键触发
             if(null==context)return;
             startActivity(context);
-        } else if (!TextUtils.isEmpty(intent.getStringExtra("action")) && (intent.getStringExtra("action").equals("add_cp_ad"))) {//app内插入广告
-            if (null == context) return;
-            Log.w("hijacking", "收到广播");
-<<<<<<< Updated upstream
-            startFullActivty(context);
         }
     }
 
-    private void startFullActivty(Context context) {
-        //判断是否进入后台
-        int isBack = PreferenceUtil.getInstants().getInt("isback");
-        if (isBack != 1|| ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
-=======
-            startTestActivty(context);
-        }
-    }
 
-    private void startTestActivty(Context context) {
-        //判断是否进入后台
-        int isBack = PreferenceUtil.getInstants().getInt("isback");
-        if (isBack != 1) {
->>>>>>> Stashed changes
-            return;
-        }
-        if (NetworkUtils.isNetConnected()) {
-            Intent screenIntent = new Intent();
-<<<<<<< Updated upstream
-            screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
-=======
-            screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.PopLayerTestsActivity");
->>>>>>> Stashed changes
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-<<<<<<< Updated upstream
-            screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_04);
-=======
->>>>>>> Stashed changes
-            context.startActivity(screenIntent);
-        }else{
 
-        }
-    }
 
 
 
