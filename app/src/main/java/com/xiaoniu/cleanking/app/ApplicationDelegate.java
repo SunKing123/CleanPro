@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -63,9 +66,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 /**
  * Created by admin on 2017/6/8.
  */
@@ -107,7 +107,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
         //广告sdk_Bid只设置一次
         if (GeekAdSdk.getBid() < 0) {
-            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0,99));
+            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
         }
         ContextUtils.initAdBid(GeekAdSdk.getBid());
         initJsBridge();
@@ -304,12 +304,16 @@ public class ApplicationDelegate implements IApplicationDelegate {
             @Override
             public void onBecameForeground(Activity activity) {
                 if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
-                    MmkvUtil.saveInt("isback",0);
+                    MmkvUtil.saveInt("isback", 0);
                 } else {//非当前主进程
                     return;
                 }
-                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class) || ActivityCollector.isActivityExist(PopLayerActivity.class)
-                        || ActivityCollector.isActivityExist(SplashADActivity.class) || ActivityCollector.isActivityExist(SplashADHotActivity.class) || activity.getLocalClassName().contains(".other") || activity.getLocalClassName().contains("FullPopLayerActivity")
+                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
+                        || ActivityCollector.isActivityExist(PopLayerActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADActivity.class)
+                        || ActivityCollector.isActivityExist(SplashADHotActivity.class)
+                        || activity.getLocalClassName().contains(".other")
+                        || activity.getLocalClassName().contains("FullPopLayerActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
@@ -333,7 +337,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
-                    MmkvUtil.saveInt("isback",1);
+                    MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
                 }
             }
