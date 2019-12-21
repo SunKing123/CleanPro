@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.main.activity;
+package com.xiaoniu.cleanking.ui.main.activity.divide;
 
 import android.os.Build;
 import android.util.Log;
@@ -18,7 +18,7 @@ import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTI
  * @date 2019/12/10 12
  * @mail：zhengzhihao@hellogeek.com
  */
-public class LauncherActivity extends SimpleActivity {
+public class WXActivity extends SimpleActivity {
 
     private boolean isStarted = false;
     @Override

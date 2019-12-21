@@ -403,7 +403,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (TextUtils.equals(auditSwitch, "1")) {
             mFragments.add(toolFragment);
             mFragments.add(upQuotaFragment);
-            enableOtherComponent();
+//            enableOtherComponent();
         }
         mFragments.add(mineFragment);
 

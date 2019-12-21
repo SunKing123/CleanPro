@@ -165,7 +165,11 @@
     <string name="garbage_ram">内存使用</string>
     <string name="garbage_virus">病毒查杀</string>
     <string name="already_virus">已杀毒</string>
-    <string name="app_label">微信</string>
+    <string name="app_wx">微信</string>
+    <string name="app_tt">今日头条</string>
+    <string name="app_ks">快手</string>
+    <string name="app_aqy">爱奇艺</string>
+    <string name="app_dy">抖音</string>
     <string name="app_quick_name">清理极速管家</string>
     <string name="redpack">红包</string>
 

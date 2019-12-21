@@ -61,6 +61,7 @@ public class PositionId {
     public static final String KEY_PAGE_EXTERNAL_FULL = "page_external_full";    //外部全屏插屏
     public static final String KEY_PAGE_INTERNAL_EXTERNAL_FULL = "page_internal_external_full"; //内外部全屏插屏
     public static final String KEY_PAGE_IMPLANTATION_FULL_SCREEN = "app_implantation_full_screen"; //应用植入插屏全屏广告
+    public static final String KEY_PAGE_DESK_ICON = "page_desk_icon"; //分身开关
     public static final String KEY_PAGE_ACCELERATE = "page_accelerate";
     public static final String KEY_PAGE_MINE = "page_mine";
 

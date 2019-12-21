@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.lockscreen;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityCollector.addActivity(this, FullPopLayerActivity.class);
+        Log.e("dong","FullPopLayerActivity");
         setContentView(R.layout.activity_full_pop_layer);
         adStyle = getIntent().getStringExtra("ad_style");
         flayoutAdContainer = (RelativeLayout) findViewById(R.id.flayout_ad_container);
@@ -87,7 +89,6 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
                     flayoutAdContainer.removeAllViews();
                     flayoutAdContainer.addView(adView);
                     MmkvUtil.saveFullInsert();
-
                 }
             }
 

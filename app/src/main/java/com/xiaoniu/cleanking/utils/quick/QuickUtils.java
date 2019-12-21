@@ -28,18 +28,18 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 public class QuickUtils {
     private static ShortcutManager shortcutManager;
     private static QuickUtils quickUtils;
-    private Activity mActivity;
+    private Context mActivity;
 
-    public QuickUtils(Activity activity) {
-        this.mActivity = activity;
-        mPm = activity.getPackageManager();
+    public QuickUtils(Context context) {
+        this.mActivity = context;
+        mPm = context.getPackageManager();
     }
 
-    public static QuickUtils getInstant(Activity activity) {
+    public static QuickUtils getInstant(Context context) {
         if (quickUtils == null) {
             synchronized (QuickUtils.class) {
                 if (quickUtils == null) {
-                    quickUtils = new QuickUtils(activity);
+                    quickUtils = new QuickUtils(context);
                 }
             }
         }
@@ -87,7 +87,7 @@ public class QuickUtils {
         } else {
             try {
                 if (shortcutManager == null) {
-                    shortcutManager = (ShortcutManager) mActivity.getApplication().getSystemService(Context.SHORTCUT_SERVICE);
+                    shortcutManager = (ShortcutManager) mActivity.getSystemService(Context.SHORTCUT_SERVICE);
                 }
                 if (null == shortcutManager) {
                     // 创建快捷方式失败
@@ -178,10 +178,10 @@ public class QuickUtils {
 
     public void disableMainComponent() {
         SPUtil.setBoolean(mActivity, SPUtil.ISADDQUICK, true);
-        ComponentName orange1 = new ComponentName(mActivity.getApplication(),
+        ComponentName orange1 = new ComponentName(mActivity,
                 "com.xiaoniu.cleanking.other");
         enableComponent(orange1);
-        ComponentName orange = new ComponentName(mActivity.getApplication(),
+        ComponentName orange = new ComponentName(mActivity,
                 "com.xiaoniu.cleanking.spa1");
         int state = mPm.getComponentEnabledSetting(orange);
         if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {

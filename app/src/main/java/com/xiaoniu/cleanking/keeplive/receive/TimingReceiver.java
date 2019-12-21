@@ -68,7 +68,6 @@ public class TimingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        Log.e("dong","收到广播");
         if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("scan_heart")){//本地push心跳
             mBatteryPower = intent.getIntExtra("battery", 50);
             temp = intent.getIntExtra("temp", 30);
@@ -97,8 +96,7 @@ public class TimingReceiver extends BroadcastReceiver {
             startActivity(context);
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("app_add_full") ) ){//锁屏打开页面||home按键触发
             if(null==context)return;
-            Log.e("dong","收到广播进入页面");
-            startFullActivty(context);
+            startFullActivty(context.getApplicationContext());
         }
     }
 
@@ -155,14 +153,13 @@ public class TimingReceiver extends BroadcastReceiver {
         }
         if (NetworkUtils.isNetConnected()) {
 //            Toast.makeText(context,"应用内插屏!",Toast.LENGTH_LONG).show();
-            Log.e("dong","应用内插屏!");
             Intent screenIntent = new Intent();
             screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-            screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_04);
+            screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_03);
             context.startActivity(screenIntent);
         } else {
 

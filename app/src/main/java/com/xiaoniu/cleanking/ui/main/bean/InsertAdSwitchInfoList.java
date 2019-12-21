@@ -34,7 +34,17 @@ public class InsertAdSwitchInfoList extends BaseEntity {
         private String versions;
         private String advertId;
         private String secondAdvertId;
+        private int displayTime;
         private int showRate =3 ;
+        public int getDisplayTime() {
+            return displayTime;
+        }
+
+        public void setDisplayTime(int displayTime) {
+            this.displayTime = displayTime;
+        }
+
+
 
         public String getSecondAdvertId() {
             return secondAdvertId;
