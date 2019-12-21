@@ -99,7 +99,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));
             if (TextUtils.equals(auditSwitch, "1") && MmkvUtil.isShowFullInsert()) {
 
-                String adSwitch = MmkvUtil.getSwitchInfo();
+                String adSwitch = MmkvUtil.getInsertSwitchInfo();
                 //内外部插屏
                 InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,adSwitch);
                 //外部插屏

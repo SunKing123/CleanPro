@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -77,7 +78,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
         adManager.loadAd(this, adStyle, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                Logger.i("zz---success");
+                Logger.i(SystemUtils.getProcessName(FullPopLayerActivity.this) +"---zz---success---"+info.getAdSource());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page");
                 adInfo = info;
                 View adView = info.getAdView();
@@ -92,19 +93,19 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void adExposed(AdInfo info) {
-                Logger.i("zz---adExposed");
+                Logger.i("zz---adExposed---"+info.getAdSource());
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                Logger.i("zz---adClicked");
+                Logger.i("zz---adClicked---"+info.getAdSource());
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page", info.getAdTitle());
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Logger.i("zz---adError");
+                Logger.i("zz---adError"+info.getAdSource());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page");
                 finish();
             }

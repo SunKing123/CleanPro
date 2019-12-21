@@ -115,16 +115,42 @@ public class MmkvUtil {
         return !ActivityCollector.isActivityExistMkv(PopLayerActivity.class) && !ActivityCollector.isActivityExistMkv(LockActivity.class) && !ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)&& !ActivityCollector.isActivityExistMkv(RedPacketHotActivity.class) && !isUpdate;
     }
 
-    //(开关数据获取)
-    public static String getSwitchInfo(){
+    //(插屏开关数据获取)
+    public static String getInsertSwitchInfo(){
         MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
         return kv.decodeString("insert_ad_switch");
     }
 
-    //(开关数据保存)
-    public static void setSwitchInfo(String info){
+    //(插屏开关数据保存)
+    public static void setInsertSwitchInfo(String info){
         MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
         kv.encode("insert_ad_switch", info);
+    }
+
+
+    //(总开关数据获取)
+    public static String getSwitchInfo(){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        return kv.decodeString("ad_switch");
+    }
+
+    //(总开关数据保存)
+    public static void setSwitchInfo(String info){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        kv.encode("ad_switch", info);
+    }
+
+
+    //(打底开关数据获取)
+    public static String getBottoomAdInfo(){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        return kv.decodeString("ad_bottom");
+    }
+
+    //(打底开关数据保存)
+    public static void setBottoomAdInfo(String info){
+        MMKV kv = MMKV.mmkvWithID("switch", MMKV.MULTI_PROCESS_MODE);
+        kv.encode("ad_bottom", info);
     }
 
 

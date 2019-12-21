@@ -43,7 +43,6 @@ import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -387,9 +386,9 @@ public final class LocalService extends Service {
         }
 
         //充电状态变更
-        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
+        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
             startFullInsertAd(this);
-        }else if(PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)){//拔电状态变更
+        }else if(PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged && !ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)){//拔电状态变更
             startFullInsertAd(this);
         }
         if(!BuildConfig.SYSTEM_EN.contains("prod"))
@@ -449,7 +448,7 @@ public final class LocalService extends Service {
     //全局跳转锁屏页面
     public void startActivity(Context context) {
         try {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            String auditSwitch =  MmkvUtil.getString(AppApplication.AuditSwitch, "0");;
             if (TextUtils.equals(auditSwitch, "1")){ //过审开关打开状态
                 Intent screenIntent = new Intent();
                 screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);
@@ -467,13 +466,13 @@ public final class LocalService extends Service {
     //全局跳转全屏插屏页面
     public void startFullInsertAd(Context context) {
         try {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            String auditSwitch =  MmkvUtil.getString(AppApplication.AuditSwitch, "0");;
 
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
             if (TextUtils.equals(auditSwitch, "1") && MmkvUtil.isShowFullInsert()) {
 
-                String adSwitch = MmkvUtil.getSwitchInfo();
+                String adSwitch = MmkvUtil.getInsertSwitchInfo();
                 //内外部插屏
                 InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_INTERNAL_EXTERNAL_FULL,adSwitch);
                 //外部插屏

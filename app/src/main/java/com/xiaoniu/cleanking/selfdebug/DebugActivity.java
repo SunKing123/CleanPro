@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -228,5 +229,26 @@ public class DebugActivity extends BaseActivity {
     public void gotoFullAd(View view) {
         startFullInsertPage(this);
     }
+
+
+    //获取广告配置
+    public void gotoPop(View view) {
+        startPop(this);
+    }
+
+    //全局跳转全屏插屏页面
+    private void startPop(Context context) {
+        if (ActivityCollector.isActivityExist(PopLayerActivity.class))
+            return;
+        Intent screenIntent = new Intent();
+        screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_POPLAYERACTIVITY);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
+        context.startActivity(screenIntent);
+    }
+
 
 }
