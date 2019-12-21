@@ -20,6 +20,8 @@ import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.quick.QuickUtils;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 /**
@@ -51,9 +53,9 @@ public class DebugActivity extends BaseActivity {
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                hideIcon();
+                hideIcon();
 //                startFullInsertPage(DebugActivity.this);
-                enableOtherComponent();
+//                enableOtherComponent();
             }
         });
 
@@ -143,9 +145,20 @@ public class DebugActivity extends BaseActivity {
      */
     public void hideIcon() {
         try {
-            PackageManager p = getPackageManager();
-            ComponentName componentName = new ComponentName(this, SplashADActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
-            p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//            ComponentName  orange =  new ComponentName(getApplication(),
+//                    "com.xiaoniu.cleanking.splash");
+//            ComponentName  orange2 =  new ComponentName(getApplication(),
+//                    "com.xiaoniu.cleanking.other");
+//            enableComponent(orange2);
+//            disableComponent(orange);
+            Intent shortcutInfoIntent = new Intent(this, SplashADActivity.class);
+            shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
+            QuickUtils.getInstant(this).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(this,this.getPackageName()),shortcutInfoIntent);
+
+
+//            PackageManager p = getPackageManager();
+//            ComponentName componentName = new ComponentName(this, SplashADActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
+//            p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         } catch (Exception e) {
             e.printStackTrace();
             Logger.e("zzh", "--" + e.getMessage(), "");
@@ -159,6 +172,26 @@ public class DebugActivity extends BaseActivity {
         PackageManager p = getPackageManager();
         ComponentName componentName = new ComponentName(this, SplashADActivity.class);
         p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
+    private PackageManager mPm;
+    private void enableComponent(ComponentName componentName){
+        if (mPm==null){
+            mPm=getPackageManager();
+        }
+        mPm.setComponentEnabledSetting(componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+    private void disableComponent( ComponentName componentName) {
+        PackageManager pm = getPackageManager();
+        int state = pm.getComponentEnabledSetting(componentName);
+        if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {
+            //已经禁用
+            return;
+        }
+        pm.setComponentEnabledSetting(componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 

@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
@@ -80,8 +81,10 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
+import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -282,7 +285,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null != getActivity()) {
             ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
         }
+        //创建快捷图标。有待后续优化，暂时不打开
+//        Intent shortcutInfoIntent = new Intent(getActivity(), SplashADActivity.class);
+//        shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
+//        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
+
+
 
     /**
      * 广告sdk
