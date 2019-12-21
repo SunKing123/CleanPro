@@ -29,7 +29,6 @@ public class DYActivity extends SimpleActivity {
     protected void initView() {
         //启动抖音
         isStarted = false;
-
     }
 
     @Override

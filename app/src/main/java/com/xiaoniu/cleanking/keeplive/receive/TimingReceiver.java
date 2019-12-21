@@ -68,6 +68,8 @@ public class TimingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
+        Log.e("dong","收到广播 ="+intent.getStringExtra("action"));
+
         if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("scan_heart")){//本地push心跳
             mBatteryPower = intent.getIntExtra("battery", 50);
             temp = intent.getIntExtra("temp", 30);
@@ -96,6 +98,7 @@ public class TimingReceiver extends BroadcastReceiver {
             startActivity(context);
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("app_add_full") ) ){//锁屏打开页面||home按键触发
             if(null==context)return;
+
             startFullActivty(context.getApplicationContext());
         }
     }
@@ -148,11 +151,13 @@ public class TimingReceiver extends BroadcastReceiver {
     private void startFullActivty(Context context) {
         //判断是否进入后台
         int isBack = MmkvUtil.getInt("isback",-1);
+        Log.e("dong","应用内插屏 isBack="+isBack);
         if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
 //            Toast.makeText(context,"应用内插屏!",Toast.LENGTH_LONG).show();
+            Log.e("dong","应用内插屏展示");
             Intent screenIntent = new Intent();
             screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

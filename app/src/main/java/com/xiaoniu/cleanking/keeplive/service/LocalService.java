@@ -207,15 +207,15 @@ public final class LocalService extends Service {
         } catch (Exception e) {
             Log.i("HideForegroundService--", e.getMessage());
         }
-        if (!isExeTask) {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
-            //过审开关打开状态
-            //!PreferenceUtil.isShowAD()广告展示状态
-            if (TextUtils.equals(auditSwitch, "1")) {
-                String adSwitch = MmkvUtil.getInsertSwitchInfo();
-                //应用植入插屏全屏广告
-                InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
-                if (dataBean != null && dataBean.isOpen()) {
+        if (!isExeTask||System.currentTimeMillis()- runTime >15*1000) {
+//            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+//            //过审开关打开状态
+//            //!PreferenceUtil.isShowAD()广告展示状态
+//            if (TextUtils.equals(auditSwitch, "1")) {
+//                String adSwitch = MmkvUtil.getInsertSwitchInfo();
+//                //应用植入插屏全屏广告
+//                InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
+//                if (dataBean != null && dataBean.isOpen()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (isSecurityPermissionOpen(this)) {
                             JsonToBean();
@@ -223,8 +223,8 @@ public final class LocalService extends Service {
                     } else {
                             JsonToBean();
                     }
-                }
-            }
+//                }
+//            }
         }
         String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
         //过审开关打开状态
@@ -608,10 +608,12 @@ public final class LocalService extends Service {
     }
 
     private String oldPackageName = "";
+    private long runTime=0;
     @SuppressLint("HandlerLeak")
     Runnable mTask = new Runnable() {
         @Override
         public void run() {
+            runTime=System.currentTimeMillis();
             String packageName = getAppInfo();
             if (TextUtils.equals(packageName, LocalService.this.getPackageName())) {
                 return;
