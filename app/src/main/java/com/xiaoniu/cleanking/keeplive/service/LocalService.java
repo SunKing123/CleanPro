@@ -30,6 +30,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import androidx.annotation.RequiresApi;
@@ -603,10 +604,17 @@ public final class LocalService extends Service {
         @Override
         public void run() {
             String packageName = getAppInfo();
+            Log.e("dong",packageName);
+            Log.e("dong","oldPackageName="+oldPackageName);
+
             if (TextUtils.equals(packageName,LocalService.this.getPackageName())){
+                Log.e("dong","本应用推出");
+
                 return;
             }
             if (!TextUtils.equals(oldPackageName, packageName)) {
+                Log.e("dong","111111==="+oldPackageName);
+
                 if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
                     oldPackageName = packageName;
                     addCPAD();
@@ -742,10 +750,12 @@ public final class LocalService extends Service {
     private void addCPAD() {
         if (!isOpen && MmkvUtil.isShowFullInsert()) {
             isOpen = true;
+            Intent inten = new Intent(this, TimingReceiver.class);
+            inten.putExtra("action", "app_add_full");
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startFullActivty(LocalService.this);
+                    LocalService.this.sendBroadcast(inten);
                     isOpen = false;
                 }
             }, 2000);
@@ -759,11 +769,13 @@ public final class LocalService extends Service {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
+            Toast.makeText(this,"应用内插屏!",Toast.LENGTH_LONG).show();
+           Log.e("dong","应用内插屏!");
             Intent screenIntent = new Intent();
             screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+//            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
             screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_04);
             context.startActivity(screenIntent);

@@ -39,6 +39,7 @@ import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
 import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
@@ -312,6 +313,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                         || ActivityCollector.isActivityExist(PopLayerActivity.class)
                         || ActivityCollector.isActivityExist(SplashADActivity.class)
                         || ActivityCollector.isActivityExist(SplashADHotActivity.class)
+                        || ActivityCollector.isActivityExist(FullPopLayerActivity.class)
                         || activity.getLocalClassName().contains(".other")
                         || activity.getLocalClassName().contains("FullPopLayerActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())

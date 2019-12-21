@@ -8,7 +8,8 @@ import android.util.Log;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
 import com.xiaoniu.cleanking.bean.AppPackageNameListDBDao;
-import com.xiaoniu.cleanking.bean.AppPackageNameListDao;
+import com.xiaoniu.cleanking.bean.DaoMaster;
+import com.xiaoniu.cleanking.bean.DaoSession;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 

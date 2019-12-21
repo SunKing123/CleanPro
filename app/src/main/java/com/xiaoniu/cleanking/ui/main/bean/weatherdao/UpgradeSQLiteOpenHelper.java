@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 
+import com.xiaoniu.cleanking.bean.DaoMaster;
+
 import org.greenrobot.greendao.database.Database;
 
 import java.io.BufferedReader;
