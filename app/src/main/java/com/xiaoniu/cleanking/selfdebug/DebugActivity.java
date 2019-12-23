@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -20,8 +22,12 @@ import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.quick.QuickUtils;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 /**
  * deprecation:调试页面
@@ -52,9 +58,9 @@ public class DebugActivity extends BaseActivity {
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                hideIcon();
+                hideIcon();
 //                startFullInsertPage(DebugActivity.this);
-                enableOtherComponent();
+//                enableOtherComponent();
             }
         });
 
@@ -144,9 +150,20 @@ public class DebugActivity extends BaseActivity {
      */
     public void hideIcon() {
         try {
-            PackageManager p = getPackageManager();
-            ComponentName componentName = new ComponentName(this, SplashADActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
-            p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//            ComponentName  orange =  new ComponentName(getApplication(),
+//                    "com.xiaoniu.cleanking.splash");
+//            ComponentName  orange2 =  new ComponentName(getApplication(),
+//                    "com.xiaoniu.cleanking.other");
+//            enableComponent(orange2);
+//            disableComponent(orange);
+            Intent shortcutInfoIntent = new Intent(this, SplashADActivity.class);
+            shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
+            QuickUtils.getInstant(this).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(this,this.getPackageName()),shortcutInfoIntent);
+
+
+//            PackageManager p = getPackageManager();
+//            ComponentName componentName = new ComponentName(this, SplashADActivity.class); // activity which is first time open in manifiest file which is declare as <category android:name="android.intent.category.LAUNCHER" />
+//            p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         } catch (Exception e) {
             e.printStackTrace();
             Logger.e("zzh", "--" + e.getMessage(), "");
@@ -160,6 +177,26 @@ public class DebugActivity extends BaseActivity {
         PackageManager p = getPackageManager();
         ComponentName componentName = new ComponentName(this, SplashADActivity.class);
         p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
+    private PackageManager mPm;
+    private void enableComponent(ComponentName componentName){
+        if (mPm==null){
+            mPm=getPackageManager();
+        }
+        mPm.setComponentEnabledSetting(componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+    private void disableComponent( ComponentName componentName) {
+        PackageManager pm = getPackageManager();
+        int state = pm.getComponentEnabledSetting(componentName);
+        if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {
+            //已经禁用
+            return;
+        }
+        pm.setComponentEnabledSetting(componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 
@@ -236,6 +273,17 @@ public class DebugActivity extends BaseActivity {
         startPop(this);
     }
 
+
+
+
+    //清除冷启动十分逻辑
+    public void cleanCodeTime(View view) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.COOL_START_TIME,0).commit();
+        ToastUtils.showShort("清除成功！");
+    }
+
     //全局跳转全屏插屏页面
     private void startPop(Context context) {
         if (ActivityCollector.isActivityExist(PopLayerActivity.class))
@@ -249,6 +297,7 @@ public class DebugActivity extends BaseActivity {
         screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
         context.startActivity(screenIntent);
     }
+
 
 
 }

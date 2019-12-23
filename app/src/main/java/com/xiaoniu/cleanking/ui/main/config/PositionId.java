@@ -60,6 +60,8 @@ public class PositionId {
     public static final String KEY_NEIBU_SCREEN = "page_internal_page";
     public static final String KEY_PAGE_EXTERNAL_FULL = "page_external_full";    //外部全屏插屏
     public static final String KEY_PAGE_INTERNAL_EXTERNAL_FULL = "page_internal_external_full"; //内外部全屏插屏
+    public static final String KEY_PAGE_IMPLANTATION_FULL_SCREEN = "app_implantation_full_screen"; //应用植入插屏全屏广告
+    public static final String KEY_PAGE_DESK_ICON = "page_desk_icon"; //分身开关
     public static final String KEY_PAGE_ACCELERATE = "page_accelerate";
     public static final String KEY_PAGE_MINE = "page_mine";
 
@@ -80,6 +82,7 @@ public class PositionId {
     public static final String AD_PERSONAL_CENTER_PAGE_BELOW = "personal_center_page_below_ad";
     public static final String AD_EXTERNAL_ADVERTISING_02 = "external_advertising_ad_2";//外部插屏全屏广告
     public static final String AD_EXTERNAL_ADVERTISING_03 = "external_advertising_ad_3";//内外部插屏全屏广告
+    public static final String AD_EXTERNAL_ADVERTISING_04 = "external_advertising_ad_4";//应用植入插屏全屏广告
     public static final String AD_VIRUS = "click_virus_killing_ad";//病毒查杀
     public static final String AD_RED_PACKET = "red_envelopes_ad";//红包
     public static final String AD_FINISH_BEFOR = "cp_ad_1";//完成页前全屏视频

@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.DbHelper;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -402,7 +403,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (TextUtils.equals(auditSwitch, "1")) {
             mFragments.add(toolFragment);
             mFragments.add(upQuotaFragment);
-            enableOtherComponent();
+//            enableOtherComponent();
         }
         mFragments.add(mineFragment);
 
@@ -748,10 +749,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     //桌面创建图标
     private void enableOtherComponent() {
         ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.other");
-        PackageManager mPm = getPackageManager();
-        mPm.setComponentEnabledSetting(apple,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+        QuickUtils.getInstant(this).enableComponent(apple);
     }
+
 
 }

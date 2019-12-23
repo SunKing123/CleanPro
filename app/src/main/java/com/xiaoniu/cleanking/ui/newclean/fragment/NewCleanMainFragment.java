@@ -282,7 +282,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null != getActivity()) {
             ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
         }
+        //创建快捷图标。有待后续优化，暂时不打开
+//        Intent shortcutInfoIntent = new Intent(getActivity(), SplashADActivity.class);
+//        shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
+//        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
+
 
     /**
      * 广告sdk
@@ -477,8 +482,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "adError---home--top");
                 if (null == info) return;
+                Log.d(TAG, "adError---home--top=" + info.toString());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
             }
         });

@@ -43,6 +43,7 @@ public class SPUtil {
     public static String FIRST_TIME_CALENDAR = "FIRST_TIME_CALENDAR";
     public static String SECOND_TIME_CALENDAR = "SECOND_TIME_CALENDAR";
     public static String THIRD_TIME_CALENDAR = "THIRD_TIME_CALENDAR";
+    public static String ISADDQUICK = "is_add_quick";
 
     public static String Guide = "";
 

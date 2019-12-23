@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -66,6 +68,8 @@ public class TimingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
+        Log.e("dong","收到广播 ="+intent.getStringExtra("action"));
+
         if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("scan_heart")){//本地push心跳
             mBatteryPower = intent.getIntExtra("battery", 50);
             temp = intent.getIntExtra("temp", 30);
@@ -89,16 +93,19 @@ public class TimingReceiver extends BroadcastReceiver {
             } else {
                 context.startService(i);
             }
-
-
-
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("unlock_screen") ||intent.getStringExtra("action").equals("home")) ){//锁屏打开页面||home按键触发
             if(null==context)return;
             startActivity(context);
+        }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("app_add_full") ) ){//锁屏打开页面||home按键触发
+            if(null==context)return;
+
+            startFullActivty(context.getApplicationContext());
         }
-
-
     }
+
+
+
+
 
 
 
@@ -107,6 +114,8 @@ public class TimingReceiver extends BroadcastReceiver {
         try {
             //判断是否进入后台
             int isBack = MmkvUtil.getInt("isback",-1);
+            Log.e("dong   isBack==",isBack+"");
+
             if(isBack!=1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
                 return;
 
@@ -138,6 +147,30 @@ public class TimingReceiver extends BroadcastReceiver {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
         }
     }
+
+    private void startFullActivty(Context context) {
+        //判断是否进入后台
+        int isBack = MmkvUtil.getInt("isback",-1);
+        Log.e("dong","应用内插屏 isBack="+isBack);
+        if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
+            return;
+        }
+        if (NetworkUtils.isNetConnected()) {
+//            Toast.makeText(context,"应用内插屏!",Toast.LENGTH_LONG).show();
+            Log.e("dong","应用内插屏展示");
+            Intent screenIntent = new Intent();
+            screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+            screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_03);
+            context.startActivity(screenIntent);
+        } else {
+
+        }
+    }
+
 
     //全局跳转插屏页面
     @NonNull

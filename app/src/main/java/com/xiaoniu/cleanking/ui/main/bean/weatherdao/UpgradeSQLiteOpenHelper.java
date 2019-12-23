@@ -5,6 +5,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.xiaoniu.cleanking.bean.DaoMaster;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -22,8 +23,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
-
-public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper{
+public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper {
     private static final String TAG = "UpgradeSQLiteOpenHelper";
     private Context mContext;
 
@@ -38,8 +38,8 @@ public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper{
     public void onUpgrade(Database db, int oldVersion, int newVersion) {
         super.onUpgrade(db, oldVersion, newVersion);
 //        LogUtils.w("dkk", "===>>>> onUpgrade newVersion = " + newVersion + " oldVersion = " + oldVersion);
-        if(newVersion > oldVersion){
-            switch (oldVersion){
+        if (newVersion > oldVersion) {
+            switch (oldVersion) {
                 case 1:
 
                     Observable.create(new ObservableOnSubscribe<Boolean>() {
@@ -58,7 +58,7 @@ public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper{
                                 String lineInsertSql;
 
                                 while ((lineInsertSql = reader.readLine()) != null) {
-                                    if(!TextUtils.isEmpty(lineInsertSql)){
+                                    if (!TextUtils.isEmpty(lineInsertSql)) {
                                         db.execSQL(lineInsertSql);
                                     }
                                 }
@@ -77,13 +77,13 @@ public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper{
                                 db.endTransaction();
 
                                 try {
-                                    if(inputStream != null){
+                                    if (inputStream != null) {
                                         inputStream.close();
                                     }
-                                    if(inputStreamReader != null){
+                                    if (inputStreamReader != null) {
                                         inputStreamReader.close();
                                     }
-                                    if(reader != null){
+                                    if (reader != null) {
                                         reader.close();
                                     }
                                 } catch (IOException e) {
@@ -96,16 +96,16 @@ public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper{
                     }).subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean aBoolean) throws Exception {
+                                @Override
+                                public void accept(Boolean aBoolean) throws Exception {
 
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
+                                }
+                            }, new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
 
-                        }
-                    });
+                                }
+                            });
 
 //                    break; //不要break，做连续升级
                 case 2: // 新增加两个字段，日出日落 2019.9.5 by dkk
@@ -135,7 +135,7 @@ public class UpgradeSQLiteOpenHelper extends DaoMaster.OpenHelper{
         */
     }
 
-    private void insertUpgradeVersion2Data(){
+    private void insertUpgradeVersion2Data() {
 
     }
 
