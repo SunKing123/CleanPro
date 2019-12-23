@@ -164,7 +164,7 @@ public class TimingReceiver extends BroadcastReceiver {
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-            screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_03);
+            screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_04);
             context.startActivity(screenIntent);
         } else {
 
