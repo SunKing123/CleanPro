@@ -476,16 +476,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<<<<<<< Updated upstream
         </activity-alias>
 
 
 
 
             <!-- User defined.  For test only  用户自定义的广播接收器 -->
-=======
-        </activity-alias> <!-- User defined.  For test only  用户自定义的广播接收器 -->
->>>>>>> Stashed changes
 <!--                <activity-alias-->
 <!--                    android:name=".spa1"-->
 <!--                    android:enabled="true"-->
@@ -499,25 +495,16 @@
 <!--                </activity-alias>-->
 
         <activity-alias
-<<<<<<< Updated upstream
             android:name=".wx"
             android:enabled="false"
             android:icon="@drawable/icon_weixin"
             android:label="@string/app_wx"
             android:targetActivity=".ui.main.activity.divide.WXActivity">
-=======
-            android:name=".other"
-            android:enabled="false"
-            android:icon="@drawable/icon_weixin"
-            android:label="@string/app_label"
-            android:targetActivity=".ui.main.activity.LauncherActivity">
->>>>>>> Stashed changes
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-<<<<<<< Updated upstream
             <activity-alias
                 android:name=".tt"
                 android:enabled="false"
@@ -565,11 +552,6 @@
 
         <activity
             android:name=".ui.main.activity.divide.WXActivity"
-=======
-
-        <activity
-            android:name=".ui.main.activity.LauncherActivity"
->>>>>>> Stashed changes
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -580,7 +562,6 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
-<<<<<<< Updated upstream
 
             <activity
                 android:name=".ui.main.activity.divide.JRTTActivity"
@@ -635,20 +616,6 @@
 
 
             <meta-data
-=======
-        <activity
-            android:name=".ui.main.activity.LauncherTwoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
-            android:theme="@style/pop_layer_style"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-
-
-        <meta-data
->>>>>>> Stashed changes
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
 
