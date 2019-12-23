@@ -13,6 +13,6 @@ import android.util.Log;
 public class QuickSucessCallbackReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-       QuickUtils.getQuickUtils().disableMainComponent();
+//       QuickUtils.getQuickUtils().disableMainComponent();
     }
 }
