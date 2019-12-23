@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.keeplive.service;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,8 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.MediaPlayer;
@@ -33,22 +30,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-
-import androidx.annotation.RequiresApi;
-
-
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
-import com.umeng.commonsdk.debug.E;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.bean.AppPackageNameList;
-
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
-
 import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
@@ -80,9 +70,9 @@ import com.xiaoniu.keeplive.KeepAliveAidl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import androidx.annotation.RequiresApi;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -796,7 +786,7 @@ public final class LocalService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private static boolean isSecurityPermissionOpen(Context context) {
         long endTime = System.currentTimeMillis();
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService("usagestats");
+        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
         List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, 0, endTime);
         if (queryUsageStats == null || queryUsageStats.isEmpty()) {
             return false;
