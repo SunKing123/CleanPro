@@ -19,7 +19,7 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.google.gson.Gson;
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
@@ -516,7 +516,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                     jumpXieyiActivity("file:///android_asset/agree.html");
                 } else {
-                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
                 break;
@@ -524,7 +524,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                     jumpXieyiActivity("file:///android_asset/userAgreement.html");
                 } else {
-                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/userAgreement.html");
+                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
                 break;

@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -84,7 +84,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                     jumpXieyiActivity("file:///android_asset/agree.html");
                 } else {
-                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
             }
@@ -96,7 +96,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                     jumpXieyiActivity("file:///android_asset/userAgreement.html");
                 } else {
-                    jumpXieyiActivity(AppConstants.Base_H5_Host + "/userAgreement.html");
+                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
             }
@@ -106,7 +106,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-                mPresenter.share("", AppConstants.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
+                mPresenter.share("", BuildConfig.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
                 StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
             }
         });

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.orhanobut.logger.Logger;
-import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
@@ -38,8 +37,8 @@ public class ApiModule {
     private Retrofit mRetrofit2;
 
     //网络地址
-    public static String Base_Host = AppConstants.Base_Host;
-    public static String Base_H5_Host = AppConstants.Base_H5_Host;//H5路径
+    public static String Base_Host = BuildConfig.Base_Host;
+    public static String Base_H5_Host = BuildConfig.Base_H5_Host;//H5路径
     public static String base_weather_api = BuildConfig.WEATHER_BASE_URL;//大数据接口路径
 
 

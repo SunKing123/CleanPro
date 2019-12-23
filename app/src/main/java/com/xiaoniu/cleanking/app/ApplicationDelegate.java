@@ -22,7 +22,6 @@ import com.tencent.mmkv.MMKV;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
@@ -190,8 +189,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //测试环境
         NiuDataAPI.init(application, new Configuration()
                 //切换到sdk默认的测试环境地址
-                .serverUrl(AppConstants.BIGDATA_MD)
-                .setHeartbeatUrl(AppConstants.BIGDATA_MD)
+                .serverUrl(BuildConfig.BIGDATA_MD)
+                .setHeartbeatUrl(BuildConfig.BIGDATA_MD)
                 //打开sdk日志信息
                 .logOpen()
                 .setHeartbeatInterval(5000)

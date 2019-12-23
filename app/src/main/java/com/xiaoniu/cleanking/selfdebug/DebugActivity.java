@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -111,7 +111,7 @@ public class DebugActivity extends BaseActivity {
     public void toH5(View view) {
         //jump 协议
 //        "cleanking://com.xiaoniu.cleanking/jump?url=XXXX"
-        String url = AppConstants.Base_H5_Host + "/userAgreement.html";
+        String url = BuildConfig.Base_H5_Host + "/userAgreement.html";
         String jump = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.JUMP + "?url=";
         String jumpParams = "&is_no_title=0&h5_title=协议";

@@ -26,11 +26,14 @@ android {
             consumerProguardFiles 'proguard-rules.pro'
         }
 
-        debug {
+        dev {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             consumerProguardFiles 'proguard-rules.pro'/*子module混淆文件自管理*/
         }
+
+        btest{}
+        preprod{}
     }
 
 }

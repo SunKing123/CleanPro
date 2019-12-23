@@ -24,7 +24,6 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
-import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppConfig;
@@ -160,7 +159,7 @@ public class MeFragment extends SimpleFragment {
             Log.e("fdsa", "" + ls);
         } else if (ids == R.id.line_share) {
             String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-            share("", AppConstants.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
+            share("", BuildConfig.Base_H5_Host + "/share.html", getString(R.string.app_name), shareContent, -1);
             StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", AppHolder.getInstance().getSourcePageId(), "about_page");
         } else if( ids ==R.id.iv_icon){
             tagNum ++;
