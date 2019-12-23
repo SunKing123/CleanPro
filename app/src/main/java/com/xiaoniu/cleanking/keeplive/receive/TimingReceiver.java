@@ -96,6 +96,7 @@ public class TimingReceiver extends BroadcastReceiver {
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("unlock_screen") ||intent.getStringExtra("action").equals("home")) ){//锁屏打开页面||home按键触发
             if(null==context)return;
             startActivity(context);
+<<<<<<< Updated upstream
         }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("app_add_full") ) ){//锁屏打开页面||home按键触发
             if(null==context)return;
 
@@ -104,7 +105,36 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
+=======
+        } else if (!TextUtils.isEmpty(intent.getStringExtra("action")) && (intent.getStringExtra("action").equals("add_cp_ad"))) {//app内插入广告
+            if (null == context) return;
+            Log.w("hijacking", "收到广播");
+            startTestActivty(context);
+        }
+    }
+>>>>>>> Stashed changes
 
+    private void startTestActivty(Context context) {
+        //判断是否进入后台
+        int isBack = PreferenceUtil.getInstants().getInt("isback");
+        if (isBack != 1) {
+            return;
+        }
+        if (NetworkUtils.isNetConnected()) {
+            Intent screenIntent = new Intent();
+            screenIntent.setClassName(context.getPackageName(), "com.xiaoniu.cleanking.ui.lockscreen.PopLayerTestsActivity");
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+            context.startActivity(screenIntent);
+        }else{
+
+<<<<<<< Updated upstream
+=======
+        }
+    }
+>>>>>>> Stashed changes
 
 
 

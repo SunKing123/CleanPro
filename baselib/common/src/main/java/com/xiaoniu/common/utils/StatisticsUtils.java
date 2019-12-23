@@ -314,6 +314,24 @@ public class StatisticsUtils {
         }
         NiuDataAPI.trackEvent(event_code, event_name, extension);
     }
+    /**
+     * 添加source_page_id、current_page_id的自定义事件
+     * @param event_code
+     * @param event_name
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void customTrackEvent(String event_code,String event_name, String source_page_id, String current_page_id,String app_name) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("app_name", app_name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
 
     /**
      * 广告曝光
