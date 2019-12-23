@@ -6,9 +6,10 @@ import android.util.Log;
 
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
-import com.xiaoniu.cleanking.bean.AppPackageNameListDBDao;
-import com.xiaoniu.cleanking.bean.DaoMaster;
-import com.xiaoniu.cleanking.bean.DaoSession;
+import com.xiaoniu.cleanking.bean.weatherdao.AppPackageNameListDBDao;
+import com.xiaoniu.cleanking.bean.weatherdao.DaoMaster;
+import com.xiaoniu.cleanking.bean.weatherdao.DaoSession;
+import com.xiaoniu.cleanking.bean.weatherdao.WeatherCityDao;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 

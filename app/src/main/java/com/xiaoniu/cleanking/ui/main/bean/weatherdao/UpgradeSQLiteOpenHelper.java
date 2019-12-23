@@ -5,7 +5,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.xiaoniu.cleanking.bean.DaoMaster;
+import com.xiaoniu.cleanking.bean.weatherdao.DaoMaster;
 
 import org.greenrobot.greendao.database.Database;
 
