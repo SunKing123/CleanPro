@@ -85,7 +85,8 @@ android {
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 //        }
 
-        dev {
+
+        devdebug {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
@@ -104,6 +105,65 @@ android {
             jniDebuggable = true
             renderscriptDebuggable = true
         }
+
+        btestdebug {
+            buildConfigField "String", "API_APPID", "\"1115551509648511000\""
+            buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://testweatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "PUSH_TAG", "\"test\""
+            buildConfigField "String", "SYSTEM_EN", "\"btest\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
+            buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.fqt188.com\""
+            buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-fat-default.fqt188.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
+            buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
+        }
+
+        releasedebug {
+            buildConfigField "String", "API_APPID", "\"1115553177840652300\""
+            buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "PUSH_TAG", "\"product\""
+            buildConfigField "String", "SYSTEM_EN", "\"prod\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
+            buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
+            buildConfigField "String", "Base_Host", "\"https://clsystem.wukongclean.com\""
+            buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
+            buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
+        }
+
+        dev {
+            buildConfigField "String", "API_APPID", "\"1115551509648511000\""
+            buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://devweatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "PUSH_TAG", "\"test\""
+            buildConfigField "String", "SYSTEM_EN", "\"dev\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
+            buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-dev-default.fqt188.com\""
+            buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-dev-default.fqt188.com\""
+            buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
+            buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
+
         btest {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
@@ -119,9 +179,8 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable = false
-            jniDebuggable = false
-            renderscriptDebuggable = true
+
+
         }
         preprod {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
@@ -155,6 +214,7 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
