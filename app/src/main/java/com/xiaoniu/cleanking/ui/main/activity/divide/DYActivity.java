@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 
 import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
@@ -29,6 +30,8 @@ public class DYActivity extends SimpleActivity {
     protected void initView() {
         //启动抖音
         isStarted = false;
+        StatisticsUtils.trackDivideClick("split_icon_click", "分身图标点击", "split_icon", "split_icon","抖音");
+
     }
 
     @Override

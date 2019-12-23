@@ -297,6 +297,31 @@ public class StatisticsUtils {
 
 
 
+
+    /**
+     * sdk 点击埋点（click类型）
+     *
+     * @param eventCode   事件code
+     * @param sourcePage  来源页面
+     * @param currentPage 当前页面
+     * @param app_name   额外参数
+     */
+    public static void trackDivideClick(String eventCode, String eventName, String sourcePage, String currentPage, String app_name) {
+        JSONObject j = new JSONObject();
+        try {
+            j.put("source_page_id", sourcePage);
+            j.put("current_page_id", currentPage);
+            j.put("app_name", app_name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        NiuDataAPI.trackClick(eventCode, eventName, j);
+    }
+
+
+
     /**
      * 添加source_page_id、current_page_id的自定义事件
      * @param event_code
@@ -314,6 +339,8 @@ public class StatisticsUtils {
         }
         NiuDataAPI.trackEvent(event_code, event_name, extension);
     }
+
+
 
     /**
      * 广告曝光

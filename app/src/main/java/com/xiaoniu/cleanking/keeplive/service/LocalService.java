@@ -72,6 +72,7 @@ import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
@@ -861,6 +862,7 @@ public final class LocalService extends Service {
                         MmkvUtil.saveInt("appicon", newIndex + 1);
                     }
                     MmkvUtil.saveInt("odlappicon", newIndex);
+                    StatisticsUtils.customTrackEvent("split_icon_establish", "分身图标创建时", "split_icon", "split_icon");
                 } else if (MmkvUtil.getInt("appicon", 0) < (appMap.size() - 1)) {
                     MmkvUtil.saveInt("appicon", MmkvUtil.getInt("appicon", 0) + 1);
                 } else {
