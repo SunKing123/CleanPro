@@ -1,8 +1,11 @@
 package com.xiaoniu.cleanking.keeplive.service;
 
 import android.annotation.SuppressLint;
+<<<<<<< Updated upstream
 import android.app.ActivityManager;
 
+=======
+>>>>>>> Stashed changes
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -18,7 +21,10 @@ import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+<<<<<<< Updated upstream
 import android.content.pm.ResolveInfo;
+=======
+>>>>>>> Stashed changes
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.ParseException;
@@ -46,9 +52,12 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.bean.AppPackageNameList;
+<<<<<<< Updated upstream
 
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
 
+=======
+>>>>>>> Stashed changes
 import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
@@ -76,12 +85,16 @@ import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
+<<<<<<< Updated upstream
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+=======
+import java.util.List;
+>>>>>>> Stashed changes
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
@@ -119,12 +132,32 @@ public final class LocalService extends Service {
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, 1);
 
 
+<<<<<<< Updated upstream
+=======
+    }
+
+    private AppPackageNameList appPackageNameList;
+    private AppPackageNameList.DataBean mDataBean;
+
+    private void JsonToBean() {
+        if (appPackageNameList != null && appPackageNameList.getData() != null && appPackageNameList.getData().size() > 0) {
+        }else{
+            String json = FileUtils.readJSONFromAsset(this, "applist.json");
+            try {
+                appPackageNameList = new Gson().fromJson(json, AppPackageNameList.class);
+            } catch (Exception e) {
+
+            }
+        }
+        handler.postDelayed(mTask, 10000);
+>>>>>>> Stashed changes
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return mBilder;
     }
+<<<<<<< Updated upstream
 //    private AppPackageNameListDB appPackageNameList;
 //    private AppPackageNameListDB.DataBean mDataBean;
 
@@ -148,6 +181,9 @@ public final class LocalService extends Service {
 
     private boolean isExeTask;
 
+=======
+  private boolean isExeTask;
+>>>>>>> Stashed changes
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -207,6 +243,7 @@ public final class LocalService extends Service {
         } catch (Exception e) {
             Log.i("HideForegroundService--", e.getMessage());
         }
+<<<<<<< Updated upstream
         if (!isExeTask||System.currentTimeMillis()- runTime >15*1000) {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
             //过审开关打开状态
@@ -238,6 +275,11 @@ public final class LocalService extends Service {
             }
         }
 
+=======
+        if (!isExeTask){
+            JsonToBean();
+        }
+>>>>>>> Stashed changes
 
         if (mKeepAliveRuning == null)
             mKeepAliveRuning = new KeepAliveRuning();
@@ -474,7 +516,11 @@ public final class LocalService extends Service {
         //充电状态变更
         if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
             startFullInsertAd(this);
+<<<<<<< Updated upstream
         } else if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {//拔电状态变更
+=======
+        } else if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged && !ActivityCollector.isActivityExist(PopLayerActivity.class)) {//拔电状态变更
+>>>>>>> Stashed changes
             startFullInsertAd(this);
         }
         if (!BuildConfig.SYSTEM_EN.contains("prod"))
@@ -608,11 +654,15 @@ public final class LocalService extends Service {
     }
 
     private String oldPackageName = "";
+<<<<<<< Updated upstream
     private long runTime=0;
+=======
+>>>>>>> Stashed changes
     @SuppressLint("HandlerLeak")
     Runnable mTask = new Runnable() {
         @Override
         public void run() {
+<<<<<<< Updated upstream
             runTime=System.currentTimeMillis();
             String packageName = getAppInfo();
             if (TextUtils.equals(packageName, LocalService.this.getPackageName())) {
@@ -625,12 +675,21 @@ public final class LocalService extends Service {
                 } else {
                     oldPackageName = "";
                 }
+=======
+            String packageName = getAppInfo();
+            if (isContains(packageName) && !TextUtils.equals(oldPackageName, packageName)) {
+                oldPackageName = packageName;
+                addCPAD();
+            } else {
+                oldPackageName = "";
+>>>>>>> Stashed changes
             }
             handler.postDelayed(mTask, 10000);
         }
     };
 
     private boolean isContains(String packageName) {
+<<<<<<< Updated upstream
         if (!GreenDaoManager.getInstance().isAppListNull()) {
             List<AppPackageNameListDB> list = GreenDaoManager.getInstance().queryAppList(packageName);
             if (list != null && list.size() > 0) {
@@ -656,12 +715,20 @@ public final class LocalService extends Service {
                         GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
                         return true;
                     }
+=======
+        if (appPackageNameList != null && appPackageNameList.getData() != null) {
+            for (AppPackageNameList.DataBean dataBean : appPackageNameList.getData()) {
+                if (packageName.contains(dataBean.getPackageName()) && dataBean.getIndex() < 2) {
+                    mDataBean = dataBean;
+                    return true;
+>>>>>>> Stashed changes
                 }
             }
         }
         return false;
     }
 
+<<<<<<< Updated upstream
 
     /**
      * 判断给定字符串时间是否为今日
@@ -713,13 +780,18 @@ public final class LocalService extends Service {
         }
     };
 
+=======
+>>>>>>> Stashed changes
     private UsageStatsManager mUsageStatsManager;
 
     public String getAppInfo() {
         if (Build.VERSION.SDK_INT >= 21) {
+<<<<<<< Updated upstream
             if (mUsageStatsManager == null) {
                 mUsageStatsManager = ((UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE));
             }
+=======
+>>>>>>> Stashed changes
             if (mUsageStatsManager != null) {
                 long now = System.currentTimeMillis();
                 // get app data during 60s
@@ -732,6 +804,7 @@ public final class LocalService extends Service {
                             j = i;
                         }
                     }
+<<<<<<< Updated upstream
                     return stats.get(j).getPackageName();
                 }
             }
@@ -742,11 +815,23 @@ public final class LocalService extends Service {
                 return taskInfos.get(0).topActivity.getPackageName();
             else
                 return "";
+=======
+                    if (!isSystemApp(stats.get(j).getPackageName())) {
+                        return stats.get(j).getPackageName();
+                    } else {
+                        return "null";
+                    }
+                }
+            } else {
+                mUsageStatsManager = ((UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE));
+            }
+>>>>>>> Stashed changes
         }
         return "null";
     }
 
     private boolean isOpen;
+<<<<<<< Updated upstream
 
 
     /**
@@ -873,6 +958,51 @@ public final class LocalService extends Service {
                 MmkvUtil.saveInt("odlappicon", 0);
             }
 
+=======
+
+
+    /**
+     * 判断是否系统app
+     *
+     * @param pkgName
+     */
+    private boolean isSystemApp(String pkgName) {
+        boolean isSystemApp = false;
+        PackageInfo pi = null;
+        try {
+            PackageManager pm = getApplicationContext().getPackageManager();
+            pi = pm.getPackageInfo(pkgName, 0);
+        } catch (Throwable t) {
+            Log.w(TAG, t.getMessage(), t);
+        }
+        // 是系统中已安装的应用
+        if (pi != null) {
+            boolean isSysApp = (pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1;
+            boolean isSysUpd = (pi.applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 1;
+            isSystemApp = isSysApp || isSysUpd;
+        }
+        Log.w("hijacking", "系统app ==" + isSystemApp);
+        return isSystemApp;
+    }
+
+    /**
+     * 进行插入开屏广告
+     */
+    private void addCPAD() {
+        if (!isOpen) {
+            isOpen = true;
+            Intent inten = new Intent(this, TimingReceiver.class);
+            inten.putExtra("action", "add_cp_ad");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LocalService.this.sendBroadcast(inten);
+                    mDataBean.setIndex(mDataBean.getIndex() + 1);
+                    isOpen = false;
+                }
+            }, 2000);
+        } else {
+>>>>>>> Stashed changes
         }
     }
 
