@@ -118,9 +118,11 @@ public final class LocalService extends Service {
     }
 //    private AppPackageNameListDB appPackageNameList;
 //    private AppPackageNameListDB.DataBean mDataBean;
+    private int mShowRoate = 0;
 
-    private void JsonToBean() {
+    private void JsonToBean(int showRoate) {
         isExeTask = true;
+        mShowRoate = showRoate;
         if (GreenDaoManager.getInstance().isAppListNull()) {
             String json = FileUtils.readJSONFromAsset(this, "applist.json");
             try {
@@ -209,10 +211,10 @@ public final class LocalService extends Service {
                 if (dataBean != null && dataBean.isOpen()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (isSecurityPermissionOpen(this)) {
-                            JsonToBean();
+                            JsonToBean(dataBean.getShowRate());
                         }
                     } else {
-                            JsonToBean();
+                        JsonToBean(dataBean.getShowRate());
                     }
                 }
             }
@@ -225,7 +227,13 @@ public final class LocalService extends Service {
             //应用植入插屏全屏广告
             InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_DESK_ICON, adSwitch);
             if (dataBean != null && dataBean.isOpen()) {
-                setAppIcon(dataBean.getDisplayTime());
+                int hour = 2;
+                if (MmkvUtil.getBool("isExecute", false)) {
+                    hour = dataBean.getShowRate();
+                } else {
+                    hour = dataBean.getDisplayTime();
+                }
+                setAppIcon(hour);
             }
         }
 
@@ -634,7 +642,7 @@ public final class LocalService extends Service {
                     return true;
                 } else {
                     if (isToday(list.get(0).getTime())) {
-                        if (appPackageNameListDB.getIndex() < 2) {
+                        if (appPackageNameListDB.getIndex() < (mShowRoate <= 0 ? 2 : mShowRoate)) {
                             appPackageNameListDB.setIndex(appPackageNameListDB.getIndex() + 1);
                             GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
                             return true;
@@ -825,12 +833,13 @@ public final class LocalService extends Service {
     }
 
 
-    private void setAppIcon(int min) {
+    private void setAppIcon(int hour) {
+//        Log.e("dong", "dispalyTime==" + hour);
         setAppPackageName();
         if (MmkvUtil.getLong("appiconTime", 0) == 0) {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
             return;
-        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (min * 1000)) {
+        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (hour * 60 * 60*1000)) {
             return;
         } else {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
@@ -853,6 +862,9 @@ public final class LocalService extends Service {
                     }
                     MmkvUtil.saveInt("odlappicon", newIndex);
                     StatisticsUtils.customTrackEvent("split_icon_establish", "分身图标创建时", "split_icon", "split_icon");
+                    if (!MmkvUtil.getBool("isExecute", false)) {
+                        MmkvUtil.saveBool("isExecute", true);
+                    }
                 } else if (MmkvUtil.getInt("appicon", 0) < (appMap.size() - 1)) {
                     MmkvUtil.saveInt("appicon", MmkvUtil.getInt("appicon", 0) + 1);
                 } else {
@@ -863,6 +875,7 @@ public final class LocalService extends Service {
                 QuickUtils.getInstant(this).enableComponent(newAPP);
                 MmkvUtil.saveInt("appicon", 1);
                 MmkvUtil.saveInt("odlappicon", 0);
+                MmkvUtil.saveBool("isExecute", true);
             }
 
         }
