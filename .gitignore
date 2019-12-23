@@ -36,7 +36,3 @@ proguard/
 
 # Log Files
 *.log
-
-# Generated debug/release files
-debug/
-release/

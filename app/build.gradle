@@ -48,6 +48,8 @@ android {
          * 3：关注城市表增加日出日落字段(2019.09.05)
          **/
         schemaVersion 1
+        targetGenDir 'src/main/java'
+        daoPackage 'com.xiaoniu.cleanking.bean.weatherdao'
     }
 
     aaptOptions {
@@ -98,6 +100,9 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
         }
         btest {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
@@ -114,6 +119,9 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable = false
+            jniDebuggable = false
+            renderscriptDebuggable = true
         }
         preprod {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
@@ -143,7 +151,7 @@ android {
             buildConfigField "String", "Base_Host", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
-            minifyEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
