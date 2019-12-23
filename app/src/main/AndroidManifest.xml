@@ -50,17 +50,10 @@
             android:icon="@mipmap/applogo"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppLauncher">
-<!--                        <intent-filter>-->
-<!--                            <action android:name="android.intent.action.MAIN" />-->
-
-<!--                            <category android:name="android.intent.category.LAUNCHER" />-->
-
-<!--                            <data-->
-<!--                            android:host="SP"-->
-<!--                            android:scheme="com.android.example" />-->
-<!--                        </intent-filter>-->
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- umeng  Caused by: java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation -->
@@ -466,33 +459,31 @@
         <!-- Since JCore2.0.0 Required SDK核心功能 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
         <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
-        <activity-alias
-            android:name=".splash"
-            android:excludeFromRecents="true"
-            android:label="@string/app_name"
-            android:targetActivity=".ui.main.activity.SplashADActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <!--        <activity-alias-->
+        <!--            android:name=".splash"-->
+        <!--            android:excludeFromRecents="true"-->
+        <!--            android:label="@string/app_name"-->
+        <!--            android:targetActivity=".ui.main.activity.SplashADActivity">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity-alias>-->
 
 
-            <!-- User defined.  For test only  用户自定义的广播接收器 -->
-<!--                <activity-alias-->
-<!--                    android:name=".spa1"-->
-<!--                    android:enabled="true"-->
-<!--                    android:icon="@drawable/ic_launcher"-->
-<!--                    android:label="@string/app_name"-->
-<!--                    android:targetActivity=".ui.main.activity.LauncherTwoActivity">-->
-<!--                    <intent-filter>-->
-<!--                        <action android:name="android.intent.action.MAIN" />-->
-<!--                        <category android:name="android.intent.category.LAUNCHER" />-->
-<!--                    </intent-filter>-->
-<!--                </activity-alias>-->
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <!--                <activity-alias-->
+        <!--                    android:name=".spa1"-->
+        <!--                    android:enabled="true"-->
+        <!--                    android:icon="@drawable/ic_launcher"-->
+        <!--                    android:label="@string/app_name"-->
+        <!--                    android:targetActivity=".ui.main.activity.LauncherTwoActivity">-->
+        <!--                    <intent-filter>-->
+        <!--                        <action android:name="android.intent.action.MAIN" />-->
+        <!--                        <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--                    </intent-filter>-->
+        <!--                </activity-alias>-->
 
         <activity-alias
             android:name=".wx"
@@ -505,50 +496,50 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-            <activity-alias
-                android:name=".tt"
-                android:enabled="false"
-                android:icon="@mipmap/icon_tt"
-                android:label="@string/app_tt"
-                android:targetActivity=".ui.main.activity.divide.JRTTActivity">
-                    <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-                            <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-            </activity-alias>
-            <activity-alias
-                android:name=".ks"
-                android:enabled="false"
-                android:icon="@mipmap/icon_ks"
-                android:label="@string/app_ks"
-                android:targetActivity=".ui.main.activity.divide.KSActivity">
-                    <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-                            <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-            </activity-alias>
-            <activity-alias
-                android:name=".aqy"
-                android:enabled="false"
-                android:icon="@mipmap/icon_aqy"
-                android:label="@string/app_aqy"
-                android:targetActivity=".ui.main.activity.divide.AQYActivity">
-                    <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-                            <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-            </activity-alias>
-            <activity-alias
-                android:name=".dy"
-                android:enabled="false"
-                android:icon="@mipmap/icon_dy"
-                android:label="@string/app_dy"
-                android:targetActivity=".ui.main.activity.divide.DYActivity">
-                    <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-                            <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-            </activity-alias>
+        <activity-alias
+            android:name=".tt"
+            android:enabled="false"
+            android:icon="@mipmap/icon_tt"
+            android:label="@string/app_tt"
+            android:targetActivity=".ui.main.activity.divide.JRTTActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".ks"
+            android:enabled="false"
+            android:icon="@mipmap/icon_ks"
+            android:label="@string/app_ks"
+            android:targetActivity=".ui.main.activity.divide.KSActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".aqy"
+            android:enabled="false"
+            android:icon="@mipmap/icon_aqy"
+            android:label="@string/app_aqy"
+            android:targetActivity=".ui.main.activity.divide.AQYActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".dy"
+            android:enabled="false"
+            android:icon="@mipmap/icon_dy"
+            android:label="@string/app_dy"
+            android:targetActivity=".ui.main.activity.divide.DYActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <activity
             android:name=".ui.main.activity.divide.WXActivity"
@@ -562,60 +553,55 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
-
-            <activity
-                android:name=".ui.main.activity.divide.JRTTActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize"
-                android:excludeFromRecents="true"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTask"
-                android:taskAffinity="com.pop.new.task"
-                android:theme="@style/pop_layer_style"
-                android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-
+        <activity
+            android:name=".ui.main.activity.divide.JRTTActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
-            <activity
-                android:name=".ui.main.activity.divide.DYActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize"
-                android:excludeFromRecents="true"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTask"
-                android:taskAffinity="com.pop.new.task"
-                android:theme="@style/pop_layer_style"
-                android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".ui.main.activity.divide.DYActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
+        <activity
+            android:name=".ui.main.activity.divide.KSActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
-            <activity
-                android:name=".ui.main.activity.divide.KSActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize"
-                android:excludeFromRecents="true"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTask"
-                android:taskAffinity="com.pop.new.task"
-                android:theme="@style/pop_layer_style"
-                android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".ui.main.activity.divide.AQYActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
-
-            <activity
-                android:name=".ui.main.activity.divide.AQYActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize"
-                android:excludeFromRecents="true"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTask"
-                android:taskAffinity="com.pop.new.task"
-                android:theme="@style/pop_layer_style"
-                android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-
-
-            <meta-data
+        <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
 
@@ -769,16 +755,16 @@
 
     <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
 
-<!--    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"-->
-<!--        />-->
-<!--    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"-->
-<!--        />-->
-<!--    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"-->
-<!--        android:maxSdkVersion="25"/>-->
-<!--    <uses-permission android:name="com.android.launcher2.permission.READ_SETTINGS"-->
-<!--        android:maxSdkVersion="25"/>-->
-<!--    <uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS"-->
-<!--        android:maxSdkVersion="25"/>-->
+    <!--    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"-->
+    <!--        />-->
+    <!--    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"-->
+    <!--        />-->
+    <!--    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"-->
+    <!--        android:maxSdkVersion="25"/>-->
+    <!--    <uses-permission android:name="com.android.launcher2.permission.READ_SETTINGS"-->
+    <!--        android:maxSdkVersion="25"/>-->
+    <!--    <uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS"-->
+    <!--        android:maxSdkVersion="25"/>-->
 
 
 </manifest>

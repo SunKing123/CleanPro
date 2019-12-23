@@ -313,7 +313,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
                         || ActivityCollector.isActivityExist(SplashADActivity.class)
                         || ActivityCollector.isActivityExist(SplashADHotActivity.class)
                         || ActivityCollector.isActivityExist(FullPopLayerActivity.class)
-                        || activity.getLocalClassName().contains(".other")
+                        || activity.getLocalClassName().contains(".wx")
+                        || activity.getLocalClassName().contains(".aqy")
+                        || activity.getLocalClassName().contains(".ks")
+                        || activity.getLocalClassName().contains(".tt")
+                        || activity.getLocalClassName().contains(".dy")
                         || activity.getLocalClassName().contains("FullPopLayerActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;

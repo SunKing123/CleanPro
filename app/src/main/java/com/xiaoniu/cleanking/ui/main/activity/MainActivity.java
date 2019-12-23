@@ -748,7 +748,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     //桌面创建图标
     private void enableOtherComponent() {
-        ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.other");
+        ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
         QuickUtils.getInstant(this).enableComponent(apple);
     }
 

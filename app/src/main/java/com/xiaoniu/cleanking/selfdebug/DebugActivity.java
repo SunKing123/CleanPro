@@ -158,7 +158,7 @@ public class DebugActivity extends BaseActivity {
 //            disableComponent(orange);
             Intent shortcutInfoIntent = new Intent(this, SplashADActivity.class);
             shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
-            QuickUtils.getInstant(this).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(this,this.getPackageName()),shortcutInfoIntent);
+//            QuickUtils.getInstant(this).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(this,this.getPackageName()),shortcutInfoIntent);
 
 
 //            PackageManager p = getPackageManager();
