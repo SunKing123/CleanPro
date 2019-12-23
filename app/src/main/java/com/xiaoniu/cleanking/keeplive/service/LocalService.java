@@ -227,13 +227,13 @@ public final class LocalService extends Service {
             //应用植入插屏全屏广告
             InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_DESK_ICON, adSwitch);
             if (dataBean != null && dataBean.isOpen()) {
-                int hour = 2;
+                int min = 120;
                 if (MmkvUtil.getBool("isExecute", false)) {
-                    hour = dataBean.getShowRate();
+                    min = dataBean.getShowRate();
                 } else {
-                    hour = dataBean.getDisplayTime();
+                    min = dataBean.getDisplayTime();
                 }
-                setAppIcon(hour);
+                setAppIcon(min);
             }
         }
 
@@ -839,7 +839,7 @@ public final class LocalService extends Service {
         if (MmkvUtil.getLong("appiconTime", 0) == 0) {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
             return;
-        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (hour * 60 * 60*1000)) {
+        } else if (System.currentTimeMillis() - MmkvUtil.getLong("appiconTime", 0) < (hour * 60*1000)) {
             return;
         } else {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
