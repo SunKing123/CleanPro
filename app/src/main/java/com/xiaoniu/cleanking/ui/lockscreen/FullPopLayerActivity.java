@@ -36,9 +36,9 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
     private TextView adShowTime;
     private ImageView adClose;
     private CountDownTimer countDownTimer;
-    private AdInfo adInfo;
-    private String adStyle = PositionId.AD_EXTERNAL_ADVERTISING_03;
-    private String currentPage ="";
+    AdInfo adInfo;
+    String adStyle = PositionId.AD_EXTERNAL_ADVERTISING_03;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +46,6 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
         Log.e("dong","FullPopLayerActivity");
         setContentView(R.layout.activity_full_pop_layer);
         adStyle = getIntent().getStringExtra("ad_style");
-        if (adStyle.equals(PositionId.AD_EXTERNAL_ADVERTISING_03)) {
-            currentPage = "external_insert_screen_full_screen_page";//外部插屏埋点
-        }else if(adStyle.equals(PositionId.AD_EXTERNAL_ADVERTISING_04)){
-            currentPage = "application_placement_insert";//应用植入插屏埋点
-        }
-
-
         flayoutAdContainer = (RelativeLayout) findViewById(R.id.flayout_ad_container);
         full_screen_insert_ad_header_layout = (RelativeLayout) findViewById(R.id.full_screen_insert_ad_header_layout);
         adShowTime = (TextView) findViewById(R.id.full_insert_ad_show_time_txt);
@@ -73,6 +66,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
         adClose.setOnClickListener(this);
         if (NetworkUtils.isNetConnected()) {
             adInit();
+
         } else {
             countDownTimer.cancel();
             finish();
@@ -81,13 +75,13 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
 
     public void adInit() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", currentPage, currentPage);
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, adStyle, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 Logger.i(SystemUtils.getProcessName(FullPopLayerActivity.this) +"---zz---success---"+info.getAdSource());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", currentPage, currentPage);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page");
                 adInfo = info;
                 View adView = info.getAdView();
                 if (adView != null && flayoutAdContainer != null && full_screen_insert_ad_header_layout != null) {
@@ -101,19 +95,19 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void adExposed(AdInfo info) {
                 Logger.i("zz---adExposed---"+info.getAdSource());
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), currentPage, currentPage, info.getAdTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Logger.i("zz---adClicked---"+info.getAdSource());
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), currentPage, currentPage, info.getAdTitle());
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page", info.getAdTitle());
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Logger.i("zz---adError"+info.getAdSource());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", currentPage, currentPage);
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page");
                 finish();
             }
 
