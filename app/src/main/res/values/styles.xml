@@ -237,6 +237,16 @@
         <item name="android:dialogTitle">@null</item>
     </style>
 
+
+
+    <!--外部插屏_悬浮Activity样式-->
+    <style name="divide_style" parent="AppTheme">
+        <!--透明是否-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">#00000000</item>
+
+    </style>
+
     <!--全屏_外部插屏_悬浮Activity样式-->
     <style name="full_pop_layer_style" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
