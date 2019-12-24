@@ -152,6 +152,8 @@ public class TimingReceiver extends BroadcastReceiver {
     private void startFullActivty(Context context) {
         //判断是否进入后台
         boolean isBack = AppLifecycleUtil.isRunningForeground(context);
+        Log.e("dong","应用内插屏展示isBack =="+isBack);
+
         if (isBack || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
             return;
         }

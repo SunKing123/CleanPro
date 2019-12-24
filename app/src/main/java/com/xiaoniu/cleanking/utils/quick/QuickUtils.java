@@ -79,7 +79,7 @@ public class QuickUtils {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        disableMainComponent();
+//                        disableMainComponent();
                     }
                 }, 5000);
             } catch (Exception e) {
@@ -160,38 +160,45 @@ public class QuickUtils {
     private PackageManager mPm;
 
     public void enableComponent(ComponentName componentName) {
-        mPm.setComponentEnabledSetting(componentName,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+        try {
+            mPm.setComponentEnabledSetting(componentName,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+        } catch (Exception e) {
+        }
     }
 
     public void disableComponent(ComponentName componentName) {
-        int state = mPm.getComponentEnabledSetting(componentName);
-        if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {
-            //已经禁用
-            return;
+        try {
+
+            int state = mPm.getComponentEnabledSetting(componentName);
+            if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {
+                //已经禁用
+                return;
+            }
+            mPm.setComponentEnabledSetting(componentName,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        } catch (Exception e) {
         }
-        mPm.setComponentEnabledSetting(componentName,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
     }
 
-    public void disableMainComponent() {
-        SPUtil.setBoolean(mActivity, SPUtil.ISADDQUICK, true);
-        ComponentName orange1 = new ComponentName(mActivity,
-                "com.xiaoniu.cleanking.other");
-        enableComponent(orange1);
-        ComponentName orange = new ComponentName(mActivity,
-                "com.xiaoniu.cleanking.spa1");
-        int state = mPm.getComponentEnabledSetting(orange);
-        if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {
-            //已经禁用
-            return;
-        }
-        mPm.setComponentEnabledSetting(orange,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+//    public void disableMainComponent() {
+//        SPUtil.setBoolean(mActivity, SPUtil.ISADDQUICK, true);
+//        ComponentName orange1 = new ComponentName(mActivity,
+//                "com.xiaoniu.cleanking.other");
+//        enableComponent(orange1);
+//        ComponentName orange = new ComponentName(mActivity,
+//                "com.xiaoniu.cleanking.spa1");
+//        int state = mPm.getComponentEnabledSetting(orange);
+//        if (PackageManager.COMPONENT_ENABLED_STATE_DISABLED == state) {
+//            //已经禁用
+//            return;
+//        }
+//        mPm.setComponentEnabledSetting(orange,
+//                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+//                PackageManager.DONT_KILL_APP);
+//
 
-
-    }
+//    }
 }
