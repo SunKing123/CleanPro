@@ -1,6 +1,8 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.app.ActivityManager;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
@@ -24,7 +26,6 @@ public class AppLifecycleUtil {
         if (null == context) return false;
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         String packageName = context.getPackageName();
-
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         if (appProcesses == null)
             return false;
@@ -84,5 +85,30 @@ public class AppLifecycleUtil {
         ActivityManager manager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
         return (runningTaskInfos.get(0).topActivity).toString();
+    }
+
+
+    public static boolean isRunningForeground(Context context) {
+        if(Build.VERSION.SDK_INT >= 21){
+            long ts = System.currentTimeMillis();
+            UsageStatsManager usageStatsManager = (UsageStatsManager)
+                    context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
+            List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(
+                    UsageStatsManager.INTERVAL_BEST, ts - 2000, ts);
+            if (queryUsageStats == null || queryUsageStats.isEmpty()) {
+                return false;
+            }
+            UsageStats recentStats = null;
+            for (UsageStats usageStats : queryUsageStats) {
+                if (recentStats == null ||
+                        recentStats.getLastTimeUsed() < usageStats.getLastTimeUsed()){
+                    recentStats = usageStats;
+                }
+            }
+            if(context.getPackageName().equals(recentStats.getPackageName())){
+                return true;
+            }
+        }
+        return false;
     }
 }

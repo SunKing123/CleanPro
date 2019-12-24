@@ -854,7 +854,7 @@ public final class LocalService extends Service {
             if (isSecurityPermissionOpen(this)) {
                 if (getAppProcessName(this)) {
                     int newIndex = MmkvUtil.getInt("appicon", 0);
-                    int oldIndex = MmkvUtil.getInt("odlappicon", 0);
+                    int oldIndex = MmkvUtil.getInt("odlappicon", -1);
                     if (oldIndex == newIndex) {
                         return;
                     }

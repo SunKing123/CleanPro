@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
+import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -150,9 +151,8 @@ public class TimingReceiver extends BroadcastReceiver {
 
     private void startFullActivty(Context context) {
         //判断是否进入后台
-        int isBack = MmkvUtil.getInt("isback",-1);
-        Log.e("dong","应用内插屏 isBack="+isBack);
-        if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
+        boolean isBack = AppLifecycleUtil.isRunningForeground(context);
+        if (isBack || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
