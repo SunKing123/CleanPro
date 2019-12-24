@@ -26,6 +26,9 @@ android {
         btest{}
         preprod{}
         dev{}
+        devdebug{}
+        btestdebug{}
+        releasedebug{}
     }
     compileOptions {
         sourceCompatibility = 1.8

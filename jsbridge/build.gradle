@@ -18,6 +18,9 @@ android {
         btest{}
         preprod{}
         dev{}
+        devdebug{}
+        btestdebug{}
+        releasedebug{}
     }
     sourceSets { main { java.srcDirs = ['src/main/java'] } }
 }

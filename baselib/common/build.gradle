@@ -34,6 +34,9 @@ android {
 
         btest{}
         preprod{}
+        devdebug{}
+        btestdebug{}
+        releasedebug{}
     }
 
 }

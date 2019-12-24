@@ -25,6 +25,9 @@ android {
         btest{}
         preprod{}
         dev{}
+        devdebug{}
+        btestdebug{}
+        releasedebug{}
     }
 
 }
