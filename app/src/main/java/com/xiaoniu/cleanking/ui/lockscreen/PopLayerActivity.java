@@ -112,7 +112,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
                 if (!BuildConfig.SYSTEM_EN.contains("prod"))
-                    ToastUtils.showLong("外部插屏errorcode-----" + errorMsg + "---errorMsg----" + errorMsg);
+                    ToastUtils.showLong("外部插屏errorcode-----" + errorCode + "---errorMsg----" + errorMsg);
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "external_advertising_page", "external_advertising_page");
                 }
