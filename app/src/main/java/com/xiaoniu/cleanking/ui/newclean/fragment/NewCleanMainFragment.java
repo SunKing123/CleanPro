@@ -18,11 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
@@ -92,6 +87,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -1507,10 +1506,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void loadGeekAdNet() {
         if (null == getActivity() || null == mAdManager) return;
-        NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
-        NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_page", "view_page", "网络加速励视频页浏览");
+        NiuDataAPI.onPageStart("view_page", "网络加速激励视频页浏览");
+        NiuDataAPIUtil.onPageEnd("home_page", "network_acceleration_video_page", "view_page", "网络加速激励视频页浏览");
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "network_acceleration_video_page");
-        mAdManager.loadRewardVideoAd(getActivity(), "click_virus_killing_ad", "user123", 1, new VideoAdListener() {
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_NETWORK_ACCE, "user123", 1, new VideoAdListener() {
             @Override
             public void onVideoResume(AdInfo info) {
 
