@@ -215,7 +215,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //设置oaid到埋点公共参数
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) { //6.0以上版本oaid
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) { //9.0以上版本oaid
                 try {
                     JLibrary.InitEntry(application);
                     //获取oaid
