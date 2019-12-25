@@ -136,7 +136,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (null != adInfo) {
-            StatisticsUtils.clickAD("close_click", "关闭点击", "1", adInfo.getAdId(), adInfo.getAdSource(), "external_insert_screen_full_screen_page", "external_insert_screen_full_screen_page", adInfo.getAdTitle());
+            StatisticsUtils.clickAD("close_click", "关闭点击", "1", adInfo.getAdId(), adInfo.getAdSource(), currentPage, currentPage, adInfo.getAdTitle());
         }
         finish();
     }
