@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.json.JSONObject;
@@ -98,7 +99,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     @Override
     protected void initView() {
-        /*        StatusBarUtil.setStatusBarState(this,mStartView,false,-1);*/
+        StatusBarUtil.setTransparentForWindow(this);
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         mBtn.setOnClickListener(this);
