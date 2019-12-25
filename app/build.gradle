@@ -163,7 +163,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
-
+        /*jenkins打包测试环境*/
         debug {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
@@ -200,6 +200,7 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        /*jenkins打包生产环境*/
         release {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
             buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
