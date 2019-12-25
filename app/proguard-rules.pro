@@ -579,7 +579,8 @@
 -keep class com.xiaoniu.cleanking.ui.lifecyler.**{ *; }  #包活相关类不参与混淆
 -keep class com.xiaoniu.cleanking.bean.**{ *; }  #Bean类不参与混淆
 -keep class com.xiaoniu.cleanking.app.**{ *; }  #app类不参与混淆
--keep class com.xiaoniu.cleanking.jsbridge.**{ *; }  #Bean类不参与混淆
+-keep class com.xiaoniu.cleanking.jsbridge.**{ *; }  #jsbridge类不参与混淆
+-keep class com.xiaoniu.cleanking.room.**{ *; }  #room类不参与混淆
 
 #########################common lib混淆开始########################
 -ignorewarning
