@@ -15,14 +15,22 @@ android {
     }
 
     buildTypes {
+        release {}
+        preprod{ }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug{}
+        debug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         preprod{}
         dev{}
-        devdebug{}
+        devdebug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         btestdebug{}
         releasedebug{}
     }

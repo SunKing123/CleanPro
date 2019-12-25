@@ -576,4 +576,32 @@
 #穿山甲 end
 
 
-#########################geek push混淆开始########################
+-keep class com.xiaoniu.cleanking.ui.lifecyler.**{ *; }  #包活相关类不参与混淆
+-keep class com.xiaoniu.cleanking.bean.**{ *; }  #Bean类不参与混淆
+-keep class com.xiaoniu.cleanking.app.**{ *; }  #app类不参与混淆
+-keep class com.xiaoniu.cleanking.jsbridge.**{ *; }  #Bean类不参与混淆
+
+#########################common lib混淆开始########################
+-ignorewarning
+-keep class com.xiaoniu.common.hotfix.CleanApplicationLike
+-keep class com.xiaoniu.common.base.** { *; }
+-keep class com.xiaoniu.common.http.** { *; }
+#-keep class com.xiaoniu.common.widget.** { *; }
+-keep public class * extends com.xiaoniu.common.base.IApplicationDelegate
+#mdid获取sdk
+-keep class com.bun.miitmdid.core.** {*;}
+
+#########################广告sdk混淆开始########################
+-keep public class com.comm.jksdk.**{*;}
+-keep public class com.comm.jksdk.bean.**{*;}
+-keep public class com.comm.jksdk.utils.**{*;}
+-keep class com.bytedance.sdk.openadsdk.** { *; }
+-keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
+-keep class com.pgl.sys.ces.* {*;}
+
+
+#########################jsbridage#######################
+-keep public class com.geek.webpage.**{*;}
+-keep public class com.apkfuns.jsbridge.**{*;}
+-keep class * extends com.apkfuns.jsbridge.module.JsModule{*;}
+-keep class com.xiaoniu.asmhelp.bean.** { *; }

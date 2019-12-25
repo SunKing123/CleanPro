@@ -7,9 +7,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -65,6 +62,9 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 /**
  * Created by admin on 2017/6/8.
@@ -305,8 +305,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
             public void onBecameForeground(Activity activity) {
                 if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
                     MmkvUtil.saveInt("isback", 0);
-                    Log.e("dong","11isBack ==0");
-
                 } else {//非当前主进程
                     return;
                 }
@@ -344,12 +342,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
-                    Log.e("dong","11isBack ==1");
                     MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
-                }else{
-                    Log.e("dong","判断不是后台");
-
                 }
             }
         });
