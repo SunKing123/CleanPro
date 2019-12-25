@@ -164,7 +164,7 @@ android {
 
         }
 
-        btest {
+        debug {
             buildConfigField "String", "API_APPID", "\"1115551509648511000\""
             buildConfigField "String", "API_APPSECRET", "\"744743ba93f44aa79834ded6f7f90e83\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.fqt188.com/video/v2/query\""
@@ -179,7 +179,6 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
 
         }
         preprod {

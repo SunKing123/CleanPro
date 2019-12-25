@@ -32,7 +32,7 @@ android {
             consumerProguardFiles 'proguard-rules.pro'/*子module混淆文件自管理*/
         }
 
-        btest{}
+        debug{}
         preprod{}
         devdebug{}
         btestdebug{}
