@@ -154,7 +154,10 @@ public class TimingReceiver extends BroadcastReceiver {
         boolean isBack = AppLifecycleUtil.isRunningForeground(context);
         Log.e("dong","应用内插屏展示isBack =="+isBack);
 
-        if (isBack || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
+//        if (isBack || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
+//            return;
+//        }
+        if (isBack ) {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
