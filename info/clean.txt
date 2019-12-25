@@ -1,3 +1,4 @@
+clean_hellogeek_test
 yingyongbao
 vivo
 oppo

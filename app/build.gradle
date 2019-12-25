@@ -159,10 +159,9 @@ android {
             buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-dev-default.fqt188.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
-            minifyEnabled true
-            jniDebuggable = true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -180,10 +179,9 @@ android {
             buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-fat-default.fqt188.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
-            minifyEnabled true
-            jniDebuggable = true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable = false
@@ -204,10 +202,9 @@ android {
             buildConfigField "String", "Base_Host", "\"https://hhh.xnsudai.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
-            minifyEnabled true
-            jniDebuggable = true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -225,10 +222,9 @@ android {
             buildConfigField "String", "Base_Host", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
-            minifyEnabled true
-            jniDebuggable = true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
