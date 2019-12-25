@@ -179,6 +179,9 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable = false
+            jniDebuggable = false
+            renderscriptDebuggable = false
 
         }
         preprod {
