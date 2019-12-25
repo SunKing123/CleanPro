@@ -205,6 +205,9 @@ android {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
+            debuggable = false
+            jniDebuggable = false
+            renderscriptDebuggable = false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -225,6 +228,9 @@ android {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
+            debuggable = false
+            jniDebuggable = false
+            renderscriptDebuggable = false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
