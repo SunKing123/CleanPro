@@ -271,7 +271,7 @@
             android:id="@+id/flayout_bottom_ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_16dp"
+            android:layout_margin="@dimen/dimen_12dp"
             android:background="@drawable/ad_container_white_bg"
             android:visibility="gone" />
         <!--<LinearLayout

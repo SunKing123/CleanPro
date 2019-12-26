@@ -84,6 +84,11 @@ public class Constants {
          * 信息流模板广告
          */
         String FEED_TEMPLATE = "FEED_TEMPLATE";
+
+        /**
+         * 信息流模板广告_带跑马灯
+         */
+        String FEED_TEMPLATE_LAMP = "FEED_TEMPLATE_LAMP";
     }
 
 

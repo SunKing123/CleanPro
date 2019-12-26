@@ -12,12 +12,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.orhanobut.logger.Logger;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -42,6 +41,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -285,8 +285,7 @@ public class MeFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
-        initGeekAdSdk();
-        mAdManager.loadAd(getActivity(), PositionId.AD_PERSONAL_CENTER_PAGE_BELOW, new AdListener() { //暂时这样
+        GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity,PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf (DisplayUtil.px2dp(mContext,DisplayUtil.getScreenWidth(mContext)) -24), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
@@ -316,7 +315,7 @@ public class MeFragment extends SimpleFragment {
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Logger.i("adError---1");
+                Logger.i("adError---1---"+errorMsg);
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "my_page", "my_page");
                 }
