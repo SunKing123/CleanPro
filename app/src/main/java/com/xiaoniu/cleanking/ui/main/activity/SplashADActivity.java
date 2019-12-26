@@ -14,6 +14,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -39,7 +41,6 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
-import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -56,7 +57,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -168,17 +168,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     //初始sd根目录关联关系
     void initFileRelation() {
         SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
-    }
-
-    public void geekAdSDKConfigSuccess() {
-        initHomeCenterAD();
-    }
-
-    /**
-     * 首页下方广告预加载
-     */
-    private void initHomeCenterAD() {
-        ADUtilsKt.preloadingAd(this, PositionId.AD_HOME_BOTTOM, "首页下方广告");
     }
 
     /**
