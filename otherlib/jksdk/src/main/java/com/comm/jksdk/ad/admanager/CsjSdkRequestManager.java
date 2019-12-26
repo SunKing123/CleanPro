@@ -58,7 +58,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
             getTemplateInsertScreenAd(activity, adInfo, listener);
         } else if (Constants.AdStyle.CUSTOM_CP.equals(style) || Constants.AdStyle.FULLSCREEN_CP_01.equals(style)) {
             getCustomInsertScreenAd(adInfo, listener);
-        } else if(Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
+        } else if(Constants.AdStyle.FEED_TEMPLATE.equals(style) ||Constants.AdStyle.FEED_TEMPLATE_LAMP.equals(style)) {
             getFeedTemplate(activity, adInfo, listener);
         } else {
             if (listener != null) {
@@ -74,6 +74,10 @@ public class CsjSdkRequestManager extends SdkRequestManager {
      * @param listener
      */
     private void getFeedTemplate(Activity activity, AdInfo info, AdRequestListener listener) {
+        //有跑马灯情况重新设置宽度
+        if(Constants.AdStyle.FEED_TEMPLATE_LAMP.equals(info.getAdStyle()) ){
+            info.setWidth(info.getWidth()-20);
+        }
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(info.getAdId()) //广告位id
                 .setSupportDeepLink(true)

@@ -12,12 +12,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -54,6 +53,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -425,8 +425,7 @@ public class ToolFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        initGeekAdSdk();
-        mAdManager.loadAd(getActivity(), PositionId.AD_ACCELERATION_PAGE_BELOW, new AdListener() { //暂时这样
+        GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity,PositionId.AD_ACCELERATION_PAGE_BELOW_AD_MB, Float.valueOf (DisplayUtil.px2dp(mContext,DisplayUtil.getScreenWidth(mContext)) -24), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
