@@ -631,8 +631,8 @@
 
     <ImageView
         android:id="@+id/iv_interaction"
-        android:layout_width="@dimen/dimen_35dp"
-        android:layout_height="@dimen/dimen_35dp"
+        android:layout_width="@dimen/dimen_65dp"
+        android:layout_height="@dimen/dimen_65dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/dimen_10dp"

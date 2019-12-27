@@ -204,7 +204,11 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                         }
                     }
                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", "hot_splash_page", "hot_splash_page", dataBean.getSwitcherName());
-                    GlideUtils.loadImage(SplashADHotActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    if (dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl().contains(".gif")) {
+                        GlideUtils.loadGif(SplashADHotActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv, 10000);
+                    } else {
+                        GlideUtils.loadImage(SplashADHotActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    }
                     if (null == mErrorAdIv) return;
                     mErrorAdIv.setOnClickListener(v -> {
                         mIsAdError = true;

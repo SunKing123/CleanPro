@@ -438,7 +438,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         return;
                     container.setVisibility(View.GONE);
                     mErrorAdIv.setVisibility(View.VISIBLE);
-                    GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    if (dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl().contains(".gif")) {
+                        GlideUtils.loadGif(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv, 1000);
+                    } else {
+                        GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    }
                     mErrorAdIv.setOnClickListener(v -> {
                         mIsAdError = true;
                         StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", "clod_splash_page", "clod_splash_page", dataBean.getSwitcherName());
