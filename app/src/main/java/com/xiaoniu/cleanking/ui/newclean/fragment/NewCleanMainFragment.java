@@ -923,17 +923,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            boolean mIsOpenThree = false;
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
+
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -966,17 +974,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(PhoneSuperPowerActivity.class);
         } else {
             boolean isOpen = false;
+            boolean mIsOpenThree = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1057,17 +1073,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(WechatCleanHomeActivity.class);
         } else {
             boolean isOpen = false;
+            boolean mIsOpenThree = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1094,17 +1117,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            boolean mIsOpenThree = false;
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1132,16 +1162,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
             boolean isOpen = false;
+            boolean mIsOpenThree = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1418,15 +1456,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void goFinishActivity() {
         boolean isOpen = false;
+        boolean mIsOpenThree = false;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                    mIsOpenThree = switchInfoList.isOpen();
+                }
                 if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();
                 }
             }
         }
-        if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (mIsOpenThree) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.game_quicken));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.game_quicken));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

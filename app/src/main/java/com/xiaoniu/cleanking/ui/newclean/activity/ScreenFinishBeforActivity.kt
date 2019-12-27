@@ -42,6 +42,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     private var mNum = ""
     private var mUnit = ""
     private var mIsOpen = false //插屏广告开关（广告位3）
+    private var mIsOpenThree = false //完成页和广告位3页面切换开关
     var mSourcePage = ""
     var mCurrentPage = "insert_screen_ad_in_front_of_result_page"
     private val TAG = "GeekSdk"
@@ -76,6 +77,9 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         var isOpen = false;
         if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data && AppHolder.getInstance().switchInfoList.data.size > 0) {
             for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
+                if (PositionId.KEY_FINISH_SWITCH == switchInfoList.configKey) {
+                    mIsOpenThree = switchInfoList.isOpen
+                }
                 if (mTitle.equals(getString(R.string.tool_suggest_clean))) {
                     if (PositionId.KEY_CLEAN_ALL_SCREEN == switchInfoList.configKey) {
                         isOpen = switchInfoList.isOpen
@@ -257,7 +261,12 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
     }
 
     private fun goFinishActivity() {
-        if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (mIsOpenThree) {
+            val bundle = Bundle()
+            bundle.putString("title", mTitle)
+            bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))
+            startActivity(CleanFinishAdvertisementActivity::class.java, bundle)
+        } else if (mIsOpen && PreferenceUtil.getShowCount(this, mTitle, mRamScale, mNotifySize, mPowerSize) < 3) {
             val bundle = Bundle()
             bundle.putString("title", mTitle)
             bundle.putBoolean("main", getIntent().getBooleanExtra("main", false))

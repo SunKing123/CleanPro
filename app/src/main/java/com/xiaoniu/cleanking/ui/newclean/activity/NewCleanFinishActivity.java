@@ -1244,8 +1244,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                     @Override
                     public void adError(AdInfo info, int errorCode, String errorMsg) {
-                        Log.d(TAG, "adError 111： " + errorMsg);
                         if (null != info) {
+                            Log.d(TAG, "adError 111=" + errorCode + "---" + errorMsg + info.toString());
                             StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
                         }
                         showBottomAd();
@@ -1294,7 +1294,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
-    public void initAd02() {//
+    public void initAd02() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_MB_TWO
@@ -1329,8 +1329,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
                     @Override
                     public void adError(AdInfo info, int errorCode, String errorMsg) {
-                        Log.d(TAG, "adError2222");
                         if (null != info) {
+                            Log.d(TAG, "adError 222=" + errorCode + "---" + errorMsg + info.toString());
                             StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
                         }
                         showBottomAd2();
