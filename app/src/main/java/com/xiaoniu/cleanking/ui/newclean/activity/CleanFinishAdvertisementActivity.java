@@ -427,7 +427,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                     public void adSuccess(AdInfo info) {
                         if (null == info || null == ad_container_pos03)
                             return;
-                        Log.d(TAG, "adSuccess 完成页广告位3---" + info.toString());
+                        Log.d(TAG, "adSuccess 完成页广告位3---" + info.toString());//
                         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                         View adView = info.getAdView();
                         if (adView != null) {

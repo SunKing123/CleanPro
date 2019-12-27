@@ -1294,7 +1294,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
-    public void initAd02() {
+    public void initAd02() {//
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_MB_TWO

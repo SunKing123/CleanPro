@@ -84,7 +84,7 @@ ext {
             "GreenDaoUpgradeHelper"        : "com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0",
             "logger"                       : "com.orhanobut:logger:2.2.0",
             "mmkv"                         : "com.tencent:mmkv:1.0.23"
-//            "easy-popup"                   : "com.github.zyyoona7:EasyPopup:1.0.1",
+//            "easy-popup"                   : "com.github.zyyoona7:EasyPopup:1.0.1",//
 //            "particleview"                 : "com.github.shchurov:particleview:0.9.12",
 //            "hellodaemon"                  : "com.xdandroid:hellodaemon:+",
 //            "klog"                         : "com.github.zhaokaiqiang.klog:library:1.6.0"

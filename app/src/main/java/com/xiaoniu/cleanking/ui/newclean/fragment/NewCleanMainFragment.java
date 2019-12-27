@@ -432,7 +432,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!mIsFristShowTopAd) {
             StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
             mIsFristShowTopAd = true;
-        }
+        }//
         if (null == getActivity() || null == mTopAdFramelayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
         AdManager adManager = GeekAdSdk.getAdsManger();

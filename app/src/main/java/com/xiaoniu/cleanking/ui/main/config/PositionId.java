@@ -92,7 +92,7 @@ public class PositionId {
     public static final String AD_RED_PACKET = "red_envelopes_ad";//红包
     public static final String AD_FINISH_BEFOR = "cp_ad_1";//完成页前全屏视频
     public static final String AD_HOME_TOP = "homepage_ad_1";//首页上方广告
-    public static final String AD_HOME_TOP_MB = "homepage_ad_1_mb";//首页上方广告
+    public static final String AD_HOME_TOP_MB = "homepage_ad_1_mb";//首页上方广告//
     public static final String AD_HOME_BOTTOM = "homepage_ad_2";//首页下方广告
     public static final String AD_HOME_BOTTOM_MB = "homepage_ad_2_mb";//首页下方广告
     public static final String AD_CLEAN_FINISH_MB_ONE = "success_page_ad_1_mb";//完成页广告位1

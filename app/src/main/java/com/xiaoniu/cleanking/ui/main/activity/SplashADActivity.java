@@ -171,7 +171,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     /**
-     * 获取过审开关成功
+     * 获取过审开关成功//
      *
      * @param auditSwitch
      */
