@@ -91,4 +91,7 @@ public class PositionId {
     public static final String AD_HOME_BOTTOM = "homepage_ad_2";//首页下方广告
 
 
+    public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告
+
+
 }

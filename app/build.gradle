@@ -305,6 +305,10 @@ dependencies {
     implementation files('libs\\push-jpush.aar')
     implementation project(':otherlib:jksdk')
 
+    //百度统计sdk
+
+    implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
+
 
 }
 

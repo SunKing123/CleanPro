@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
+import com.baidu.mobstat.StatService;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.AppProfile;
@@ -53,6 +54,12 @@ public class AppApplication extends BaseApplication {
         sInstance = this;
         super.onCreate();
         ContextUtils.initApplication(this);
+//         获取测试设备ID
+        String testDeviceId = StatService.getTestDeviceId(this);
+// 日志输出
+        android.util.Log.d("BaiduMobStat", "Test DeviceId : " + testDeviceId);
+
+
     }
 
     /**

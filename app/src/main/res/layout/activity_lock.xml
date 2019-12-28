@@ -302,6 +302,39 @@
 
             </RelativeLayout>
 
+
+            <RelativeLayout
+                android:id="@+id/rel_interactive"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:onClick="interactionClick">
+
+                <ImageView
+                    android:id="@+id/iv_interactive"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/icon_lock_btn_hot" />
+
+                <TextView
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:gravity="center"
+                    android:alpha="0.6"
+                    android:id="@+id/tv_interactive"
+                    android:layout_below="@id/iv_interactive"
+                    android:textSize="12sp"
+                    />
+
+            </RelativeLayout>
+
+
         </LinearLayout>
 
     </LinearLayout>

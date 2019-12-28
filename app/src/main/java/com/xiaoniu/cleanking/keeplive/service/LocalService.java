@@ -888,6 +888,7 @@ public final class LocalService extends Service {
                 MmkvUtil.saveInt("appicon", 1);
                 MmkvUtil.saveInt("odlappicon", 0);
                 MmkvUtil.saveBool("isExecute", true);
+                StatisticsUtils.customTrackEvent("split_icon_establish", "分身图标创建时", "split_icon", "split_icon");
             }
 
         }
