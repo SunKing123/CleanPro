@@ -615,15 +615,15 @@ public final class LocalService extends Service {
         public void run() {
             runTime = System.currentTimeMillis();
             String packageName = getAppInfo();
-            if (TextUtils.equals(packageName, LocalService.this.getPackageName())) {
-                return;
-            }
-            if (!TextUtils.equals(oldPackageName, packageName)) {
-                if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
-                    oldPackageName = packageName;
-                    addCPAD();
-                } else {
-                    oldPackageName = "";
+            Log.e("dong", "packageName=" + packageName);
+            if (!TextUtils.equals(packageName, LocalService.this.getPackageName())) {
+                if (!TextUtils.equals(oldPackageName, packageName)) {
+                    if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
+                        oldPackageName = packageName;
+                        addCPAD();
+                    } else {
+                        oldPackageName = "";
+                    }
                 }
             }
             handler.postDelayed(mTask, 10000);
@@ -866,7 +866,7 @@ public final class LocalService extends Service {
                         ComponentName now = new ComponentName(getApplication(), getPackName(oldIndex));
                         QuickUtils.getInstant(this).disableComponent(now);
                     }
-                    if (newIndex >= appMap.size()-1) {
+                    if (newIndex >= appMap.size() - 1) {
                         MmkvUtil.saveInt("appicon", 0);
                     } else {
                         MmkvUtil.saveInt("appicon", newIndex + 1);
