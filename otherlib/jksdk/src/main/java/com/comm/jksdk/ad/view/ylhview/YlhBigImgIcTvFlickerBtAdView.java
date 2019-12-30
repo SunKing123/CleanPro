@@ -89,8 +89,8 @@ public class YlhBigImgIcTvFlickerBtAdView extends YlhAdView {
         requestOptions = new RequestOptions()
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
-        lottAdLownload.setAnimation("clean_finish_download.json");
-        lottAdLownload.setImageAssetsFolder("images_clean_download");
+        lottAdLownload.setAnimation("clean_btn_download.json");
+        lottAdLownload.setImageAssetsFolder("images_btn_download");
         lottAdLownload.playAnimation();
     }
 
@@ -193,7 +193,7 @@ public class YlhBigImgIcTvFlickerBtAdView extends YlhAdView {
 
     public void updateAdAction(TextView button, NativeUnifiedADData ad) {
         if (!ad.isAppAd()) {
-            button.setText("详情");
+            button.setText("查看详情");
             return;
         }
         switch (ad.getAppStatus()) {
@@ -216,7 +216,7 @@ public class YlhBigImgIcTvFlickerBtAdView extends YlhAdView {
                 button.setText("下载失败，重新下载");
                 break;
             default:
-                button.setText("详情");
+                button.setText("查看详情");
                 break;
         }
     }

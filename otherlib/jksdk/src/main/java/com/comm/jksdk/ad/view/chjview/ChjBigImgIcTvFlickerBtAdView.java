@@ -92,8 +92,8 @@ public class ChjBigImgIcTvFlickerBtAdView extends CHJAdView {
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
 
-        lottAdLownload.setAnimation("clean_finish_download.json");
-        lottAdLownload.setImageAssetsFolder("images_clean_download");
+        lottAdLownload.setAnimation("clean_btn_download.json");
+        lottAdLownload.setImageAssetsFolder("images_btn_download");
         lottAdLownload.playAnimation();
     }
 
@@ -225,7 +225,7 @@ public class ChjBigImgIcTvFlickerBtAdView extends CHJAdView {
             case TTAdConstant.INTERACTION_TYPE_DIAL:
             case TTAdConstant.INTERACTION_TYPE_LANDING_PAGE:
             case TTAdConstant.INTERACTION_TYPE_BROWSER:
-                tvAdDownload.setText("详情");
+                tvAdDownload.setText("查看详情");
             default:
 //                nativeAdContainer.setVisibility(View.GONE);
 //                ToastUtils.setToastStrShort("交互类型异常");

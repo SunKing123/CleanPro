@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dimen_15dp">
+    android:layout_margin="@dimen/dp_15">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -95,12 +95,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/dp_15"
-        android:layout_height="@dimen/dp_60">
+        android:layout_height="@dimen/dp_48">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lott_ad_download"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_60"
+            android:layout_height="@dimen/dp_48"
             app:lottie_autoPlay="true"
             android:scaleType="centerCrop"
             app:lottie_loop="true" />
@@ -108,11 +108,11 @@
         <TextView
             android:id="@+id/tv_ad_download"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_60"
+            android:layout_height="@dimen/dp_48"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="下载"
-            android:textStyle="bold"
+
             android:textColor="@color/white"
             android:textSize="17sp" />
     </RelativeLayout>
