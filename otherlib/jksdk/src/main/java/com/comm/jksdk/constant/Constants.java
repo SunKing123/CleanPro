@@ -89,6 +89,11 @@ public class Constants {
          * 信息流模板广告_带跑马灯
          */
         String FEED_TEMPLATE_LAMP = "FEED_TEMPLATE_LAMP";
+
+        /**
+         * 大图_带icon文字_激光按钮
+         */
+        String DATU_ICON_TEXT_FLICKER_BUTTON = "DATU_ICON_TEXT_FLICKER_BUTTON";
     }
 
 
