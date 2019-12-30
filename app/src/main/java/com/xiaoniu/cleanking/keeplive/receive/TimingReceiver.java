@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
@@ -123,10 +122,12 @@ public class TimingReceiver extends BroadcastReceiver {
             //判断广告开关
             boolean isOpen = false;
             int showTimes = 3;
+            int displayTime = 0;
             if (null != AppHolder.getInstance().getInsertAdSwitchmap()  ) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                 isOpen = null == map.get("page_outside_screen") ? false : map.get("page_outside_screen").isOpen();
                 showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
+                displayTime = null == map.get("page_outside_screen") ? 0 : map.get("page_outside_screen").getDisplayTime();
             }
             if (!isOpen) return;
 
@@ -134,9 +135,9 @@ public class TimingReceiver extends BroadcastReceiver {
             long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME)) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME));
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
 
-            //一小时内N次
-            if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime)<= (60 * 60 * 1000) && number < showTimes)) {
-                if((System.currentTimeMillis() - pretime)> (60 * 60 * 1000)){//超过一小时
+            //第一次|| 间隔时间大于一个小时||一小时内N次（N<showRate）(每次间隔时间<displayTime)
+            if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) > displayTime && (System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
+                if((System.currentTimeMillis() - pretime)> (60 * 60 * 1000)){//超过一小时重置次数
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS,0);
                 }
                 if(NetworkUtils.isNetConnected()){
