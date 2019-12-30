@@ -236,6 +236,13 @@ android {
 
         }
 
+        //构建apk的名字 项目名称(缩写或小写)_APP版本_日期(年月日_时分)_环境模式
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "clean_${defaultConfig.versionName}_${getSimpleDate()}_${variant.buildType.name}.apk"
+            }
+        }
+
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
@@ -740,4 +747,9 @@ task sortPublicTxt() {
             sortedFile.append("${it}\n")
         }
     }
+}
+
+
+def getSimpleDate() {
+    return new Date().format("yyyyMMdd_HHmm", TimeZone.getDefault())
 }
