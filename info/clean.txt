@@ -1,13 +1,2 @@
-gj_baidu
-gj_yingyongbao
-gj_vivo
-gj_huawei
-gj_xiaomi
-gj_sougou
-gj_lianxiang
-gj_sanxing
-gj_yingyonghui
-gj_anzhi
-gj_official
-gj_meizu
-gj_wandoujia
+gj_oppo
+gj_360

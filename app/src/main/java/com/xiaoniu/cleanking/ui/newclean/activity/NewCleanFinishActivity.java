@@ -12,10 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.comm.jksdk.GeekAdSdk;
@@ -69,6 +65,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Random;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cn.jzvd.Jzvd;
 
 /**
@@ -1096,7 +1095,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         /*---------------------------------------- 埋点---------------------------------------------------------------------*/
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //清理极速管家
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
@@ -1140,7 +1139,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void onPause() {
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //清理极速管家
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
