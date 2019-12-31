@@ -153,10 +153,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyExternalDb();
         }
-        StatService.setDebugOn(true);
-        StatService.autoTrace(this);
-        StatService.setOn(this, StatService.EXCEPTION_LOG);
-        StatService.start(this);
     }
 
 

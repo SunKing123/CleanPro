@@ -153,7 +153,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         rel_interactive = ViewUtils.get(this, R.id.rel_interactive);
         iv_interactive = ViewUtils.get(this, R.id.iv_interactive);
-
+        rel_interactive.setOnClickListener(this::onClick);
 
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
@@ -230,10 +230,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 互动式广告点击
      */
-    public void interactionClick(View view) {
-
-//        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-//        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
+    public void interactionClick() {
+        StatisticsUtils.trackClick("interactive_advertising_click", "互动式广告点击", "lock_screen", "lock_screen");
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > mInteractionList.size() - 1) {
                 mInteractionPoistion = 0;
@@ -570,6 +568,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
 
+                break;
+            case R.id.rel_interactive:
+                interactionClick();
                 break;
 
         }

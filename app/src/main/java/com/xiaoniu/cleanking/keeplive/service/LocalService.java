@@ -122,7 +122,7 @@ public final class LocalService extends Service {
     private int mShowRoate = 0;
     private int mDispalyTime = 0;
 
-    private void JsonToBean(int showRoate,int dispalyTime) {
+    private void JsonToBean(int showRoate, int dispalyTime) {
         isExeTask = true;
         mShowRoate = showRoate;
         mDispalyTime = dispalyTime;
@@ -214,10 +214,10 @@ public final class LocalService extends Service {
                 if (dataBean != null && dataBean.isOpen()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (isSecurityPermissionOpen(this)) {
-                            JsonToBean(dataBean.getShowRate(),dataBean.getDisplayTime());
+                            JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
                         }
                     } else {
-                        JsonToBean(dataBean.getShowRate(),dataBean.getDisplayTime());
+                        JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
                     }
                 }
             }
@@ -642,7 +642,7 @@ public final class LocalService extends Service {
                     return true;
                 } else {
                     if (isToday(list.get(0).getTime())) {
-                        if (isBeforDispalyTime(appPackageNameListDB.getDisplaytime(),mDispalyTime) && appPackageNameListDB.getIndex() < (mShowRoate <= 0 ? 2 : mShowRoate)) {
+                        if (isBeforDispalyTime(appPackageNameListDB.getDisplaytime(), mDispalyTime) && appPackageNameListDB.getIndex() < (mShowRoate <= 0 ? 2 : mShowRoate)) {
                             appPackageNameListDB.setIndex(appPackageNameListDB.getIndex() + 1);
                             appPackageNameListDB.setDisplaytime(System.currentTimeMillis());
                             GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
@@ -692,7 +692,7 @@ public final class LocalService extends Service {
      * @return boolean
      */
     public boolean isBeforDispalyTime(long sdate, int intervalTime) {
-        if (System.currentTimeMillis()- sdate >= intervalTime * 60 * 1000) {
+        if (System.currentTimeMillis() - sdate >= intervalTime * 60 * 1000) {
             return true;
         }
         return false;
@@ -874,7 +874,7 @@ public final class LocalService extends Service {
                     if (oldIndex == newIndex) {
                         return;
                     }
-
+                    StatisticsUtils.customTrackEvent("split_icon_meet_the_opportunity_display", "分身图标满足创建时机时", "split_icon", "split_icon");
                     ComponentName apple = new ComponentName(getApplication(), getPackName(newIndex));
                     QuickUtils.getInstant(this).enableComponent(apple);
 
@@ -899,6 +899,8 @@ public final class LocalService extends Service {
                     MmkvUtil.saveInt("appicon", 0);
                 }
             } else if (MmkvUtil.getInt("appicon", 0) == 0 && !MmkvUtil.getBool("isExecute", false)) {
+                StatisticsUtils.customTrackEvent("split_icon_meet_the_opportunity_display", "分身图标满足创建时机时", "split_icon", "split_icon");
+
                 ComponentName newAPP = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
                 QuickUtils.getInstant(this).enableComponent(newAPP);
                 MmkvUtil.saveInt("appicon", 1);

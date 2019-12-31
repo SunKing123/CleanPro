@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
+import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 
@@ -54,12 +55,9 @@ public class AppApplication extends BaseApplication {
         sInstance = this;
         super.onCreate();
         ContextUtils.initApplication(this);
-//         获取测试设备ID
-        String testDeviceId = StatService.getTestDeviceId(this);
-// 日志输出
-        android.util.Log.d("BaiduMobStat", "Test DeviceId : " + testDeviceId);
-
-
+        //接入百度统计sdk
+        StatService.setAppChannel(this,ChannelUtil.getChannel(),true);
+        StatService.autoTrace(this);
     }
 
     /**

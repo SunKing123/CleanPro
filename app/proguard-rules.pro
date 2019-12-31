@@ -28,6 +28,10 @@
 #-keep class com.google.**{*;}
 -keepattributes Signature
 -keepattributes *Annotation*
+
+-keep class com.baidu.mobstat.** { *; }
+-keep class com.baidu.bottom.** { *; }
+
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
 -keep class com.dubai.fa.model.** { *; }

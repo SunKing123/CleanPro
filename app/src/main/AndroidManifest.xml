@@ -673,10 +673,10 @@
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
             android:value="1e37f31fbf" />
-        <!-- 渠道商编号 -->
-        <meta-data
-            android:name="BaiduMobAd_CHANNEL"
-            android:value="Baidu Market" />
+<!--        &lt;!&ndash; 渠道商编号 &ndash;&gt;-->
+<!--        <meta-data-->
+<!--            android:name="BaiduMobAd_CHANNEL"-->
+<!--            android:value="Baidu Market" />-->
         <!-- 是否开启错误日志统计，默认为false -->
         <meta-data
             android:name="BaiduMobAd_EXCEPTION_LOG"
