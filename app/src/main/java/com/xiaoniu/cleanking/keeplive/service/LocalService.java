@@ -120,10 +120,12 @@ public final class LocalService extends Service {
     //    private AppPackageNameListDB appPackageNameList;
 //    private AppPackageNameListDB.DataBean mDataBean;
     private int mShowRoate = 0;
+    private int mDispalyTime = 0;
 
-    private void JsonToBean(int showRoate) {
+    private void JsonToBean(int showRoate,int dispalyTime) {
         isExeTask = true;
         mShowRoate = showRoate;
+        mDispalyTime = dispalyTime;
         if (GreenDaoManager.getInstance().isAppListNull()) {
             String json = FileUtils.readJSONFromAsset(this, "applist.json");
             try {
@@ -212,10 +214,10 @@ public final class LocalService extends Service {
                 if (dataBean != null && dataBean.isOpen()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (isSecurityPermissionOpen(this)) {
-                            JsonToBean(dataBean.getShowRate());
+                            JsonToBean(dataBean.getShowRate(),dataBean.getDisplayTime());
                         }
                     } else {
-                        JsonToBean(dataBean.getShowRate());
+                        JsonToBean(dataBean.getShowRate(),dataBean.getDisplayTime());
                     }
                 }
             }
@@ -607,7 +609,7 @@ public final class LocalService extends Service {
         context.startActivity(screenIntent);
     }
 
-    private String oldPackageName = "";
+    //    private String oldPackageName = "";
     private long runTime = 0;
     @SuppressLint("HandlerLeak")
     Runnable mTask = new Runnable() {
@@ -617,14 +619,11 @@ public final class LocalService extends Service {
             String packageName = getAppInfo();
             Log.e("dong", "packageName=" + packageName);
             if (!TextUtils.equals(packageName, LocalService.this.getPackageName())) {
-                if (!TextUtils.equals(oldPackageName, packageName)) {
-                    if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
-                        oldPackageName = packageName;
-                        addCPAD();
-                    } else {
-                        oldPackageName = "";
-                    }
+//                if (!TextUtils.equals(oldPackageName, packageName)) {
+                if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
+                    addCPAD();
                 }
+//                }
             }
             handler.postDelayed(mTask, 10000);
         }
@@ -636,23 +635,25 @@ public final class LocalService extends Service {
             if (list != null && list.size() > 0) {
                 AppPackageNameListDB appPackageNameListDB = list.get(0);
                 if (TextUtils.isEmpty(appPackageNameListDB.getTime())) {
-                    appPackageNameListDB.setTime(dateFormater2.get().format(new Date()));
+                    appPackageNameListDB.setTime(dateFormater.get().format(new Date()));
                     appPackageNameListDB.setIndex(1);
-
+                    appPackageNameListDB.setDisplaytime(System.currentTimeMillis());
                     GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
                     return true;
                 } else {
                     if (isToday(list.get(0).getTime())) {
-                        if (appPackageNameListDB.getIndex() < (mShowRoate <= 0 ? 2 : mShowRoate)) {
+                        if (isBeforDispalyTime(appPackageNameListDB.getDisplaytime(),mDispalyTime) && appPackageNameListDB.getIndex() < (mShowRoate <= 0 ? 2 : mShowRoate)) {
                             appPackageNameListDB.setIndex(appPackageNameListDB.getIndex() + 1);
+                            appPackageNameListDB.setDisplaytime(System.currentTimeMillis());
                             GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        appPackageNameListDB.setTime(dateFormater2.get().format(new Date()));
+                        appPackageNameListDB.setTime(dateFormater.get().format(new Date()));
                         appPackageNameListDB.setIndex(1);
+                        appPackageNameListDB.setDisplaytime(System.currentTimeMillis());
                         GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
                         return true;
                     }
@@ -674,13 +675,27 @@ public final class LocalService extends Service {
         Date time = toDate(sdate);
         Date today = new Date();
         if (time != null) {
-            String nowDate = dateFormater2.get().format(today);
-            String timeDate = dateFormater2.get().format(time);
+            String nowDate = dateFormater.get().format(today);
+            String timeDate = dateFormater.get().format(time);
             if (nowDate.equals(timeDate)) {
                 b = true;
             }
         }
         return b;
+    }
+
+
+    /**
+     * 判断给定字符串时间是是否大于指定的时间
+     *
+     * @param sdate
+     * @return boolean
+     */
+    public boolean isBeforDispalyTime(long sdate, int intervalTime) {
+        if (System.currentTimeMillis()- sdate >= intervalTime * 60 * 1000) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -709,9 +724,10 @@ public final class LocalService extends Service {
     private final static ThreadLocal<SimpleDateFormat> dateFormater2 = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd");
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm");
         }
     };
+
 
     private UsageStatsManager mUsageStatsManager;
 

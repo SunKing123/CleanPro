@@ -3,9 +3,13 @@ package com.comm.jksdk.ad.admanager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
@@ -14,6 +18,7 @@ import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.factory.RequestManagerFactory;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -51,6 +56,7 @@ import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
@@ -652,9 +658,14 @@ public class NativeAdManger implements AdManager {
             return;
         }
         String style = adInfo.getAdStyle();
+        //信息流模板广告_带跑马灯
+        if (Constants.AdStyle.FEED_TEMPLATE_LAMP.equals(style)) {
+            showCsjFeedTemplate(activity, adInfo,true);
+            return;
+        }
         //信息流模板广告
         if (Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
-            showCsjFeedTemplate(activity, adInfo);
+            showCsjFeedTemplate(activity, adInfo,false);
             return;
         }
         //全屏视频
@@ -724,7 +735,7 @@ public class NativeAdManger implements AdManager {
      * @param activity
      * @param info
      */
-    private void showCsjFeedTemplate(Activity activity, AdInfo info) {
+    private void showCsjFeedTemplate(Activity activity, AdInfo info,boolean islamp) {
         TTNativeExpressAd ttNativeExpressAd = info.getTtNativeExpressAd();
         ttNativeExpressAd.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
             @Override
@@ -756,7 +767,26 @@ public class NativeAdManger implements AdManager {
 //                TToast.show(mContext, "渲染成功");
 //                mExpressContainer.removeAllViews();
 //                mExpressContainer.addView(view);
-                info.setAdView(view);
+                if(islamp){//带跑马灯样式
+                    RelativeLayout rl = new RelativeLayout(activity);
+                    int currentpx = DisplayUtil.dp2px(activity,10);
+                    rl.setPadding(currentpx,currentpx,currentpx,currentpx);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        AnimationDrawable mAnimationDrawable;
+                        rl.setBackground(activity.getResources().getDrawable(R.drawable.anim_ad));
+                        if (rl.getBackground() instanceof AnimationDrawable) {
+                            mAnimationDrawable = (AnimationDrawable) rl.getBackground();
+                            mAnimationDrawable.start();
+                        }
+                    }
+                    RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp1.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    rl.addView(view, lp1);
+                    info.setAdView(rl);
+                }else{
+                    info.setAdView(view);
+                }
+
                 if (mAdListener != null) {
                     mAdListener.adSuccess(info);
                 }

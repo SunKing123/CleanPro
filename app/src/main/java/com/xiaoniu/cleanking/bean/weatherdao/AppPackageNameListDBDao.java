@@ -29,6 +29,7 @@ public class AppPackageNameListDBDao extends AbstractDao<AppPackageNameListDB, L
         public final static Property Index = new Property(2, int.class, "index", false, "INDEX");
         public final static Property Name = new Property(3, String.class, "name", false, "NAME");
         public final static Property Time = new Property(4, String.class, "time", false, "TIME");
+        public final static Property Displaytime = new Property(5, long.class, "displaytime", false, "DISPLAYTIME");
     }
 
 
@@ -48,7 +49,8 @@ public class AppPackageNameListDBDao extends AbstractDao<AppPackageNameListDB, L
                 "\"PACKAGE_NAME\" TEXT," + // 1: packageName
                 "\"INDEX\" INTEGER NOT NULL ," + // 2: index
                 "\"NAME\" TEXT," + // 3: name
-                "\"TIME\" TEXT);"); // 4: time
+                "\"TIME\" TEXT," + // 4: time
+                "\"DISPLAYTIME\" INTEGER NOT NULL );"); // 5: displaytime
     }
 
     /** Drops the underlying database table. */
@@ -81,6 +83,7 @@ public class AppPackageNameListDBDao extends AbstractDao<AppPackageNameListDB, L
         if (time != null) {
             stmt.bindString(5, time);
         }
+        stmt.bindLong(6, entity.getDisplaytime());
     }
 
     @Override
@@ -107,6 +110,7 @@ public class AppPackageNameListDBDao extends AbstractDao<AppPackageNameListDB, L
         if (time != null) {
             stmt.bindString(5, time);
         }
+        stmt.bindLong(6, entity.getDisplaytime());
     }
 
     @Override
@@ -121,7 +125,8 @@ public class AppPackageNameListDBDao extends AbstractDao<AppPackageNameListDB, L
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // packageName
             cursor.getInt(offset + 2), // index
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // time
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // time
+            cursor.getLong(offset + 5) // displaytime
         );
         return entity;
     }
@@ -133,6 +138,7 @@ public class AppPackageNameListDBDao extends AbstractDao<AppPackageNameListDB, L
         entity.setIndex(cursor.getInt(offset + 2));
         entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setTime(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDisplaytime(cursor.getLong(offset + 5));
      }
     
     @Override

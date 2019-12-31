@@ -78,15 +78,15 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void getData(InteractionSwitchList switchInfoList) {
-//                for (InteractionSwitchList.DataBean dataBean : switchInfoList.getData()) {
-//                    if (TextUtils.equals(dataBean.getAdvertPosition(), "")) {
+                for (InteractionSwitchList.DataBean dataBean : switchInfoList.getData()) {
+                    if (TextUtils.equals(dataBean.getSwitcherKey(), "page_lock")) {
                         try {
                             MmkvUtil.saveString(PositionId.LOCK_INTERACTIVE, JSONObject.toJSONString(switchInfoList.getData().get(0)));
                             Log.e("dong",JSONObject.toJSONString(switchInfoList.getData().get(0)));
                         } catch (Exception e) {
                         }
-//                    }
-//                }
+                    }
+                }
                 mView.getInteractionSwitchSuccess(switchInfoList);
             }
 

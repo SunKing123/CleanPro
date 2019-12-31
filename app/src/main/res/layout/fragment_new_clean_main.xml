@@ -22,14 +22,6 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/iv_interaction"
-            android:layout_width="@dimen/dimen_35dp"
-            android:layout_height="@dimen/dimen_35dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:visibility="invisible" />
-
     </RelativeLayout>
 
     <!--完成动画-->
@@ -636,4 +628,13 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/iv_interaction"
+        android:layout_width="@dimen/dimen_65dp"
+        android:layout_height="@dimen/dimen_65dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dimen_10dp"
+        android:visibility="gone" />
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

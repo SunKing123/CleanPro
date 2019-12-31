@@ -24,6 +24,7 @@ public class InteractionSwitchList extends BaseEntity {
         private boolean isOpen;
         private String configKey;
         private String switcherName;
+        private String switcherKey;
         private String advertPosition;
         private String versions;
         private String advertId;
@@ -39,6 +40,10 @@ public class InteractionSwitchList extends BaseEntity {
 
         public String getSwitcherName() {
             return switcherName;
+        }
+
+        public String getSwitcherKey() {
+            return switcherKey;
         }
 
         public String getAdvertPosition() {

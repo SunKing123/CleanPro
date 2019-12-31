@@ -46,6 +46,7 @@ public class PositionId {
     public static final String KEY_VIDEO_PLAY = "page_video_play_screen";
 
 
+    public static final String KEY_FINISH_SWITCH = "page_res_fixed_ad_3";
     public static final String KEY_CLEAN_ALL_SCREEN = "page_immediately_complete_screen";
     public static final String KEY_PHONE_SCREEN = "page_phone_clear_complete_screen";
     public static final String KEY_JIASU_SCREEN = "page_speed_up_complete_screen";
@@ -77,6 +78,10 @@ public class PositionId {
     public static final String AD_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
     public static final String AD_LOCK_SCREEN_ADVERTISING_1_3_0 = "lock_screen_advertising_1.3.0";
 
+    //新加位置（模板样式）
+    public static final String AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB = "personal_center_page_below_ad_mb";
+    public static final String AD_ACCELERATION_PAGE_BELOW_AD_MB = "acceleration_page_below_ad_mb";
+
     public static final String AD_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
     public static final String AD_ACCELERATION_PAGE_BELOW = "acceleration_page_below_ad";
     public static final String AD_PERSONAL_CENTER_PAGE_BELOW = "personal_center_page_below_ad";
@@ -88,7 +93,12 @@ public class PositionId {
     public static final String AD_RED_PACKET = "red_envelopes_ad";//红包
     public static final String AD_FINISH_BEFOR = "cp_ad_1";//完成页前全屏视频
     public static final String AD_HOME_TOP = "homepage_ad_1";//首页上方广告
+    public static final String AD_HOME_TOP_MB = "homepage_ad_1_mb";//首页上方广告//
     public static final String AD_HOME_BOTTOM = "homepage_ad_2";//首页下方广告
+    public static final String AD_HOME_BOTTOM_MB = "homepage_ad_2_mb";//首页下方广告
+    public static final String AD_CLEAN_FINISH_MB_ONE = "success_page_ad_1_mb";//完成页广告位1
+    public static final String AD_CLEAN_FINISH_MB_TWO = "success_page_ad_2_mb";//完成页广告位2
+    public static final String AD_CLEAN_FINISH_MB_THREE = "success_page_ad_3_mb";//完成页广告位3
 
 
     public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告

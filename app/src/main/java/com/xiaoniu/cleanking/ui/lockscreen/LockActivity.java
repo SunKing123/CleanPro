@@ -78,7 +78,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mLockTime, mLockDate, tv_weather_temp;
     private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus, rel_interactive;
     private ImageView iv_file_btn, iv_ram_btn, iv_virus_btn, mErrorAdIv, iv_interactive;
-    private TextView tv_file_size, tv_ram_size, tv_virus_size, tv_interactive;
+    private TextView tv_file_size, tv_ram_size, tv_virus_size;
     private LinearLayout lin_tem_top, lin_tem_bottom, linAdLayout;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
     private SimpleDateFormat monthFormat = new SimpleDateFormat("MM月dd日", Locale.getDefault());
@@ -155,7 +155,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         rel_interactive = ViewUtils.get(this, R.id.rel_interactive);
         iv_interactive = ViewUtils.get(this, R.id.iv_interactive);
-        tv_interactive = ViewUtils.get(this, R.id.tv_interactive);
 
 
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
@@ -219,7 +218,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 rel_interactive.setVisibility(View.VISIBLE);
                 mInteractionList = dataBean.getSwitchActiveLineDTOList();
                 Glide.with(this).load(dataBean.getSwitchActiveLineDTOList().get(0).getImgUrl()).into(iv_interactive);
-                tv_interactive.setText(dataBean.getSwitchActiveLineDTOList().get(0).getActiveId());
             }
         }
     }
@@ -429,11 +427,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             }
             if (mInteractionList.size() == 1) {
                 GlideUtils.loadGif(this, mInteractionList.get(0).getImgUrl(), iv_interactive, 10000);
-                tv_interactive.setText(mInteractionList.get(mInteractionPoistion).getActiveId());
             } else {
                 if (mInteractionList.size() - 1 >= mInteractionPoistion) {
                     GlideUtils.loadGif(this, mInteractionList.get(mInteractionPoistion).getImgUrl(), iv_interactive, 10000);
-                    tv_interactive.setText(mInteractionList.get(mInteractionPoistion).getActiveId());
                 }
             }
         }

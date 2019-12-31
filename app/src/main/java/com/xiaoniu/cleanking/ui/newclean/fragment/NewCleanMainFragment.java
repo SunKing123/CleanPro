@@ -18,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
@@ -25,6 +30,7 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -87,10 +93,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -430,62 +432,64 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!mIsFristShowTopAd) {
             StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
             mIsFristShowTopAd = true;
-        }
+        }//
         if (null == getActivity() || null == mTopAdFramelayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(getActivity(), "homepage_ad_1", new AdListener() { //暂时这样
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                    if (null != mTopAdFramelayout && null != info.getAdView()) {
-                        mTopContentView.setVisibility(View.GONE);
-                        mTopAdFramelayout.setVisibility(VISIBLE);
-                        mTopAdFramelayout.removeAllViews();
-                        mTopAdFramelayout.addView(info.getAdView());
+        adManager.loadNativeTemplateAd(getActivity(), PositionId.AD_HOME_TOP_MB
+                , Float.valueOf(DisplayUtil.px2dp(getActivity(), DisplayUtil.getScreenWidth(getActivity())) - 28)
+                , new AdListener() {
+                    @Override
+                    public void adSuccess(AdInfo info) {
+                        if (null != info) {
+                            Log.d(TAG, "adSuccess---home--top =" + info.toString());
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                            if (null != mTopAdFramelayout && null != info.getAdView()) {
+                                mTopContentView.setVisibility(View.GONE);
+                                mTopAdFramelayout.setVisibility(VISIBLE);
+                                mTopAdFramelayout.removeAllViews();
+                                mTopAdFramelayout.addView(info.getAdView());
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "adExposed---home--top");
-                mIsTopAdExposed = true;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-            }
+                    @Override
+                    public void adExposed(AdInfo info) {
+                        if (null == info) return;
+                        Log.d(TAG, "adExposed---home--top");
+                        mIsTopAdExposed = true;
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                    }
 
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked---home--top");
-                if (null == info) return;
-                if (mIsTopAdExposed) {
-                    StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-                } else {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                }
-                if (info.getAdClickType() == 2) { //2=详情
-                    mIsClickAdTopDetail = true;
-                } else {
-                    mIsClickAdTopDetail = false;
-                }
-            }
+                    @Override
+                    public void adClicked(AdInfo info) {
+                        Log.d(TAG, "adClicked---home--top");
+                        if (null == info) return;
+                        if (mIsTopAdExposed) {
+                            StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                        } else {
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                        }
+                        if (info.getAdClickType() == 2) { //2=详情
+                            mIsClickAdTopDetail = true;
+                        } else {
+                            mIsClickAdTopDetail = false;
+                        }
+                    }
 
-            @Override
-            public void adClose(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-            }
+                    @Override
+                    public void adClose(AdInfo info) {
+                        if (null == info) return;
+                        StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                    }
 
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (null == info) return;
-                Log.d(TAG, "adError---home--top=" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
-            }
-        });
+                    @Override
+                    public void adError(AdInfo info, int errorCode, String errorMsg) {
+                        if (null == info) return;
+                        Log.d(TAG, "adError---home--top=" + info.toString());
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+                    }
+                });
     }
 
     /**
@@ -505,57 +509,59 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == getActivity() || null == mCenterAdFramelayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", "home_page", "home_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(getActivity(), PositionId.AD_HOME_BOTTOM, new AdListener() { //暂时这样
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.d(TAG, "adSuccess--home--center =" + info.toString());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                    if (null != mCenterAdFramelayout && null != info.getAdView()) {
-                        mCenterAdFramelayout.setVisibility(VISIBLE);
-                        mCenterAdFramelayout.removeAllViews();
-                        mCenterAdFramelayout.addView(info.getAdView());
+        adManager.loadNativeTemplateAd(getActivity(), PositionId.AD_HOME_BOTTOM_MB
+                , Float.valueOf(DisplayUtil.px2dp(getActivity(), DisplayUtil.getScreenWidth(getActivity())) - 28)
+                , new AdListener() {
+                    @Override
+                    public void adSuccess(AdInfo info) {
+                        if (null != info) {
+                            Log.d(TAG, "adSuccess--home--center =" + info.toString());
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                            if (null != mCenterAdFramelayout && null != info.getAdView()) {
+                                mCenterAdFramelayout.setVisibility(VISIBLE);
+                                mCenterAdFramelayout.removeAllViews();
+                                mCenterAdFramelayout.addView(info.getAdView());
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "adExposed--home--center");
-                mIsCenterAdExposed = true;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
-            }
+                    @Override
+                    public void adExposed(AdInfo info) {
+                        if (null == info) return;
+                        Log.d(TAG, "adExposed--home--center");
+                        mIsCenterAdExposed = true;
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
+                    }
 
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked--home--center");
-                if (null == info) return;
-                if (mIsCenterAdExposed) {
-                    StatisticsUtils.clickAD("ad_click", "网络加速激励视频结束页下载点击", "2", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
-                } else {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                }
-                if (info.getAdClickType() == 2) { //2=详情
-                    mIsClickAdCenterDetail = true;
-                } else {
-                    mIsClickAdCenterDetail = false;
-                }
-            }
+                    @Override
+                    public void adClicked(AdInfo info) {
+                        Log.d(TAG, "adClicked--home--center");
+                        if (null == info) return;
+                        if (mIsCenterAdExposed) {
+                            StatisticsUtils.clickAD("ad_click", "网络加速激励视频结束页下载点击", "2", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
+                        } else {
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                        }
+                        if (info.getAdClickType() == 2) { //2=详情
+                            mIsClickAdCenterDetail = true;
+                        } else {
+                            mIsClickAdCenterDetail = false;
+                        }
+                    }
 
-            @Override
-            public void adClose(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
-            }
+                    @Override
+                    public void adClose(AdInfo info) {
+                        if (null == info) return;
+                        StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
+                    }
 
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (null == info) return;
-                Log.d(TAG, "adError--home--center =" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
-            }
-        });
+                    @Override
+                    public void adError(AdInfo info, int errorCode, String errorMsg) {
+                        if (null == info) return;
+                        Log.d(TAG, "adError--home--center =" + errorCode + "---" + errorMsg + info.toString());
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+                    }
+                });
     }
 
     @Override
@@ -917,17 +923,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            boolean mIsOpenThree = false;
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
+
                 }
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -960,17 +974,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(PhoneSuperPowerActivity.class);
         } else {
             boolean isOpen = false;
+            boolean mIsOpenThree = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1051,17 +1073,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(WechatCleanHomeActivity.class);
         } else {
             boolean isOpen = false;
+            boolean mIsOpenThree = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1088,17 +1117,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            boolean mIsOpenThree = false;
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
 
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1126,16 +1162,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
             boolean isOpen = false;
+            boolean mIsOpenThree = false;
             //solve umeng error --> SwitchInfoList.getData()' on a null object reference
             if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                     && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                 for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
                     if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                         isOpen = switchInfoList.isOpen();
                     }
                 }
             }
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -1412,15 +1456,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void goFinishActivity() {
         boolean isOpen = false;
+        boolean mIsOpenThree = false;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                    mIsOpenThree = switchInfoList.isOpen();
+                }
                 if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();
                 }
             }
         }
-        if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
+        if (mIsOpenThree) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.game_quicken));
+            startActivity(CleanFinishAdvertisementActivity.class, bundle);
+        } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();
             bundle.putString("title", getString(R.string.game_quicken));
             startActivity(CleanFinishAdvertisementActivity.class, bundle);

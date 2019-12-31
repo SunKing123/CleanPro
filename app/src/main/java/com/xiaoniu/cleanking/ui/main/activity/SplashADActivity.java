@@ -14,7 +14,11 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.baidu.mobstat.StatService;
+
+import androidx.annotation.Nullable;
+
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -40,7 +44,6 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
-import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -57,7 +60,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -151,14 +153,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyExternalDb();
         }
-
-
         StatService.setDebugOn(true);
         StatService.autoTrace(this);
         StatService.setOn(this, StatService.EXCEPTION_LOG);
         StatService.start(this);
-
-
     }
 
 
@@ -178,19 +176,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
     }
 
-    public void geekAdSDKConfigSuccess() {
-        initHomeCenterAD();
-    }
-
     /**
-     * 首页下方广告预加载
-     */
-    private void initHomeCenterAD() {
-        ADUtilsKt.preloadingAd(this, PositionId.AD_HOME_BOTTOM, "首页下方广告");
-    }
-
-    /**
-     * 获取过审开关成功
+     * 获取过审开关成功//
      *
      * @param auditSwitch
      */
@@ -457,7 +444,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                         return;
                     container.setVisibility(View.GONE);
                     mErrorAdIv.setVisibility(View.VISIBLE);
-                    GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    if (dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl().contains(".gif")) {
+                        GlideUtils.loadGif(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv, 1000);
+                    } else {
+                        GlideUtils.loadImage(SplashADActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
+                    }
                     mErrorAdIv.setOnClickListener(v -> {
                         mIsAdError = true;
                         StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", "clod_splash_page", "clod_splash_page", dataBean.getSwitcherName());

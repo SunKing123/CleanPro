@@ -18,6 +18,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -214,17 +215,24 @@ public class ToolFragment extends SimpleFragment {
                 // 每次清理间隔 至少3秒
                 startActivity(WechatCleanHomeActivity.class);
             } else {
-
                 boolean isOpen = false;
+                boolean mIsOpenThree = false;
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                            mIsOpenThree = switchInfoList.isOpen();
+                        }
                         if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (mIsOpenThree) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_chat_clear));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -255,19 +263,25 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
-
                 boolean isOpen = false;
-                //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+                boolean mIsOpenThree = false;
                 if (AppHolder.getInstance().getSwitchInfoList() != null && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                            mIsOpenThree = switchInfoList.isOpen();
+                        }
                         if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();
                         }
                     }
                 }
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (mIsOpenThree) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_one_key_speed));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_one_key_speed));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -293,17 +307,24 @@ public class ToolFragment extends SimpleFragment {
             if (PreferenceUtil.getCoolingCleanTime()) {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             } else {
-
                 boolean isOpen = false;
+                boolean mIsOpenThree = false;
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                            mIsOpenThree = switchInfoList.isOpen();
+                        }
                         if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                             isOpen = switchInfoList.isOpen();
                         }
                     }
                 }
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (mIsOpenThree) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -425,8 +446,7 @@ public class ToolFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        initGeekAdSdk();
-        mAdManager.loadAd(getActivity(), PositionId.AD_ACCELERATION_PAGE_BELOW, new AdListener() { //暂时这样
+        GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity, PositionId.AD_ACCELERATION_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(mContext, DisplayUtil.getScreenWidth(mContext)) - 24), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
