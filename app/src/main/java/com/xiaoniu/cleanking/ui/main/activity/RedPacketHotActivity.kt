@@ -228,6 +228,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     }
 
     override fun onDestroy() {
+        WebDialogManager.getInstance().dismissDialog()
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }

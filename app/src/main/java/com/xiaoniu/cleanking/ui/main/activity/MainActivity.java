@@ -5,10 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -214,9 +212,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         checkReadPermission();
 
-        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        //扫描更新系统数据库
-        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);
+//        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+//        //扫描更新系统数据库
+//        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);
 
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
