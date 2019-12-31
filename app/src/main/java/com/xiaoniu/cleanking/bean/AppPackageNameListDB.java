@@ -24,14 +24,16 @@ public class AppPackageNameListDB {
     private int index;
     private String name;
     private String time;
-    @Generated(hash = 1652023735)
+    private long displaytime;
+    @Generated(hash = 516810378)
     public AppPackageNameListDB(Long id, String packageName, int index, String name,
-            String time) {
+            String time, long displaytime) {
         this.id = id;
         this.packageName = packageName;
         this.index = index;
         this.name = name;
         this.time = time;
+        this.displaytime = displaytime;
     }
     @Generated(hash = 886929937)
     public AppPackageNameListDB() {
@@ -66,5 +68,11 @@ public class AppPackageNameListDB {
     public void setTime(String time) {
         this.time = time;
     }
-
+    public long getDisplaytime() {
+        return this.displaytime;
+    }
+    public void setDisplaytime(long displaytime) {
+        this.displaytime = displaytime;
+    }
+    
 }

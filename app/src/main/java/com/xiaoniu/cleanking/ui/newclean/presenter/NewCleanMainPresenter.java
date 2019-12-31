@@ -1,8 +1,13 @@
 package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -10,11 +15,15 @@ import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -69,6 +78,15 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void getData(InteractionSwitchList switchInfoList) {
+                for (InteractionSwitchList.DataBean dataBean : switchInfoList.getData()) {
+                    if (TextUtils.equals(dataBean.getSwitcherKey(), "page_lock")) {
+                        try {
+                            MmkvUtil.saveString(PositionId.LOCK_INTERACTIVE, JSONObject.toJSONString(dataBean));
+                            Log.e("dong",JSONObject.toJSONString(dataBean));
+                        } catch (Exception e) {
+                        }
+                    }
+                }
                 mView.getInteractionSwitchSuccess(switchInfoList);
             }
 

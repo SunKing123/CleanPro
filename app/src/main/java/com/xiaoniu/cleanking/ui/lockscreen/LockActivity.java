@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -33,6 +34,7 @@ import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -72,8 +74,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private TouchToUnLockView mUnlockView;
     private RelativeLayout relAd;
     private TextView mLockTime, mLockDate, tv_weather_temp;
-    private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus;
-    private ImageView iv_file_btn, iv_ram_btn, iv_virus_btn, mErrorAdIv;
+    private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus, rel_interactive;
+    private ImageView iv_file_btn, iv_ram_btn, iv_virus_btn, mErrorAdIv, iv_interactive;
     private TextView tv_file_size, tv_ram_size, tv_virus_size;
     private LinearLayout lin_tem_top, lin_tem_bottom, linAdLayout;
     private SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
@@ -81,7 +83,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_weather_state, tv_city;
     private String TAG = "GeekSdk";
     private List<SwitchInfoList.DataBean> dataBeans = new ArrayList<>();
-    private List<BottoomAdList.DataBean> bottomAds= new ArrayList<>();
+    private List<BottoomAdList.DataBean> bottomAds = new ArrayList<>();
 
 
     @Override
@@ -93,13 +95,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         ActivityCollector.addActivity(this, LockActivity.class);
 
         //获取总开关数据
-       String switchString = MmkvUtil.getSwitchInfo();
-       if(!TextUtils.isEmpty(switchString)){
-           SwitchInfoList  switchInfoList = new Gson().fromJson(MmkvUtil.getSwitchInfo(), SwitchInfoList.class);
-           if (null != switchInfoList)
-           dataBeans.addAll(switchInfoList.getData());
-       }
-       //获取打底广告数据
+        String switchString = MmkvUtil.getSwitchInfo();
+        if (!TextUtils.isEmpty(switchString)) {
+            SwitchInfoList switchInfoList = new Gson().fromJson(MmkvUtil.getSwitchInfo(), SwitchInfoList.class);
+            if (null != switchInfoList)
+                dataBeans.addAll(switchInfoList.getData());
+        }
+        //获取打底广告数据
         String botomAdString = MmkvUtil.getBottoomAdInfo();
         if (!TextUtils.isEmpty(botomAdString)) {
             List<BottoomAdList.DataBean> bottomBeans = new Gson().fromJson(MmkvUtil.getBottoomAdInfo(), new TypeToken<List<BottoomAdList.DataBean>>() {
@@ -148,6 +150,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
         linAdLayout = ViewUtils.get(this, R.id.lock_ad_container);
         relAd = ViewUtils.get(this, R.id.rel_ad);
+
+        rel_interactive = ViewUtils.get(this, R.id.rel_interactive);
+        iv_interactive = ViewUtils.get(this, R.id.iv_interactive);
+
+
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
             public void onTouchLockArea() {
@@ -197,8 +204,52 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             lin_tem_bottom.setVisibility(View.GONE);
 
         }
+        setInteractive();
+    }
+
+    private void setInteractive() {
+        if (TextUtils.isEmpty(MmkvUtil.getString(PositionId.LOCK_INTERACTIVE, ""))) {
+            rel_interactive.setVisibility(View.GONE);
+        } else {
+            InteractionSwitchList.DataBean dataBean = new Gson().fromJson(MmkvUtil.getString(PositionId.LOCK_INTERACTIVE, ""), InteractionSwitchList.DataBean.class);
+            if (dataBean != null && !dataBean.isOpen()) {
+                mInteractionList = dataBean.getSwitchActiveLineDTOList();
+                if (mInteractionList != null && mInteractionList.size() > 0) {
+                    rel_interactive.setVisibility(View.VISIBLE);
+                    Glide.with(this).load(mInteractionList.get(0).getImgUrl()).into(iv_interactive);
+                }
+            }
+        }
+    }
 
 
+    private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
+
+    private int mInteractionPoistion; //互动式广告position
+
+    /**
+     * 互动式广告点击
+     */
+    public void interactionClick(View view) {
+
+//        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+//        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
+        if (null != mInteractionList && mInteractionList.size() > 0) {
+            if (mInteractionPoistion > mInteractionList.size() - 1) {
+                mInteractionPoistion = 0;
+            }
+
+            if (mInteractionList.size() == 1) {
+                startActivity(new Intent(this, AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
+            } else {
+                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
+                    startActivity(new Intent(this, AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+                }
+            }
+            mInteractionPoistion++;
+        }
     }
 
     /**
@@ -370,6 +421,19 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        if (null != mInteractionList && mInteractionList.size() > 0) {
+            if (mInteractionPoistion > mInteractionList.size() - 1) {
+                mInteractionPoistion = 0;
+            }
+            if (mInteractionList.size() == 1) {
+                GlideUtils.loadGif(this, mInteractionList.get(0).getImgUrl(), iv_interactive, 10000);
+            } else {
+                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
+                    GlideUtils.loadGif(this, mInteractionList.get(mInteractionPoistion).getImgUrl(), iv_interactive, 10000);
+                }
+            }
+        }
+
 
         if (null == mUnlockView)
             return;
@@ -735,7 +799,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showBottomAd() {
 
-        if ( bottomAds.size() > 0) {
+        if (bottomAds.size() > 0) {
             for (BottoomAdList.DataBean dataBean : bottomAds) {
                 if (dataBean.getSwitcherKey().equals(PositionId.KEY_LOCK_SCREEN)) {
                     if (dataBean.getShowType() == 1) { //循环

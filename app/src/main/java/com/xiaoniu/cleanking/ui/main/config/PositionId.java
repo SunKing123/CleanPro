@@ -102,4 +102,7 @@ public class PositionId {
     public static final String AD_CLEAN_FINISH_MB_THREE = "success_page_ad_3_mb";//完成页广告位3
 
 
+    public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告
+
+
 }

@@ -14,6 +14,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+import com.baidu.mobstat.StatService;
+
 import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
@@ -150,7 +153,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyExternalDb();
         }
-
+        StatService.setDebugOn(true);
+        StatService.autoTrace(this);
+        StatService.setOn(this, StatService.EXCEPTION_LOG);
+        StatService.start(this);
     }
 
 
