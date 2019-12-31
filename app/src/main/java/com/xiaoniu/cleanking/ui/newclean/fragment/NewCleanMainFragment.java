@@ -364,7 +364,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mInteractionPoistion = 0;
         }
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
+        StatisticsUtils.trackClick("suspended_interactive_advertising_click", "悬浮互动式广告点击", "clod_splash_page", "home_page");
         if (null != mInteractionList && mInteractionList.size() > 0) {
 
             if (mInteractionList.size() == 1) {
