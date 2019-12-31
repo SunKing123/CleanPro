@@ -409,7 +409,15 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
                 }
-                showBottomAd();
+
+                //打底样式
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showBottomAd();
+                    }
+                });
+
             }
         });
     }
@@ -816,7 +824,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                             mBottomAdShowCount = NumberUtils.mathRandomInt(0, dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
-
+                    if(null==mErrorAdIv)
+                        return;
                     GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
                         AppHolder.getInstance().setCleanFinishSourcePageId("lock_screen");
