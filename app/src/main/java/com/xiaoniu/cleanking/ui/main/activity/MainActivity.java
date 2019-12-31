@@ -5,17 +5,14 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.baidu.mobstat.StatService;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -53,7 +50,6 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -216,9 +212,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         checkReadPermission();
 
-        String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+       /* String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         //扫描更新系统数据库
-        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);
+        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);*/
 
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();

@@ -12,17 +12,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.utils.DisplayUtil;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.umeng.socialize.UMShareAPI;
@@ -69,6 +64,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Random;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cn.jzvd.Jzvd;
 
 /**
@@ -1208,49 +1206,47 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void initPos01Ad() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_MB_ONE
-                , Float.valueOf(DisplayUtil.px2dp(this, DisplayUtil.getScreenWidth(this)) - 28)
-                , new AdListener() {
-                    @Override
-                    public void adSuccess(AdInfo info) {
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
-                        if (info == null) {
-                            Log.d(TAG, "DEMO>>>adSuccess1， AdInfo is empty");
-                        } else {
-                            Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
-                            if (info.getAdView() != null) {
-                                ad_container_pos01.removeAllViews();
-                                ad_container_pos01.addView(info.getAdView());
-                            }
-                        }
+        adManager.loadAd(this, "success_page_ad_1", new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
+                if (info == null) {
+                    Log.d(TAG, "DEMO>>>adSuccess1， AdInfo is empty");
+                } else {
+                    Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
+                    if (info.getAdView() != null) {
+                        ad_container_pos01.removeAllViews();
+                        ad_container_pos01.addView(info.getAdView());
                     }
+                }
+            }
 
-                    @Override
-                    public void adExposed(AdInfo info) {
-                        if (info == null) {
-                            Log.d(TAG, "DEMO>>>adExposed1， AdInfo is empty");
-                        } else {
-                            Log.d(TAG, "DEMO>>>adExposed1， ");
-                        }
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                    }
+            @Override
+            public void adExposed(AdInfo info) {
+                if (info == null) {
+                    Log.d(TAG, "DEMO>>>adExposed1， AdInfo is empty");
+                } else {
+                    Log.d(TAG, "DEMO>>>adExposed1， ");
+                }
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
+            }
 
-                    @Override
-                    public void adClicked(AdInfo info) {
-                        if (null == info) return;
-                        Log.d(TAG, "adClicked1");
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                    }
+            @Override
+            public void adClicked(AdInfo info) {
+                if (null == info) return;
+                Log.d(TAG, "adClicked1");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
+            }
 
-                    @Override
-                    public void adError(AdInfo info, int errorCode, String errorMsg) {
-                        if (null != info) {
-                            Log.d(TAG, "adError 111=" + errorCode + "---" + errorMsg + info.toString());
-                            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
-                        }
-                        showBottomAd();
-                    }
-                });
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "adError 111： " + errorMsg);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
+                }
+                showBottomAd();
+            }
+        });
     }
 
     private int mBottomAdShowCount = 0;
@@ -1297,45 +1293,43 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void initAd02() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_MB_TWO
-                , Float.valueOf(DisplayUtil.px2dp(this, DisplayUtil.getScreenWidth(this)) - 28)
-                , new AdListener() {
-                    @Override
-                    public void adSuccess(AdInfo info) {
-                        if (null != info) {
-                            Log.d(TAG, "DEMO>>>adSuccess2， " + info.toString());
-                            StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
-                            if (info.getAdView() != null) {
-                                ad_container_pos02.removeAllViews();
-                                ad_container_pos02.addView(info.getAdView());
-                            }
-                        }
+        adManager.loadAd(this, "success_page_ad_2", new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null != info) {
+                    Log.d(TAG, "DEMO>>>adSuccess2， " + info.toString());
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
+                    if (info.getAdView() != null) {
+                        ad_container_pos02.removeAllViews();
+                        ad_container_pos02.addView(info.getAdView());
                     }
+                }
+            }
 
-                    @Override
-                    public void adExposed(AdInfo info) {
-                        Log.d(TAG, "adExposed");
-                        if (null == info) return;
-                        Log.d(TAG, "DEMO>>>adExposed2， ");
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                    }
+            @Override
+            public void adExposed(AdInfo info) {
+                Log.d(TAG, "adExposed");
+                if (null == info) return;
+                Log.d(TAG, "DEMO>>>adExposed2， ");
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
+            }
 
-                    @Override
-                    public void adClicked(AdInfo info) {
-                        Log.d(TAG, "adClicked2");
-                        if (null == info) return;
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                    }
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "adClicked2");
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
+            }
 
-                    @Override
-                    public void adError(AdInfo info, int errorCode, String errorMsg) {
-                        if (null != info) {
-                            Log.d(TAG, "adError 222=" + errorCode + "---" + errorMsg + info.toString());
-                            StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
-                        }
-                        showBottomAd2();
-                    }
-                });
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "adError2222");
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
+                }
+                showBottomAd2();
+            }
+        });
     }
 
     private int mBottomAdShowCount2 = 0;
