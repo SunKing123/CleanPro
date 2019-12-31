@@ -364,7 +364,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mInteractionPoistion = 0;
         }
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
+        StatisticsUtils.trackClick("suspended_interactive_advertising_click", "悬浮互动式广告点击", "clod_splash_page", "home_page");
         if (null != mInteractionList && mInteractionList.size() > 0) {
 
             if (mInteractionList.size() == 1) {
@@ -857,7 +857,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.text_wjgl)
     public void wjgl() {
         textWjgl.setEnabled(false);
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         if (null != mVirusList && mVirusList.size() > 0) {
             switch (mVirusPoistion) {
                 case 0:
@@ -915,7 +915,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.text_acce)
     public void text_acce() {
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         ((MainActivity) getActivity()).commitJpushClickTime(2);
@@ -965,7 +965,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.line_shd)
     public void line_shd() {
         lineShd.setEnabled(false);
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         ((MainActivity) getActivity()).commitJpushClickTime(9);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
@@ -1036,7 +1036,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void ViewThinClick() {
         isGameMain = false;
         viewGame.setEnabled(false);
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         Intent intent = new Intent(getActivity(), GameActivity.class);
         intent.putExtra("main", false);
@@ -1059,7 +1059,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.line_wx)
     public void mClickWx() {
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
         ((MainActivity) getActivity()).commitJpushClickTime(5);
@@ -1109,7 +1109,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.line_super_power_saving)
     public void mClickQq() {
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         ((MainActivity) getActivity()).commitJpushClickTime(8);
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -1153,7 +1153,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.line_jw)
     public void mClickJw() {
-        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         ((MainActivity) getActivity()).commitJpushClickTime(6);
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -1428,7 +1428,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
         if (null == getActivity() || null == list || list.size() <= 0) return;
         if (list.get(pos).getLinkType().equals("1")) {
-            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             if (list.get(pos).getName().equals(getString(R.string.game_quicken))) { //游戏加速
                 StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
                 AppHolder.getInstance().setCleanFinishSourcePageId("home_page");

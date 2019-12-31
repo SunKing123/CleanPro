@@ -206,7 +206,7 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_chat);
                 return;
             }
-            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
@@ -249,7 +249,7 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
                 return;
             }
-            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             ((MainActivity) getActivity()).commitJpushClickTime(7);
             if (QQUtil.audioList != null)
                 QQUtil.audioList.clear();
@@ -299,7 +299,7 @@ public class ToolFragment extends SimpleFragment {
             }
         } else if (ids == R.id.text_cooling) {
             //手机降温
-            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             ((MainActivity) getActivity()).commitJpushClickTime(6);
@@ -342,7 +342,7 @@ public class ToolFragment extends SimpleFragment {
             startActivity(intent);
             StatisticsUtils.trackClick("slim_scan_page_on_phone_click", "视频专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_notification_clear) {
-            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             //手机清理
             String permissionsHint = "需要打开文件读写权限";
             String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
