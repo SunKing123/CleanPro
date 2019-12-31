@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_ad_item_root"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/dp_15"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.qq.e.ads.nativ.widget.NativeAdContainer
+        android:id="@+id/ad_im_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ad_im"
+            android:layout_width="match_parent"
+            android:layout_height="171dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ad_big_img_paly" />
+    </com.qq.e.ads.nativ.widget.NativeAdContainer>
+
+    <RelativeLayout
+        android:id="@+id/insert_screen_ad_app_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="11dp">
+
+        <ImageView
+            android:id="@+id/brand_icon_im"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="15dp"
+            android:scaleType="centerCrop"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/brand_icon_im"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_marginTop="-3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="**"
+                android:textColor="#404040"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ad_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4.5dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:text="****"
+                android:textColor="#66404040"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_height="@dimen/dp_48">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lott_ad_download"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            app:lottie_autoPlay="true"
+            android:scaleType="centerInside"
+            app:lottie_loop="true" />
+
+        <TextView
+            android:id="@+id/tv_ad_download"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="下载"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+    </RelativeLayout>
+</LinearLayout>

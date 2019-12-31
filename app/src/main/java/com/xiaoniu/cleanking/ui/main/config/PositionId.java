@@ -77,6 +77,7 @@ public class PositionId {
     public static final String AD_SOURCE_CSJ = "chuanshanjia";
     public static final String AD_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
     public static final String AD_LOCK_SCREEN_ADVERTISING_1_3_0 = "lock_screen_advertising_1.3.0";
+    public static final String AD_LOCK_SCREEN_ADVERTISING_1_4_0 = "lock_screen_advertising_1.4.0";   //锁屏页自渲染样式
 
     //新加位置（模板样式）
     public static final String AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB = "personal_center_page_below_ad_mb";

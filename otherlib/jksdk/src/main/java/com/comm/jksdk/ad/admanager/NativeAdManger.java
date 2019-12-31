@@ -34,6 +34,7 @@ import com.comm.jksdk.ad.view.chjview.ChjBigImgFakeVideoAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtCenterAdView;
+import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvFlickerBtAdView;
 import com.comm.jksdk.ad.view.chjview.ChjExternalDialogBigImageView;
 import com.comm.jksdk.ad.view.chjview.ChjFullScreenBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.chjview.ChjSplashAdView;
@@ -45,6 +46,7 @@ import com.comm.jksdk.ad.view.ylhview.YlhBigImgFakeVideoAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvBtCenterAdView;
+import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvFlickerBtAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhExternalDialogBigImageView;
 import com.comm.jksdk.ad.view.ylhview.YlhFullBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhFullScreenVideoAdView;
@@ -696,6 +698,8 @@ public class NativeAdManger implements AdManager {
         CHJAdView adView = null;
         if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style)) { // 大图_带icon文字按钮
             adView = new ChjBigImgIcTvBtAdView(activity);
+        } else if(Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)){// 大图_带icon文字_激光按钮
+            adView = new ChjBigImgIcTvFlickerBtAdView(activity);
         } else if (Constants.AdStyle.DATU_ICON_TEXT.equals(style)) { //大图_带icon文字
             adView = new ChjBigImgIcTvAdView(activity);
         } else if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style)) { //大图_带icon文字按钮居中
@@ -1144,6 +1148,8 @@ public class NativeAdManger implements AdManager {
         YlhAdView adView = null;
         if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style)) { // 大图_带icon文字按钮
             adView = new YlhBigImgIcTvBtAdView(activity);
+        } else if(Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)){ // 大图_带icon文字_激光按钮
+            adView = new YlhBigImgIcTvFlickerBtAdView(activity);
         } else if (Constants.AdStyle.DATU_ICON_TEXT.equals(style)) { //大图_带icon文字
             adView = new YlhBigImgIcTvAdView(activity);
         } else if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style)) { //大图_带icon文字按钮居中

@@ -310,6 +310,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:onClick="interactionClick">
 
                 <ImageView

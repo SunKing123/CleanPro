@@ -3,28 +3,17 @@ package com.comm.jksdk.ad.admanager;
 import android.app.Activity;
 import android.text.TextUtils;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdConstant;
-import com.bytedance.sdk.openadsdk.TTAdManager;
 import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.bytedance.sdk.openadsdk.TTFeedAd;
-import com.bytedance.sdk.openadsdk.TTImage;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
-import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdRequestListener;
 import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
-import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.qq.e.ads.cfg.VideoOption;
-import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeADUnifiedListener;
-import com.qq.e.ads.nativ.NativeExpressAD;
-import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.ads.nativ.NativeUnifiedAD;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
 import com.qq.e.comm.util.AdError;
@@ -56,7 +45,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
         String style = adInfo.getAdStyle();
         if (Constants.AdStyle.DATU_ICON_TEXT.equals(style) || Constants.AdStyle.DATU_ICON_TEXT_BUTTON_CENTER.equals(style) || Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_01.equals(style)
                 || Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style) || Constants.AdStyle.BIG_IMG_BUTTON_LAMP.equals(style) || Constants.AdStyle.BIG_IMG_BUTTON.equals(style) || Constants.AdStyle.EXTERNAL_DIALOG_BIG_IMAGE_02.equals(style)
-                || Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style)) {
+                || Constants.AdStyle.FAKE_VIDEO_IARGE_IMAGE.equals(style) ||Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)) {
             //todo请求大图广告
             getAdByBigImg(activity, adInfo, listener);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) {
