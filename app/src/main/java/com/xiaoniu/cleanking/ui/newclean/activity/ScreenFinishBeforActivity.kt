@@ -200,15 +200,15 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", mSourcePage, mCurrentPage)
         mAdManager.loadVideoAd(this, PositionId.AD_FINISH_BEFOR, object : VideoAdListener {
             override fun onVideoResume(info: AdInfo) {
-
+                Log.d(TAG, "onVideoResume 完成页前全屏视频==" + info.toString())
             }
 
             override fun onVideoRewardVerify(info: AdInfo, rewardVerify: Boolean, rewardAmount: Int, rewardName: String) {
-
+                Log.d(TAG, "onVideoRewardVerify 完成页前全屏视频==" + info.toString())
             }
 
             override fun onVideoComplete(info: AdInfo) {
-
+                Log.d(TAG, "onVideoComplete 完成页前全屏视频==" + info.toString())
             }
 
             override fun adSuccess(info: AdInfo) {
