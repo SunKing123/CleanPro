@@ -1,5 +1,6 @@
 package com.comm.jksdk.utils;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -8,6 +9,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -58,6 +61,22 @@ public class JsonUtils {
         return arrayList;
     }
 
+    //读取json文件
+    public static String readJSONFromAsset(Context context, String fileName) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
 
 //    public static <T> BaseResponse<List<T>> fromJsonArray(String reader, Class<T> clazz) {
 //        // 生成List<T> 中的 List<T>

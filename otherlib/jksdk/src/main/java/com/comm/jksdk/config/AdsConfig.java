@@ -248,16 +248,12 @@ public class AdsConfig {
         if (TextUtils.isEmpty(postion)) {
             return null;
         }
-        List<ConfigBean.AdListBean> adListBeans = getAdsInfoslist();
-        if (CollectionUtils.isEmpty(adListBeans)) {
+        String confString= MmkvUtil.getString(Constants.SPUtils.CONFIG_INFO + "_" + postion.trim() ,"");
+        if(TextUtils.isEmpty(confString)){
             return null;
         }
-        for (ConfigBean.AdListBean adListBean : adListBeans) {
-            if (postion.equals(adListBean.getAdPosition())) {
-                return adListBean;
-            }
-        }
-        return null;
+        ConfigBean.AdListBean adListBeans = new Gson().fromJson(confString,ConfigBean.AdListBean.class);
+        return adListBeans;
 //        // 从sp获取配置信息
 //        if (!TextUtils.isEmpty(cmsConfigKey)) {
 //            mConfigInfo = SpUtils.getString(cmsConfigKey, "");
@@ -474,6 +470,10 @@ public class AdsConfig {
         String configInfo = new Gson().toJson(configBean);
         LogUtils.i("GeekSdk--configInfo---" + configInfo);
         MmkvUtil.saveString(Constants.SPUtils.CONFIG_INFO, configInfo);
+        //以position_id作为key独立保存单个ad_infp
+        for (ConfigBean.AdListBean bean : adsInfoslist) {
+            MmkvUtil.saveString(Constants.SPUtils.CONFIG_INFO + "_" + bean.getAdPosition(), new Gson().toJson(bean));
+        }
 //        //初始化穿山甲sdk
 //        String csjAppId = "";
 //        for (ConfigBean.AdListBean adListBean : adsInfoslist) {
@@ -483,4 +483,6 @@ public class AdsConfig {
 //            }
 //        }
     }
+
+
 }
