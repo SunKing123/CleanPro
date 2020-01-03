@@ -277,7 +277,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         initVirus();
         initGeekAdSdk();
-        initGeekSdkCenter();
+//        initGeekSdkCenter();
 //        if (null != getActivity()) {
 //            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
 //        }
@@ -746,7 +746,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             forThreeTab();
         }
         initGeekSdkTop();
-        initGeekSdkCenter();
     }
 
     /**
@@ -1223,6 +1222,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             } else {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
             }
+            initGeekAdSdk();
+            initGeekSdkCenter();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
