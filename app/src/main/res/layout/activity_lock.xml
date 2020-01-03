@@ -343,7 +343,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:maxHeight="350dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY" />
     </RelativeLayout>
 
     <com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView

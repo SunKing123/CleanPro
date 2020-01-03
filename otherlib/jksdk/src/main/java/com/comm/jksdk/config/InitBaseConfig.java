@@ -3,11 +3,15 @@ package com.comm.jksdk.config;
 import android.content.Context;
 
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.http.Api;
 import com.comm.jksdk.http.utils.ApiManage;
 import com.comm.jksdk.http.utils.AppEnvironment;
 import com.comm.jksdk.http.utils.LogUtils;
+import com.comm.jksdk.utils.JsonUtils;
 import com.comm.jksdk.utils.MmkvUtil;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 
@@ -37,7 +41,17 @@ public class InitBaseConfig {
         initNetWork();
         //初始化穿山甲
 //        initChjAd(context);
+        readlocalData(context);
 
+    }
+    //获取本地兜底数据
+    public void readlocalData(Context context){
+        try {
+            ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context,"ad_config_gj_1.4.0.json"),ConfigBean.class);
+            AdsConfig.setAdsInfoslist(jsonConfig);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initChjAd(Context context, String appId) {

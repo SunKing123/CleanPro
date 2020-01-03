@@ -46,7 +46,6 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
-import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
@@ -386,7 +385,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (info.getAdView() != null && null != relAd) {
                     relAd.removeAllViews();
                     relAd.addView(info.getAdView());
-                    adPredLoad();
+//                    adPredLoad();
                 }
             }
 
@@ -410,7 +409,15 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
                 }
-                showBottomAd();
+
+                //打底样式
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showBottomAd();
+                    }
+                });
+
             }
         });
     }
@@ -577,9 +584,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //广告预加载
-    public void adPredLoad() {
+  /*  public void adPredLoad() {
         ADUtilsKt.preloadingAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING, "外部锁屏");
-    }
+    }*/
 
     @Override
     protected void onStop() {
@@ -817,7 +824,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                             mBottomAdShowCount = NumberUtils.mathRandomInt(0, dataBean.getAdvBottomPicsDTOS().size() - 1);
                         }
                     }
-
+                    if(null==mErrorAdIv)
+                        return;
                     GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
                     mErrorAdIv.setOnClickListener(v -> {
                         AppHolder.getInstance().setCleanFinishSourcePageId("lock_screen");

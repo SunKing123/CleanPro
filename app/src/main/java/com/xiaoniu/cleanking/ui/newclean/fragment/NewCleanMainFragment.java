@@ -18,11 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
@@ -80,7 +75,6 @@ import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
-import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -93,6 +87,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -280,9 +278,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         initVirus();
         initGeekAdSdk();
         initGeekSdkCenter();
-        if (null != getActivity()) {
-            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
-        }
+//        if (null != getActivity()) {
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
+//        }
         //创建快捷图标。有待后续优化，暂时不打开
 //        Intent shortcutInfoIntent = new Intent(getActivity(), SplashADActivity.class);
 //        shortcutInfoIntent.setAction(Intent.ACTION_VIEW);

@@ -19,7 +19,6 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil
-import com.xiaoniu.cleanking.utils.geeksdk.preloadingSplashAd
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
@@ -83,7 +82,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
             }
         }
         if (!isFinishing()) {
-            preloadingSplashAd(this, PositionId.AD_RED_PACKET, getString(R.string.redpack))
+//            preloadingSplashAd(this, PositionId.AD_RED_PACKET, getString(R.string.redpack))
             NiuDataAPI.onPageStart("red_envelopes_page_view_page", "红包弹窗浏览")
             WebDialogManager.getInstance().showWebDialog(this, this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount])
             WebDialogManager.getInstance().setFinishInterface(this)
