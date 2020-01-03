@@ -1244,7 +1244,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
                 }
-                showBottomAd();
+                //打底样式
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showBottomAd();
+                    }
+                });
+
             }
         });
     }
