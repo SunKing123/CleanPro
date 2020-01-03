@@ -360,12 +360,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.iv_interaction)
     public void interactionClick() {
-        if (mInteractionPoistion > 2) {
-            mInteractionPoistion = 0;
-        }
+
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         StatisticsUtils.trackClick("suspended_interactive_advertising_click", "悬浮互动式广告点击", "clod_splash_page", "home_page");
         if (null != mInteractionList && mInteractionList.size() > 0) {
+            if (mInteractionPoistion > mInteractionList.size()-1) {
+                mInteractionPoistion = 0;
+            }
 
             if (mInteractionList.size() == 1) {
                 startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
@@ -389,7 +390,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
         if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > 2) {
+            if (mInteractionPoistion > mInteractionList.size()-1) {
                 mInteractionPoistion = 0;
             }
             if (mInteractionList.size() == 1) {

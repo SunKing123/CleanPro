@@ -859,7 +859,7 @@ public final class LocalService extends Service {
         } else {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
         }
-        setAppIcon();
+//        setAppIcon();
     }
 
 
@@ -900,7 +900,6 @@ public final class LocalService extends Service {
                 }
             } else if (MmkvUtil.getInt("appicon", 0) == 0 && !MmkvUtil.getBool("isExecute", false)) {
                 StatisticsUtils.customTrackEvent("split_icon_meet_the_opportunity_display", "分身图标满足创建时机时", "split_icon", "split_icon");
-
                 ComponentName newAPP = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
                 QuickUtils.getInstant(this).enableComponent(newAPP);
                 MmkvUtil.saveInt("appicon", 1);
@@ -908,7 +907,6 @@ public final class LocalService extends Service {
                 MmkvUtil.saveBool("isExecute", true);
                 StatisticsUtils.customTrackEvent("split_icon_establish", "分身图标创建时", "split_icon", "split_icon");
             }
-
         }
     }
 
