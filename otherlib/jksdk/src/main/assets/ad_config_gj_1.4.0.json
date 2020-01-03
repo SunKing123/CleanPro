@@ -185,7 +185,7 @@
       ]
     },
     {
-      "productId": 4,
+      "productId": 6,
       "adVersion": 1,
       "adPosition": "cp_ad_1",
       "adStyle": "FULL_SCREEN_VIDEO",
@@ -198,7 +198,7 @@
           "requestOrder": 1,
           "requestType": 0,
           "adsAppId": "5036430",
-          "adsAppName": "清理极速版"
+          "adsAppName": "清理管家极速版"
         }
       ]
     },
