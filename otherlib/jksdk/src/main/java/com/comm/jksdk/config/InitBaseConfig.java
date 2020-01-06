@@ -47,7 +47,7 @@ public class InitBaseConfig {
     //获取本地兜底数据
     public void readlocalData(Context context){
         try {
-            ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context,"ad_config_gj_1.4.0.json"),ConfigBean.class);
+            ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context, "ad_config_gj_1.4.5_c1.json"),ConfigBean.class);
             AdsConfig.setAdsInfoslist(jsonConfig);
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
