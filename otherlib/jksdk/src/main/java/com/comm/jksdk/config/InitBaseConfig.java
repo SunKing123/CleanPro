@@ -47,7 +47,22 @@ public class InitBaseConfig {
     //获取本地兜底数据
     public void readlocalData(Context context){
         try {
-            ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context, "ad_config_gj_1.4.5_c1.json"),ConfigBean.class);
+            String cFileName = "ad_config_gj_1.4.5_c1.json";
+            long userActive = AdsConfig.getUserActive();
+            if (userActive < 0) {
+                userActive = System.currentTimeMillis();
+                AdsConfig.setUserActive(userActive);
+            } else {//已设置激活时间
+                long timeSpace = System.currentTimeMillis() - userActive;//时间间隔
+                if (timeSpace < 3 * 60 * 60) {//三小时以内
+                    cFileName = "ad_config_gj_1.4.5_c1.json";
+                }else if(timeSpace > 3 * 60 * 60 && timeSpace < 12 * 60 * 60){ //三小时到12小时
+                    cFileName = "ad_config_gj_1.4.5_c2.json";
+                }else if(timeSpace > 12 * 60 * 60){             //12小时以上
+                    cFileName = "ad_config_gj_1.4.5_c3.json";
+                }
+            }
+            ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context, cFileName),ConfigBean.class);
             AdsConfig.setAdsInfoslist(jsonConfig);
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
