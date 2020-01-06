@@ -67,6 +67,7 @@ import java.util.Random;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import cn.jzvd.Jzvd;
 
 /**
@@ -80,8 +81,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private TextView mTvSize;
     private TextView mTvGb;
     private TextView mTvQl;
-    private XRecyclerView mRecyclerView;
-    private NewsListAdapter mNewsAdapter;
+    //    private XRecyclerView mRecyclerView;
+//    private NewsListAdapter mNewsAdapter;
     private ImageView mBtnLeft;
     public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool, v_clean_all, v_game;
     public View line_quicken, line_power, line_notification, line_wechat, line_cool, line_clean_all, line_game;
@@ -127,58 +128,58 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTitle = getIntent().getStringExtra("title");
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
-        mRecyclerView = findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+//        mRecyclerView = findViewById(R.id.recyclerView);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        mRecyclerView.setLayoutManager(layoutManager);
 
-        mRecyclerView.setPullRefreshEnabled(false);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
+//        mRecyclerView.setPullRefreshEnabled(false);
+//        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+//        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
 
-        mNewsAdapter = new NewsListAdapter(this);
-        View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content), false);
-        View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content), false);
-        mRecyclerView.addHeaderView(header);
-        mRecyclerView.addHeaderView(headerTool);
-        mRecyclerView.setLimitNumberToCallLoadMore(1);
-        mRecyclerView.setAdapter(mNewsAdapter);
-        mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
+//        mNewsAdapter = new NewsListAdapter(this);
+//        View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content), false);
+//        View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content), false);
+//        mRecyclerView.addHeaderView(header);
+//        mRecyclerView.addHeaderView(headerTool);
+//        mRecyclerView.setLimitNumberToCallLoadMore(1);
+//        mRecyclerView.setAdapter(mNewsAdapter);
+//        mRecyclerView.getDefaultRefreshHeaderView().setRefreshTimeVisible(true);
 
-        ad_container_pos01 = header.findViewById(R.id.ad_container_pos01);
-        error_ad_iv1 = header.findViewById(R.id.error_ad_iv1);
-        mTvSize = header.findViewById(R.id.tv_size);
-        mTvGb = header.findViewById(R.id.tv_clear_finish_gb_title);
+        ad_container_pos01 = findViewById(R.id.ad_container_pos01);
+        error_ad_iv1 = findViewById(R.id.error_ad_iv1);
+        mTvSize = findViewById(R.id.tv_size);
+        mTvGb = findViewById(R.id.tv_clear_finish_gb_title);
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-        mTvQl = header.findViewById(R.id.tv_ql);
+        mTvQl = findViewById(R.id.tv_ql);
 
-        ad_container_pos02 = headerTool.findViewById(R.id.ad_container_pos02);
-        error_ad_iv2 = headerTool.findViewById(R.id.error_ad_iv2);
-        mRecommendV = headerTool.findViewById(R.id.v_recommend);
-        v_clean_all = headerTool.findViewById(R.id.v_clean_all);
-        v_game = headerTool.findViewById(R.id.v_game);
-        v_quicken = headerTool.findViewById(R.id.v_quicken);
-        v_power = headerTool.findViewById(R.id.v_power);
-        v_notification = headerTool.findViewById(R.id.v_notification);
-        v_wechat = headerTool.findViewById(R.id.v_wechat);
-        v_file = headerTool.findViewById(R.id.v_file);
-        v_cool = headerTool.findViewById(R.id.v_cool);
-        line_quicken = headerTool.findViewById(R.id.line_quicken);
-        line_power = headerTool.findViewById(R.id.line_power);
-        line_notification = headerTool.findViewById(R.id.line_notification);
-        line_wechat = headerTool.findViewById(R.id.line_wechat);
-        line_cool = headerTool.findViewById(R.id.line_cool);
-        line_clean_all = headerTool.findViewById(R.id.line_clean_all);
-        line_game = headerTool.findViewById(R.id.line_game);
+        ad_container_pos02 = findViewById(R.id.ad_container_pos02);
+        error_ad_iv2 = findViewById(R.id.error_ad_iv2);
+        mRecommendV = findViewById(R.id.v_recommend);
+        v_clean_all = findViewById(R.id.v_clean_all);
+        v_game = findViewById(R.id.v_game);
+        v_quicken = findViewById(R.id.v_quicken);
+        v_power = findViewById(R.id.v_power);
+        v_notification = findViewById(R.id.v_notification);
+        v_wechat = findViewById(R.id.v_wechat);
+        v_file = findViewById(R.id.v_file);
+        v_cool = findViewById(R.id.v_cool);
+        line_quicken = findViewById(R.id.line_quicken);
+        line_power = findViewById(R.id.line_power);
+        line_notification = findViewById(R.id.line_notification);
+        line_wechat = findViewById(R.id.line_wechat);
+        line_cool = findViewById(R.id.line_cool);
+        line_clean_all = findViewById(R.id.line_clean_all);
+        line_game = findViewById(R.id.line_game);
 
-        tv_quicken = headerTool.findViewById(R.id.tv_quicken);
-        tv_power = headerTool.findViewById(R.id.tv_power);
-        tv_notification = headerTool.findViewById(R.id.tv_notification);
+        tv_quicken = findViewById(R.id.tv_quicken);
+        tv_power = findViewById(R.id.tv_power);
+        tv_notification = findViewById(R.id.tv_notification);
 
-        iv_quicken = headerTool.findViewById(R.id.iv_quicken);
-        iv_power = headerTool.findViewById(R.id.iv_power);
-        iv_notification = headerTool.findViewById(R.id.iv_notification);
+        iv_quicken = findViewById(R.id.iv_quicken);
+        iv_power = findViewById(R.id.iv_power);
+        iv_notification = findViewById(R.id.iv_notification);
         mTitleTv.setText(mTitle);
         mPresenter.getScreentSwitch();
         getPageData();
@@ -966,32 +967,32 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         });
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                    //获取第一个完全显示的ItemPosition
-                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
-                    int totalItemCount = manager.getItemCount();
-                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
-
-                }
-            });
-        } else {
-            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                }
-            });
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//                @Override
+//                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+//                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+//                    //获取第一个完全显示的ItemPosition
+//                    int lastVisibleItem = manager.findFirstVisibleItemPosition();
+//                    int totalItemCount = manager.getItemCount();
+//                    //recyclerView滑动到底部再滑动回顶部后重新执行动画
+//
+//                }
+//            });
+//        } else {
+//            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                    super.onScrollStateChanged(recyclerView, newState);
+//                }
+//
+//                @Override
+//                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                    super.onScrolled(recyclerView, dx, dy);
+//                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+//                }
+//            });
+//        }
 
     }
 
@@ -1175,10 +1176,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (mRecyclerView != null) {
-            mRecyclerView.destroy(); // this will totally release XR's memory
-            mRecyclerView = null;
-        }
+//        if (mRecyclerView != null) {
+//            mRecyclerView.destroy(); // this will totally release XR's memory
+//            mRecyclerView = null;
+//        }
         //Umeng --- Caused by: java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
         if (Util.isOnMainThread()) {
             Glide.get(this).clearMemory();
@@ -1215,7 +1216,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 } else {
                     Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
                     if (info.getAdView() != null) {
-                        ad_container_pos01.removeAllViews();
+                        if (ad_container_pos01.getChildCount() > 0) {
+                            ad_container_pos01.removeAllViews();
+                        }
                         ad_container_pos01.addView(info.getAdView());
                     }
                 }
