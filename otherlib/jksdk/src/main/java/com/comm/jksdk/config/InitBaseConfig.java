@@ -54,11 +54,11 @@ public class InitBaseConfig {
                 AdsConfig.setUserActive(userActive);
             } else {//已设置激活时间
                 long timeSpace = System.currentTimeMillis() - userActive;//时间间隔
-                if (timeSpace < 3 * 60 * 60) {//三小时以内
+                if (timeSpace < 3 * 60 * 60 * 1000) {//三小时以内
                     cFileName = "ad_config_gj_1.4.5_c1.json";
-                }else if(timeSpace > 3 * 60 * 60 && timeSpace < 12 * 60 * 60){ //三小时到12小时
+                } else if (timeSpace > 3 * 60 * 60 * 1000 && timeSpace < 12 * 60 * 60 * 1000) { //三小时到12小时
                     cFileName = "ad_config_gj_1.4.5_c2.json";
-                }else if(timeSpace > 12 * 60 * 60){             //12小时以上
+                } else if (timeSpace > 12 * 60 * 60 * 1000) {             //12小时以上
                     cFileName = "ad_config_gj_1.4.5_c3.json";
                 }
             }
