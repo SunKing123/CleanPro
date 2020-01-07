@@ -47,7 +47,7 @@ android {
          * 2: 增加城市及更新对应的字段
          * 3：关注城市表增加日出日落字段(2019.09.05)
          **/
-        schemaVersion 1
+        schemaVersion 2
         targetGenDir 'src/main/java'
         daoPackage 'com.xiaoniu.cleanking.bean.weatherdao'
     }
