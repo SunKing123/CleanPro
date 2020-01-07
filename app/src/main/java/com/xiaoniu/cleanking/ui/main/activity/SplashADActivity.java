@@ -126,7 +126,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 getAuditSwitchFail();
             }
         } else {
-//            mPresenter.geekAdSDKConfig();//加载广告配置
+            mPresenter.geekAdSDKConfig();//加载广告配置
             mPresenter.getBottomAdList();
         }
 

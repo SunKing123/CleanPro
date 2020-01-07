@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -303,8 +304,10 @@ public class ApplicationDelegate implements IApplicationDelegate {
         LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
             @Override
             public void onBecameForeground(Activity activity) {
-                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
+                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {//当前主进程
                     MmkvUtil.saveInt("isback", 0);
+                    LogUtils.i("-cgName-----进入前台");
+                    GeekAdSdk.refAdConfig(application);
                 } else {//非当前主进程
                     return;
                 }

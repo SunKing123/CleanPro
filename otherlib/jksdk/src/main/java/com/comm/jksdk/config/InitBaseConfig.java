@@ -1,6 +1,7 @@
 package com.comm.jksdk.config;
 
 import android.content.Context;
+import android.os.SystemClock;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.bean.ConfigBean;
@@ -44,9 +45,17 @@ public class InitBaseConfig {
         readlocalData(context);
 
     }
+
+
+    private long mLastClickTime = 0;  //短时间内保存频次限制
     //获取本地兜底数据
     public void readlocalData(Context context){
         try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             String cFileName = "ad_config_gj_1.4.5_c1.json";
             long userActive = AdsConfig.getUserActive();
             if (userActive < 0) {
@@ -62,7 +71,9 @@ public class InitBaseConfig {
                     cFileName = "ad_config_gj_1.4.5_c3.json";
                 }
             }
+
             ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context, cFileName),ConfigBean.class);
+            LogUtils.i(System.currentTimeMillis()+"--cgName--"+cFileName+"---size-"+jsonConfig.getAdList().size()+"---first--"+jsonConfig.getAdList().get(0).getAdsInfos().get(0).getAdId());
             AdsConfig.setAdsInfoslist(jsonConfig);
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
