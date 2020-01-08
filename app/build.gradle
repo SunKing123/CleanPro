@@ -157,8 +157,6 @@ android {
             buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -178,9 +176,7 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            debuggable = false
-//            jniDebuggable = false
-//            renderscriptDebuggable = false
+
 
 
         }
@@ -196,11 +192,6 @@ android {
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
-            debuggable = false
-            jniDebuggable = false
-            renderscriptDebuggable = false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -218,11 +209,6 @@ android {
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
-            debuggable = false
-            jniDebuggable = false
-            renderscriptDebuggable = false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
