@@ -1,15 +1,13 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
@@ -55,7 +53,6 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -83,9 +80,12 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
@@ -101,6 +101,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.content.Context.BATTERY_SERVICE;
 import static android.view.View.VISIBLE;
 
 /**
@@ -109,10 +110,6 @@ import static android.view.View.VISIBLE;
 public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener {
 
     private long firstTime;
-    @BindView(R.id.tv_clean_type)
-    TextView mTvCleanType;
-    @BindView(R.id.tv_clean_type01)
-    TextView mTvCleanType01;
 
     @BindView(R.id.line_shd)
     LinearLayout lineShd;
@@ -168,6 +165,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     FrameLayout mTopAdFramelayout;
     @BindView(R.id.framelayout_center_ad)
     FrameLayout mCenterAdFramelayout;
+    @BindView(R.id.top_context)
+    TextView top_context;
+    @BindView(R.id.icon_top)
+    ImageView iconTop;
+    @BindView(R.id.oneTxt)
+    TextView oneTxt;
+    @BindView(R.id.twoTxt)
+    TextView twoTxt;
+    @BindView(R.id.threeTxt)
+    TextView threeTxt;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -198,7 +205,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     protected void initView() {
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
-        showHomeLottieView();
+        isTopChange();
         initRecyclerView();
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
@@ -249,6 +256,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mVirusList.add(new VirusLlistEntity(R.drawable.icon_network, getString(R.string.network_quicken)));
         mVirusList.add(new VirusLlistEntity(R.drawable.icon_game_home, getString(R.string.game_quicken)));
     }
+   private String accData;//内存占用多少
     /***
      *
      * 设置清理数据
@@ -270,7 +278,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mAccFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
+            mAccTv.setText(accData);
 //   ---------------------------             }
         }
     }
@@ -279,7 +288,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      *
      * 设置清理通知栏数据
      */
-    private void setNotiClearData(){
+    private void setNotiClearData() {
         if (!NotifyUtils.isNotificationListenerEnabled()) {
             mShowCount++;
             mNotiClearFinishIv.setVisibility(View.GONE);
@@ -301,11 +310,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         }
     }
+
     /***
      *
      * 设置电池数据
      */
-    private void setPowerData(){
+    private void setPowerData() {
         if (mShowCount < 2 && AndroidUtil.getElectricityNum(getActivity()) <= 70) {
             if (!PreferenceUtil.getPowerCleanTime()) {
                 mElectricityFinishIv.setVisibility(View.VISIBLE);
@@ -429,9 +439,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
 
-        if (mIsClickAdTopDetail) {
-            initGeekSdkTop();
-        }
+//        if (mIsClickAdTopDetail) {
+//            initGeekSdkTop();
+//        }
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
@@ -606,7 +616,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mAccFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-            mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
+            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%";
+            mAccTv.setText(accData);
 
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
@@ -674,6 +685,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+                accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
                 mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
             }
 
@@ -726,7 +738,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+                accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
+                mAccTv.setText(accData);
             }
 
             //通知栏清理
@@ -756,11 +769,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
-        if (mShowCount <= 0) {
-            mTvCleanType01.setText(getString(R.string.recommend_count_hint_all));
-        } else {
-            mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
-        }
+//        if (mShowCount <= 0) {
+//            mTvCleanType01.setText(getString(R.string.recommend_count_hint_all));
+//        } else {
+//            mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
+//        }
 
         if (getString(R.string.virus_kill).contains(event.getTitle()) || getString(R.string.network_quicken).contains(event.getTitle())) {
             forThreeTab();
@@ -768,7 +781,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (getString(R.string.game_quicken).contains(event.getTitle()) && isGameMain) {
             forThreeTab();
         }
-        initGeekSdkTop();
+//        initGeekSdkTop();
     }
 
     /**
@@ -796,7 +809,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mAccFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
+
+            mAccTv.setText(accData);
         }
     }
 
@@ -807,27 +822,49 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
-        if (null == mTopAdFramelayout || null == mLottieHomeView) return;
+        if (null == mLottieHomeView) return;
         if (lifecycEvent.isActivity()) {
-            mTopContentView.setVisibility(VISIBLE);
-            mTopAdFramelayout.removeAllViews();
-            mTopAdFramelayout.setVisibility(View.GONE);
-            tvNowClean.setVisibility(VISIBLE);
-            mTvCleanType.setVisibility(VISIBLE);
-            mTvCleanType01.setVisibility(View.GONE);
-            showTextView();
-//            mLottieHomeView.useHardwareAcceleration(true);
-            mLottieHomeView.setAnimation("clean_home_top.json");
-            mLottieHomeView.setImageAssetsFolder("images_home");
-            mLottieHomeView.playAnimation();
-            mLottieHomeView.setVisibility(VISIBLE);
             if (System.currentTimeMillis() - oldTime > (min * 60 * 1000)) {
                 setCleanType();
                 setNotiClearData();
                 setPowerData();
-                oldTime=System.currentTimeMillis();
+                oldTime = System.currentTimeMillis();
             }
         }
+    }
+
+    private Map<String, Boolean> TopMap = new HashMap<>();
+
+    /**
+     * 判断圾清理>一键加速>超强省电>手机降温 切换
+     */
+    private void isTopChange() {
+        if (TopMap != null && TopMap.size() > 0) {
+            if (!TopMap.get("clear")) {
+                showHomeLottieView();
+            } else if (!TopMap.get("accelerate")) {
+                showAccelerateLottieView();
+            } else if (!TopMap.get("power")) {
+                showPowerLottieView();
+            } else if (!TopMap.get("cooling")) {
+                showCoolingLottieView();
+            } else {
+                initMap();
+            }
+        } else {
+            initMap();
+            isTopChange();
+        }
+    }
+
+    private void initMap() {
+        if (TopMap != null && TopMap.size() > 0) {
+            TopMap.clear();
+        }
+        TopMap.put("clear", false);
+        TopMap.put("accelerate", false);
+        TopMap.put("power", false);
+        TopMap.put("cooling", false);
     }
 
     @Override
@@ -1265,33 +1302,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                showTextView01();
-                tvNowClean.setVisibility(View.GONE);
-//                mLottieHomeView.useHardwareAcceleration(true);
-                mLottieHomeView.setAnimation("clean_home_top2.json");
-                mLottieHomeView.setImageAssetsFolder("images_home_finish");
-                mLottieHomeView.playAnimation();
-                mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mLottieHomeView.playAnimation();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
+                TopMap.put("clear", true);
+                isTopChange();
             }
         }
     }
@@ -1319,37 +1331,80 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 静止时动画
+     * 首页首次进入
+     * 垃圾清理效果
      */
     private void showHomeLottieView() {
-        showTextView();
-//        mLottieHomeView.useHardwareAcceleration(true);
-        mLottieHomeView.setAnimation("clean_home_top.json");
-        mLottieHomeView.setImageAssetsFolder("images_home");
+        String hintText = getString(R.string.tool_home_hint);
+        SpannableString msp = new SpannableString(hintText);
+//        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("大量垃圾文件"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        top_context.setText(msp);
+        oneTxt.setText(getString(R.string.top_clear));
+        twoTxt.setText(NumberUtils.mathRandom(200, 500));
+        threeTxt.setVisibility(VISIBLE);
+        iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_clear));
+        mLottieHomeView.setAnimation("home_top_clear.json");
+        mLottieHomeView.setImageAssetsFolder("images_top_home");
         mLottieHomeView.playAnimation();
         mLottieHomeView.setVisibility(VISIBLE);
-        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
     }
+
+
+    /**
+     * 一键加速
+     */
+    private void showAccelerateLottieView() {
+        String hintText = getString(R.string.tool_accelerate_hint);
+        SpannableString msp = new SpannableString(hintText);
+//        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("内存不足"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        top_context.setText(msp);
+        iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_accelerate));
+        oneTxt.setText(getString(R.string.top_accelerate));
+        if (TextUtils.isEmpty(accData)){
+            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
+        }
+        twoTxt.setText(accData);
+        threeTxt.setVisibility(View.GONE);
+        mLottieHomeView.setAnimation("home_top_accelerate.json");
+        mLottieHomeView.setImageAssetsFolder("images_top_home");
+        mLottieHomeView.playAnimation();
+        mLottieHomeView.setVisibility(VISIBLE);
+    }
+
+    /**
+     * 超强省电
+     */
+    private void showPowerLottieView() {
+        top_context.setText(getString(R.string.tool_power_top_hint, NumberUtils.mathRandom(8, 15)));
+        if (getPower() < 70) {//中
+            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_low));
+        } else if (getPower() < 50) {//低
+            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_di));
+        } else {
+            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_gao));
+        }
+
+        mLottieHomeView.setAnimation("home_top_power.json");
+        mLottieHomeView.setImageAssetsFolder("images_top_home");
+        mLottieHomeView.playAnimation();
+        mLottieHomeView.setVisibility(VISIBLE);
+    }
+
+    /**
+     * 手机降温
+     */
+    private void showCoolingLottieView() {
+        String hintText = getString(R.string.tool_cooling_hint);
+        top_context.setText(hintText);
+        iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_top_cooling));
+        mLottieHomeView.setAnimation("home_top_cooling.json");
+        mLottieHomeView.setImageAssetsFolder("images_top_home");
+        mLottieHomeView.playAnimation();
+        mLottieHomeView.setVisibility(VISIBLE);
+    }
+
 
     @Override
     public void onDestroy() {
@@ -1357,43 +1412,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         EventBus.getDefault().unregister(this);
     }
 
-
-    public void showTextView() {
-        String hintText = getString(R.string.tool_home_hint);
-        SpannableString msp = new SpannableString(hintText);
-//        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mTvCleanType != null && msp != null) {
-                    mTvCleanType.setText(msp);
-                    mTvCleanType.animate()
-                            .alpha(1f)
-                            .setDuration(500)
-                            .setListener(null);
-                }
-            }
-        }, 1000);
-    }
-
-    public void showTextView01() {
-        String showText = getString(R.string.tool_phone_already_clean);
-        String showText01 = "";
-        if (mShowCount <= 0) {
-            showText01 = getString(R.string.recommend_count_hint_all);
-        } else {
-            showText01 = getString(R.string.recommend_count_hint, String.valueOf(mShowCount));
-        }
-        SpannableString msp = new SpannableString(showText);
-        SpannableString msp01 = new SpannableString(showText01);
-        msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mTvCleanType.setText(msp);
-        mTvCleanType.setVisibility(VISIBLE);
-        mTvCleanType01.setText(msp01);
-        mTvCleanType01.setVisibility(VISIBLE);
-    }
 
     /**
      * 获取推荐列表成功
@@ -1649,5 +1667,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 startActivity(NetWorkActivity.class);
             }
         });
+    }
+
+    private int getPower() {
+        BatteryManager batteryManager = (BatteryManager) getActivity().getSystemService(BATTERY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        } else {
+            return 0;
+        }
     }
 }
