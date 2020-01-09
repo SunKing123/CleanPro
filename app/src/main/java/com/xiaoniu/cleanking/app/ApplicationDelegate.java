@@ -94,7 +94,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(application);
-        UMConfigure.init(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.init(application, "5e16d7b54ca35746e9000248", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
 
