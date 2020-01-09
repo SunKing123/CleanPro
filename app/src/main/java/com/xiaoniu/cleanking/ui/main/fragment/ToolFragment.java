@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -42,7 +40,6 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.geeksdk.ADUtilsKt;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -55,6 +52,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -458,6 +456,7 @@ public class ToolFragment extends SimpleFragment {
                         frameBottomLayout.setVisibility(View.VISIBLE);
                     }
                 }
+
             }
 
             @Override
@@ -480,7 +479,16 @@ public class ToolFragment extends SimpleFragment {
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "acceleration_page", "acceleration_page");
                 }
-                frameBottomLayout.setVisibility(View.GONE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(null!=frameBottomLayout){
+                            frameBottomLayout.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+
             }
         });
     }

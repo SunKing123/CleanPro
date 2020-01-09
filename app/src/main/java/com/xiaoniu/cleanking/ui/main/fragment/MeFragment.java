@@ -319,7 +319,14 @@ public class MeFragment extends SimpleFragment {
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "my_page", "my_page");
                 }
-                frameBottomLayout.setVisibility(View.GONE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(null!=frameBottomLayout){
+                            frameBottomLayout.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
         });
     }
