@@ -1086,7 +1086,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         /*---------------------------------------- 埋点---------------------------------------------------------------------*/
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //手机大师极速版
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
@@ -1130,7 +1130,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void onPause() {
         Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //手机大师极速版
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速

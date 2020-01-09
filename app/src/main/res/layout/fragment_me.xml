@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_8dp"
-        android:text="欢迎来到清理管家极速版"
+        android:text="欢迎来到手机大师极速版"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/iv_top"
