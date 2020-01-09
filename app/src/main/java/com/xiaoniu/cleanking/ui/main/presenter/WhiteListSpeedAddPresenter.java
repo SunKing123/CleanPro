@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
@@ -132,7 +133,7 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
             PackageInfo packageInfo = packages.get(i);
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
 
-                if ("com.hellogeek.cleanking".equals(packageInfo.packageName)) {
+                if (BuildConfig.APPLICATION_ID.equals(packageInfo.packageName)) {
                    continue;
                 }
                 boolean isExist = false;

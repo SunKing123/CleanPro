@@ -118,7 +118,7 @@ public class SpCacheConfig {
     public static final String NOTITY = "notity";
     public static final String SUPER_POWER_SAVING = "super_power_saving";
     public static final String BANNER = "banner";
-    public static final String APP_ID = "com.hellogeek.cleanking";
+    public static final String APP_ID = "com.xiaoniu.cleanmaster.cleanking";
     //头条信息流
     public static final String NEWS_BASEURL = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
     //瑞狮信息流地址

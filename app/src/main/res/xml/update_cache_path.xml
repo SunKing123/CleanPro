@@ -19,7 +19,7 @@
         path="" />
     <external-path
         name="files_root"
-        path="Android/data/com.hellogeek.cleanking/" />
+        path="Android/data/com.xiaoniu.cleanmaster.cleanking/" />
     <external-path
         name="external_storage_root"
         path="." />

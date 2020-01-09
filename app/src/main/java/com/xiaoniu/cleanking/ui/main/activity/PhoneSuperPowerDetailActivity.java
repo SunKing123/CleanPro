@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -330,7 +331,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 } else {
                     childInfo.selected = 1;
                     mSelectedCount++;
-                    if (!childInfo.packageName.equals("com.hellogeek.cleanking"))
+                    if (!childInfo.packageName.equals(BuildConfig.APPLICATION_ID))
                         killGroupInfo.addItemInfo(childInfo);
                 }
             }

@@ -20,6 +20,7 @@ import android.webkit.MimeTypeMap;
 
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoClean;
@@ -434,7 +435,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null && !"com.hellogeek.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !BuildConfig.APPLICATION_ID.equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -449,7 +450,7 @@ public class FileQueryUtils {
 
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null && !"com.hellogeek.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !BuildConfig.APPLICATION_ID.equals(firstJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -476,7 +477,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null && !"com.hellogeek.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !BuildConfig.APPLICATION_ID.equals(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -489,7 +490,7 @@ public class FileQueryUtils {
                             secondJunkInfo.setGarbagetype("TYPE_CACHE");
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null && !"com.hellogeek.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !BuildConfig.APPLICATION_ID.equals(firstJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -502,7 +503,7 @@ public class FileQueryUtils {
                 continue;
             }
             //排除当前应用
-            if (!"com.hellogeek.cleanking".equals(firstJunkInfo.getAppPackageName()))
+            if (!BuildConfig.APPLICATION_ID.equals(firstJunkInfo.getAppPackageName()))
                 list.add(firstJunkInfo);
             /**
              * 遍历文件3/4以上 && 未扫描出apk文件 && 遍历私有路径下包含垃圾
@@ -622,7 +623,7 @@ public class FileQueryUtils {
             for (Object obj : hashMap.keySet()) {
                 FirstJunkInfo onelevelGarbageInfo4 = (FirstJunkInfo) hashMap.get(obj);
                 if (onelevelGarbageInfo4.getTotalSize() != 0) {
-                    if (!"com.hellogeek.cleanking".equals(onelevelGarbageInfo4.getAppPackageName()))
+                    if (!BuildConfig.APPLICATION_ID.equals(onelevelGarbageInfo4.getAppPackageName()))
                         arrayList.add(onelevelGarbageInfo4);
                 }
             }
@@ -1034,7 +1035,7 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(true);
                                     }
-                                    if (!"com.hellogeek.cleanking".equals(packageArchiveInfo.packageName)) {
+                                    if (!BuildConfig.APPLICATION_ID.equals(packageArchiveInfo.packageName)) {
                                         arrayList.add(onelevelGarbageInfo);
                                         if (mScanFileListener != null) {
                                             mScanFileListener.increaseSize(j);
