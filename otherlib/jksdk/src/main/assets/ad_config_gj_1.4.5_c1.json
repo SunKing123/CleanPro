@@ -499,21 +499,22 @@
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "936430226",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理管家极速版"
-        },
-        {
           "adId": "1090093231771892",
           "adUnion": "youlianghui",
           "requestOrder": 2,
           "requestType": 0,
           "adsAppId": "1110047950",
           "adsAppName": "清理管家极速版"
+        },
+        {
+          "adId": "936430226",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理管家极速版"
         }
+
       ]
     },
     {
