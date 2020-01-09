@@ -859,7 +859,7 @@ public final class LocalService extends Service {
         } else {
             MmkvUtil.saveLong("appiconTime", System.currentTimeMillis());
         }
-//        setAppIcon();
+        setAppIcon();
     }
 
 
