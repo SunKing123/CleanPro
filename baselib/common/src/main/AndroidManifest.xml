@@ -115,7 +115,7 @@
         </activity> <!-- 小牛数据埋点 -->
         <meta-data
             android:name="com.xiaoniu.statistic.ProductID"
-            android:value="181" /> <!-- 热修复回调 -->
+            android:value="182" /> <!-- 热修复回调 -->
         <receiver android:name=".hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" />
 
         <service

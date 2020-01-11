@@ -429,7 +429,13 @@ public class AdsConfig {
                 appName = "悟空清理";
                 break;
             case "181":
+                appName = "清理管家极速版";
+                break;
+            case "182":
                 appName = "手机大师极速版";
+                break;
+            case "183":
+                appName = "一键清理管家";
                 break;
             case "19":
                 appName = "最来电";
