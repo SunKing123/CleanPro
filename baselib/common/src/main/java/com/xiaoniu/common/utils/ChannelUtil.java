@@ -69,7 +69,7 @@ public class ChannelUtil {
         if (split != null && split.length >= 2) {
             channel = ret.substring(split[0].length() + 1);
         }
-        return TextUtils.isEmpty(channel)?"clean_hellogeek_test":channel;
+        return TextUtils.isEmpty(channel)?"clean_master_test":channel;
     }
 
 }
