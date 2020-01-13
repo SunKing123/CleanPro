@@ -127,7 +127,7 @@ public class ShoppingMallFragment extends SimpleFragment implements MainActivity
                 return;
             }
             if (getActivity() != null) {
-                mCanGoBack = !"清理管家极速版商城".equals(title);
+                mCanGoBack = !"一键清理管家商城".equals(title);
             }
         }
     }
