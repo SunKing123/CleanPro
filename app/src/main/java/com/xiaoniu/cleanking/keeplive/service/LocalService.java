@@ -480,7 +480,7 @@ public final class LocalService extends Service {
             startFullInsertAd(this);
         }
         if (!BuildConfig.SYSTEM_EN.contains("prod"))
-            ToastUtils.showShort("charge--" + (isCharged ? "充电中" : "未充电"));
+//            ToastUtils.showShort("charge--" + (isCharged ? "充电中" : "未充电"));
         Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
@@ -791,7 +791,7 @@ public final class LocalService extends Service {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
-            Toast.makeText(this, "应用内插屏!", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "应用内插屏!", Toast.LENGTH_LONG).show();
             Log.e("dong", "应用内插屏!");
             Intent screenIntent = new Intent();
             screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);

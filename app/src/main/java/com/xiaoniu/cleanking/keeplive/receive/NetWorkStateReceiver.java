@@ -82,7 +82,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             startFullInsertAd(context);
         }
         if(!BuildConfig.SYSTEM_EN.contains("prod"))
-        ToastUtils.showShort("WIFI---"+(wifiContected == 0 ? "未连接" : "已连接"));
+//        ToastUtils.showShort("WIFI---"+(wifiContected == 0 ? "未连接" : "已连接"));
         Logger.i("zz---WIFI" + (wifiContected == 0 ? "未连接" : "已连接"));
         //更新sp当前wifi状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, wifiContected);
