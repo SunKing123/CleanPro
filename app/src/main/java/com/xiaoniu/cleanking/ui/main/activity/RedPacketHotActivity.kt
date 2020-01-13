@@ -11,6 +11,7 @@ import com.comm.jksdk.ad.listener.VideoAdListener
 import com.geek.webpage.eventbus.BaseEventBus
 import com.geek.webpage.eventbus.BaseEventBusConstant
 import com.geek.webpage.web.model.WebDialogManager
+import com.orhanobut.logger.Logger
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
@@ -18,6 +19,7 @@ import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -84,6 +86,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         if (!isFinishing()) {
 //            preloadingSplashAd(this, PositionId.AD_RED_PACKET, getString(R.string.redpack))
             NiuDataAPI.onPageStart("red_envelopes_page_view_page", "红包弹窗浏览")
+            LogUtils.i("zzh--"+AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount]);
             WebDialogManager.getInstance().showWebDialog(this, this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount])
             WebDialogManager.getInstance().setFinishInterface(this)
         }

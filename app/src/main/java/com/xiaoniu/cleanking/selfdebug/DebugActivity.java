@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -297,6 +298,13 @@ public class DebugActivity extends BaseActivity {
         screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
         context.startActivity(screenIntent);
     }
+
+
+    public void gotoInside(Context context){
+        context.startActivity(new Intent(context, ScreenInsideActivity.class));
+    }
+
+
 
 
 

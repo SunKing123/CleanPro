@@ -83,7 +83,7 @@ public class PositionId {
     public static final String AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB = "personal_center_page_below_ad_mb";
     public static final String AD_ACCELERATION_PAGE_BELOW_AD_MB = "acceleration_page_below_ad_mb";
 
-    public static final String AD_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";
+    public static final String AD_EXTERNAL_ADVERTISING_AD_1 = "external_advertising_ad_1";//外部非全屏插屏
     public static final String AD_ACCELERATION_PAGE_BELOW = "acceleration_page_below_ad";
     public static final String AD_PERSONAL_CENTER_PAGE_BELOW = "personal_center_page_below_ad";
     public static final String AD_EXTERNAL_ADVERTISING_02 = "external_advertising_ad_2";//外部插屏全屏广告
