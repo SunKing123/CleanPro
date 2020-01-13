@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -387,7 +388,7 @@ public class SPUtil {
         whitelist.add("com.tencent.mm");
         whitelist.add("com.tencent.mobileqq");
         whitelist.add("com.tencent.wework");
-        whitelist.add("com.hellogeek.cleanking");
+        whitelist.add(BuildConfig.APPLICATION_ID);
         return whitelist;
     }
 

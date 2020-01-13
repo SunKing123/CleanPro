@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
@@ -186,9 +187,9 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
         List<AppInfoBean> appInfoAll = apps;
         List<AppInfoBean> lists = new ArrayList<>();
         for (AppInfoBean appInfoBean : appInfoAll) {
-            if (type == 0 && appInfoBean.isInstall == true && !"com.hellogeek.cleanking".equals(appInfoBean.packageName)) {
+            if (type == 0 && appInfoBean.isInstall == true && !BuildConfig.APPLICATION_ID.equals(appInfoBean.packageName)) {
                 lists.add(appInfoBean);
-            } else if (type == 1 && appInfoBean.isInstall == false && !"com.hellogeek.cleanking".equals(appInfoBean.packageName)) {
+            } else if (type == 1 && appInfoBean.isInstall == false && !BuildConfig.APPLICATION_ID.equals(appInfoBean.packageName)) {
                 lists.add(appInfoBean);
             }
         }

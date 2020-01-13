@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.config;
 
+import com.xiaoniu.cleanking.BuildConfig;
+
 /**
  * sp 配置文件
  * Created by lang.chen on 2019/7/3
@@ -118,7 +120,7 @@ public class SpCacheConfig {
     public static final String NOTITY = "notity";
     public static final String SUPER_POWER_SAVING = "super_power_saving";
     public static final String BANNER = "banner";
-    public static final String APP_ID = "com.hellogeek.cleanking";
+    public static final String APP_ID = BuildConfig.APPLICATION_ID;
     //头条信息流
     public static final String NEWS_BASEURL = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
     //瑞狮信息流地址
