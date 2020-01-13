@@ -52,7 +52,7 @@ public class Constant {
     public static final int HOME_SPACE_LONG = 1;
 
     //穿山甲广告app_id
-    public static final String CSJ_AD_ID = "5036430";
+    public static final String CSJ_AD_ID = "5046137";
 
     public static final String CLEAN_DB_NAME = "weatherCity.db";
     public static final String CLEAN_TABLE_NAME = "XNWeatherCityModel";
