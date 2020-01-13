@@ -7,7 +7,6 @@ gj_lianxiang
 gj_wandoujia
 gj_yingyonghui
 gj_sougou
-gj_lianxiang
 gj_sanxing
 gj_meizu
 gj_mumayi
