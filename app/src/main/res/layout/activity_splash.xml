@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/iv_splash"
         android:layout_width="wrap_content"
-        android:layout_height="31dp"
+        android:layout_height="36dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dimen_16dp"
         android:adjustViewBounds="true"
