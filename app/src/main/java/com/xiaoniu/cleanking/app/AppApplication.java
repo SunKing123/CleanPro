@@ -55,9 +55,9 @@ public class AppApplication extends BaseApplication {
         sInstance = this;
         super.onCreate();
         ContextUtils.initApplication(this);
-        //接入百度统计sdk
+        /*//接入百度统计sdk
         StatService.setAppChannel(this,ChannelUtil.getChannel(),true);
-        StatService.autoTrace(this);
+        StatService.autoTrace(this);*/
     }
 
     /**
