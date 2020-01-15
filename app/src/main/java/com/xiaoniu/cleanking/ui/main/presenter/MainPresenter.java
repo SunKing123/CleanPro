@@ -120,7 +120,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void showExtraOp(String code, String message) {
-                Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
                 getRedPacketList();
             }
 

@@ -128,6 +128,11 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         ActivityCollector.removeActivity(this);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 
     @Override
     public void onBackPressed() {
