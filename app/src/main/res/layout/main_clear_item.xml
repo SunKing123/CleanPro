@@ -15,8 +15,8 @@
         android:id="@+id/flyTop">
         <ImageView
             android:id="@+id/icon_top"
-            android:layout_width="@dimen/dimen_150dp"
-            android:layout_height="@dimen/dimen_150dp"
+            android:layout_width="@dimen/dimen_160dp"
+            android:layout_height="@dimen/dimen_160dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:src="@mipmap/icon_clear" />
@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
+            android:id="@+id/lly_text"
             android:layout_marginTop="@dimen/dp_10"
             >
             <TextView
@@ -33,9 +34,8 @@
                 android:layout_height="wrap_content"
                 android:text="垃圾文件"
                 android:id="@+id/oneTxt"
-
                 android:layout_gravity="center"
-                android:textColor="#FF546B"
+                android:textColor="@color/color_FF546B"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_12"
                 />
@@ -45,7 +45,8 @@
                 android:text="200"
                 android:id="@+id/twoTxt"
                 android:layout_gravity="center"
-                android:textColor="#FF546B"
+                android:textColor="@color/color_FF546B"
+
                 android:textStyle="bold"
                 android:textSize="22sp"
                 />
@@ -72,7 +73,6 @@
             app:lottie_autoPlay="true"
             android:scaleType="centerInside"
             app:lottie_loop="true"
-
             />
 
     </FrameLayout>
@@ -87,13 +87,19 @@
         android:text="已发现大量垃圾文件，深度清理更彻底"
         android:textColor="@color/white" />
 
-    <ImageView
+
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/tv_now_clean"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        android:scaleType="centerInside"
+        app:lottie_loop="true"
         android:layout_width="wrap_content"
-        android:layout_height="54dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/top_context"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_13"
         android:layout_marginBottom="120dp"
-        android:src="@drawable/icon_clean_now" />
+        />
 </RelativeLayout>

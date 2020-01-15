@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -209,7 +210,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         });
         DbHelper.copyDb();
-
         checkReadPermission();
 
        /* String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -232,6 +232,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
+        Log.e("shenming","onCreate");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e("shenming","onStart");
     }
 
     @Override
@@ -348,6 +355,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 e.printStackTrace();
             }
         }
+        Log.e("shenming","onResume");
     }
 
     @Override

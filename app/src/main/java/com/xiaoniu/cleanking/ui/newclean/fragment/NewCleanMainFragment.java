@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -80,7 +81,6 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,7 +148,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
     @BindView(R.id.tv_now_clean)
-    ImageView tvNowClean;
+    LottieAnimationView tvNowClean;
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
     @BindView(R.id.layout_scroll)
@@ -175,6 +175,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     TextView twoTxt;
     @BindView(R.id.threeTxt)
     TextView threeTxt;
+    @BindView(R.id.lly_text)
+    LinearLayout lly_text;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -237,8 +239,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        Intent shortcutInfoIntent = new Intent(getActivity(), SplashADActivity.class);
 //        shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
 //        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
+        Log.e("shenming","Fragment_onCreate");
+
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("shenming","Fragment_onStart");
+
+    }
 
     /**
      * 广告sdk
@@ -256,7 +266,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mVirusList.add(new VirusLlistEntity(R.drawable.icon_network, getString(R.string.network_quicken)));
         mVirusList.add(new VirusLlistEntity(R.drawable.icon_game_home, getString(R.string.game_quicken)));
     }
-   private String accData;//内存占用多少
+
+    private String accData;//内存占用多少
+
     /***
      *
      * 设置清理数据
@@ -278,8 +290,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mAccFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
-            mAccTv.setText(accData);
+            accData = NumberUtils.mathRandom(70, 85);
+            mAccTv.setText(getString(R.string.internal_storage_scale, accData) + "%");
 //   ---------------------------             }
         }
     }
@@ -445,6 +457,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
+        Log.e("shenming","Fragment_onResume");
     }
 
     /**
@@ -616,9 +629,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mAccFinishIv.setVisibility(View.VISIBLE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_yjjs, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%";
-            mAccTv.setText(accData);
-
+            mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
+            TopMap.put("accelerate", true);
+            isTopChange();
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
@@ -685,8 +698,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
-                mAccTv.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+                accData = NumberUtils.mathRandom(70, 85);
+                mAccTv.setText(getString(R.string.internal_storage_scale, accData) + "%");
             }
 
             //超强省电
@@ -726,6 +739,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             } else {
                 mElectricityTv.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
             }
+            TopMap.put("power", true);
+            isTopChange();
             //一键加速
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
                 mShowCount++;
@@ -738,8 +753,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mAccFinishIv.setVisibility(View.GONE);
                 GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
                 mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-                accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
-                mAccTv.setText(accData);
+                accData = NumberUtils.mathRandom(70, 85);
+                mAccTv.setText(getString(R.string.internal_storage_scale, accData) + "%");
             }
 
             //通知栏清理
@@ -768,6 +783,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
                 }
             }
+        } else if (getString(R.string.tool_phone_temperature_low).contains(event.getTitle())) {
+            TopMap.put("cooling", true);
+            isTopChange();
         }
 //        if (mShowCount <= 0) {
 //            mTvCleanType01.setText(getString(R.string.recommend_count_hint_all));
@@ -809,9 +827,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mAccFinishIv.setVisibility(View.GONE);
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_quicken, mAccIv);
             mAccTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
-
-            mAccTv.setText(accData);
+            accData = NumberUtils.mathRandom(70, 85);
+            mAccTv.setText(getString(R.string.internal_storage_scale, accData) + "%");
         }
     }
 
@@ -834,6 +851,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private Map<String, Boolean> TopMap = new HashMap<>();
+    private int topChange = 0;//0：清理，1：加速，2：省电，3：降温
 
     /**
      * 判断圾清理>一键加速>超强省电>手机降温 切换
@@ -841,15 +859,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void isTopChange() {
         if (TopMap != null && TopMap.size() > 0) {
             if (!TopMap.get("clear")) {
+                topChange = 0;
                 showHomeLottieView();
             } else if (!TopMap.get("accelerate")) {
+                topChange = 1;
                 showAccelerateLottieView();
             } else if (!TopMap.get("power")) {
+                topChange = 2;
                 showPowerLottieView();
             } else if (!TopMap.get("cooling")) {
+                topChange = 3;
                 showCoolingLottieView();
             } else {
                 initMap();
+                isTopChange();
             }
         } else {
             initMap();
@@ -877,41 +900,55 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     }
 
+
+
     /**
-     * 立即清理
+     * 立即清理 加速  电池 降温
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
-        StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
-        ((MainActivity) getActivity()).commitJpushClickTime(1);
-        if (true) {
-            startActivity(NowCleanActivity.class);
-        } else {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
+
+        if (topChange == 0) {
+            StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
+            //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
+            ((MainActivity) getActivity()).commitJpushClickTime(1);
+            if (true) {
+                startActivity(NowCleanActivity.class);
+            } else {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                boolean isOpen = false;
+                //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                            isOpen = switchInfoList.isOpen();
+                        }
                     }
                 }
+                EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_suggest_clean));
+                    startActivity(CleanFinishAdvertisementActivity.class, bundle);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", getString(R.string.tool_suggest_clean));
+                    bundle.putString("num", "");
+                    bundle.putString("unit", "");
+                    bundle.putString("home", "");
+                    startActivity(NewCleanFinishActivity.class, bundle);
+                }
             }
-            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putString("home", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+        } else if (topChange == 1) {//加速
+            ((MainActivity) getActivity()).commitJpushClickTime(2);
+            text_acce();
+        } else if (topChange == 2) {//电池
+            ((MainActivity) getActivity()).commitJpushClickTime(9);
+            line_shd();
+        } else if (topChange == 3) {//降温
+            ((MainActivity) getActivity()).commitJpushClickTime(6);
+            mClickJw();
         }
     }
 
@@ -1340,16 +1377,29 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("大量垃圾文件"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         top_context.setText(msp);
+        setLlyTextMargin(0, 10);
         oneTxt.setText(getString(R.string.top_clear));
         twoTxt.setText(NumberUtils.mathRandom(200, 500));
         threeTxt.setVisibility(VISIBLE);
         iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_clear));
+        oneTxt.setTextColor(getActivity().getResources().getColor(R.color.color_FF546B));
+        twoTxt.setTextColor(getActivity().getResources().getColor(R.color.color_FF546B));
         mLottieHomeView.setAnimation("home_top_clear.json");
         mLottieHomeView.setImageAssetsFolder("images_top_home");
         mLottieHomeView.playAnimation();
         mLottieHomeView.setVisibility(VISIBLE);
+        tvNowClean.setAnimation("top_clear/donghua.json");
+        tvNowClean.setImageAssetsFolder("top_clear/images");
+        tvNowClean.playAnimation();
     }
-
+    private void setLlyTextMargin(int left, int top) {
+        int tops = DisplayUtil.dp2px(mContext, top);
+        int lefts = DisplayUtil.dp2px(mContext, left);
+        FrameLayout.LayoutParams params =
+                (FrameLayout.LayoutParams) lly_text.getLayoutParams();
+        params.setMargins(lefts, tops, 0, 0);
+        lly_text.setLayoutParams(params);
+    }
 
     /**
      * 一键加速
@@ -1360,17 +1410,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("内存不足"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         top_context.setText(msp);
+        setLlyTextMargin(0, 0);
         iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_accelerate));
         oneTxt.setText(getString(R.string.top_accelerate));
-        if (TextUtils.isEmpty(accData)){
-            accData=getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%";
+        if (TextUtils.isEmpty(accData)) {
+            accData = NumberUtils.mathRandom(70, 85);
         }
-        twoTxt.setText(accData);
+        twoTxt.setText(accData + "%");
+        oneTxt.setTextColor(getActivity().getResources().getColor(R.color.color_FF546B));
+        twoTxt.setTextColor(getActivity().getResources().getColor(R.color.color_FF546B));
         threeTxt.setVisibility(View.GONE);
         mLottieHomeView.setAnimation("home_top_accelerate.json");
         mLottieHomeView.setImageAssetsFolder("images_top_home");
         mLottieHomeView.playAnimation();
         mLottieHomeView.setVisibility(VISIBLE);
+
+        tvNowClean.setAnimation("top_acc/donghua.json");
+        tvNowClean.setImageAssetsFolder("top_acc/images");
+        tvNowClean.playAnimation();
+
     }
 
     /**
@@ -1378,18 +1436,32 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void showPowerLottieView() {
         top_context.setText(getString(R.string.tool_power_top_hint, NumberUtils.mathRandom(8, 15)));
-        if (getPower() < 70) {//中
-            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_low));
-        } else if (getPower() < 50) {//低
-            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_di));
-        } else {
-            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_gao));
-        }
-
         mLottieHomeView.setAnimation("home_top_power.json");
         mLottieHomeView.setImageAssetsFolder("images_top_home");
         mLottieHomeView.playAnimation();
         mLottieHomeView.setVisibility(VISIBLE);
+        if (getPower() < 70) {//中
+            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_low));
+            mLottieHomeView.setVisibility(VISIBLE);
+        } else if (getPower() < 50) {//低
+            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_di));
+            mLottieHomeView.setVisibility(VISIBLE);
+        } else {
+            iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_gao));
+            mLottieHomeView.setVisibility(View.GONE);
+        }
+        setLlyTextMargin(0, 10);
+        oneTxt.setText(getString(R.string.top_power));
+        oneTxt.setTextColor(getActivity().getResources().getColor(R.color.white));
+        twoTxt.setText(getPower() + "%");
+        twoTxt.setTextColor(getActivity().getResources().getColor(R.color.white));
+        threeTxt.setVisibility(View.GONE);
+
+        tvNowClean.setAnimation("top_power/donghua.json");
+        tvNowClean.setImageAssetsFolder("top_power/images");
+        tvNowClean.playAnimation();
+
+
     }
 
     /**
@@ -1399,10 +1471,28 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         String hintText = getString(R.string.tool_cooling_hint);
         top_context.setText(hintText);
         iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_top_cooling));
+        setLlyTextMargin(10, 0);
+        oneTxt.setText(getString(R.string.top_cooling));
+        twoTxt.setText(getPhoneTemperature() + "°C");
+        threeTxt.setVisibility(View.GONE);
+        oneTxt.setTextColor(getActivity().getResources().getColor(R.color.color_FF546B));
+        twoTxt.setTextColor(getActivity().getResources().getColor(R.color.color_FF546B));
         mLottieHomeView.setAnimation("home_top_cooling.json");
         mLottieHomeView.setImageAssetsFolder("images_top_home");
         mLottieHomeView.playAnimation();
         mLottieHomeView.setVisibility(VISIBLE);
+        tvNowClean.setAnimation("top_cooling/donghua.json");
+        tvNowClean.setImageAssetsFolder("top_cooling/images");
+        tvNowClean.playAnimation();
+
+    }
+
+    private int getPhoneTemperature() {
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = AppApplication.getInstance().registerReceiver(null, iFilter);
+        int tem = batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+        int i = tem / 10;
+        return i > 0 ? i : 30;
     }
 
 

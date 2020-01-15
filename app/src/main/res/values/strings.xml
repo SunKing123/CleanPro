@@ -105,6 +105,8 @@
     <string name="tool_cooling_hint">手机温度过高会影响手机性能</string>
     <string name="top_clear">垃圾文件</string>
     <string name="top_accelerate">内存占用</string>
+    <string name="top_power">电池电量</string>
+    <string name="top_cooling">手机温度</string>
     <string name="tool_home_clean">立即清理</string>
     <string name="tool_phone_already_clean">手机很干净了</string>
 

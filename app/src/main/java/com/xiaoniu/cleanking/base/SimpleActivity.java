@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -72,6 +73,9 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         initView();
     }
 
+
+
+
     protected void handleMessage(Message msg) {
     }
 
@@ -117,7 +121,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         MobclickAgent.onResume(this);
     }
 
