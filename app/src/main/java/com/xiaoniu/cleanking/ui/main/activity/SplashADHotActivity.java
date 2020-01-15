@@ -15,6 +15,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -85,7 +86,9 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                         if (dataBean.isOpen()) {//内部插屏广告
+                            Logger.i("zz--inside"+PreferenceUtil.getRedPacketShowCount());
                             if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
+                                Logger.i("zz--inside"+PreferenceUtil.getRedPacketShowCount());
                                 PreferenceUtil.saveScreenInsideTime();
                                 startActivity(new Intent(this, ScreenInsideActivity.class));
                                 return;
@@ -96,6 +99,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 //所有页面展示红包
                 if (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0
                         || PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
+                    Logger.i("zz--hot"+PreferenceUtil.getRedPacketShowCount());
                     startActivity(new Intent(this, RedPacketHotActivity.class));
                 }
                 break;

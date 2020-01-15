@@ -121,10 +121,12 @@ public class AppHolder {
 
     public void setRedPacketEntityList(RedPacketEntity redPacketEntity) {
         this.mRedPacketEntity = redPacketEntity;
+        MmkvUtil.saveString("red_packet", new Gson().toJson(mRedPacketEntity));
     }
 
     public RedPacketEntity getRedPacketEntityList() {
-        return mRedPacketEntity;
+        return mRedPacketEntity != null ? mRedPacketEntity : new Gson().fromJson(MmkvUtil.getString("red_packet", ""), new TypeToken<RedPacketEntity>() {
+        }.getType());
     }
 
 
