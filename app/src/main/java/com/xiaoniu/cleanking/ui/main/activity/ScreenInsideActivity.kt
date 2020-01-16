@@ -1,12 +1,15 @@
 package com.xiaoniu.cleanking.ui.main.activity
 
+import android.os.Handler
 import android.util.Log
 import com.comm.jksdk.GeekAdSdk
 import com.comm.jksdk.ad.entity.AdInfo
 import com.comm.jksdk.ad.listener.AdListener
 import com.comm.jksdk.ad.listener.AdManager
+import com.comm.jksdk.config.InitBaseConfig
 import com.xiaoniu.cleanking.BuildConfig
 import com.xiaoniu.cleanking.R
+import com.xiaoniu.cleanking.app.Constant
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
@@ -48,6 +51,8 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
      * 内部插屏广告
      */
     private fun loadCustomInsertScreenAd() {
+
+        var adState = 0
         if (null == mAdManager) return
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "inside_advertising_ad_page")
         mAdManager.loadCustomInsertScreenAd(this, "inside_advertising_ad", 3, object : AdListener {
@@ -59,6 +64,7 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
 
             override fun adExposed(info: AdInfo) {
                 Log.d(TAG, "adExposed 内部插屏")
+                adState = 1
                 PreferenceUtil.saveShowAD(true)
                 if (null == info) return
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "inside_advertising_ad_page", info.adTitle)
@@ -90,6 +96,15 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
                 finish()
             }
         }, "80")
+        Handler().postDelayed( Runnable() {//在当前线程（也即主线程中）开启一个消息处理器，并在3秒后在主线程中执行，从而来更新UI
+            if(adState ==0){
+                if (!isFinishing) {
+                    InitBaseConfig.getInstance().initChjAd(this, Constant.CSJ_AD_ID)
+                    PreferenceUtil.saveShowAD(false)
+                    finish()
+                }
+            }
+        }, 2500);
     }
 
     override fun onStop() {

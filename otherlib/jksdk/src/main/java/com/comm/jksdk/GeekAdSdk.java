@@ -44,10 +44,10 @@ public final class GeekAdSdk {
         mRroductName = productName;
         mChannel = channel;
         mIsFormal = isFormal;
+        AdsConfig.setProductName(mRroductName);
         //初始化基本配置信息
         InitBaseConfig.getInstance().init(mContext);
         InitBaseConfig.getInstance().initChjAd(mContext, csjAppId);
-        AdsConfig.setProductName(mRroductName);
         mIsInit = true;
     }
 

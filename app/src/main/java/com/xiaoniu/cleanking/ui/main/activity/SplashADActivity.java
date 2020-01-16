@@ -128,6 +128,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         } else {
             mPresenter.geekAdSDKConfig();//加载广告配置
             mPresenter.getBottomAdList();
+            if(!"1".equals(MmkvUtil.getString(AppApplication.AuditSwitch, "0"))){  //过审开关关闭状态
+                mPresenter.getSwitchInfoListNew();
+            }
+
         }
 
         initNiuData();
