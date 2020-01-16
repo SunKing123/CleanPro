@@ -123,10 +123,10 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         if (ActivityCollector.isActivityExist(RedPacketHotActivity.class)) {
             ActivityCollector.finishActivity(RedPacketHotActivity.class);
         }
-        if (ActivityCollector.isActivityExistMkv(InsertScreenFinishActivity.class)) {
+        if (ActivityCollector.isActivityExist(InsertScreenFinishActivity.class)) {
             ActivityCollector.finishActivity(InsertScreenFinishActivity.class);
         }
-        if (ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)) {
+        if (ActivityCollector.isActivityExist(ScreenInsideActivity.class)) {
             ActivityCollector.finishActivity(ScreenInsideActivity.class);
         }
 
