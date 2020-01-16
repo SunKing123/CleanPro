@@ -37,8 +37,9 @@
        android:id="@+id/ll_power_low"
        android:layout_width="wrap_content"
        android:orientation="vertical"
-       android:visibility="gone"
        android:layout_marginLeft="@dimen/dimen_68dp"
+       android:visibility="gone"
+
        android:layout_toRightOf="@id/bv_view"
        android:layout_height="wrap_content">
 

@@ -1435,15 +1435,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 超强省电
      */
     private void showPowerLottieView() {
-        top_context.setText(getString(R.string.tool_power_top_hint, NumberUtils.mathRandom(8, 15)));
         mLottieHomeView.setAnimation("home_top_power.json");
         mLottieHomeView.setImageAssetsFolder("images_top_home");
         mLottieHomeView.playAnimation();
         mLottieHomeView.setVisibility(VISIBLE);
-        if (getPower() < 70) {//中
+        int powerSize=getPower();
+        if (TextUtils.isEmpty(getPowerSize(powerSize))){
+            top_context.setText(getString(R.string.tool_power_hint));
+        }else{
+            top_context.setText(getString(R.string.tool_power_top_hint,getPowerSize(powerSize) ));
+        }
+        if (powerSize < 70) {//中
             iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_low));
             mLottieHomeView.setVisibility(VISIBLE);
-        } else if (getPower() < 50) {//低
+        } else if (powerSize< 50) {//低
             iconTop.setImageDrawable(getResources().getDrawable(R.mipmap.icon_power_di));
             mLottieHomeView.setVisibility(VISIBLE);
         } else {
@@ -1462,6 +1467,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         tvNowClean.playAnimation();
 
 
+    }
+
+
+    private String getPowerSize(int mBatteryPower){
+        if (mBatteryPower < 6) {
+           return "";
+        }else if (mBatteryPower < 11) {
+            return NumberUtils.mathRandom(5, 20);
+        } else if (mBatteryPower < 21) {
+            return  NumberUtils.mathRandom(10, 30);
+        } else if (mBatteryPower < 51) {
+            return NumberUtils.mathRandom(10, 45);
+        } else if (mBatteryPower < 71) {
+            return  NumberUtils.mathRandom(20, 55);
+        } else if (mBatteryPower < 101) {
+            return  NumberUtils.mathRandom(30, 60);
+        }
+        return "";
     }
 
     /**

@@ -162,7 +162,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
     /**
      * 更新显示电量
-     * 当手机电量1%~10%，延长时间显示“点击优化，请尽快充电哦！”
+     * 当手机电量1%~5%，延长时间显示“手机电量严重不足”
+     * 当手机电量5%~10%，延长时间显示5~20分钟随机数
      * 当手机电量10%~20%，延长时间显示10~30分钟随机数
      * 当手机电池电量20%~50%时，延长时间显示10~45分钟随机数
      * 当手机电池电量50%~70%时，延长待机时间显示20~55分钟随机数
@@ -172,10 +173,12 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
         mBvView.setBattaryPercent(mBatteryPower);
         if (change) {
             //显示电量
-            if (mBatteryPower < 11) {
+            if (mBatteryPower < 6) {
                 mTvAfterUpdate.setVisibility(View.GONE);
                 mLlTime.setVisibility(View.GONE);
                 mLlPowerLow.setVisibility(View.VISIBLE);
+            }else if (mBatteryPower < 11) {
+                tvMini.setText(String.valueOf(getSavingPower(5, 20)));
             } else if (mBatteryPower < 21) {
                 tvMini.setText(String.valueOf(getSavingPower(10, 30)));
             } else if (mBatteryPower < 51) {
