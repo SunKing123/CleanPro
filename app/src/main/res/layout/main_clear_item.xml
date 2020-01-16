@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/v_top_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_home"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="@dimen/dimen_150dp"
+        android:layout_height="@dimen/dimen_150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_35"
+        android:id="@+id/flyTop">
+        <ImageView
+            android:id="@+id/icon_top"
+            android:layout_width="@dimen/dimen_160dp"
+            android:layout_height="@dimen/dimen_160dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon_clear" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/lly_text"
+            android:layout_marginTop="@dimen/dp_10"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="垃圾文件"
+                android:id="@+id/oneTxt"
+                android:layout_gravity="center"
+                android:textColor="@color/color_FF546B"
+                android:textStyle="bold"
+                android:textSize="@dimen/sp_12"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200"
+                android:id="@+id/twoTxt"
+                android:layout_gravity="center"
+                android:textColor="@color/color_FF546B"
+
+                android:textStyle="bold"
+                android:textSize="22sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MB"
+                android:id="@+id/threeTxt"
+                android:layout_gravity="center"
+                android:textColor="#FF546B"
+                android:textStyle="bold"
+                android:textSize="@dimen/sp_11"
+                />
+
+
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            android:scaleType="centerInside"
+            app:lottie_loop="true"
+            />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/top_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/flyTop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_7dp"
+        android:text="已发现大量垃圾文件，深度清理更彻底"
+        android:textColor="@color/white" />
+
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/tv_now_clean"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        android:scaleType="centerInside"
+        app:lottie_loop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_context"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_13"
+        android:layout_marginBottom="120dp"
+        />
+</RelativeLayout>

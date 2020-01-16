@@ -324,7 +324,7 @@
                         android:layout_height="@dimen/dimen_32dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dimen_20dp"
-                        android:src="@mipmap/icon_cooling" />
+                        android:src="@mipmap/icon_top_cooling" />
 
                     <TextView
                         android:layout_width="wrap_content"

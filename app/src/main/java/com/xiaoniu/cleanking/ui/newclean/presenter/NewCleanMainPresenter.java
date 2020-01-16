@@ -82,7 +82,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                     if (TextUtils.equals(dataBean.getSwitcherKey(), "page_lock")) {
                         try {
                             MmkvUtil.saveString(PositionId.LOCK_INTERACTIVE, JSONObject.toJSONString(dataBean));
-                            Log.e("dong",JSONObject.toJSONString(dataBean));
                         } catch (Exception e) {
                         }
                     }
