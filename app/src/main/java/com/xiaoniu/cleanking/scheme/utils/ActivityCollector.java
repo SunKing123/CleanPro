@@ -102,7 +102,26 @@ public class ActivityCollector {
             }
             activities.clear();
         }
+        spSave(activities);
     }
+
+    /**
+     * 关闭指定类名的Activity
+     */
+    public static void finishActivity(Class<?> cls) {
+        if (activities != null && activities.size() > 0) {
+            Set<Map.Entry<Class<?>, Activity>> sets = activities.entrySet();
+            for (Map.Entry<Class<?>, Activity> s : sets) {
+                if (s.getValue().getClass().equals(cls)) {
+                    s.getValue().finish();
+                    activities.remove(s.getValue().getClass());
+                }
+            }
+
+        }
+        spSave(activities);
+    }
+
 
     /**
      * 获取当前Activity（堆栈中最后一个压入的）

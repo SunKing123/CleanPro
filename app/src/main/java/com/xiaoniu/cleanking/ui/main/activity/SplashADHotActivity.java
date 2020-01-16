@@ -16,20 +16,24 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.orhanobut.logger.Logger;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
+import com.xiaoniu.cleanking.ui.newclean.activity.InsertScreenFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 
 import org.json.JSONObject;
 
@@ -115,6 +119,17 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         } else {
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
+
+        if (ActivityCollector.isActivityExist(RedPacketHotActivity.class)) {
+            ActivityCollector.finishActivity(RedPacketHotActivity.class);
+        }
+        if (ActivityCollector.isActivityExistMkv(InsertScreenFinishActivity.class)) {
+            ActivityCollector.finishActivity(InsertScreenFinishActivity.class);
+        }
+        if (ActivityCollector.isActivityExistMkv(ScreenInsideActivity.class)) {
+            ActivityCollector.finishActivity(ScreenInsideActivity.class);
+        }
+
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         initGeekSdkAD();

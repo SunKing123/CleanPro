@@ -20,10 +20,12 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.RedPacketHotActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.newclean.activity.InsertScreenFinishActivity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.common.utils.AppUtils;
@@ -301,9 +303,15 @@ public class DebugActivity extends BaseActivity {
 
 
     public void gotoInside(Context context){
-        context.startActivity(new Intent(context, ScreenInsideActivity.class));
+        startActivity(new Intent(mContext,InsertScreenFinishActivity.class));
     }
 
+
+
+    public void gotoRed(Context context){
+        startActivity(new Intent(mContext,RedPacketHotActivity.class));
+
+    }
 
 
 
