@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -210,6 +209,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         });
         DbHelper.copyDb();
+
         checkReadPermission();
 
        /* String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();

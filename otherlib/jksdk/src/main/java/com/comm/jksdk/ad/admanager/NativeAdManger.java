@@ -10,6 +10,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
@@ -59,6 +60,7 @@ import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.comm.jksdk.utils.ToastUtils;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
@@ -267,6 +269,7 @@ public class NativeAdManger implements AdManager {
                 }
                 return;
             }
+
             againRequest(adInfo, mAdsInfosBean);
         } catch (Exception e) {
             e.printStackTrace();
@@ -534,7 +537,7 @@ public class NativeAdManger implements AdManager {
         //某些特有的数据清空，避免污染下一次请求数据
         adInfo.setAdTitle("");
         adInfo.setAdClickType(0);
-
+        adInfo.setRequestOrder(adsInfosBean.getRequestOrder());
         //广告源
         adInfo.setAdSource(adsInfosBean.getAdUnion());
         //广告id
@@ -589,6 +592,10 @@ public class NativeAdManger implements AdManager {
                 createAdView(mActivity, temAdinfo);
             }
             return;
+        }
+        if (GeekAdSdk.mIsFormal.equals("btest")) {//测试环境打印广告配置
+            LogUtils.i("pengfei-\nadPosition：" + adInfo.getPosition() + "\nadStyle:" + adInfo.getAdStyle()+"\nadId:"+adInfo.getAdId()+"\nadUnion:"+adInfo.getAdSource()+"\nrequestOrder:"+adInfo.getRequestOrder());
+            ToastUtils.showToast(mActivity, "adPosition：" + adInfo.getPosition() + "\nadStyle:" + adInfo.getAdStyle()+"\nadId:"+adInfo.getAdId()+"\nadUnion:"+adInfo.getAdSource()+"\nrequestOrder:"+adInfo.getRequestOrder(), Toast.LENGTH_LONG,0);
         }
         //没有缓存对象,走正常流程
         adRequestManager.requestAd(mActivity, adInfo, new AdRequestListener() {

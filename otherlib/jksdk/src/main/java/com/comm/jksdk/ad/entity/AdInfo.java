@@ -2,7 +2,6 @@ package com.comm.jksdk.ad.entity;
 
 import android.os.Parcel;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
@@ -79,6 +78,12 @@ public class AdInfo extends BaseEntity{
      * 穿山甲开屏广告
      */
     private TTSplashAd ttSplashAd;
+
+
+    /**
+     * 请求排序
+     */
+    private int requestOrder;
     /**
      * 广告对应的appid
      */
@@ -127,6 +132,15 @@ public class AdInfo extends BaseEntity{
      * 是否支持磁盘缓存
      */
     private boolean isDisk;
+
+
+    public int getRequestOrder() {
+        return requestOrder;
+    }
+
+    public void setRequestOrder(int requestOrder) {
+        this.requestOrder = requestOrder;
+    }
 
     public float getWidth() {
         return width;
@@ -311,6 +325,7 @@ public class AdInfo extends BaseEntity{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.requestOrder);
         dest.writeString(this.adAppid);
         dest.writeString(this.adId);
         dest.writeString(this.adSource);
@@ -323,6 +338,7 @@ public class AdInfo extends BaseEntity{
     }
 
     protected AdInfo(Parcel in) {
+        this.requestOrder = in.readInt();
         this.adAppid = in.readString();
         this.adId = in.readString();
         this.adSource = in.readString();
@@ -346,6 +362,7 @@ public class AdInfo extends BaseEntity{
     @Override
     public String toString() {
         return "AdInfo{" +
+                "requestOrder='" + requestOrder + '\'' +
                 "adAppid='" + adAppid + '\'' +
                 ", adId='" + adId + '\'' +
                 ", adSource='" + adSource + '\'' +

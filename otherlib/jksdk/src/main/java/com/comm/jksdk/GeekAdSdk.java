@@ -51,6 +51,12 @@ public final class GeekAdSdk {
         mIsInit = true;
     }
 
+    //更新本地配置;
+    public static void refAdConfig(Context context){
+        mContext = context.getApplicationContext();
+        InitBaseConfig.getInstance().readlocalData(mContext);
+    }
+
     /**
      * 请求广告配置信息
      * @param listener 回调

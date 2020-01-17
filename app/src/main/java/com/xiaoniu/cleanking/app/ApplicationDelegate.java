@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -103,13 +104,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
 //        TTAdManagerHolder.init(application);
-        //商业sdk初始化
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
-        //广告sdk_Bid只设置一次
-        if (GeekAdSdk.getBid() < 0) {
-            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
-        }
-        ContextUtils.initAdBid(GeekAdSdk.getBid());
+//        LogUtils.i("GeekSdk--"+SystemUtils.getProcessName(application));
+        initAdSdk(application);
         initJsBridge();
         homeCatch(application);
         initLifecycle(application);
@@ -134,6 +130,19 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     }
 
+
+    //商业sdk初始化
+    public void initAdSdk(Application application){
+        String processName = SystemUtils.getProcessName(application);
+        if (!processName.equals(application.getPackageName()))
+            return;
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+        //广告sdk_Bid只设置一次
+        if (GeekAdSdk.getBid() < 0) {
+            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
+        }
+        ContextUtils.initAdBid(GeekAdSdk.getBid());
+    }
     /**
      * js回调
      */
@@ -303,8 +312,10 @@ public class ApplicationDelegate implements IApplicationDelegate {
         LifecycleHelper.registerActivityLifecycle(application, new LifecycleListener() {
             @Override
             public void onBecameForeground(Activity activity) {
-                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {
+                if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {//当前主进程
                     MmkvUtil.saveInt("isback", 0);
+                    LogUtils.i("-cgName-----进入前台");
+                    GeekAdSdk.refAdConfig(application);
                 } else {//非当前主进程
                     return;
                 }

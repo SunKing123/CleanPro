@@ -95,7 +95,6 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-dev-default.fqt188.com\""
-            buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-dev-default.fqt188.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
@@ -115,7 +114,6 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.fqt188.com\""
-            buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-fat-default.fqt188.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
@@ -136,7 +134,6 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"prod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
-            buildConfigField "String", "Base_Host", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             minifyEnabled false
@@ -156,12 +153,10 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-dev-default.fqt188.com\""
-            buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-dev-default.fqt188.com\""
+
             buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -176,17 +171,12 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.fqt188.com\""
-            buildConfigField "String", "Base_Host", "\"http://clsystem-mclean-fat-default.fqt188.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable = false
-            jniDebuggable = false
-            renderscriptDebuggable = false
+
 
 
         }
@@ -199,15 +189,9 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"preprod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
-            buildConfigField "String", "Base_Host", "\"https://hhh.xnsudai.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
-            debuggable = false
-            jniDebuggable = false
-            renderscriptDebuggable = false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
@@ -222,15 +206,9 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"prod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
-            buildConfigField "String", "Base_Host", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
-            debuggable = false
-            jniDebuggable = false
-            renderscriptDebuggable = false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
