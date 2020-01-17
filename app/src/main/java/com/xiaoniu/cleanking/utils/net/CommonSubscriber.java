@@ -24,7 +24,7 @@ public abstract class CommonSubscriber<T extends BaseEntity> extends ResourceSub
 
     @Override
     public void onNext(T t) {
-        if (Constant.SUCCESS.equals(t.code)) {
+        if (Constant.SUCCESS.equals(t.code) || Constant.AD_SUCCESS.equals(t.code)) {
             //成功
             getData(t);
 //        } else if (Constant.TokenFailure.equals(t.code) || Constant.TokenIllegality.equals(t.code)) {

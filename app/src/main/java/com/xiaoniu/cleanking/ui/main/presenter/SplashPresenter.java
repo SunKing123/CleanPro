@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -10,6 +11,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.CheckAdConfigUpdateEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -122,9 +124,31 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
         if(null==mActivity)
             return;
         LogUtils.i("-cgName-----冷启动进入前台");
+        mModel.checkAdConfigUpdate("1",new Common4Subscriber<CheckAdConfigUpdateEntity>() {
+
+            @Override
+            public void showExtraOp(String code, String message) {
+                Logger.i("zz--checkAd--"+code+message);
+            }
+
+            @Override
+            public void getData(CheckAdConfigUpdateEntity configUpdateEntity) {
+                Logger.i("zz--checkAd--"+configUpdateEntity.getData().getIsUpdate());
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+                Logger.i("zz--checkAd--showExtraOp"+message);
+            }
+
+            @Override
+            public void netConnectError() {
+                Logger.i("zz--checkAd--netConnectError");
+            }
+        });
         GeekAdSdk.refAdConfig(mActivity);
         //1.4.5版本走本地配置
-       /* GeekAdSdk.requestConfig(new ConfigListener() {
+    /*    GeekAdSdk.requestConfig(new ConfigListener() {
             @Override
             public void adSuccess(List<ConfigBean.AdListBean> configList) {
                 String config = JsonUtils.encode(configList);
@@ -138,6 +162,8 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
             }
         });*/
+
+
     }
 
     /**

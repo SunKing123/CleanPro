@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.CheckAdConfigUpdateEntity;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -129,6 +130,16 @@ public class MainModel extends BaseModel {
     public void getBottomAdList(Common4Subscriber<BottoomAdList> commonSubscriber) {
         mService.getBottomAdList().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
+
+    /**
+     * 广告配置检测
+     * @param vCode
+     * @param commonSubscriber
+     */
+    public void checkAdConfigUpdate(String vCode,Common4Subscriber<CheckAdConfigUpdateEntity> commonSubscriber) {
+        mService.checkConfig(vCode).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
 
     /**
      * 广告开关

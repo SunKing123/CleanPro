@@ -5,6 +5,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.CheckAdConfigUpdateEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -192,6 +193,15 @@ public interface UserApiService {
      */
     @POST("/device/save")
     Flowable<BaseEntity> pushDeviceInfo(@Body RequestBody body);
+
+    /**
+     * 检测是否更新配置接口
+     *
+     * @param code
+     * @return
+     */
+    @POST("/v2/getAdsConfig/checkUpdate")
+    Flowable<CheckAdConfigUpdateEntity> checkConfig(@Query("code") String code);
 
 
 }

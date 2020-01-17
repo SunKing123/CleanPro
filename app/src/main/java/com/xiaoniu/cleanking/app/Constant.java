@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.BuildConfig;
 public class Constant {
 
     public static final String SUCCESS = "000000";
+    public static final String AD_SUCCESS = "0";
 
     public static String APP_IS_LIVE = "";
     //用户中心跳转通用H5 Activity字段

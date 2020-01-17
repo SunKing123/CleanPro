@@ -48,9 +48,9 @@ public class TTAdManagerHolder {
                 .debug(true) //测试阶段打开，可以通过日志排查问题，上线时去除该调用
                 .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G) //允许直接下载的网络状态集合
                 .supportMultiProcess(false)//是否支持多进程
-                .gender(TTAdConstant.GENDER_MALE)  //男性
                 .keywords("清理大师，手机加速，垃圾清理，抖音，病毒查杀，手机降温，网络加速，酷我音乐，好看点，微鲤，七猫，看点快报，玩赚星球，赚钱，安全卫士，助手，管家，西瓜视频，映客，今日头条，趣头条，火山小视频，成语大富豪，球球视频，波波视频，爱奇艺，拼多多，小说，快手，哔哩哔哩，知乎")
                 //.httpStack(new MyOkStack3())//自定义网络库，demo中给出了okhttp3版本的样例，其余请自行开发或者咨询工作人员。
                 .build();
     }
+    /*                .gender(TTAdConstant.GENDER_MALE)  //男性*/
 }
