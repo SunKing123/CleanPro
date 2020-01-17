@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -19,10 +17,12 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
+import com.xiaoniu.cleanking.ui.newclean.activity.InsertScreenFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Random;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 /**
@@ -110,6 +111,16 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             PreferenceUtil.saveScreenInsideTime();
         } else {
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
+        }
+
+        if (ActivityCollector.isActivityExist(RedPacketHotActivity.class)) {
+            ActivityCollector.finishActivity(RedPacketHotActivity.class);
+        }
+        if (ActivityCollector.isActivityExist(InsertScreenFinishActivity.class)) {
+            ActivityCollector.finishActivity(InsertScreenFinishActivity.class);
+        }
+        if (ActivityCollector.isActivityExist(ScreenInsideActivity.class)) {
+            ActivityCollector.finishActivity(ScreenInsideActivity.class);
         }
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);

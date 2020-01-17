@@ -203,6 +203,24 @@
       ]
     },
     {
+      "productId": 6,
+      "adVersion": 1,
+      "adPosition": "cp_ad_3",
+      "adStyle": "CP",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945008943",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理管家极速版"
+        }
+      ]
+    },
+    {
       "productId": 1,
       "adVersion": 5,
       "adPosition": "lock_screen_advertising",
