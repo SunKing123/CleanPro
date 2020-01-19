@@ -935,6 +935,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
 
                 if (count == 0 || isClick) {
+                  if(Build.VERSION.SDK_INT != Build.VERSION_CODES.O)
                     startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
                 }
             }
@@ -1045,6 +1046,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 isClick = (PreferenceUtil.getCleanFinishClickCount() % mScreenShowCount == 0);
             }
             if (count == 0 || isClick) {
+                  if(Build.VERSION.SDK_INT != Build.VERSION_CODES.O)
                 startActivity(new Intent(this, InsertScreenFinishActivity.class).putExtra("title", mTitle));
             }
         }
