@@ -274,6 +274,7 @@ public final class LocalService extends Service {
         @Override
         public void onReceive(final Context context, Intent intent) {
             if (intent.getAction().equals("_ACTION_SCREEN_OFF")) {
+                Log.e("DONG","锁屏进入");
                 isPause = false;
                 play();
                 startActivity(context);
