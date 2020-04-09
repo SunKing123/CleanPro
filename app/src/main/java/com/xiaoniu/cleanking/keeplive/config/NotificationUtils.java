@@ -12,12 +12,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.NumberUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-
-import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 
 public class NotificationUtils extends ContextWrapper {
     private NotificationManager manager;
