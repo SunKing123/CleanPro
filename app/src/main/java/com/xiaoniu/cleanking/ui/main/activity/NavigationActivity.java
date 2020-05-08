@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.SimpleActivity;
@@ -51,7 +51,7 @@ public class NavigationActivity extends SimpleActivity {
         TextView tv_delete = vlast.findViewById(R.id.tv_delete);
         TextView tv_qx = vlast.findViewById(R.id.tv_qx);
         tv_qx.setOnClickListener(v -> {
-            jumpXieyiActivity(AppConstants.Base_H5_Host + "/agree.html");
+            jumpXieyiActivity(BuildConfig.H5_BASE_URL + "/agree.html");
             StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
         });
         initLastClick(cb_checkall, tv_delete);

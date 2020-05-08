@@ -51,8 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cn.jzvd.Jzvd;
-
 /**
  * 插屏广告
  * 由功能结束页进入
@@ -265,6 +263,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
                 }
             }
         });
+
         /**
          * 如果广告位支持视频广告，强烈建议在调用loadData请求广告前，调用下面两个方法，有助于提高视频广告的eCPM值 <br/>
          * 如果广告位仅支持图文广告，则无需调用
@@ -331,7 +330,6 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     @Override
     protected void onPause() {
         super.onPause();
-        Jzvd.releaseAllVideos();
         NiuDataAPIUtil.onPageEnd(NewCleanFinishActivity.currentPage, "screen_advertising", "screen_advertising_view_page", "插屏广告浏览");
     }
 

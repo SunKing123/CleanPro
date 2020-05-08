@@ -309,9 +309,6 @@ public class UpdateUtil {
     }
 
     public interface PatchCallback {
-        public void downloadSuccess(String path);
-
-        public void downloadError(String message);
     }
 
     public static boolean verify(File apk, String md5) {

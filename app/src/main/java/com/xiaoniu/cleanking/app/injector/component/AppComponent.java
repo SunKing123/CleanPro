@@ -3,11 +3,9 @@ package com.xiaoniu.cleanking.app.injector.component;
 
 import android.app.Application;
 
-import com.xiaoniu.cleanking.api.BigDataApiService;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
-import com.xiaoniu.cleanking.utils.prefs.PreferencesHelper;
 
 import javax.inject.Singleton;
 
@@ -23,9 +21,5 @@ public interface AppComponent {
     void inject(Application mApplication);
 
     UserApiService getApiUserService();
-
-    PreferencesHelper getPreferencesHelper();
-
-    BigDataApiService getBigDataApiService();
 }
 

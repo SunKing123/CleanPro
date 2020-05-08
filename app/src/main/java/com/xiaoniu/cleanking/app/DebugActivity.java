@@ -2,7 +2,7 @@ package com.xiaoniu.cleanking.app;
 
 import android.view.View;
 
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -18,12 +18,10 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     public void inject(ActivityComponent activityComponent) {
-
     }
 
     @Override
     public void netError() {
-
     }
 
     @Override
@@ -33,7 +31,6 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
     }
 
     public void close(View view) {
@@ -41,8 +38,7 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void toHomeClean(View view) {
-        //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=0"
+        //原生带参数 native协议  "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=0"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -52,8 +48,7 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void toHomeTools(View view) {
-        //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=1"
+        //原生带参数 native协议  "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=1"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -63,8 +58,7 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void toHomeNews(View view) {
-        //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=2"
+        //原生带参数 native协议  "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=2"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -74,8 +68,7 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void toHomeMine(View view) {
-        //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=3"
+        //原生带参数 native协议 "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=3"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -85,9 +78,8 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void toH5(View view) {
-        //jump 协议
-//        "cleanking://com.xiaoniu.cleanking/jump?url=XXXX"
-        String url = AppConstants.Base_H5_Host + "/agree.html";
+        //jump 协议 "cleanking://com.xiaoniu.cleanking/jump?url=XXXX"
+        String url = BuildConfig.H5_BASE_URL + "/agree.html";
         String jump = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.JUMP + "?url=";
         String jumpParams = "&is_no_title=0&h5_title=协议";
@@ -96,8 +88,7 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void toWeChatClean(View view) {
-        //原生不带参数 native_no_params协议
-//        "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=包名.ui.后面的路径"
+        //原生不带参数 native_no_params协议  "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=包名.ui.后面的路径"
         String packagePath = "tool.wechat.activity.WechatCleanHomeActivity";
         String schemeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE_NO_PARAMS +
@@ -105,6 +96,4 @@ public class DebugActivity extends BaseActivity {
         String scheme = schemeHeader + packagePath;
         SchemeProxy.openScheme(this, scheme);
     }
-
-
 }

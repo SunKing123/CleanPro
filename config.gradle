@@ -1,0 +1,54 @@
+ext {
+
+    /**
+     * 公共配置BuildConfig配置项
+     */
+    commonConfigFiledMap = new HashMap<String, Object>()
+    commonConfigFiledMap.put("PLATFORM", '"all"')
+
+    /**
+     * 开发环境BuildConfig配置项
+     */
+    devConfigFiledMap = new HashMap<String, Object>()
+    devConfigFiledMap.put("IS_DEBUG", '"true"')
+    devConfigFiledMap.put("BASE_URL", '"http://clsystem-mclean-dev-default.xiaoniuhy.com"')
+    devConfigFiledMap.put("H5_BASE_URL", '"https://devfddh5.51huihuahua.com"')
+    devConfigFiledMap.put("STATISTICS_URL", '"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk"')
+    devConfigFiledMap.put("API_APPID", '"1115551509648511000"')
+    devConfigFiledMap.put("API_APPSECRET", '"744743ba93f44aa79834ded6f7f90e83"')
+    devConfigFiledMap.put("VIDEO_BASE_URL", '"http://clsystem-mclean-dev-default.fqt188.com/video/query"')
+    devConfigFiledMap.put("PUSH_TAG", '"test"')
+
+    /**
+     * 测试环境BuildConfig配置项
+     */
+    testConfigFiledMap = new HashMap<String, Object>()
+    testConfigFiledMap.put("IS_DEBUG", '"true"')
+    testConfigFiledMap.put("BASE_URL", '"http://clsystem-mclean-fat-default.xiaoniuhy.com"')
+    testConfigFiledMap.put("H5_BASE_URL", '"http://testwlqlapph5.fqt188.com"')
+    testConfigFiledMap.put("STATISTICS_URL", '"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk"')
+    testConfigFiledMap.put("API_APPID", '"1115551509648511000"')
+    testConfigFiledMap.put("API_APPSECRET", '"744743ba93f44aa79834ded6f7f90e83"')
+    testConfigFiledMap.put("VIDEO_BASE_URL", '"http://clsystem-mclean-fat-default.fqt188.com/video/query"')
+    testConfigFiledMap.put("PUSH_TAG", '"test"')
+
+    /**
+     * 生产环境BuildConfig配置项
+     */
+    prodConfigFiledMap = new HashMap<String, Object>()
+    prodConfigFiledMap.put("IS_DEBUG", '"false"')
+    prodConfigFiledMap.put("BASE_URL", '"https://clsystem.wukongclean.com"')
+    prodConfigFiledMap.put("H5_BASE_URL", '"https://wkqlapph5.wukongclean.com"')
+    prodConfigFiledMap.put("STATISTICS_URL", '"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk"')
+    prodConfigFiledMap.put("API_APPID", '"1115553177840652300"')
+    prodConfigFiledMap.put("API_APPSECRET", '"f8e28aa6525f4bd79c9920e2540d531e"')
+    prodConfigFiledMap.put("VIDEO_BASE_URL", '"https://clsystem.wukongclean.com/video/query"')
+    prodConfigFiledMap.put("PUSH_TAG", '"product"')
+
+    /**
+     * app公共依赖三方组件
+     */
+    dependencies = [
+
+    ]
+}

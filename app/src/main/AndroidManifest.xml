@@ -409,25 +409,25 @@
         <service
             android:name=".keeplive.service.LocalService"
             android:exported="true"
-            android:process=":local"></service>
+            android:process=":local" />
         <service
             android:name=".keeplive.service.RemoteService"
             android:exported="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <receiver android:name=".keeplive.receive.NotificationClickReceiver">
             <intent-filter>
-                <action android:name="CLICK_NOTIFICATION"></action>
+                <action android:name="CLICK_NOTIFICATION" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".keeplive.receive.TimingReceiver"></receiver>
+        <receiver android:name=".keeplive.receive.TimingReceiver" />
 
-        <activity android:name=".keeplive.onepx.OnePixelActivity"></activity>
+        <activity android:name=".keeplive.onepx.OnePixelActivity" />
 
         <service
             android:name=".keeplive.service.JobHandlerService"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
 
         <provider

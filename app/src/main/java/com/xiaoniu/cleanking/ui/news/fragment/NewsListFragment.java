@@ -113,11 +113,7 @@ public class NewsListFragment extends BaseFragment {
         }
 
         if (mType != null) {
-            if (mType == NewsType.VIDEO) {
-                loadVideoData();
-            } else {
-                loadNewsData();
-            }
+            loadNewsData();
         }
     }
 
@@ -158,50 +154,4 @@ public class NewsListFragment extends BaseFragment {
         });
     }
 
-    private void loadVideoData() {
-        //请求参数设置：比如一个json字符串
-        JSONObject jsonObject = new JSONObject();
-        try {
-            String lastId = SPUtil.getLastNewsID(mType.getName());
-            jsonObject.put("pageSize", PAGE_NUM);
-            jsonObject.put("lastId", lastId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        HttpRequest request = new HttpRequest.Builder()
-                .addBodyParams(jsonObject.toString())
-                .build();
-
-        EHttp.post(this, BuildConfig.VIDEO_BASE_URL, request, new ApiCallback<ArrayList<VideoItemInfo>>() {
-
-            @Override
-            public void onComplete() {
-                if (mIsRefresh) {
-                    mRecyclerView.refreshComplete();
-                } else {
-                    mRecyclerView.loadMoreComplete();
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                Log.i("123", e.toString());
-            }
-
-            @Override
-            public void onSuccess(ArrayList<VideoItemInfo> result) {
-                if (result != null && result.size() > 0) {
-                    if (mLlNoNet.getVisibility() == View.VISIBLE)
-                        mLlNoNet.setVisibility(View.GONE);
-                    SPUtil.setLastNewsID(mType.getName(), result.get(result.size() - 1).videoId);
-                    if (mIsRefresh) {
-                        mNewsAdapter.setData(result);
-                    } else {
-                        mNewsAdapter.addData(result);
-                    }
-                }
-            }
-        });
-    }
 }

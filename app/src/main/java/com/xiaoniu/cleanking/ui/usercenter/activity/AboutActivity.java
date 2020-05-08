@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -78,7 +78,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         line_xy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpXieyiActivity(AppConstants.Base_H5_Host+"/agree.html");
+                jumpXieyiActivity(BuildConfig.H5_BASE_URL+"/agree.html");
                 StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
             }
         });
@@ -87,7 +87,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-                mPresenter.share("", AppConstants.Base_H5_Host+"/share.html", getString(R.string.app_name), shareContent, -1);
+                mPresenter.share("", BuildConfig.H5_BASE_URL+"/share.html", getString(R.string.app_name), shareContent, -1);
                 StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
             }
         });

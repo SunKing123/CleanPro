@@ -17,7 +17,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
-import com.xiaoniu.cleanking.AppConstants;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
@@ -108,7 +108,7 @@ public class MeFragment extends SimpleFragment {
         }
     }
 
-    @OnClick({R.id.line_share,R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report})
+    @OnClick({R.id.line_share, R.id.ll_setting, R.id.line_permisson, R.id.ll_question_report})
     public void onClickView(View view) {
         int ids = view.getId();
         if (ids == R.id.ll_setting) {
@@ -124,9 +124,9 @@ public class MeFragment extends SimpleFragment {
 
             long ls = e + WxQqUtil.i.getTotalSize() + WxQqUtil.l.getTotalSize() + WxQqUtil.h.getTotalSize() + WxQqUtil.k.getTotalSize() + WxQqUtil.j.getTotalSize() + WxQqUtil.n.getTotalSize();
             Log.e("fdsa", "" + ls);
-        }else if (ids == R.id.line_share) {
+        } else if (ids == R.id.line_share) {
             String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-            share("", AppConstants.Base_H5_Host+"/share.html", getString(R.string.app_name), shareContent, -1);
+            share("", BuildConfig.H5_BASE_URL + "/share.html", getString(R.string.app_name), shareContent, -1);
             StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", AppHolder.getInstance().getSourcePageId(), "about_page");
 
         }
@@ -192,7 +192,7 @@ public class MeFragment extends SimpleFragment {
         });
         switch (type) {
             case -1:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA);
                 shareAction.open();
 //                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE);
 //                shareAction.open();
@@ -206,7 +206,7 @@ public class MeFragment extends SimpleFragment {
                 shareAction.share();
                 break;
             default:
-                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA);
+                shareAction.setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA);
                 shareAction.open();
         }
     }

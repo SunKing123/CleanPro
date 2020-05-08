@@ -5,18 +5,15 @@ import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.arch.persistence.room.Room;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bun.miitmdid.core.JLibrary;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-//import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.AppConstants;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
@@ -39,15 +36,16 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+//import com.tencent.bugly.Bugly;
+
 /**
  * Created by admin on 2017/6/8.
  */
 
 public class ApplicationDelegate implements IApplicationDelegate {
 
-    private static final String TAG = "Tinker.ApplicationDelegate";
     private static AppDataBase mAppDatabase;
-
+    private String oaId = "";
 
     @Override
     public void onCreate(Application application) {
@@ -55,7 +53,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
         PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
         PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
         PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
-//        Bugly.init(application, "bdd6fe23ab", false);
         UMShareAPI.get(application);
         initInjector(application);
 
@@ -67,7 +64,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(application);
-        UMConfigure.init(application, "5d230f2f4ca357bdb700106d", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.init(application, "", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
+//        UMConfigure.init(application, "5d230f2f4ca357bdb700106d", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
 
@@ -79,9 +77,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
     }
-
-
-
 
 
     private static AppComponent mAppComponent;
@@ -107,7 +102,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
 
-
     private void initRoom(Application application) {
         mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "wukong_cleanking.db")
                 .allowMainThreadQueries()
@@ -125,27 +119,23 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     @Override
     public void onTerminate() {
-
     }
 
     @Override
     public void onLowMemory() {
-
     }
 
     @Override
     public void onTrimMemory(int level) {
-
     }
 
-
     //埋点初始化
-    public void initNiuData(Application application) {
+    private void initNiuData(Application application) {
         //测试环境
         NiuDataAPI.init(application, new Configuration()
                 //切换到sdk默认的测试环境地址
-                .serverUrl(AppConstants.BIGDATA_MD)
-                .setHeartbeatUrl(AppConstants.BIGDATA_MD)
+                .serverUrl(BuildConfig.STATISTICS_URL)
+                .setHeartbeatUrl(BuildConfig.STATISTICS_URL)
                 //打开sdk日志信息
                 .logOpen()
                 .setHeartbeatInterval(5000)
@@ -162,8 +152,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     }
 
-    private String oaId ="";
-    public void initOaid(Application application) {
+    private void initOaid(Application application) {
         //设置oaid到埋点公共参数
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) { //4.4以上版本oaid
             try {
@@ -202,5 +191,4 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         }
     }
-
 }

@@ -56,8 +56,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import cn.jzvd.Jzvd;
-
 /**
  * 自渲染广告位3
  */
@@ -579,7 +577,6 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     @Override
     protected void onPause() {
         onPageEnd();
-        Jzvd.releaseAllVideos();
         super.onPause();
     }
 

@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -98,8 +97,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import cn.jzvd.Jzvd;
-
 /**
  * 1.2.0 版本以后清理完成 显示资讯
  */
@@ -169,9 +166,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //插屏广告相关 end
 
     private AnimationDrawable mAnimationDrawable;
-    FileQueryUtils fileQueryUtils ;
+    FileQueryUtils fileQueryUtils;
 
-    int processNum = 0 ;
+    int processNum = 0;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -1422,7 +1420,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void onPause() {
-        Jzvd.releaseAllVideos();
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             NiuDataAPIUtil.onPageEnd(sourcePage, currentPage, "clean_success_page_view_page", "清理结果出现时");
