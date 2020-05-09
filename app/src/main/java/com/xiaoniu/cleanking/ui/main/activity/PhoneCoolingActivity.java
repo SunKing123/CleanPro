@@ -779,16 +779,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
                 PreferenceUtil.saveCleanCoolUsed(true);
-                boolean isOpen = false;
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
-
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL,PositionId.DRAW_THREE_CODE);
 
                 //恢复状态栏状态
                 NotificationEvent event = new NotificationEvent();

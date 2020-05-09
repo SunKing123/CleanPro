@@ -10,6 +10,7 @@ import android.view.View;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.cleanking.ui.main.bean.AdkeyEntity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -21,6 +22,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -121,14 +123,14 @@ public class WechatCleanResultActivity extends SimpleActivity {
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             boolean isOpen = false;
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    } else if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
+            if(!CollectionUtils.isEmpty(AppHolder.getInstance().getSwitchInfoMap())){
+                SwitchInfoList.DataBean wechar= AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(PositionId.KEY_WECHAT,PositionId.DRAW_THREE_CODE));
+                SwitchInfoList.DataBean qq= AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(PositionId.KEY_QQ,PositionId.DRAW_THREE_CODE));
+                AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(PositionId.KEY_QQ,PositionId.DRAW_THREE_CODE));
+                if(wechar!=null){
+                    isOpen = wechar.isOpen();
+                }else if(qq!=null){
+                    isOpen = qq.isOpen();
                 }
             }
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");

@@ -299,16 +299,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             PreferenceUtil.saveNotificationCleanTime();
         }
         PreferenceUtil.saveCleanNotifyUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_NOTIFY,PositionId.DRAW_THREE_CODE);
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {

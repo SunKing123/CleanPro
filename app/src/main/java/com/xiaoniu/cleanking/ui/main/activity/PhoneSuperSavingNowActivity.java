@@ -402,16 +402,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             PreferenceUtil.savePowerCleanTime();
         }
         PreferenceUtil.saveCleanPowerUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CQSD,PositionId.DRAW_THREE_CODE);
+
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {

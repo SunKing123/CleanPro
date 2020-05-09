@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -49,7 +50,8 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             @Override
             public void getData(SwitchInfoList switchInfoList) {
                 mView.getSwitchInfoListSuccess(switchInfoList);
-                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+                if(null != switchInfoList)
+                    AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
             }
 
             @Override
@@ -60,6 +62,9 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             @Override
             public void netConnectError() {
                 mView.getSwitchInfoListFail();
+                if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
+                    AppHolder.getInstance().setSwitchInfoMap(ApplicationDelegate.getAppDatabase().adInfotDao().getAll());
+                }
             }
         });
     }
