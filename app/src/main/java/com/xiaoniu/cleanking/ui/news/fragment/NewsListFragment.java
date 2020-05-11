@@ -8,34 +8,30 @@ import android.widget.LinearLayout;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
-import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
-import com.xiaoniu.common.http.request.HttpRequest;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class NewsListFragment extends BaseFragment {
+
+    private static final String TAG = "NewsListFragment";
+
     private static final String KEY_TYPE = "TYPE";
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;
     private LinearLayout mLlNoNet;
     private NewsType mType;
 
-    private static final int PAGE_NUM = 20;//每一页数据
+    private static final int PAGE_NUM = 15; //每一页数据  20
     private boolean mIsRefresh = true;
 
     public static NewsListFragment getInstance(NewsType type) {
@@ -152,6 +148,16 @@ public class NewsListFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    public void setIsRefresh(boolean isRefresh) {
+        this.mIsRefresh = isRefresh;
+    }
+
+    public void returnTop() {
+        if (mRecyclerView != null) {
+            mRecyclerView.scrollToPosition(0);
+        }
     }
 
 }

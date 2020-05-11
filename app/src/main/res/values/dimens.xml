@@ -100,4 +100,7 @@
     <dimen name="dimen_106dp">106dp</dimen>
     <dimen name="dimen_118dp">118dp</dimen>
     <dimen name="dimen_13sp">13sp</dimen>
+
+    <dimen name="statusbar_view_height">0dp</dimen>
+
 </resources>

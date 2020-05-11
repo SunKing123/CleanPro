@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="@dimen/dimen_56dp"
+        android:visibility="gone"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@id/viewt"
@@ -115,36 +116,25 @@
       </FrameLayout>-->
 
     <RelativeLayout
-        android:id="@+id/v_top"
+        android:id="@+id/v_home_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@drawable/bg_title"
-        android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+        <include layout="@layout/layout_home_title_normal" />
 
-        <ImageView
-            android:id="@+id/iv_interaction"
-            android:layout_width="@dimen/dimen_35dp"
-            android:layout_height="@dimen/dimen_35dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+        <include layout="@layout/layout_title_xiding" />
 
     </RelativeLayout>
 
     <!--完成动画-->
-    <android.support.v4.widget.NestedScrollView
+    <com.xiaoniu.cleanking.widget.OperatorNestedScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/v_top"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@+id/v_home_top"
         android:fadingEdgeLength="@dimen/dimen_0dp"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -530,6 +520,7 @@
                 android:layout_marginRight="@dimen/dimen_12dp"
                 android:layout_marginBottom="@dimen/dimen_16dp" />
 
+            <!-- no_net -->
             <LinearLayout
                 android:id="@+id/v_no_net"
                 android:layout_width="match_parent"
@@ -719,6 +710,16 @@
                         android:textSize="@dimen/dimen_12sp" />
                 </RelativeLayout>
             </LinearLayout>
+
+            <!--关闭信息流的时候站位，吸顶+底部tab高度56+60 -->
+            <View
+                android:id="@+id/close_feed_empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:visibility="gone" />
+
+            <include layout="@layout/layout_feed" />
+
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </com.xiaoniu.cleanking.widget.OperatorNestedScrollView>
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

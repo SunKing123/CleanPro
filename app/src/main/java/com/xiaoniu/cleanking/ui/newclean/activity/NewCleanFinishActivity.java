@@ -1495,10 +1495,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
-
-            if (mRecyclerView != null)
+            if (mRecyclerView != null) {
                 mRecyclerView.loadMoreComplete();
-
+            }
             return;
         }
 

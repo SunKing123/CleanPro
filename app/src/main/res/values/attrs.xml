@@ -99,7 +99,9 @@
         <attr name="arcHeight" />
     </declare-styleable>
 
-
+    <declare-styleable name="MeasureViewPager">
+        <attr name="topHeightDp" format="dimension" />
+    </declare-styleable>
 
 
 </resources>
