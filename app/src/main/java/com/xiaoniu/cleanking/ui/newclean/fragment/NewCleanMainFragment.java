@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -1335,10 +1336,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private void scrollAnima(int start, int end, int duration) {
-        com.nineoldandroids.animation.ValueAnimator valueAnimator = com.nineoldandroids.animation.ValueAnimator.ofInt(start, end);
-        valueAnimator.addUpdateListener(new com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener() {
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(start, end);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationUpdate(com.nineoldandroids.animation.ValueAnimator animation) {
+            public void onAnimationUpdate(ValueAnimator animation) {
                 //获取动画过程中的渐变值
                 int animatedValue = (int) animation.getAnimatedValue();
                 if (mNestedScrollView != null) {
@@ -1346,24 +1347,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         });
-        valueAnimator.addListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+        valueAnimator.addListener(new Animator.AnimatorListener() {
 
             @Override
-            public void onAnimationStart(com.nineoldandroids.animation.Animator animator) {
+            public void onAnimationStart(Animator animator) {
                 canXiding = false;
             }
 
             @Override
-            public void onAnimationEnd(com.nineoldandroids.animation.Animator animator) {
+            public void onAnimationEnd(Animator animator) {
                 canXiding = true;
             }
 
             @Override
-            public void onAnimationCancel(com.nineoldandroids.animation.Animator animator) {
+            public void onAnimationCancel(Animator animator) {
             }
 
             @Override
-            public void onAnimationRepeat(com.nineoldandroids.animation.Animator animator) {
+            public void onAnimationRepeat(Animator animator) {
             }
         });
         valueAnimator.setDuration(duration);
