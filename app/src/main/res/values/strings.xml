@@ -4,7 +4,7 @@
     <string name="life">生活</string>
     <string name="clean">清理</string>
     <string name="up_quota">提额</string>
-    <string name="tool">加速</string>
+    <string name="tool">工具箱</string>
     <string name="top">发现</string>
     <string name="mine">我的</string>
     <string name="shopping_mall">商城</string>
@@ -137,7 +137,7 @@
     <string name="open">开启</string>
     <string name="net_error">网络连接失败</string>
     <string name="game_list_hint">温馨提醒：添加游戏平均可被提速38%</string>
-<!--<![CDATA[<font color="#FFFD6F46">%1$dMB</font>垃圾严重影响使用]]>-->
+    <!--<![CDATA[<font color="#FFFD6F46">%1$dMB</font>垃圾严重影响使用]]>-->
     <string name="push_content_scan_all">%1$dMB 垃圾严重影响使用></string>
     <string name="push_content_access">内存占比%d%%,加速避免卡顿</string>
     <string name="push_content_power">电量不足%d%%,一键省电</string>
@@ -151,8 +151,6 @@
     <string name="scaning">扫描中</string>
     <string name="clean_all_hint">已检测到大量残留垃圾</string>
     <string name="clean_game_hint">一键加速畅玩游戏</string>
-
-
 
 
 </resources>

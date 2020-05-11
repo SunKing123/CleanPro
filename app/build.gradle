@@ -123,6 +123,7 @@ dependencies {
     api 'com.alibaba:arouter-api:1.4.1'
     annotationProcessor 'com.alibaba:arouter-compiler:latest.release'
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    implementation 'me.jessyan:retrofit-url-manager:1.4.0'
 
     implementation project(':common')
     implementation project(':asmhelp')

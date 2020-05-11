@@ -192,8 +192,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             EventBus.getDefault().post(new FromHomeCleanFinishEvent(mTitle));
         }
         mPresenter.getSwitchInfoList();
-        mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
-        mTitleTv = (TextView) findViewById(R.id.tvTitle);
+        mBtnLeft = findViewById(R.id.btnLeft);
+        mTitleTv = findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -1273,7 +1273,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadData() {
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
-//        startLoadData();
+        startLoadData();
     }
 
     @Override

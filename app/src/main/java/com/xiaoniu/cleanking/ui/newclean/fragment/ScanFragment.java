@@ -1,17 +1,17 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,7 +32,6 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -43,7 +42,10 @@ import static android.view.View.VISIBLE;
 
 /**
  * 扫描
+ *
+ * use {@link }
  */
+@Deprecated
 public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     public static ScanFragment newInstance() {
@@ -54,12 +56,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     LottieAnimationView mLottieHomeView;
     @BindView(R.id.view_lottie_ripple)
     LottieAnimationView lottieRipple;
- /*   @BindView(R.id.icon_outer)
-    ImageView mIconOuter;*/
-   /* @BindView(R.id.circle_outer)
-    View mCircleOuter;*/
-/*    @BindView(R.id.circle_outer2)
-    View mCircleOuter2;*/
 
     @BindView(R.id.layout_count)
     RelativeLayout mLayoutCount;
@@ -87,18 +83,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     TextView tvScanLeftTitle;
     ImageView[] ivs;
 
-
-    /*    */
-    /**
-     * 清理的分类列表
-     *//*
-    public static HashMap<Integer, JunkGroup> mJunkGroups;*/
     private CountEntity mCountEntity = new CountEntity();
-
-    /**
-     * 首页是否显示
-     */
-    private boolean isShow = true;
 
     /**
      * 当前的首页的状态
@@ -122,16 +107,9 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      */
     private boolean mChangeFinish;
 
-    private MyHandler mHandler = new MyHandler(getActivity());
-
-    class MyHandler extends Handler {
-        WeakReference<Activity> mActivity;
-
-        public MyHandler(Activity con) {
-            this.mActivity = new WeakReference<>(con);
-        }
-
-        public void handleMessage(android.os.Message msg) {
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 if (mLottieHomeView != null)
                     mLottieHomeView.playAnimation();
@@ -148,8 +126,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
                 }
             }
         }
-    }
-
+    };
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -182,9 +159,7 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-
     }
-
 
     @OnClick({R.id.btn_left_scan})
     public void viewClick(View view) {
@@ -235,11 +210,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         super.onStart();
     }
 
-
     /**
      * 统计总数
-     *
-     * @param total
      */
     public void showCountNumber(long total) {
         if (getActivity() == null || total <= 0) {
@@ -260,10 +232,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }
     }
 
-    public FrameLayout getCleanTopLayout() {
-        return null;
-    }
-
     /**
      * 清理很干净标识
      */
@@ -273,8 +241,6 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         //清理完成标识
         type = TYPE_CLEAN_FINISH;
         setColorChange(false);
-
-//        mPresenter.showOuterViewRotation(mIconOuter);
     }
 
     public void showScanFile(String p0) {
@@ -289,17 +255,11 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
 
     }
 
-
     /**
      * 终止扫描
      */
     public void stopScan() {
         mPresenter.setIsFinish(true);
-    /*    if (mPresenter.getCleanScanAnimator() != null)
-            mPresenter.getCleanScanAnimator().cancel();*/
-
-    /*    mCircleOuter2.setVisibility(GONE);
-        mCircleOuter.setVisibility(GONE);*/
         lottieRipple.pauseAnimation();
         showHomeLottieView(true);
     }
@@ -310,26 +270,8 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     public void endScanAnimation() {
         if (lottieRipple != null) {
             lottieRipple.pauseAnimation();
-//            lottieRipple.setVisibility(GONE);
         }
         showHomeLottieView(true);
-    }
-
-    /**
-     * 状态栏颜色变化
-     *
-     * @param animatedValue
-     */
-    public void showBarColor(int animatedValue) {
-        if (getActivity() == null)
-            return;
-        ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(animatedValue);
-        mLayoutCleanTop.setBackgroundColor(animatedValue);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, true);
-        } else {
-            StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, false);
-        }
     }
 
     @Override
@@ -342,25 +284,12 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         }
 
         if (!hidden) {
-            isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
+                StatusBarCompat.setStatusBarColor(requireActivity(), ContextCompat.getColor(requireContext(), color), true);
             } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), false);
+                StatusBarCompat.setStatusBarColor(requireActivity(), getResources().getColor(color), false);
             }
-        } else {
-            isShow = false;
         }
-
-    }
-
-    /**
-     * 获取当前Fragment是否显示
-     *
-     * @return
-     */
-    public boolean getViewShow() {
-        return isShow;
     }
 
     /**
@@ -402,22 +331,16 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
      * @param isMove true转动 false 停止
      */
     private void showHomeLottieView(boolean isMove) {
-        Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_anim);
-     /*   if (rotate == null) {
-            mIconOuter.setAnimation(rotate);
-        }*/
         if (mLottieHomeView == null)
             return;
         mLottieHomeView.useHardwareAcceleration();
         mLottieHomeView.setAnimation("data_home.json");
         mLottieHomeView.setImageAssetsFolder("images");
         if (isMove) {
-//            mIconOuter.startAnimation(rotate);
             mLottieHomeView.playAnimation();
             mLottieHomeView.setVisibility(VISIBLE);
         } else {
             mHandler.removeCallbacksAndMessages(null);
-//            mIconOuter.clearAnimation();
             mLottieHomeView.cancelAnimation();
             mLottieHomeView.setVisibility(GONE);
         }

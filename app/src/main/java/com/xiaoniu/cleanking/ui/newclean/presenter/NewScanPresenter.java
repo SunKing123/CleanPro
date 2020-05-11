@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -51,6 +52,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
+@Deprecated
 public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
     private ValueAnimator mScanTranlateColor;
@@ -88,22 +90,9 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         mFileQueryUtils = new FileQueryUtils();
         //文件加载进度回调
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
-            private boolean isFirst = true;
 
             @Override
             public void currentNumber() {
-                Log.v("onAnimationEnd", "currentNumber " + isFirst);
-                if (isFirst) {
-                    isFirst = false;
-                    if (mView.getActivity() == null) {
-                        return;
-                    }
-                    /* mView.getActivity().runOnUiThread(() -> {
-                     *//* if (!mScanTranlateColor.isRunning()) {
-//                            mScanTranlateColor.start();
-                        }*//*
-                    });*/
-                }
             }
 
             @Override
@@ -134,9 +123,11 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         Observable.create(e -> {
             //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+            Log.e("info", "内存占用----->" + runningProcess.size());
             e.onNext(runningProcess);
             //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
+            Log.e("info", "Apk安装包----->" + apkJunkInfos.size());
             e.onNext(apkJunkInfos);
 
             boolean isScanFile = apkJunkInfos.size() > 0;
@@ -144,18 +135,25 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
             ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
             //根据私有路径扫描公用路径
             ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
+            Log.e("info", "磁盘垃圾----->" + publicDataInfo.size());
+            for (FirstJunkInfo firstJunkInfo : publicDataInfo) {
+                Log.e("info", "垃圾----->" + firstJunkInfo.getSdPath());
+            }
             e.onNext(publicDataInfo);
 
-//            //公用路径残留文件
+            //公用路径残留文件
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
+            Log.e("info", "卸载残余----->" + leaveDataInfo.size());
             e.onNext(leaveDataInfo);
 
             //其他垃圾
             JunkGroup otherGroup = mFileQueryUtils.getOtherCache();
+            Log.e("info", "其他垃圾----->" + otherGroup);
             e.onNext(otherGroup);
             //扫描完成表示
             e.onNext("FINISH");
         }).compose(RxUtil.rxObservableSchedulerHelper(mView)).subscribe(o -> {
+            Log.e("info", "00000000000000000000000------------<" + o.toString());
             if (o instanceof ArrayList) {
                 ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
 
@@ -171,7 +169,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     cacheGroup.mSize += 0;
                 }
 
-
                 //卸载残留
                 JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
                 if (uninstallGroup == null) {
@@ -183,7 +180,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
                     uninstallGroup.mSize += 0;
                 }
-
 
                 //无用安装包
                 JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
@@ -208,7 +204,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
                     processGroup.mSize += 0;
                 }
-
 
                 for (FirstJunkInfo info : a) {
                     if ("TYPE_CACHE".equals(info.getGarbageType())) {
@@ -475,7 +470,7 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         //umeng -- Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'android.app.FragmentManager android.app.Activity.getFragmentManager()' on a null object reference
-        if (null == mView || null == mView.getActivity()) return;
+        if (null == mView.getActivity()) return;
         new RxPermissions(mView.getActivity()).request(permissions).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {

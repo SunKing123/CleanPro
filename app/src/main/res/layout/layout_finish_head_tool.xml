@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -11,7 +12,8 @@
         android:layout_margin="@dimen/dimen_8dp"
         android:background="@drawable/bg_finish_rem"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
         <!--建议清理-->
         <RelativeLayout
             android:id="@+id/v_clean_all"
@@ -75,7 +77,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--一键加速-->
         <RelativeLayout
             android:id="@+id/v_quicken"
@@ -84,7 +87,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_quicken"
@@ -139,7 +143,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--超强省电-->
         <RelativeLayout
             android:id="@+id/v_power"
@@ -148,7 +153,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_power"
@@ -203,7 +209,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--通知栏清理-->
         <RelativeLayout
             android:id="@+id/v_notification"
@@ -212,7 +219,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_notification"
@@ -267,7 +275,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--微信专清-->
         <RelativeLayout
             android:id="@+id/v_wechat"
@@ -276,7 +285,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_wechat"
@@ -331,7 +341,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--文件清理-->
         <RelativeLayout
             android:id="@+id/v_file"
@@ -340,7 +351,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_file"
@@ -395,7 +407,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--游戏加速-->
         <RelativeLayout
             android:id="@+id/v_game"
@@ -404,7 +417,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_game"
@@ -459,7 +473,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:layout_marginRight="@dimen/dimen_8dp"
             android:background="@color/color_F0F0F0"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
         <!--手机降温-->
         <RelativeLayout
             android:id="@+id/v_cool"
@@ -468,7 +483,8 @@
             android:layout_marginLeft="@dimen/dimen_8dp"
             android:paddingTop="@dimen/dimen_12dp"
             android:paddingBottom="@dimen/dimen_12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_cool"
@@ -530,7 +546,8 @@
         android:paddingTop="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_20dp"
         android:paddingBottom="@dimen/dimen_24dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/v_advert"
@@ -611,7 +628,7 @@
                 android:layout_height="180dp"
                 android:layout_below="@+id/tv_advert_content"
                 android:layout_marginTop="@dimen/dimen_8dp"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY" />
         </RelativeLayout>
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
 </LinearLayout>

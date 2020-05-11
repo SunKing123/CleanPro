@@ -9,49 +9,43 @@
     <include
         layout="@layout/content_junk_clean"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
-    <!--  <com.xiaoniu.cleanking.ui.newclean.view.NewCleanAnimView
-          android:id="@+id/view_clean_anim"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:visibility="gone" />
-  -->
+        android:layout_height="match_parent" />
 
     <RelativeLayout
         android:id="@+id/rel_clean_content"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:gravity="center"
+        android:visibility="gone">
 
 
-            <TextView
-                android:id="@+id/iv_clean_bg01"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="1"
-                android:background="@drawable/icon_clean_bg01"></TextView>
-            <TextView
-                android:id="@+id/iv_clean_bg02"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="1"
-                android:background="@drawable/icon_clean_bg02"></TextView>
-            <TextView
-                android:id="@+id/iv_clean_bg03"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="1"
-                android:background="@drawable/icon_clean_bg03"></TextView>
+        <TextView
+            android:id="@+id/iv_clean_bg01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_clean_bg01" />
+
+        <TextView
+            android:id="@+id/iv_clean_bg02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_clean_bg02" />
+
+        <TextView
+            android:id="@+id/iv_clean_bg03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="1"
+            android:background="@drawable/icon_clean_bg03" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie_bottom"
             android:layout_width="match_parent"
-            android:scaleType="centerCrop"
+            android:layout_height="match_parent"
             android:layout_marginTop="24dp"
-            android:layout_height="match_parent"/>
+            android:scaleType="centerCrop" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/view_lottie_top"
@@ -65,25 +59,27 @@
             android:layout_height="match_parent"
             android:layout_marginTop="24dp"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="66">
 
             </TextView>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_weight="315">
+                android:layout_weight="315"
+                android:gravity="center">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tv_clean_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:layout_centerInParent="true"
+                    android:lines="1"
                     android:maxWidth="@dimen/dimen_200dp"
                     android:text="0.0"
                     android:textColor="@color/white"
@@ -94,18 +90,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_clean_count"
-                    android:text="MB"
-                    android:layout_marginTop="-8dp"
                     android:layout_centerInParent="true"
-                    android:textSize="32sp"
                     android:layout_centerHorizontal="true"
-                    android:textColor="@color/white" />
+                    android:layout_marginTop="-8dp"
+                    android:text="MB"
+                    android:textColor="@color/white"
+                    android:textSize="32sp" />
             </RelativeLayout>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="339"></TextView>
+                android:layout_weight="339" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -116,9 +112,9 @@
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
         android:padding="0dp"
+        android:visibility="visible"
         app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp"
-        android:visibility="visible">
+        app:contentInsetStartWithNavigation="0dp">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -143,8 +139,6 @@
                 android:textSize="18sp" />
 
         </FrameLayout>
-
-
     </android.support.v7.widget.Toolbar>
 
 </FrameLayout>

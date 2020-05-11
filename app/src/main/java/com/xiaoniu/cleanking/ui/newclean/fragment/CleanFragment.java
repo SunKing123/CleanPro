@@ -68,8 +68,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @BindView(R.id.junk_list)
     ExpandableListView mExpandableListView;
-/*    @BindView(R.id.view_clean_anim)
-    NewCleanAnimView mCleanAnimView;*/
     @BindView(R.id.do_junk_clean)
     TextView doJunkClean;
 
@@ -199,10 +197,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 }
             }
         });
-    /*    mAdapter.setOnItemSe lectListener(() -> {
-            long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-            totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
-        });*/
 
         mExpandableListView.setAdapter(mAdapter);
 
@@ -213,31 +207,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 mExpandableListView.expandGroup(i);
             }
         }
-        /*
-        mCleanAnimView.setStateListener(new AnimationStateListener() {
-            @Override
-            public void onAnimationStart() {
-                //清理完成动画开始
-                NiuDataAPI.onPageStart("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
-            }
-
-            @Override
-            public void onAnimationEnd() {
-                NiuDataAPIUtil.onPageEnd("scanning_result_page", "clean_finish_annimation_page", "clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
-                cleanFinish();
-            }
-        });
-
-        mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
-
-        mCleanAnimView.setCleanOverListener(() -> {
-            if (getActivity() != null) {
-                ((NowCleanActivity) getActivity()).setClean(false);
-            }
-        });*/
     }
-
-
 
     @OnClick({R.id.layout_junk_clean,R.id.btn_left_scan})
     public void viewClick(View view) {
@@ -251,7 +221,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
 
     }
-
 
     public void starClean(){
         //扫描中弹框_确认按钮
@@ -294,12 +263,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     }
 
     private void startClean() {
-/*        mCleanAnimView.setStopClean(false);
-        mCleanAnimView.setVisibility(View.VISIBLE);
-        mCleanAnimView.setData(checkCountEntity);
-        //清理动画
-        mCleanAnimView.startCleanAnim(false);*/
-//        layoutShowList.setVisibility(View.GONE);
         cleanToolbar.setVisibility(View.GONE);
         relCleanContent.setVisibility(View.VISIBLE);
         ivCleanBg01.setVisibility(View.VISIBLE);
@@ -345,15 +308,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
             }
-
-
         });
         viewLottieBottom.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -415,6 +374,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
+                                break;
                             }
                         }
                         long l = CleanUtil.freeJunkInfos(value.mChildren);
@@ -423,6 +383,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
+                                break;
                             }
                         }
                         long l1 = CleanUtil.freeJunkInfos(value.mChildren);
@@ -431,6 +392,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
+                                break;
                             }
                         }
                         long leavedCache = CleanUtil.freeJunkInfos(value.mChildren);
@@ -459,25 +421,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     }
 
-/*    private long getTotalSize() {
-        long size = 0L;
-        for (JunkGroup group : mJunkGroups.values()) {
-            for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-                if (firstJunkInfo.isAllchecked()) {
-                    size += firstJunkInfo.getTotalSize();
-                }
-            }
-        }
-        return size;
-    }*/
-
-
     /**
      * 停止清理
      */
     public void stopClean() {
         viewLottieBottom.pauseAnimation();
-//        mCleanAnimView.stopClean();
     }
 
 
@@ -500,12 +448,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
-
     public void showColorChange(TextView[] ivs, int index) {
         if (ivs.length == 3 && index <= 2 && index > 0) {
             Drawable drawable = ivs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                if (drawable.getAlpha() == 255) {
                 ObjectAnimator animatorHide = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
                 animatorHide.setTarget(drawable);
                 animatorHide.setDuration(1000);
@@ -520,16 +466,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                       /* if(index==1){
-
-                  *//*          Log.v("onAnimationEnd", "onAnimationEnd ");
-                            mView.setColorChange(true);
-                           *//*
-                            if (animatorHide != null)
-                                animatorHide.cancel();
-                        }else{
-
-                        }*/
                         showColorChange(ivs, (index - 1));
                     }
 
@@ -543,9 +479,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
                     }
                 });
-//                }
             }
         }
-
     }
 }

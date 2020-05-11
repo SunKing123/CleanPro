@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -10,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -60,7 +61,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -118,17 +118,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
-    private NewCleanMainFragment mainFragment;
-    private MyHandler mHandler = new MyHandler(this);
-
-    private class MyHandler extends Handler {
-        WeakReference<Activity> mActivity;
-
-        public MyHandler(Activity con) {
-            this.mActivity = new WeakReference<>(con);
-        }
-
-        public void handleMessage(android.os.Message msg) {
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
             if (msg.what == 1) {
                 if (isSelectTop)
                     return;
@@ -137,7 +129,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 }
             }
         }
-    }
+    };
 
     @Override
     public int getLayoutId() {
@@ -153,15 +145,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
-                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
+                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_clean_normal, getString(R.string.clean)))
+                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_me_normal, getString(R.string.mine)));
         } else {
-            mBottomBarTab = new BottomBarTab(this, R.drawable.msg_normal, getString(R.string.top));
+            mBottomBarTab = new BottomBarTab(this, R.drawable.ic_tab_msg_normal, getString(R.string.top));
             mBottomBar
-                    .addItem(new BottomBarTab(this, R.drawable.clean_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.drawable.tool_normal, getString(R.string.tool)))
+                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_clean_normal, getString(R.string.clean)))
+                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_tool_normal, getString(R.string.tool)))
                     .addItem(mBottomBarTab)
-                    .addItem(new BottomBarTab(this, R.drawable.me_normal, getString(R.string.mine)));
+                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_me_normal, getString(R.string.mine)));
         }
 
         mBottomBar.setCurrentItem(0);
@@ -352,7 +344,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
 
         MeFragment mineFragment = MeFragment.getIntance();
-        mainFragment = new NewCleanMainFragment();
+        NewCleanMainFragment mainFragment = new NewCleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
