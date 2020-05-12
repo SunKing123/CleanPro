@@ -1,14 +1,11 @@
 package com.xiaoniu.cleanking.ui.news.utils;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.widget.ScaleTransitionPagerTitleView;
-import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.abs.IPagerIndicator;
 import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
@@ -32,11 +29,23 @@ public class NewsUtils {
     }
 
 
+    /**
+     *
+     * @param context
+     * @param text
+     * @param isWhiteBg
+     * @return
+     */
+    public static SimplePagerTitleView getSimplePagerTitleView(Context context, String text, boolean isWhiteBg) {
 
-    public static SimplePagerTitleView getSimplePagerTitleView(Context context, String text) {
         SimplePagerTitleView simplePagerTitleView = new ScaleTransitionPagerTitleView(context);
-        simplePagerTitleView.setNormalColor(Color.parseColor("#000000"));    // black
-        simplePagerTitleView.setSelectedColor(Color.parseColor("#06C581"));  // colorPrimary
+        if (isWhiteBg) {
+            simplePagerTitleView.setNormalColor(context.getResources().getColor(R.color.black));    // black
+            simplePagerTitleView.setSelectedColor(context.getResources().getColor(R.color.colorPrimary));  // colorPrimary
+        } else {
+            simplePagerTitleView.setNormalColor(context.getResources().getColor(R.color.white));
+            simplePagerTitleView.setSelectedColor(context.getResources().getColor(R.color.white));
+        }
         simplePagerTitleView.setTextSize(20);
         simplePagerTitleView.setText(text);
         int padding = ScreenUtil.dp2px(context, 3);
@@ -46,14 +55,18 @@ public class NewsUtils {
     }
 
 
-    public static LinePagerIndicator getPagerIndicator(Context context) {
+    public static LinePagerIndicator getPagerIndicator(Context context, boolean isWhiteBg) {
         LinePagerIndicator indicator = new LinePagerIndicator(context);
         //设置宽度
         indicator.setLineWidth(ScreenUtil.dp2px(context,12));
         //设置高度
         indicator.setLineHeight(ScreenUtil.dp2px(context, 2));
         //设置颜色
-        indicator.setColors(context.getResources().getColor(R.color.colorPrimary));
+        if (isWhiteBg) {
+            indicator.setColors(context.getResources().getColor(R.color.colorPrimary));
+        } else {
+            indicator.setColors(context.getResources().getColor(R.color.white));
+        }
         //设置圆角
         indicator.setRoundRadius(1);
         //设置模式

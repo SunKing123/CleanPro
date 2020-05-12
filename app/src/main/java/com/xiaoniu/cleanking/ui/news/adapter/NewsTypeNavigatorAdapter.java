@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
@@ -18,16 +17,16 @@ import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.titl
  */
 public class NewsTypeNavigatorAdapter extends CommonNavigatorAdapter {
 
-    private static final String TAG = "NewsTypeNaviAdapter";
-
     private OnClickListener mOnClickListener;
 
+    private boolean isWhiteBg;
 
     private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
 
 
-    public NewsTypeNavigatorAdapter(NewsType[] mNewTypes) {
+    public NewsTypeNavigatorAdapter(NewsType[] mNewTypes, boolean isWhiteBg) {
         this.mNewTypes = mNewTypes;
+        this.isWhiteBg = isWhiteBg;
     }
 
     @Override
@@ -37,11 +36,10 @@ public class NewsTypeNavigatorAdapter extends CommonNavigatorAdapter {
 
     @Override
     public IPagerTitleView getTitleView(Context context, final int index) {
-        SimplePagerTitleView simplePagerTitleView = NewsUtils.getSimplePagerTitleView(context, mNewTypes[index].getName());
+        SimplePagerTitleView simplePagerTitleView = NewsUtils.getSimplePagerTitleView(context, mNewTypes[index].getName(), isWhiteBg);
         simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "!--->getTitleView---onClick-----");
                 if (mOnClickListener != null) {
                     mOnClickListener.onClickTitleView(index);
                 }
@@ -52,7 +50,7 @@ public class NewsTypeNavigatorAdapter extends CommonNavigatorAdapter {
 
     @Override
     public IPagerIndicator getIndicator(Context context) {
-        return NewsUtils.getPagerIndicator(context);
+        return NewsUtils.getPagerIndicator(context, isWhiteBg);
     }
 
 

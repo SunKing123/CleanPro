@@ -449,7 +449,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private void initMagicIndicator() {
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setSkimOver(true);
-        mNewsTypeNaviAdapter = new NewsTypeNavigatorAdapter(mNewTypes);
+        mNewsTypeNaviAdapter = new NewsTypeNavigatorAdapter(mNewTypes, true);
         mNewsTypeNaviAdapter.setOnClickListener(new NewsTypeNavigatorAdapter.OnClickListener() {
             @Override
             public void onClickTitleView(int index) {

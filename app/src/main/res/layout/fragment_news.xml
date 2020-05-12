@@ -16,7 +16,7 @@
             android:visibility="gone"
             android:layout_height="match_parent" />
 
-        <com.xiaoniu.common.widget.viewpagerindicator.ViewPagerIndicator
+        <com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator
             android:id="@+id/newsTabIndicator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
