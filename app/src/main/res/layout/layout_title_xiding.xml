@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="52dp"
             android:gravity="center"
-            android:text="@string/home_news_back_to_clean"
+            android:text="@string/xiding_back_to_clean"
             android:textColor="@color/white"
             android:textSize="18sp" />
     </FrameLayout>

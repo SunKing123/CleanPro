@@ -1,14 +1,19 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -64,7 +71,11 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
+import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
+import com.xiaoniu.cleanking.ui.news.fragment.NewsListFragment;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -76,7 +87,13 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.MeasureViewPager;
+import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
+import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
+import com.xiaoniu.cleanking.widget.magicIndicator.ViewPagerHelper;
+import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -97,12 +114,57 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+
 /**
  * 1.2.0 版本以后清理完成 显示资讯
  */
-public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> implements View.OnClickListener {
+public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> implements View.OnClickListener, NestedScrollView.OnScrollChangeListener  {
 
     private static final String TAG = "AD_DEMO";
+
+
+    /*< XD added for feed begin */
+    @BindView(R.id.layout_root)
+    LinearLayout layoutRoot;
+    @BindView(R.id.v_clean_finish_top)
+    RelativeLayout vHomeTop;
+    @BindView(R.id.v_clean_finish_top_normal)
+    LinearLayout vTopTitleNormal;    // normal
+    @BindView(R.id.ll_top_xiding)
+    LinearLayout vTopTitleXiding;
+
+    @BindView(R.id.layout_scroll)
+    OperatorNestedScrollView mNestedScrollView;
+
+    @BindView(R.id.close_feed_empty_view)
+    View close_feed_empty_view;
+    @BindView(R.id.home_feeds)
+    LinearLayout homeFeeds;    // 信息流
+    @BindView(R.id.feed_view_pager)
+    MeasureViewPager feedViewPager;   // feed pager
+    @BindView(R.id.feed_indicator)
+    MagicIndicator feedIndicator;
+    @BindView(R.id.fl_top_nav)
+    LinearLayout mFLTopNav;
+    @BindView(R.id.iv_back)
+    ImageView mIvBack;
+    @BindView(R.id.tv_top_xiding_back)
+    TextView tvTopXidingBack;
+
+    private String mTitleType = "white";
+    private static final String KEY_TYPE = "TYPE";
+    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
+    private NewsTypeNavigatorAdapter mNewsTypeNaviAdapter;
+    private ComFragmentAdapter mNewsListFragmentAdapter;
+    private List<com.xiaoniu.common.base.BaseFragment> mNewsListFragments;  // NewsListFragments
+    private boolean canXiding = true;
+    public LayoutInflater mInflater;
+    private int mStatusBarHeight;
+    private int mStickyHeight;
+    /* XD added for feed End >*/
+
     private String mTitle = "";
     private TextView mTitleTv;
     private TextView mTvSize;
@@ -110,9 +172,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private TextView mTvQl;
 
     private XRecyclerView mRecyclerView;
-    private NewsListAdapter mNewsAdapter;
+    private NewsListAdapter mNewsAdapter;     //
     private NewsType mType = NewsType.TOUTIAO;
-    private static final int PAGE_NUM = 20;//每一页数据
+    private static final int PAGE_NUM = 15; //每一页数据
     private boolean mIsRefresh = true;
     private ImageView mBtnLeft;
 
@@ -170,6 +232,23 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     int processNum = 0;
 
+    /*< XD added for feed begin */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        initVariable(savedInstanceState);
+        super.onCreate(savedInstanceState);
+    }
+
+    protected void initVariable(Bundle arguments) {
+        mNewTypes = NewsUtils.sNewTypes;
+        mNewsListFragments = new ArrayList<>();
+        if (arguments != null) {
+            mTitleType = arguments.getString(KEY_TYPE);
+            Log.d(TAG, "!--->initVariable----mTitleType:"+mTitleType);
+        }
+    }
+    /* XD added for feed End >*/
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_finish_layout;
@@ -182,6 +261,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     protected void initView() {
+        mInflater = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        mStatusBarHeight = ScreenUtil.getStatusBarHeight(this);
+        mStickyHeight = ScreenUtil.dp2px(this, 80);
+        Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight+"; mStickyHeight :"+mStickyHeight);
+
         EventBus.getDefault().register(this);
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
@@ -204,6 +288,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
 
         mNewsAdapter = new NewsListAdapter(this);
+
         View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content), false);
         View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content), false);
         mRecyclerView.addHeaderView(header);
@@ -263,6 +348,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         mTitleTv.setText(mTitle);
 
+        initFeedView();  // XD added 20200509
+
         mLottieAd = (LottieAnimationView) header.findViewById(R.id.lottie_ad);
         mLottieAd.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -285,6 +372,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             }
         });
+
         mPresenter.getScreentSwitch();
         getPageData();
         setListener();
@@ -303,6 +391,92 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
+    /*< XD added for feed 20200215 begin */
+    /**
+     * @author xd.he
+     */
+    private void initFeedView() {
+        tvTopXidingBack.setText(R.string.xiding_back_to_wx_clean);
+        mNestedScrollView.setOnScrollChangeListener(this);
+        feedViewPager.setOffscreenPageLimit(10);
+        homeFeeds.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!NewsUtils.isFeedClosed()) {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
+                        params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
+                        homeFeeds.setLayoutParams(params);
+                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        mNestedScrollView.requestLayout();
+                    } else {
+                        homeFeeds.setVisibility(View.GONE);
+                        close_feed_empty_view.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        feedViewPager.setNeedScroll(false);
+        feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                feedViewPager.setNeedScroll(false);
+                Rect rect = new Rect();
+                homeFeeds.getGlobalVisibleRect(rect);
+                int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+                Log.d(TAG, "!--->xiding--onPageSelected---index:"+i+"; dy:" + dy);
+                if (dy != 0) {
+                    doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
+                }
+                StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        initMagicIndicator();
+    }
+
+    private void initMagicIndicator() {
+        CommonNavigator commonNavigator = new CommonNavigator(this);
+        commonNavigator.setSkimOver(true);
+        mNewsTypeNaviAdapter = new NewsTypeNavigatorAdapter(mNewTypes);
+        mNewsTypeNaviAdapter.setOnClickListener(new NewsTypeNavigatorAdapter.OnClickListener() {
+            @Override
+            public void onClickTitleView(int index) {
+                onClickNavigator(index);
+            }
+        });
+        commonNavigator.setAdapter(mNewsTypeNaviAdapter);
+        feedIndicator.setBackgroundColor(getResources().getColor(R.color.transparent));
+        feedIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(feedIndicator, feedViewPager);
+    }
+
+    private void onClickNavigator(int index) {
+        feedViewPager.setCurrentItem(index);
+        feedViewPager.setNeedScroll(false);
+        feedViewPager.setClickTab(true);
+        //处理吸顶操作
+        Rect rect = new Rect();
+        homeFeeds.getGlobalVisibleRect(rect);
+        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+        Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
+        if (dy != 0 && canXiding) {
+            Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
+            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
+        }
+    }
+    /* XD added for feed 20200215 End >*/
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -1273,7 +1447,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadData() {
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
-        startLoadData();
+//        startLoadData();  // XD delete 20200512
+        loadFeedData();  // XD add for feed
     }
 
     @Override
@@ -1493,6 +1668,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
+    /**
+     * @deprecated
+     */
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
             if (mRecyclerView != null) {
@@ -2375,4 +2553,132 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         });
     }
+
+
+    /*< XD added for feed begin */
+
+
+    private void showFeedView() {
+        homeFeeds.setVisibility(View.VISIBLE);   // 显示信息流
+        feedViewPager.setVisibility(View.VISIBLE);
+    }
+
+    protected void loadFeedData() {
+        showFeedView();
+        for (int i = 0; i < mNewTypes.length; i++) {
+            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            mNewsListFragments.add(listFragment);
+        }
+        mNewsListFragmentAdapter = new ComFragmentAdapter(getSupportFragmentManager(), mNewsListFragments);
+        feedViewPager.setAdapter(mNewsListFragmentAdapter);
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
+        if (!NewsUtils.isFeedClosed() && canXiding) {
+            //处理吸顶操作
+            Rect rect = new Rect();
+            homeFeeds.getGlobalVisibleRect(rect);
+            int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            int changeY = y - lasty;
+            if (dy> 0 && dy <= mStickyHeight && changeY > 0) {
+                if (changeY < 20) {
+                    if (dy > 0) {
+                        doXiDingStickyAnim(y + dy, true, 300);
+                    }
+                } else {
+                    doXiDingStickyAnim(y + dy, false);
+                }
+            }
+        }
+    }
+
+    private void doXiDingStickyAnim(int scrolltoY, boolean isAnimation) {
+        doXiDingStickyAnim(scrolltoY, isAnimation, 400);
+    }
+
+    private void doXiDingStickyAnim(int scrolltoY, boolean isAnimation, int duration) {
+        mNestedScrollView.setNeedScroll(false);
+        canXiding = false;
+        if (isAnimation) {
+            scrollAnima(mNestedScrollView.getScrollY(), scrolltoY, duration);
+        } else {
+            mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), scrolltoY);
+            canXiding = true;
+        }
+        updateTitle(true);
+    }
+
+    @OnClick(R.id.fl_xiding_top_back)
+    public void onClickGoBackToClean() {
+        goBackToClean(true);
+    }
+
+    private void goBackToClean(boolean isAnimation) {
+        canXiding = false;
+        if (mNewsListFragmentAdapter != null) {
+            mNewsListFragmentAdapter.resetScrollToTop();
+        }
+        mNestedScrollView.setNeedScroll(true);
+        if (isAnimation) {
+            scrollAnima(mNestedScrollView.getScrollY(), 0, 400);
+        } else {
+            mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+            canXiding = true;
+        }
+        updateTitle(false);
+    }
+
+
+    private void updateTitle(boolean xiding) {
+        if (xiding) {
+            vTopTitleNormal.setVisibility(View.GONE);  // lltop_narmal
+            vTopTitleXiding.setVisibility(View.VISIBLE);
+        } else {
+            vTopTitleNormal.setVisibility(View.VISIBLE);
+            vTopTitleXiding.setVisibility(View.GONE);
+        }
+    }
+
+    private void scrollAnima(int start, int end, int duration) {
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(start, end);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //获取动画过程中的渐变值
+                int animatedValue = (int) animation.getAnimatedValue();
+                if (mNestedScrollView != null) {
+                    mNestedScrollView.scrollTo(0, animatedValue);
+                }
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animator) {
+                canXiding = false;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                canXiding = true;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
+    private void startDetail() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+    /* XD added for feed End >*/
+
 }

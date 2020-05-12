@@ -39,6 +39,18 @@ public class ScreenUtil {
         return dp * (getDisplayMetrics(context).densityDpi / 160F);
     }
 
+    /**
+     * 将dp值转换为px值，保证尺寸大小不变，在动态设置组件的固定宽,高值时，由于待设置的宽或高为密度值，常用此方法转换
+     *
+     * @param context
+     * @param dpValue
+     * @return
+     */
+    public static int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
     public static DisplayMetrics getDisplayMetrics(Context context) {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         ((WindowManager) context.getSystemService(

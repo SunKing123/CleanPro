@@ -3,9 +3,7 @@ package com.xiaoniu.cleanking.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.injector.component.DaggerFragmentComponent;

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
  */
 public class NewsFragment extends BaseFragment {
     private static final String KEY_TYPE = "TYPE";
-    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
+    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
     private ViewPager mViewPager;
     private ViewPagerIndicator mTabIndicator;
     private ArrayList<NewsListFragment> mFragments;
@@ -68,6 +69,7 @@ public class NewsFragment extends BaseFragment {
 
     @Override
     protected void initVariable(Bundle arguments) {
+        mNewTypes = NewsUtils.sNewTypes;
         mFragments = new ArrayList<>();
         if (arguments != null) {
             mType = arguments.getString(KEY_TYPE);
@@ -78,7 +80,7 @@ public class NewsFragment extends BaseFragment {
     protected void initViews(View contentView, Bundle savedInstanceState) {
         mIvBack = contentView.findViewById(R.id.iv_back);
         mViewPager = contentView.findViewById(R.id.newsViewPager);
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(6);
         mTabIndicator = contentView.findViewById(R.id.newsTabIndicator);
         mFLTopNav = contentView.findViewById(R.id.fl_top_nav);
         if (isShowBack) {

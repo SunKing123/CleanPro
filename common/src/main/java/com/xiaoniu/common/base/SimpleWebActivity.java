@@ -34,6 +34,12 @@ public class SimpleWebActivity extends BaseActivity {
     public String url;
     public String title;
 
+    /**
+     *
+     * @param context
+     * @param url
+     * @param title
+     */
     public static void startActivity(Context context, String url, String title) {
         if (context != null) {
             Intent intent = new Intent(context, SimpleWebActivity.class);

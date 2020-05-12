@@ -20,6 +20,10 @@ import java.util.ArrayList;
  * 头条资讯适配器
  */
 public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
+
+    private OnClickItemListener mOnClickItemListener;
+
+
     public NewsListAdapter(Context context) {
         super(context, new NewsItemTypeSupport());
     }
@@ -47,6 +51,9 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
             commonHolder.itemView.setOnClickListener(v -> {
                         SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
+                        if (mOnClickItemListener != null) {
+                            mOnClickItemListener.onClickItem(itemInfo);
+                        }
                         //埋点
                         if (position > 11)
                             return;
@@ -98,5 +105,15 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         public int getSpanSize(int position, int spanCount) {
             return 0;
         }
+    }
+
+    public void setOnClickItemListener(OnClickItemListener mOnClickItemListener) {
+        this.mOnClickItemListener = mOnClickItemListener;
+    }
+
+    public interface OnClickItemListener {
+
+        void onClickItem(NewsItemInfo itemInfo);
+
     }
 }

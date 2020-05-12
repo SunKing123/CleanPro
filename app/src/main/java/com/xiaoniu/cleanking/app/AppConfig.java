@@ -90,13 +90,5 @@ public class AppConfig {
         }
     }
 
-    /**
-     * 信息流是否关闭  TODO
-     *
-     * @return
-     */
-    public static boolean isFeedClosed() {
-        return false;
-    }
 
 }

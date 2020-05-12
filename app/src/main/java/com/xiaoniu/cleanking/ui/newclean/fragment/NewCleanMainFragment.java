@@ -2,9 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -22,7 +20,6 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +32,6 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -69,7 +65,9 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
+import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsListFragment;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
@@ -87,14 +85,12 @@ import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
+import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
+import com.xiaoniu.cleanking.widget.magicIndicator.ViewPagerHelper;
+import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.common.widget.viewpagerindicator.IScrollBar;
-import com.xiaoniu.common.widget.viewpagerindicator.IndicatorAdapter;
-import com.xiaoniu.common.widget.viewpagerindicator.LineScrollBar;
-import com.xiaoniu.common.widget.viewpagerindicator.ViewPagerIndicator;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -117,7 +113,7 @@ import static android.view.View.VISIBLE;
 /**
  * 1.2.1 新版本清理主页
  */
-public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener , NestedScrollView.OnScrollChangeListener{
+public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener, NestedScrollView.OnScrollChangeListener {
 
     private static final String TAG = "NewCleanMainFragment";
 
@@ -188,23 +184,30 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     View close_feed_empty_view;
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
+
     @BindView(R.id.feed_view_pager)
     MeasureViewPager feedViewPager;   // feed pager
+
     @BindView(R.id.feed_indicator)
-    ViewPagerIndicator feedIndicator;
+    MagicIndicator feedIndicator;
+
     @BindView(R.id.fl_top_nav)
     LinearLayout mFLTopNav;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
+    @BindView(R.id.tv_top_xiding_back)
+    TextView tvTopXidingBack;
 
-    private String mType = "white";
+    private String mTitleType = "white";
     private static final String KEY_TYPE = "TYPE";
-    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUONEI, NewsType.GUOJI, NewsType.YULE};
+    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
+    private NewsTypeNavigatorAdapter mNewsTypeNaviAdapter;
     private ComFragmentAdapter mNewsListFragmentAdapter;
     private List<com.xiaoniu.common.base.BaseFragment> mNewsListFragments;  // NewsListFragments
     private boolean canXiding = true;
     public LayoutInflater mInflater;
     private int mStatusBarHeight;
+    private int mStickyHeight;
     /* XD added for feed End >*/
 
     private int mNotifySize; //通知条数
@@ -229,10 +232,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     protected void initVariable(Bundle arguments) {
+        mNewTypes = NewsUtils.sNewTypes;
         mNewsListFragments = new ArrayList<>();
         if (arguments != null) {
-            mType = arguments.getString(KEY_TYPE);
-            Log.d(TAG, "!--->initVariable----mType:"+mType);
+            mTitleType = arguments.getString(KEY_TYPE);
+            Log.d(TAG, "!--->initVariable----mTitleType:"+mTitleType);
         }
     }
 
@@ -246,8 +250,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     protected void initView() {
-        mStatusBarHeight = ScreenUtil.getStatusBarHeight(getActivity());
-        Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight);
+        mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
+        mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
+        Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight+"; mStickyHeight :"+mStickyHeight);
 
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
@@ -331,17 +336,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+    /*< XD added for feed 20200215 begin */
     /**
      * @author xd.he
      */
     private void initFeedView() {
+        tvTopXidingBack.setText(R.string.xiding_back_to_clean);
         mNestedScrollView.setOnScrollChangeListener(this);
-        feedViewPager.setOffscreenPageLimit(10);
+        feedViewPager.setOffscreenPageLimit(6);
         homeFeeds.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if (!AppConfig.isFeedClosed()) {
+                    if (!NewsUtils.isFeedClosed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
                         params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
                         homeFeeds.setLayoutParams(params);
@@ -358,7 +365,64 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         });
         feedViewPager.setNeedScroll(false);
+        feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                feedViewPager.setNeedScroll(false);
+                Rect rect = new Rect();
+                homeFeeds.getGlobalVisibleRect(rect);
+                int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+                Log.d(TAG, "!--->xiding--onPageSelected---index:"+i+"; dy:" + dy);
+                if (dy != 0) {
+                    doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
+                }
+                StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        initMagicIndicator();
     }
+
+    private void initMagicIndicator() {
+        CommonNavigator commonNavigator = new CommonNavigator(getContext());
+        commonNavigator.setSkimOver(true);
+        mNewsTypeNaviAdapter = new NewsTypeNavigatorAdapter(mNewTypes);
+        mNewsTypeNaviAdapter.setOnClickListener(new NewsTypeNavigatorAdapter.OnClickListener() {
+            @Override
+            public void onClickTitleView(int index) {
+                onClickNavigator(index);
+            }
+        });
+        commonNavigator.setAdapter(mNewsTypeNaviAdapter);
+        feedIndicator.setBackgroundColor(getResources().getColor(R.color.transparent));
+        feedIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(feedIndicator, feedViewPager);
+    }
+
+    private void onClickNavigator(int index) {
+        feedViewPager.setCurrentItem(index);
+        feedViewPager.setNeedScroll(false);
+        feedViewPager.setClickTab(true);
+        //处理吸顶操作
+        Rect rect = new Rect();
+        homeFeeds.getGlobalVisibleRect(rect);
+        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+        Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
+        if (dy != 0 && canXiding) {
+            Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
+            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
+        }
+    }
+    /* XD added for feed 20200215 End >*/
+
 
     private void initRecyclerView() {
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -1206,76 +1270,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         mNewsListFragmentAdapter = new ComFragmentAdapter(getChildFragmentManager(), mNewsListFragments);
         feedViewPager.setAdapter(mNewsListFragmentAdapter);
-        feedIndicator.bindViewPager(feedViewPager);
-        feedIndicator.setIndicatorAdapter(new IndicatorAdapter() {
-            @Override
-            public View getTabView(Context context, int position) {
-                TextView textView = (TextView) mInflater.inflate(R.layout.layout_news_tab_item, null);
-                textView.setText(mNewTypes[position].getName());
-                if ("white".equals(mType)) {
-                    feedIndicator.setBackgroundColor(Color.WHITE); // WHITE color_06C581
-                    mFLTopNav.setBackgroundColor(Color.WHITE);
-                    mIvBack.setColorFilter(Color.BLACK);
-                } else {
-                    textView.setTextColor(Color.WHITE);
-                }
-                return textView;
-            }
-
-            @Override
-            public IScrollBar getScrollBar(Context context) {
-                LineScrollBar scrollBar = new LineScrollBar(context);
-                scrollBar.setColor(Color.WHITE);//滚动块颜色
-                scrollBar.setHeight(DisplayUtils.dip2px(context, 2));//滚动块高度，不设置默认和每个tabview高度一致
-                scrollBar.setRadius(DisplayUtils.dip2px(context, 1));//滚动块圆角半径
-                scrollBar.setGravity(Gravity.BOTTOM);//可设置上中下三种
-                scrollBar.setWidth(DisplayUtils.dip2px(context, 12));//滚动块宽度，不设置默认和每个tabview宽度一致
-                return scrollBar;
-            }
-
-            @Override
-            public int getTabCount() {
-                return mNewsListFragments.size();
-            }
-
-            @Override
-            public void onTabChange(View tabView, int position, float selectPercent) { // callback many times ！
-            }
-        });
-
-        feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                feedViewPager.setNeedScroll(false);
-                Rect rect = new Rect();
-                homeFeeds.getGlobalVisibleRect(rect);
-                int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-                doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
-
-                StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
+        // xd delete some codes here
     }
 
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
-        if (!AppConfig.isFeedClosed() && canXiding) {
+        if (!NewsUtils.isFeedClosed() && canXiding) {
             //处理吸顶操作
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
             int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
             int changeY = y - lasty;
-            int mStickyHeight = (int) (ScreenUtil.getScreenHeightPx(NewCleanMainFragment.this.getActivity()) * 0.35f);
             if (dy> 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
                     if (dy > 0) {

@@ -518,7 +518,7 @@
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginTop="@dimen/dimen_8dp"
                 android:layout_marginRight="@dimen/dimen_12dp"
-                android:layout_marginBottom="@dimen/dimen_16dp" />
+                android:layout_marginBottom="@dimen/dimen_12dp" />
 
             <!-- no_net -->
             <LinearLayout
