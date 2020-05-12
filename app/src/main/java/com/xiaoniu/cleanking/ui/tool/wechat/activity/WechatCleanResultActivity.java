@@ -124,9 +124,9 @@ public class WechatCleanResultActivity extends SimpleActivity {
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             boolean isOpen = false;
             if(!CollectionUtils.isEmpty(AppHolder.getInstance().getSwitchInfoMap())){
-                SwitchInfoList.DataBean wechar= AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(PositionId.KEY_WECHAT,PositionId.DRAW_THREE_CODE));
-                SwitchInfoList.DataBean qq= AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(PositionId.KEY_QQ,PositionId.DRAW_THREE_CODE));
-                AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(PositionId.KEY_QQ,PositionId.DRAW_THREE_CODE));
+                SwitchInfoList.DataBean wechar= AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_WECHAT+PositionId.DRAW_THREE_CODE);
+                SwitchInfoList.DataBean qq= AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_QQ+PositionId.DRAW_THREE_CODE);
+                AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_QQ+PositionId.DRAW_THREE_CODE);
                 if(wechar!=null){
                     isOpen = wechar.isOpen();
                 }else if(qq!=null){

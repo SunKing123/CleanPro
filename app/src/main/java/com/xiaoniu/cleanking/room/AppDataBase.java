@@ -19,5 +19,7 @@ public abstract class AppDataBase extends RoomDatabase {
 
     public abstract GameSelectDao gameSelectDao();
     //广告配置数据
-    public abstract AdInfotDao adInfotDao();
+    public abstract AdInfoDao adInfotDao();
+
+
 }

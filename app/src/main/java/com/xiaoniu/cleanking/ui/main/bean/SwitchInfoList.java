@@ -36,6 +36,9 @@ public class SwitchInfoList extends BaseEntity {
         private String versions;
         private String advertId;
         private String secondAdvertId;
+        private String advertSource;
+        private String secondAdvertSource;
+        private String appName;
         private int showRate;
 
         public String getSecondAdvertId() {
@@ -100,6 +103,30 @@ public class SwitchInfoList extends BaseEntity {
 
         public void setShowRate(int showRate) {
             this.showRate = showRate;
+        }
+
+        public String getAdvertSource() {
+            return advertSource;
+        }
+
+        public void setAdvertSource(String advertSource) {
+            this.advertSource = advertSource;
+        }
+
+        public String getSecondAdvertSource() {
+            return secondAdvertSource;
+        }
+
+        public void setSecondAdvertSource(String secondAdvertSource) {
+            this.secondAdvertSource = secondAdvertSource;
+        }
+
+        public String getAppName() {
+            return appName;
+        }
+
+        public void setAppName(String appName) {
+            this.appName = appName;
         }
     }
 }

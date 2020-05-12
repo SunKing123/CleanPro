@@ -15,7 +15,7 @@ public class AppHolder {
     private static AppHolder appHolder;
 
     //广告配置内存缓存
-    public static Map<AdkeyEntity, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
+    public static Map<String, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
 
     private AppHolder() {
     }
@@ -60,14 +60,14 @@ public class AppHolder {
      * 广告配置内存缓存 数据库缓存
      * @param switchInfoList
      */
-    public void setSwitchInfoMap(List<SwitchInfoList.DataBean> switchInfoList) {
+    public synchronized void setSwitchInfoMap(List<SwitchInfoList.DataBean> switchInfoList) {
 
         if (CollectionUtils.isEmpty(switchInfoList)) {
             return;
         }
         mAdsMap.clear();
         for (SwitchInfoList.DataBean adInfo : switchInfoList) {
-            mAdsMap.put(new AdkeyEntity(adInfo.getConfigKey(), adInfo.getAdvertPosition()), adInfo);
+            mAdsMap.put(adInfo.getConfigKey()+adInfo.getAdvertPosition(), adInfo);
         }
 
         if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().adInfotDao())
@@ -78,7 +78,7 @@ public class AppHolder {
     }
 
 
-    public Map<AdkeyEntity, SwitchInfoList.DataBean> getSwitchInfoMap() {
+    public Map<String, SwitchInfoList.DataBean> getSwitchInfoMap() {
         return mAdsMap;
     }
 
@@ -110,7 +110,7 @@ public class AppHolder {
     public boolean isOpen(String configKey, String positionId) {
         boolean isOpen = false;
         if (!CollectionUtils.isEmpty(mAdsMap)) {
-            SwitchInfoList.DataBean adinfoBean = AppHolder.getInstance().getSwitchInfoMap().get(new AdkeyEntity(configKey, positionId));
+            SwitchInfoList.DataBean adinfoBean = AppHolder.getInstance().getSwitchInfoMap().get(configKey+positionId);
             if (null != adinfoBean) {
                 isOpen = adinfoBean.isOpen();
             }

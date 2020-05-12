@@ -17,7 +17,7 @@ import java.util.List;
  * @CreateDate: 2020/5/8 20:36
  */
 @Dao
-public interface AdInfotDao {
+public interface AdInfoDao {
 
     @Query("SELECT * FROM AdInfo")
     List<SwitchInfoList.DataBean> getAll();
