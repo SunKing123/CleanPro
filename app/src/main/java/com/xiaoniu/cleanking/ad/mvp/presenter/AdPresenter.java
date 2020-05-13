@@ -70,46 +70,14 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
      */
     private void arrangementData(AdRequestParamentersBean adRequestParamentersBean) throws Exception {
         Map<String, SwitchInfoList.DataBean> adMap = AppHolder.getInstance().getSwitchInfoMap();
-        SwitchInfoList.DataBean adinfoBean = null;
-        if (CollectionUtils.isEmpty(adMap)) {
-            if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
-                List<SwitchInfoList.DataBean> adList = ApplicationDelegate.getAppDatabase().adInfotDao().getAdInfo(adRequestParamentersBean.configKey, adRequestParamentersBean.advertPosition);
-                if (!CollectionUtils.isEmpty(adList)) {
-                    adinfoBean = adList.get(0);
-                }
-            }
-        } else {
-            adinfoBean = adMap.get(adRequestParamentersBean.configKey + adRequestParamentersBean.advertPosition);
-        }
-
+        SwitchInfoList.DataBean adinfoBean = getAdInfo(adMap, adRequestParamentersBean);
         if (adinfoBean != null) {
             dispatcherUnion(requestData(adinfoBean), adRequestParamentersBean);
         } else {
             //本地没有，走网络
+            getNetAdInfo(adRequestParamentersBean);
             Log.d("ad_status", "本地没有数据，开始走网络！");
-            adModel.getSwitchInfoList(adRequestParamentersBean.context, new Common4Subscriber<SwitchInfoList>() {
-                @Override
-                public void showExtraOp(String code, String message) {
 
-                }
-
-                @Override
-                public void getData(SwitchInfoList switchInfoList) {
-                    if (null != switchInfoList)
-                        AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
-                }
-
-                @Override
-                public void showExtraOp(String message) {
-                }
-
-                @Override
-                public void netConnectError() {
-                    if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
-                        AppHolder.getInstance().setSwitchInfoMap(ApplicationDelegate.getAppDatabase().adInfotDao().getAll());
-                    }
-                }
-            });
         }
     }
 
@@ -188,13 +156,73 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
      * @return
      * @throws InterruptedException
      */
-    private Deque<AdRequestBean> requestData(SwitchInfoList.DataBean adInfo) throws InterruptedException {
+    private Deque<AdRequestBean> requestData(SwitchInfoList.DataBean adInfo) throws Exception {
         Deque<AdRequestBean> request = new ArrayDeque<AdRequestBean>();
         request.add(new AdRequestBean(adInfo.getAdvertId(), adInfo.getAdvertSource()));
         if (!TextUtils.isEmpty(adInfo.getSecondAdvertSource()) && !TextUtils.isEmpty(adInfo.getSecondAdvertId())) {
             request.add(new AdRequestBean(adInfo.getSecondAdvertId(), adInfo.getSecondAdvertSource()));
         }
         return request;
+    }
+
+    /**
+     * 获取本地数据
+     *
+     * @param adMap
+     * @param adRequestParamentersBean
+     * @return
+     */
+    private SwitchInfoList.DataBean getAdInfo(Map<String, SwitchInfoList.DataBean> adMap, AdRequestParamentersBean adRequestParamentersBean) {
+        SwitchInfoList.DataBean adinfoBean = null;
+
+        if (CollectionUtils.isEmpty(adMap)) {
+            if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
+                List<SwitchInfoList.DataBean> adList = ApplicationDelegate.getAppDatabase().adInfotDao().getAdInfo(adRequestParamentersBean.configKey, adRequestParamentersBean.advertPosition);
+                if (!CollectionUtils.isEmpty(adList)) {
+                    adinfoBean = adList.get(0);
+                }
+            }
+        } else {
+            adinfoBean = adMap.get(adRequestParamentersBean.configKey + adRequestParamentersBean.advertPosition);
+        }
+        return adinfoBean;
+    }
+
+    /**
+     * 拉去忘了配置再次发起分发请求
+     *
+     * @param adRequestParamentersBean
+     */
+    private void getNetAdInfo(AdRequestParamentersBean adRequestParamentersBean) {
+        adModel.getSwitchInfoList(adRequestParamentersBean.context, new Common4Subscriber<SwitchInfoList>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(SwitchInfoList switchInfoList) {
+                if (null != switchInfoList) {
+                    AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
+                    try {
+                        dispatcherUnion(requestData(getAdInfo(AppHolder.getInstance().getSwitchInfoMap(), adRequestParamentersBean)), adRequestParamentersBean);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+                if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
+                    AppHolder.getInstance().setSwitchInfoMap(ApplicationDelegate.getAppDatabase().adInfotDao().getAll());
+                }
+            }
+        });
     }
 
 }
