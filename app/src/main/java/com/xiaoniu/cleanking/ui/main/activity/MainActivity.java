@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
+    private NewCleanMainFragment mMainFragment;
     private NewsFragment upQuotaFragment;
     private static final long DEFAULT_REFRESH_TIME = 10 * 60 * 1000L;
     /**
@@ -189,7 +190,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
             @Override
             public void onTabReselected(int position) {
-
+                if (position == CLEAN && mMainFragment != null) {
+                    mMainFragment.onClickCleanTab();
+                }
             }
         });
         DbHelper.copyDb();
@@ -342,14 +345,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void initFragments() {
-
         MeFragment mineFragment = MeFragment.getIntance();
-        NewCleanMainFragment mainFragment = new NewCleanMainFragment();
+        mMainFragment = new NewCleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
         upQuotaFragment = NewsFragment.getNewsFragment("");
-        mFragments.add(mainFragment);
+        mFragments.add(mMainFragment);
 
         mFragments.add(toolFragment);
 
@@ -361,11 +363,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mFragments.add(mineFragment);
 
         mManager.beginTransaction()
-                .add(R.id.frame_layout, mainFragment)
+                .add(R.id.frame_layout, mMainFragment)
                 .add(R.id.frame_layout, toolFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
                 .add(R.id.frame_layout, mineFragment)
-                .hide(mainFragment)
+                .hide(mMainFragment)
                 .hide(toolFragment)
                 .hide(upQuotaFragment)
                 .hide(mineFragment)

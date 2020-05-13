@@ -185,18 +185,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
 
-    @BindView(R.id.feed_view_pager)
-    MeasureViewPager feedViewPager;   // feed pager
-
-    @BindView(R.id.feed_indicator)
-    MagicIndicator feedIndicator;
-
     @BindView(R.id.fl_top_nav)
     LinearLayout mFLTopNav;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
     @BindView(R.id.tv_top_xiding_back)
     TextView tvTopXidingBack;
+
+    @BindView(R.id.feed_indicator)
+    MagicIndicator feedIndicator;
+    @BindView(R.id.feed_view_pager)
+    MeasureViewPager feedViewPager;   // feed pager
 
     private String mTitleType = "white";
     private static final String KEY_TYPE = "TYPE";
@@ -205,9 +204,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private ComFragmentAdapter mNewsListFragmentAdapter;
     private List<com.xiaoniu.common.base.BaseFragment> mNewsListFragments;  // NewsListFragments
     private boolean canXiding = true;
+    private boolean hasXiding = false;
     public LayoutInflater mInflater;
     private int mStatusBarHeight;
     private int mStickyHeight;
+    private int mRootHeight;
     /* XD added for feed End >*/
 
     private int mNotifySize; //通知条数
@@ -236,7 +237,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mNewsListFragments = new ArrayList<>();
         if (arguments != null) {
             mTitleType = arguments.getString(KEY_TYPE);
-            Log.d(TAG, "!--->initVariable----mTitleType:"+mTitleType);
         }
     }
 
@@ -252,7 +252,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     protected void initView() {
         mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
         mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
-        Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight+"; mStickyHeight :"+mStickyHeight);
 
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
@@ -344,26 +343,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         tvTopXidingBack.setText(R.string.xiding_back_to_clean);
         mNestedScrollView.setOnScrollChangeListener(this);
         feedViewPager.setOffscreenPageLimit(6);
-        homeFeeds.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!NewsUtils.isFeedClosed()) {
-                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
-                        params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
-                        homeFeeds.setLayoutParams(params);
-                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
-                        mNestedScrollView.requestLayout();
-                    } else {
-                        homeFeeds.setVisibility(View.GONE);
-                        close_feed_empty_view.setVisibility(View.VISIBLE);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        requestFeedHeight();
         feedViewPager.setNeedScroll(false);
         feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -376,7 +356,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 Rect rect = new Rect();
                 homeFeeds.getGlobalVisibleRect(rect);
                 int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-                Log.d(TAG, "!--->xiding--onPageSelected---index:"+i+"; dy:" + dy);
                 if (dy != 0) {
                     doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
                 }
@@ -389,6 +368,29 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         });
         initMagicIndicator();
+    }
+
+    private void requestFeedHeight() {
+        homeFeeds.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!NewsUtils.isFeedClosed()) {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
+                        params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
+                        homeFeeds.setLayoutParams(params);
+                        mRootHeight = layoutRoot.getHeight();
+                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        mNestedScrollView.requestLayout();
+                    } else {
+                        homeFeeds.setVisibility(View.GONE);
+                        close_feed_empty_view.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void initMagicIndicator() {
@@ -415,9 +417,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
         int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
+        // Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
         if (dy != 0 && canXiding) {
-            Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
+            // Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
         }
     }
@@ -1270,26 +1272,35 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         mNewsListFragmentAdapter = new ComFragmentAdapter(getChildFragmentManager(), mNewsListFragments);
         feedViewPager.setAdapter(mNewsListFragmentAdapter);
-        // xd delete some codes here
     }
 
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
         if (!NewsUtils.isFeedClosed() && canXiding) {
             //处理吸顶操作
+            cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
             int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            if (dy == 0) {
+                hasXiding = true;
+            }
             int changeY = y - lasty;
             if (dy> 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
-                    if (dy > 0) {
-                        doXiDingStickyAnim(y + dy, true, 300);
-                    }
+                    doXiDingStickyAnim(y + dy, true, 300);
                 } else {
                     doXiDingStickyAnim(y + dy, false);
                 }
             }
+        }
+    }
+
+    private void cheekRootHeight() {
+        int rootHeight = layoutRoot.getHeight();
+        if (mRootHeight != rootHeight) {
+            // Log.w(TAG, "!--->cheekRootHeight- init mRootHeight!= rootHeight");
+            requestFeedHeight();
         }
     }
 
@@ -1314,6 +1325,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         goBackToClean(true);
     }
 
+    public void onClickCleanTab() {
+        if (hasXiding && !NewsUtils.isFeedClosed()) {
+            goBackToClean(true);
+        }
+    }
+
+    /**
+     *
+     * @param isAnimation
+     */
     private void goBackToClean(boolean isAnimation) {
         canXiding = false;
         if (mNewsListFragmentAdapter != null) {
@@ -1338,6 +1359,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             vTopTitleNormal.setVisibility(View.VISIBLE);
             vTopTitleXiding.setVisibility(View.GONE);
         }
+        hasXiding = xiding;
     }
 
     private void scrollAnima(int start, int end, int duration) {

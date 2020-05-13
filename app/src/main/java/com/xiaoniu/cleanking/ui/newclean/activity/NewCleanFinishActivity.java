@@ -163,6 +163,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public LayoutInflater mInflater;
     private int mStatusBarHeight;
     private int mStickyHeight;
+    private int mRootHeight;
     /* XD added for feed End >*/
 
     private String mTitle = "";
@@ -244,7 +245,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mNewsListFragments = new ArrayList<>();
         if (arguments != null) {
             mTitleType = arguments.getString(KEY_TYPE);
-            Log.d(TAG, "!--->initVariable----mTitleType:"+mTitleType);
         }
     }
     /* XD added for feed End >*/
@@ -264,7 +264,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mInflater = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
         mStatusBarHeight = ScreenUtil.getStatusBarHeight(this);
         mStickyHeight = ScreenUtil.dp2px(this, 80);
-        Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight+"; mStickyHeight :"+mStickyHeight);
+        // Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight+"; mStickyHeight :"+mStickyHeight);
 
         EventBus.getDefault().register(this);
         fileQueryUtils = new FileQueryUtils();
@@ -399,26 +399,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         tvTopXidingBack.setText(R.string.xiding_back_to_wx_clean);
         mNestedScrollView.setOnScrollChangeListener(this);
         feedViewPager.setOffscreenPageLimit(10);
-        homeFeeds.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!NewsUtils.isFeedClosed()) {
-                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
-                        params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
-                        homeFeeds.setLayoutParams(params);
-                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
-                        mNestedScrollView.requestLayout();
-                    } else {
-                        homeFeeds.setVisibility(View.GONE);
-                        close_feed_empty_view.setVisibility(View.VISIBLE);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        requestFeedHeight();
         feedViewPager.setNeedScroll(false);
         feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -446,6 +427,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initMagicIndicator();
     }
 
+    private void requestFeedHeight() {
+        homeFeeds.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!NewsUtils.isFeedClosed()) {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
+                        mRootHeight = layoutRoot.getHeight();
+                        params.height = mRootHeight - mFLTopNav.getHeight();  //  mStatusBarHeight
+                        Log.d(TAG, "!--->requestFeedHeight---homeFeeds height:"+ params.height+"; layoutRoot:"+ layoutRoot.getHeight()+"; mFLTopNav:"+mFLTopNav.getHeight());
+                        homeFeeds.setLayoutParams(params);
+                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        mNestedScrollView.requestLayout();
+                    } else {
+                        homeFeeds.setVisibility(View.GONE);
+                        close_feed_empty_view.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     private void initMagicIndicator() {
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setSkimOver(true);
@@ -470,9 +475,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
         int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
+        // Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
         if (dy != 0 && canXiding) {
-            Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
+            // Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
         }
     }
@@ -2577,19 +2582,25 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
         if (!NewsUtils.isFeedClosed() && canXiding) {
             //处理吸顶操作
+            cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
             int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
             int changeY = y - lasty;
             if (dy> 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
-                    if (dy > 0) {
-                        doXiDingStickyAnim(y + dy, true, 300);
-                    }
+                    doXiDingStickyAnim(y + dy, true, 300);
                 } else {
                     doXiDingStickyAnim(y + dy, false);
                 }
             }
+        }
+    }
+
+    private void cheekRootHeight() {
+        int rootHeight = layoutRoot.getHeight();
+        if (mRootHeight != rootHeight) {
+            requestFeedHeight();
         }
     }
 
