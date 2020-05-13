@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#06C581</color>
-    <color name="colorPrimaryDark">#06C581</color>
+    <color name="colorPrimary">#16C9C5</color>
+    <color name="colorPrimaryDark">#16C9C5</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
     <color name="EAEDEF">#EAEDEF</color>
@@ -100,6 +100,7 @@
     <color name="color_FFAC01">#FFAC01</color>
     <color name="color_FF4545">#FF4545</color>
     <color name="color_404040">#404040</color>
+    <color name="color_66404040">#66404040</color>
     <color name="color_BABABA">#BABABA</color>
     <color name="color_777777">#777777</color>
     <color name="color_F7F7F7">#F7F7F7</color>
@@ -114,6 +115,6 @@
     <color name="color_27D599">#27D599</color>
     <color name="color_2ACBBB">#2ACBBB</color>
 
-
+    <color name="color_26FFFFFF">#26FFFFFF</color>
 
 </resources>

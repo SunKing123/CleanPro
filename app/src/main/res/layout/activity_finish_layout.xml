@@ -10,7 +10,7 @@
         android:id="@+id/v_clean_finish_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/bg_title"
+        android:background="@color/colorPrimary"
         android:paddingRight="@dimen/dimen_16dp">
 
         <include layout="@layout/layout_clean_finish_title_normal" />
@@ -23,8 +23,8 @@
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:fadingEdgeLength="@dimen/dimen_0dp"
+        android:fillViewport="true"
         android:overScrollMode="never"
         android:scrollbars="none">
 

@@ -299,17 +299,7 @@ public class CleanBigFilePresenter extends RxPresenter<CleanBigFileActivity, Cle
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

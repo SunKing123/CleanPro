@@ -104,6 +104,9 @@ public abstract class BaseFragment<T extends BasePresenter> extends SimpleFragme
 
     @Override
     public void onDestroyView() {
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
         super.onDestroyView();
     }
 

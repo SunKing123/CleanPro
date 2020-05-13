@@ -142,7 +142,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         tvUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
 
         tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
-        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
+//        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 
         totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
         checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
@@ -162,7 +162,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mExpandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             JunkGroup junkGroup = mJunkGroups.get(groupPosition);
             if (junkGroup != null) {
-                junkGroup.isExpand = !junkGroup.isExpand();
+                junkGroup.isExpand = !junkGroup.isExpand;
                 mAdapter.notifyDataSetChanged();
             }
             return false;
@@ -399,7 +399,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         total += leavedCache;
                     }
                 } else if (entry.getKey() == 4 && value.otherChildren.size() > 0) {//其他垃圾处理
-                    if (!value.isChecked()) {
+                    if (!value.isChecked) {
                         isCheckAll = false;
                     }
 

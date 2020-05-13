@@ -185,7 +185,7 @@ public class FileQueryUtils {
                 }
             }
         }
-        otherGroup.getOtherChildren().addAll(otherList);
+        otherGroup.otherChildren.addAll(otherList);
         return otherGroup;
     }
 
@@ -1306,11 +1306,7 @@ public class FileQueryUtils {
 
         void increaseSize(final long p0);
 
-        void reduceSize(final long p0);
-
         void scanFile(final String p0);
-
-        void totalSize(final int p0);
     }
 
 

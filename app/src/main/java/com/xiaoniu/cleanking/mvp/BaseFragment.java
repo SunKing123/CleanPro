@@ -5,12 +5,16 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class BaseFragment extends Fragment implements IBaseView {
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.trello.rxlifecycle2.components.support.RxFragment;
+
+public abstract class BaseFragment extends RxFragment implements IBaseView {
 
     private ProxyFragment mProxyFragment;
 
@@ -52,6 +56,21 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
             return new ProxyFragment<>(this);
         }
         return mProxyFragment;
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindLifecycle() {
+        return bindToLifecycle();
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindFragmentEvent(@NonNull FragmentEvent event) {
+        return bindUntilEvent(event);
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindActivityEvent(@NonNull ActivityEvent event) {
+        return null;
     }
 
     @Override

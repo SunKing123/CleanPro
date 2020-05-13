@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import io.reactivex.subjects.BehaviorSubject;
@@ -81,6 +82,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
     @Override
     public <T> LifecycleTransformer<T> bindActivityEvent(@NonNull ActivityEvent event) {
         return bindUntilEvent(event);
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindFragmentEvent(@NonNull FragmentEvent event) {
+        return null;
     }
 
     @Override

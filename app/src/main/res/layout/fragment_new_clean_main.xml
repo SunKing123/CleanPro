@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="@dimen/dimen_56dp"
-        android:visibility="gone"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/viewt"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/viewt"
@@ -89,37 +89,12 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--  <FrameLayout
-          android:id="@+id/fl_anim"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:paddingBottom="@dimen/dimen_60dp"
-          android:visibility="gone">
-
-          <TextView
-              android:id="@+id/tv_anim_title"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginTop="150dp"
-              android:text="@string/tool_cleaned_up"
-              android:textColor="@color/white"
-              android:textSize="16sp"
-              android:visibility="visible" />
-
-          <com.airbnb.lottie.LottieAnimationView
-              android:id="@+id/animation_clean_finish"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center" />
-
-      </FrameLayout>-->
-
     <RelativeLayout
         android:id="@+id/v_home_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/bg_title"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
 
         <include layout="@layout/layout_home_title_normal" />
@@ -133,9 +108,9 @@
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_below="@+id/v_home_top"
         android:fadingEdgeLength="@dimen/dimen_0dp"
+        android:fillViewport="true"
         android:overScrollMode="never"
         android:scrollbars="none">
 
@@ -148,7 +123,7 @@
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_home">
+                android:background="@drawable/home_bg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -211,7 +186,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minHeight="120dp"></TextView>
+                            android:minHeight="120dp" />
 
                         <ImageView
                             android:id="@+id/tv_now_clean"
@@ -360,6 +335,7 @@
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/dimen_16dp"
                     android:weightSum="3">
+
                     <!--通知栏清理-->
                     <LinearLayout
                         android:id="@+id/line_super_power_saving"

@@ -134,17 +134,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

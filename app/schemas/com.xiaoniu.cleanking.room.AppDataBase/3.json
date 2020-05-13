@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "b4b87d1160524ba3e52d3666ff6083e5",
+    "identityHash": "b769f9051f5c6bebe664fd5d658556b9",
     "entities": [
       {
         "tableName": "HomeRecommend",
@@ -100,7 +100,7 @@
       },
       {
         "tableName": "AdInfo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`isOpen` INTEGER NOT NULL, `configKey` TEXT NOT NULL, `switcherName` TEXT, `advertPosition` TEXT NOT NULL, `versions` TEXT, `advertId` TEXT, `secondAdvertId` TEXT, `showRate` INTEGER NOT NULL, PRIMARY KEY(`configKey`, `advertPosition`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`isOpen` INTEGER NOT NULL, `configKey` TEXT NOT NULL, `switcherName` TEXT, `advertPosition` TEXT NOT NULL, `versions` TEXT, `advertId` TEXT, `secondAdvertId` TEXT, `advertSource` TEXT, `secondAdvertSource` TEXT, `appName` TEXT, `showRate` INTEGER NOT NULL, PRIMARY KEY(`configKey`, `advertPosition`))",
         "fields": [
           {
             "fieldPath": "isOpen",
@@ -145,6 +145,24 @@
             "notNull": false
           },
           {
+            "fieldPath": "advertSource",
+            "columnName": "advertSource",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "secondAdvertSource",
+            "columnName": "secondAdvertSource",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "appName",
+            "columnName": "appName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "showRate",
             "columnName": "showRate",
             "affinity": "INTEGER",
@@ -164,7 +182,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b4b87d1160524ba3e52d3666ff6083e5\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b769f9051f5c6bebe664fd5d658556b9\")"
     ]
   }
 }

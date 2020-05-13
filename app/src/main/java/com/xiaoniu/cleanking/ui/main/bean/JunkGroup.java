@@ -14,6 +14,7 @@ public class JunkGroup implements Parcelable {
     public static final int GROUP_APK = 2;        //安装无用包
     public static final int GROUP_PROCESS = 3;    //运行内存清理
     public static final int GROUP_OTHER = 4;      //其他垃圾
+    public static final int GROUP_AD = 5;         //广告垃圾
     public String mName;
     public long mSize;
     public boolean isChecked;
@@ -22,72 +23,43 @@ public class JunkGroup implements Parcelable {
     public ArrayList<OtherJunkInfo> otherChildren;
     public boolean isExpand;
     public boolean needExpand = true;
+    public boolean isScanningOver = false;  //是否完成了扫描
+    public int junkType;
 
-
-    public ArrayList<OtherJunkInfo> getOtherChildren() {
-        return otherChildren;
+    public JunkGroup() {
     }
 
-    public void setOtherChildren(ArrayList<OtherJunkInfo> otherChildren) {
-        this.otherChildren = otherChildren;
-    }
-
-    public String getmName() {
-        return mName;
-    }
-
-    public void setmName(String mName) {
+    public JunkGroup(String mName, int junkType) {
         this.mName = mName;
+        this.junkType = junkType;
+        this.isChecked = true;
+        this.mChildren = new ArrayList<>();
+        this.isExpand = true;
+        this.needExpand = true;
     }
 
-    public long getmSize() {
-        return mSize;
+    protected JunkGroup(Parcel in) {
+        mName = in.readString();
+        mSize = in.readLong();
+        isChecked = in.readByte() != 0;
+        isCheckPart = in.readByte() != 0;
+        isExpand = in.readByte() != 0;
+        needExpand = in.readByte() != 0;
+        isScanningOver = in.readByte() != 0;
+        junkType = in.readInt();
     }
 
-    public void setmSize(long mSize) {
-        this.mSize = mSize;
-    }
+    public static final Creator<JunkGroup> CREATOR = new Creator<JunkGroup>() {
+        @Override
+        public JunkGroup createFromParcel(Parcel in) {
+            return new JunkGroup(in);
+        }
 
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked) {
-        isChecked = checked;
-    }
-
-    public ArrayList<FirstJunkInfo> getmChildren() {
-        return mChildren;
-    }
-
-    public void setmChildren(ArrayList<FirstJunkInfo> mChildren) {
-        this.mChildren = mChildren;
-    }
-
-    public boolean isExpand() {
-        return isExpand;
-    }
-
-    public void setExpand(boolean expand) {
-        isExpand = expand;
-    }
-
-    public boolean isNeedExpand() {
-        return needExpand;
-    }
-
-    public void setNeedExpand(boolean needExpand) {
-        this.needExpand = needExpand;
-    }
-
-
-    public boolean isCheckPart() {
-        return isCheckPart;
-    }
-
-    public void setCheckPart(boolean checkPart) {
-        isCheckPart = checkPart;
-    }
+        @Override
+        public JunkGroup[] newArray(int size) {
+            return new JunkGroup[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -96,41 +68,48 @@ public class JunkGroup implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mName);
-        dest.writeLong(this.mSize);
-        dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isCheckPart ? (byte) 1 : (byte) 0);
-        dest.writeList(this.mChildren);
-        dest.writeList(this.otherChildren);
-        dest.writeByte(this.isExpand ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.needExpand ? (byte) 1 : (byte) 0);
+        dest.writeString(mName);
+        dest.writeLong(mSize);
+        dest.writeByte((byte) (isChecked ? 1 : 0));
+        dest.writeByte((byte) (isCheckPart ? 1 : 0));
+        dest.writeByte((byte) (isExpand ? 1 : 0));
+        dest.writeByte((byte) (needExpand ? 1 : 0));
+        dest.writeByte((byte) (isScanningOver ? 1 : 0));
+        dest.writeInt(junkType);
     }
 
-    public JunkGroup() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JunkGroup junkGroup = (JunkGroup) o;
+
+        if (mSize != junkGroup.mSize) return false;
+        if (isChecked != junkGroup.isChecked) return false;
+        if (isCheckPart != junkGroup.isCheckPart) return false;
+        if (isExpand != junkGroup.isExpand) return false;
+        if (needExpand != junkGroup.needExpand) return false;
+        if (isScanningOver != junkGroup.isScanningOver) return false;
+        if (junkType != junkGroup.junkType) return false;
+        if (mName != null ? !mName.equals(junkGroup.mName) : junkGroup.mName != null) return false;
+        if (mChildren != null ? !mChildren.equals(junkGroup.mChildren) : junkGroup.mChildren != null)
+            return false;
+        return otherChildren != null ? otherChildren.equals(junkGroup.otherChildren) : junkGroup.otherChildren == null;
     }
 
-    protected JunkGroup(Parcel in) {
-        this.mName = in.readString();
-        this.mSize = in.readLong();
-        this.isChecked = in.readByte() != 0;
-        this.isCheckPart = in.readByte() != 0;
-        this.mChildren = new ArrayList<FirstJunkInfo>();
-        in.readList(this.mChildren, FirstJunkInfo.class.getClassLoader());
-        this.otherChildren = new ArrayList<OtherJunkInfo>();
-        in.readList(this.otherChildren, OtherJunkInfo.class.getClassLoader());
-        this.isExpand = in.readByte() != 0;
-        this.needExpand = in.readByte() != 0;
+    @Override
+    public int hashCode() {
+        int result = mName != null ? mName.hashCode() : 0;
+        result = 31 * result + (int) (mSize ^ (mSize >>> 32));
+        result = 31 * result + (isChecked ? 1 : 0);
+        result = 31 * result + (isCheckPart ? 1 : 0);
+        result = 31 * result + (mChildren != null ? mChildren.hashCode() : 0);
+        result = 31 * result + (otherChildren != null ? otherChildren.hashCode() : 0);
+        result = 31 * result + (isExpand ? 1 : 0);
+        result = 31 * result + (needExpand ? 1 : 0);
+        result = 31 * result + (isScanningOver ? 1 : 0);
+        result = 31 * result + junkType;
+        return result;
     }
-
-    public static final Parcelable.Creator<JunkGroup> CREATOR = new Parcelable.Creator<JunkGroup>() {
-        @Override
-        public JunkGroup createFromParcel(Parcel source) {
-            return new JunkGroup(source);
-        }
-
-        @Override
-        public JunkGroup[] newArray(int size) {
-            return new JunkGroup[size];
-        }
-    };
 }

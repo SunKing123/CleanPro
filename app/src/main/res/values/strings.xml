@@ -151,8 +151,13 @@
     <string name="push_power_btn">省电</string>
     <string name="push_cool_btn">降温</string>
     <string name="scaning">扫描中</string>
+    <string name="stop_scan">停止清理</string>
+    <string name="deep_scaning">深度清理</string>
+    <string name="clean_junk">垃圾清理</string>
+    <string name="to_clean">立即使用</string>
     <string name="clean_all_hint">已检测到大量残留垃圾</string>
     <string name="clean_game_hint">一键加速畅玩游戏</string>
+    <string name="scanning_file">扫描: %1$s</string>
 
 
 </resources>

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 public interface IBaseView {
 
@@ -15,4 +16,6 @@ public interface IBaseView {
     <T> LifecycleTransformer<T> bindLifecycle();
 
     <T> LifecycleTransformer<T> bindActivityEvent(@NonNull ActivityEvent event);
+
+    <T> LifecycleTransformer<T> bindFragmentEvent(@NonNull FragmentEvent event);
 }
