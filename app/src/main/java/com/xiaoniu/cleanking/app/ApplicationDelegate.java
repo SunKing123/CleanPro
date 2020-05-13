@@ -105,18 +105,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private void initRoom(Application application) {
-        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "wukong_cleanking.db")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .addMigrations(MIGRATION_2_3)
-                .build();
+        mAppDatabase = RoomDataBaseUtils.init(application);
     }
 
-    static final Migration MIGRATION_2_3 = new Migration(3, 4) {
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-        }
-    };
 
     public static AppDataBase getAppDatabase() {
         return mAppDatabase;
