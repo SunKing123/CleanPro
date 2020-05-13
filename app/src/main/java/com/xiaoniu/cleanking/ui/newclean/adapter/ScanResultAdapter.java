@@ -10,9 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.newclean.bean.JunkResultWrapper;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -105,16 +107,30 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     onItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
                 }
             });
+            CountEntity mCountEntity = CleanUtil.formatShortFileSize(junkGroup.mSize);
+            tv_checked_junk_total.setText(itemView.getResources().getString(R.string.scan_result_check, mCountEntity.getResultSize()));
         }
     }
 
     static class ScanResultContentViewHolder extends RecyclerView.ViewHolder {
 
         private View v_space;
+        private ImageView iv_junk_logo;
+        private TextView tv_junk_title;
+        private TextView tv_junk_sub_title;
+        private TextView tv_checked_total;
+        private ImageView iv_check_state;
+        private OnItemClickListener<JunkResultWrapper> mOnItemClickListener;
 
         ScanResultContentViewHolder(@NonNull View itemView, OnItemClickListener<JunkResultWrapper> onItemClickListener) {
             super(itemView);
+            this.mOnItemClickListener = onItemClickListener;
             v_space = itemView.findViewById(R.id.v_space);
+            iv_junk_logo = itemView.findViewById(R.id.iv_junk_logo);
+            tv_junk_title = itemView.findViewById(R.id.tv_junk_title);
+            tv_junk_sub_title = itemView.findViewById(R.id.tv_junk_sub_title);
+            tv_checked_total = itemView.findViewById(R.id.tv_checked_total);
+            iv_check_state = itemView.findViewById(R.id.iv_check_state);
         }
 
         public void bind(JunkResultWrapper wrapper) {
@@ -123,6 +139,16 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 v_space.setVisibility(View.GONE);
             } else {
                 v_space.setVisibility(View.VISIBLE);
+            }
+            CountEntity mCountEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getSelectSize());
+            tv_checked_total.setText(mCountEntity.getResultSize());
+            tv_junk_title.setText(firstJunkInfo.getAppName());
+            iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
+
+            if (firstJunkInfo.isSelect()) {
+                iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
+            } else {
+                iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
             }
         }
     }

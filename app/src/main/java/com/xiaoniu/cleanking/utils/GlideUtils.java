@@ -23,11 +23,19 @@ import com.bumptech.glide.util.Util;
  */
 public class GlideUtils {
 
+    public static void loadImage(Context context, String url, ImageView imageView) {
+        try {
+            Glide.with(context).load(url).into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void loadImage(Activity context, String url, ImageView imageView) {
         if (null != context && !context.isDestroyed()) {
             try {
                 Glide.with(context).load(url).into(imageView);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -40,7 +48,7 @@ public class GlideUtils {
                     Glide.with(context).load(url)
                             .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
                             .into(imageView);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -78,10 +86,17 @@ public class GlideUtils {
         if (Util.isOnMainThread() && null != context && !context.isDestroyed()) {
             try {
                 Glide.with(context).load(resourceId).into(imageView);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
+    public static void loadDrawble(Context context, int resourceId, ImageView imageView) {
+        try {
+            Glide.with(context).load(resourceId).into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
