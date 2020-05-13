@@ -2,13 +2,24 @@ package com.xiaoniu.cleanking.ad.interfaces;
 
 import android.view.View;
 
+import com.xiaoniu.cleanking.ad.bean.TemplateAdResponse;
+
+import java.util.List;
+
 
 public interface AdShowCallBack {
 
     /**
      * 曝光
      */
-    void onAdShowCallBack(boolean isSucess, View view);
+    default void onAdShowCallBack(boolean isSucess, View view){}
+
+    /**
+     * 信息流渲染显示
+     * @param index
+     * @param view
+     */
+    default void onAdListShowCallBack(int index, View view){}
 
     /**
      * 广告点击
@@ -20,7 +31,14 @@ public interface AdShowCallBack {
      * 关闭广告
      * 对于开屏相当于（ onAdDismissed  广告关闭时调用，可能是用户关闭或者展示时间到。此时一般需要跳过开屏的 Activity，进入应用内容页面）
      */
-    default void onCloseCallback() {
+    default void onCloseCallback(View view) {
+    }
+
+    /**
+     * 关闭信息流中的item
+     * @param index
+     */
+    default void onCloseCallback(int index) {
     }
 
     /**

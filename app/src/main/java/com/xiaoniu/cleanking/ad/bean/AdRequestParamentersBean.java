@@ -39,6 +39,8 @@ public class AdRequestParamentersBean {
     //期待高度
     public int viewHeight;
 
+    public int index;
+
 
 
     public AdRequestParamentersBean(Context context, String configKey, String advertPosition,  AdType adType) {
@@ -68,13 +70,22 @@ public class AdRequestParamentersBean {
         this.skipContainer = skipContainer;
     }
 
-    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType, ViewGroup adContainer, int viewWidth, int viewHeight) {
+    /**
+     *
+     * @param configKey
+     * @param advertPosition
+     * @param context
+     * @param adType
+     * @param viewWidth
+     * @param viewHeight
+     */
+    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType,  int viewWidth, int viewHeight,int index) {
         this.configKey = configKey;
         this.advertPosition = advertPosition;
         this.context = context;
         this.adType = adType;
-        this.adContainer = adContainer;
         this.viewWidth = viewWidth;
         this.viewHeight = viewHeight;
+        this.index=index;
     }
 }

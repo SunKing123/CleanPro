@@ -9,6 +9,7 @@ import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.ad.bean.AdRequestBean;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
+import com.xiaoniu.cleanking.ad.bean.TemplateAdResponse;
 import com.xiaoniu.cleanking.ad.interfaces.AdAgainRequestCallBack;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.model.AdModel;
@@ -92,8 +93,106 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
         });
     }
 
+//    @Override
+//    public void requestTemplateAdvertising(AdRequestParamentersBean adRequestParamentersBean, Deque<AdRequestBean> adRequest, AdRequestBean adRequestBean, AdShowCallBack adShowCallBack) {
+//        Log.d(TAG, "优量会模板请求开始 id "+adRequestBean.getAdvertId());
+//
+//        adModel.getYLHTemplateAd(adRequestParamentersBean, adRequestBean, new NativeExpressAD.NativeExpressADListener() {
+//            @Override
+//            public void onNoAD(AdError adError) {
+//                Log.d(TAG, "优量会模板 onNoAD message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode());
+//
+//                if (CollectionUtils.isEmpty(adRequest) && adShowCallBack != null) {
+//                    adShowCallBack.onFailure("串行广告结束");
+//                    return;
+//                }
+//                if (adAgainRequestCallBack != null) {
+//                    adAgainRequestCallBack.againRequestCallback(adRequest, adRequestParamentersBean);
+//                }
+//            }
+//
+//            @Override
+//            public void onADLoaded(List<NativeExpressADView> list) {
+//                Log.d(TAG, "优量会模板 onADLoaded ");
+//                if (CollectionUtils.isEmpty(list) && adAgainRequestCallBack != null) {
+//                    if (CollectionUtils.isEmpty(adRequest) && adShowCallBack != null) {
+//                        adShowCallBack.onFailure("串行广告结束");
+//                        return;
+//                    }
+//                    adAgainRequestCallBack.againRequestCallback(adRequest, adRequestParamentersBean);
+//                }
+//                NativeExpressADView nativeExpressADView = list.get(0);
+//                nativeExpressADView.render();
+//                addAdView(adRequestParamentersBean, nativeExpressADView, adShowCallBack);
+//                if(adShowCallBack!=null){
+//                    adShowCallBack.onAdShowCallBack(true,nativeExpressADView);
+//                }
+//                nativeExpressADView.destroy();
+//            }
+//
+//            @Override
+//            public void onRenderFail(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onRenderFail ");
+//
+//                if (CollectionUtils.isEmpty(adRequest) && adShowCallBack != null) {
+//                    adShowCallBack.onFailure("串行广告结束");
+//                    return;
+//                }
+//                if (adAgainRequestCallBack != null) {
+//                    adAgainRequestCallBack.againRequestCallback(adRequest, adRequestParamentersBean);
+//                }
+//            }
+//
+//            @Override
+//            public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onRenderSuccess ");
+//
+//            }
+//
+//            @Override
+//            public void onADExposure(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onADExposure ");
+//
+//            }
+//
+//            @Override
+//            public void onADClicked(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onADClicked ");
+//            }
+//
+//            @Override
+//            public void onADClosed(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onADClosed ");
+//                if(adShowCallBack!=null && adRequestParamentersBean!=null){
+//                    adShowCallBack.onCloseCallback(adRequestParamentersBean.adContainer);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onADLeftApplication ");
+//
+//            }
+//
+//            @Override
+//            public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onADOpenOverlay ");
+//
+//            }
+//
+//            @Override
+//            public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
+//                Log.d(TAG, "优量会模板 onADCloseOverlay ");
+//
+//            }
+//        });
+//    }
+
     @Override
     public void requestTemplateAdvertising(AdRequestParamentersBean adRequestParamentersBean, Deque<AdRequestBean> adRequest, AdRequestBean adRequestBean, AdShowCallBack adShowCallBack) {
+        Log.d(TAG, "优量会模板请求开始 id "+adRequestBean.getAdvertId());
+
         adModel.getYLHTemplateAd(adRequestParamentersBean, adRequestBean, new NativeExpressAD.NativeExpressADListener() {
             @Override
             public void onNoAD(AdError adError) {
@@ -120,8 +219,6 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                 }
                 NativeExpressADView nativeExpressADView = list.get(0);
                 nativeExpressADView.render();
-                addAdView(adRequestParamentersBean, nativeExpressADView, adShowCallBack);
-                nativeExpressADView.destroy();
             }
 
             @Override
@@ -140,7 +237,9 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
             @Override
             public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
                 Log.d(TAG, "优量会模板 onRenderSuccess ");
-
+                if(adShowCallBack!=null){
+                    adShowCallBack.onAdListShowCallBack(adRequestParamentersBean.index,nativeExpressADView);
+                }
             }
 
             @Override
@@ -152,12 +251,15 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
             @Override
             public void onADClicked(NativeExpressADView nativeExpressADView) {
                 Log.d(TAG, "优量会模板 onADClicked ");
-
             }
 
             @Override
             public void onADClosed(NativeExpressADView nativeExpressADView) {
                 Log.d(TAG, "优量会模板 onADClosed ");
+                if(adShowCallBack!=null && adRequestParamentersBean!=null){
+                    adShowCallBack.onCloseCallback(adRequestParamentersBean.adContainer);
+                    nativeExpressADView.destroy();
+                }
 
             }
 

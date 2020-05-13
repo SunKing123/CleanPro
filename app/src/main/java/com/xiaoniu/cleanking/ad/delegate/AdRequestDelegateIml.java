@@ -46,8 +46,11 @@ public abstract class AdRequestDelegateIml implements AdRequestDelegate {
             }
             return;
         }
+        adRequestParamentersBean.adContainer.setVisibility(View.VISIBLE);
         adRequestParamentersBean.adContainer.removeAllViews();
         adRequestParamentersBean.adContainer.addView(adView);
+        adShowCallBack.onAdShowCallBack(true,adRequestParamentersBean.adContainer);
+
     }
 
     /**

@@ -190,7 +190,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
      */
     private Deque<AdRequestBean> requestData(SwitchInfoList.DataBean adInfo) throws InterruptedException {
         Deque<AdRequestBean> request = new ArrayDeque<AdRequestBean>();
-        request.add(new AdRequestBean("123", adInfo.getAdvertSource()));
+        request.add(new AdRequestBean(adInfo.getAdvertId(), adInfo.getAdvertSource()));
         if (!TextUtils.isEmpty(adInfo.getSecondAdvertSource()) && !TextUtils.isEmpty(adInfo.getSecondAdvertId())) {
             request.add(new AdRequestBean(adInfo.getSecondAdvertId(), adInfo.getSecondAdvertSource()));
         }

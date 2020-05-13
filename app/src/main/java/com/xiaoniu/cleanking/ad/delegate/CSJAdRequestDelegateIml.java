@@ -1,9 +1,11 @@
 package com.xiaoniu.cleanking.ad.delegate;
 
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
+import com.bytedance.sdk.openadsdk.TTAdDislike;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.bytedance.sdk.openadsdk.TTSplashAd;
@@ -123,10 +125,12 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 
     @Override
     public void requestTemplateAdvertising(AdRequestParamentersBean adRequestParamentersBean, Deque<AdRequestBean> adRequest, AdRequestBean adRequestBean, AdShowCallBack adShowCallBack) {
+        Log.d(TAG, "穿山甲模板 开始 id:" +adRequestBean.getAdvertId());
+
         adModel.getCSJTemplateAd(adRequestParamentersBean, adRequestBean, new TTAdNative.NativeExpressAdListener() {
             @Override
             public void onError(int code, String message) {
-                Log.d(TAG, "穿山甲模板 onError message:" + message + " code:" + code);
+                Log.d(TAG, "穿山甲模板 onError message:" + message + " code:" + code+" id"+adRequestBean.getAdvertId());
 
                 if (CollectionUtils.isEmpty(adRequest) && adShowCallBack != null) {
                     adShowCallBack.onFailure("串行广告结束");
@@ -161,9 +165,10 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 
                     }
 
+
                     @Override
                     public void onAdShow(View view, int type) {
-                        Log.d(TAG, "穿山甲模板 onAdShow");
+                        Log.d(TAG, "穿山甲模板 onAdShow"+adRequestParamentersBean.index);
 
                     }
 
@@ -174,10 +179,30 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 
                     @Override
                     public void onRenderSuccess(View view, float width, float height) {
-                        addAdView(adRequestParamentersBean, view, adShowCallBack);
+                        Log.d(TAG, "穿山甲模板 onRenderSuccess"+adRequestParamentersBean.index);
+
+                        if(adShowCallBack!=null){
+                            adShowCallBack.onAdListShowCallBack(adRequestParamentersBean.index,view);
+                        }
                     }
                 });
+                ttNativeExpressAd.setDislikeCallback((Activity) adRequestParamentersBean.context,new TTAdDislike.DislikeInteractionCallback(){
 
+                    @Override
+                    public void onSelected(int i, String s) {
+                        Log.d(TAG, "穿山甲模板 onSelected"+adRequestParamentersBean.index);
+                        if (adShowCallBack != null) {
+                            adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
+                            ttNativeExpressAd.destroy();
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "穿山甲模板 onCancel");
+
+                    }
+                });
                 ttNativeExpressAd.render();
             }
         });
