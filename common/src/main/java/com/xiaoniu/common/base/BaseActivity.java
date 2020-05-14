@@ -26,6 +26,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaoniu.common.R;
 import com.xiaoniu.common.widget.LoadingDialog;
+import com.xiaoniu.common.widget.SlidingLayout;
 import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 import java.util.List;
@@ -62,11 +63,29 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         super.setContentView(R.layout.common_activity_base);
         initBaseView();
         setContentView();
+        initSliding();  // XD added
         initVariable(getIntent());
         initViews(savedInstanceState);
         setStatusBar();
         setListener();
         loadData();
+    }
+
+    /**
+     * @author xd.he
+     */
+    private void initSliding() {
+        if (isSlidingEnable()) {
+            SlidingLayout rootView = new SlidingLayout(this);
+            rootView.bindActivity(this);
+        }
+    }
+
+    /**
+     * @author xd.he
+     */
+    protected boolean isSlidingEnable() {
+        return false;
     }
 
     private void initBaseView() {

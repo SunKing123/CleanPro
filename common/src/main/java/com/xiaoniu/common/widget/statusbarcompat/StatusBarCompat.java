@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xiaoniu.common.R;
+
 /**
  * Utils for status bar
  * Created by qiu on 3/29/16.
@@ -28,6 +30,19 @@ public class StatusBarCompat {
         green = (int) (green * a + 0.5);
         blue = (int) (blue * a + 0.5);
         return 0xff << 24 | red << 16 | green << 8 | blue;
+    }
+
+    /**
+     *
+     * @param activity
+     * @author xd.he
+     */
+    public static void setStatusBarColorPrimary(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(activity, activity.getResources().getColor(R.color.colorPrimary_app), true);
+        } else {
+            StatusBarCompat.setStatusBarColor(activity, activity.getResources().getColor(R.color.colorPrimary_app), false);
+        }
     }
 
     /**

@@ -10,7 +10,7 @@
         android:id="@+id/v_clean_finish_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/bg_gradient_clean_finish_tobar">
 
         <include layout="@layout/layout_clean_finish_title_normal" />
 

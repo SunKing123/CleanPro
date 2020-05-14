@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ import android.widget.ProgressBar;
 
 import com.xiaoniu.common.R;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 /**
  * Created by wangbaozhong on 2017/5/25.
@@ -50,6 +52,21 @@ public class SimpleWebActivity extends BaseActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
+    }
+
+    /**
+     * @author xd.he
+     */
+    protected boolean isSlidingEnable() {
+        return true;
+    }
+
+    /**
+     * @author xd.he
+     */
+    @Override
+    protected void setStatusBar() {
+        StatusBarCompat.setStatusBarColorPrimary(this);
     }
 
     @Override

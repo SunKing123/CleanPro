@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -988,11 +987,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         super.onHiddenChanged(hidden);
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
-            } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
-            }
+            StatusBarCompat.setStatusBarColorPrimary(getActivity());
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }

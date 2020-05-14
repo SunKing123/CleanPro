@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;

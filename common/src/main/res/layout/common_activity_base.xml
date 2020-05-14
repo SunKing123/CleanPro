@@ -9,7 +9,7 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#06C581"
+        android:background="@color/colorPrimary"
         android:padding="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"

@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.news.fragment;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -138,11 +137,7 @@ public class NewsFragment extends BaseFragment {
     @Override
     protected void onVisibleToUser() {
         super.onVisibleToUser();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), true);
-        } else {
-            StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_4690FD), false);
-        }
+        StatusBarCompat.setStatusBarColorPrimary(getActivity());
     }
 
     @Override
@@ -177,11 +172,7 @@ public class NewsFragment extends BaseFragment {
 
             NiuDataAPI.onPageStart("information_page_view_page", "信息页面浏览");
             StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", 0);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), true);
-            } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
-            }
+            StatusBarCompat.setStatusBarColorPrimary(getActivity());
         } else {
             NiuDataAPI.onPageEnd("information_page_view_page", "信息页面浏览");
         }
