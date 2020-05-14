@@ -17,9 +17,11 @@ import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.presenter.AdPresenter;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.activity.DeepCleanPermissionActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.adapter.ScanResultAdapter;
 import com.xiaoniu.cleanking.ui.newclean.bean.JunkResultWrapper;
@@ -28,7 +30,9 @@ import com.xiaoniu.cleanking.ui.newclean.contact.ScanResultContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanResultPresenter;
 import com.xiaoniu.cleanking.utils.LayoutAnimationHelper;
 import com.xiaoniu.cleanking.utils.OnItemClickListener;
+import com.xiaoniu.common.utils.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -56,6 +60,8 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     TextView tv_junk_unit;
     @BindView(R.id.tv_checked_total)
     TextView tv_checked_total;
+    @BindView(R.id.tv_back)
+    TextView tv_back;
 
     @InjectPresenter
     ScanResultPresenter presenter;
@@ -79,12 +85,14 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         rv_content_list.setAdapter(mScanResultAdapter = new ScanResultAdapter(this));
 
         tv_deep_clean.setOnClickListener(v -> {
-
+            //判断如果没有授权的话，则进入授权界面
+            DeepCleanPermissionActivity.start(requireActivity());
         });
 
-        tv_clean_junk.setOnClickListener(v -> {
+        //计算用户选中需要清理的垃圾文件，并且跳转清理界面
+        tv_clean_junk.setOnClickListener(v -> presenter.jumpToCleanPage());
 
-        });
+        tv_back.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
     }
 
     @Override
@@ -144,11 +152,6 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     }
 
     @Override
-    public boolean isActive() {
-        return isAdded() && !isDetached();
-    }
-
-    @Override
     public void setInitSubmitResult(List<JunkResultWrapper> junkResultWrappers) {
         //首次填充数据
         mScanResultAdapter.submitList(junkResultWrappers);
@@ -171,6 +174,17 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     @Override
     public void setCheckedJunkResult(String resultSize) {
         tv_checked_total.setText(getString(R.string.scan_result_check_total, resultSize));
+    }
+
+    @Override
+    public void setUnCheckedItemTip() {
+        ToastUtils.showShort("请勾选需要清理的内容");
+    }
+
+    @Override
+    public void setJumpToCleanPage(LinkedHashMap<ScanningResultType, JunkGroup> junkTitleMap,
+                                   LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap) {
+        ((NowCleanActivity) requireActivity()).setReadyCleanJunkList(junkTitleMap, junkContentMap);
     }
 
     @Override

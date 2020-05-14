@@ -34,6 +34,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
     private FileQueryUtils mFileQueryUtils;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private long totalJunk = 0;
+    private ScanningLevel currentLevel;
 
     /**
      * 监听扫描状态
@@ -52,6 +53,25 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                     if (getView() != null) {
                         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalJunk);
                         getView().setScanningJunkTotal(countEntity.getTotalSize(), countEntity.getUnit());
+                        if (Float.parseFloat(countEntity.getTotalSize()) < 50F) {
+                            if (currentLevel == ScanningLevel.Little) {
+                                return;
+                            }
+                            currentLevel = ScanningLevel.Little;
+                            getView().setScanningBackgroundColor(ScanningLevel.Little.getColor(), ScanningLevel.Little.getColor());
+                        } else if (Float.parseFloat(countEntity.getTotalSize()) >= 50F && Float.parseFloat(countEntity.getTotalSize()) < 100F) {
+                            if (currentLevel == ScanningLevel.Middle) {
+                                return;
+                            }
+                            currentLevel = ScanningLevel.Middle;
+                            getView().setScanningBackgroundColor(ScanningLevel.Little.getColor(), ScanningLevel.Middle.getColor());
+                        } else {
+                            if (currentLevel == ScanningLevel.Large) {
+                                return;
+                            }
+                            currentLevel = ScanningLevel.Large;
+                            getView().setScanningBackgroundColor(ScanningLevel.Middle.getColor(), ScanningLevel.Large.getColor());
+                        }
                     }
                 });
             }

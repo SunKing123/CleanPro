@@ -19,7 +19,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="230dip"
-                android:background="#FF5454">
+                android:background="@color/color_FF5454">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -122,7 +122,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="84dip"
-        android:background="#FF5454"
+        android:background="@color/color_FF5454"
         android:orientation="vertical">
 
         <View
@@ -135,6 +135,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/tv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

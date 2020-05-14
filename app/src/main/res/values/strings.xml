@@ -155,11 +155,18 @@
     <string name="deep_scaning">深度清理</string>
     <string name="clean_junk">垃圾清理</string>
     <string name="to_clean">立即使用</string>
+    <string name="to_open_deep_clean">立即开启</string>
     <string name="clean_all_hint">已检测到大量残留垃圾</string>
     <string name="clean_game_hint">一键加速畅玩游戏</string>
     <string name="scanning_file">扫描: %1$s</string>
     <string name="scan_result_check">已选: %1$s</string>
     <string name="scan_result_check_total">已勾选: %1$s</string>
+    <string name="back">返回</string>
 
-
+    <string name="memory_clean_title">手机加速</string>
+    <string name="memory_clean_content">深度清理内存垃圾，提高手机运行速度</string>
+    <string name="notification_clean_title">通知栏清理</string>
+    <string name="notification_clean_content">拦截骚扰消息</string>
+    <string name="power_clean_title">超强省电</string>
+    <string name="power_clean_content">清理异常耗电应用，延长待机时长</string>
 </resources>

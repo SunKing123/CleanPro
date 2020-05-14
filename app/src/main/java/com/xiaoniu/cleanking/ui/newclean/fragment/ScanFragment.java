@@ -70,6 +70,8 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
     RecyclerView rv_content_list;
     @BindView(R.id.tv_stop_clean)
     TextView tv_stop_clean;
+    @BindView(R.id.tv_back)
+    TextView tv_back;
 
     @InjectPresenter
     ScanningPresenter scanningPresenter;
@@ -103,6 +105,9 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
                 .marginResId(R.dimen.dimen_16dp, R.dimen.dimen_16dp)
                 .build());
         rv_content_list.setAdapter(scanningJunkAdapter);
+
+        tv_stop_clean.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
+        tv_back.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
     }
 
     @Override
@@ -111,11 +116,6 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
         scanningPresenter.readyScanningJunk();
         //检查存贮权限是否开启
         checkStoragePermission();
-    }
-
-    @Override
-    public boolean isActive() {
-        return isAdded() && !isDetached();
     }
 
     @Override

@@ -338,6 +338,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /*< XD added for feed 20200215 begin */
+
     /**
      * @author xd.he
      */
@@ -1334,7 +1335,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     *
      * @param isAnimation
      */
     private void goBackToClean(boolean isAnimation) {

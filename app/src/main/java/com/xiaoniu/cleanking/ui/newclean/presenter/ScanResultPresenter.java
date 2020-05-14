@@ -120,6 +120,16 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
         }
     }
 
+    @Override
+    public void jumpToCleanPage() {
+        if (getView() != null) {
+            if (setCheckedJunkResult() == 0) {
+                getView().setUnCheckedItemTip();
+            }
+            getView().setJumpToCleanPage(junkTitleMap, junkContentMap);
+        }
+    }
+
     /**
      * 刷新界面展示
      */

@@ -9,8 +9,10 @@ import android.view.View;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.fragment.ScanCleanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanResultFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
@@ -19,7 +21,7 @@ import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -30,8 +32,10 @@ public class NowCleanActivity extends BaseActivity {
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups;
     private boolean isScan = false;
     private boolean isClean = true;
-    private ScanResultFragment scanResultFragment;
     private boolean isBackClick = false;
+
+    private LinkedHashMap<ScanningResultType, JunkGroup> junkTitleMap;
+    private LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap;
 
     public void setClean(boolean clean) {
         isClean = clean;
@@ -123,7 +127,7 @@ public class NowCleanActivity extends BaseActivity {
         isScan = false;
         setLeftTitle("建议清理");
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
-        scanResultFragment = ScanResultFragment.createFragment();
+        ScanResultFragment scanResultFragment = ScanResultFragment.createFragment();
         replaceFragment(R.id.fl_content, scanResultFragment, false);
     }
 
@@ -196,5 +200,22 @@ public class NowCleanActivity extends BaseActivity {
     @Override
     protected void loadData() {
 
+    }
+
+    public void setReadyCleanJunkList(LinkedHashMap<ScanningResultType, JunkGroup> junkTitleMap,
+                                      LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap) {
+        this.junkTitleMap = junkTitleMap;
+        this.junkContentMap = junkContentMap;
+        //切换到清理界面
+        ScanCleanFragment scanCleanFragment = ScanCleanFragment.createFragment();
+        replaceFragment(R.id.fl_content, scanCleanFragment, true);
+    }
+
+    public LinkedHashMap<ScanningResultType, JunkGroup> getJunkTitleMap() {
+        return junkTitleMap;
+    }
+
+    public LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> getJunkContentMap() {
+        return junkContentMap;
     }
 }
