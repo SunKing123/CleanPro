@@ -159,6 +159,7 @@
     <string name="clean_game_hint">一键加速畅玩游戏</string>
     <string name="scanning_file">扫描: %1$s</string>
     <string name="scan_result_check">已选: %1$s</string>
+    <string name="scan_result_check_total">已勾选: %1$s</string>
 
 
 </resources>

@@ -49,7 +49,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             public void increaseSize(long increaseSize) {
                 totalJunk += increaseSize;
                 mHandler.post(() -> {
-                    if (getView() != null && getView().isActive()) {
+                    if (getView() != null) {
                         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalJunk);
                         getView().setScanningJunkTotal(countEntity.getTotalSize(), countEntity.getUnit());
                     }
@@ -59,7 +59,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             @Override
             public void scanFile(String filePath) {
                 mHandler.post(() -> {
-                    if (getView() != null && getView().isActive() && !TextUtils.isEmpty(filePath)) {
+                    if (getView() != null && !TextUtils.isEmpty(filePath)) {
                         getView().setScanningFilePath(filePath);
                     }
                 });

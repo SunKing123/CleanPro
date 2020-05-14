@@ -29,12 +29,24 @@
                     android:layout_marginBottom="@dimen/dimen_10dp">
 
                     <com.xiaoniu.cleanking.widget.FuturaRoundTextView
-                        android:id="@+id/tv_junk_total_and_unit"
+                        android:id="@+id/tv_junk_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dimen_64sp"
                         tools:text="886" />
+
+                    <com.xiaoniu.cleanking.widget.FuturaRoundTextView
+                        android:id="@+id/tv_junk_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/tv_junk_total"
+                        android:layout_alignBottom="@+id/tv_junk_total"
+                        android:layout_toRightOf="@+id/tv_junk_total"
+                        android:baselineAlignBottom="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/dimen_25sp"
+                        tools:text="MB" />
 
                 </RelativeLayout>
 
@@ -44,7 +56,11 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/iv_down_arrow"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/icon_checked_bg01" />
+                    android:background="@drawable/icon_checked_bg01"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_13sp"
+                    tools:text="666MB" />
 
                 <ImageView
                     android:id="@+id/iv_down_arrow"
@@ -90,7 +106,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_stop_clean"
+            android:id="@+id/tv_clean_junk"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_46dp"
             android:layout_marginLeft="@dimen/dimen_16dp"

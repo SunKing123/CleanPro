@@ -10,13 +10,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -28,9 +29,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -40,7 +39,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -64,6 +62,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 清理操作页面
  */
+@Deprecated
 public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @BindView(R.id.junk_list)
@@ -209,20 +208,20 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         }
     }
 
-    @OnClick({R.id.layout_junk_clean,R.id.btn_left_scan})
+    @OnClick({R.id.layout_junk_clean, R.id.btn_left_scan})
     public void viewClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.layout_junk_clean:
                 starClean();
                 break;
             case R.id.btn_left_scan:
-                ((NowCleanActivity)getActivity()).backClick(true);
+                ((NowCleanActivity) getActivity()).backClick(true);
                 break;
         }
 
     }
 
-    public void starClean(){
+    public void starClean() {
         //扫描中弹框_确认按钮
         StatisticsUtils.trackClick("cleaning_button_click", "用户在扫描结果页点击【清理】按钮", "clean_up_scan_page", "scanning_result_page");
         startClean();
@@ -244,7 +243,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         EventBus.getDefault().post(event);
 
         PreferenceUtil.saveCleanAllUsed(true);
-        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL,PositionId.DRAW_THREE_CODE);
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL, PositionId.DRAW_THREE_CODE);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
@@ -268,7 +267,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         ivCleanBg01.setVisibility(View.VISIBLE);
         ivCleanBg02.setVisibility(View.VISIBLE);
         ivCleanBg03.setVisibility(View.VISIBLE);
-        ivs = new TextView[]{ivCleanBg01,ivCleanBg02,ivCleanBg03};
+        ivs = new TextView[]{ivCleanBg01, ivCleanBg02, ivCleanBg03};
         viewLottieBottom.useHardwareAcceleration();
         viewLottieBottom.setAnimation("cleanbottom.json");
         viewLottieBottom.setImageAssetsFolder("cleanbottom");
@@ -281,10 +280,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         tvCleanUnit.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
 
 
-        if(!viewLottieBottom.isAnimating()){
+        if (!viewLottieBottom.isAnimating()) {
             viewLottieBottom.playAnimation();
         }
-        if(!viewLottieTop.isAnimating()){
+        if (!viewLottieTop.isAnimating()) {
             viewLottieTop.playAnimation();
         }
         tvCleanCount.setText(checkCountEntity.getTotalSize());
@@ -322,10 +321,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                     float currentValue = Float.valueOf(checkCountEntity.getTotalSize()) * (0.74f - animatedValue);
                     tvCleanCount.setText(String.format("%s", Math.round(currentValue)));
                     tvCleanUnit.setText(checkCountEntity.getUnit());
-                }else if(animatedValue > 0.76f && animatedValue < 0.76f){
+                } else if (animatedValue > 0.76f && animatedValue < 0.76f) {
                     tvCleanCount.setText("0");
                     tvCleanUnit.setText(checkCountEntity.getUnit());
-                }else{
+                } else {
                     tvCleanCount.setVisibility(View.GONE);
                     tvCleanUnit.setVisibility(View.GONE);
 
@@ -335,15 +334,15 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
 
         shouIndex = 2;
-        showColorChange(ivs,shouIndex);
+        showColorChange(ivs, shouIndex);
         clearAll();
     }
 
-   public void  reStartClean(){
-        if(viewLottieBottom!=null){
+    public void reStartClean() {
+        if (viewLottieBottom != null) {
             viewLottieBottom.playAnimation();
         }
-   }
+    }
 
     boolean isCacheCheckAll = true;  //运行内存是否全选
     boolean isCheckAll = true;  //运行内存是否全选

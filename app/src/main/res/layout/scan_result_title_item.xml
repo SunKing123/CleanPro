@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_type_root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dimen_46dp"
@@ -24,13 +23,13 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/dimen_8dp"
-        android:layout_toLeftOf="@+id/iv_check_state"
+        android:layout_toLeftOf="@+id/iv_check_junk_state"
         android:text="已选123MB"
         android:textColor="@color/color_404040"
         android:textSize="@dimen/dimen_13sp" />
 
     <ImageView
-        android:id="@+id/iv_check_state"
+        android:id="@+id/iv_check_junk_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

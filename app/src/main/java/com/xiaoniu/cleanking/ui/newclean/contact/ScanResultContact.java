@@ -23,6 +23,19 @@ public interface ScanResultContact {
          * 非首次展示数据模型
          */
         void setSubmitResult(List<JunkResultWrapper> buildJunkDataModel);
+
+        /**
+         * 设置扫描到的垃圾总大小
+         *
+         * @param totalSize 垃圾总量
+         * @param unit      垃圾总量单位
+         */
+        void setJunkTotalResultSize(String totalSize, String unit);
+
+        /**
+         * 选中状态的垃圾总量
+         */
+        void setCheckedJunkResult(String resultSize);
     }
 
     interface IPresenter extends IBasePresenter {
@@ -36,6 +49,16 @@ public interface ScanResultContact {
          * 更新视图折叠状态
          */
         void updateExpendState(JunkResultWrapper data);
+
+        /**
+         * 更新垃圾类别选中状态
+         */
+        void updateJunkTypeCheckSate(JunkResultWrapper data);
+
+        /**
+         * 更新垃圾内容选中状态
+         */
+        void updateJunkContentCheckState(JunkResultWrapper data);
     }
 
     interface IModel extends IBaseModel {

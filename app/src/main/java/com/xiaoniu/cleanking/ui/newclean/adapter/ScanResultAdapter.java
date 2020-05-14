@@ -80,17 +80,17 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         private TextView tv_junk_type_title;
         private TextView tv_checked_junk_total;
-        private ImageView iv_check_state;
+        private ImageView iv_check_junk_state;
         private RelativeLayout rl_type_root;
 
-        private OnItemClickListener<JunkResultWrapper> onItemClickListener;
+        private OnItemClickListener<JunkResultWrapper> mOnItemClickListener;
 
         ScanResultTypeViewHolder(@NonNull View itemView, OnItemClickListener<JunkResultWrapper> onItemClickListener) {
             super(itemView);
-            this.onItemClickListener = onItemClickListener;
+            this.mOnItemClickListener = onItemClickListener;
             tv_junk_type_title = itemView.findViewById(R.id.tv_junk_type_title);
             tv_checked_junk_total = itemView.findViewById(R.id.tv_checked_junk_total);
-            iv_check_state = itemView.findViewById(R.id.iv_check_state);
+            iv_check_junk_state = itemView.findViewById(R.id.iv_check_junk_state);
             rl_type_root = itemView.findViewById(R.id.rl_type_root);
         }
 
@@ -102,13 +102,25 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             } else {
                 tv_junk_type_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_arrow_up, 0);
             }
-            rl_type_root.setOnClickListener(v -> {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
-                }
-            });
             CountEntity mCountEntity = CleanUtil.formatShortFileSize(junkGroup.mSize);
             tv_checked_junk_total.setText(itemView.getResources().getString(R.string.scan_result_check, mCountEntity.getResultSize()));
+            iv_check_junk_state.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                }
+            });
+            if (junkGroup.isCheckPart) {
+                iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_check);
+            } else if (junkGroup.isChecked) {
+                iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_checked);
+            } else {
+                iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_nomal);
+            }
+            rl_type_root.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                }
+            });
         }
     }
 
@@ -140,16 +152,21 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             } else {
                 v_space.setVisibility(View.VISIBLE);
             }
-            CountEntity mCountEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getSelectSize());
+            CountEntity mCountEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getTotalSize());
             tv_checked_total.setText(mCountEntity.getResultSize());
             tv_junk_title.setText(firstJunkInfo.getAppName());
             iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
 
-            if (firstJunkInfo.isSelect()) {
+            if (firstJunkInfo.isAllchecked()) {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
             } else {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
             }
+            iv_check_state.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                }
+            });
         }
     }
 }

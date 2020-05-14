@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -45,6 +46,16 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     RecyclerView rv_content_list;
     @BindView(R.id.fl_ad_container)
     FrameLayout adContainer;
+    @BindView(R.id.tv_deep_clean)
+    TextView tv_deep_clean;
+    @BindView(R.id.tv_clean_junk)
+    TextView tv_clean_junk;
+    @BindView(R.id.tv_junk_total)
+    TextView tv_junk_total;
+    @BindView(R.id.tv_junk_unit)
+    TextView tv_junk_unit;
+    @BindView(R.id.tv_checked_total)
+    TextView tv_checked_total;
 
     @InjectPresenter
     ScanResultPresenter presenter;
@@ -66,6 +77,14 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
         rv_content_list.setLayoutManager(new LinearLayoutManager(requireActivity()));
         rv_content_list.setAdapter(mScanResultAdapter = new ScanResultAdapter(this));
+
+        tv_deep_clean.setOnClickListener(v -> {
+
+        });
+
+        tv_clean_junk.setOnClickListener(v -> {
+
+        });
     }
 
     @Override
@@ -80,7 +99,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     /**
      * 请求广告
      */
-    private void requestAd(){
+    private void requestAd() {
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_SCAN_RESULT,
                 PositionId.DRAW_ONE_CODE,
                 requireContext(),
@@ -90,9 +109,9 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
-                Log.d("ad_status", " scan onAdShowCallBack"+((view==null)?"null":"not null"));
+                Log.d("ad_status", " scan onAdShowCallBack" + ((view == null) ? "null" : "not null"));
 
-                if(adContainer!=null){
+                if (adContainer != null) {
                     adContainer.removeAllViews();
                     adContainer.addView(view);
                 }
@@ -105,7 +124,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
             @Override
             public void onFailure(String message) {
-                if(adContainer!=null){
+                if (adContainer != null) {
                     adContainer.setVisibility(View.GONE);
                 }
             }
@@ -144,11 +163,29 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     }
 
     @Override
+    public void setJunkTotalResultSize(String totalSize, String unit) {
+        tv_junk_total.setText(totalSize);
+        tv_junk_unit.setText(unit);
+    }
+
+    @Override
+    public void setCheckedJunkResult(String resultSize) {
+        tv_checked_total.setText(getString(R.string.scan_result_check_total, resultSize));
+    }
+
+    @Override
     public void onItemClick(View view, JunkResultWrapper data, int position) {
         switch (view.getId()) {
             case R.id.rl_type_root:
                 presenter.updateExpendState(data);
                 break;
+            case R.id.iv_check_junk_state:
+                presenter.updateJunkTypeCheckSate(data);
+                break;
+            case R.id.iv_check_state:
+                presenter.updateJunkContentCheckState(data);
+                break;
         }
     }
+
 }

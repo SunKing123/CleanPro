@@ -18,6 +18,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+@Deprecated
 public class CleanPresenter extends RxPresenter<CleanFragment, NewScanModel> {
 
     @Inject

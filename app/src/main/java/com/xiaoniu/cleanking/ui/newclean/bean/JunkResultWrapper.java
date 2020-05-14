@@ -14,14 +14,18 @@ public class JunkResultWrapper {
 
     public FirstJunkInfo firstJunkInfo;
 
-    public JunkResultWrapper(int itemTye, JunkGroup junkGroup) {
+    public ScanningResultType scanningResultType;
+
+    public JunkResultWrapper(int itemTye, ScanningResultType scanningResultType, JunkGroup junkGroup) {
         this.itemTye = itemTye;
         this.junkGroup = junkGroup;
+        this.scanningResultType = scanningResultType;
     }
 
-    public JunkResultWrapper(int itemTye, FirstJunkInfo firstJunkInfo) {
+    public JunkResultWrapper(int itemTye, ScanningResultType scanningResultType, FirstJunkInfo firstJunkInfo) {
         this.itemTye = itemTye;
         this.firstJunkInfo = firstJunkInfo;
+        this.scanningResultType = scanningResultType;
     }
 
     @Override
@@ -34,7 +38,9 @@ public class JunkResultWrapper {
         if (itemTye != wrapper.itemTye) return false;
         if (junkGroup != null ? !junkGroup.equals(wrapper.junkGroup) : wrapper.junkGroup != null)
             return false;
-        return firstJunkInfo != null ? firstJunkInfo.equals(wrapper.firstJunkInfo) : wrapper.firstJunkInfo == null;
+        if (firstJunkInfo != null ? !firstJunkInfo.equals(wrapper.firstJunkInfo) : wrapper.firstJunkInfo != null)
+            return false;
+        return scanningResultType == wrapper.scanningResultType;
     }
 
     @Override
@@ -42,6 +48,7 @@ public class JunkResultWrapper {
         int result = itemTye;
         result = 31 * result + (junkGroup != null ? junkGroup.hashCode() : 0);
         result = 31 * result + (firstJunkInfo != null ? firstJunkInfo.hashCode() : 0);
+        result = 31 * result + (scanningResultType != null ? scanningResultType.hashCode() : 0);
         return result;
     }
 }
