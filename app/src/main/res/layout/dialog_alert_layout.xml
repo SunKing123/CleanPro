@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:paddingLeft="@dimen/dimen_12dp"
+    android:paddingRight="@dimen/dimen_12dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/doalog_suspended_window_bg"
+        android:padding="@dimen/dimen_16dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/v_circular"
+                android:layout_width="@dimen/dimen_23dp"
+                android:layout_height="@dimen/dimen_23dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circular" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_toRightOf="@+id/v_circular"
+                android:text="悟空清理大师卸载检测"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dimen_11sp" />
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/dimen_20dp"
+            android:layout_height="@dimen/dimen_20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/close" />
+
+
+        <ImageView
+            android:id="@+id/iv_del_icon"
+            android:layout_width="@dimen/dimen_35dp"
+            android:layout_height="@dimen/dimen_35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/dimen_7dp"
+            android:background="#ff0000" />
+
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_del_icon"
+            android:layout_toRightOf="@+id/iv_del_icon"
+            android:text="刚卸载的 今日头条"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_del_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_del_icon"
+            android:layout_toRightOf="@+id/iv_del_icon"
+            android:text="存在残留垃圾"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/dimen_12sp" />
+
+        <TextView
+            android:id="@+id/tv_garbage_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_del_icon"
+            android:layout_marginLeft="@dimen/dimen_5dp"
+            android:layout_toRightOf="@+id/tv_del_desc"
+            android:text="42.88MB"
+            android:textColor="@color/color_FF4545"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <Button
+            android:id="@+id/btn_clean_now"
+            android:layout_width="@dimen/dimen_100dp"
+            android:layout_height="@dimen/dimen_38dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_btn_open_now"
+            android:text="立即清理"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     tools:context=".ui.main.activity.SplashADActivity">
 
-    <include layout="@layout/activity_splash"/>
+    <include layout="@layout/activity_splash" />
     <!-- 广点通开屏广告支持“半屏/全屏”展示，开发者可以把Logo区域放在屏幕底部，然后在Logo上方提供一个容器来放置半开屏广告，请注意此容器高度不得小于400dp -->
 
     <!-- 1.Logo区域：展示半开屏广告时使用，如果想展示全开屏广告，可以不需要这个Logo区域 -->
@@ -17,7 +17,71 @@
         android:layout_height="108dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:contentDescription="@string/app_name"/>
+        android:contentDescription="@string/app_name" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_open_new"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/permission_mask"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginRight="@dimen/dimen_10dp"
+            android:background="@drawable/skip_bg"
+            android:clickable="false"
+            android:padding="@dimen/dimen_5dp"
+            android:text="跳过 5 "
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:text="手机存在发烫卡顿问题"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_21sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_repair_now"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dimen_41dp"
+            android:text="一健修复，手机运行更流畅"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/dimen_14sp"
+            android:visibility="gone" />
+
+
+        <Button
+            android:id="@+id/btn_repair_now"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/dimen_45dp"
+            android:layout_marginRight="@dimen/dimen_45dp"
+            android:layout_marginBottom="@dimen/dimen_31dp"
+            android:background="@drawable/bg_btn_open_now"
+            android:text="立即修复"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+    </RelativeLayout>
+
 
     <!-- 2.预设开屏图片区域： -->
     <!-- 开发者可以把自家App设计开屏图片摆放在这里，本示例中放置了一张静态图片。!-->
@@ -30,7 +94,7 @@
         android:id="@+id/splash_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="108dp"/>
+        android:layout_marginBottom="108dp" />
 
 
 </RelativeLayout>

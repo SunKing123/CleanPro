@@ -268,6 +268,22 @@ public class SPUtil {
         return guideSp.getBoolean(key, defValue);
     }
 
+
+    public static void setRepair(Context ctx, String key, boolean value) {
+        if (guideSp == null) {
+            guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
+        }
+        guideSp.edit().putBoolean(key, value).commit();
+    }
+
+    public static boolean getRepairBoolean(Context ctx, String key, boolean defValue) {
+        if (guideSp == null) {
+            guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
+        }
+        return guideSp.getBoolean(key, defValue);
+    }
+
+
     public static void setGuideString(Context ctx, String key, String value) {
         if (guideSp == null) {
             guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
@@ -468,5 +484,7 @@ public class SPUtil {
     public static void setLastNewsID(String newType, String newsId) {
         setString(ContextUtils.getContext(), newType, newsId);
     }
+
+
 }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dimen_12dp"
+    android:layout_marginRight="@dimen/dimen_12dp"
+    android:background="@drawable/bg_confixm_dialog"
+    android:padding="@dimen/dimen_24dp">
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="温馨提示"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/dimen_20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_title"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_24dp"
+        android:text="欢迎使用悟空清理！我们依据最新的法律要求，
+        更新了隐私政策，特此向您说明。作为互联网安全公司，
+        我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。
+        在使用悟空清理前，请务必仔细阅读并了解"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/dimen_16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_content"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center|center"
+            android:text="不同意"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/dimen_16sp" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center|center"
+            android:text="同意"
+            android:textColor="@color/color_4690FD"
+            android:textSize="@dimen/dimen_16sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

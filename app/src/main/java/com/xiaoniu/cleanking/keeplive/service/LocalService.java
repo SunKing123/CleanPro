@@ -49,7 +49,7 @@ public final class LocalService extends Service {
     private KeepAliveRuning mKeepAliveRuning;
     private int mBatteryPower = 50;  //当前电量监控
     private int temp = 30;
-    private boolean isCharged =false;
+    private boolean isCharged = false;
 
     @Override
     public void onCreate() {
@@ -113,8 +113,6 @@ public final class LocalService extends Service {
         }
 
 
-
-
         //----判断是否为充电状态---结束-------------------------------
 
         //开启一个前台通知，用于提升服务进程优先级
@@ -147,7 +145,8 @@ public final class LocalService extends Service {
         Log.i(TAG, "播放音乐");
         try {
             if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-                mediaPlayer.start();
+                // TODO：由于耗电过大，去掉播放无声音乐
+                // mediaPlayer.start();
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -157,7 +156,8 @@ public final class LocalService extends Service {
     private void pause() {
         try {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
+                // TODO：由于耗电过大，去掉播放无声音乐
+                // mediaPlayer.pause();
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -176,7 +176,6 @@ public final class LocalService extends Service {
             }
         }
     }
-
 
 
     private final class LocalBinder extends KeepAliveAidl.Stub {
@@ -225,7 +224,7 @@ public final class LocalService extends Service {
     };
 
     //启动定时器
-    public void sendTimingReceiver(){
+    public void sendTimingReceiver() {
         IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         if (batteryReceiver == null) {
             batteryReceiver = new BroadcastReceiver() {
@@ -239,31 +238,31 @@ public final class LocalService extends Service {
                     //获取当前电池温度
                     temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
                     int i = temp / 10;
-                    temp = i > 0 ? i : 30+ NumberUtils.mathRandomInt(1,3);
+                    temp = i > 0 ? i : 30 + NumberUtils.mathRandomInt(1, 3);
                 }
             };
         }
         //注册接收器以获取电量信息
         Intent powerIntent = registerReceiver(batteryReceiver, iFilter);
         //----判断是否为充电状态-------------------------------
-        int chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);
-        boolean usb = chargePlug ==BatteryManager.BATTERY_PLUGGED_USB;//usb充电
+        int chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean usb = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;//usb充电
         boolean ac = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;//交流电
         //无线充电---API>=17
         boolean wireless = false;
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
         }
-        isCharged = usb||ac||wireless;
+        isCharged = usb || ac || wireless;
 
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long spacelong = SCAN_SPACE_LONG * 15 * 1000;
         long triggerAtTime = SystemClock.elapsedRealtime() + spacelong;
         Intent i = new Intent(this, TimingReceiver.class);
-        i.putExtra("battery",mBatteryPower);
-        i.putExtra("temp",temp);
-        i.putExtra("isCharged",isCharged);
+        i.putExtra("battery", mBatteryPower);
+        i.putExtra("temp", temp);
+        i.putExtra("isCharged", isCharged);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
@@ -308,10 +307,6 @@ public final class LocalService extends Service {
             }
         }
     }
-
-
-
-
 
 
 }

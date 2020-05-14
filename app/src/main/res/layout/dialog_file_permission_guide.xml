@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_confixm_dialog"
+    android:padding="@dimen/dimen_20dp">
+
+    <ImageView
+        android:id="@+id/iv_content"
+        android:layout_width="274dp"
+        android:layout_height="142dp"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/wk_file_permission_dialog_bg" />
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_content"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:gravity="center"
+        android:text="检测到手机存在大量垃圾"
+        android:textColor="@color/color_ABF3D9"
+        android:textSize="@dimen/dimen_16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_title"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:gravity="center"
+        android:text="请打开手机权限，仅限清理使用"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_10dp">
+
+        <ImageView
+            android:id="@+id/iv_spot"
+            android:layout_width="@dimen/dimen_18dp"
+            android:layout_height="@dimen/dimen_18dp"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/permission_icon" />
+
+        <TextView
+            android:id="@+id/tv_permission_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_5dp"
+            android:layout_toRightOf="@+id/iv_spot"
+            android:text="读取存储空间权限"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/dimen_14sp" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_permission"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginBottom="@dimen/dimen_12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_38dp"
+            android:layout_marginLeft="@dimen/dimen_42dp"
+            android:layout_marginRight="@dimen/dimen_42dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_open_now"
+            android:gravity="center|center"
+            android:text="立即开启"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

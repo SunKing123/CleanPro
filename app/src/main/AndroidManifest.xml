@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xiaoniu.cleanking">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 开机启动完成后就开始接收(可选权限) -->
+
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"
@@ -14,6 +16,20 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
+
+        <receiver android:name="com.xiaoniu.cleanking.ui.main.receiver.InstallUninstallBroadcastReceiver">
+            <intent-filter android:priority="1000">>
+                <!-- 应用安装了 -->
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <!-- 应用卸载了 -->
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <!-- 应用被覆盖了 -->
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <!-- 系统就是这样发送的，所以必须这样订阅 -->
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
@@ -33,6 +49,7 @@
                 <data android:scheme="cleanking" />
             </intent-filter>
         </activity>
+
 
         <activity
             android:name=".ui.main.activity.MainActivity"
@@ -421,9 +438,12 @@
             </intent-filter>
         </receiver>
 
+
         <receiver android:name=".keeplive.receive.TimingReceiver" />
 
         <activity android:name=".keeplive.onepx.OnePixelActivity" />
+
+        <activity android:name=".ui.newclean.activity.JurisdictionGuideActivity" />
 
         <service
             android:name=".keeplive.service.JobHandlerService"
@@ -435,6 +455,13 @@
             android:authorities="com.xiaoniu.preference"
             android:exported="false"
             android:process=":remote" />
+
+
+        <provider
+            android:name="com.hellogeek.permission.provider.PermissionProvider"
+            android:authorities="com.xiaoniu.cleanking.PreferenceProvider"
+            android:exported="true" />
+
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission
@@ -443,12 +470,32 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <!-- 悬浮窗 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- 查看应用使用情况权限 -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
     <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
 
+    <!--    <uses-permission-->
+    <!--        android:name="android.permission.MODIFY_PHONE_STATE"-->
+    <!--        tools:ignore="ProtectedPermissions" />-->
+    <!--    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />-->
+    <!--    <uses-permission-->
+    <!--        android:name="android.permission.READ_LOGS"-->
+    <!--        tools:ignore="ProtectedPermissions" />-->
+    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> &lt;!&ndash; Android 8.0 接听电话 模拟耳机按键的时候需要通知栏权限 &ndash;&gt;-->
+    <!--    <uses-permission-->
+    <!--        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"-->
+    <!--        tools:ignore="ProtectedPermissions" /> &lt;!&ndash; Android 8.0 接听电话 官方api需要的权限 &ndash;&gt;-->
+    <!--    <uses-permission-->
+    <!--        android:name="android.permission.ANSWER_PHONE_CALLS"-->
+    <!--        tools:ignore="ProtectedPermissions" />-->
 
 </manifest>

@@ -4,21 +4,27 @@ import android.Manifest;
 import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.MainThread;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -37,15 +43,17 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.ConfirmDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MessageDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.WeakHandler;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -93,6 +101,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private String mAdvertId = ""; //冷启动广告id
     private String mSecondAdvertId = ""; //冷启动广告备用id
     private boolean mIsOpen; //冷启动广告开关
+    private static int mStart;
 
     //穿山甲相关 begin
     private TTAdNative mTTAdNative;
@@ -105,6 +114,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     private boolean mHasLoaded;
     private final String TAG = "ChuanShanJia";
     //穿山甲相关 end
+    private TextView skipTv;
+
+    private String[] permissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
 
     @Override
     protected int getLayoutId() {
@@ -177,6 +193,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         }
         finish();
     }
+
 
     /**
      * 埋点事件
@@ -415,6 +432,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
 
     @Override
     protected void initView() {
+
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -422,12 +440,93 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
-        initChuanShanJia();
-        if (NetworkUtils.isNetConnected()) {
-            mPresenter.getAuditSwitch();
+        skipTv = findViewById(R.id.tv_skip);
+        skipTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, 0);
+            }
+        });
+        final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+        if (isFirst) {
+            ConfirmDialogFragment confirmDialogFragment = ConfirmDialogFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString("title", "温馨提示");
+            bundle.putString("content", "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
+                    "特此向您说明。作为互联网安全公司，我们在为用户提供隐私保护的同时，" +
+                    "对自身的安全产品提出了更高级别的标准。在使用悟空清理前，请务必仔细阅读并了解");
+            confirmDialogFragment.setArguments(bundle);
+            confirmDialogFragment.show(getFragmentManager(), "");
+            confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
+                @Override
+                public void onConfirm() {
+                    initChuanShanJia();
+                    if (NetworkUtils.isNetConnected()) {
+                        mPresenter.getAuditSwitch();
+                    } else {
+                        getAuditSwitchFail();
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    confirmDialogFragment.dismiss();
+                    MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
+                    messageDialogFragment.show(getFragmentManager(), "");
+                    messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
+                        @Override
+                        public void onConfirm() {
+                            confirmDialogFragment.show(getFragmentManager(), "");
+                        }
+
+                        @Override
+                        public void onCancel() {
+
+                        }
+                    });
+                }
+            });
         } else {
-            getAuditSwitchFail();
+
+            if (PermissionUtils.checkPermission(this, permissions)) {
+                // 已获取读写文件权限
+                //  新用户二次冷启动app，先判断是否授予读取存储文件权限，若已授予，
+                //  开屏页显示权限引导页（不展示开屏广告），
+                //  右上角显示5s倒计时，5s结束后，右上角显示【跳过】按钮，
+                //  点击跳过进入首页。
+                // 显示立即修复
+                findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
+
+                countDown(5);
+                // initChuanShanJia();
+                findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // 立即修复
+                        SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
+                    }
+                });
+            } else {
+                // 未获取文件读写权限
+                //  若未授予读写权限开屏显示广告，
+                //  进入首页是弹窗显示引导开启系统权限读取存储文件权限。
+                initChuanShanJia();
+//                if (NetworkUtils.isNetConnected()) {
+//                    mPresenter.getAuditSwitch();
+//                } else {
+//                    getAuditSwitchFail();
+//                }
+
+            }
         }
+
+        //  initChuanShanJia();
+//                if (NetworkUtils.isNetConnected()) {
+//                    mPresenter.getAuditSwitch();
+//                } else {
+//                    getAuditSwitchFail();
+//                }
+
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
@@ -453,6 +552,32 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
     }
+
+
+    public void countDown(int start) {
+        final Handler mHandler = new Handler();
+        mStart = start;
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                //do something
+                //每隔1s循环执行run方法
+                mStart--;
+
+                if (0 == mStart) {
+                    // 可以跳过
+                    skipTv.setText("跳过");
+                    skipTv.setClickable(true);
+                    return;
+                }
+                skipTv.setText(String.format(SKIP_TEXT, mStart));
+                mHandler.postDelayed(this, 1000);
+            }
+        };
+        //主线程中调用：
+        mHandler.postDelayed(r, 1000);//延时100毫秒
+    }
+
 
     /**
      * 拉取广告开关成功

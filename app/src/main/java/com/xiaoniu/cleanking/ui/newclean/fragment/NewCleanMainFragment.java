@@ -1,7 +1,11 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.Manifest;
 import android.animation.Animator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +27,11 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.server.AccessibilityServiceMonitor;
+import com.hellogeek.permission.strategy.ExternalInterface;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xiaoniu.asmhelp.util.AccessibilitUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -39,6 +48,7 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
+import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
@@ -49,12 +59,17 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.FilePermissionGuideDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.JurisdictionGuideDialogFragment;
+import com.xiaoniu.cleanking.ui.main.receiver.InstallUninstallBroadcastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.JurisdictionGuideActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
+import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -69,10 +84,11 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.update.AccessibilityServiceUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -148,6 +164,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.v_no_net)
     View mNoNetView;
 
+    private String[] basicPermissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    private String[] seniorPermissions = new String[]{
+
+    };
+
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
@@ -162,8 +187,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         return R.layout.fragment_new_clean_main;
     }
 
+    InstallUninstallBroadcastReceiver installUninstallBroadcastReceiver;
+
+    public void registResceiver() {
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
+            intentFilter.addAction("android.intent.action.PACKAGE_REMOVED");
+            intentFilter.addDataScheme("package");
+            installUninstallBroadcastReceiver = new InstallUninstallBroadcastReceiver();
+            getActivity().registerReceiver(installUninstallBroadcastReceiver, intentFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void initView() {
+        registResceiver();
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
@@ -242,6 +283,77 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
+        // 检测是否包含文件读写权限
+        if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+            // 無障礙服務權限
+            boolean isAccessibility = AccessibilityServiceUtils.isAccessibilityEnabled(getActivity());
+            // 自啓動權限
+            //有权查看应用使用情况
+            //            // android.permission.PACKAGE_USAGE_STATS
+            //            // 通知读取权
+            //            // 悬浮窗
+            //            // android.permission.SYSTEM_ALERT_WINDOW
+            boolean isAllopen = false;
+            if (PermissionIntegrate.getPermission().getIsNecessary()) {
+                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
+            } else {
+                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
+            }
+
+            // isAllopen == true 显示权限ICON三角形
+            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
+            // 一鍵修復流程,開啓無障礙無法
+            if (isRepair && isAllopen) {
+                PermissionIntegrate.getPermission().startWK(getActivity());
+                return;
+            }
+            JurisdictionGuideDialogFragment jurisdictionDialogFragment = JurisdictionGuideDialogFragment.newInstance();
+            jurisdictionDialogFragment.show(getActivity().getFragmentManager(), "");
+            jurisdictionDialogFragment.setOnClickListener(new JurisdictionGuideDialogFragment.OnClickListener() {
+                @Override
+                public void onConfirm() {
+                    jurisdictionDialogFragment.dismiss();
+                    // 跳转一件修复
+                    PermissionIntegrate.getPermission().startWK(getActivity());
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            return;
+        }
+        FilePermissionGuideDialogFragment filePermissionGuideDialogFragment = FilePermissionGuideDialogFragment.newInstance();
+        filePermissionGuideDialogFragment.show(getActivity().getFragmentManager(), "");
+        filePermissionGuideDialogFragment.setOnClickListener(new FilePermissionGuideDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                filePermissionGuideDialogFragment.dismiss();
+                // 请求存储权限
+                new RxPermissions(getActivity()).request(basicPermissions).subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            // 权限获取成功
+                        } else {
+//                            if (NewScanPresenter.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                                //永久拒绝权限
+//                                showPermissionDialog(mView.getContext());
+//                            } else {
+//                                //拒绝权限
+//                                checkPermission();
+//                            }
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -344,12 +456,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             }
         }
-
         lineShd.setEnabled(true);
         textWjgl.setEnabled(true);
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
+
     }
 
     @Override
@@ -572,6 +684,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.tv_now_clean)
     public void nowClean() {
+        if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+            // 跳转到权限引导页面
+            startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
+            return;
+        }
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
         ((MainActivity) getActivity()).commitJpushClickTime(1);

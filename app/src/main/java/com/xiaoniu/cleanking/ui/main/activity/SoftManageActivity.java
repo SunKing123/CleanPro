@@ -81,13 +81,12 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             checkAll(mIsCheckAll);
             totalSelectFiles();
         });
-        registResceiver();
+        // registResceiver();
         mPresenter.scanData();
     }
 
 
-
-    public void registResceiver(){
+    public void registResceiver() {
         try {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
@@ -99,8 +98,6 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             e.printStackTrace();
         }
     }
-
-
 
 
     @Override
@@ -118,8 +115,8 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
 
     public void updateData(List<AppInfoBean> lists) {
         runOnUiThread(() -> {
-                mAdapter.clear();
-                mAdapter.modifyList(lists);
+            mAdapter.clear();
+            mAdapter.modifyList(lists);
         });
     }
 

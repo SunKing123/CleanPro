@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_confixm_dialog"
+    android:paddingLeft="@dimen/dimen_24dp"
+    android:paddingTop="@dimen/dimen_24dp">
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="温馨提示"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/dimen_20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_24dp"
+        android:text="使用悟空清理需要先同意我们的《隐私政策》和《用户协议》"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen_24dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center|center"
+            android:text="下一步"
+            android:textColor="@color/color_4690FD"
+            android:textSize="@dimen/dimen_16sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

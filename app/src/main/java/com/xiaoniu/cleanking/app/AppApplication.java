@@ -1,9 +1,14 @@
 package com.xiaoniu.cleanking.app;
 
+import com.hellogeek.permission.Integrate.Permission;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.utils.ContextUtils;
+
+import java.util.Map;
 
 
 /**
@@ -24,6 +29,8 @@ public class AppApplication extends BaseApplication {
         AppProfile.PLATFORM = BuildConfig.PLATFORM;
         AppProfile.VERSION_CODE = BuildConfig.VERSION_CODE;
         AppProfile.VERSION_NAME = BuildConfig.VERSION_NAME;
+
+
     }
 
     @Override
@@ -31,6 +38,25 @@ public class AppApplication extends BaseApplication {
         sInstance = this;
         super.onCreate();
         ContextUtils.initApplication(this);
+
+//        PermissionIntegrate.getInstance(this)
+//                .setPermissionList(Permission.SUSPENDEDTOAST,Permission.BACKSTAGEPOPUP,Permission.SELFSTARTING,Permission.LOCKDISPALY,Permission.NOTIFICATIONBAR,Permission.REPLACEACLLPAGE,Permission.SYSTEMSETTING)
+//                .setPermissionRecordCallback(new PermissionRecordCallback() {
+//                    @Override
+//                    public void usagePermissionRecord(int usageType, String currentPage, String sourcePage, String eventCode, String eventName, Map<String, String> extraMap) {
+//
+//                    }
+//                });
+//
+        PermissionIntegrate.getInstance(this)
+                .setPermissionList(Permission.SUSPENDEDTOAST, Permission.SELFSTARTING,
+                        Permission.NOTIFICATIONBAR, Permission.PACKAGEUSAGESTATS)
+                .setPermissionRecordCallback(new PermissionRecordCallback() {
+                    @Override
+                    public void usagePermissionRecord(int usageType, String currentPage, String sourcePage, String eventCode, String eventName, Map<String, String> extraMap) {
+
+                    }
+                });
     }
 
     /**

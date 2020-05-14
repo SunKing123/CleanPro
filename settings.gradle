@@ -3,4 +3,5 @@ include ':app',
         ':takephoto_library',
         ':common',
         ':asmhelp',
-        ':xrecyclerview'
+        ':xrecyclerview',
+        ':permission'

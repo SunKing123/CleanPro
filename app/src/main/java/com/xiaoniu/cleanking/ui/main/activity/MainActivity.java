@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -69,6 +70,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
 import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
 
 /**
@@ -146,6 +148,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
+
         mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
         isFirstCreate = true;
         initFragments();
@@ -527,7 +530,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void start() {
         try {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                //启动保活服务
+                // 启动保活服务
                 KeepAliveManager.toKeepAlive(
                         getApplication()
                         , HIGH_POWER_CONSUMPTION,
