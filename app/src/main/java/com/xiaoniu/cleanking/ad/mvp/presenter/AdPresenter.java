@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.common.utils.NetworkUtils;
 
 
 import java.util.ArrayDeque;
@@ -51,7 +52,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
     @Override
     public void requestAd(AdRequestParamentersBean adRequestParamentersBean, AdShowCallBack adShowCallBack) {
         this.adShowCallBack = adShowCallBack;
-        if (adRequestParamentersBean == null || adShowCallBack == null) {
+        if (adRequestParamentersBean == null || adShowCallBack == null || !NetworkUtils.isNetConnected()) {
             Log.d("ad_status", "广告没有获取到广告数据！");
             adShowCallBack.onFailure("没有获取到广告数据");
             return;
@@ -71,13 +72,12 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
     private void arrangementData(AdRequestParamentersBean adRequestParamentersBean) throws Exception {
         Map<String, SwitchInfoList.DataBean> adMap = AppHolder.getInstance().getSwitchInfoMap();
         SwitchInfoList.DataBean adinfoBean = getAdInfo(adMap, adRequestParamentersBean);
-        if (adinfoBean != null) {
+        if (adinfoBean != null && adinfoBean.isOpen()) {
             dispatcherUnion(requestData(adinfoBean), adRequestParamentersBean);
         } else {
             //本地没有，走网络
             getNetAdInfo(adRequestParamentersBean);
             Log.d("ad_status", "本地没有数据，开始走网络！");
-
         }
     }
 
@@ -203,9 +203,14 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
             @Override
             public void getData(SwitchInfoList switchInfoList) {
                 if (null != switchInfoList) {
-                    AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
                     try {
-                        dispatcherUnion(requestData(getAdInfo(AppHolder.getInstance().getSwitchInfoMap(), adRequestParamentersBean)), adRequestParamentersBean);
+                        AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
+                        SwitchInfoList.DataBean adinfo=getAdInfo(AppHolder.getInstance().getSwitchInfoMap(),adRequestParamentersBean);
+                        if(adinfo==null){
+                            Log.d("ad_status", "广告没有获取到广告数据！");
+                        }else {
+                            dispatcherUnion(requestData(adinfo),adRequestParamentersBean);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

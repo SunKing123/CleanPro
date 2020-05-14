@@ -87,7 +87,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                         public void onAdShow(View view, int type) {
                             Log.d(TAG, "穿山甲 开屏----onAdShow");
                             if (null != adShowCallBack)
-                                adShowCallBack.onAdShowCallBack(true, view);
+                                adShowCallBack.onAdShowCallBack(view);
                             StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", adRequestBean.getAdvertId(), "穿山甲", "clod_splash_page", "clod_splash_page", "");
                         }
 
@@ -181,7 +181,9 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                     public void onRenderSuccess(View view, float width, float height) {
                         Log.d(TAG, "穿山甲模板 onRenderSuccess"+adRequestParamentersBean.index);
 
-                        if(adShowCallBack!=null){
+                        if(adRequestParamentersBean.index==0){
+                            adShowCallBack.onAdShowCallBack(view);
+                        }else {
                             adShowCallBack.onAdListShowCallBack(adRequestParamentersBean.index,view);
                         }
                     }
@@ -193,6 +195,11 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                         Log.d(TAG, "穿山甲模板 onSelected"+adRequestParamentersBean.index);
                         if (adShowCallBack != null) {
                             adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
+                            if(adRequestParamentersBean.index==0){
+                                adShowCallBack.onCloseCallback();
+                            }else {
+                                adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
+                            }
                             ttNativeExpressAd.destroy();
                         }
                     }

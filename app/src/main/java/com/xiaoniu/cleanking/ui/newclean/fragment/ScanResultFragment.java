@@ -4,13 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LayoutAnimationController;
+import android.widget.FrameLayout;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
+import com.xiaoniu.cleanking.ad.enums.AdType;
+import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
+import com.xiaoniu.cleanking.ad.mvp.presenter.AdPresenter;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.adapter.ScanResultAdapter;
 import com.xiaoniu.cleanking.ui.newclean.bean.JunkResultWrapper;
@@ -35,6 +43,8 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
     @BindView(R.id.rv_content_list)
     RecyclerView rv_content_list;
+    @BindView(R.id.fl_ad_container)
+    FrameLayout adContainer;
 
     @InjectPresenter
     ScanResultPresenter presenter;
@@ -63,6 +73,43 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         final LinkedHashMap<ScanningResultType, JunkGroup> groupLinkedHashMap = ((NowCleanActivity) requireActivity()).getJunkGroups();
         //构造清理数据模型
         presenter.buildJunkResultModel(groupLinkedHashMap);
+        //广告
+        requestAd();
+    }
+
+    /**
+     * 请求广告
+     */
+    private void requestAd(){
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_SCAN_RESULT,
+                PositionId.DRAW_ONE_CODE,
+                requireContext(),
+                AdType.Template,
+                (int) ScreenUtils.getScreenWidthDp(requireContext()),
+                0);
+        new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
+            @Override
+            public void onAdShowCallBack(View view) {
+                Log.d("ad_status", " scan onAdShowCallBack"+((view==null)?"null":"not null"));
+
+                if(adContainer!=null){
+                    adContainer.removeAllViews();
+                    adContainer.addView(view);
+                }
+            }
+
+            @Override
+            public void onCloseCallback(int index) {
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+                if(adContainer!=null){
+                    adContainer.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     /***

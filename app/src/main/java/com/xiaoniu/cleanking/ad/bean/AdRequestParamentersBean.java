@@ -1,11 +1,8 @@
 package com.xiaoniu.cleanking.ad.bean;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.qq.e.ads.splash.SplashADListener;
 import com.xiaoniu.cleanking.ad.enums.AdType;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 
@@ -43,11 +40,22 @@ public class AdRequestParamentersBean {
 
 
 
-    public AdRequestParamentersBean(Context context, String configKey, String advertPosition,  AdType adType) {
+    /**
+     *普通单个广告使用
+     * @param configKey
+     * @param advertPosition
+     * @param context
+     * @param adType
+     * @param viewWidth  宽度  单位dp
+     * @param viewHeight  如果高度需要自定义，请给0
+     */
+    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType,  int viewWidth, int viewHeight) {
+        this.configKey = configKey;
+        this.advertPosition = advertPosition;
         this.context = context;
-        this.configKey=configKey;
-        this.advertPosition=advertPosition;
         this.adType = adType;
+        this.viewWidth = viewWidth;
+        this.viewHeight = viewHeight;
     }
 
     /**
@@ -71,7 +79,7 @@ public class AdRequestParamentersBean {
     }
 
     /**
-     *
+     *信息流使用
      * @param configKey
      * @param advertPosition
      * @param context

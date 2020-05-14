@@ -85,7 +85,7 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
             public void onADExposure() {
                 Log.d(TAG, "优量会 开屏----onADExposure");
                 if (null != adShowCallBack) {
-                    adShowCallBack.onAdShowCallBack(true, null);
+                    adShowCallBack.onAdShowCallBack(null);
                 }
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", adRequestBean.getAdvertId(), "优量汇", "success", "clod_splash_page", "clod_splash_page");
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", adRequestBean.getAdvertId(), "优量汇", "clod_splash_page", "clod_splash_page", "");
@@ -238,7 +238,11 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
             public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
                 Log.d(TAG, "优量会模板 onRenderSuccess ");
                 if(adShowCallBack!=null){
-                    adShowCallBack.onAdListShowCallBack(adRequestParamentersBean.index,nativeExpressADView);
+                    if(adRequestParamentersBean.index==0){
+                        adShowCallBack.onAdShowCallBack(nativeExpressADView);
+                    }else {
+                        adShowCallBack.onAdListShowCallBack(adRequestParamentersBean.index,nativeExpressADView);
+                    }
                 }
             }
 
@@ -257,7 +261,11 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
             public void onADClosed(NativeExpressADView nativeExpressADView) {
                 Log.d(TAG, "优量会模板 onADClosed ");
                 if(adShowCallBack!=null && adRequestParamentersBean!=null){
-                    adShowCallBack.onCloseCallback(adRequestParamentersBean.adContainer);
+                    if(adRequestParamentersBean.index==0){
+                        adShowCallBack.onCloseCallback();
+                    }else {
+                        adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
+                    }
                     nativeExpressADView.destroy();
                 }
 
