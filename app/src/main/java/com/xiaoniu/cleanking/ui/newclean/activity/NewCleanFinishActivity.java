@@ -5,50 +5,27 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
-import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdConstant;
-import com.bytedance.sdk.openadsdk.TTAdManager;
-import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.bytedance.sdk.openadsdk.TTFeedAd;
-import com.bytedance.sdk.openadsdk.TTImage;
-import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.qq.e.ads.cfg.VideoOption;
-import com.qq.e.ads.nativ.MediaView;
-import com.qq.e.ads.nativ.NativeADEventListener;
-import com.qq.e.ads.nativ.NativeADMediaListener;
-import com.qq.e.ads.nativ.NativeADUnifiedListener;
-import com.qq.e.ads.nativ.NativeUnifiedAD;
-import com.qq.e.ads.nativ.NativeUnifiedADData;
-import com.qq.e.ads.nativ.widget.NativeAdContainer;
-import com.qq.e.comm.constants.AdPatternType;
-import com.qq.e.comm.util.AdError;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -57,7 +34,6 @@ import com.xiaoniu.cleanking.ad.enums.AdType;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.presenter.AdPresenter;
 import com.xiaoniu.cleanking.app.RouteConstants;
-import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -66,9 +42,9 @@ import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfoRuishi;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.VideoItemInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -80,6 +56,7 @@ import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsListFragment;
+import com.xiaoniu.cleanking.ui.news.listener.OnClickNewsItemListener;
 import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -113,10 +90,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -180,7 +155,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;     //
     private NewsType mType = NewsType.TOUTIAO;
-    private static final int PAGE_NUM = 15; //每一页数据
     private ImageView mBtnLeft;
 
     public View v_quicken, v_power, v_notification, v_wechat, v_file, v_cool, v_clean_all, v_game;
@@ -322,6 +296,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @author xd.he
      */
     private void initFeedView() {
+        vTopTitleXiding.setBackgroundResource(R.drawable.bg_gradient_clean_finish_tobar);
         tvTopXidingBack.setText(R.string.xiding_back_to_wx_clean);
         mNestedScrollView.setOnScrollChangeListener(this);
         feedViewPager.setOffscreenPageLimit(10);
@@ -334,13 +309,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void onPageSelected(int i) {
-                feedViewPager.setNeedScroll(false);
-                Rect rect = new Rect();
-                homeFeeds.getGlobalVisibleRect(rect);
-                int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-                if (dy != 0) {
-                    doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
-                }
+                clickCauseXiding(true);
                 StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
             }
 
@@ -381,7 +350,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mNewsTypeNaviAdapter.setOnClickListener(new NewsTypeNavigatorAdapter.OnClickListener() {
             @Override
             public void onClickTitleView(int index) {
-                onClickNavigator(index);
+                feedViewPager.setCurrentItem(index);
+                feedViewPager.setClickTab(true);
             }
         });
         commonNavigator.setAdapter(mNewsTypeNaviAdapter);
@@ -390,18 +360,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         ViewPagerHelper.bind(feedIndicator, feedViewPager);
     }
 
-    private void onClickNavigator(int index) {
-        feedViewPager.setCurrentItem(index);
-        feedViewPager.setNeedScroll(false);
-        feedViewPager.setClickTab(true);
-        //处理吸顶操作
-        Rect rect = new Rect();
-        homeFeeds.getGlobalVisibleRect(rect);
-        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        if (dy != 0 && canXiding) {
-            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
-        }
-    }
     /* XD added for feed 20200215 End >*/
 
     @Override
@@ -1199,7 +1157,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         JSONObject jsonObject = new JSONObject();
         try {
             String lastId = SPUtil.getLastNewsID(mType.getName());
-            jsonObject.put("pageSize", PAGE_NUM);
+            jsonObject.put("pageSize", NewsUtils.NEWS_PAGE_SIZE);
             jsonObject.put("lastId", lastId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1337,10 +1295,31 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         showFeedView();
         for (int i = 0; i < mNewTypes.length; i++) {
             NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            final int index = i;
+            listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
+                @Override
+                public void onClickItem(int position, NewsItemInfo itemInfo) {
+                    clickCauseXiding(false);
+                }
+            });
             mNewsListFragments.add(listFragment);
         }
         mNewsListFragmentAdapter = new ComFragmentAdapter(getSupportFragmentManager(), mNewsListFragments);
         feedViewPager.setAdapter(mNewsListFragmentAdapter);
+    }
+
+
+    /**
+     * click Cause Xiding
+     */
+    private void clickCauseXiding(boolean isAnimation) {
+        feedViewPager.setNeedScroll(false);
+        Rect rect = new Rect();
+        homeFeeds.getGlobalVisibleRect(rect);
+        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+        if (dy != 0) {
+            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, isAnimation);
+        }
     }
 
     @Override

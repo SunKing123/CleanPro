@@ -51,6 +51,7 @@ import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -67,6 +68,7 @@ import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsListFragment;
+import com.xiaoniu.cleanking.ui.news.listener.OnClickNewsItemListener;
 import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -352,13 +354,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void onPageSelected(int i) {
-                feedViewPager.setNeedScroll(false);
-                Rect rect = new Rect();
-                homeFeeds.getGlobalVisibleRect(rect);
-                int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-                if (dy != 0) {
-                    doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
-                }
+                clickCauseXiding(true);
                 StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
             }
 
@@ -400,26 +396,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mNewsTypeNaviAdapter.setOnClickListener(new NewsTypeNavigatorAdapter.OnClickListener() {
             @Override
             public void onClickTitleView(int index) {
-                onClickNavigator(index);
+                feedViewPager.setCurrentItem(index);
+                feedViewPager.setClickTab(true);
             }
         });
         commonNavigator.setAdapter(mNewsTypeNaviAdapter);
         feedIndicator.setBackgroundColor(getResources().getColor(R.color.transparent));
         feedIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(feedIndicator, feedViewPager);
-    }
-
-    private void onClickNavigator(int index) {
-        feedViewPager.setCurrentItem(index);
-        feedViewPager.setNeedScroll(false);
-        feedViewPager.setClickTab(true);
-        //处理吸顶操作
-        Rect rect = new Rect();
-        homeFeeds.getGlobalVisibleRect(rect);
-        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        if (dy != 0 && canXiding) {
-            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
-        }
     }
     /* XD added for feed 20200215 End >*/
 
@@ -1266,10 +1250,31 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         showFeedView();
         for (int i = 0; i < mNewTypes.length; i++) {
             NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            final int index = i;
+            listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
+                @Override
+                public void onClickItem(int position, NewsItemInfo itemInfo) {
+                    clickCauseXiding(false);
+                }
+            });
             mNewsListFragments.add(listFragment);
         }
         mNewsListFragmentAdapter = new ComFragmentAdapter(getChildFragmentManager(), mNewsListFragments);
         feedViewPager.setAdapter(mNewsListFragmentAdapter);
+    }
+
+
+    /**
+     * click Cause Xiding
+     */
+    private void clickCauseXiding(boolean isAnimation) {
+        feedViewPager.setNeedScroll(false);
+        Rect rect = new Rect();
+        homeFeeds.getGlobalVisibleRect(rect);
+        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+        if (dy != 0) {
+            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, isAnimation);
+        }
     }
 
     @Override

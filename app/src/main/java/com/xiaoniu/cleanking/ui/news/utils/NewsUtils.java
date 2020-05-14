@@ -17,6 +17,8 @@ import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.titl
  */
 public class NewsUtils {
 
+    public static final int NEWS_PAGE_SIZE = 15;  // 每一页数据
+
     public static final NewsType[] sNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
 
     private static boolean isHomeFeedOpen = true;

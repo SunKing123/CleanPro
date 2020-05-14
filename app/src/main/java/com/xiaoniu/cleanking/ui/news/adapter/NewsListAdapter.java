@@ -2,13 +2,11 @@ package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -19,25 +17,23 @@ import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsPicInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.utils.CollectionUtils;
+import com.xiaoniu.cleanking.ui.news.listener.OnClickNewsItemListener;
 import com.xiaoniu.cleanking.utils.ImageUtil;
-import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.common.base.SimpleWebActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.widget.xrecyclerview.CommonRecyclerAdapter;
 import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * 头条资讯适配器
  */
 public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
-    private OnClickItemListener mOnClickItemListener;
+    private OnClickNewsItemListener mOnClickItemListener;
+
     public static final String adType = "AD";
     private AdPresenter presenter;
 
@@ -170,7 +166,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             commonHolder.itemView.setOnClickListener(v -> {
                         SimpleWebActivity.startActivity(mContext, itemInfo.url, mContext.getString(R.string.app_name));
                         if (mOnClickItemListener != null) {
-                            mOnClickItemListener.onClickItem(itemInfo);
+                            mOnClickItemListener.onClickItem(position, itemInfo);
                         }
                         //埋点
                         if (position > 11)
@@ -233,13 +229,9 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         }
     }
 
-    public void setOnClickItemListener(OnClickItemListener mOnClickItemListener) {
-        this.mOnClickItemListener = mOnClickItemListener;
+    public void setOnClickItemListener(OnClickNewsItemListener onClickItemListener) {
+        this.mOnClickItemListener = onClickItemListener;
     }
 
-    public interface OnClickItemListener {
 
-        void onClickItem(NewsItemInfo itemInfo);
-
-    }
 }

@@ -14,6 +14,8 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
+import com.xiaoniu.cleanking.ui.news.listener.OnClickNewsItemListener;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -31,8 +33,9 @@ public class NewsListFragment extends BaseFragment {
     private LinearLayout mLlNoNet;
     private NewsType mType;
 
-    private static final int PAGE_NUM = 15; //每一页数据  20
     private boolean mIsRefresh = true;
+
+    private OnClickNewsItemListener mOnClickItemListener;  // XD added 20200514
 
     public static NewsListFragment getInstance(NewsType type) {
         Bundle bundle = new Bundle();
@@ -50,9 +53,12 @@ public class NewsListFragment extends BaseFragment {
     @Override
     protected void initVariable(Bundle arguments) {
         mNewsAdapter = new NewsListAdapter(getContext());
+        if (mOnClickItemListener != null) {
+            mNewsAdapter.setOnClickItemListener(mOnClickItemListener);
+        }
+
         if (arguments != null) {
             mType = (NewsType) arguments.getSerializable(KEY_TYPE);
-
         }
         setSupportLazy(true);
     }
@@ -119,7 +125,7 @@ public class NewsListFragment extends BaseFragment {
         if (mIsRefresh) {
             lastId = "";
         }
-        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + PAGE_NUM;
+        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + NewsUtils.NEWS_PAGE_SIZE;
         EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
             @Override
             public void onFailure(Throwable e) {
@@ -158,6 +164,14 @@ public class NewsListFragment extends BaseFragment {
         if (mRecyclerView != null) {
             mRecyclerView.scrollToPosition(0);
         }
+    }
+
+    /**
+     * @param onClickItemListener
+     * @author xd.he
+     */
+    public void setOnClickItemListener(OnClickNewsItemListener onClickItemListener) {
+        this.mOnClickItemListener = onClickItemListener;
     }
 
 }
