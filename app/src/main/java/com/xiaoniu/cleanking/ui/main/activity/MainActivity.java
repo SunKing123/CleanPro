@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -26,14 +27,10 @@ import android.view.ViewGroup;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.base.UmengEnum;
-import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -50,8 +47,10 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.DbHelper;
+import com.xiaoniu.cleanking.utils.MainBottomBarUtil;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -84,32 +83,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private FragmentManager mManager = getSupportFragmentManager();
     private NewCleanMainFragment mMainFragment;
     private NewsFragment upQuotaFragment;
+
     private static final long DEFAULT_REFRESH_TIME = 10 * 60 * 1000L;
     /**
      * 定时扫面手机时间 1小时
      */
     private static final long SCAN_LOOP_TIME = 3 * 1000;
 
-    /**
-     * 借款页
-     */
-    public static int CLEAN = 0;
-    /**
-     * 商城页
-     */
-    public static int TOOL = 1;
-    /**
-     * 生活页
-     */
-    public static int LIFE = -1;
-    /**
-     * 提额
-     */
-    public static int NEWS = 2;
-    /**
-     * 我的页面
-     */
-    public static int MINE = 3;
+    private static final int MSG_SHOW_NEWS_BADGE_VIEW = 1;
+
 
     @Inject
     NoClearSPHelper mSPHelper;
@@ -117,17 +99,14 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     //判断重新启动
     boolean isFirstCreate = false;
 
-    private BottomBarTab mBottomBarTab;
+    private BottomBarTab mNewsBottomBarTab;
     private boolean isSelectTop = false;
+
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                if (isSelectTop)
-                    return;
-                if (mBottomBarTab != null) {
-                    mBottomBarTab.showBadgeView("...");
-                }
+            if (msg.what == MSG_SHOW_NEWS_BADGE_VIEW) {
+                showNewsBadgeView();
             }
         }
     };
@@ -139,29 +118,36 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
+        if (MainBottomBarUtil.isShowNewsTab()) {
+            mHandler.sendEmptyMessageDelayed(MSG_SHOW_NEWS_BADGE_VIEW, DEFAULT_REFRESH_TIME);
+        }
+
         isFirstCreate = true;
         initFragments();
-//        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "0")) {
+        boolean isAuditMode = SPUtil.isInAudit();
+        boolean isMainTabNewsOpen = NewsUtils.isMainTabNewsOpen();
+        if (isAuditMode) {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.ic_tab_clean_normal, getString(R.string.clean)))
                     .addItem(new BottomBarTab(this, R.drawable.ic_tab_me_normal, getString(R.string.mine)));
         } else {
-            mBottomBarTab = new BottomBarTab(this, R.drawable.ic_tab_msg_normal, getString(R.string.top));
-            mBottomBar
-                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_clean_normal, getString(R.string.clean)))
-                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_tool_normal, getString(R.string.tool)))
-                    .addItem(mBottomBarTab)
-                    .addItem(new BottomBarTab(this, R.drawable.ic_tab_me_normal, getString(R.string.mine)));
+            if (isMainTabNewsOpen) {
+                mNewsBottomBarTab = new BottomBarTab(this, R.drawable.ic_tab_msg_normal, getString(R.string.top));
+                mBottomBar.addItem(new BottomBarTab(this, R.drawable.ic_tab_clean_normal, getString(R.string.clean)))
+                        .addItem(new BottomBarTab(this, R.drawable.ic_tab_tool_normal, getString(R.string.tool)))
+                        .addItem(mNewsBottomBarTab)
+                        .addItem(new BottomBarTab(this, R.drawable.ic_tab_me_normal, getString(R.string.mine)));
+
+            } else {
+                mBottomBar.addItem(new BottomBarTab(this, R.drawable.ic_tab_clean_normal, getString(R.string.clean)))
+                        .addItem(new BottomBarTab(this, R.drawable.ic_tab_tool_normal, getString(R.string.tool)))
+                        .addItem(new BottomBarTab(this, R.drawable.ic_tab_me_normal, getString(R.string.mine)));
+            }
         }
+        MainBottomBarUtil.initPageIndex(isAuditMode, isMainTabNewsOpen);
 
         mBottomBar.setCurrentItem(0);
-        CLEAN = 0;
-        TOOL = 1;
-        NEWS = 2;
-        MINE = 3;
+
         showHideFragment(0, -1);
 
         this.mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
@@ -169,28 +155,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onTabSelected(int position, int prePosition) {
                 showHideFragment(position, prePosition);
-                //如果没有选中头条，开始10分钟记时
-                if (position == 2) {
-                    isSelectTop = true;
-                    hideBadgeView();
-                } else {
-                    if (isSelectTop) {
-                        isSelectTop = false;
-                        //清空所有的消息
-                        mHandler.removeCallbacksAndMessages(null);
-                        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
-                    }
-                }
+                updateNewsBadgeView(MainActivity.this, position, true);
             }
 
             @Override
             public void onTabUnselected(int position) {
-
+                updateNewsBadgeView(MainActivity.this, position, false);
             }
 
             @Override
             public void onTabReselected(int position) {
-                if (position == CLEAN && mMainFragment != null) {
+                if (position == MainBottomBarUtil.getCleanPageIndex() && mMainFragment != null) {
                     mMainFragment.onClickCleanTab();
                 }
             }
@@ -214,6 +189,27 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
+    }
+
+    /**
+     *
+     * @param context
+     * @param position
+     * @author xd.he
+     */
+    private void updateNewsBadgeView(Context context, int position, boolean isSelect) {
+        if (!MainBottomBarUtil.isShowNewsTab() || position != MainBottomBarUtil.getNewsPageIndex()) {
+            return;
+        }
+        isSelectTop = isSelect;
+        if (isSelect) {
+            mHandler.removeCallbacksAndMessages(null);        //清空所有的消息
+            hideBadgeView();
+        } else {
+            //如果没有选中头条，开始10分钟倒记时
+            mHandler.removeCallbacksAndMessages(null);        //清空所有的消息
+            mHandler.sendEmptyMessageDelayed(MSG_SHOW_NEWS_BADGE_VIEW, DEFAULT_REFRESH_TIME);
+        }
     }
 
     @Override
@@ -272,26 +268,28 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void changeTab(Bundle intent) {
         String type = intent.getString("type");
         String home = intent.getString("NotificationService");
-        if ("shangcheng".equals(type)) {
-            mBottomBar.setCurrentItem(TOOL);
+        Log.d("MainActivity", "!--->changeTab--type:"+type+"; home:"+home);
+        // TODO type 貌似没用到 !!
+        if ("shangcheng".equals(type)) {  // ????
+            mBottomBar.setCurrentItem(MainBottomBarUtil.getToolPageIndex());
         } else if ("shenghuo".equals(type)) {
-            mBottomBar.setCurrentItem(LIFE);
+            mBottomBar.setCurrentItem(MainBottomBarUtil.getLifePageIndex());
         } else if ("jiekuan".equals(type)) {
-            mBottomBar.setCurrentItem(CLEAN);
+            mBottomBar.setCurrentItem(MainBottomBarUtil.getCleanPageIndex());
         } else if ("huodong".equals(type)) {
-            mBottomBar.setCurrentItem(NEWS);
+            mBottomBar.setCurrentItem(MainBottomBarUtil.getNewsPageIndex());
         } else if ("wode".equals(type)) {
-            mBottomBar.setCurrentItem(MINE);
+            mBottomBar.setCurrentItem(MainBottomBarUtil.getMinePageIndex());
         }
         String tabIndex = intent.getString(SchemeConstant.EXTRA_MAIN_INDEX);
         if (!TextUtils.isEmpty(tabIndex)) {
             try {
                 int tab = Integer.parseInt(tabIndex);
-                if (tab <= 3) {
+                if (tab <= 3) {  // TODO
                     mBottomBar.setCurrentItem(tab);
                 } else {
                     if (tab == 4) {
-                        mBottomBar.setCurrentItem(CLEAN);
+                        mBottomBar.setCurrentItem(MainBottomBarUtil.getCleanPageIndex());
                         EventBus.getDefault().post(new AutoCleanEvent());
                     }
                 }
@@ -345,75 +343,63 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void initFragments() {
-        MeFragment mineFragment = MeFragment.getIntance();
         mMainFragment = new NewCleanMainFragment();
-        String url = ApiModule.SHOPPING_MALL;
-
         ToolFragment toolFragment = new ToolFragment();
         upQuotaFragment = NewsFragment.getNewsFragment("");
-        mFragments.add(mMainFragment);
+        MeFragment mineFragment = MeFragment.getIntance();
 
-        mFragments.add(toolFragment);
+        boolean isAuditMode = SPUtil.isInAudit();
+        boolean isMainTabNewsOpen = NewsUtils.isMainTabNewsOpen();
+        if (isAuditMode) {
+            mFragments.add(mMainFragment);
+            mFragments.add(mineFragment);
 
-        //        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "1")) {
-            mFragments.add(upQuotaFragment);
+            mManager.beginTransaction()
+                    .add(R.id.frame_layout, mMainFragment)
+                    .add(R.id.frame_layout, mineFragment)
+                    .hide(mMainFragment)
+                    .hide(mineFragment)
+                    .commitAllowingStateLoss();
+        } else {
+            if (isMainTabNewsOpen) {
+                mFragments.add(mMainFragment);
+                mFragments.add(toolFragment);
+                mFragments.add(upQuotaFragment);
+                mFragments.add(mineFragment);
+
+                mManager.beginTransaction()
+                        .add(R.id.frame_layout, mMainFragment)
+                        .add(R.id.frame_layout, toolFragment)
+                        .add(R.id.frame_layout, upQuotaFragment)
+                        .add(R.id.frame_layout, mineFragment)
+                        .hide(mMainFragment)
+                        .hide(toolFragment)
+                        .hide(upQuotaFragment)
+                        .hide(mineFragment)
+                        .commitAllowingStateLoss();
+            } else {
+                mFragments.add(mMainFragment);
+                mFragments.add(toolFragment);
+                mFragments.add(mineFragment);
+
+                mManager.beginTransaction()
+                        .add(R.id.frame_layout, mMainFragment)
+                        .add(R.id.frame_layout, toolFragment)
+                        .add(R.id.frame_layout, mineFragment)
+                        .hide(mMainFragment)
+                        .hide(toolFragment)
+                        .hide(mineFragment)
+                        .commitAllowingStateLoss();
+            }
         }
-        mFragments.add(mineFragment);
 
-        mManager.beginTransaction()
-                .add(R.id.frame_layout, mMainFragment)
-                .add(R.id.frame_layout, toolFragment)
-                .add(R.id.frame_layout, upQuotaFragment)
-                .add(R.id.frame_layout, mineFragment)
-                .hide(mMainFragment)
-                .hide(toolFragment)
-                .hide(upQuotaFragment)
-                .hide(mineFragment)
-                .commitAllowingStateLoss();
 
     }
 
     private void showHideFragment(int position, int prePosition) {
-        String eventCode = "home_click";
-        String currentPage = "";
-        String sourcePage = "";
-        if (position == 0) {
-            eventCode = "home_click";
-            currentPage = "home_page";
-        } else if (position == 1) {
-            eventCode = "tool_click";
-            currentPage = "tool_page";
-        } else if (position == 2) {
-            eventCode = "selected_click";
-            currentPage = "selected_page";
-        } else if (position == 3) {
-            eventCode = "mine_click";
-            currentPage = "mine_page";
-        }
-        if (prePosition == 0) {
-            sourcePage = "home_page";
-        } else if (prePosition == 1) {
-            sourcePage = "tool_page";
-        } else if (prePosition == 2) {
-            sourcePage = "selected_page";
-        } else if (prePosition == 3) {
-            sourcePage = "mine_page";
-        }
-        //保存选中的currentPage 为 上级页面id
-        AppHolder.getInstance().setSourcePageId(currentPage);
-        //默认二级选中页面为当前页面
-        AppHolder.getInstance().setOtherSourcePageId(currentPage);
-        StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
-        if (position == MINE)
+        MainBottomBarUtil.onShowHideFragment(this, position, prePosition);
+        if (position == MainBottomBarUtil.getMinePageIndex()) {
             source_page = "wode";
-        if (position == CLEAN) {
-            UmengUtils.event(MainActivity.this, UmengEnum.Tab_jiekuan);
-        } else if (position == MINE) {
-            UmengUtils.event(MainActivity.this, UmengEnum.Tab_wode);
-        } else if (position == NEWS) {
-        } else if (position == TOOL) {
         }
         FragmentTransaction ft = mManager.beginTransaction();
         ft.show(mFragments.get(position));
@@ -502,11 +488,26 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     public boolean isBadgeViewShow() {
-        return mBottomBarTab.isBadgeViewShow();
+        if (mNewsBottomBarTab == null) {
+            return false;
+        }
+        return mNewsBottomBarTab.isBadgeViewShow();
+    }
+
+    private void showNewsBadgeView() {
+        if (isSelectTop || mNewsBottomBarTab == null) {
+            return;
+        }
+        mNewsBottomBarTab.showBadgeView("...");
     }
 
     public void hideBadgeView() {
-        mBottomBarTab.hideBadgeView();
+        if (mNewsBottomBarTab == null) {
+            return;
+        }
+        if (mNewsBottomBarTab.isBadgeViewShow()) {
+            mNewsBottomBarTab.hideBadgeView();
+        }
     }
 
     /**

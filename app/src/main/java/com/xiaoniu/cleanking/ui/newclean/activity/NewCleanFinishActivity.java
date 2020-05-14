@@ -138,8 +138,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @BindView(R.id.layout_scroll)
     OperatorNestedScrollView mNestedScrollView;
 
-    @BindView(R.id.close_feed_empty_view)
-    View close_feed_empty_view;
+//    @BindView(R.id.close_feed_empty_view)
+//    View close_feed_empty_view;
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
     @BindView(R.id.feed_view_pager)
@@ -264,7 +264,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mInflater = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
         mStatusBarHeight = ScreenUtil.getStatusBarHeight(this);
         mStickyHeight = ScreenUtil.dp2px(this, 80);
-        // Log.d(TAG, "!--->initView--mStatusBarHeight:" + mStatusBarHeight+"; mStickyHeight :"+mStickyHeight);
 
         EventBus.getDefault().register(this);
         fileQueryUtils = new FileQueryUtils();
@@ -412,7 +411,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 Rect rect = new Rect();
                 homeFeeds.getGlobalVisibleRect(rect);
                 int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-                Log.d(TAG, "!--->xiding--onPageSelected---index:"+i+"; dy:" + dy);
                 if (dy != 0) {
                     doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
                 }
@@ -432,17 +430,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void run() {
                 try {
-                    if (!NewsUtils.isFeedClosed()) {
+                    if (NewsUtils.isShowCleanFinishFeed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
                         mRootHeight = layoutRoot.getHeight();
                         params.height = mRootHeight - mFLTopNav.getHeight();  //  mStatusBarHeight
-                        Log.d(TAG, "!--->requestFeedHeight---homeFeeds height:"+ params.height+"; layoutRoot:"+ layoutRoot.getHeight()+"; mFLTopNav:"+mFLTopNav.getHeight());
                         homeFeeds.setLayoutParams(params);
                         mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
                         mNestedScrollView.requestLayout();
                     } else {
                         homeFeeds.setVisibility(View.GONE);
-                        close_feed_empty_view.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -475,9 +471,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
         int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        // Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
         if (dy != 0 && canXiding) {
-            // Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
         }
     }
@@ -2580,7 +2574,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
-        if (!NewsUtils.isFeedClosed() && canXiding) {
+        if (NewsUtils.isShowCleanFinishFeed() && canXiding) {
             //处理吸顶操作
             cheekRootHeight();
             Rect rect = new Rect();

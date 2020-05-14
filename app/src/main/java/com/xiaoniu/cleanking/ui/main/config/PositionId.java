@@ -36,15 +36,21 @@ public class PositionId {
     public static final String KEY_PHONE = "page_phone_clear_complete";
     public static final String KEY_GAME_JILI = "page_speed_game_encourag";
     public static final String KEY_GAME = "page_speed_game_complete";
-    //首页信息流
-    public static final String KEY_HOME_DOWN_FEED = "page_home_down_feed_complete";
     //垃圾清理
     public static final String KEY_SCAN_RESULT = "page_scan_result_complete";
-
-
+    // XD added 20200514
+    public static final String KEY_HOME_NEWS = "page_home_news";                  // 首页信息流
+    public static final String KEY_MAIN_TAB_NEWS = "page_main_tab_news";          // 资讯tab
+    public static final String KEY_CLEAN_FINISH_NEWS = "page_clean_finish_news";  // 清理完成
 
     public static final String DRAW_ONE_CODE = "advert_position_advert1";
     public static final String DRAW_TWO_CODE = "advert_position_advert2";
     public static final String DRAW_THREE_CODE = "advert_position_advert3";
+
+    // XD added 20200514
+    public static final String AD_POSITION_HOME_NEWS = "advert_position_home_news";                 // 首页资讯开关
+    public static final String AD_POSITION_MAIN_TAB_NEWS = "advert_position_main_tab_news";         // 主界面tab资讯
+    public static final String AD_POSITION_CLEAN_FINISH_NEWS = "advert_position_clean_finish_news"; // 清理完成页资讯
+
 
 }

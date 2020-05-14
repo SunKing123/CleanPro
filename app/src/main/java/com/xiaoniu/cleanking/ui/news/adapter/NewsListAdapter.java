@@ -94,7 +94,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
      */
     private void getAd(int postion) {
 
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_HOME_DOWN_FEED,
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_HOME_NEWS,
                 PositionId.DRAW_ONE_CODE,
                 mContext,
                 AdType.Template,

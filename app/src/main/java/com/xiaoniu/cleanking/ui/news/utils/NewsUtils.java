@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.widget.ScaleTransitionPagerTitleView;
 import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.indicators.LinePagerIndicator;
@@ -18,16 +19,42 @@ public class NewsUtils {
 
     public static final NewsType[] sNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
 
+    private static boolean isHomeFeedOpen = true;
+    private static boolean isMainTabNewsOpen = true;
+    private static boolean isCleanFinishFeedOpen = true;
 
-    /**
-     * 信息流是否关闭  TODO
-     *
-     * @return
-     */
-    public static boolean isFeedClosed() {
-        return false;
+    public static void setIsHomeFeedOpen(boolean isHomeFeedOpen) {
+        NewsUtils.isHomeFeedOpen = isHomeFeedOpen;
     }
 
+    public static void setIsMainTabNewsOpen(boolean isMainTabNewsOpen) {
+        NewsUtils.isMainTabNewsOpen = isMainTabNewsOpen;
+    }
+
+    public static void setIsCleanFinishFeedOpen(boolean isCleanFinishFeedOpen) {
+        NewsUtils.isCleanFinishFeedOpen = isCleanFinishFeedOpen;
+    }
+
+    private static boolean isHomeFeedOpen() {
+        return isHomeFeedOpen;
+    }
+
+    public static boolean isMainTabNewsOpen() {
+        return isMainTabNewsOpen;
+        // return AppHolder.getInstance().isOpen(PositionId.KEY_MAIN_TAB_NEWS, PositionId.AD_POSITION_MAIN_TAB_NEWS);
+    }
+
+    private static boolean isCleanFinishFeedOpen() {
+        return isCleanFinishFeedOpen;
+    }
+
+    public static boolean isShowHomeFeed() {
+        return !SPUtil.isInAudit() && isHomeFeedOpen();
+    }
+
+    public static boolean isShowCleanFinishFeed() {
+        return !SPUtil.isInAudit() && isCleanFinishFeedOpen();
+    }
 
     /**
      *

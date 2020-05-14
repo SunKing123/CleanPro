@@ -180,8 +180,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     View mNoNetView;
 
     /*< XD added for feed begin */
-    @BindView(R.id.close_feed_empty_view)
-    View close_feed_empty_view;
+//    @BindView(R.id.close_feed_empty_view)
+//    View close_feed_empty_view;
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
 
@@ -375,7 +375,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void run() {
                 try {
-                    if (!NewsUtils.isFeedClosed()) {
+                    if (NewsUtils.isShowHomeFeed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
                         params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
                         homeFeeds.setLayoutParams(params);
@@ -384,7 +384,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         mNestedScrollView.requestLayout();
                     } else {
                         homeFeeds.setVisibility(View.GONE);
-                        close_feed_empty_view.setVisibility(View.VISIBLE);
+//                        close_feed_empty_view.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -417,9 +417,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
         int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        // Log.d(TAG, "!--->xiding--onClickNavigator------index:"+index+"; dy:"+dy+"; mStickyHeight:"+mStickyHeight +"; canXiding:"+canXiding);
         if (dy != 0 && canXiding) {
-            // Log.e(TAG, "!--->xiding--onClickNavigator------index:"+index);
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, true);
         }
     }
@@ -1276,7 +1274,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
-        if (!NewsUtils.isFeedClosed() && canXiding) {
+        if (NewsUtils.isShowHomeFeed() && canXiding) {
             //处理吸顶操作
             cheekRootHeight();
             Rect rect = new Rect();
@@ -1286,7 +1284,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 hasXiding = true;
             }
             int changeY = y - lasty;
-            if (dy> 0 && dy <= mStickyHeight && changeY > 0) {
+            if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
                     doXiDingStickyAnim(y + dy, true, 300);
                 } else {
@@ -1299,7 +1297,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void cheekRootHeight() {
         int rootHeight = layoutRoot.getHeight();
         if (mRootHeight != rootHeight) {
-            // Log.w(TAG, "!--->cheekRootHeight- init mRootHeight!= rootHeight");
             requestFeedHeight();
         }
     }
@@ -1326,7 +1323,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     public void onClickCleanTab() {
-        if (hasXiding && !NewsUtils.isFeedClosed()) {
+        if (hasXiding && NewsUtils.isShowHomeFeed()) {
             goBackToClean(true);
         }
     }
@@ -1353,7 +1350,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void updateTitle(boolean xiding) {
         if (xiding) {
-            vTopTitleNormal.setVisibility(View.GONE);  // lltop_narmal
+            vTopTitleNormal.setVisibility(View.GONE);
             vTopTitleXiding.setVisibility(View.VISIBLE);
         } else {
             vTopTitleNormal.setVisibility(View.VISIBLE);

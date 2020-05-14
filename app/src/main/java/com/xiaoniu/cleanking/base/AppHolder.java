@@ -1,8 +1,10 @@
 package com.xiaoniu.cleanking.base;
 
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
-import com.xiaoniu.cleanking.ui.main.bean.AdkeyEntity;
+
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 
 import java.util.List;
@@ -58,6 +60,7 @@ public class AppHolder {
 
     /**
      * 广告配置内存缓存 数据库缓存
+     *
      * @param switchInfoList
      */
     public synchronized void setSwitchInfoMap(List<SwitchInfoList.DataBean> switchInfoList) {
@@ -68,6 +71,15 @@ public class AppHolder {
         mAdsMap.clear();
         for (SwitchInfoList.DataBean adInfo : switchInfoList) {
             mAdsMap.put(adInfo.getConfigKey()+adInfo.getAdvertPosition(), adInfo);
+            /*< XD added for sync feed config begin */
+            if (PositionId.KEY_HOME_NEWS.equals(adInfo.getConfigKey()) && PositionId.AD_POSITION_HOME_NEWS.equals(adInfo.getAdvertPosition())) {
+                NewsUtils.setIsHomeFeedOpen(adInfo.isOpen());
+            } else if(PositionId.KEY_MAIN_TAB_NEWS.equals(adInfo.getConfigKey()) && PositionId.AD_POSITION_MAIN_TAB_NEWS.equals(adInfo.getAdvertPosition())) {
+                NewsUtils.setIsMainTabNewsOpen(adInfo.isOpen());
+            } else if(PositionId.KEY_CLEAN_FINISH_NEWS.equals(adInfo.getConfigKey()) && PositionId.AD_POSITION_CLEAN_FINISH_NEWS.equals(adInfo.getAdvertPosition())) {
+                NewsUtils.setIsCleanFinishFeedOpen(adInfo.isOpen());
+            }
+            /* XD added for sync feed config End >*/
         }
 
         if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().adInfotDao())
@@ -76,7 +88,6 @@ public class AppHolder {
         ApplicationDelegate.getAppDatabase().adInfotDao().deleteAll();
         ApplicationDelegate.getAppDatabase().adInfotDao().insertAll(switchInfoList);
     }
-
 
     public Map<String, SwitchInfoList.DataBean> getSwitchInfoMap() {
         return mAdsMap;
