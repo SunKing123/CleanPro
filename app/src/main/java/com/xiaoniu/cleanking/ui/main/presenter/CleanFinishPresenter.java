@@ -38,64 +38,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList() {
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                mView.getSwitchInfoListSuccess(switchInfoList);
-                if(null != switchInfoList)
-                    AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getSwitchInfoListFail();
-                if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
-                    AppHolder.getInstance().setSwitchInfoMap(ApplicationDelegate.getAppDatabase().adInfotDao().getAll());
-                }
-            }
-        });
-    }
-    /**
-     * 插屏广告开关
-     */
-    public void getScreentSwitch() {
-        mModel.getScreentSwitch(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                mView.getScreentSwitchSuccess(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getSwitchInfoListFail();
-            }
-        });
-    }
-
-    /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
      */
     @SuppressLint("CheckResult")

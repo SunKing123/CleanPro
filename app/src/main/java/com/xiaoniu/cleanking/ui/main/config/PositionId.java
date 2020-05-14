@@ -27,6 +27,7 @@ public class PositionId {
     public static final String HOT_CODE = "advert_position_hot_start";
 
     public static final String KEY_CLEAN_ALL = "page_immediately_complete";
+    //一键加速结束页
     public static final String KEY_JIASU = "page_speed_up_complete";
     public static final String KEY_CQSD = "page_save_power_complete";
     public static final String KEY_NOTIFY = "page_bar_clean_complete";

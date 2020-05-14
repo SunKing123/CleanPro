@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.bytedance.sdk.openadsdk.TTAdDislike;
 import com.bytedance.sdk.openadsdk.TTAdNative;
+import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.bytedance.sdk.openadsdk.TTSplashAd;
 import com.xiaoniu.cleanking.ad.bean.AdRequestBean;
@@ -208,6 +209,31 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                     public void onCancel() {
                         Log.d(TAG, "穿山甲模板 onCancel");
 
+                    }
+                });
+                ttNativeExpressAd.setDownloadListener(new TTAppDownloadListener() {
+                    @Override
+                    public void onIdle() {
+                    }
+
+                    @Override
+                    public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
+                    }
+
+                    @Override
+                    public void onDownloadPaused(long totalBytes, long currBytes, String fileName, String appName) {
+                    }
+
+                    @Override
+                    public void onDownloadFailed(long totalBytes, long currBytes, String fileName, String appName) {
+                    }
+
+                    @Override
+                    public void onInstalled(String fileName, String appName) {
+                    }
+
+                    @Override
+                    public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                     }
                 });
                 ttNativeExpressAd.render();
