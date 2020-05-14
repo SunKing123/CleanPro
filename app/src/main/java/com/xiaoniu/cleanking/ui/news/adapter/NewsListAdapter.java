@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -115,12 +116,15 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
             @Override
             public void onCloseCallback(int index) {
+                Log.d("----------------",index+"__");
                 try {
                     if (adCache.get(index) == null) {
                         return;
                     }
-                    adCache.remove(index);
+//                    adCache.remove(index);
+//                    mDatas.remove(index);
                     notifyItemRemoved(index);
+//                    notifyItemRangeChanged(0, mDatas.size() - 1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -130,6 +134,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
     @Override
     public void convert(RecyclerView.ViewHolder holder, Object itemData, int position) {
+        Log.d("----------------","__convert");
 
         CommonViewHolder commonHolder = (CommonViewHolder) holder;
         int viewType = getItemViewType(position);

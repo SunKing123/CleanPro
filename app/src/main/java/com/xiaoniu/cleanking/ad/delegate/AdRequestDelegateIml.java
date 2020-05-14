@@ -74,4 +74,23 @@ public abstract class AdRequestDelegateIml implements AdRequestDelegate {
     }
 
 
+    /**
+     * 参数检查
+     * @param adRequest
+     * @param adRequestParamentersBean
+     * @param adRequestBean
+     * @param adShowCallBack
+     * @return
+     */
+    protected boolean checkParamenter(Deque<AdRequestBean> adRequest, AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean, AdShowCallBack adShowCallBack) {
+        if (null == adRequestBean || null == adRequestParamentersBean || adShowCallBack == null || adRequest == null) {
+            Log.d(TAG, "广告没有获取到下发配置");
+            adError(adRequest, adRequestParamentersBean, adShowCallBack);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }

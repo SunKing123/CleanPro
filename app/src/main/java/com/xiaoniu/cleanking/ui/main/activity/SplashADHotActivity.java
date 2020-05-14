@@ -250,6 +250,11 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     }
 
     @Override
+    public void onADLoaded(long l) {
+
+    }
+
+    @Override
     public void onADDismissed() {
         Log.i("AD_DEMO", "SplashADDismissed");
         next();
