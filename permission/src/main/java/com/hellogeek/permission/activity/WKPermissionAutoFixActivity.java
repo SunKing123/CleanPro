@@ -3,10 +3,12 @@ package com.hellogeek.permission.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,6 +65,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.hellogeek.permission.util.Constant.PACKAGE_USAGE_STATS;
 import static com.hellogeek.permission.util.Constant.PROVIDER_BACKSTAGEPOPUP;
 import static com.hellogeek.permission.util.Constant.PROVIDER_LOCKDISPLAY;
 import static com.hellogeek.permission.util.Constant.PROVIDER_NECESSARY_PERMISSIONALLOPEN;
@@ -106,6 +110,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
 
     private final int ACCESSIBILITY_SETTINGS = 1000;
 
+    private Boolean isOneRepair = true;
+
     //    @BindView(R2.id.ivHintIcon)
 //    ImageView ivHintIcon;
 //    @BindView(R2.id.imTop)
@@ -128,6 +134,10 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
 //    ImageView ivPb;
     @BindView(R2.id.tv_pb_text)
     TextView tvPbText;
+
+    @BindView(R2.id.tv_risk_num)
+    TextView tvRiskNum;
+    Integer risksNumber = 4;
     //    @BindView(R2.id.tvClick)
 //    TextView tvClick;
 //    @BindView(R2.id.tvOneKeyFix)
@@ -218,16 +228,38 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     }
                 });
                 // int defaultColor = PermissionIntegrate.getPermission().getPermissionDefaultColor() != 0 ? PermissionIntegrate.getPermission().getPermissionDefaultColor() : getResources().getColor(R.color.permission_title);
-//                int openColor = PermissionIntegrate.getPermission().getPermissionOpenColor() != 0 ? PermissionIntegrate.getPermission().getPermissionOpenColor() : Color.parseColor("#FF3B8E");
+                // int openColor = PermissionIntegrate.getPermission().getPermissionOpenColor() != 0 ? PermissionIntegrate.getPermission().getPermissionOpenColor() : Color.parseColor("#FF3B8E");
                 // helper.setTextColor(R.id.hintText, defaultColor);
 
                 ImageView hintIcon = helper.getView(R.id.hintIcon);
                 hintIcon.setImageResource(PermissionConvertUtils.getRes(item.permission));
-
                 ImageView allowIcon = helper.getView(R.id.allowIcon);
-//                allowIcon.setImageResource(item.isAllow ? R.mipmap.icon_fix_success : R.mipmap.icon_fix_fail);
-                allowIcon.setImageResource(item.isAllow ? R.mipmap.permission_icon : R.mipmap.not_permission_icon);
+                Button openBtn = helper.getView(R.id.btn_open);
+                if (item.isAllow) {
+                    risksNumber--;
+                }
+                tvRiskNum.setText(risksNumber + "");
+                if (risksNumber == 0) {
+                    // 全部开启
 
+                }
+
+                if (isOneRepair || item.isAllow) {
+                    allowIcon.setVisibility(View.VISIBLE);
+                    openBtn.setVisibility(View.GONE);
+                    allowIcon.setImageResource(item.isAllow ? R.mipmap.permission_icon : R.mipmap.not_permission_icon);
+                } else {
+                    allowIcon.setVisibility(View.GONE);
+                    openBtn.setVisibility(View.VISIBLE);
+                    openBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // 请求指定权限
+                            Toast.makeText(WKPermissionAutoFixActivity.this, "请开启，" + item.permission.getName() + "权限！", Toast.LENGTH_LONG).show();
+                            request(item.permission);
+                        }
+                    });
+                }
             }
         });
 
@@ -260,6 +292,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 base.add(asBase);
             }
             if (base != null) {
+                risksNumber = 4;
                 mAdapter.setNewData(base);
             }
         }
@@ -337,7 +370,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                         }
                         if (autoFixAction != null) {
                             autoFixAction.configAccessbility(mService);
-                            request();
+                            request(null);
                             isFixing = true;
                         }
                     } else {
@@ -441,20 +474,20 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     public void open() {
                         PermissionProvider.save(WKPermissionAutoFixActivity.this, getPermissionProvider(permission), true);
                         setIsOpen(new PathEvent(permission, true));
-                        request();
+                        request(null);
                     }
 
                     @Override
                     public void dismiss() {
                         PermissionProvider.save(WKPermissionAutoFixActivity.this, getPermissionProvider(permission), false);
-                        request();
+                        request(null);
                     }
                 });
             } else {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        request();
+                        request(null);
                     }
                 }, 1000);
             }
@@ -463,8 +496,12 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
 
     Random rand = new Random();
 
-
-    private void request() {
+    /**
+     * 请求权限
+     *
+     * @param requestPermission 需要请求的权限
+     */
+    private void request(Permission requestPermission) {
 
         if (!CustomSharedPreferences.getBooleanValue(this, CustomSharedPreferences.isPermissionShow)) {
             CustomSharedPreferences.setValue(this, CustomSharedPreferences.isPermissionShow, true);
@@ -514,6 +551,15 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         } else {
             boolean isExecute = false;
             for (ASBase asBase : base) {
+                if (null != requestPermission) {
+                    if (!asBase.isAllow && requestPermission.getName().equals(asBase.permission.getName())) {
+                        permission = asBase.permission;
+                        isExecute = true;
+                        autoFixAction.permissionAction(asBase.permission);
+                        break;
+                    }
+                    continue;
+                }
                 if (!asBase.isAllow && asBase.executeNumber == 0) {
                     permission = asBase.permission;
                     asBase.executeNumber++;
@@ -590,6 +636,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     UsageRecordHelper.recordItemData(new UsageBuider().setUsageType(UsageRecordType.TYPE_CUSTOM.getValue()).setPage(PAGE), event.getIsAuto(), asBase);
                 }
             }
+            risksNumber = 4;
             mAdapter.notifyDataSetChanged();
         }
         if (event.getIsBack()) {
@@ -670,22 +717,61 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        boolean isOpen = false;
+        Permission requestPermission = null;
+        // 判断是否有无障碍权限
+        if (AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName())) {
+            return;
+        }
         if (requestCode == ACCESSIBILITY_SETTINGS) {
-            // 判断是否有无障碍权限
-            if (!AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName())) {
-                Toast.makeText(this, "未开启无障碍服务权限", Toast.LENGTH_LONG).show();
-                request();
-            }
+            // 显示单独权限开启按钮
+            isOneRepair = false;
+            requestPermission = Permission.SUSPENDEDTOAST;
         } else if (requestCode == Permission.SUSPENDEDTOAST.getRequestCode()) {
             // 判断是否具备悬浮窗权限
-            request();
+            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.SUSPENDEDTOAST);
+            if (isOpen) {
+                PermissionProvider.save(this, PROVIDER_SUSPENDEDTOAST, true);
+                EventBus.getDefault().post(new PathEvent(Permission.SUSPENDEDTOAST, true, 1));
+            }
+            requestPermission = Permission.SELFSTARTING;
         } else if (requestCode == Permission.SELFSTARTING.getRequestCode()) {
-            request();
+            // 判断是否具备自启动权限
+            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.SELFSTARTING);
+            if (isOpen) {
+                PermissionProvider.save(this, PROVIDER_SELFSTARTING, true);
+                EventBus.getDefault().post(new PathEvent(Permission.SELFSTARTING, true, 1));
+            }
+            requestPermission = Permission.NOTIFICATIONBAR;
         } else if (requestCode == Permission.NOTIFICATIONBAR.getRequestCode()) {
-            request();
+            // 判断是否具备通知管理权限
+            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.NOTIFICATIONBAR);
+            if (isOpen) {
+                PermissionProvider.save(this, PROVIDER_NOTIFICATIONBAR, true);
+                EventBus.getDefault().post(new PathEvent(Permission.NOTIFICATIONBAR, true, 1));
+            }
+
+            requestPermission = Permission.PACKAGEUSAGESTATS;
         } else if (requestCode == Permission.PACKAGEUSAGESTATS.getRequestCode()) {
-            request();
+            // 判断是否具备查看应用使用情况权限
+            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.PACKAGEUSAGESTATS);
+            if (isOpen) {
+                PermissionProvider.save(this, PACKAGE_USAGE_STATS, true);
+                EventBus.getDefault().post(new PathEvent(Permission.PACKAGEUSAGESTATS, true, 1));
+            }
+
         }
+        risksNumber = 4;
+        mAdapter.notifyDataSetChanged();
+        if (!isOpen && requestCode != ACCESSIBILITY_SETTINGS) {
+            return;
+        }
+        // 修改权限执行次数
+//        permission = asBase.permission;
+//        asBase.executeNumber++;
+
+        Toast.makeText(this, "请开启，" + requestPermission.getName() + "权限！", Toast.LENGTH_LONG).show();
+        request(requestPermission);
     }
 
 }

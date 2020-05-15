@@ -32,6 +32,8 @@ import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTSplashAd;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.strategy.ExternalInterface;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
@@ -452,48 +454,18 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, 0);
             }
         });
+//
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
         if (isFirst) {
-            ConfirmDialogFragment confirmDialogFragment = ConfirmDialogFragment.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putString("title", "温馨提示");
-            bundle.putString("content", "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
-                    "特此向您说明。作为互联网安全公司，我们在为用户提供隐私保护的同时，" +
-                    "对自身的安全产品提出了更高级别的标准。在使用悟空清理前，请务必仔细阅读并了解");
-            confirmDialogFragment.setArguments(bundle);
-            confirmDialogFragment.show(getFragmentManager(), "");
-            confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
-                @Override
-                public void onConfirm() {
-                    initChuanShanJia();
-                    if (NetworkUtils.isNetConnected()) {
-                        mPresenter.getAuditSwitch();
-                    } else {
-                        getAuditSwitchFail();
-                    }
-                }
-
-                @Override
-                public void onCancel() {
-                    confirmDialogFragment.dismiss();
-                    MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
-                    messageDialogFragment.show(getFragmentManager(), "");
-                    messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
-                        @Override
-                        public void onConfirm() {
-                            confirmDialogFragment.show(getFragmentManager(), "");
-                        }
-
-                        @Override
-                        public void onCancel() {
-
-                        }
-                    });
-                }
-            });
+            showConfirmDialog();
         } else {
-
-            if (PermissionUtils.checkPermission(this, permissions)) {
+            boolean isAllopen = false;
+            if (PermissionIntegrate.getPermission().getIsNecessary()) {
+                isAllopen = !ExternalInterface.getInstance(this).isOpenNecessaryPermission(this);
+            } else {
+                isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
+            }
+            if (PermissionUtils.checkPermission(this, permissions) && isAllopen) {
                 // 已获取读写文件权限
                 //  新用户二次冷启动app，先判断是否授予读取存储文件权限，若已授予，
                 //  开屏页显示权限引导页（不展示开屏广告），
@@ -501,7 +473,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                 //  点击跳过进入首页。
                 // 显示立即修复
                 findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
-
                 countDown(5);
                 // initChuanShanJia();
                 findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
@@ -511,26 +482,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
                     }
                 });
-            } else {
-                // 未获取文件读写权限
-                //  若未授予读写权限开屏显示广告，
-                //  进入首页是弹窗显示引导开启系统权限读取存储文件权限。
-                initChuanShanJia();
-//                if (NetworkUtils.isNetConnected()) {
-//                    mPresenter.getAuditSwitch();
-//                } else {
-//                    getAuditSwitchFail();
-//                }
-
             }
         }
 
-        //  initChuanShanJia();
-//                if (NetworkUtils.isNetConnected()) {
-//                    mPresenter.getAuditSwitch();
-//                } else {
-//                    getAuditSwitchFail();
-//                }
+        initChuanShanJia();
+        if (NetworkUtils.isNetConnected()) {
+            mPresenter.getAuditSwitch();
+        } else {
+            getAuditSwitchFail();
+        }
 
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
@@ -556,6 +516,47 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
+    }
+
+    private void showConfirmDialog() {
+
+        ConfirmDialogFragment confirmDialogFragment = ConfirmDialogFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "温馨提示");
+        bundle.putString("content", "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
+                "特此向您说明。作为互联网安全公司，我们在为用户提供隐私保护的同时，" +
+                "对自身的安全产品提出了更高级别的标准。在使用悟空清理前，请务必仔细阅读并了解");
+        confirmDialogFragment.setArguments(bundle);
+        confirmDialogFragment.show(getFragmentManager(), "");
+        confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                initChuanShanJia();
+                if (NetworkUtils.isNetConnected()) {
+                    mPresenter.getAuditSwitch();
+                } else {
+                    getAuditSwitchFail();
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                confirmDialogFragment.dismiss();
+                MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
+                messageDialogFragment.show(getFragmentManager(), "");
+                messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
+                    @Override
+                    public void onConfirm() {
+                        confirmDialogFragment.show(getFragmentManager(), "");
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
+            }
+        });
     }
 
 

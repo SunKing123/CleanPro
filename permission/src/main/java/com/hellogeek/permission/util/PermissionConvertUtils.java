@@ -47,7 +47,7 @@ public class PermissionConvertUtils {
                 if (PermissionIntegrate.getPermission().getNotifiCationBarRes() != 0) {
                     res = PermissionIntegrate.getPermission().getNotifiCationBarRes();
                 } else {
-                    res = R.mipmap.icon_fix_notificationbar;
+                    res = R.mipmap.icon_notification;
                 }
                 break;
             case BACKSTAGEPOPUP:
