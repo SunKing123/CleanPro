@@ -1212,8 +1212,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @param configKey
      */
     private void loadAdUp(String configKey){
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_SCAN_RESULT,
-                configKey,
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(configKey,
+                PositionId.DRAW_ONE_CODE,
                 this,
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(this)-56,
@@ -1251,8 +1251,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @param configKey
      */
     private void loadAdDown(String configKey){
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_SCAN_RESULT,
-                configKey,
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(configKey,
+                PositionId.DRAW_TWO_CODE,
                 this,
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(this)-56,

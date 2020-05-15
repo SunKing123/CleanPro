@@ -101,7 +101,7 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.AccessibilityServiceUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
 import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
@@ -190,7 +190,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
     @BindView(R.id.tv_now_clean)
-    ImageView tvNowClean;
+    BreathTextView tvNowClean;
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
     @BindView(R.id.layout_scroll)
@@ -1049,7 +1049,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
-                tvNowClean.setVisibility(View.GONE);
+                tvNowClean.setVisibility(View.INVISIBLE);
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");

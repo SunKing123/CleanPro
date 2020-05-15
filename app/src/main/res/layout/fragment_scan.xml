@@ -89,13 +89,13 @@
         android:id="@+id/tv_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_42dp"
+        android:layout_marginTop="@dimen/dimen_31dp"
         android:drawableLeft="@drawable/common_icon_back_arrow_white"
         android:drawablePadding="@dimen/dimen_10dp"
         android:padding="@dimen/dimen_12dp"
         android:text="@string/scaning"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/dimen_20sp" />
+        android:textSize="@dimen/text_title_main" />
 
     <ImageView
         android:id="@+id/bottom_shadow"
