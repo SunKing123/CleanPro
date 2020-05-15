@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
 import com.xiaoniu.cleanking.ui.newclean.model.ScanCleanModel;
@@ -13,6 +14,8 @@ import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -128,6 +131,9 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
             double memoryShow = NoClearSPHelper.getMemoryShow();
             if (memoryShow == 1) {
                 //清理完成，存储时间点
+                CleanEvent cleanEvent = new CleanEvent();
+                cleanEvent.setCleanAminOver(true);
+                EventBus.getDefault().post(cleanEvent);
                 mSPHelper.saveCleanTime(System.currentTimeMillis());
             }
         });

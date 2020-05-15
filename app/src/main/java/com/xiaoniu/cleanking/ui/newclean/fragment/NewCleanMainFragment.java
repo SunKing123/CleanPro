@@ -2,12 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.animation.Animator;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,10 +32,8 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.server.AccessibilityServiceMonitor;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.xiaoniu.asmhelp.util.AccessibilitUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -55,7 +50,6 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
-import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
@@ -78,7 +72,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.JurisdictionGuideActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
-//import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
@@ -98,9 +91,9 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.AccessibilityServiceUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
@@ -128,6 +121,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
+
+//import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 
 /**
  * 1.2.1 新版本清理主页
@@ -1179,6 +1174,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mTvCleanType.setVisibility(VISIBLE);
         mTvCleanType01.setText(msp01);
         mTvCleanType01.setVisibility(VISIBLE);
+
     }
 
     /**

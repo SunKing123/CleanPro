@@ -422,6 +422,7 @@ public class FileQueryUtils {
                     cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
                 }
                 if (mScanFileListener != null) {
+                    Log.e("info", "------1------------------->" + secondJunkInfo.getGarbageSize());
                     mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                 }
             }
@@ -444,6 +445,7 @@ public class FileQueryUtils {
                         cacheJunkInfo.addSecondJunk(listFiles2);
                         cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
                         if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                            Log.e("info", "--------2----------------->" + listFiles2.getGarbageSize());
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -459,6 +461,7 @@ public class FileQueryUtils {
                             cacheJunkInfo.addSecondJunk(secondJunkInfo);
                             cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
                             if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                                Log.e("info", "------3------------------->" + secondJunkInfo.getGarbageSize());
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -493,6 +496,7 @@ public class FileQueryUtils {
                         }
 
                         if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                            Log.e("info", "---------4---------------->" + listFiles2.getGarbageSize());
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -506,6 +510,7 @@ public class FileQueryUtils {
                             cacheJunkInfo.addSecondJunk(secondJunkInfo);
                             cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
                             if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                                Log.e("info", "-------5------------------>" + secondJunkInfo.getGarbageSize());
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }

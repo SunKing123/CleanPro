@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -155,6 +156,8 @@
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="14dp"
                     android:alpha="0"
+                    tools:alpha="1"
+                    tools:visibility="visible"
                     android:gravity="center"
                     android:text="@string/tool_home_hint"
                     android:textColor="@color/white"
@@ -168,6 +171,8 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="15sp"
+                    tools:text="手机存在大量垃圾"
+                    tools:visibility="visible"
                     android:visibility="gone" />
 
 <!--                <RelativeLayout-->
@@ -187,6 +192,7 @@
                         android:textColor="@color/colorPrimary"
                         android:text="@string/clean_junk"
                         android:textStyle="bold"
+                        tools:visibility="visible"
                         android:textSize="@dimen/text_secondary"
                         android:visibility="invisible" />
 <!--                </RelativeLayout>-->
