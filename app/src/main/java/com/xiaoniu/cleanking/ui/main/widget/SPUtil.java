@@ -247,6 +247,21 @@ public class SPUtil {
         return guideSp.getBoolean(key, defValue);
     }
 
+    public static void setStartsNumber(Context ctx, String key, int value) {
+        if (guideSp == null) {
+            guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
+        }
+        guideSp.edit().putInt(key, value).commit();
+    }
+
+    public static int getStartsNumber(Context ctx, String key, int defValue) {
+        if (guideSp == null) {
+            guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);
+        }
+        return guideSp.getInt(key, defValue);
+    }
+
+
     public static void setUploadBoolean(Context ctx, String key, boolean value) {
         if (guideSp == null) {
             guideSp = ctx.getSharedPreferences(Guide, Context.MODE_PRIVATE);

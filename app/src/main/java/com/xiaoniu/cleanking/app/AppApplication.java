@@ -39,15 +39,6 @@ public class AppApplication extends BaseApplication {
         super.onCreate();
         ContextUtils.initApplication(this);
 
-//        PermissionIntegrate.getInstance(this)
-//                .setPermissionList(Permission.SUSPENDEDTOAST,Permission.BACKSTAGEPOPUP,Permission.SELFSTARTING,Permission.LOCKDISPALY,Permission.NOTIFICATIONBAR,Permission.REPLACEACLLPAGE,Permission.SYSTEMSETTING)
-//                .setPermissionRecordCallback(new PermissionRecordCallback() {
-//                    @Override
-//                    public void usagePermissionRecord(int usageType, String currentPage, String sourcePage, String eventCode, String eventName, Map<String, String> extraMap) {
-//
-//                    }
-//                });
-//
         PermissionIntegrate.getInstance(this)
                 .setPermissionList(Permission.SUSPENDEDTOAST, Permission.SELFSTARTING,
                         Permission.NOTIFICATIONBAR, Permission.PACKAGEUSAGESTATS)

@@ -80,7 +80,7 @@ public class ExternalInterface {
                     PermissionProvider.save(context, PROVIDER_NECESSARY_PERMISSIONALLOPEN, false);
                 }
                 return isOpenAll;
-            }else {
+            } else {
                 boolean isallOpen = PermissionProvider.getBoolen(context, PROVIDER_NECESSARY_PERMISSIONALLOPEN, false);
                 return isallOpen;
             }
@@ -88,6 +88,28 @@ public class ExternalInterface {
             boolean isallOpen = PermissionProvider.getBoolen(context, PROVIDER_NECESSARY_PERMISSIONALLOPEN, false);
             return isallOpen;
         }
+    }
+
+    /**
+     * 获取缺失的权限数量
+     *
+     * @param activity
+     * @return
+     */
+    public Integer getDefectPermissionNum(Activity activity) {
+
+        Integer permissionNum = 0;
+        AutoFixAction autoFixAction = IGetManfactureExample.getManfactureExample(activity);
+        if (autoFixAction != null) {
+            List<Permission> list = autoFixAction.getPermissionList();
+            if (list != null && list.size() > 0) {
+                for (Permission permission : list) {
+                    boolean isOpen = AccessibilitUtil.isOpenPermission(context, permission);
+                    permissionNum = isOpen ? permissionNum : ++permissionNum;
+                }
+            }
+        }
+        return permissionNum;
     }
 
 

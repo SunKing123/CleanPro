@@ -2,12 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.animation.Animator;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,10 +32,8 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.server.AccessibilityServiceMonitor;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.xiaoniu.asmhelp.util.AccessibilitUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -55,7 +50,6 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
-import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
@@ -68,7 +62,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FilePermissionGuideDialogFragment;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.JurisdictionGuideDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.PermissionGuideDialogFragment;
 import com.xiaoniu.cleanking.ui.main.receiver.InstallUninstallBroadcastReceiver;
 import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -98,7 +92,6 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
-import com.xiaoniu.cleanking.utils.update.AccessibilityServiceUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.widget.BreathTextView;
@@ -1446,25 +1439,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void permissionRepair() {
         // 检测是否包含文件读写权限
         if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
-            // 無障礙服務權限
-            boolean isAccessibility = AccessibilityServiceUtils.isAccessibilityEnabled(getActivity());
+            // 权限是否全部开启
             boolean isAllopen = false;
             if (PermissionIntegrate.getPermission().getIsNecessary()) {
-                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
+                isAllopen = ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
             } else {
-                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
+                isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
             }
-            // isAllopen == true 显示权限ICON三角形
-            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
-            // 一鍵修復流程,開啓無障礙無法
+
             if (isAllopen) {
                 return;
             }
+            // isAllopen == false 显示权限ICON三角形
+
+            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
             if (isRepair) {
                 PermissionIntegrate.getPermission().startWK(getActivity());
                 return;
-            }
-            showjurisdictionDialog();
+            }   // getDefectPermissionNum
+            showPermissionDialog();
             return;
         }
         showFilePermissionGuideDialog();
@@ -1504,10 +1497,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         });
     }
 
-    private void showjurisdictionDialog() {
-        JurisdictionGuideDialogFragment jurisdictionDialogFragment = JurisdictionGuideDialogFragment.newInstance();
+    private void showPermissionDialog() {
+
+        Integer setRiskTipsNum = ExternalInterface.getInstance(getActivity()).getDefectPermissionNum(getActivity());
+        PermissionGuideDialogFragment jurisdictionDialogFragment = PermissionGuideDialogFragment
+                .newInstance(String.format(getString(R.string.risk_tips), setRiskTipsNum + ""));
         jurisdictionDialogFragment.show(getActivity().getFragmentManager(), "");
-        jurisdictionDialogFragment.setOnClickListener(new JurisdictionGuideDialogFragment.OnClickListener() {
+        jurisdictionDialogFragment.setOnClickListener(new PermissionGuideDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
                 jurisdictionDialogFragment.dismiss();

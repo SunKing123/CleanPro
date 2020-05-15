@@ -28,13 +28,19 @@ import com.xiaoniu.cleanking.R;
  * @UpdateRemark: 更新说明：
  * @Version: 1.0
  */
-public class JurisdictionGuideDialogFragment extends DialogFragment {
+public class PermissionGuideDialogFragment extends DialogFragment {
 
     private Context mContext;
     private OnClickListener mOnClickListener;
+    private TextView TitleTv;
+    private String riskTipsNum;
+    private static final String RISK_TIPS_NUM = "riskTipsNum";
 
-    public static JurisdictionGuideDialogFragment newInstance() {
-        JurisdictionGuideDialogFragment messageDialogFragment = new JurisdictionGuideDialogFragment();
+    public static PermissionGuideDialogFragment newInstance(String riskTipsNum) {
+        PermissionGuideDialogFragment messageDialogFragment = new PermissionGuideDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(RISK_TIPS_NUM, riskTipsNum);
+        messageDialogFragment.setArguments(bundle);
         return messageDialogFragment;
     }
 
@@ -76,6 +82,11 @@ public class JurisdictionGuideDialogFragment extends DialogFragment {
 
         Button confirmBtn = view.findViewById(R.id.btn_confirm);
         confirmBtn.setOnClickListener(onClickListener);
+        TitleTv = view.findViewById(R.id.txt_title);
+        this.riskTipsNum = getArguments().getString(RISK_TIPS_NUM);
+        if (null != this.riskTipsNum) {
+            TitleTv.setText(riskTipsNum);
+        }
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {

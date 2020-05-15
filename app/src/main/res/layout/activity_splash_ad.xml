@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/tv_skip"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dimen_60dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
@@ -37,6 +37,7 @@
             android:layout_marginRight="@dimen/dimen_10dp"
             android:background="@drawable/skip_bg"
             android:clickable="false"
+            android:gravity="center"
             android:padding="@dimen/dimen_5dp"
             android:text="跳过 5 "
             android:textColor="@color/white"

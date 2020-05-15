@@ -172,9 +172,10 @@ public class MainModel extends BaseModel {
 
     /**
      * 上报Device消息
+     *
      * @param commonSubscriber
      */
-    public void pushDeviceInfo(DeviceInfo deviceInfo,Common4Subscriber<BaseEntity> commonSubscriber) {
+    public void pushDeviceInfo(DeviceInfo deviceInfo, Common4Subscriber<BaseEntity> commonSubscriber) {
         Gson gson = new Gson();
         String json = gson.toJson(deviceInfo);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);

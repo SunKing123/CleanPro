@@ -1,20 +1,13 @@
 package com.xiaoniu.cleanking.ui.main.receiver;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 
-
-import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.CacheUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -37,7 +30,6 @@ public class InstallUninstallBroadcastReceiver extends BroadcastReceiver {
     private final String TAG = InstallUninstallBroadcastReceiver.class.getSimpleName();
 
     private static AlertDialog mDialog;
-
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -84,85 +76,6 @@ public class InstallUninstallBroadcastReceiver extends BroadcastReceiver {
             mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         }
         mDialog.show();
-    }
-
-    /**
-     * @param path 路径
-     * @return void
-     * @method clearUninstallResidue
-     * @description 清除卸載殘留
-     * @date: 2020/5/11 9:48
-     * @author: LiDing
-     */
-    public void clearUninstallResidue(String path) {
-        delFileByPath(path);
-    }
-
-
-    private boolean delFileByPath(String filePath) {
-        // showDialog("清理中");
-        try {
-            File dir = new File(filePath);
-            if (dir == null || !dir.exists() || !dir.isDirectory()) {
-//                dismissDialog();
-                ToastUtils.showShort("缓存文件空");
-                return false;
-            }
-
-            for (File file : dir.listFiles()) {
-                if (file.isFile()) {
-                    //自定义
-                    /**
-                     if (Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date())) - Integer.parseInt(file.getName().split("-")[2].split("\\.")[0].substring(0, 8)) > 30) {
-                     Log.e(TAG, "deleteFolderFile:30天之前的删除 ");
-                     }
-                     Log.e(TAG, "deleteFile: " + file.getName().split("-")[2].split("\\.")[0].substring(0, 8));
-                     */
-                    //具体操作
-                    file.delete(); // 删除所有文件
-                } else if (file.isDirectory()) {
-                    delFileByPath(file.getPath()); // 递规的方式删除文件夹
-                }
-            }
-            Log.e(TAG, "deleteFolder: " + dir.getName());
-            dir.delete(); // 删除目录本身
-//            initView();
-//            dismissDialog();
-            ToastUtils.showShort("清理完成");
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-//            dismissDialog();
-            ToastUtils.showShort("清理失败");
-            return false;
-        }
-    }
-
-
-    /**
-     * 获取指定目录大小
-     *
-     * @return
-     */
-    public double getDirSize(String filePath) {
-        File file = new File(filePath);
-        // 判断文件是否存在
-        if (file.exists()) {
-            // 如果是目录则递归计算其内容的总大小
-            if (file.isDirectory()) {
-                File[] children = file.listFiles();
-                double size = 0;
-                for (File f : children)
-                    size += getDirSize(f.getAbsolutePath());
-                return size;
-            } else { //如果是文件则直接返回其大小,以“兆”为单位
-                double size = (double) file.length() / 1024 / 1024;
-                return size;
-            }
-        } else {
-            System.out.println("文件或者文件夹不存在，请检查路径是否正确！");
-            return 0.0;
-        }
     }
 
 }

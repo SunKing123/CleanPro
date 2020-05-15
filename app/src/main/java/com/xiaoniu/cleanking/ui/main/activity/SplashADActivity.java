@@ -74,7 +74,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private LinearLayout skipLayout;
     private boolean needStartDemoList = true;
     private final int DEFAULT_TIME = 5000;
-
+    private final int SECONDARY_STARTUP = 2;
+    private ConfirmDialogFragment confirmDialogFragment;
 
     /**
      * 记录拉取广告的时间
@@ -117,7 +118,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
         finish();
     }
-
 
     /**
      * 埋点事件
@@ -237,14 +237,17 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         skipTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, 0);
+                jumpActivity();
             }
         });
-//
+
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
         if (isFirst) {
             showConfirmDialog();
-        } else {
+        }
+        int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
+
+        if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
             if (PermissionIntegrate.getPermission().getIsNecessary()) {
                 isAllopen = !ExternalInterface.getInstance(this).isOpenNecessaryPermission(this);
@@ -259,8 +262,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 //  点击跳过进入首页。
                 // 显示立即修复
                 findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
-                countDown(5);
-                // initChuanShanJia();
+                startCountDown(5);
                 findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -269,29 +271,29 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     }
                 });
             }
+        } else {
+            if (NetworkUtils.isNetConnected()) {
+                mPresenter.getAuditSwitch();
+            } else {
+                getAuditSwitchFail();
+            }
         }
 
         // initChuanShanJia();
-        if (NetworkUtils.isNetConnected()) {
-            mPresenter.getAuditSwitch();
-        } else {
-            getAuditSwitchFail();
-        }
-
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         skipLayout = findViewById(R.id.skip_layout);
+
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
         needStartDemoList = getIntent().getBooleanExtra("need_start_demo_list", true);
         if (!needLogo) {
             findViewById(R.id.app_logo).setVisibility(View.GONE);
         }
-
         initNiuData();
         initFileRelation();
-        skipView.setOnClickListener(v -> {
+        skipView.setOnClickListener(v ->
+        {
             skipView.clearAnimation();
-
             JSONObject extension = new JSONObject();
             try {
                 extension.put("ad_id", mSecondAdvertId);
@@ -304,8 +306,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-
-        mPresenter.getAuditSwitch();
+        // mPresenter.getAuditSwitch();
+        if (startsNumber < 2 * SECONDARY_STARTUP) {
+            SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", ++startsNumber);
+        }
     }
 
     /**
@@ -323,8 +327,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
-            PreferenceUtil.saveFirstOpenApp();
-            jumpActivity();
+            // PreferenceUtil.saveFirstOpenApp();
+            // jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
@@ -334,11 +338,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
     }
 
+
     private void showConfirmDialog() {
 
-        ConfirmDialogFragment confirmDialogFragment = ConfirmDialogFragment.newInstance();
+        confirmDialogFragment = ConfirmDialogFragment.newInstance();
         Bundle bundle = new Bundle();
-        bundle.putString("title", "温馨提示");
+        bundle.putString("title", getString(R.string.reminder));
         bundle.putString("content", "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
                 "特此向您说明。作为互联网安全公司，我们在为用户提供隐私保护的同时，" +
                 "对自身的安全产品提出了更高级别的标准。在使用悟空清理前，请务必仔细阅读并了解");
@@ -347,54 +352,64 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
-                if (NetworkUtils.isNetConnected()) {
-//                        mPresenter.getAuditSwitch();
-                }
+                PreferenceUtil.saveFirstOpenApp();
+                jumpActivity();
             }
 
             @Override
             public void onCancel() {
                 confirmDialogFragment.dismiss();
-                MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
-                messageDialogFragment.show(getFragmentManager(), "");
-                messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
-                    @Override
-                    public void onConfirm() {
-                        confirmDialogFragment.show(getFragmentManager(), "");
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
+                showMessageDialog();
             }
         });
     }
 
+    private void showMessageDialog() {
+        MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
+        messageDialogFragment.show(getFragmentManager(), "");
+        messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                confirmDialogFragment.show(getFragmentManager(), "");
+            }
 
-    public void countDown(int start) {
-        final Handler mHandler = new Handler();
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    /**
+     * 倒计时
+     *
+     * @param start
+     */
+    public void startCountDown(int start) {
         mStart = start;
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                //do something
                 //每隔1s循环执行run方法
                 mStart--;
-
                 if (0 == mStart) {
-                    // 可以跳过
-                    skipTv.setText("跳过");
+                    // 跳过
+                    skipTv.setText(getString(R.string.skip));
                     skipTv.setClickable(true);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            jumpActivity();
+                        }
+                    }, 2000); // 延时1秒
                     return;
                 }
                 skipTv.setText(String.format(SKIP_TEXT, mStart));
-                mHandler.postDelayed(this, 1000);
+                handler.postDelayed(this, 1000);
             }
         };
         //主线程中调用：
-        mHandler.postDelayed(r, 1000);//延时100毫秒
+        handler.postDelayed(r, 1000); // 延时1秒
     }
 
 
