@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.newclean.bean.JunkResultWrapper;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.OnItemClickListener;
 
@@ -167,6 +168,14 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
                 }
             });
+            tv_junk_sub_title.setVisibility(View.VISIBLE);
+            if (wrapper.scanningResultType == ScanningResultType.APK_JUNK) {
+                tv_junk_sub_title.setText(firstJunkInfo.getDescp() + " v" + firstJunkInfo.getVersionName());
+            } else if (wrapper.scanningResultType == ScanningResultType.CACHE_JUNK) {
+                tv_junk_sub_title.setText("建议清理");
+            } else {
+                tv_junk_sub_title.setVisibility(View.GONE);
+            }
         }
     }
 }

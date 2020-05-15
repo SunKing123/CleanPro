@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.hellogeek.permission.Integrate.PermissionIntegrate
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.mvp.BaseActivity
 import com.xiaoniu.cleanking.ui.newclean.adapter.DeepCleanPermissionAdapter
@@ -36,7 +37,7 @@ class DeepCleanPermissionActivity : BaseActivity() {
             onBackPressed()
         }
         tv_open_deep_clean.setOnClickListener {
-            //todo 开启权限操作逻辑
+            PermissionIntegrate.getPermission().startWK(this)
         }
 
         adapter = DeepCleanPermissionAdapter()

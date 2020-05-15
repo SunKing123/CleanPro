@@ -54,15 +54,18 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 
         //开屏限制3s超时，超时后直接结束广告
         adModel.getCSJSplashAd(adRequestParamentersBean, adRequestBean)
-                .subscribeOn(Schedulers.io())
+//                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(3, TimeUnit.SECONDS)
+                .timeout(10, TimeUnit.SECONDS)
                 .subscribe(new Consumer<TTSplashAd>() {
                     @Override
                     public void accept(TTSplashAd ttSplashAd) throws Exception {
                         //获取SplashView
                         View view = ttSplashAd.getSplashView();
                         if (view != null) {
+                            Log.d(TAG, "穿山甲 开屏----accept");
+
                             addAdView(adRequestParamentersBean, view, adShowCallBack);
                             ttSplashAd.setNotAllowSdkCountdown();
                             adShowCallBack.onAdTickCallback(3000);
@@ -79,8 +82,6 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                                 @Override
                                 public void onAdShow(View view, int type) {
                                     Log.d(TAG, "穿山甲 开屏----onAdShow");
-                                    if (null != adShowCallBack)
-                                        adShowCallBack.onAdShowCallBack(view);
                                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", adRequestBean.getAdvertId(), "穿山甲", "clod_splash_page", "clod_splash_page", "");
                                 }
 
@@ -116,6 +117,8 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "穿山甲 开屏----throwable"+throwable.getMessage());
+
                         if (throwable instanceof TimeoutException && adShowCallBack != null) {
                             adShowCallBack.onFailure("开屏超时后不在请求，直接结束");
                         } else {

@@ -183,7 +183,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
                 }
             }
         } else {
-            adinfoBean = adMap.get(adRequestParamentersBean.configKey + adRequestParamentersBean.advertPosition);
+            adinfoBean = adMap.get(adRequestParamentersBean.configKey+adRequestParamentersBean.advertPosition);
         }
         return adinfoBean;
     }
@@ -202,15 +202,17 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
-                if (null != switchInfoList) {
+                if (null != switchInfoList && null!=switchInfoList.getData()) {
                     try {
                         AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
                         SwitchInfoList.DataBean adinfo=getAdInfo(AppHolder.getInstance().getSwitchInfoMap(),adRequestParamentersBean);
-                        if(adinfo==null){
+                        if(adinfo==null || adShowCallBack==null){
                             Log.d("ad_status", "广告没有获取到广告数据！");
+                            adShowCallBack.onFailure("广告没有获取到广告数据");
                         }else {
                             dispatcherUnion(requestData(adinfo),adRequestParamentersBean);
                         }
+                        AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

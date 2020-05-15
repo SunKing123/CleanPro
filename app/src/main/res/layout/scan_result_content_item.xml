@@ -31,7 +31,7 @@
         android:layout_toLeftOf="@+id/tv_checked_total"
         android:layout_toRightOf="@+id/iv_junk_logo"
         android:singleLine="true"
-        android:text="拼多多的垃圾"
+        tools:text="拼多多的垃圾"
         android:textColor="@color/color_404040"
         android:textSize="@dimen/dimen_13sp" />
 
@@ -45,7 +45,7 @@
         android:layout_toLeftOf="@+id/tv_checked_total"
         android:layout_toRightOf="@+id/iv_junk_logo"
         android:singleLine="true"
-        android:text="建议清理"
+        tools:text="建议清理"
         android:textColor="@color/color_66404040"
         android:textSize="@dimen/dimen_11sp" />
 
@@ -58,7 +58,7 @@
         android:layout_marginRight="@dimen/dimen_8dp"
         android:layout_toLeftOf="@+id/iv_check_state"
         android:singleLine="true"
-        android:text="已选123MB"
+        tools:text="已选123MB"
         android:textColor="@color/color_404040"
         android:textSize="@dimen/dimen_12sp" />
 
@@ -69,5 +69,5 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/dimen_16dp"
-        android:src="@drawable/ic_scan_result_checked" />
+        android:src="@drawable/ic_scan_result_nomal" />
 </RelativeLayout>

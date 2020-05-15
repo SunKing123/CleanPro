@@ -18,7 +18,7 @@
         tools:replace="android:label">
 
         <receiver android:name="com.xiaoniu.cleanking.ui.main.receiver.InstallUninstallBroadcastReceiver">
-            <intent-filter android:priority="1000">>
+            <intent-filter android:priority="1000">
                 <!-- 应用安装了 -->
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <!-- 应用卸载了 -->

@@ -125,6 +125,7 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
         if (getView() != null) {
             if (setCheckedJunkResult() == 0) {
                 getView().setUnCheckedItemTip();
+                return;
             }
             getView().setJumpToCleanPage(junkTitleMap, junkContentMap);
         }

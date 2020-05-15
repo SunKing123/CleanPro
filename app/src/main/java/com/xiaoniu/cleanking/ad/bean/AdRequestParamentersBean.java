@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ad.bean;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.ad.enums.AdType;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
@@ -30,7 +31,7 @@ public class AdRequestParamentersBean {
     //广告的view壳
     public ViewGroup adContainer;
     //开屏 跳过view
-    public RoundProgressBar skipContainer;
+    public LinearLayout skipContainer;
     //期望个性化模板广告view的size,单位dp
     public int viewWidth;
     //期待高度
@@ -68,7 +69,7 @@ public class AdRequestParamentersBean {
      * @param adType
      * @param fetchDelay
      */
-    public AdRequestParamentersBean( Context context,ViewGroup adContainer, RoundProgressBar skipContainer,String configKey, String advertPosition, AdType adType, int fetchDelay) {
+    public AdRequestParamentersBean( Context context,ViewGroup adContainer, LinearLayout skipContainer,String configKey, String advertPosition, AdType adType, int fetchDelay) {
         this.configKey = configKey;
         this.advertPosition = advertPosition;
         this.context = context;

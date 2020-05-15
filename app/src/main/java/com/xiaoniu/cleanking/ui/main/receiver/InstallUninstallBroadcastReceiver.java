@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.CacheUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
@@ -51,23 +52,29 @@ public class InstallUninstallBroadcastReceiver extends BroadcastReceiver {
             Log.d(TAG, packages + "应用程序安装了，需要进行该应用安全扫描吗");
         } else if (Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
             Log.d(TAG, packages + "应用程序卸载了，需要清理垃圾有缓存吗");
-            showClearAlert(context, packages);
+            try {
+                showClearAlert(context, packages);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
         } else if (Intent.ACTION_PACKAGE_REPLACED.equals(action)) {
             Log.d(TAG, packages + "应用程序覆盖了");
         }
     }
 
-    public void showClearAlert(Context context, String packages) {
-        String path = context.getCacheDir() + packages;
-
+    public void showClearAlert(Context context, String packages) throws Exception {
+        long cacheSize = CacheUtil.getTotalCacheSize(context, packages);
+        if (cacheSize <= 0) {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setAppName("刚卸载的应用")
-                .setGarbageNum(getDirSize(path) + "M")
+                .setGarbageNum(CacheUtil.getFormatSize(cacheSize))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mDialog.dismiss();
-                        clearUninstallResidue(path);
+                        CacheUtil.clearAllCache(context, packages);
                     }
                 });
         mDialog = builder.create();

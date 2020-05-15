@@ -184,44 +184,35 @@ public class AdModel extends BaseModel implements AdContract.Model {
                             @Override
                             public void onADDismissed() {
                                 Log.d(TAG, "优量会 开屏----onADDismissed");
-                                emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index,0,7));
-                                emitter.onComplete();
                             }
 
                             @Override
                             public void onNoAD(AdError adError) {
                                 Log.d(TAG, "优量会 开屏----onNoAD  获取广告失败  message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode());
                                 emitter.onError(new Throwable("优量会 开屏----onNoAD  获取广告失败  message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode()));
-                                emitter.onComplete();
                             }
 
                             @Override
                             public void onADPresent() {
                                 Log.d(TAG, "优量会 开屏----onADPresent");
+                                emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index,0,2));
+                                emitter.onComplete();
                             }
 
                             @Override
                             public void onADClicked() {
                                 Log.d(TAG, "优量会 开屏----onADClicked");
-                                emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index,0,4));
-                                emitter.onComplete();
                                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", adRequestBean.getAdvertId(), "优量汇", "clod_splash_page", "clod_splash_page", "");
                             }
 
                             @Override
                             public void onADTick(long millisUntilFinished) {
                                 Log.d(TAG, "优量会 开屏----onADTick");
-                                if (Math.round(millisUntilFinished / 1000f) > 4) {
-                                    emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index,millisUntilFinished,6));
-                                    emitter.onComplete();
-                                }
                             }
 
                             @Override
                             public void onADExposure() {
                                 Log.d(TAG, "优量会 开屏----onADExposure");
-                                emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index,0,2));
-                                emitter.onComplete();
                                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", adRequestBean.getAdvertId(), "优量汇", "clod_splash_page", "clod_splash_page", "");
                             }
 
@@ -250,7 +241,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
         return Observable.create(new ObservableOnSubscribe<List<TTNativeExpressAd>>() {
             @Override
             public void subscribe(ObservableEmitter<List<TTNativeExpressAd>> emitter) throws Exception {
-                Log.d(TAG, "穿山甲开屏开始 id:" + adRequestBean.getAdvertId());
+                Log.d(TAG, "穿山甲模板开始 id:" + adRequestBean.getAdvertId());
                 TTAdNative mTTAdNative = TTAdManagerHolder.get().createAdNative(adRequestParamentersBean.context);
                 //设置广告参数
                 AdSlot adSlot = new AdSlot.Builder()
@@ -263,14 +254,14 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 mTTAdNative.loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
                     @Override
                     public void onError(int i, String s) {
-                        Log.d(TAG, "穿山甲开屏广告失败 message:" + s + " code:" + i);
+                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i);
                         emitter.onError(new Throwable("code "+i+" message:"+s));
                         emitter.onComplete();
                     }
 
                     @Override
                     public void onNativeExpressAdLoad(List<TTNativeExpressAd> list) {
-                        Log.d(TAG, "穿山甲开屏广告成功！");
+                        Log.d(TAG, "穿山甲模板广告成功！");
                         emitter.onNext(list);
                         emitter.onComplete();
                     }
@@ -302,13 +293,11 @@ public class AdModel extends BaseModel implements AdContract.Model {
                     public void onError(int i, String s) {
                         Log.d(TAG, "穿山甲开屏广告失败 message:" + s + " code:" + i);
                         emitter.onError(new Throwable(s));
-                        emitter.onComplete();
                     }
 
                     @Override
                     public void onTimeout() {
                         emitter.onError(new TimeoutException("穿山甲广告商请求超时"));
-                        emitter.onComplete();
                     }
 
                     @Override
