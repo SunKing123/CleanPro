@@ -65,7 +65,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_16dp"
                     android:layout_marginBottom="@dimen/dimen_24dp"
+                    android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/dimen_16sp"
                     tools:text="扫描: com.huawei.android.airsharing" />

@@ -17,9 +17,11 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanningContact;
 import com.xiaoniu.cleanking.ui.newclean.model.ScanningModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -114,16 +116,14 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
             e.onNext(new JunkWrapper(ScanningResultType.UNINSTALL_JUNK, leaveDataInfo));
 
-            boolean isScanFile = apkJunkInfos.size() > 0;
-            //扫描私有路径下缓存文件
-            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
-            //根据私有路径扫描公用路径
-            ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
-            e.onNext(new JunkWrapper(ScanningResultType.CACHE_JUNK, publicDataInfo));
-
-            //其他垃圾
-            JunkGroup otherGroup = mFileQueryUtils.getOtherCache();
-            e.onNext(otherGroup);
+            //缓存垃圾
+            HashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkResultMap = mFileQueryUtils.getFileJunkResult();
+            if (!CollectionUtils.isEmpty(junkResultMap)) {
+                ArrayList<FirstJunkInfo> adJunkInfoList = junkResultMap.get(ScanningResultType.AD_JUNK);
+                ArrayList<FirstJunkInfo> cacheJunkInfoList = junkResultMap.get(ScanningResultType.CACHE_JUNK);
+                e.onNext(new JunkWrapper(ScanningResultType.CACHE_JUNK, cacheJunkInfoList));
+                e.onNext(new JunkWrapper(ScanningResultType.AD_JUNK, adJunkInfoList));
+            }
 
             //扫描完成表示
             e.onNext("FINISH");
@@ -165,14 +165,36 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
      * 回传广告垃圾
      */
     private void setAdJunkResult(JunkWrapper wrapper) {
-
+        List<FirstJunkInfo> firstJunkList = wrapper.junkInfoList;
+        JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.AD_JUNK);
+        if (junkGroup != null) {
+            for (FirstJunkInfo info : firstJunkList) {
+                if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
+                    junkGroup.mChildren.add(info);
+                    junkGroup.mSize += info.getTotalSize();
+                }
+            }
+            junkGroup.isScanningOver = true;
+        }
+        updateScanningModelState();
     }
 
     /**
      * 回传缓存垃圾
      */
     private void setCacheJunkResult(JunkWrapper wrapper) {
-
+        List<FirstJunkInfo> firstJunkList = wrapper.junkInfoList;
+        JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.CACHE_JUNK);
+        if (junkGroup != null) {
+            for (FirstJunkInfo info : firstJunkList) {
+                if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
+                    junkGroup.mChildren.add(info);
+                    junkGroup.mSize += info.getTotalSize();
+                }
+            }
+            junkGroup.isScanningOver = true;
+        }
+        updateScanningModelState();
     }
 
     /**

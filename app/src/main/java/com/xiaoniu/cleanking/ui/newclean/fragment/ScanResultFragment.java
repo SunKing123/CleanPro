@@ -10,6 +10,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
 import com.xiaoniu.cleanking.ad.enums.AdType;
@@ -83,6 +84,12 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
         rv_content_list.setLayoutManager(new LinearLayoutManager(requireActivity()));
         rv_content_list.setAdapter(mScanResultAdapter = new ScanResultAdapter(this));
+
+        if (ExternalInterface.getInstance(requireActivity()).isOpenAllPermission(requireActivity())) {
+            tv_deep_clean.setVisibility(View.GONE);
+        } else {
+            tv_deep_clean.setVisibility(View.VISIBLE);
+        }
 
         tv_deep_clean.setOnClickListener(v -> {
             //判断如果没有授权的话，则进入授权界面

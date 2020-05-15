@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -84,9 +83,6 @@ public class FileUtils {
 
     /**
      * 遍历文件夹
-     *
-     * @param file
-     * @return
      */
     public static SecondJunkInfo cacheListFiles(final File file) {
         final SecondJunkInfo secondlevelGarbageInfo = new SecondJunkInfo();
@@ -94,7 +90,9 @@ public class FileUtils {
         return secondlevelGarbageInfo;
     }
 
-    //递归遍历file下的所有文件
+    /**
+     * 递归遍历file下的所有文件
+     */
     public static void cacheInnerListFiles(final SecondJunkInfo secondJunkInfo, File file) {
         final File[] listFiles = file.listFiles();
         if (listFiles == null) {
@@ -122,7 +120,7 @@ public class FileUtils {
     }
 
     //判断是否超过n天
-    public static boolean checkFile(File file, int count) {
+    private static boolean checkFile(File file, int count) {
         if (!file.exists()) {
             return false;
         }
@@ -139,7 +137,7 @@ public class FileUtils {
 
     //读取json文件
     public static String readJSONFromAsset(Context context, String fileName) {
-        String json = null;
+        String json;
         try {
             InputStream is = context.getAssets().open(fileName);
             int size = is.available();
@@ -158,11 +156,8 @@ public class FileUtils {
     /**
      * 筛选其他垃圾
      * 根目录下超过30天的file
-     *
-     * @param file
-     * @return
      */
-    public static Map<String, String> otherAllkFiles(final File file) {
+    static Map<String, String> otherAllkFiles(final File file) {
         HashMap<String, String> hashMap = new HashMap<String, String>();
         File[] listFiles = file.listFiles();
         if (listFiles != null && listFiles.length > 0) {
@@ -175,5 +170,64 @@ public class FileUtils {
         return hashMap;
     }
 
+    //==============================New Toolkit for File Match======================================================
 
+    /**
+     * 遍历文件夹
+     */
+    public static SecondJunkInfo listFiles(final File file) {
+        final SecondJunkInfo secondLevelGarbageInfo = new SecondJunkInfo();
+        listInnerListFiles(secondLevelGarbageInfo, file);
+        return secondLevelGarbageInfo;
+    }
+
+    /**
+     * 递归遍历file下的所有文件
+     */
+    public static void listInnerListFiles(final SecondJunkInfo secondJunkInfo, File file) {
+        final File[] listFiles = file.listFiles();
+        if (listFiles == null) {
+            return;
+        }
+        try {
+            if (listFiles.length == 0) {
+                file.delete();
+                return;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        for (int length = listFiles.length, i = 0; i < length; ++i) {
+            file = listFiles[i];
+            if (file.isDirectory()) {
+                if (file.getName().contains("image") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else if (file.getName().contains("video") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else if (file.getName().contains("audio") && checkFileTimeout(file, 3)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else if (file.getName().contains("download") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                }
+            } else {   //单个文件
+                secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
+                secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
+            }
+        }
+    }
+
+    //判断是否超过n天
+    private static boolean checkFileTimeout(File file, int count) {
+        if (!file.exists()) {
+            return false;
+        }
+        try {
+            long time = file.lastModified();
+            return DateUtils.isOverThreeDay(time, count);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
 }
