@@ -101,7 +101,7 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.AccessibilityServiceUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
 import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
@@ -190,7 +190,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.view_lottie_home)
     LottieAnimationView mLottieHomeView;
     @BindView(R.id.tv_now_clean)
-    ImageView tvNowClean;
+    BreathTextView tvNowClean;
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
     @BindView(R.id.layout_scroll)
@@ -376,77 +376,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
-        // 检测是否包含文件读写权限
-        if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
-            // 無障礙服務權限
-            boolean isAccessibility = AccessibilityServiceUtils.isAccessibilityEnabled(getActivity());
-            // 自啓動權限
-            //有权查看应用使用情况
-            //            // android.permission.PACKAGE_USAGE_STATS
-            //            // 通知读取权
-            //            // 悬浮窗
-            //            // android.permission.SYSTEM_ALERT_WINDOW
-            boolean isAllopen = false;
-            if (PermissionIntegrate.getPermission().getIsNecessary()) {
-                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
-            } else {
-                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
-            }
-
-            // isAllopen == true 显示权限ICON三角形
-            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
-            // 一鍵修復流程,開啓無障礙無法
-            if (isRepair && isAllopen) {
-                PermissionIntegrate.getPermission().startWK(getActivity());
-                return;
-            }
-            JurisdictionGuideDialogFragment jurisdictionDialogFragment = JurisdictionGuideDialogFragment.newInstance();
-            jurisdictionDialogFragment.show(getActivity().getFragmentManager(), "");
-            jurisdictionDialogFragment.setOnClickListener(new JurisdictionGuideDialogFragment.OnClickListener() {
-                @Override
-                public void onConfirm() {
-                    jurisdictionDialogFragment.dismiss();
-                    // 跳转一件修复
-                    PermissionIntegrate.getPermission().startWK(getActivity());
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-            return;
-        }
-        FilePermissionGuideDialogFragment filePermissionGuideDialogFragment = FilePermissionGuideDialogFragment.newInstance();
-        filePermissionGuideDialogFragment.show(getActivity().getFragmentManager(), "");
-        filePermissionGuideDialogFragment.setOnClickListener(new FilePermissionGuideDialogFragment.OnClickListener() {
-            @Override
-            public void onConfirm() {
-                filePermissionGuideDialogFragment.dismiss();
-                // 请求存储权限
-                new RxPermissions(getActivity()).request(basicPermissions).subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if (aBoolean) {
-                            // 权限获取成功
-                        } else {
-//                            if (NewScanPresenter.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                                //永久拒绝权限
-//                                showPermissionDialog(mView.getContext());
-//                            } else {
-//                                //拒绝权限
-//                                checkPermission();
-//                            }
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        permissionRepair();
     }
 
     /*< XD added for feed 20200215 begin */
@@ -1119,7 +1049,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
-                tvNowClean.setVisibility(View.GONE);
+                tvNowClean.setVisibility(View.INVISIBLE);
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -1511,6 +1441,85 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         });
         valueAnimator.setDuration(duration);
         valueAnimator.start();
+    }
+
+    private void permissionRepair() {
+        // 检测是否包含文件读写权限
+        if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+            // 無障礙服務權限
+            boolean isAccessibility = AccessibilityServiceUtils.isAccessibilityEnabled(getActivity());
+            boolean isAllopen = false;
+            if (PermissionIntegrate.getPermission().getIsNecessary()) {
+                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
+            } else {
+                isAllopen = !ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
+            }
+            // isAllopen == true 显示权限ICON三角形
+            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
+            // 一鍵修復流程,開啓無障礙無法
+            if (isAllopen) {
+                return;
+            }
+            if (isRepair) {
+                PermissionIntegrate.getPermission().startWK(getActivity());
+                return;
+            }
+            showjurisdictionDialog();
+            return;
+        }
+        showFilePermissionGuideDialog();
+    }
+
+
+    private void showFilePermissionGuideDialog() {
+        FilePermissionGuideDialogFragment filePermissionGuideDialogFragment = FilePermissionGuideDialogFragment.newInstance();
+        filePermissionGuideDialogFragment.show(getActivity().getFragmentManager(), "");
+        filePermissionGuideDialogFragment.setOnClickListener(new FilePermissionGuideDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                filePermissionGuideDialogFragment.dismiss();
+                // 请求存储权限
+                new RxPermissions(getActivity()).request(basicPermissions).subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            // 权限获取成功
+                        } else {
+//                            if (NewScanPresenter.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                                //永久拒绝权限
+//                                showPermissionDialog(mView.getContext());
+//                            } else {
+//                                //拒绝权限
+//                                checkPermission();
+//                            }
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    private void showjurisdictionDialog() {
+        JurisdictionGuideDialogFragment jurisdictionDialogFragment = JurisdictionGuideDialogFragment.newInstance();
+        jurisdictionDialogFragment.show(getActivity().getFragmentManager(), "");
+        jurisdictionDialogFragment.setOnClickListener(new JurisdictionGuideDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                jurisdictionDialogFragment.dismiss();
+                // 跳转一件修复
+                PermissionIntegrate.getPermission().startWK(getActivity());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
     /* XD added for feed End >*/
 }

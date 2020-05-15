@@ -147,7 +147,7 @@
                 android:paddingBottom="@dimen/dimen_5dp"
                 android:text="@string/clean_junk"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/dimen_20sp" />
+                android:textSize="@dimen/text_title_main" />
 
             <TextView
                 android:id="@+id/tv_deep_clean"

@@ -113,10 +113,10 @@ public class NowCleanActivity extends BaseActivity {
         }
 
         isScan = true;
-        setLeftTitle("扫描中");
+        setLeftTitle(getString(R.string.scaning)); // xx
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         ScanFragment mScanFragment = ScanFragment.newInstance();
-        getToolBar().setVisibility(View.GONE);//不显示公共toobar
+        getToolBar().setVisibility(View.GONE); //不显示公共toobar
         replaceFragment(R.id.fl_content, mScanFragment, false);
     }
 
@@ -125,7 +125,7 @@ public class NowCleanActivity extends BaseActivity {
      */
     public void scanFinish() {
         isScan = false;
-        setLeftTitle("建议清理");
+        setLeftTitle("建议清理");  // xx
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
         ScanResultFragment scanResultFragment = ScanResultFragment.createFragment();
         replaceFragment(R.id.fl_content, scanResultFragment, false);

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_52dp"
+    android:layout_height="84dp"
     android:orientation="horizontal">
 
     <ImageView
@@ -15,15 +15,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/dimen_5dp"
-        android:paddingBottom="@dimen/dimen_5dp">
+        android:layout_height="@dimen/dimen_36dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/hintText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dimen_12dp"
             android:textColor="#333333"
@@ -50,5 +50,16 @@
         android:layout_height="@dimen/dimen_24dp"
         android:layout_gravity="center_vertical"
         android:src="@mipmap/icon_fix_fail" />
+
+    <Button
+        android:id="@+id/btn_open"
+        android:layout_width="@dimen/dimen_52dp"
+        android:layout_height="@dimen/dimen_27dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/btn_open_bg"
+        android:text="开启"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_14sp"
+        android:visibility="gone" />
 
 </LinearLayout>

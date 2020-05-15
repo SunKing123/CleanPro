@@ -53,7 +53,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="@dimen/dimen_7dp"
-            android:background="#ff0000" />
+            android:background="@drawable/uninstall_icon" />
 
         <TextView
             android:id="@+id/tv_app_name"
