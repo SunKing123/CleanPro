@@ -176,6 +176,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     public void setJunkTotalResultSize(String totalSize, String unit) {
         tv_junk_total.setText(totalSize);
         tv_junk_unit.setText(unit);
+        tv_clean_junk.setText(getString(R.string.clean_btn, totalSize + unit));
     }
 
     @Override

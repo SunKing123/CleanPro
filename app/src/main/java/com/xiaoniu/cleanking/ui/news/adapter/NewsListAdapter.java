@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.qq.e.ads.nativ.NativeExpressADView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
 import com.xiaoniu.cleanking.ad.enums.AdType;
@@ -51,7 +50,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     public void setData(ArrayList<NewsItemInfo> datas) {
         if (datas != null && datas.size() > 0) {
             mDatas.clear();
-            adCache.clear();
+//            adCache.clear();
             mDatas.addAll(setAdList(datas));
             notifyDataSetChanged();
         }
@@ -102,29 +101,21 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
             @Override
             public void onAdListShowCallBack(int index, View view) {
-                //ylh
-                if (view instanceof NativeExpressADView) {
-                    adCache.put(index, (NativeExpressADView) view);
-                    notifyItemChanged(index + 1);
-                }
-                //csj
-                else {
-                    adCache.put(index, view);
-                    notifyItemChanged(index + 1);
-                }
+                adCache.put(index, view);
+                notifyItemChanged(index + 1);
             }
 
             @Override
             public void onCloseCallback(int index) {
-                Log.d("----------------",index+"__");
+                Log.d("----------------", index + "__");
                 try {
                     if (adCache.get(index) == null) {
                         return;
                     }
-//                    adCache.remove(index);
-//                    mDatas.remove(index);
-                    notifyItemRemoved(index);
-//                    notifyItemRangeChanged(0, mDatas.size() - 1);
+                    adCache.remove(index);
+                    mDatas.remove(index);
+//                    notifyItemRemoved(index);
+                    notifyItemRangeChanged(index, mDatas.size());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -134,7 +125,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
     @Override
     public void convert(RecyclerView.ViewHolder holder, Object itemData, int position) {
-        Log.d("----------------","__convert");
+        Log.d("----------------", "__convert");
 
         CommonViewHolder commonHolder = (CommonViewHolder) holder;
         int viewType = getItemViewType(position);

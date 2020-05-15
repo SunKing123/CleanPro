@@ -162,6 +162,7 @@
     <string name="scan_result_check">已选: %1$s</string>
     <string name="scan_result_check_total">已勾选: %1$s</string>
     <string name="back">返回</string>
+    <string name="clean_btn">清理 %1$s</string>
 
     <string name="memory_clean_title">手机加速</string>
     <string name="memory_clean_content">深度清理内存垃圾，提高手机运行速度</string>

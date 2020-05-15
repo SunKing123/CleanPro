@@ -90,7 +90,7 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                         }
                         long l = CleanUtil.freeJunkInfos(entry.getValue());
                         total += l;
-                    } else if (ScanningResultType.AD_JUNK.equals(entry.getKey())) { //apk文件
+                    } else if (ScanningResultType.AD_JUNK.equals(entry.getKey())) { //ad文件
                         for (FirstJunkInfo info : entry.getValue()) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
@@ -100,6 +100,15 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                         long l1 = CleanUtil.freeJunkInfos(entry.getValue());
                         total += l1;
                     } else if (ScanningResultType.UNINSTALL_JUNK.equals(entry.getKey())) {//残留垃圾
+                        for (FirstJunkInfo info : entry.getValue()) {
+                            if (!info.isAllchecked()) {
+                                isCheckAll = false;
+                                break;
+                            }
+                        }
+                        long leavedCache = CleanUtil.freeJunkInfos(entry.getValue());
+                        total += leavedCache;
+                    } else if (ScanningResultType.APK_JUNK.equals(entry.getKey())) { //apk垃圾
                         for (FirstJunkInfo info : entry.getValue()) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;

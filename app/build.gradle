@@ -67,6 +67,9 @@ android {
             versionNameSuffix "dev"
             minifyEnabled false
             signingConfig signingConfigs.release
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
             commonConfigFiledMap.each { buildConfigField("String", it.key, it.value) }
             devConfigFiledMap.each {
                 buildConfigField("String", it.key, it.value)
